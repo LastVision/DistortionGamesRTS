@@ -1,6 +1,7 @@
 #pragma once
 
 #include "BaseModel.h"
+#include <Matrix.h>
 
 struct ID3D11Texture2D;
 

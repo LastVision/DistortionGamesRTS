@@ -1,6 +1,7 @@
 #pragma once
 #include "EffectListener.h"
 #include "VertexBufferWrapper.h"
+#include <GrowingArray.h>
 
 struct ID3D11BlendState;
 struct ID3D11InputLayout;
