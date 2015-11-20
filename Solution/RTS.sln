@@ -26,6 +26,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CollisionRadiusCalc", "CollisionRadiusCalc\CollisionRadiusCalc.vcxproj", "{A99EBB70-B6F2-4EC5-9F5E-9C111920A73A}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GUI", "GUI\GUI.vcxproj", "{17CEF55E-6AEE-4487-AD02-5940167C2FD0}"
+	ProjectSection(ProjectDependencies) = postProject
+		{CF69D483-5BF1-4673-99E2-C04B953CA73C} = {CF69D483-5BF1-4673-99E2-C04B953CA73C}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

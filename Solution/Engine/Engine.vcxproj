@@ -71,28 +71,28 @@
     <IntDir>$(SolutionDir)..\temp\$(ProjectName)\</IntDir>
     <IncludePath>$(FBX_SDK_ROOT)\include\;$(SolutionDir)\InputWrapper;$(SolutionDir)\DL_Debug;$(SolutionDir)\CommonUtilities;$(SolutionDir)\Timer;$(SolutionDir)\..\DirectX\Include;$(SolutionDir)..\FBX\;$(VTUNE_DIR)\include\;$(IncludePath)</IncludePath>
     <TargetName>$(ProjectName)_$(Configuration)</TargetName>
-    <LibraryPath>$(SolutionDir)..\Libs3rdParty\;$(SolutionDir)..\DirectX\Libs\x86\;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)..\Libs3rdParty\;$(SolutionDir)..\Libs3rdParty\DirectXLibs\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)..\Libs\</OutDir>
     <IntDir>$(SolutionDir)..\temp\$(ProjectName)\</IntDir>
     <IncludePath>$(FBX_SDK_ROOT)\include\;$(SolutionDir)\InputWrapper;$(SolutionDir)\DL_Debug;$(SolutionDir)\CommonUtilities;$(SolutionDir)\Timer;$(SolutionDir)\..\DirectX\Include;$(SolutionDir)..\FBX\;$(VTUNE_DIR)\include\;$(IncludePath)</IncludePath>
     <TargetName>$(ProjectName)_$(Configuration)</TargetName>
-    <LibraryPath>$(SolutionDir)..\Libs3rdParty\;$(SolutionDir)..\DirectX\Libs\x86\;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)..\Libs3rdParty\;$(SolutionDir)..\Libs3rdParty\DirectXLibs\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DLL_Release|Win32'">
     <OutDir>$(SolutionDir)..\Libs\</OutDir>
     <IntDir>$(SolutionDir)..\temp\$(ProjectName)\</IntDir>
     <IncludePath>$(FBX_SDK_ROOT)\include\;$(SolutionDir)\InputWrapper;$(SolutionDir)\DL_Debug;$(SolutionDir)\CommonUtilities;$(SolutionDir)\Timer;$(SolutionDir)\..\DirectX\Include;$(SolutionDir)..\FBX\;$(VTUNE_DIR)\include\;$(IncludePath)</IncludePath>
     <TargetName>$(ProjectName)_$(Configuration)</TargetName>
-    <LibraryPath>$(SolutionDir)..\Libs3rdParty\;$(SolutionDir)..\DirectX\Libs\x86\;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)..\Libs3rdParty\;$(SolutionDir)..\Libs3rdParty\DirectXLibs\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Internal|Win32'">
     <OutDir>$(SolutionDir)..\Libs\</OutDir>
     <IntDir>$(SolutionDir)..\temp\$(ProjectName)\</IntDir>
     <IncludePath>$(FBX_SDK_ROOT)\include\;$(SolutionDir)\InputWrapper;$(SolutionDir)\DL_Debug;$(SolutionDir)\CommonUtilities;$(SolutionDir)\Timer;$(SolutionDir)\..\DirectX\Include;$(SolutionDir)..\FBX\;$(VTUNE_DIR)\include\;$(IncludePath)</IncludePath>
     <TargetName>$(ProjectName)_$(Configuration)</TargetName>
-    <LibraryPath>$(SolutionDir)..\Libs3rdParty\;$(SolutionDir)..\DirectX\Libs\x86\;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)..\Libs3rdParty\;$(SolutionDir)..\Libs3rdParty\DirectXLibs\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -106,7 +106,7 @@
     </Link>
     <Lib>
       <AdditionalDependencies>Effects11_$(Configuration).lib;D3D11.lib;D3DX11.lib;D3DCompiler.lib;dxguid.lib;libfbxsdk-md_$(Configuration).lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)..\Libs\</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)..\Libs\;$(SolutionDir)..\Libs3rdParty\DirectXLibs\</AdditionalLibraryDirectories>
       <AdditionalOptions>/ignore:4099,4221,4006 %(AdditionalOptions)</AdditionalOptions>
     </Lib>
     <FxCompile>
@@ -134,7 +134,7 @@
     </Link>
     <Lib>
       <AdditionalDependencies>Effects11_$(Configuration).lib;D3D11.lib;D3DX11.lib;D3DCompiler.lib;dxguid.lib;libfbxsdk-md_$(Configuration).lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)..\Libs\</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)..\Libs\;$(SolutionDir)..\Libs3rdParty\DirectXLibs\</AdditionalLibraryDirectories>
       <AdditionalOptions>/ignore:4099,4221,4006 %(AdditionalOptions)</AdditionalOptions>
     </Lib>
     <FxCompile>
@@ -162,7 +162,7 @@
     </Link>
     <Lib>
       <AdditionalDependencies>Effects11_Release.lib;D3D11.lib;D3DX11.lib;D3DCompiler.lib;libfbxsdk-md_Release.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)..\Libs\</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)..\Libs\;$(SolutionDir)..\Libs3rdParty\DirectXLibs\</AdditionalLibraryDirectories>
       <AdditionalOptions>/ignore:4099,4221,4006 %(AdditionalOptions)</AdditionalOptions>
     </Lib>
     <FxCompile>
@@ -189,7 +189,7 @@
     </Link>
     <Lib>
       <AdditionalDependencies>Effects11_Release.lib;D3D11.lib;D3DX11.lib;D3DCompiler.lib;dxguid.lib;libfbxsdk-md_Release.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)..\Libs\</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)..\Libs\;$(SolutionDir)..\Libs3rdParty\DirectXLibs\</AdditionalLibraryDirectories>
       <AdditionalOptions>/ignore:4099,4221,4006 %(AdditionalOptions)</AdditionalOptions>
     </Lib>
     <FxCompile>
