@@ -124,7 +124,7 @@
     </ProjectReference>
     <Lib>
       <AdditionalDependencies>AkConvolutionReverbFX.lib;AkFlangerFX.lib;AstoundsoundExpanderFX.lib;AkTremoloFX.lib;AkMemoryMgr.lib;AuroHeadphoneFX.lib;IOSONOProximityMixer.lib;AkMotionGenerator.lib;AkSineSource.lib;AkSoundSeedWind.lib;AkStereoDelayFX.lib;AkGuitarDistortionFX.lib;AkRumble.lib;AuroPannerMixer.lib;AkSoundEngine.lib;AkSilenceSource.lib;AkPeakLimiterFX.lib;McDSPLimiterFX.lib;iZTrashBoxModelerFX.lib;AkSoundSeedImpactFX.lib;AkRoomVerbFX.lib;iZTrashDelayFX.lib;McDSPFutzBoxFX.lib;AkParametricEQFX.lib;AstoundsoundFolddownFX.lib;AkToneSource.lib;AkMatrixReverbFX.lib;AkCompressorFX.lib;AkAudioInputSource.lib;AkMusicEngine.lib;AkSoundSeedWoosh.lib;CrankcaseAudioREVModelPlayerFX.lib;iZTrashMultibandDistortionFX.lib;iZHybridReverbFX.lib;AkPitchShifterFX.lib;iZTrashDynamicsFX.lib;iZTrashDistortionFX.lib;AstoundsoundRTIFX.lib;AkDelayFX.lib;AkGainFX.lib;AkVorbisDecoder.lib;AkMeterFX.lib;AstoundsoundShared.lib;iZTrashFiltersFX.lib;AkSynthOne.lib;AkMP3Source.lib;AkStreamMgr.lib;AkHarmonizerFX.lib;AkTimeStretchFX.lib;AkExpanderFX.lib;dxguid.lib;XInput.lib;msacm32.lib;CommunicationCentral.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)..\Wwise\libs\$(Configuration)\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)..\Libs3rdParty\WwiseLibs\$(Configuration)\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>/ignore:4006,4221 %(AdditionalOptions)</AdditionalOptions>
     </Lib>
   </ItemDefinitionGroup>
@@ -147,7 +147,7 @@
     </Link>
     <Lib>
       <AdditionalDependencies>AkConvolutionReverbFX.lib;AkFlangerFX.lib;AstoundsoundExpanderFX.lib;AkTremoloFX.lib;AkMemoryMgr.lib;AuroHeadphoneFX.lib;IOSONOProximityMixer.lib;AkMotionGenerator.lib;AkSineSource.lib;AkSoundSeedWind.lib;AkStereoDelayFX.lib;AkGuitarDistortionFX.lib;AkRumble.lib;AuroPannerMixer.lib;AkSoundEngine.lib;AkSilenceSource.lib;AkPeakLimiterFX.lib;McDSPLimiterFX.lib;iZTrashBoxModelerFX.lib;AkSoundSeedImpactFX.lib;AkRoomVerbFX.lib;iZTrashDelayFX.lib;McDSPFutzBoxFX.lib;AkParametricEQFX.lib;AstoundsoundFolddownFX.lib;AkToneSource.lib;AkMatrixReverbFX.lib;AkCompressorFX.lib;AkAudioInputSource.lib;AkMusicEngine.lib;AkSoundSeedWoosh.lib;CrankcaseAudioREVModelPlayerFX.lib;iZTrashMultibandDistortionFX.lib;iZHybridReverbFX.lib;AkPitchShifterFX.lib;iZTrashDynamicsFX.lib;iZTrashDistortionFX.lib;AstoundsoundRTIFX.lib;AkDelayFX.lib;AkGainFX.lib;AkVorbisDecoder.lib;AkMeterFX.lib;AstoundsoundShared.lib;iZTrashFiltersFX.lib;AkSynthOne.lib;AkMP3Source.lib;AkStreamMgr.lib;AkHarmonizerFX.lib;AkTimeStretchFX.lib;AkExpanderFX.lib;dxguid.lib;XInput.lib;msacm32.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)..\Wwise\libs\$(Configuration)\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)..\Libs3rdParty\WwiseLibs\$(Configuration)\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>/ignore:4006,4221 %(AdditionalOptions)</AdditionalOptions>
     </Lib>
   </ItemDefinitionGroup>
@@ -170,7 +170,7 @@
     </Link>
     <Lib>
       <AdditionalDependencies>AkConvolutionReverbFX.lib;AkFlangerFX.lib;AstoundsoundExpanderFX.lib;AkTremoloFX.lib;AkMemoryMgr.lib;AuroHeadphoneFX.lib;IOSONOProximityMixer.lib;AkMotionGenerator.lib;AkSineSource.lib;AkSoundSeedWind.lib;AkStereoDelayFX.lib;AkGuitarDistortionFX.lib;AkRumble.lib;AuroPannerMixer.lib;AkSoundEngine.lib;AkSilenceSource.lib;AkPeakLimiterFX.lib;McDSPLimiterFX.lib;iZTrashBoxModelerFX.lib;AkSoundSeedImpactFX.lib;AkRoomVerbFX.lib;iZTrashDelayFX.lib;McDSPFutzBoxFX.lib;AkParametricEQFX.lib;AstoundsoundFolddownFX.lib;AkToneSource.lib;AkMatrixReverbFX.lib;AkCompressorFX.lib;AkAudioInputSource.lib;AkMusicEngine.lib;AkSoundSeedWoosh.lib;CrankcaseAudioREVModelPlayerFX.lib;iZTrashMultibandDistortionFX.lib;iZHybridReverbFX.lib;AkPitchShifterFX.lib;iZTrashDynamicsFX.lib;iZTrashDistortionFX.lib;AstoundsoundRTIFX.lib;AkDelayFX.lib;AkGainFX.lib;AkVorbisDecoder.lib;AkMeterFX.lib;AstoundsoundShared.lib;iZTrashFiltersFX.lib;AkSynthOne.lib;AkMP3Source.lib;AkStreamMgr.lib;AkHarmonizerFX.lib;AkTimeStretchFX.lib;AkExpanderFX.lib;dxguid.lib;XInput.lib;msacm32.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)..\Wwise\libs\Release\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)..\Libs3rdParty\WwiseLibs\Release\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>/ignore:4006,4221 %(AdditionalOptions)</AdditionalOptions>
     </Lib>
   </ItemDefinitionGroup>
@@ -193,7 +193,7 @@
     </Link>
     <Lib>
       <AdditionalDependencies>AkConvolutionReverbFX.lib;AkFlangerFX.lib;AstoundsoundExpanderFX.lib;AkTremoloFX.lib;AkMemoryMgr.lib;AuroHeadphoneFX.lib;IOSONOProximityMixer.lib;AkMotionGenerator.lib;AkSineSource.lib;AkSoundSeedWind.lib;AkStereoDelayFX.lib;AkGuitarDistortionFX.lib;AkRumble.lib;AuroPannerMixer.lib;AkSoundEngine.lib;AkSilenceSource.lib;AkPeakLimiterFX.lib;McDSPLimiterFX.lib;iZTrashBoxModelerFX.lib;AkSoundSeedImpactFX.lib;AkRoomVerbFX.lib;iZTrashDelayFX.lib;McDSPFutzBoxFX.lib;AkParametricEQFX.lib;AstoundsoundFolddownFX.lib;AkToneSource.lib;AkMatrixReverbFX.lib;AkCompressorFX.lib;AkAudioInputSource.lib;AkMusicEngine.lib;AkSoundSeedWoosh.lib;CrankcaseAudioREVModelPlayerFX.lib;iZTrashMultibandDistortionFX.lib;iZHybridReverbFX.lib;AkPitchShifterFX.lib;iZTrashDynamicsFX.lib;iZTrashDistortionFX.lib;AstoundsoundRTIFX.lib;AkDelayFX.lib;AkGainFX.lib;AkVorbisDecoder.lib;AkMeterFX.lib;AstoundsoundShared.lib;iZTrashFiltersFX.lib;AkSynthOne.lib;AkMP3Source.lib;AkStreamMgr.lib;AkHarmonizerFX.lib;AkTimeStretchFX.lib;AkExpanderFX.lib;dxguid.lib;XInput.lib;msacm32.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)..\Wwise\libs\Release\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)..\Libs3rdParty\WwiseLibs\Release\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>/ignore:4006,4221 %(AdditionalOptions)</AdditionalOptions>
     </Lib>
   </ItemDefinitionGroup>
