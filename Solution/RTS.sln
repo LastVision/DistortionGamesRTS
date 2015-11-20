@@ -32,6 +32,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GUI", "GUI\GUI.vcxproj", "{
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Memory", "Memory\Memory.vcxproj", "{25945336-03D1-42A6-8764-7EF11DBC42E6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{79D52050-1454-49C9-9186-AB74C959970E} = {79D52050-1454-49C9-9186-AB74C959970E}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
