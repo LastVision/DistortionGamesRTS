@@ -1,0 +1,370 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="DLL_Release|Win32">
+      <Configuration>DLL_Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Internal|Win32">
+      <Configuration>Internal</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{040C55CC-94AC-4543-A75B-B121AC5AF085}</ProjectGuid>
+    <RootNamespace>Game</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DLL_Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Internal|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='DLL_Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Internal|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>$(SolutionDir)\Engine;$(SolutionDir)\CommonUtilities;$(SolutionDir)\Timer;$(SolutionDir)\DL_Debug;$(SolutionDir)..\DirectX\include\;$(SolutionDir)\InputWrapper;$(VTUNE_DIR)\include\;$(SolutionDir)\Audio;$(IncludePath)</IncludePath>
+    <OutDir>$(SolutionDir)..\Libs\</OutDir>
+    <IntDir>$(SolutionDir)..\temp\$(ProjectName)\</IntDir>
+    <TargetName>$(ProjectName)_$(Configuration)</TargetName>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>$(SolutionDir)\Engine;$(SolutionDir)\CommonUtilities;$(SolutionDir)\Timer;$(SolutionDir)\DL_Debug;$(SolutionDir)..\DirectX\include\;$(SolutionDir)\InputWrapper;$(VTUNE_DIR)\include\;$(SolutionDir)\Audio;$(IncludePath)</IncludePath>
+    <OutDir>$(SolutionDir)..\Libs\</OutDir>
+    <IntDir>$(SolutionDir)..\temp\$(ProjectName)\</IntDir>
+    <TargetName>$(ProjectName)_$(Configuration)</TargetName>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DLL_Release|Win32'">
+    <IncludePath>$(SolutionDir)\Engine;$(SolutionDir)\CommonUtilities;$(SolutionDir)\Timer;$(SolutionDir)\DL_Debug;$(SolutionDir)..\DirectX\include\;$(SolutionDir)\InputWrapper;$(VTUNE_DIR)\include\;$(SolutionDir)\Audio;$(IncludePath)</IncludePath>
+    <OutDir>$(SolutionDir)..\Libs\</OutDir>
+    <IntDir>$(SolutionDir)..\temp\$(ProjectName)\</IntDir>
+    <TargetName>$(ProjectName)_$(Configuration)</TargetName>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Internal|Win32'">
+    <IncludePath>$(SolutionDir)\Engine;$(SolutionDir)\CommonUtilities;$(SolutionDir)\Timer;$(SolutionDir)\DL_Debug;$(SolutionDir)..\DirectX\include\;$(SolutionDir)\InputWrapper;$(VTUNE_DIR)\include\;$(SolutionDir)\Audio;$(IncludePath)</IncludePath>
+    <OutDir>$(SolutionDir)..\Libs\</OutDir>
+    <IntDir>$(SolutionDir)..\temp\$(ProjectName)\</IntDir>
+    <TargetName>$(ProjectName)_$(Configuration)</TargetName>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PreprocessorDefinitions>RELEASE_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DLL_Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PreprocessorDefinitions>RELEASE_BUILD;DLL_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Internal|Win32'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="Action.h" />
+    <ClInclude Include="AIComponent.h" />
+    <ClInclude Include="BulletAIComponent.h" />
+    <ClInclude Include="BulletComponent.h" />
+    <ClInclude Include="BulletManager.h" />
+    <ClInclude Include="BulletMessage.h" />
+    <ClInclude Include="Button.h" />
+    <ClInclude Include="CollisionComponent.h" />
+    <ClInclude Include="CollisionManager.h" />
+    <ClInclude Include="CollisionNote.h" />
+    <ClInclude Include="Conversation.h" />
+    <ClInclude Include="ConversationAction.h" />
+    <ClInclude Include="ConversationManager.h" />
+    <ClInclude Include="ConversationMessage.h" />
+    <ClInclude Include="DefendMessage.h" />
+    <ClInclude Include="DefendMission.h" />
+    <ClInclude Include="dirent.h" />
+    <ClInclude Include="EMPAction.h" />
+    <ClInclude Include="EMPMessage.h" />
+    <ClInclude Include="EMPNote.h" />
+    <ClInclude Include="ExplosionMessage.h" />
+    <ClInclude Include="FadeMessage.h" />
+    <ClInclude Include="InGameMenuState.h" />
+    <ClInclude Include="InvulnerabilityAction.h" />
+    <ClInclude Include="LevelButton.h" />
+    <ClInclude Include="LevelScore.h" />
+    <ClInclude Include="LevelScoreMessage.h" />
+    <ClInclude Include="LoadingScreen.h" />
+    <ClInclude Include="ParticleEmitterComponent.h" />
+    <ClInclude Include="EmitterManager.h" />
+    <ClInclude Include="DestroyEmitterMessage.h" />
+    <ClInclude Include="EmitterNote.h" />
+    <ClInclude Include="EnemyKilledMessage.h" />
+    <ClInclude Include="Event.h" />
+    <ClInclude Include="EventQueueEmptyMessage.h" />
+    <ClInclude Include="BulletCollisionToGUIMessage.h" />
+    <ClInclude Include="HealthNote.h" />
+    <ClInclude Include="KillStructureMessage.h" />
+    <ClInclude Include="KillStructureMission.h" />
+    <ClInclude Include="MissionContainer.h" />
+    <ClInclude Include="MissionEventReader.h" />
+    <ClInclude Include="EventManager.h" />
+    <ClInclude Include="GUINote.h" />
+    <ClInclude Include="KillAllAbortMission.h" />
+    <ClInclude Include="KillAllMission.h" />
+    <ClInclude Include="KillXEnemiesAbortMission.h" />
+    <ClInclude Include="KillXEnemiesMission.h" />
+    <ClInclude Include="LevelFactory.h" />
+    <ClInclude Include="MessageState.h" />
+    <ClInclude Include="Mission.h" />
+    <ClInclude Include="MissionManager.h" />
+    <ClInclude Include="MissionNote.h" />
+    <ClInclude Include="PlanetCollisionComponent.h" />
+    <ClInclude Include="PointLightComponent.h" />
+    <ClInclude Include="PowerUpGUIIcon.h" />
+    <ClInclude Include="PowerUpMessage.h" />
+    <ClInclude Include="PowerUpNote.h" />
+    <ClInclude Include="ColoursForBG.h" />
+    <ClInclude Include="Component.h" />
+    <ClInclude Include="Constants.h" />
+    <ClInclude Include="ControllerComponent.h" />
+    <ClInclude Include="Entity.h" />
+    <ClInclude Include="EntityFactory.h" />
+    <ClInclude Include="Enums.h" />
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="GameState.h" />
+    <ClInclude Include="GameStateMessage.h" />
+    <ClInclude Include="GraphicsComponent.h" />
+    <ClInclude Include="GUIComponent.h" />
+    <ClInclude Include="HealthComponent.h" />
+    <ClInclude Include="InGameState.h" />
+    <ClInclude Include="InputComponent.h" />
+    <ClInclude Include="InputNote.h" />
+    <ClInclude Include="Level.h" />
+    <ClInclude Include="Menu.h" />
+    <ClInclude Include="MenuState.h" />
+    <ClInclude Include="Message.h" />
+    <ClInclude Include="PhysicsComponent.h" />
+    <ClInclude Include="PostMaster.h" />
+    <ClInclude Include="PowerUpComponent.h" />
+    <ClInclude Include="PropComponent.h" />
+    <ClInclude Include="ResizeMessage.h" />
+    <ClInclude Include="ScoreIO.h" />
+    <ClInclude Include="ScoreItem.h" />
+    <ClInclude Include="ShieldComponent.h" />
+    <ClInclude Include="ShieldNote.h" />
+    <ClInclude Include="ShootingComponent.h" />
+    <ClInclude Include="ShootNote.h" />
+    <ClInclude Include="SoundComponent.h" />
+    <ClInclude Include="SoundNote.h" />
+    <ClInclude Include="SpawnEnemyAction.h" />
+    <ClInclude Include="SpawnEnemyMessage.h" />
+    <ClInclude Include="EnqueueEventMessage.h" />
+    <ClInclude Include="SpawnExplosionMessage.h" />
+    <ClInclude Include="SpawnPowerUpMessage.h" />
+    <ClInclude Include="SplashState.h" />
+    <ClInclude Include="StateEnums.h" />
+    <ClInclude Include="StateStack.h" />
+    <ClInclude Include="StateStackProxy.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="StreakEmitterComponent.h" />
+    <ClInclude Include="Subscriber.h" />
+    <ClInclude Include="SurvivalAbortMission.h" />
+    <ClInclude Include="SurvivalMission.h" />
+    <ClInclude Include="WaitAction.h" />
+    <ClInclude Include="WaypointComponent.h" />
+    <ClInclude Include="WaypointMission.h" />
+    <ClInclude Include="WeaponFactory.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="AIComponent.cpp" />
+    <ClCompile Include="BulletAIComponent.cpp" />
+    <ClCompile Include="BulletComponent.cpp" />
+    <ClCompile Include="BulletManager.cpp" />
+    <ClCompile Include="BulletMessage.cpp" />
+    <ClCompile Include="Button.cpp" />
+    <ClCompile Include="CollisionComponent.cpp" />
+    <ClCompile Include="CollisionManager.cpp" />
+    <ClCompile Include="Component.cpp" />
+    <ClCompile Include="ControllerComponent.cpp" />
+    <ClCompile Include="Conversation.cpp" />
+    <ClCompile Include="ConversationAction.cpp" />
+    <ClCompile Include="ConversationManager.cpp" />
+    <ClCompile Include="ConversationMessage.cpp" />
+    <ClCompile Include="DefendMessage.cpp" />
+    <ClCompile Include="DefendMission.cpp" />
+    <ClCompile Include="EMPAction.cpp" />
+    <ClCompile Include="EMPMessage.cpp" />
+    <ClCompile Include="ExplosionMessage.cpp" />
+    <ClCompile Include="FadeMessage.cpp" />
+    <ClCompile Include="InGameMenuState.cpp" />
+    <ClCompile Include="InvulnerabilityAction.cpp" />
+    <ClCompile Include="LevelButton.cpp" />
+    <ClCompile Include="LevelScoreMessage.cpp" />
+    <ClCompile Include="LoadingScreen.cpp" />
+    <ClCompile Include="ParticleEmitterComponent.cpp" />
+    <ClCompile Include="EmitterManager.cpp" />
+    <ClCompile Include="DestroyEmitterMessage.cpp" />
+    <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="EntityFactory.cpp" />
+    <ClCompile Include="Event.cpp" />
+    <ClCompile Include="KillStructureMessage.cpp" />
+    <ClCompile Include="KillStructureMission.cpp" />
+    <ClCompile Include="MissionContainer.cpp" />
+    <ClCompile Include="MissionEventReader.cpp" />
+    <ClCompile Include="EventManager.cpp" />
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameStateMessage.cpp" />
+    <ClCompile Include="GraphicsComponent.cpp" />
+    <ClCompile Include="GUIComponent.cpp" />
+    <ClCompile Include="HealthComponent.cpp" />
+    <ClCompile Include="InGameState.cpp" />
+    <ClCompile Include="InputComponent.cpp" />
+    <ClCompile Include="KillAllAbortMission.cpp" />
+    <ClCompile Include="KillAllMission.cpp" />
+    <ClCompile Include="KillXEnemiesAbortMission.cpp" />
+    <ClCompile Include="KillXEnemiesMission.cpp" />
+    <ClCompile Include="Level.cpp" />
+    <ClCompile Include="LevelFactory.cpp" />
+    <ClCompile Include="Menu.cpp" />
+    <ClCompile Include="MenuState.cpp" />
+    <ClCompile Include="MessageState.cpp" />
+    <ClCompile Include="Mission.cpp" />
+    <ClCompile Include="MissionManager.cpp" />
+    <ClCompile Include="PhysicsComponent.cpp" />
+    <ClCompile Include="PlanetCollisionComponent.cpp" />
+    <ClCompile Include="PointLightComponent.cpp" />
+    <ClCompile Include="PostMaster.cpp" />
+    <ClCompile Include="PowerUpComponent.cpp" />
+    <ClCompile Include="PowerUpGUIIcon.cpp" />
+    <ClCompile Include="PowerUpMessage.cpp" />
+    <ClCompile Include="PropComponent.cpp" />
+    <ClCompile Include="ScoreIO.cpp" />
+    <ClCompile Include="ScoreItem.cpp" />
+    <ClCompile Include="ShieldComponent.cpp" />
+    <ClCompile Include="ShootingComponent.cpp" />
+    <ClCompile Include="SoundComponent.cpp" />
+    <ClCompile Include="SpawnEnemyAction.cpp" />
+    <ClCompile Include="SpawnEnemyMessage.cpp" />
+    <ClCompile Include="EnqueueEventMessage.cpp" />
+    <ClCompile Include="SpawnExplosionMessage.cpp" />
+    <ClCompile Include="SpawnPowerUpMessage.cpp" />
+    <ClCompile Include="SplashState.cpp" />
+    <ClCompile Include="StateStack.cpp" />
+    <ClCompile Include="StateStackProxy.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DLL_Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Internal|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="StreakEmitterComponent.cpp" />
+    <ClCompile Include="Subscriber.cpp" />
+    <ClCompile Include="SurvivalAbortMission.cpp" />
+    <ClCompile Include="SurvivalMission.cpp" />
+    <ClCompile Include="WaitAction.cpp" />
+    <ClCompile Include="WaypointComponent.cpp" />
+    <ClCompile Include="WaypointMission.cpp" />
+    <ClCompile Include="WeaponFactory.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Audio\Audio.vcxproj">
+      <Project>{b5915c8f-2aef-4137-bcbe-152f819860cd}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Engine\Engine.vcxproj">
+      <Project>{56e2c751-a07c-49d7-9073-839a5d0a71d2}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\InputWrapper\InputWrapper.vcxproj">
+      <Project>{e6bd4153-64be-4109-8d3c-724baadab8af}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

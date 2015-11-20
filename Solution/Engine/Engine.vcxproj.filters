@@ -1,0 +1,345 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Engine.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Precompile</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="DirectX.cpp">
+      <Filter>DirectX</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="FBX\FbxLoader.cpp">
+      <Filter>FBX</Filter>
+    </ClCompile>
+    <ClCompile Include="FBXFactory.cpp">
+      <Filter>FBX</Filter>
+    </ClCompile>
+    <ClCompile Include="PointLight.cpp">
+      <Filter>Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="FileWatcher.cpp" />
+    <ClCompile Include="SpotLight.cpp">
+      <Filter>Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="SystemMonitor.cpp">
+      <Filter>DebugServices</Filter>
+    </ClCompile>
+    <ClCompile Include="Instance.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Surface.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="TreeNode.cpp">
+      <Filter>Octree</Filter>
+    </ClCompile>
+    <ClCompile Include="Octree.cpp">
+      <Filter>Octree</Filter>
+    </ClCompile>
+    <ClCompile Include="Frustum.cpp" />
+    <ClCompile Include="Sprite.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Effect.cpp">
+      <Filter>Rendering\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="EffectContainer.cpp">
+      <Filter>Rendering\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Rendering\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureContainer.cpp">
+      <Filter>Rendering\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseModel.cpp">
+      <Filter>Rendering\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>Rendering\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelLoader.cpp">
+      <Filter>Rendering\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelProxy.cpp">
+      <Filter>Rendering\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugText.cpp">
+      <Filter>Rendering\DebugText</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugFont.cpp">
+      <Filter>Rendering\DebugText</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugFontContainer.cpp">
+      <Filter>Rendering\DebugText</Filter>
+    </ClCompile>
+    <ClCompile Include="Text.cpp">
+      <Filter>Rendering\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="TextFile.cpp">
+      <Filter>Rendering\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="TextParser.cpp">
+      <Filter>Rendering\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="Token.cpp">
+      <Filter>Rendering\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="FontFile.cpp">
+      <Filter>Rendering\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="Font.cpp">
+      <Filter>Rendering\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="FullScreenHelper.cpp">
+      <Filter>Rendering\PostProcessing</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Rendering\PostProcessing</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleEmitterInstance.cpp">
+      <Filter>Rendering\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleEmitterData.cpp">
+      <Filter>Rendering\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="StreakEmitterData.cpp">
+      <Filter>Rendering\Streak</Filter>
+    </ClCompile>
+    <ClCompile Include="StreakEmitterInstance.cpp">
+      <Filter>Rendering\Streak</Filter>
+    </ClCompile>
+    <ClCompile Include="EmitterDataContainer.cpp" />
+    <ClCompile Include="Tga32.cpp">
+      <Filter>Tga32</Filter>
+    </ClCompile>
+    <ClCompile Include="HeightMapFactory.cpp">
+      <Filter>Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="Terrain.cpp">
+      <Filter>Terrain</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Engine.h" />
+    <ClInclude Include="stdafx.h">
+      <Filter>Precompile</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="DirectX.h">
+      <Filter>DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="IndexBufferWrapper.h">
+      <Filter>DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexBufferWrapper.h">
+      <Filter>DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexDataWrapper.h">
+      <Filter>DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexIndexWrapper.h">
+      <Filter>DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="SetupInfo.h">
+      <Filter>DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h" />
+    <ClInclude Include="FBX\FbxLoader.h">
+      <Filter>FBX</Filter>
+    </ClInclude>
+    <ClInclude Include="FBXFactory.h">
+      <Filter>FBX</Filter>
+    </ClInclude>
+    <ClInclude Include="VTuneApi.h">
+      <Filter>DebugServices</Filter>
+    </ClInclude>
+    <ClInclude Include="PointLight.h">
+      <Filter>Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectionalLight.h">
+      <Filter>Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="FileWatcher.h" />
+    <ClInclude Include="SpotLight.h">
+      <Filter>Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="Defines.h" />
+    <ClInclude Include="LightStructs.h">
+      <Filter>Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectListener.h" />
+    <ClInclude Include="SystemMonitor.h">
+      <Filter>DebugServices</Filter>
+    </ClInclude>
+    <ClInclude Include="Instance.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Vertices.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Surface.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="TreeNode.h">
+      <Filter>Octree</Filter>
+    </ClInclude>
+    <ClInclude Include="Octree.h">
+      <Filter>Octree</Filter>
+    </ClInclude>
+    <ClInclude Include="Frustum.h" />
+    <ClInclude Include="EngineEnums.h" />
+    <ClInclude Include="LodStructs.h">
+      <Filter>FBX</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleData.h">
+      <Filter>Rendering\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprite.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Effect.h">
+      <Filter>Rendering\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectContainer.h">
+      <Filter>Rendering\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Rendering\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureContainer.h">
+      <Filter>Rendering\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseModel.h">
+      <Filter>Rendering\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>Rendering\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelLoader.h">
+      <Filter>Rendering\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelProxy.h">
+      <Filter>Rendering\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugText.h">
+      <Filter>Rendering\DebugText</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugFont.h">
+      <Filter>Rendering\DebugText</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugFontContainer.h">
+      <Filter>Rendering\DebugText</Filter>
+    </ClInclude>
+    <ClInclude Include="Text.h">
+      <Filter>Rendering\Text</Filter>
+    </ClInclude>
+    <ClInclude Include="TextFile.h">
+      <Filter>Rendering\Text</Filter>
+    </ClInclude>
+    <ClInclude Include="TextParser.h">
+      <Filter>Rendering\Text</Filter>
+    </ClInclude>
+    <ClInclude Include="Token.h">
+      <Filter>Rendering\Text</Filter>
+    </ClInclude>
+    <ClInclude Include="FontFile.h">
+      <Filter>Rendering\Text</Filter>
+    </ClInclude>
+    <ClInclude Include="Font.h">
+      <Filter>Rendering\Text</Filter>
+    </ClInclude>
+    <ClInclude Include="FullScreenHelper.h">
+      <Filter>Rendering\PostProcessing</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Rendering\PostProcessing</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleEmitterInstance.h">
+      <Filter>Rendering\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleEmitterData.h">
+      <Filter>Rendering\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="StreakData.h">
+      <Filter>Rendering\Streak</Filter>
+    </ClInclude>
+    <ClInclude Include="StreakEmitterData.h">
+      <Filter>Rendering\Streak</Filter>
+    </ClInclude>
+    <ClInclude Include="StreakEmitterInstance.h">
+      <Filter>Rendering\Streak</Filter>
+    </ClInclude>
+    <ClInclude Include="StreakInstance.h">
+      <Filter>Rendering\Streak</Filter>
+    </ClInclude>
+    <ClInclude Include="EmitterDataContainer.h" />
+    <ClInclude Include="Tga32.h">
+      <Filter>Tga32</Filter>
+    </ClInclude>
+    <ClInclude Include="HeightMap.h">
+      <Filter>Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="HeightMapFactory.h">
+      <Filter>Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="Terrain.h">
+      <Filter>Terrain</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Precompile">
+      <UniqueIdentifier>{60e037e0-b5db-4ba4-89e7-926b418d4716}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectX">
+      <UniqueIdentifier>{4e45fc3e-08bd-402b-982d-47db849e325d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lights">
+      <UniqueIdentifier>{66e70d18-ed4b-4b98-9eff-c35077563ee6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FBX">
+      <UniqueIdentifier>{923b2b8b-c8a5-41fb-891a-0d4653b552b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DebugServices">
+      <UniqueIdentifier>{351a3e6e-50d2-43e1-823e-641c1538baa2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering">
+      <UniqueIdentifier>{bf7322d7-2e84-4f42-a427-99331b06f309}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Octree">
+      <UniqueIdentifier>{0468ca14-fae5-470f-a05b-94c6c2fd9450}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering\Particle">
+      <UniqueIdentifier>{d380eca4-b468-48dd-9f92-cfcff3f864e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering\Effect">
+      <UniqueIdentifier>{1117f290-3613-4c3a-8597-128b3d9aa91d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering\Texture">
+      <UniqueIdentifier>{2708954c-1f58-418a-807f-d200b4992301}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering\Model">
+      <UniqueIdentifier>{9d55b564-4db1-403d-926e-4c36e7a0a13c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering\DebugText">
+      <UniqueIdentifier>{baf2e884-b972-4bc8-9638-b545b2737981}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering\Text">
+      <UniqueIdentifier>{c692a68a-c85e-4a75-9e93-03f0b69dd9e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering\PostProcessing">
+      <UniqueIdentifier>{9eae83a0-4dc4-4207-9000-7994f620f042}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering\Streak">
+      <UniqueIdentifier>{dd92a4e0-d37f-466b-9b7a-966645f4818d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tga32">
+      <UniqueIdentifier>{18b9410f-d7c0-46f2-af85-b20098396534}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Terrain">
+      <UniqueIdentifier>{59d37244-123a-4cb5-bb00-433a66692270}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
