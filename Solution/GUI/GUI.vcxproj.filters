@@ -16,6 +16,9 @@
     <ClInclude Include="Widget.h">
       <Filter>Widget</Filter>
     </ClInclude>
+    <ClInclude Include="ButtonWidget.h">
+      <Filter>Widget</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -23,6 +26,9 @@
     </ClCompile>
     <ClCompile Include="GUIManager.cpp" />
     <ClCompile Include="Widget.cpp">
+      <Filter>Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="ButtonWidget.cpp">
       <Filter>Widget</Filter>
     </ClCompile>
   </ItemGroup>
