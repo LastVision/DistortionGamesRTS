@@ -79,3 +79,5 @@ Tools/CSharpUtilities/CSharpUtilities/obj/
 /Solution/Launcher/bin/Internal/Launcher.vshost.exe.config
 /Solution/Launcher/bin/Internal/Launcher.vshost.exe.manifest
 /Solution/Launcher/bin/Internal/Raven.exe.config
+/Solution/GUI/Debug/GUI.tlog
+/Solution/GUI/Debug
