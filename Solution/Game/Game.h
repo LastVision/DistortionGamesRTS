@@ -7,6 +7,11 @@ namespace CU
 	class InputWrapper;
 }
 
+namespace GUI
+{
+	class GUIManager;
+}
+
 class InGameState;
 class MenuState;
 class BulletManager;
@@ -27,6 +32,8 @@ public:
 
 private:
 	void operator=(Game& aApp) = delete;
+
+	GUI::GUIManager* myGUIManager;
 
 	CU::InputWrapper* myInputWrapper;
 	HWND* myWindowHandler;

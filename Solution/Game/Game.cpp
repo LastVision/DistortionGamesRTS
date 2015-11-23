@@ -8,6 +8,7 @@
 #include <FileWatcher.h>
 #include <DebugFont.h>
 #include "Game.h"
+#include <GUIManager.h>
 #include <InputWrapper.h>
 #include <ModelLoader.h>
 #include <SystemMonitor.h>
@@ -28,7 +29,7 @@ Game::Game()
 	myInputWrapper = new CU::InputWrapper();
 	Prism::Engine::GetInstance()->SetShowDebugText(myShowSystemInfo);
 
-	
+	myGUIManager = new GUI::GUIManager(myInputWrapper);
 }
 
 Game::~Game()
