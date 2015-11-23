@@ -85,26 +85,7 @@ void Prism::EffectContainer::ReloadEffect(const std::string& aFilePath)
 
 void Prism::EffectContainer::VerifyShader(const std::string& aFilePath)
 {
-	DL_ASSERT_EXP(aFilePath == "Data/Resource/Shader/S_effect_pbl.fx"
-		|| aFilePath == "Data/Resource/Shader/S_effect_font.fx"
-		|| aFilePath == "Data/Resource/Shader/S_effect_fontDebug.fx"
-		|| aFilePath == "Data/Resource/Shader/S_effect_sprite.fx"
-		|| aFilePath == "Data/Resource/Shader/S_effect_graph.fx"
-		|| aFilePath == "Data/Resource/Shader/S_effect_debug.fx"
-		|| aFilePath == "Data/Resource/Shader/S_effect_skybox.fx"
-		|| aFilePath == "Data/Resource/Shader/S_effect_basic.fx"
-		|| aFilePath == "Data/Resource/Shader/S_effect_particle.fx"
-		|| aFilePath == "Data/Resource/Shader/S_effect_streak.fx"
-		|| aFilePath == "Data/Resource/Shader/S_effect_bar_health.fx"
-		|| aFilePath == "Data/Resource/Shader/S_effect_bar_shield.fx"
-		|| aFilePath == "Data/Resource/Shader/S_effect_combine.fx"
-		|| aFilePath == "Data/Resource/Shader/S_effect_render_to_texture.fx"
-		|| aFilePath == "Data/Resource/Shader/S_effect_bloom.fx"
-		|| aFilePath == "Data/Resource/Shader/S_effect_down_sample.fx"
-		|| aFilePath == "Data/Resource/Shader/S_effect_emp.fx"
-		|| aFilePath == "Data/Resource/Shader/S_effect_glass.fx"
-		|| aFilePath == "Data/Resource/Shader/S_effect_bar_overcharged_shield.fx",
-		CU::Concatenate("Found invalid Shader: %s", aFilePath.c_str()));
+	//DL_ASSERT_EXP(	CU::Concatenate("Found invalid Shader: %s", aFilePath.c_str()));
 }
 
 void Prism::EffectContainer::Update(const float aDeltaTime)
