@@ -19,6 +19,9 @@
     <ClInclude Include="ButtonWidget.h">
       <Filter>Widget</Filter>
     </ClInclude>
+    <ClInclude Include="WidgetContainer.h">
+      <Filter>Widget</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -29,6 +32,9 @@
       <Filter>Widget</Filter>
     </ClCompile>
     <ClCompile Include="ButtonWidget.cpp">
+      <Filter>Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="WidgetContainer.cpp">
       <Filter>Widget</Filter>
     </ClCompile>
   </ItemGroup>
