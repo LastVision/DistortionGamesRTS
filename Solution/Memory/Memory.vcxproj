@@ -82,10 +82,10 @@
   <ItemGroup>
     <ClInclude Include="MemoryMacros.h" />
     <ClInclude Include="MemoryStatistics.h" />
-    <ClInclude Include="Tracker.h" />
+    <ClInclude Include="MemoryTracker.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Tracker.cpp" />
+    <ClCompile Include="MemoryTracker.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

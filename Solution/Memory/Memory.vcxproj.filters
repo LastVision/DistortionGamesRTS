@@ -2,10 +2,10 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClInclude Include="MemoryMacros.h" />
-    <ClInclude Include="Tracker.h" />
     <ClInclude Include="MemoryStatistics.h" />
+    <ClInclude Include="MemoryTracker.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Tracker.cpp" />
+    <ClCompile Include="MemoryTracker.cpp" />
   </ItemGroup>
 </Project>
