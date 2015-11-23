@@ -191,46 +191,46 @@ namespace Prism
 
 	void ModelLoader::AddPrefetchJobs()
 	{
-		XMLReader entityReader;
-		entityReader.OpenDocument("Data/Script/LI_list_entity.xml");
-		tinyxml2::XMLElement* entityRoot = entityReader.FindFirstChild("root");
-		tinyxml2::XMLElement* entityPathElement = entityReader.ForceFindFirstChild(entityRoot, "path");
-		for (; entityPathElement != nullptr; entityPathElement = entityReader.FindNextElement(entityPathElement, "path"))
-		{
-			std::string entityPath;
-			entityReader.ForceReadAttribute(entityPathElement, "src", entityPath);
-
-			XMLReader fbxReader;
-			fbxReader.OpenDocument(entityPath);
-
-			entityRoot = fbxReader.FindFirstChild("root");
-			tinyxml2::XMLElement* entityElement = nullptr;
-			if (entityRoot != nullptr)
-			{
-				entityElement = fbxReader.ForceFindFirstChild(entityRoot, "Entity");
-			}
-			else
-			{
-				entityElement = fbxReader.ForceFindFirstChild("Entity");
-			}
-
-			tinyxml2::XMLElement* gfxElement = fbxReader.FindFirstChild(entityElement, "GraphicsComponent");
-			if (gfxElement != nullptr)
-			{
-				tinyxml2::XMLElement* modelElement = fbxReader.ForceFindFirstChild(gfxElement, "Model");
-				std::string model;
-				std::string effect;
-
-				fbxReader.ForceReadAttribute(modelElement, "modelFile", model);
-				fbxReader.ForceReadAttribute(modelElement, "effectFile", effect);
-
-				LoadModel(model, effect);
-			}
-
-			fbxReader.CloseDocument();
-		}
-
-		entityReader.CloseDocument();
+		//XMLReader entityReader;
+		//entityReader.OpenDocument("Data/Script/LI_list_entity.xml");
+		//tinyxml2::XMLElement* entityRoot = entityReader.FindFirstChild("root");
+		//tinyxml2::XMLElement* entityPathElement = entityReader.ForceFindFirstChild(entityRoot, "path");
+		//for (; entityPathElement != nullptr; entityPathElement = entityReader.FindNextElement(entityPathElement, "path"))
+		//{
+		//	std::string entityPath;
+		//	entityReader.ForceReadAttribute(entityPathElement, "src", entityPath);
+		//
+		//	XMLReader fbxReader;
+		//	fbxReader.OpenDocument(entityPath);
+		//
+		//	entityRoot = fbxReader.FindFirstChild("root");
+		//	tinyxml2::XMLElement* entityElement = nullptr;
+		//	if (entityRoot != nullptr)
+		//	{
+		//		entityElement = fbxReader.ForceFindFirstChild(entityRoot, "Entity");
+		//	}
+		//	else
+		//	{
+		//		entityElement = fbxReader.ForceFindFirstChild("Entity");
+		//	}
+		//
+		//	tinyxml2::XMLElement* gfxElement = fbxReader.FindFirstChild(entityElement, "GraphicsComponent");
+		//	if (gfxElement != nullptr)
+		//	{
+		//		tinyxml2::XMLElement* modelElement = fbxReader.ForceFindFirstChild(gfxElement, "Model");
+		//		std::string model;
+		//		std::string effect;
+		//
+		//		fbxReader.ForceReadAttribute(modelElement, "modelFile", model);
+		//		fbxReader.ForceReadAttribute(modelElement, "effectFile", effect);
+		//
+		//		LoadModel(model, effect);
+		//	}
+		//
+		//	fbxReader.CloseDocument();
+		//}
+		//
+		//entityReader.CloseDocument();
 
 		myHasPrefetched = true;
 	}
