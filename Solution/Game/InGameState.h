@@ -4,6 +4,8 @@
 #include <GrowingArray.h>
 #include <Subscriber.h>
 
+class Level;
+
 namespace CU
 {
 	class InputWrapper;
@@ -43,6 +45,8 @@ public:
 
 private:
 	void ShowMessage(const std::string& aBackgroundPath, const CU::Vector2<float>& aSize, std::string aText, GameStateMessage* aMessage = nullptr);
+
+	Level* myLevel;
 
 	bool myIsComplete;
 };
