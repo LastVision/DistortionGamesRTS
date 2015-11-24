@@ -10,6 +10,7 @@ namespace GUI
 		virtual void Destroy();
 
 		virtual void Update();
+		virtual void Render(const CU::Vector2<float>& aParentPosition);
 		virtual void OnMouseDown(const CU::Vector2<float>& aPosition);
 		virtual void OnMousePressed(const CU::Vector2<float>& aPosition);
 		virtual void OnMouseUp();
@@ -22,10 +23,8 @@ namespace GUI
 
 		virtual bool IsInside(const CU::Vector2<float>& aPosition) const;
 
-		virtual inline void SetSize(const float aWidth, const float aHeight);
 		virtual inline void SetSize(const CU::Vector2<float>& aSize);
 		virtual inline void SetPosition(const CU::Vector2<float>& aPosition);
-		virtual inline void SetPosition(const float aX, const float aY);
 		virtual inline void SetVisibility(bool aVisibility);
 		inline const CU::Vector2<float>& GetSize() const;
 		inline const CU::Vector2<float>& GetPosition() const;
@@ -37,12 +36,6 @@ namespace GUI
 		bool myIsVisible;
 	};
 
-	inline void Widget::SetSize(const float aWidth, const float aHeight)
-	{
-		mySize.x = aWidth;
-		mySize.y = aHeight;
-	}
-
 	inline void Widget::SetSize(const CU::Vector2<float>& aSize)
 	{
 		mySize = aSize;
@@ -51,12 +44,6 @@ namespace GUI
 	inline void Widget::SetPosition(const CU::Vector2<float>& aPosition)
 	{
 		myPosition = aPosition;
-	}
-
-	inline void Widget::SetPosition(const float aX, const float aY)
-	{
-		myPosition.x = aX;
-		myPosition.y = aY;
 	}
 
 	inline void Widget::SetVisibility(bool aVisibility)

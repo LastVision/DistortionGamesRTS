@@ -20,11 +20,15 @@ namespace GUI
 	{
 	}
 
-	void Widget::OnMouseDown(const CU::Vector2<float>& aPosition)
+	void Widget::Render(const CU::Vector2<float>&)
 	{
 	}
 
-	void Widget::OnMousePressed(const CU::Vector2<float>& aPosition)
+	void Widget::OnMouseDown(const CU::Vector2<float>&)
+	{
+	}
+
+	void Widget::OnMousePressed(const CU::Vector2<float>&)
 	{
 	}
 
@@ -40,7 +44,7 @@ namespace GUI
 	{
 	}
 
-	void Widget::OnMouseMoved(const CU::Vector2<float>& aPosition)
+	void Widget::OnMouseMoved(const CU::Vector2<float>&)
 	{
 	}
 
@@ -56,7 +60,7 @@ namespace GUI
 		}
 	}
 
-	Widget* Widget::FindWidget(const std::string& aName)
+	Widget* Widget::FindWidget(const std::string&)
 	{
 		return nullptr;
 	}
