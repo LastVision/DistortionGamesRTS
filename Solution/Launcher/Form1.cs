@@ -195,7 +195,7 @@ namespace Launcher
 
         void WriterWindowedToFile(BinaryWriter aWriter)
         {
-            bool windowed = false;
+            //bool windowed = false;
 
             //if (windowed == true)
             //{

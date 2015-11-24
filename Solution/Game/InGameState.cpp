@@ -49,6 +49,7 @@ void InGameState::EndState()
 
 const eStateStatus InGameState::Update(const float& aDeltaTime)
 {
+	aDeltaTime;
 	return eStateStatus::eKeepState;
 }
 
@@ -66,7 +67,8 @@ void InGameState::ResumeState()
 
 void InGameState::OnResize(int aWidth, int aHeight)
 {
-
+	aWidth;
+	aHeight;
 }
 
 void InGameState::ReceiveMessage(const GameStateMessage& aMessage)
@@ -89,7 +91,8 @@ void InGameState::ReceiveMessage(const GameStateMessage& aMessage)
 
 void InGameState::SetLevel(int aLevelID, int aDifficultID)
 {
-	
+	aLevelID;
+	aDifficultID;
 }
 
 void InGameState::CompleteLevel()
@@ -116,5 +119,8 @@ void InGameState::LoadPlayerSettings()
 void InGameState::ShowMessage(const std::string& aBackgroundPath, 
 	const CU::Vector2<float>& aSize, std::string aText, GameStateMessage* aMessage)
 {
-	
+	aBackgroundPath;
+	aSize;
+	aText;
+	aMessage;
 }
