@@ -5,11 +5,13 @@
 #include <ColoursForBG.h>
 #include <CommonHelper.h>
 #include <Cursor.h>
+#include <DebugFont.h>
 #include <Engine.h>
 #include <FileWatcher.h>
-#include <DebugFont.h>
 #include "Game.h"
+#include <GameStateMessage.h>
 #include <GUIManager.h>
+#include "InGameState.h"
 #include <InputWrapper.h>
 #include <ModelLoader.h>
 #include <SystemMonitor.h>
@@ -17,8 +19,6 @@
 #include <VTuneApi.h>
 #include <Vector.h>
 #include <XMLReader.h>
-
-#include <Sprite.h>
 
 Game::Game()
 	: myLockMouse(true)
@@ -40,8 +40,8 @@ Game::Game()
 
 Game::~Game()
 {
-	delete mySprite;
-	delete myInputWrapper;
+	SAFE_DELETE(myGUIManager);
+	SAFE_DELETE(myInputWrapper);
 	Prism::Audio::AudioInterface::GetInstance()->PostEvent("Stop_MenuMusic", 0);
 	Prism::Audio::AudioInterface::Destroy();
 }
@@ -57,10 +57,6 @@ bool Game::Init(HWND& aHwnd)
 	myWindowSize.x = Prism::Engine::GetInstance()->GetWindowSize().x;
 	myWindowSize.y = Prism::Engine::GetInstance()->GetWindowSize().y;
 
-	myGUIManager = new GUI::GUIManager(myInputWrapper);
-
-
-	mySprite = new Prism::Sprite("Data/Resource/Texture/Star.dds", { 128.f, 128.f }, { 64.f, 64.f });
 	GAME_LOG("Init Successful");
 	return true;
 }
@@ -72,7 +68,6 @@ bool Game::Destroy()
 
 bool Game::Update()
 {
-	mySprite->Render({ 0, 100 });
 	myInputWrapper->Update();
 	if (myInputWrapper->KeyDown(DIK_ESCAPE))
 	{
@@ -109,4 +104,20 @@ void Game::OnResize(int aWidth, int aHeight)
 {
 	myWindowSize.x = aWidth;
 	myWindowSize.y = aHeight;
+}
+
+void Game::ReceiveMessage(const GameStateMessage& aMessage)
+{
+	switch (aMessage.GetGameState())
+	{
+	case eGameState::LOAD_GAME:
+		myGame = new InGameState(myInputWrapper);
+		myStateStack.PushSubGameState(myGame);
+		myGame->SetLevel(aMessage.GetID(), aMessage.GetSecondID());
+		break;
+	case eGameState::LOAD_MENU:
+		break;
+	default:
+		break;
+	}
 }

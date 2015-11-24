@@ -1,4 +1,5 @@
 #include "InputWrapper.h"
+#include <MemoryMacros.h>
 
 CU::InputWrapper::InputWrapper()
 {

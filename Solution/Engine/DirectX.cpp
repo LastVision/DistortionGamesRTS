@@ -116,6 +116,9 @@ void Prism::DirectX::CleanD3D()
 	myWireframeRasterizer->Release();
 	myWireframeRasterizer = nullptr;
 
+	delete myViewPort;
+	myViewPort = nullptr;
+
 	myContext->ClearState();
 	myContext->Flush();
 	myContext->Release();
@@ -376,6 +379,7 @@ bool Prism::DirectX::D3DBackbufferSetup(int aWidth, int aHeight)
 
 bool Prism::DirectX::D3DViewPortSetup(int aWidth, int aHeight)
 {
+	delete myViewPort;
 	myViewPort = new D3D11_VIEWPORT();
 	ZeroMemory(myViewPort, sizeof(D3D11_VIEWPORT));
 
