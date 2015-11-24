@@ -30,12 +30,11 @@ Game::Game()
 	Prism::Audio::AudioInterface::CreateInstance();
 	myInputWrapper = new CU::InputWrapper();
 	Prism::Engine::GetInstance()->SetShowDebugText(myShowSystemInfo);
-
-	myGUIManager = new GUI::GUIManager(myInputWrapper);
 }
 
 Game::~Game()
 {
+	delete myGUIManager;
 	delete mySprite;
 	delete myInputWrapper;
 	Prism::Audio::AudioInterface::GetInstance()->PostEvent("Stop_MenuMusic", 0);
