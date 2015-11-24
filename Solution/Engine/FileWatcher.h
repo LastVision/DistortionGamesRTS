@@ -1,8 +1,8 @@
 #pragma once
 
 
-#define WATCH_FILE(FILE, FUNCTION) (Prism::Engine::GetInstance()->GetFileWatcher()->WatchFile(FILE, std::bind(&FUNCTION, this, FILE)))
-#define UNWATCH_FILE(FILE) (Prism::Engine::GetInstance()->GetFileWatcher()->UnWatchFile(FILE))
+#define WATCH_FILE(FILE, FUNCTION) (Prism::FileWatcher::GetInstance()->WatchFile(FILE, std::bind(&FUNCTION, this, FILE)))
+#define UNWATCH_FILE(FILE) (Prism::FileWatcher::GetInstance()->UnWatchFile(FILE))
 
 #include <functional>
 #include <string>
@@ -12,7 +12,8 @@ namespace Prism
 	class FileWatcher
 	{
 	public:
-		FileWatcher();
+		static FileWatcher* GetInstance();
+		static void Destroy();
 
 		void WatchFile(const std::string& aFile, std::function<void()> aCallBack);
 		void UnWatchFile(const std::string& aFile);
@@ -21,6 +22,8 @@ namespace Prism
 		void Clear();
 
 	private:
+		FileWatcher();
+
 		struct FileData
 		{
 			std::string myFilePath;
@@ -29,5 +32,7 @@ namespace Prism
 		};
 
 		CU::GrowingArray<FileData> myFileDatas;
+
+		static FileWatcher* myInstance;
 	};
 }

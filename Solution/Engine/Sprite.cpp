@@ -20,7 +20,7 @@ Prism::Sprite::Sprite(const std::string& aFileName, const CU::Vector2<float>& aS
 {
 	myFileName = aFileName;
 
-	myEffect = Engine::GetInstance()->GetEffectContainer()->GetEffect("Data/Resource/Shader/S_effect_sprite.fx");
+	myEffect = EffectContainer::GetInstance()->GetEffect("Data/Resource/Shader/S_effect_sprite.fx");
 	myEffect->AddListener(this);
 
 	D3D11_INPUT_ELEMENT_DESC vertexDesc[] =
@@ -49,7 +49,7 @@ Prism::Sprite::Sprite(ID3D11Texture2D* aTexture, const CU::Vector2<float>& aSpri
 {
 	myFileName = "Inited from ID3D11Texture";
 
-	myEffect = Engine::GetInstance()->GetEffectContainer()->GetEffect("Data/Resource/Shader/S_effect_sprite.fx");
+	myEffect = EffectContainer::GetInstance()->GetEffect("Data/Resource/Shader/S_effect_sprite.fx");
 	myEffect->AddListener(this);
 
 	D3D11_INPUT_ELEMENT_DESC vertexDesc[] =

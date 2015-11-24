@@ -134,8 +134,8 @@ bool Prism::StreakEmitterData::LoadDataFile(const std::string& aFileName)
 
 	reader.CloseDocument();
 
-	myTexture = Engine::GetInstance()->GetTextureContainer()->GetTexture(myTextureName);
-	myEffect = Engine::GetInstance()->GetEffectContainer()->GetEffect(myEffectName);
+	myTexture = TextureContainer::GetInstance()->GetTexture(myTextureName);
+	myEffect = EffectContainer::GetInstance()->GetEffect(myEffectName);
 
 	return CreateInputLayout();
 }

@@ -11,6 +11,22 @@
 
 namespace Prism
 {
+	EmitterDataContainer* EmitterDataContainer::myInstance = nullptr;
+	EmitterDataContainer* EmitterDataContainer::GetInstance()
+	{
+		if (myInstance == nullptr)
+		{
+			myInstance = new EmitterDataContainer();
+		}
+
+		return myInstance;
+	}
+
+	void EmitterDataContainer::Destroy()
+	{
+		SAFE_DELETE(myInstance);
+	}
+
 	EmitterDataContainer::~EmitterDataContainer()
 	{
 		for (auto it = myParticleData.begin(); it != myParticleData.end(); ++it)

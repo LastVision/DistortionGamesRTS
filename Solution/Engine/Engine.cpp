@@ -29,12 +29,7 @@ namespace Prism
 		, myDebugTexts(16)
 		, myShowDebugText(false)
 	{
-		myTextureContainer = new TextureContainer();
-		myEffectContainer = new EffectContainer();
-		myEmitterDataContainer = new EmitterDataContainer();
 		myModelFactory = new FBXFactory();
-		myFileWatcher = new FileWatcher();
-		myModelLoader = new ModelLoader();
 		myWireframeIsOn = false;
 		myWireframeShouldShow = false;
 
@@ -48,22 +43,23 @@ namespace Prism
 	{
 		delete myFadeData.mySprite;
 		myFadeData.mySprite = nullptr;
-		delete myTextureContainer;
-		delete myEffectContainer;
-		delete myEmitterDataContainer;
 		delete myModelFactory;
-		delete myFileWatcher;
 
 		delete myText;
 		delete myDebugText;
 		delete myFont;
 
-		Prism::Engine::GetInstance()->GetModelLoader()->ClearLoadJobs();
-		Prism::Engine::GetInstance()->GetModelLoader()->WaitUntilFinished();
+		TextureContainer::Destroy();
+		EffectContainer::Destroy();
+		EmitterDataContainer::Destroy();
+		FileWatcher::Destroy();
 
-		myModelLoader->Shutdown();
+		ModelLoader::GetInstance()->ClearLoadJobs();
+		ModelLoader::GetInstance()->WaitUntilFinished();
+		ModelLoader::GetInstance()->Shutdown();
+
 		myModelLoaderThread->join();
-		delete myModelLoader;
+		ModelLoader::Destroy();
 		delete myModelLoaderThread;
 
 		delete myDirectX;
@@ -204,7 +200,7 @@ namespace Prism
 	{
 #ifdef THREADED_LOADING
 		DL_ASSERT_EXP(std::this_thread::get_id() == myModelLoaderThreadID ||
-			myModelLoader->IsLoading() == false, "Called GetDevice() from mainThread, while modelLoader is loading, not allowed!");
+			ModelLoader::GetInstance()->IsLoading() == false, "Called GetDevice() from mainThread, while modelLoader is loading, not allowed!");
 #endif
 		return myDirectX->GetDevice();
 	}
@@ -288,7 +284,7 @@ namespace Prism
 
 		myMainThreadID = std::this_thread::get_id();
 
-		myModelLoaderThread = new std::thread(&ModelLoader::Run, myModelLoader);
+		myModelLoaderThread = new std::thread(&ModelLoader::Run, ModelLoader::GetInstance());
 
 		myModelLoaderThreadID = myModelLoaderThread->get_id();
 

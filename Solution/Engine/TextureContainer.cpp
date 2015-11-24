@@ -5,51 +5,70 @@
 #include "Texture.h"
 #include "TextureContainer.h"
 
-
-Prism::TextureContainer::~TextureContainer()
+namespace Prism
 {
-	for (auto it = myTextures.begin(); it != myTextures.end(); ++it)
+	TextureContainer* TextureContainer::myInstance = nullptr;
+
+	TextureContainer* TextureContainer::GetInstance()
 	{
-		delete it->second;
+		if (myInstance == nullptr)
+		{
+			myInstance = new TextureContainer();
+		}
+
+		return myInstance;
 	}
 
-	myTextures.clear();
-}
-
-Prism::Texture* Prism::TextureContainer::GetTexture(const std::string& aFileName)
-{
-	auto it = myTextures.find(aFileName);
-
-	if (it == myTextures.end())
+	void TextureContainer::Destroy()
 	{
-		LoadTexture(aFileName);
+		SAFE_DELETE(myInstance);
 	}
 
-	return myTextures[aFileName];
-}
-
-void Prism::TextureContainer::LoadTexture(const std::string& aFileName)
-{
-	Texture* newTex = new Texture();
-	if (aFileName.empty() == false)
+	TextureContainer::~TextureContainer()
 	{
-		const char* fileEnding = &aFileName[aFileName.size() - 3];
-		std::string stringEnding(fileEnding);
-		CU::ToLower(stringEnding);
-		std::string errorMessage = "Texture file-format not .DDS/.dds in [" + aFileName + "].";
-		//DL_ASSERT_EXP(stringEnding == "dds", errorMessage.c_str());
-	}
-	newTex->LoadTexture(aFileName);
+		for (auto it = myTextures.begin(); it != myTextures.end(); ++it)
+		{
+			delete it->second;
+		}
 
-	myTextures[aFileName] = newTex;
+		myTextures.clear();
+	}
+
+	Texture* TextureContainer::GetTexture(const std::string& aFileName)
+	{
+		auto it = myTextures.find(aFileName);
+
+		if (it == myTextures.end())
+		{
+			LoadTexture(aFileName);
+		}
+
+		return myTextures[aFileName];
+	}
+
+	void TextureContainer::LoadTexture(const std::string& aFileName)
+	{
+		Texture* newTex = new Texture();
+		if (aFileName.empty() == false)
+		{
+			const char* fileEnding = &aFileName[aFileName.size() - 3];
+			std::string stringEnding(fileEnding);
+			CU::ToLower(stringEnding);
+			std::string errorMessage = "Texture file-format not .DDS/.dds in [" + aFileName + "].";
+			//DL_ASSERT_EXP(stringEnding == "dds", errorMessage.c_str());
+		}
+		newTex->LoadTexture(aFileName);
+
+		myTextures[aFileName] = newTex;
 
 #ifdef DLL_EXPORT
-	WATCH_FILE(aFileName, Prism::TextureContainer::ReloadTexture);
+		WATCH_FILE(aFileName, Prism::TextureContainer::ReloadTexture);
 #endif
-}
+	}
 
-void Prism::TextureContainer::ReloadTexture(const std::string& aFileName) 
-{
-	myTextures[aFileName]->Release();
-	myTextures[aFileName]->LoadTexture(aFileName);
+	void TextureContainer::ReloadTexture(const std::string& aFileName)
+	{
+		myTextures[aFileName]->Release();
+		myTextures[aFileName]->LoadTexture(aFileName);
+	}
 }

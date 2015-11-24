@@ -194,7 +194,7 @@ bool Prism::Effect::ReloadShader(const std::string& aFile)
 		if (compilationMsgs != nullptr)
 		{
 			DL_MESSAGE_BOX((char*)compilationMsgs->GetBufferPointer(), "Effect Error", MB_ICONWARNING);
-			myEffect = Engine::GetInstance()->GetEffectContainer()->GetEffect(
+			myEffect = EffectContainer::GetInstance()->GetEffect(
 				"Data/Resource/Shader/S_effect_debug.fx")->myEffect;
 		} 
 		else 
