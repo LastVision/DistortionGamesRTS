@@ -53,6 +53,9 @@ bool Game::Init(HWND& aHwnd)
 	myWindowSize.x = Prism::Engine::GetInstance()->GetWindowSize().x;
 	myWindowSize.y = Prism::Engine::GetInstance()->GetWindowSize().y;
 
+	myGUIManager = new GUI::GUIManager(myInputWrapper);
+
+
 	mySprite = new Prism::Sprite("Data/Resource/Texture/Star.dds", { 128.f, 128.f }, { 64.f, 64.f });
 	GAME_LOG("Init Successful");
 	return true;
@@ -71,6 +74,9 @@ bool Game::Update()
 	{
 		return false;
 	}
+
+	myGUIManager->Update();
+	myGUIManager->Render();
 
 	return true;
 }
