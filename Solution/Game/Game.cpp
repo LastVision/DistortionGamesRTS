@@ -50,6 +50,9 @@ bool Game::Init(HWND& aHwnd)
 	myWindowSize.x = Prism::Engine::GetInstance()->GetWindowSize().x;
 	myWindowSize.y = Prism::Engine::GetInstance()->GetWindowSize().y;
 
+	myGUIManager = new GUI::GUIManager(myInputWrapper);
+
+
 	GAME_LOG("Init Successful");
 	return true;
 }
@@ -67,6 +70,9 @@ bool Game::Update()
 	{
 		return false;
 	}
+
+	myGUIManager->Update();
+	myGUIManager->Render();
 
 	return true;
 }

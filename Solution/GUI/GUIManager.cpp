@@ -54,6 +54,11 @@ namespace GUI
 		myWidgets->Update();
 	}
 
+	void GUIManager::Render()
+	{
+		myWidgets->Render({ 0.f, 0.f });
+	}
+
 	void GUIManager::SetPosition(const CU::Vector2<float>& aPosition)
 	{
 		myWidgets->SetPosition(aPosition);
