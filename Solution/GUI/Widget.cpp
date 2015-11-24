@@ -60,11 +60,6 @@ namespace GUI
 		}
 	}
 
-	Widget* Widget::FindWidget(const std::string&)
-	{
-		return nullptr;
-	}
-
 	bool Widget::IsInside(const CU::Vector2<float>& aPosition) const
 	{
 		return	aPosition.x >= myPosition.x &&

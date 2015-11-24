@@ -24,7 +24,7 @@ namespace GUI
 		widget->myImageCurrent = widget->myImageNormal;
 		widget->SetPosition({ 500.f, 700.f});
 		widget->SetSize({ 500.f, 500.f });
-		myWidgets->AddWidget("test", widget);
+		myWidgets->AddWidget(widget);
 
 		SetPosition({ 0.f, 0.f });
 		SetSize({ float(Prism::Engine::GetInstance()->GetWindowSize().x), float(Prism::Engine::GetInstance()->GetWindowSize().y) });
@@ -37,9 +37,9 @@ namespace GUI
 		myActiveWidget = nullptr;
 	}
 
-	void GUIManager::AddWidget(const std::string& aName, Widget* aWidget)
+	void GUIManager::AddWidget(Widget* aWidget)
 	{
-		myWidgets->AddWidget(aName, aWidget);
+		myWidgets->AddWidget(aWidget);
 	}
 
 	void GUIManager::Update()
@@ -72,11 +72,6 @@ namespace GUI
 		myWidgets->SetSize(aSize);
 	}
 
-	Widget* GUIManager::FindWidget(const std::string& aWidgetName)
-	{
-		return myWidgets->FindWidget(aWidgetName);
-	}
-	
 	void GUIManager::CheckMousePressed()
 	{
 		if (myActiveWidget != nullptr)
