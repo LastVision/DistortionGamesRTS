@@ -37,7 +37,6 @@ void InGameState::InitState(StateStackProxy* aStateStackProxy)
 	CU::Vector2<int> windowSize = Prism::Engine::GetInstance()->GetWindowSize();
 
 	OnResize(windowSize.x, windowSize.y);
-	PostMaster::GetInstance()->SendMessage(GameStateMessage(eGameState::MOUSE_LOCK, true));
 	PostMaster::GetInstance()->Subscribe(eMessageType::GAME_STATE, this);
 
 	myIsActiveState = true;
@@ -63,7 +62,6 @@ void InGameState::Render()
 void InGameState::ResumeState()
 {
 	myIsActiveState = true;
-	PostMaster::GetInstance()->SendMessage(GameStateMessage(eGameState::MOUSE_LOCK, true));
 }
 
 void InGameState::OnResize(int aWidth, int aHeight)
@@ -96,13 +94,12 @@ void InGameState::SetLevel(int aLevelID, int aDifficultID)
 
 void InGameState::CompleteLevel()
 {
-	GameStateMessage* newEvent = new GameStateMessage(eGameState::LOAD_NEXT_LEVEL);
-	ShowMessage("Data/Resource/Texture/Menu/T_background_completed_level.dds", { 1024, 1024 }, "Press [space] to continue.", newEvent);
+	
 }
 
 void InGameState::CompleteGame()
 {
-	ShowMessage("Data/Resource/Texture/Menu/T_background_completed_game.dds", { 1024, 1024 }, "Press [space] to continue.");
+	
 	myIsComplete = true;
 }
 
