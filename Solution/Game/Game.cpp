@@ -65,7 +65,6 @@ bool Game::Init(HWND& aHwnd)
 		| DISCL_FOREGROUND, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND);
 	myWindowSize.x = Prism::Engine::GetInstance()->GetWindowSize().x;
 	myWindowSize.y = Prism::Engine::GetInstance()->GetWindowSize().y;
-	myGUIManager = new GUI::GUIManager(myInputWrapper);
 
 	PostMaster::GetInstance()->SendMessage(GameStateMessage(eGameState::LOAD_GAME, 1));
 
