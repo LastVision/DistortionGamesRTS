@@ -53,8 +53,8 @@ const eStateStatus InGameState::Update(const float& aDeltaTime)
 	}
 	if (myLevel->LogicUpdate(aDeltaTime) == true)
 	{
-		return eStateStatus::eKeepState;
-	}
+	return eStateStatus::eKeepState;
+}
 	return eStateStatus::eKeepState;
 }
 
@@ -98,6 +98,8 @@ void InGameState::ReceiveMessage(const GameStateMessage& aMessage)
 void InGameState::SetLevel(int aLevelID, int aDifficultID)
 {
 	myLevel = new Level();
+	aLevelID;
+	aDifficultID;
 }
 
 void InGameState::CompleteLevel()
@@ -124,5 +126,8 @@ void InGameState::LoadPlayerSettings()
 void InGameState::ShowMessage(const std::string& aBackgroundPath, 
 	const CU::Vector2<float>& aSize, std::string aText, GameStateMessage* aMessage)
 {
-	
+	aBackgroundPath;
+	aSize;
+	aText;
+	aMessage;
 }

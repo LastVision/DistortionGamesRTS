@@ -24,17 +24,11 @@ namespace CU
 		union
 		{
 			T x;
-			T myX;
-			T r;
-			T myR;
 		};
 
 		union
 		{
 			T y;
-			T myY;
-			T g;
-			T myG;
 		};
 	};
 }

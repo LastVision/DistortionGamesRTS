@@ -4,6 +4,7 @@
 #include <Camera.h>
 #include <ColoursForBG.h>
 #include <CommonHelper.h>
+#include <Cursor.h>
 #include <DebugFont.h>
 #include <Engine.h>
 #include <FileWatcher.h>
@@ -33,6 +34,11 @@ Game::Game()
 	Prism::Audio::AudioInterface::CreateInstance();
 	myInputWrapper = new CU::InputWrapper();
 	Prism::Engine::GetInstance()->SetShowDebugText(myShowSystemInfo);
+
+	myGUIManager = new GUI::GUIManager(myInputWrapper);
+	myCursor = new GUI::Cursor(myInputWrapper, Prism::Engine::GetInstance()->GetWindowSize());
+
+	SetCursorPos(Prism::Engine::GetInstance()->GetWindowSize().x / 2, Prism::Engine::GetInstance()->GetWindowSize().y / 2);
 }
 
 Game::~Game()
@@ -40,6 +46,7 @@ Game::~Game()
 	SAFE_DELETE(myGUIManager);
 	SAFE_DELETE(myInputWrapper);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::GAME_STATE, this);
+	SAFE_DELETE(myCursor);
 	Prism::Audio::AudioInterface::GetInstance()->PostEvent("Stop_MenuMusic", 0);
 	Prism::Audio::AudioInterface::Destroy();
 	PostMaster::Destroy();
@@ -58,7 +65,6 @@ bool Game::Init(HWND& aHwnd)
 		| DISCL_FOREGROUND, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND);
 	myWindowSize.x = Prism::Engine::GetInstance()->GetWindowSize().x;
 	myWindowSize.y = Prism::Engine::GetInstance()->GetWindowSize().y;
-
 	myGUIManager = new GUI::GUIManager(myInputWrapper);
 
 	PostMaster::GetInstance()->SendMessage(GameStateMessage(eGameState::LOAD_GAME, 1));
@@ -83,6 +89,11 @@ bool Game::Update()
 		deltaTime = 1.0f / 10.0f;
 	}
 
+	if (myLockMouse == true)
+	{
+		SetCursorPos(Prism::Engine::GetInstance()->GetWindowSize().x / 2, Prism::Engine::GetInstance()->GetWindowSize().y / 2);
+	}
+
 	myGUIManager->Update();
 	myGUIManager->Render();
 
@@ -94,6 +105,8 @@ bool Game::Update()
 	myStateStack.RenderCurrentState();
 
 	CU::TimerManager::GetInstance()->CapFrameRate(100.f);
+	myCursor->Update();
+	myCursor->Render();
 
 	return true;
 }
