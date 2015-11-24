@@ -1,6 +1,10 @@
 #pragma once
 
 #include "MemoryStatistics.h"
+namespace std
+{
+	class mutex;
+}
 
 namespace Prism
 {
@@ -53,6 +57,8 @@ namespace Prism
 		MemoryData* myData;
 		int myAllocations;
 		bool myRuntime;
+
+		std::mutex* myMutex;
 
 		static MemoryTracker* myInstance;
 	};

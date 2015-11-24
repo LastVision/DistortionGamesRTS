@@ -2,6 +2,7 @@
 #include <DL_Assert.h>
 #include "MemoryTracker.h"
 #include <sstream>
+#include <mutex>
 
 void* operator new(size_t aBytes)
 {
@@ -57,9 +58,11 @@ namespace Prism
 	{
 		if (myInstance == nullptr)
 		{
-			//Stackoverflow
 			myInstance = static_cast<MemoryTracker*>(malloc(sizeof(MemoryTracker)));
 			myInstance = new(myInstance)MemoryTracker();
+
+			myInstance->myMutex = static_cast<std::mutex*>(malloc(sizeof(std::mutex)));
+			myInstance->myMutex = new(myInstance->myMutex)std::mutex();
 		}
 
 		return myInstance;
@@ -108,7 +111,10 @@ namespace Prism
 		myMemoryStatistics.myCurrentMemoryAllocated += aBytes;
 		++myMemoryStatistics.myAccumulatedNumberOfAllocations;
 
-		//Mutex.Lock()
+		if (myMutex != nullptr)
+		{
+			myMutex->lock();
+		}
 
 		myTopicalData.myAddress = aAddress;
 		myTopicalData.myBytes = aBytes;
@@ -131,14 +137,17 @@ namespace Prism
 		myTopicalData.myLine = -1;
 		myTopicalData.myType = eMemoryType::UNKNOWN;
 
-		//Mutex.Unlock();
+		if (myMutex != nullptr)
+		{
+			myMutex->unlock();
+		}
 	}
 
 	void MemoryTracker::Remove(void* aAddress, bool aLock)
 	{
-		if (aLock == true)
+		if (aLock == true && myMutex != nullptr)
 		{
-			//Mutex.Lock
+			myMutex->lock();
 		}
 
 		for (int i = 0; i < myAllocations; ++i)
@@ -152,11 +161,9 @@ namespace Prism
 			}
 		}
 
-
-
-		if (aLock == true)
+		if (aLock == true && myMutex != nullptr)
 		{
-			//Mutex.Unlock()
+			myMutex->unlock();
 		}
 	}
 
@@ -171,15 +178,15 @@ namespace Prism
 
 	MemoryTracker::~MemoryTracker()
 	{
+		::free(myMutex);
+
 		if (myAllocations > 0)
 		{
 			DL_PRINT_VA("--- MEMORY LEAKS ---\n");
 			DL_PRINT_VA("Bytes:\tLine:\tFile:\t\t\t\t\t\tFunction:");
 
-			const char* first;
 			for (int i = 0; i < myAllocations; ++i)
 			{
-
 				const char* shortPath = strstr(myData[i].myFileName, "solution");
 				shortPath += 9;
 
