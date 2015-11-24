@@ -20,7 +20,7 @@ namespace GUI
 		ButtonWidget* widget = new ButtonWidget;
 		widget->myImageHover = new Prism::Sprite("Data/Resource/Texture/Menu/T_button_start_hover.dds", { 500.f, 500.f }, { 250.f, 250.f });
 		widget->myImageNormal = new Prism::Sprite("Data/Resource/Texture/Menu/T_button_start.dds", { 500.f, 500.f }, { 250.f, 250.f });
-		widget->myImagePressed = new Prism::Sprite("Data/Resource/Texture/Menu/T_button_start.dds", { 500.f, 500.f }, { 250.f, 250.f });
+		widget->myImagePressed = new Prism::Sprite("Data/Resource/Texture/Menu/T_button_start_pressed.dds", { 500.f, 500.f }, { 250.f, 250.f });
 		widget->myImageCurrent = widget->myImageNormal;
 		widget->SetPosition({ 500.f, 700.f});
 		widget->SetSize({ 500.f, 500.f });
