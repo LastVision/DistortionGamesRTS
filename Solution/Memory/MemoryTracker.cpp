@@ -167,10 +167,12 @@ namespace Prism
 				DL_PRINT_VA("%i\t\t%i\t\t%s\t\t%s", myData[i].myBytes, myData[i].myLine, shortPath, myData[i].myFunctionName);
 			}
 
-			//DL_MESSAGE_BOX("FOUND MEMORYLEAKS!", "MEMORY ERROR!", MB_ICONWARNING);
-			DL_ASSERT("SHOW FIRST MEMORYLEAK HERE!! VA_ARGS ASSERT NEEDED");
-			::free(myData);
+			const char* shortPath = strstr(myData[0].myFileName, "solution");
+			shortPath += 9;
 
+			DL_ASSERT_VA("\nMEMORYLEAK!\nFile: %s\nFunction: %s\nLine: %i\n\nTotal Leaks: %i"
+				, shortPath, myData[0].myFunctionName, myData[0].myLine, myAllocations);
+			::free(myData);
 		}
 	}
 }
