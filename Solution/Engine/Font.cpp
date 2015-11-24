@@ -9,7 +9,7 @@ Prism::Font::Font(const std::string& aFilePath, const CU::Vector2<int>& aTexture
 	ParseFontFile(myChars, myFilePath, myTextureSize.x, myTextureSize.y);
 	std::string texturePath(aFilePath.begin(), aFilePath.end() - 4);
 	texturePath += ".dds";
-	myTexture = Engine::GetInstance()->GetTextureContainer()->GetTexture(texturePath);
+	myTexture = TextureContainer::GetInstance()->GetTexture(texturePath);
 }
 
 Prism::Font::CharacterData Prism::Font::GetCharData(unsigned char aChar) const

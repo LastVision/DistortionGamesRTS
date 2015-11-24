@@ -11,6 +11,23 @@
 
 namespace Prism
 {
+	ModelLoader* ModelLoader::myInstance = nullptr;
+
+	ModelLoader* ModelLoader::GetInstance()
+	{
+		if (myInstance == nullptr)
+		{
+			myInstance = new ModelLoader();
+		}
+
+		return myInstance;
+	}
+
+	void ModelLoader::Destroy()
+	{
+		delete myInstance;
+	}
+
 	ModelLoader::ModelLoader()
 		: myNonFXBModels(4)
 		, myIsRunning(true)
@@ -115,7 +132,7 @@ namespace Prism
 				{
 					
 					model = myModelFactory->LoadModel(myLoadArray[i].myModelPath.c_str(),
-						Engine::GetInstance()->GetEffectContainer()->GetEffect(myLoadArray[i].myEffectPath));
+						EffectContainer::GetInstance()->GetEffect(myLoadArray[i].myEffectPath));
 					
 					break;
 				}
@@ -260,7 +277,7 @@ namespace Prism
 		ModelProxy* proxy = new ModelProxy();
 
 		Model* model = myModelFactory->LoadModel(aModelPath.c_str(),
-			Engine::GetInstance()->GetEffectContainer()->GetEffect(aEffectPath));
+			EffectContainer::GetInstance()->GetEffect(aEffectPath));
 
 		proxy->SetModel(model);
 

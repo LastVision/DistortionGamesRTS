@@ -9,7 +9,7 @@ Prism::Text::Text(const Font& aFont)
 	, myColor(1.f, 1.f, 1.f, 1.f)
 {
 	//from debugText
-	myEffect = Engine::GetInstance()->GetEffectContainer()->GetEffect("Data/Resource/Shader/S_effect_font.fx");
+	myEffect = EffectContainer::GetInstance()->GetEffect("Data/Resource/Shader/S_effect_font.fx");
 	//myFont = aFont;
 	//myCharSize = myFont->GetCharSize();
 	//myCharSpacing = 17.f;

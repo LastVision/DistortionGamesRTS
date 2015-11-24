@@ -15,7 +15,7 @@
 
 void Prism::DebugText::Init(DebugFont* aFont)
 {
-	myEffect = Engine::GetInstance()->GetEffectContainer()->GetEffect("Data/Resource/Shader/S_effect_fontDebug.fx");
+	myEffect = EffectContainer::GetInstance()->GetEffect("Data/Resource/Shader/S_effect_fontDebug.fx");
 	myFont = aFont;
 	myCharSize = myFont->GetCharSize();
 	myCharSpacing = 17.f;

@@ -176,7 +176,7 @@ namespace Prism
 
 	void FullScreenHelper::CreateCombineData()
 	{
-		myCombineData.myEffect = Engine::GetInstance()->GetEffectContainer()->GetEffect(
+		myCombineData.myEffect = EffectContainer::GetInstance()->GetEffect(
 			"Data/Resource/Shader/S_effect_combine.fx");
 
 		myCombineData.mySourceA
@@ -191,7 +191,7 @@ namespace Prism
 
 	void FullScreenHelper::CreateRenderToTextureData()
 	{
-		myRenderToTextureData.myEffect = Engine::GetInstance()->GetEffectContainer()->GetEffect(
+		myRenderToTextureData.myEffect = EffectContainer::GetInstance()->GetEffect(
 			"Data/Resource/Shader/S_effect_render_to_texture.fx");
 
 		myRenderToTextureData.mySource
@@ -213,7 +213,7 @@ namespace Prism
 			, DXGI_FORMAT_R8G8B8A8_UNORM);
 
 		myBloomData.myBloomEffect
-			= Engine::GetInstance()->GetEffectContainer()->GetEffect("Data/Resource/Shader/S_effect_bloom.fx");
+			= EffectContainer::GetInstance()->GetEffect("Data/Resource/Shader/S_effect_bloom.fx");
 		myBloomData.myBloomVariable
 			= myBloomData.myBloomEffect->GetEffect()->GetVariableByName("DiffuseTexture")->AsShaderResource();
 		myBloomData.myTexelWidthVariable
@@ -226,7 +226,7 @@ namespace Prism
 
 
 		myBloomData.myDownSampleEffect
-			= Engine::GetInstance()->GetEffectContainer()->GetEffect("Data/Resource/Shader/S_effect_down_sample.fx");
+			= EffectContainer::GetInstance()->GetEffect("Data/Resource/Shader/S_effect_down_sample.fx");
 		myBloomData.myDownSampleVariable
 			= myBloomData.myDownSampleEffect->GetEffect()->GetVariableByName("DiffuseTexture")->AsShaderResource();
 

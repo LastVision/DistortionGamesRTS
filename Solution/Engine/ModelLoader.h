@@ -12,8 +12,8 @@ namespace Prism
 	class ModelLoader
 	{
 	public:
-		ModelLoader();
-		~ModelLoader();
+		static ModelLoader* GetInstance();
+		static void Destroy();
 
 		void Run();
 		void Shutdown();
@@ -45,6 +45,9 @@ namespace Prism
 			CU::Vector4<float> myColor;
 		};
 
+		ModelLoader();
+		~ModelLoader();
+
 		void WaitUntilCopyIsAllowed();
 		void WaitUntilAddIsAllowed();
 		void AddPrefetchJobs();
@@ -63,5 +66,7 @@ namespace Prism
 
 		FBXFactory* myModelFactory;
 		CU::GrowingArray<Model*> myNonFXBModels;
+
+		static ModelLoader* myInstance;
 	};
 }

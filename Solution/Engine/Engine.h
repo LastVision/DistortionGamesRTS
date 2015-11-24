@@ -33,18 +33,13 @@ namespace Prism
 
 	class Camera;
 	class DirectX;
-	class EffectContainer;
 	class Effect;
-	class EmitterDataContainer;
 	class FBXFactory;
-	class FileWatcher;
 	class Font;
 	class Model;
-	class ModelLoader;
 	class ModelProxy;
 	class Sprite;
 	class Text;
-	class TextureContainer;
 
 	struct SetupInfo;
 
@@ -66,13 +61,6 @@ namespace Prism
 		ID3D11ShaderResourceView* GetBackbufferView();
 		ID3D11Texture2D* GetDepthBufferTexture();
 		void SetDebugName(ID3D11DeviceChild* aChild, const std::string& aName);
-
-		TextureContainer* GetTextureContainer();
-		EffectContainer* GetEffectContainer();
-		EmitterDataContainer* GetEmitterDataContainer();
-		FileWatcher* GetFileWatcher();
-		ModelLoader* GetModelLoader();
-
 
 		Model* DLLLoadModel(const std::string& aModelPath, Effect* aEffect);
 
@@ -128,11 +116,7 @@ namespace Prism
 
 		DirectX* myDirectX;
 		SetupInfo* mySetupInfo;
-		TextureContainer* myTextureContainer;
-		EffectContainer* myEffectContainer;
-		EmitterDataContainer* myEmitterDataContainer;
 		FBXFactory* myModelFactory;
-		FileWatcher* myFileWatcher;
 		Font* myFont;
 		Text* myText;
 		Text* myDebugText;
@@ -143,7 +127,6 @@ namespace Prism
 		CU::Matrix44<float> myOrthogonalMatrix;
 
 
-		ModelLoader* myModelLoader;
 		std::thread* myModelLoaderThread;
 		std::thread::id myModelLoaderThreadID;
 		std::thread::id myMainThreadID;
@@ -154,32 +137,6 @@ namespace Prism
 		CU::GrowingArray<TextCommand> myDebugTexts;
 		bool myShowDebugText;
 	};
-}
-
-inline Prism::TextureContainer* Prism::Engine::GetTextureContainer()
-{
-	return myTextureContainer;
-}
-
-inline Prism::EffectContainer* Prism::Engine::GetEffectContainer()
-{
-	return myEffectContainer;
-}
-
-inline Prism::EmitterDataContainer* Prism::Engine::GetEmitterDataContainer()
-{
-	DL_ASSERT_EXP(myEmitterDataContainer != nullptr, "EmitterDataContainer were nullptr! Couldn't get it.");
-	return myEmitterDataContainer;
-}
-
-inline Prism::FileWatcher* Prism::Engine::GetFileWatcher()
-{
-	return myFileWatcher;
-}
-
-inline Prism::ModelLoader* Prism::Engine::GetModelLoader()
-{
-	return myModelLoader;
 }
 
 inline const CU::Vector2<int>& Prism::Engine::GetWindowSize() const

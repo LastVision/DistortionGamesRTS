@@ -60,7 +60,7 @@ void Prism::Instance::SetEffect(const std::string& aEffectFile)
 {
 	if (myProxy.IsLoaded())
 	{
-		myProxy.SetEffect(Engine::GetInstance()->GetEffectContainer()->GetEffect(aEffectFile));
+		myProxy.SetEffect(EffectContainer::GetInstance()->GetEffect(aEffectFile));
 	}
 }
 

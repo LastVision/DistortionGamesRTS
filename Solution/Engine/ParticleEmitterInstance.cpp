@@ -73,7 +73,7 @@ namespace Prism
 		UpdateVertexBuffer();
 
 		myParticleEmitterData->myEffect->SetTexture(
-			Engine::GetInstance()->GetTextureContainer()->GetTexture(myParticleEmitterData->myTextureName.c_str()));
+			TextureContainer::GetInstance()->GetTexture(myParticleEmitterData->myTextureName.c_str()));
 
 
 		myParticleEmitterData->myEffect->SetWorldMatrix(myOrientation);

@@ -85,7 +85,7 @@ void Prism::Model::Init()
 void Prism::Model::InitCube(const float aWidth, const float aHeight, const float aDepth, CU::Vector4f aColour)
 {
 	DL_ASSERT_EXP(myInited == false, "Tried to Init a model twice");
-	myEffect = Engine::GetInstance()->GetEffectContainer()->GetEffect("Data/Resource/Shader/S_effect_cube_colored.fx");
+	myEffect = EffectContainer::GetInstance()->GetEffect("Data/Resource/Shader/S_effect_cube_colored.fx");
 
 
 	if (myEffect == nullptr)
