@@ -41,6 +41,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Memory", "Memory\Memory.vcx
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PostMaster", "PostMaster\PostMaster.vcxproj", "{EF362EDC-8FFF-400B-A5FF-05A9BC551D65}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Entity", "Entity\Entity.vcxproj", "{9DD8D699-EDB7-44B3-A0DC-1FA57B81FA7A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -330,6 +332,26 @@ Global
 		{EF362EDC-8FFF-400B-A5FF-05A9BC551D65}.Release|Mixed Platforms.Build.0 = Release|Win32
 		{EF362EDC-8FFF-400B-A5FF-05A9BC551D65}.Release|Win32.ActiveCfg = Release|Win32
 		{EF362EDC-8FFF-400B-A5FF-05A9BC551D65}.Release|Win32.Build.0 = Release|Win32
+		{9DD8D699-EDB7-44B3-A0DC-1FA57B81FA7A}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{9DD8D699-EDB7-44B3-A0DC-1FA57B81FA7A}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{9DD8D699-EDB7-44B3-A0DC-1FA57B81FA7A}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{9DD8D699-EDB7-44B3-A0DC-1FA57B81FA7A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{9DD8D699-EDB7-44B3-A0DC-1FA57B81FA7A}.Debug|Win32.Build.0 = Debug|Win32
+		{9DD8D699-EDB7-44B3-A0DC-1FA57B81FA7A}.DLL_Release|Any CPU.ActiveCfg = Release|Win32
+		{9DD8D699-EDB7-44B3-A0DC-1FA57B81FA7A}.DLL_Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{9DD8D699-EDB7-44B3-A0DC-1FA57B81FA7A}.DLL_Release|Mixed Platforms.Build.0 = Release|Win32
+		{9DD8D699-EDB7-44B3-A0DC-1FA57B81FA7A}.DLL_Release|Win32.ActiveCfg = Release|Win32
+		{9DD8D699-EDB7-44B3-A0DC-1FA57B81FA7A}.DLL_Release|Win32.Build.0 = Release|Win32
+		{9DD8D699-EDB7-44B3-A0DC-1FA57B81FA7A}.Internal|Any CPU.ActiveCfg = Release|Win32
+		{9DD8D699-EDB7-44B3-A0DC-1FA57B81FA7A}.Internal|Mixed Platforms.ActiveCfg = Release|Win32
+		{9DD8D699-EDB7-44B3-A0DC-1FA57B81FA7A}.Internal|Mixed Platforms.Build.0 = Release|Win32
+		{9DD8D699-EDB7-44B3-A0DC-1FA57B81FA7A}.Internal|Win32.ActiveCfg = Release|Win32
+		{9DD8D699-EDB7-44B3-A0DC-1FA57B81FA7A}.Internal|Win32.Build.0 = Release|Win32
+		{9DD8D699-EDB7-44B3-A0DC-1FA57B81FA7A}.Release|Any CPU.ActiveCfg = Release|Win32
+		{9DD8D699-EDB7-44B3-A0DC-1FA57B81FA7A}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{9DD8D699-EDB7-44B3-A0DC-1FA57B81FA7A}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{9DD8D699-EDB7-44B3-A0DC-1FA57B81FA7A}.Release|Win32.ActiveCfg = Release|Win32
+		{9DD8D699-EDB7-44B3-A0DC-1FA57B81FA7A}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
