@@ -4,6 +4,23 @@
 
 namespace Prism
 {
+	FileWatcher* FileWatcher::myInstance = nullptr;
+
+	FileWatcher* FileWatcher::GetInstance()
+	{
+		if (myInstance == nullptr)
+		{
+			myInstance = new FileWatcher();
+		}
+
+		return myInstance;
+	}
+
+	void FileWatcher::Destroy()
+	{
+		delete myInstance;
+	}
+
 	FileWatcher::FileWatcher()
 	{
 		myFileDatas.Init(256);

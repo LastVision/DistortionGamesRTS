@@ -133,8 +133,8 @@ namespace Prism
 
 		myData.myLifeTime = myParticlesLifeTime;
 
-		myTexture = Engine::GetInstance()->GetTextureContainer()->GetTexture(myTextureName.c_str());
-		myEffect = Engine::GetInstance()->GetEffectContainer()->GetEffect(myEffectName.c_str());
+		myTexture = TextureContainer::GetInstance()->GetTexture(myTextureName.c_str());
+		myEffect = EffectContainer::GetInstance()->GetEffect(myEffectName.c_str());
 		
 		CreateInputLayout();
 	}

@@ -27,7 +27,7 @@ namespace Prism
 	{
 		myFileName = aTexturePath;
 
-		myEffect = Engine::GetInstance()->GetEffectContainer()->GetEffect("Data/Resource/Shader/S_effect_skybox.fx");
+		myEffect = EffectContainer::GetInstance()->GetEffect("Data/Resource/Shader/S_effect_skybox.fx");
 		D3D11_INPUT_ELEMENT_DESC vertexDesc[] =
 		{
 			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },

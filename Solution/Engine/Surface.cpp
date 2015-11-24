@@ -33,7 +33,7 @@ bool Prism::Surface::SetTexture(const std::string& aResourceName, const std::str
 	DL_ASSERT_EXP(aFileName != ""
 		, CU::Concatenate("Shader resource ( %s ) tried to use invalid filePath", aResourceName.c_str()));
 
-	Texture* tex = Engine::GetInstance()->GetTextureContainer()->GetTexture(aFileName);
+	Texture* tex = TextureContainer::GetInstance()->GetTexture(aFileName);
 	ID3DX11EffectShaderResourceVariable* shaderVar = myEffect->GetEffect()->GetVariableByName(aResourceName.c_str())->AsShaderResource();
 
 	if (shaderVar->IsValid() == false)
@@ -108,7 +108,7 @@ void Prism::Surface::ReloadSurface()
 
 	for (int i = 0; i < myFilePaths.Size(); ++i)
 	{
-		Texture* tex = Engine::GetInstance()->GetTextureContainer()->GetTexture(myFilePaths[i]);
+		Texture* tex = TextureContainer::GetInstance()->GetTexture(myFilePaths[i]);
 		ID3DX11EffectShaderResourceVariable* shaderVar = myEffect->GetEffect()->GetVariableByName(myShaderResourceNames[i].c_str())->AsShaderResource();
 
 		if (shaderVar->IsValid() == false)

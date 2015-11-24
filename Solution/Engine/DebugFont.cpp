@@ -10,7 +10,7 @@ Prism::DebugFont::DebugFont()
 
 bool Prism::DebugFont::Init(const char* aFontPath)
 {
-	myTexture = Engine::GetInstance()->GetTextureContainer()->GetTexture(aFontPath);
+	myTexture = TextureContainer::GetInstance()->GetTexture(aFontPath);
 
 	return true;
 }
