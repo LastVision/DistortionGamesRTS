@@ -17,8 +17,6 @@
 #include <Vector.h>
 #include <XMLReader.h>
 
-#include <Sprite.h>
-
 Game::Game()
 	: myLockMouse(true)
 #ifdef RELEASE_BUILD
@@ -34,9 +32,8 @@ Game::Game()
 
 Game::~Game()
 {
-	delete myGUIManager;
-	delete mySprite;
-	delete myInputWrapper;
+	SAFE_DELETE(myGUIManager);
+	SAFE_DELETE(myInputWrapper);
 	Prism::Audio::AudioInterface::GetInstance()->PostEvent("Stop_MenuMusic", 0);
 	Prism::Audio::AudioInterface::Destroy();
 }
@@ -54,8 +51,6 @@ bool Game::Init(HWND& aHwnd)
 
 	myGUIManager = new GUI::GUIManager(myInputWrapper);
 
-
-	mySprite = new Prism::Sprite("Data/Resource/Texture/Star.dds", { 128.f, 128.f }, { 64.f, 64.f });
 	GAME_LOG("Init Successful");
 	return true;
 }
@@ -67,7 +62,6 @@ bool Game::Destroy()
 
 bool Game::Update()
 {
-	mySprite->Render({ 0, 100 });
 	myInputWrapper->Update();
 	if (myInputWrapper->KeyDown(DIK_ESCAPE))
 	{
