@@ -126,6 +126,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPTSTR, int aNumberCommands)
 	globalGame = nullptr;
 
 	Prism::Engine::Destroy();
+	Prism::MemoryTracker::Destroy();
 	return 0;
 }
 

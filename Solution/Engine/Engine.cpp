@@ -54,12 +54,17 @@ namespace Prism
 		delete myModelFactory;
 		delete myFileWatcher;
 
+		delete myText;
+		delete myDebugText;
+		delete myFont;
+
 		Prism::Engine::GetInstance()->GetModelLoader()->ClearLoadJobs();
 		Prism::Engine::GetInstance()->GetModelLoader()->WaitUntilFinished();
 
 		myModelLoader->Shutdown();
 		myModelLoaderThread->join();
 		delete myModelLoader;
+		delete myModelLoaderThread;
 
 		delete myDirectX;
 		myDirectX = nullptr;

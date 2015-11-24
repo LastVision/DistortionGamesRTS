@@ -11,3 +11,4 @@
 #include "tinyxml2.h"
 #include <vector>
 #include "Vector.h"
+#include <MemoryMacros.h>

@@ -10,3 +10,4 @@
 #include <string>
 #include <unordered_map>
 #include <Vector.h>
+#include <MemoryMacros.h>

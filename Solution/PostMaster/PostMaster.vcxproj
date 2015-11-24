@@ -11,8 +11,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{25945336-03D1-42A6-8764-7EF11DBC42E6}</ProjectGuid>
-    <RootNamespace>Memory</RootNamespace>
+    <ProjectGuid>{EF362EDC-8FFF-400B-A5FF-05A9BC551D65}</ProjectGuid>
+    <RootNamespace>PostMaster</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -42,19 +42,21 @@
     <OutDir>$(SolutionDir)..\Libs\</OutDir>
     <IntDir>$(SolutionDir)..\temp\$(ProjectName)\</IntDir>
     <TargetName>$(ProjectName)_$(Configuration)</TargetName>
-    <IncludePath>$(SolutionDir)\DL_Debug;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\Memory;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)..\Libs\</OutDir>
     <IntDir>$(SolutionDir)..\temp\$(ProjectName)\</IntDir>
     <TargetName>$(ProjectName)_$(Configuration)</TargetName>
-    <IncludePath>$(SolutionDir)\DL_Debug;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\Memory;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <PrecompiledHeader>Create</PrecompiledHeader>
+      <AdditionalIncludeDirectories>$(SolutionDir)\Memory;$(SolutionDir)\CommonUtilities;$(SolutionDir)\DL_Debug;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -62,11 +64,13 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <AdditionalIncludeDirectories>$(SolutionDir)\Memory;$(SolutionDir)\CommonUtilities;$(SolutionDir)\DL_Debug;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -75,17 +79,30 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DL_Debug\DL_Debug.vcxproj">
-      <Project>{79d52050-1454-49c9-9186-ab74c959970e}</Project>
+    <ClInclude Include="GameStateMessage.h" />
+    <ClInclude Include="Message.h" />
+    <ClInclude Include="MessageEnum.h" />
+    <ClInclude Include="PostMaster.h" />
+    <ClInclude Include="ResizeMessage.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="Subscriber.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="GameStateMessage.cpp" />
+    <ClCompile Include="PostMaster.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Subscriber.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CommonUtilities\CommonUtilities.vcxproj">
+      <Project>{cf69d483-5bf1-4673-99e2-c04b953ca73c}</Project>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="MemoryMacros.h" />
-    <ClInclude Include="MemoryStatistics.h" />
-    <ClInclude Include="MemoryTracker.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="MemoryTracker.cpp" />
+    <ProjectReference Include="..\Memory\Memory.vcxproj">
+      <Project>{25945336-03d1-42a6-8764-7ef11dbc42e6}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

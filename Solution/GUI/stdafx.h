@@ -2,3 +2,4 @@
 
 #include <Vector.h>
 #include <string>
+#include <MemoryMacros.h>
