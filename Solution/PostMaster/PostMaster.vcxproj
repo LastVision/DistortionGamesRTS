@@ -42,11 +42,13 @@
     <OutDir>$(SolutionDir)..\Libs\</OutDir>
     <IntDir>$(SolutionDir)..\temp\$(ProjectName)\</IntDir>
     <TargetName>$(ProjectName)_$(Configuration)</TargetName>
+    <IncludePath>$(SolutionDir)\Memory;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)..\Libs\</OutDir>
     <IntDir>$(SolutionDir)..\temp\$(ProjectName)\</IntDir>
     <TargetName>$(ProjectName)_$(Configuration)</TargetName>
+    <IncludePath>$(SolutionDir)\Memory;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -85,9 +87,10 @@
     <ClInclude Include="Subscriber.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="PostMaster.cpp" />
-    <ClCompile Include="stdafx.cpp" />
-    <ClCompile Include="Subscriber.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CommonUtilities\CommonUtilities.vcxproj">

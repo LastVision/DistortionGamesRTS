@@ -18,6 +18,7 @@ namespace GUI
 
 		void AddWidget(const std::string& aName, Widget* aWidget);
 		void Update();
+		void Render();
 
 		void SetPosition(const CU::Vector2<float>& aPosition);
 		void SetSize(const CU::Vector2<float>& aSize);

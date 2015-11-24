@@ -68,28 +68,28 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ExecutablePath>$(VC_ExecutablePath_x86);$(WindowsSDK_ExecutablePath);$(VS_ExecutablePath);$(MSBuild_ExecutablePath);$(SystemRoot)\SysWow64;$(FxCopDir);$(PATH);</ExecutablePath>
-    <IncludePath>$(SolutionDir)\DL_Debug;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\Memory;$(SolutionDir)\DL_Debug;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)..\Libs\</OutDir>
     <IntDir>$(SolutionDir)..\temp\$(ProjectName)\</IntDir>
     <TargetName>$(ProjectName)_$(Configuration)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ExecutablePath>$(VC_ExecutablePath_x86);$(WindowsSDK_ExecutablePath);$(VS_ExecutablePath);$(MSBuild_ExecutablePath);$(SystemRoot)\SysWow64;$(FxCopDir);$(PATH);</ExecutablePath>
-    <IncludePath>$(SolutionDir)\DL_Debug;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\Memory;$(SolutionDir)\DL_Debug;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)..\Libs\</OutDir>
     <IntDir>$(SolutionDir)..\temp\$(ProjectName)\</IntDir>
     <TargetName>$(ProjectName)_$(Configuration)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DLL_Release|Win32'">
     <ExecutablePath>$(VC_ExecutablePath_x86);$(WindowsSDK_ExecutablePath);$(VS_ExecutablePath);$(MSBuild_ExecutablePath);$(SystemRoot)\SysWow64;$(FxCopDir);$(PATH);</ExecutablePath>
-    <IncludePath>$(SolutionDir)\DL_Debug;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\Memory;$(SolutionDir)\DL_Debug;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)..\Libs\</OutDir>
     <IntDir>$(SolutionDir)..\temp\$(ProjectName)\</IntDir>
     <TargetName>$(ProjectName)_$(Configuration)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Internal|Win32'">
     <ExecutablePath>$(VC_ExecutablePath_x86);$(WindowsSDK_ExecutablePath);$(VS_ExecutablePath);$(MSBuild_ExecutablePath);$(SystemRoot)\SysWow64;$(FxCopDir);$(PATH);</ExecutablePath>
-    <IncludePath>$(SolutionDir)\DL_Debug;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\Memory;$(SolutionDir)\DL_Debug;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)..\Libs\</OutDir>
     <IntDir>$(SolutionDir)..\temp\$(ProjectName)\</IntDir>
     <TargetName>$(ProjectName)_$(Configuration)</TargetName>
@@ -217,6 +217,9 @@
   <ItemGroup>
     <ProjectReference Include="..\DL_Debug\DL_Debug.vcxproj">
       <Project>{79d52050-1454-49c9-9186-ab74c959970e}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Memory\Memory.vcxproj">
+      <Project>{25945336-03d1-42a6-8764-7ef11dbc42e6}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -12,6 +12,11 @@ namespace GUI
 	class GUIManager;
 }
 
+namespace Prism
+{
+	class Sprite;
+}
+
 class InGameState;
 class MenuState;
 class BulletManager;
@@ -40,6 +45,8 @@ private:
 
 	MenuState* myCurrentMenu;
 	InGameState* myGame;
+
+	Prism::Sprite* mySprite;
 
 	bool myLockMouse;
 	bool myShowSystemInfo;

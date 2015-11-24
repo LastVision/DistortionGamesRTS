@@ -39,6 +39,7 @@ namespace Prism
 		void Allocate(int aLine, const char* aFile, const char* aFunction);
 		void Free(void* aAddress);
 
+		void SetRunTime(bool aStatus);
 	private:
 		static void Create();
 		MemoryTracker();
@@ -51,7 +52,7 @@ namespace Prism
 		MemoryData myTopicalData;
 		MemoryData* myData;
 		int myAllocations;
-
+		bool myRuntime;
 
 		static MemoryTracker* myInstance;
 	};

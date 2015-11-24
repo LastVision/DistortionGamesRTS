@@ -67,28 +67,28 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)\GUI;$(SolutionDir)\Engine;$(SolutionDir)\CommonUtilities;$(SolutionDir)\Timer;$(SolutionDir)\DL_Debug;$(SolutionDir)..\DirectX\include\;$(SolutionDir)\InputWrapper;$(VTUNE_DIR)\include\;$(SolutionDir)\Audio;$(SolutionDir)\PostMaster;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\Memory;$(SolutionDir)\GUI;$(SolutionDir)\Engine;$(SolutionDir)\CommonUtilities;$(SolutionDir)\Timer;$(SolutionDir)\DL_Debug;$(SolutionDir)..\DirectX\include\;$(SolutionDir)\InputWrapper;$(VTUNE_DIR)\include\;$(SolutionDir)\Audio;$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)..\Libs\</OutDir>
     <IntDir>$(SolutionDir)..\temp\$(ProjectName)\</IntDir>
     <TargetName>$(ProjectName)_$(Configuration)</TargetName>
     <LibraryPath>$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(SolutionDir)\GUI;$(SolutionDir)\Engine;$(SolutionDir)\CommonUtilities;$(SolutionDir)\Timer;$(SolutionDir)\DL_Debug;$(SolutionDir)..\DirectX\include\;$(SolutionDir)\InputWrapper;$(VTUNE_DIR)\include\;$(SolutionDir)\Audio;$(SolutionDir)\PostMaster;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\Memory;$(SolutionDir)\GUI;$(SolutionDir)\Engine;$(SolutionDir)\CommonUtilities;$(SolutionDir)\Timer;$(SolutionDir)\DL_Debug;$(SolutionDir)..\DirectX\include\;$(SolutionDir)\InputWrapper;$(VTUNE_DIR)\include\;$(SolutionDir)\Audio;$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)..\Libs\</OutDir>
     <IntDir>$(SolutionDir)..\temp\$(ProjectName)\</IntDir>
     <TargetName>$(ProjectName)_$(Configuration)</TargetName>
     <LibraryPath>$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DLL_Release|Win32'">
-    <IncludePath>$(SolutionDir)\GUI;$(SolutionDir)\Engine;$(SolutionDir)\CommonUtilities;$(SolutionDir)\Timer;$(SolutionDir)\DL_Debug;$(SolutionDir)..\DirectX\include\;$(SolutionDir)\InputWrapper;$(VTUNE_DIR)\include\;$(SolutionDir)\Audio;$(SolutionDir)\PostMaster;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\Memory;$(SolutionDir)\GUI;$(SolutionDir)\Engine;$(SolutionDir)\CommonUtilities;$(SolutionDir)\Timer;$(SolutionDir)\DL_Debug;$(SolutionDir)..\DirectX\include\;$(SolutionDir)\InputWrapper;$(VTUNE_DIR)\include\;$(SolutionDir)\Audio;$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)..\Libs\</OutDir>
     <IntDir>$(SolutionDir)..\temp\$(ProjectName)\</IntDir>
     <TargetName>$(ProjectName)_$(Configuration)</TargetName>
     <LibraryPath>$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Internal|Win32'">
-    <IncludePath>$(SolutionDir)\GUI;$(SolutionDir)\Engine;$(SolutionDir)\CommonUtilities;$(SolutionDir)\Timer;$(SolutionDir)\DL_Debug;$(SolutionDir)..\DirectX\include\;$(SolutionDir)\InputWrapper;$(VTUNE_DIR)\include\;$(SolutionDir)\Audio;$(SolutionDir)\PostMaster;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\Memory;$(SolutionDir)\GUI;$(SolutionDir)\Engine;$(SolutionDir)\CommonUtilities;$(SolutionDir)\Timer;$(SolutionDir)\DL_Debug;$(SolutionDir)..\DirectX\include\;$(SolutionDir)\InputWrapper;$(VTUNE_DIR)\include\;$(SolutionDir)\Audio;$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)..\Libs\</OutDir>
     <IntDir>$(SolutionDir)..\temp\$(ProjectName)\</IntDir>
     <TargetName>$(ProjectName)_$(Configuration)</TargetName>
@@ -178,8 +178,8 @@
     <ProjectReference Include="..\InputWrapper\InputWrapper.vcxproj">
       <Project>{e6bd4153-64be-4109-8d3c-724baadab8af}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\PostMaster\PostMaster.vcxproj">
-      <Project>{ef362edc-8fff-400b-a5ff-05a9bc551d65}</Project>
+    <ProjectReference Include="..\Memory\Memory.vcxproj">
+      <Project>{25945336-03d1-42a6-8764-7ef11dbc42e6}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
