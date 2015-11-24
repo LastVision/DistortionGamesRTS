@@ -35,8 +35,8 @@ Game::Game()
 	myInputWrapper = new CU::InputWrapper();
 	Prism::Engine::GetInstance()->SetShowDebugText(myShowSystemInfo);
 
-	myGUIManager = new GUI::GUIManager(myInputWrapper);
 	myCursor = new GUI::Cursor(myInputWrapper, Prism::Engine::GetInstance()->GetWindowSize());
+	myGUIManager = new GUI::GUIManager(myInputWrapper, myCursor);
 
 	SetCursorPos(Prism::Engine::GetInstance()->GetWindowSize().x / 2, Prism::Engine::GetInstance()->GetWindowSize().y / 2);
 }
@@ -65,7 +65,6 @@ bool Game::Init(HWND& aHwnd)
 		| DISCL_FOREGROUND, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND);
 	myWindowSize.x = Prism::Engine::GetInstance()->GetWindowSize().x;
 	myWindowSize.y = Prism::Engine::GetInstance()->GetWindowSize().y;
-	myGUIManager = new GUI::GUIManager(myInputWrapper);
 
 	PostMaster::GetInstance()->SendMessage(GameStateMessage(eGameState::LOAD_GAME, 1));
 

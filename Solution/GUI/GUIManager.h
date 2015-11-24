@@ -9,11 +9,12 @@ namespace GUI
 {
 	class WidgetContainer;
 	class Widget;
+	class Cursor;
 
 	class GUIManager
 	{
 	public:
-		GUIManager(CU::InputWrapper* anInputWrapper);
+		GUIManager(CU::InputWrapper* anInputWrapper, Cursor* aCursor);
 		~GUIManager();
 
 		void AddWidget(const std::string& aName, Widget* aWidget);
@@ -37,6 +38,7 @@ namespace GUI
 		Widget* myActiveWidget;
 		WidgetContainer* myWidgets;
 		CU::InputWrapper* myInputWrapper;
+		Cursor* myCursor;
 
 		CU::Vector2<float> myMousePosition;
 	};

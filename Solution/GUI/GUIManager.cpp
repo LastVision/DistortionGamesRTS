@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "Cursor.h"
 #include <Engine.h>
 #include "GUIManager.h"
 #include "../InputWrapper/InputWrapper.h"
@@ -8,19 +9,21 @@
 
 namespace GUI
 {
-	GUIManager::GUIManager(CU::InputWrapper* anInputWrapper)
+	GUIManager::GUIManager(CU::InputWrapper* anInputWrapper, Cursor* aCursor)
 		: myActiveWidget(nullptr)
 		, myInputWrapper(anInputWrapper)
+		, myCursor(aCursor)
 		, myMousePosition({ 0.f, 0.f })
 	{
 		myWidgets = new WidgetContainer;
 
 		ButtonWidget* widget = new ButtonWidget;
-		widget->myImageHover = new Prism::Sprite("Data/Resource/Texture/Menu/T_button_start_hover.dds", { 100.f, 100.f }, { 50.f, 50.f });
-		widget->myImageNormal = new Prism::Sprite("Data/Resource/Texture/Menu/T_button_start.dds", { 100.f, 100.f }, { 50.f, 50.f });
-		widget->myImagePressed = new Prism::Sprite("Data/Resource/Texture/Menu/T_button_start.dds", { 100.f, 100.f }, { 50.f, 50.f });
+		widget->myImageHover = new Prism::Sprite("Data/Resource/Texture/Menu/T_button_start_hover.dds", { 500.f, 500.f }, { 250.f, 250.f });
+		widget->myImageNormal = new Prism::Sprite("Data/Resource/Texture/Menu/T_button_start.dds", { 500.f, 500.f }, { 250.f, 250.f });
+		widget->myImagePressed = new Prism::Sprite("Data/Resource/Texture/Menu/T_button_start.dds", { 500.f, 500.f }, { 250.f, 250.f });
 		widget->myImageCurrent = widget->myImageNormal;
-		widget->SetPosition({ 0.f, 0.f});
+		widget->SetPosition({ 500.f, 700.f});
+		widget->SetSize({ 500.f, 500.f });
 		myWidgets->AddWidget("test", widget);
 
 		SetPosition({ 0.f, 0.f });
@@ -41,8 +44,7 @@ namespace GUI
 
 	void GUIManager::Update()
 	{
-		myMousePosition = myInputWrapper->GetMousePosition();
-		myMousePosition.y = float(Prism::Engine::GetInstance()->GetWindowSize().y) - myInputWrapper->GetMousePosition().y;
+		myMousePosition = myCursor->GetMousePosition();
 
 		CheckMouseMoved();
 		CheckMouseExited();

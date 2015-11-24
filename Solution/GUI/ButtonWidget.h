@@ -22,6 +22,9 @@ namespace GUI
 		void OnMouseEnter() override;
 		void OnMouseExit() override;
 
+		bool IsInside(const CU::Vector2<float>& aPosition) const override;
+		void SetPosition(const CU::Vector2<float>& aPosition) override;
+
 		Prism::Sprite* myImageNormal;
 		Prism::Sprite* myImagePressed;
 		Prism::Sprite* myImageHover;
