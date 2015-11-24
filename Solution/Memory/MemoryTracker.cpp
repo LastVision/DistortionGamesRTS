@@ -113,7 +113,7 @@ namespace Prism
 
 		if (myMutex != nullptr)
 		{
-			//myMutex->lock();
+			myMutex->lock();
 		}
 
 		myTopicalData.myAddress = aAddress;
@@ -139,7 +139,7 @@ namespace Prism
 
 		if (myMutex != nullptr)
 		{
-			//myMutex->unlock();
+			myMutex->unlock();
 		}
 	}
 
@@ -147,7 +147,7 @@ namespace Prism
 	{
 		if (aLock == true && myMutex != nullptr)
 		{
-			//myMutex->lock();
+			myMutex->lock();
 		}
 
 		for (int i = 0; i < myAllocations; ++i)
@@ -163,7 +163,7 @@ namespace Prism
 
 		if (aLock == true && myMutex != nullptr)
 		{
-			//myMutex->unlock();
+			myMutex->unlock();
 		}
 	}
 
@@ -178,8 +178,6 @@ namespace Prism
 
 	MemoryTracker::~MemoryTracker()
 	{
-		::free(myMutex);
-
 		if (myAllocations > 0)
 		{
 			DL_PRINT_VA("--- MEMORY LEAKS ---\n");
@@ -200,5 +198,8 @@ namespace Prism
 				, shortPath, myData[0].myFunctionName, myData[0].myLine, myAllocations);
 			::free(myData);
 		}
+
+		::free(myMutex);
+		myMutex = nullptr;
 	}
 }
