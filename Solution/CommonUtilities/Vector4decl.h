@@ -11,27 +11,12 @@ namespace CU
 	public:
 		Vector4();
 		Vector4(T aX, T aY, T aZ, T aW);
-		Vector4(Vector3<T> aVector);
+		Vector4(Vector3<T> aVector, T aW);
 		~Vector4();
 
-		union
-		{
-			T x;
-		};
-
-		union
-		{
-			T y;
-		};
-
-		union
-		{
-			T z;
-		};
-
-		union
-		{
-			T w;
-		};
+		T x;
+		T y;
+		T z;
+		T w;
 	};
 }

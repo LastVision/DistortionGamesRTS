@@ -24,8 +24,12 @@ namespace GUI
 
 	void Cursor::Update()
 	{
-		myPosition.x += myInputWrapper->GetMouseDX();
-		myPosition.y -= myInputWrapper->GetMouseDY();
+		// uncomment for software cursor:
+		//myPosition.x += myInputWrapper->GetMouseDX();
+		//myPosition.y -= myInputWrapper->GetMouseDY();
+
+		myPosition.x = myInputWrapper->GetMousePosition().x;
+		myPosition.y = myWindowSize.y - myInputWrapper->GetMousePosition().y;
 	}
 
 	void Cursor::Render()

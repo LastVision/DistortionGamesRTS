@@ -27,12 +27,12 @@ namespace CU
 	}
 
 	template <typename T>
-	Vector4<T>::Vector4(Vector3<T> aVector)
+	Vector4<T>::Vector4(Vector3<T> aVector, T aW)
 	{
 		x = aVector.x;
 		y = aVector.y;
 		z = aVector.z;
-		w = 1.f;
+		w = aW;
 	}
 
 	template <typename T>

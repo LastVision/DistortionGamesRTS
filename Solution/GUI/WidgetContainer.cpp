@@ -35,7 +35,7 @@ namespace GUI
 	{
 		for (int i = 0; i < myWidgets.Size(); i++)
 		{
-			myWidgets[i]->Render(myPosition);
+			myWidgets[i]->Render(myPosition - aParentPosition);
 		}
 	}
 

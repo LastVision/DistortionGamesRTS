@@ -102,7 +102,6 @@ bool Game::Update()
 			windowRect.bottom -= 10;
 		}
 		ClipCursor(&windowRect);
-		myCursor->ClipCursor();
 	}
 
 	myGUIManager->Update();

@@ -21,14 +21,7 @@ namespace CU
 			return tmp;
 		}
 
-		union
-		{
-			T x;
-		};
-
-		union
-		{
-			T y;
-		};
+		T x;
+		T y;
 	};
 }
