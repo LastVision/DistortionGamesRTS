@@ -14,6 +14,9 @@
     <ClCompile Include="StateStackProxy.cpp">
       <Filter>StateStack</Filter>
     </ClCompile>
+    <ClCompile Include="Level.cpp">
+      <Filter>Level</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -35,6 +38,9 @@
     <ClInclude Include="StateStackProxy.h">
       <Filter>StateStack</Filter>
     </ClInclude>
+    <ClInclude Include="Level.h">
+      <Filter>Level</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="PreCompile">
@@ -42,6 +48,9 @@
     </Filter>
     <Filter Include="StateStack">
       <UniqueIdentifier>{39b4d83c-1076-4592-8091-99e0c0c7d080}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Level">
+      <UniqueIdentifier>{f9276240-a779-416b-9c05-b682b500c868}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
