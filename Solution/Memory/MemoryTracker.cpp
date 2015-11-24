@@ -113,7 +113,7 @@ namespace Prism
 
 		if (myMutex != nullptr)
 		{
-			myMutex->lock();
+			//myMutex->lock();
 		}
 
 		myTopicalData.myAddress = aAddress;
@@ -139,7 +139,7 @@ namespace Prism
 
 		if (myMutex != nullptr)
 		{
-			myMutex->unlock();
+			//myMutex->unlock();
 		}
 	}
 
@@ -147,7 +147,7 @@ namespace Prism
 	{
 		if (aLock == true && myMutex != nullptr)
 		{
-			myMutex->lock();
+			//myMutex->lock();
 		}
 
 		for (int i = 0; i < myAllocations; ++i)
@@ -163,7 +163,7 @@ namespace Prism
 
 		if (aLock == true && myMutex != nullptr)
 		{
-			myMutex->unlock();
+			//myMutex->unlock();
 		}
 	}
 

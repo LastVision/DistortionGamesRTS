@@ -47,6 +47,8 @@ const eStateStatus InGameState::Update(const float& aDeltaTime)
 	if (myInputWrapper->KeyDown(DIK_ESCAPE))
 	{
 		myIsActiveState = false;
+		delete myLevel;
+		myLevel = nullptr;
 		return eStateStatus::ePopMainState;
 	}
 	if (myLevel->LogicUpdate(aDeltaTime) == true)

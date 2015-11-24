@@ -13,6 +13,8 @@
 #include "InGameState.h"
 #include <InputWrapper.h>
 #include <ModelLoader.h>
+#include <PostMaster.h>
+#include <ResizeMessage.h>
 #include <SystemMonitor.h>
 #include <TimerManager.h>
 #include <VTuneApi.h>
@@ -27,6 +29,7 @@ Game::Game()
 	, myShowSystemInfo(true)
 #endif
 {
+	PostMaster::Create();
 	Prism::Audio::AudioInterface::CreateInstance();
 	myInputWrapper = new CU::InputWrapper();
 	Prism::Engine::GetInstance()->SetShowDebugText(myShowSystemInfo);
@@ -36,14 +39,19 @@ Game::~Game()
 {
 	SAFE_DELETE(myGUIManager);
 	SAFE_DELETE(myInputWrapper);
+	PostMaster::GetInstance()->UnSubscribe(eMessageType::GAME_STATE, this);
 	Prism::Audio::AudioInterface::GetInstance()->PostEvent("Stop_MenuMusic", 0);
 	Prism::Audio::AudioInterface::Destroy();
+	PostMaster::Destroy();
+	myStateStack.Clear();
 }
 
 bool Game::Init(HWND& aHwnd)
 {
 	myWindowHandler = &aHwnd;
 	myIsComplete = false;
+
+	PostMaster::GetInstance()->Subscribe(eMessageType::GAME_STATE, this);
 
 	Prism::Engine::GetInstance()->SetClearColor({ MAGENTA });
 	myInputWrapper->Init(aHwnd, GetModuleHandle(NULL), DISCL_NONEXCLUSIVE 
@@ -52,6 +60,8 @@ bool Game::Init(HWND& aHwnd)
 	myWindowSize.y = Prism::Engine::GetInstance()->GetWindowSize().y;
 
 	myGUIManager = new GUI::GUIManager(myInputWrapper);
+
+	PostMaster::GetInstance()->SendMessage(GameStateMessage(eGameState::LOAD_GAME, 1));
 
 	GAME_LOG("Init Successful");
 	return true;
@@ -65,13 +75,25 @@ bool Game::Destroy()
 bool Game::Update()
 {
 	myInputWrapper->Update();
-	if (myInputWrapper->KeyDown(DIK_ESCAPE))
+
+	float deltaTime = CU::TimerManager::GetInstance()->GetMasterTimer().GetTime().GetFrameTime();
+	float realDeltaTime = deltaTime;
+	if (deltaTime > 1.0f / 10.0f)
 	{
-		return false;
+		deltaTime = 1.0f / 10.0f;
 	}
 
 	myGUIManager->Update();
 	myGUIManager->Render();
+
+	if (myStateStack.UpdateCurrentState(deltaTime) == false)
+	{
+		return false;
+	}
+
+	myStateStack.RenderCurrentState();
+
+	CU::TimerManager::GetInstance()->CapFrameRate(100.f);
 
 	return true;
 }
@@ -92,6 +114,8 @@ void Game::OnResize(int aWidth, int aHeight)
 {
 	myWindowSize.x = aWidth;
 	myWindowSize.y = aHeight;
+	myStateStack.OnResize(aWidth, aHeight);
+	PostMaster::GetInstance()->SendMessage(ResizeMessage(aWidth, aHeight));
 }
 
 void Game::ReceiveMessage(const GameStateMessage& aMessage)
@@ -100,7 +124,7 @@ void Game::ReceiveMessage(const GameStateMessage& aMessage)
 	{
 	case eGameState::LOAD_GAME:
 		myGame = new InGameState(myInputWrapper);
-		myStateStack.PushSubGameState(myGame);
+		myStateStack.PushMainGameState(myGame);
 		myGame->SetLevel(aMessage.GetID(), aMessage.GetSecondID());
 		break;
 	case eGameState::LOAD_MENU:
