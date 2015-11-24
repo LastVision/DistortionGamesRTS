@@ -1,6 +1,7 @@
 #pragma once
 
 #include "BaseModel.h"
+#include <D3DX11.h>
 
 struct ID3DX11EffectShaderResourceVariable;
 struct ID3D11ShaderResourceView;

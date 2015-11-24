@@ -1,9 +1,10 @@
 #pragma once
 
 #include "Defines.h"
+#include <GrowingArray.h>
 #include "LightStructs.h"
 #include <Matrix.h>
-#include <string.h>
+#include <string>
 #include <StaticArray.h>
 
 struct ID3D11BlendState;
