@@ -30,17 +30,17 @@ namespace GUI
 
 	void WidgetContainer::Update()
 	{
-		for (auto widget : myWidgets)
+		for (auto it = myWidgets.begin(); it != myWidgets.end(); ++it)
 		{
-			widget.second->Update();
+			it->second->Update();
 		}
 	}
 
 	void WidgetContainer::Render(const CU::Vector2<float>&)
 	{
-		for (auto widget : myWidgets)
+		for (auto it = myWidgets.begin(); it != myWidgets.end(); ++it)
 		{
-			widget.second->Render(myPosition);
+			it->second->Render(myPosition);
 		}
 	}
 
@@ -59,11 +59,11 @@ namespace GUI
 	{
 		if (IsInside(aPosition) == true)
 		{
-			for (auto widget : myWidgets)
+			for (auto it = myWidgets.begin(); it != myWidgets.end(); ++it)
 			{
-				if (widget.second->IsVisible() == true && widget.second->IsInside(aPosition - myPosition) == true)
+				if (it->second->IsVisible() == true && it->second->IsInside(aPosition - myPosition) == true)
 				{
-					Widget* childWidget = widget.second->MouseIsOver(aPosition - myPosition);
+					Widget* childWidget = it->second->MouseIsOver(aPosition - myPosition);
 					if (childWidget != nullptr)
 					{
 						return childWidget;
