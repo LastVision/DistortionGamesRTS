@@ -16,6 +16,7 @@ class Component;
 
 class Entity
 {
+	friend class GraphicsComponent;
 public:
 	Entity(eEntityType aType, Prism::Scene& aScene, Prism::eOctreeType anOctreeType, const std::string& aName = "");
 	~Entity();
@@ -34,8 +35,7 @@ public:
 	template <typename T>
 	void SendNote(const T& aNote);
 
-	CU::Matrix44<float> myOrientation;
-	CU::Matrix44<float> myOriginalOrientation;
+	const CU::Matrix44<float>& GetOrientation() const;
 
 	eEntityType GetType() const;
 	bool GetAlive() const;
@@ -59,6 +59,9 @@ private:
 	const eEntityType myType;
 	Prism::Scene* myScene;
 	const Prism::eOctreeType myOctreeType;
+
+	CU::Matrix44<float> myOrientation;
+	CU::Matrix44<float> myOriginalOrientation;
 };
 
 template <typename T>
@@ -109,6 +112,11 @@ void Entity::SendNote(const T& aMessage)
 			myComponents[i]->ReceiveNote(aMessage);
 		}
 	}
+}
+
+inline const CU::Matrix44<float>& Entity::GetOrientation() const
+{
+	return myOrientation;
 }
 
 inline eEntityType Entity::GetType() const
