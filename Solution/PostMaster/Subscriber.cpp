@@ -18,3 +18,7 @@ void Subscriber::ReceiveMessage(const Message&)
 void Subscriber::ReceiveMessage(const ResizeMessage&)
 {
 }
+
+void Subscriber::ReceiveMessage(const GameStateMessage& aMessage)
+{
+}
