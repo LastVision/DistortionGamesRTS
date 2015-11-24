@@ -19,6 +19,8 @@ namespace Prism
 			data[i] = image->myImage[i * 4];
 		}
 
+		SAFE_DELETE(image);
+
 		return new HeightMap(width, depth, data);
 	}
 }
