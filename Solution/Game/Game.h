@@ -12,6 +12,7 @@ namespace CU
 namespace GUI
 {
 	class GUIManager;
+	class Cursor;
 }
 
 class InGameState;
@@ -38,6 +39,7 @@ private:
 	void operator=(Game& aApp) = delete;
 
 	GUI::GUIManager* myGUIManager;
+	GUI::Cursor* myCursor;
 
 	CU::InputWrapper* myInputWrapper;
 	HWND* myWindowHandler;

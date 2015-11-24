@@ -22,6 +22,7 @@
     <ClInclude Include="WidgetContainer.h">
       <Filter>Widget</Filter>
     </ClInclude>
+    <ClInclude Include="Cursor.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -37,5 +38,6 @@
     <ClCompile Include="WidgetContainer.cpp">
       <Filter>Widget</Filter>
     </ClCompile>
+    <ClCompile Include="Cursor.cpp" />
   </ItemGroup>
 </Project>
