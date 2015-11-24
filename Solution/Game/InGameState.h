@@ -13,6 +13,7 @@ namespace CU
 
 namespace Prism
 {
+	class Camera;
 	class Sprite;
 }
 
@@ -44,9 +45,12 @@ public:
 	bool IsComplete() const;
 
 private:
+	void UpdateCamera(float aDeltaTime);
 	void ShowMessage(const std::string& aBackgroundPath, const CU::Vector2<float>& aSize, std::string aText, GameStateMessage* aMessage = nullptr);
 
 	Level* myLevel;
+	Prism::Camera* myCamera;
+	CU::Matrix44<float> myCameraOrientation;
 
 	bool myIsComplete;
 };
