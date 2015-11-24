@@ -1,11 +1,11 @@
 #include "stdafx.h"
-#include "Level.h"
 
+#include <Engine.h>
+#include "Level.h"
 
 Level::Level()
 {
 }
-
 
 Level::~Level()
 {
@@ -19,6 +19,7 @@ bool Level::LogicUpdate(float aDeltaTime)
 
 void Level::Render(bool aIsActiveState)
 {
+	Prism::Engine::GetInstance()->SetClearColor({ 1.0f, 0.f, 0.f, 1.f });
 	aIsActiveState;
 }
 

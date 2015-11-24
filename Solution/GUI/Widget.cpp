@@ -67,9 +67,9 @@ namespace GUI
 
 	bool Widget::IsInside(const CU::Vector2<float>& aPosition) const
 	{
-		return	aPosition.myX >= myPosition.myX &&
-			aPosition.myY >= myPosition.myY &&
-			aPosition.myX <= myPosition.myX + mySize.x &&
-			aPosition.myY <= myPosition.myY + mySize.y;
+		return	aPosition.x >= myPosition.x &&
+			aPosition.x >= myPosition.x &&
+			aPosition.x <= myPosition.x + mySize.x &&
+			aPosition.x <= myPosition.x + mySize.y;
 	}
 }

@@ -35,21 +35,21 @@ namespace CU
 
 		float GetMaximumValueFromVector(const Vector2<float>& aVector)
 		{
-			if (aVector.myX > aVector.myY) return aVector.myX;
-			return aVector.myY;
+			if (aVector.x > aVector.y) return aVector.x;
+			return aVector.y;
 		}
 		float GetMaximumValueFromVector(const Vector3<float>& aVector)
 		{
-			if (aVector.myX > aVector.myY && aVector.myX > aVector.myZ) return aVector.myX;
-			if (aVector.myY > aVector.myX && aVector.myY > aVector.myZ) return aVector.myY;
-			return aVector.myZ;
+			if (aVector.x > aVector.y && aVector.x > aVector.z) return aVector.x;
+			if (aVector.y > aVector.x && aVector.y > aVector.z) return aVector.y;
+			return aVector.z;
 		}
 		float GetMaximumValueFromVector(const Vector4<float>& aVector)
 		{
-			if (aVector.myX > aVector.myY && aVector.myX > aVector.myZ && aVector.myX > aVector.myW) return aVector.myX;
-			if (aVector.myY > aVector.myX && aVector.myY > aVector.myZ && aVector.myY > aVector.myW) return aVector.myY;
-			if (aVector.myZ > aVector.myY && aVector.myZ > aVector.myX && aVector.myZ > aVector.myW) return aVector.myZ;
-			return aVector.myW;
+			if (aVector.x > aVector.y && aVector.x > aVector.z && aVector.x > aVector.w) return aVector.x;
+			if (aVector.y > aVector.x && aVector.y > aVector.z && aVector.y > aVector.w) return aVector.y;
+			if (aVector.z > aVector.y && aVector.z > aVector.x && aVector.z > aVector.w) return aVector.z;
+			return aVector.w;
 		}
 
 		float Saturate(const float aValue)

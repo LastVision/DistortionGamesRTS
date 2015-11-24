@@ -145,7 +145,7 @@ namespace Prism
 #endif
 #endif
 
-		float clearColor[4] = { myClearColor.myR, myClearColor.myG, myClearColor.myB, 0.f };
+		float clearColor[4] = { myClearColor.x, myClearColor.y, myClearColor.z, 0.f };
 		myDirectX->Clear(clearColor);
 
 		VTUNE_EVENT_END();

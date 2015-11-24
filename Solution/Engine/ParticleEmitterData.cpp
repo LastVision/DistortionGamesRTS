@@ -65,14 +65,14 @@ namespace Prism
 
 
 		element = read.ForceFindFirstChild(emitter, "ParticleStartColor");
-		read.ReadAttribute(element, "r", myData.myStartColor.r);
-		read.ReadAttribute(element, "g", myData.myStartColor.g);
-		read.ReadAttribute(element, "b", myData.myStartColor.b);
+		read.ReadAttribute(element, "r", myData.myStartColor.x);
+		read.ReadAttribute(element, "g", myData.myStartColor.y);
+		read.ReadAttribute(element, "b", myData.myStartColor.z);
 
 		element = read.ForceFindFirstChild(emitter, "ParticleEndColor");
-		read.ReadAttribute(element, "r", myData.myEndColor.r);
-		read.ReadAttribute(element, "g", myData.myEndColor.g);
-		read.ReadAttribute(element, "b", myData.myEndColor.b);
+		read.ReadAttribute(element, "r", myData.myEndColor.x);
+		read.ReadAttribute(element, "g", myData.myEndColor.y);
+		read.ReadAttribute(element, "b", myData.myEndColor.z);
 
 
 		element = read.ForceFindFirstChild(emitter, "ParticleLifeTime");
@@ -117,13 +117,13 @@ namespace Prism
 
 		read.CloseDocument();
 
-		myData.myStartColor.r = (myData.myStartColor.r / 255.f);
-		myData.myStartColor.g = (myData.myStartColor.g / 255.f);
-		myData.myStartColor.b = (myData.myStartColor.b / 255.f);
+		myData.myStartColor.x = (myData.myStartColor.x / 255.f);
+		myData.myStartColor.y = (myData.myStartColor.y / 255.f);
+		myData.myStartColor.z = (myData.myStartColor.z / 255.f);
 
-		myData.myEndColor.r = (myData.myEndColor.r / 255.f);
-		myData.myEndColor.g = (myData.myEndColor.g / 255.f);
-		myData.myEndColor.b = (myData.myEndColor.b / 255.f);
+		myData.myEndColor.x = (myData.myEndColor.x / 255.f);
+		myData.myEndColor.y = (myData.myEndColor.y / 255.f);
+		myData.myEndColor.z = (myData.myEndColor.z / 255.f);
 
 		myData.myMaxStartSize = myMaxScale;
 		myData.myMinStartSize = myMinScale;

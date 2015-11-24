@@ -210,7 +210,7 @@ namespace CU
 
 	inline int Intersection::PlaneVsSphere(CU::Plane<float> aPlane, Sphere aSphere)
 	{
-		float d = CU::Dot(aPlane.GetNormal(), aSphere.myCenterPosition) - aPlane.myABCD.myW;
+		float d = CU::Dot(aPlane.GetNormal(), aSphere.myCenterPosition) - aPlane.myABCD.w;
 
 		if (d >= aSphere.myRadius)
 		{
