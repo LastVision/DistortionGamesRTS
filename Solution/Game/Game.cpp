@@ -4,6 +4,7 @@
 #include <Camera.h>
 #include <ColoursForBG.h>
 #include <CommonHelper.h>
+#include <Cursor.h>
 #include <Engine.h>
 #include <FileWatcher.h>
 #include <DebugFont.h>
@@ -32,6 +33,9 @@ Game::Game()
 	Prism::Engine::GetInstance()->SetShowDebugText(myShowSystemInfo);
 
 	myGUIManager = new GUI::GUIManager(myInputWrapper);
+	myCursor = new GUI::Cursor(myInputWrapper, Prism::Engine::GetInstance()->GetWindowSize());
+
+	SetCursorPos(Prism::Engine::GetInstance()->GetWindowSize().x / 2, Prism::Engine::GetInstance()->GetWindowSize().y / 2);
 }
 
 Game::~Game()
@@ -75,8 +79,16 @@ bool Game::Update()
 		return false;
 	}
 
+	if (myLockMouse == true)
+	{
+		SetCursorPos(Prism::Engine::GetInstance()->GetWindowSize().x / 2, Prism::Engine::GetInstance()->GetWindowSize().y / 2);
+	}
+
 	myGUIManager->Update();
 	myGUIManager->Render();
+
+	myCursor->Update();
+	myCursor->Render();
 
 	return true;
 }

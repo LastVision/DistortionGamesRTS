@@ -10,6 +10,7 @@ namespace CU
 namespace GUI
 {
 	class GUIManager;
+	class Cursor;
 }
 
 namespace Prism
@@ -39,6 +40,7 @@ private:
 	void operator=(Game& aApp) = delete;
 
 	GUI::GUIManager* myGUIManager;
+	GUI::Cursor* myCursor;
 
 	CU::InputWrapper* myInputWrapper;
 	HWND* myWindowHandler;
