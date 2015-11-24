@@ -20,7 +20,7 @@ namespace GUI
 		widget->myImageNormal = new Prism::Sprite("Data/Resource/Texture/Menu/T_button_start.dds", { 100.f, 100.f }, { 50.f, 50.f });
 		widget->myImagePressed = new Prism::Sprite("Data/Resource/Texture/Menu/T_button_start.dds", { 100.f, 100.f }, { 50.f, 50.f });
 		widget->myImageCurrent = widget->myImageNormal;
-		widget->SetPosition({ 100.f, -100.f});
+		widget->SetPosition({ 100.f, 100.f});
 		myWidgets->AddWidget("test", widget);
 
 		SetPosition({ 0.f, 0.f });

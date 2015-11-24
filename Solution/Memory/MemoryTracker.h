@@ -16,38 +16,44 @@ namespace Prism
 	{
 
 		MemoryData()
-			: myFileName("") {}
+			: myFileName(""), myFunctionName(""), myLine(-1), myType(eMemoryType::UNKNOWN) {}
 
 		void* myAddress;
 		size_t myBytes;
 		const char* myFileName;
 		const char* myFunctionName;
-		unsigned int myLine;
+		int myLine;
 		eMemoryType myType;
 	};
 
-	class Tracker
+	class MemoryTracker
 	{
 		friend void* ::operator new(size_t aBytes);
+		friend void* ::operator new[](size_t aBytes);
+		friend void ::operator delete(void* aAddress);
+		friend void ::operator delete[](void* aAddress);
 	public:
 		static void Destroy();
-		static Tracker* GetInstance();
+		static MemoryTracker* GetInstance();
 
-		void Allocate(unsigned int aLine, const char* aFile, const char* aFunction);
+		void Allocate(int aLine, const char* aFile, const char* aFunction);
+		void Free(void* aAddress);
 
+		void SetRunTime(bool aStatus);
 	private:
 		static void Create();
-		Tracker();
-		~Tracker();
+		MemoryTracker();
+		~MemoryTracker();
 
 		void Add(void* aAddress, size_t aBytes, eMemoryType aMemoryType);
+		void Remove(void* aAddress, bool aLock = true);
 
 		MemoryStatistics myMemoryStatistics;
 		MemoryData myTopicalData;
 		MemoryData* myData;
 		int myAllocations;
+		bool myRuntime;
 
-
-		static Tracker* myInstance;
+		static MemoryTracker* myInstance;
 	};
 }

@@ -1,4 +1,4 @@
 #pragma once
-#include "Tracker.h"
+#include "MemoryTracker.h"
 
-#define new (Prism::Tracker::GetInstance()->Allocate(__LINE__, __FILE__, __FUNCTION__), false) ? 0 : new
+#define new (Prism::MemoryTracker::GetInstance()->Allocate(__LINE__, __FILE__, __FUNCTION__), false) ? 0 : new

@@ -150,12 +150,37 @@ void DL_Debug::Debug::PrintMessage(const char* aString)
 	ourInstance->myDebugFile.flush();
 }
 
+void DL_Debug::Debug::PrintMessageVA(const char *aFormattedString, ...)
+{
+	char buffer[1024];
+	va_list args;
+	va_start(args, aFormattedString);
+	vsprintf_s(buffer, aFormattedString, args);
+	perror(buffer);
+	va_end(args);
+
+	ourInstance->myDebugFile << buffer << std::endl;
+	ourInstance->myDebugFile.flush();
+}
+
 void DL_Debug::Debug::AssertMessage(bool aAssertExpression, const char *aFileName, int aLine, const char *aFunctionName, const char *aString)
 {
 	if (aAssertExpression == false)
 	{
 		AssertMessage(aFileName, aLine, aFunctionName, aString);
 	}
+}
+
+void DL_Debug::Debug::AssertMessageVA(const char *aFileName, int aLine, const char *aFunctionName, const char *aFormattedString, ...)
+{
+	char buffer[1024];
+	va_list args;
+	va_start(args, aFormattedString);
+	vsprintf_s(buffer, aFormattedString, args);
+	perror(buffer);
+	va_end(args);
+
+	AssertMessage(aFileName, aLine, aFunctionName, buffer);
 }
 
 void DL_Debug::Debug::AssertMessage(bool aAssertExpression, const char *aFileName, int aLine, const char *aFunctionName, const std::string& aString)
@@ -205,11 +230,11 @@ void DL_Debug::Debug::DebugMessage(const char *aFileName, int aLine, const char 
 
 void DL_Debug::Debug::ShowMessageBox(HWND aHwnd, LPCSTR aText, LPCSTR aTitle, UINT aType)
 {
-	std::string msg = "[";
-	msg += aTitle;
-	msg += "] ";
-	msg += aText;
-	DL_PRINT(msg.c_str());
+	//std::string msg = "[";
+	//msg += aTitle;
+	//msg += "] ";
+	//msg += aText;
+	//DL_PRINT(msg.c_str());
 	MessageBox(aHwnd, aText, aTitle, aType);
 }
 
