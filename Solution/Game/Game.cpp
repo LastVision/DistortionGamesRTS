@@ -35,8 +35,8 @@ Game::Game()
 	myInputWrapper = new CU::InputWrapper();
 	Prism::Engine::GetInstance()->SetShowDebugText(myShowSystemInfo);
 
-	myGUIManager = new GUI::GUIManager(myInputWrapper);
 	myCursor = new GUI::Cursor(myInputWrapper, Prism::Engine::GetInstance()->GetWindowSize());
+	myGUIManager = new GUI::GUIManager(myInputWrapper, myCursor);
 
 	SetCursorPos(Prism::Engine::GetInstance()->GetWindowSize().x / 2, Prism::Engine::GetInstance()->GetWindowSize().y / 2);
 }
