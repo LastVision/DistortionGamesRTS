@@ -171,6 +171,18 @@ void DL_Debug::Debug::AssertMessage(bool aAssertExpression, const char *aFileNam
 	}
 }
 
+void DL_Debug::Debug::AssertMessageVA(const char *aFileName, int aLine, const char *aFunctionName, const char *aFormattedString, ...)
+{
+	char buffer[1024];
+	va_list args;
+	va_start(args, aFormattedString);
+	vsprintf_s(buffer, aFormattedString, args);
+	perror(buffer);
+	va_end(args);
+
+	AssertMessage(aFileName, aLine, aFunctionName, buffer);
+}
+
 void DL_Debug::Debug::AssertMessage(bool aAssertExpression, const char *aFileName, int aLine, const char *aFunctionName, const std::string& aString)
 {
 	AssertMessage(aAssertExpression, aFileName, aLine, aFunctionName, aString.c_str());

@@ -47,6 +47,7 @@
 #endif
 #else
 #define DL_ASSERT(string) DL_Debug::Debug::GetInstance()->AssertMessage(__FILE__,__LINE__,__FUNCTION__, string)
+#define DL_ASSERT_VA(...) DL_Debug::Debug::GetInstance()->AssertMessageVA(__FILE__,__LINE__,__FUNCTION__, __VA_ARGS__)
 #define DL_ASSERT_EXP(expression, string) DL_Debug::Debug::GetInstance()->AssertMessage(expression, __FILE__,__LINE__,__FUNCTION__, string)
 
 #define DL_PRINT(string)  DL_Debug::Debug::GetInstance()->PrintMessage(string)
@@ -105,6 +106,7 @@ namespace DL_Debug
 		void PrintMessageVA(const char *aFormattedString, ...);
 		void DebugMessage(const char *aFileName, int aLine, const char *aFunctionName, const char *aFormattedString, ...);
 		void AssertMessage(bool aAssertExpression, const char *aFileName, int aLine, const char *aFunctionName, const char *aString);
+		void AssertMessageVA(const char *aFileName, int aLine, const char *aFunctionName, const char *aFormattedString, ...);
 		void AssertMessage(bool aAssertExpression, const char *aFileName, int aLine, const char *aFunctionName, const std::string& aString);
 		void AssertMessage(const char *aFileName, int aLine, const char *aFunctionName, const std::string& aString);
 		void ShowMessageBox(HWND aHwnd, LPCSTR aText, LPCSTR aTitle, UINT aType);
