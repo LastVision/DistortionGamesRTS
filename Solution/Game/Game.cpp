@@ -42,6 +42,8 @@ Game::~Game()
 {
 	SAFE_DELETE(myGUIManager);
 	SAFE_DELETE(myInputWrapper);
+	SAFE_DELETE(myCursor);
+
 	Prism::Audio::AudioInterface::GetInstance()->PostEvent("Stop_MenuMusic", 0);
 	Prism::Audio::AudioInterface::Destroy();
 }
