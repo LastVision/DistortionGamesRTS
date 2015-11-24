@@ -5,6 +5,12 @@
 
 void* operator new(size_t aBytes)
 {
+	if (Prism::MemoryTracker::GetInstance()->myRuntime == true)
+	{
+		Prism::MemoryTracker::GetInstance()->myRuntime = false;
+		DL_ASSERT_VA("Tried to NEW in runtime");
+	}
+
 	void* address = ::malloc(aBytes);
 	Prism::MemoryTracker::GetInstance()->Add(address, aBytes, Prism::eMemoryType::NEW);
 	return address;
@@ -12,6 +18,12 @@ void* operator new(size_t aBytes)
 
 void* operator new[](size_t aBytes)
 {
+	if (Prism::MemoryTracker::GetInstance()->myRuntime == true)
+	{
+		Prism::MemoryTracker::GetInstance()->myRuntime = false;
+		DL_ASSERT_VA("Tried to NEW[] in runtime");
+	}
+
 	void* address = ::malloc(aBytes);
 	Prism::MemoryTracker::GetInstance()->Add(address, aBytes, Prism::eMemoryType::NEW_ARRAY);
 	return address;
@@ -74,6 +86,12 @@ namespace Prism
 	{
 		Remove(aAddress);
 	}
+
+	void MemoryTracker::SetRunTime(bool aStatus)
+	{
+		myRuntime = aStatus;
+	}
+
 
 	void MemoryTracker::Add(void* aAddress, size_t aBytes, eMemoryType aMemoryType)
 	{
@@ -145,6 +163,7 @@ namespace Prism
 	MemoryTracker::MemoryTracker()
 		: myData(nullptr)
 		, myAllocations(0)
+		, myRuntime(false)
 	{
 		myData = reinterpret_cast<MemoryData*>(::malloc(sizeof(MemoryData)));
 	}
