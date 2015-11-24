@@ -1,17 +1,12 @@
 #include "stdafx.h"
 
-#include <AudioInterface.h>
-#include <Camera.h>
 #include <ColoursForBG.h>
 #include <Engine.h>
-#include <FileWatcher.h>
-#include <DebugFont.h>
 #include <GameStateMessage.h>
 #include "InGameState.h"
 #include <InputWrapper.h>
-#include <ModelLoader.h>
+#include "Level.h"
 #include <PostMaster.h>
-#include <Sprite.h>
 #include <TimerManager.h>
 #include <VTuneApi.h>
 #include <Vector.h>
@@ -49,13 +44,23 @@ void InGameState::EndState()
 
 const eStateStatus InGameState::Update(const float& aDeltaTime)
 {
-	aDeltaTime;
+	if (myInputWrapper->KeyDown(DIK_ESCAPE))
+	{
+		myIsActiveState = false;
+		return eStateStatus::ePopMainState;
+	}
+	if (myLevel->LogicUpdate(aDeltaTime) == true)
+	{
+	return eStateStatus::eKeepState;
+}
 	return eStateStatus::eKeepState;
 }
 
 void InGameState::Render()
 {
 	VTUNE_EVENT_BEGIN(VTUNE::GAME_RENDER);
+
+	myLevel->Render(myIsActiveState);
 
 	VTUNE_EVENT_END();
 }
@@ -67,8 +72,7 @@ void InGameState::ResumeState()
 
 void InGameState::OnResize(int aWidth, int aHeight)
 {
-	aWidth;
-	aHeight;
+	myLevel->OnResize(aWidth, aHeight);
 }
 
 void InGameState::ReceiveMessage(const GameStateMessage& aMessage)
@@ -91,6 +95,7 @@ void InGameState::ReceiveMessage(const GameStateMessage& aMessage)
 
 void InGameState::SetLevel(int aLevelID, int aDifficultID)
 {
+	myLevel = new Level();
 	aLevelID;
 	aDifficultID;
 }

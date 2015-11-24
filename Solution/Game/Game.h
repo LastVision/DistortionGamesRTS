@@ -1,6 +1,8 @@
 #pragma once
 #include <Matrix.h>
 #include <GrowingArray.h>
+#include "StateStack.h"
+#include <Subscriber.h>
 
 namespace CU
 {
@@ -16,7 +18,7 @@ class InGameState;
 class MenuState;
 class BulletManager;
 
-class Game
+class Game : public Subscriber
 {
 public:
 	Game();
@@ -30,6 +32,8 @@ public:
 	void UnPause();
 	void OnResize(int aWidth, int aHeight);
 
+	void ReceiveMessage(const GameStateMessage& aMessage) override;
+
 private:
 	void operator=(Game& aApp) = delete;
 
@@ -37,6 +41,8 @@ private:
 
 	CU::InputWrapper* myInputWrapper;
 	HWND* myWindowHandler;
+
+	StateStack myStateStack;
 
 	MenuState* myCurrentMenu;
 	InGameState* myGame;

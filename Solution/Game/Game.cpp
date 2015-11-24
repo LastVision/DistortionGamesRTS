@@ -4,11 +4,13 @@
 #include <Camera.h>
 #include <ColoursForBG.h>
 #include <CommonHelper.h>
+#include <DebugFont.h>
 #include <Engine.h>
 #include <FileWatcher.h>
-#include <DebugFont.h>
 #include "Game.h"
+#include <GameStateMessage.h>
 #include <GUIManager.h>
+#include "InGameState.h"
 #include <InputWrapper.h>
 #include <ModelLoader.h>
 #include <SystemMonitor.h>
@@ -90,4 +92,20 @@ void Game::OnResize(int aWidth, int aHeight)
 {
 	myWindowSize.x = aWidth;
 	myWindowSize.y = aHeight;
+}
+
+void Game::ReceiveMessage(const GameStateMessage& aMessage)
+{
+	switch (aMessage.GetGameState())
+	{
+	case eGameState::LOAD_GAME:
+		myGame = new InGameState(myInputWrapper);
+		myStateStack.PushSubGameState(myGame);
+		myGame->SetLevel(aMessage.GetID(), aMessage.GetSecondID());
+		break;
+	case eGameState::LOAD_MENU:
+		break;
+	default:
+		break;
+	}
 }
