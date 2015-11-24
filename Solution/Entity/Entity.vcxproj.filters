@@ -10,6 +10,12 @@
     <Filter Include="EntityEnum">
       <UniqueIdentifier>{7d7f71b2-422d-45ef-86e0-9e5de1bf5ff3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Notes">
+      <UniqueIdentifier>{94368afe-a27b-4e9d-a92f-675b465c30d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\Graphic">
+      <UniqueIdentifier>{04e1e5b4-fd4d-484e-882c-295f20cb2c9c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -19,6 +25,9 @@
       <Filter>Component</Filter>
     </ClCompile>
     <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="GraphicsComponent.cpp">
+      <Filter>Component\Graphic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -30,6 +39,9 @@
     <ClInclude Include="Entity.h" />
     <ClInclude Include="EntityEnum.h">
       <Filter>EntityEnum</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicsComponent.h">
+      <Filter>Component\Graphic</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -3,6 +3,7 @@
 #include "FullScreenHelper.h"
 #include "Texture.h"
 #include "Renderer.h"
+#include <D3DX11.h>
 
 namespace Prism
 {

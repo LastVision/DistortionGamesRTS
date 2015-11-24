@@ -1,7 +1,6 @@
 #pragma once
 
 #include "BaseModel.h"
-#include <D3DX11.h>
 #include "EffectListener.h"
 #include <GrowingArray.h>
 #include <Matrix.h>
