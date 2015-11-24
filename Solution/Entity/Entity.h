@@ -1,4 +1,6 @@
 #pragma once
+
+#include <DL_Debug.h>
 #include "EntityEnum.h"
 #include <unordered_map>
 #include <StaticArray.h>
@@ -23,11 +25,8 @@ public:
 
 	virtual void Update(float aDeltaTime);
 
-	template <typename T>
-	T* AddComponent();
-
-	template <typename T>
-	void RemoveComponent();
+	void AddComponent(Component* aComponent);
+	void RemoveComponent(eComponentType aComponent);
 
 	template <typename T>
 	T* GetComponent();
@@ -36,17 +35,13 @@ public:
 	void SendNote(const T& aNote);
 
 	const CU::Matrix44<float>& GetOrientation() const;
-
+	Prism::Scene& GetScene();
 	eEntityType GetType() const;
 	bool GetAlive() const;
 	void Kill();
 	const std::string& GetName() const;
 	void SetName(const std::string& aName);
 	void Reset();
-
-	Prism::Scene& GetScene();
-
-	void SetPlayerScene(Prism::Scene& aScene);
 
 	Prism::eOctreeType GetOctreeType() const;
 
@@ -57,49 +52,62 @@ private:
 	bool myAlive;
 	std::string myName;
 	const eEntityType myType;
-	Prism::Scene* myScene;
 	const Prism::eOctreeType myOctreeType;
+	Prism::Scene& myScene;
 
 	CU::Matrix44<float> myOrientation;
-	CU::Matrix44<float> myOriginalOrientation;
 };
 
-template <typename T>
-T* Entity::AddComponent()
+inline void Entity::AddComponent(Component* aComponent)
 {
-	DL_ASSERT_EXP(T::GetType() != eComponentType::NOT_USED, "Tried to add invalid component.");
-
-	int index = static_cast<int>(T::GetType());
-	if (myComponents[index] != nullptr)
-	{
-		DL_ASSERT("Tried to add a component twice to the same entity.");
-	}
-
-	T* component = new T(*this);
-	myComponents[index] = component;
-
-	return component;
+	DL_ASSERT_EXP(myComponents[int(aComponent->GetType())] == nullptr, "Tried to add component several times");
+	myComponents[int(aComponent->GetType())] = aComponent;
 }
 
-template <typename T>
-void Entity::RemoveComponent()
+inline void Entity::RemoveComponent(eComponentType aComponent)
 {
-	DL_ASSERT_EXP(T::GetType() != eComponentType::NOT_USED, "Tried to add invalid component.");
-
-	int index = static_cast<int>(T::GetType());
-	if (myComponents[index] == nullptr)
-	{
-		DL_ASSERT("Tried to remove a component from a entity that wasnt added.");
-	}
-
-	delete myComponents[index];
-	myComponents[index] = nullptr;
+	DL_ASSERT_EXP(myComponents[int(aComponent)] != nullptr, "Tried to remove an nonexisting component");
+	delete myComponents[int(aComponent)];
+	myComponents[int(aComponent)] = nullptr;
 }
+
+//
+//template <typename T>
+//T* Entity::AddComponent()
+//{
+//	DL_ASSERT_EXP(T::GetType() != eComponentType::NOT_USED, "Tried to add invalid component.");
+//
+//	int index = static_cast<int>(T::GetType());
+//	if (myComponents[index] != nullptr)
+//	{
+//		DL_ASSERT("Tried to add a component twice to the same entity.");
+//	}
+//
+//	T* component = new T(*this);
+//	myComponents[index] = component;
+//
+//	return component;
+//}
+
+//template <typename T>
+//void Entity::RemoveComponent()
+//{
+//	DL_ASSERT_EXP(T::GetType() != eComponentType::NOT_USED, "Tried to add invalid component.");
+//
+//	int index = static_cast<int>(T::GetTypeStatic());
+//	if (myComponents[index] == nullptr)
+//	{
+//		DL_ASSERT("Tried to remove a component from a entity that wasnt added.");
+//	}
+//
+//	delete myComponents[index];
+//	myComponents[index] = nullptr;
+//}
 
 template <typename T>
 T* Entity::GetComponent()
 {
-	return static_cast<T*>(myComponents[static_cast<int>(T::GetType())]);
+	return static_cast<T*>(myComponents[static_cast<int>(T::GetTypeStatic())]);
 }
 
 template <typename T>
@@ -119,6 +127,11 @@ inline const CU::Matrix44<float>& Entity::GetOrientation() const
 	return myOrientation;
 }
 
+inline Prism::Scene& Entity::GetScene()
+{
+	return myScene;
+}
+
 inline eEntityType Entity::GetType() const
 {
 	return myType;
@@ -127,16 +140,6 @@ inline eEntityType Entity::GetType() const
 inline bool Entity::GetAlive() const
 {
 	return myAlive;
-}
-
-inline Prism::Scene& Entity::GetScene()
-{
-	return *myScene;
-}
-
-inline void Entity::SetPlayerScene(Prism::Scene& aScene)
-{
-	myScene = &aScene;
 }
 
 inline const std::string& Entity::GetName() const

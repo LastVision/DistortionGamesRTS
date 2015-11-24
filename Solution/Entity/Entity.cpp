@@ -6,7 +6,7 @@
 Entity::Entity(eEntityType aType, Prism::Scene& aScene, Prism::eOctreeType anOctreeType, const std::string& aName)
 	: myAlive(true)
 	, myType(aType)
-	, myScene(&aScene)
+	, myScene(aScene)
 	, myOctreeType(anOctreeType)
 	, myName(aName)
 {
@@ -44,7 +44,6 @@ void Entity::Kill()
 
 void Entity::Reset()
 {
-	myOrientation = myOriginalOrientation;
 	myAlive = true;
 	for (int i = 0; i < static_cast<int>(eComponentType::_COUNT); ++i)
 	{
