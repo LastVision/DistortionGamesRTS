@@ -10,10 +10,16 @@
     <Filter Include="MessageEnum">
       <UniqueIdentifier>{1ea61717-2475-4611-b768-283394c81acc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Message\StateMessage">
+      <UniqueIdentifier>{d387a4d5-0a6e-4895-8fa3-78744878958f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
       <Filter>PreCompile</Filter>
+    </ClCompile>
+    <ClCompile Include="GameStateMessage.cpp">
+      <Filter>Message\StateMessage</Filter>
     </ClCompile>
     <ClCompile Include="PostMaster.cpp" />
     <ClCompile Include="Subscriber.cpp" />
@@ -32,6 +38,9 @@
     </ClInclude>
     <ClInclude Include="ResizeMessage.h">
       <Filter>Message</Filter>
+    </ClInclude>
+    <ClInclude Include="GameStateMessage.h">
+      <Filter>Message\StateMessage</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -5,16 +5,52 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>PreCompile</Filter>
     </ClCompile>
+    <ClCompile Include="InGameState.cpp">
+      <Filter>StateStack</Filter>
+    </ClCompile>
+    <ClCompile Include="StateStack.cpp">
+      <Filter>StateStack</Filter>
+    </ClCompile>
+    <ClCompile Include="StateStackProxy.cpp">
+      <Filter>StateStack</Filter>
+    </ClCompile>
+    <ClCompile Include="Level.cpp">
+      <Filter>Level</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
     <ClInclude Include="stdafx.h">
       <Filter>PreCompile</Filter>
     </ClInclude>
+    <ClInclude Include="GameState.h">
+      <Filter>StateStack</Filter>
+    </ClInclude>
+    <ClInclude Include="InGameState.h">
+      <Filter>StateStack</Filter>
+    </ClInclude>
+    <ClInclude Include="StateEnums.h">
+      <Filter>StateStack</Filter>
+    </ClInclude>
+    <ClInclude Include="StateStack.h">
+      <Filter>StateStack</Filter>
+    </ClInclude>
+    <ClInclude Include="StateStackProxy.h">
+      <Filter>StateStack</Filter>
+    </ClInclude>
+    <ClInclude Include="Level.h">
+      <Filter>Level</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="PreCompile">
       <UniqueIdentifier>{c4e0ae1e-09e7-4d58-884d-9ca4a18e8414}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="StateStack">
+      <UniqueIdentifier>{39b4d83c-1076-4592-8091-99e0c0c7d080}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Level">
+      <UniqueIdentifier>{f9276240-a779-416b-9c05-b682b500c868}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
