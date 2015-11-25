@@ -99,12 +99,6 @@
     <ClCompile Include="Renderer.cpp">
       <Filter>Rendering\PostProcessing</Filter>
     </ClCompile>
-    <ClCompile Include="StreakEmitterData.cpp">
-      <Filter>Rendering\Streak</Filter>
-    </ClCompile>
-    <ClCompile Include="StreakEmitterInstance.cpp">
-      <Filter>Rendering\Streak</Filter>
-    </ClCompile>
     <ClCompile Include="Tga32.cpp">
       <Filter>Tga32</Filter>
     </ClCompile>
@@ -113,6 +107,30 @@
     </ClCompile>
     <ClCompile Include="Terrain.cpp">
       <Filter>Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation.cpp">
+      <Filter>Rendering\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationCurve.cpp">
+      <Filter>Rendering\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationNode.cpp">
+      <Filter>Rendering\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="HierarchyBone.cpp">
+      <Filter>Rendering\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="TransformationNode.cpp">
+      <Filter>Rendering\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="TransformationNodeCurves.cpp">
+      <Filter>Rendering\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="TransformationNodeHierarchy.cpp">
+      <Filter>Rendering\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="TransformationNodeInstance.cpp">
+      <Filter>Rendering\Animation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -247,18 +265,6 @@
     <ClInclude Include="Renderer.h">
       <Filter>Rendering\PostProcessing</Filter>
     </ClInclude>
-    <ClInclude Include="StreakData.h">
-      <Filter>Rendering\Streak</Filter>
-    </ClInclude>
-    <ClInclude Include="StreakEmitterData.h">
-      <Filter>Rendering\Streak</Filter>
-    </ClInclude>
-    <ClInclude Include="StreakEmitterInstance.h">
-      <Filter>Rendering\Streak</Filter>
-    </ClInclude>
-    <ClInclude Include="StreakInstance.h">
-      <Filter>Rendering\Streak</Filter>
-    </ClInclude>
     <ClInclude Include="Tga32.h">
       <Filter>Tga32</Filter>
     </ClInclude>
@@ -270,6 +276,30 @@
     </ClInclude>
     <ClInclude Include="Terrain.h">
       <Filter>Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation.h">
+      <Filter>Rendering\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationCurve.h">
+      <Filter>Rendering\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationNode.h">
+      <Filter>Rendering\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="HierarchyBone.h">
+      <Filter>Rendering\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="TransformationNode.h">
+      <Filter>Rendering\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="TransformationNodeCurves.h">
+      <Filter>Rendering\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="TransformationNodeHierarchy.h">
+      <Filter>Rendering\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="TransformationNodeInstance.h">
+      <Filter>Rendering\Animation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -312,14 +342,14 @@
     <Filter Include="Rendering\PostProcessing">
       <UniqueIdentifier>{9eae83a0-4dc4-4207-9000-7994f620f042}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Rendering\Streak">
-      <UniqueIdentifier>{dd92a4e0-d37f-466b-9b7a-966645f4818d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Tga32">
       <UniqueIdentifier>{18b9410f-d7c0-46f2-af85-b20098396534}</UniqueIdentifier>
     </Filter>
     <Filter Include="Terrain">
       <UniqueIdentifier>{59d37244-123a-4cb5-bb00-433a66692270}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering\Animation">
+      <UniqueIdentifier>{818116f3-0b61-43a9-aa31-5eb1ab31adf6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

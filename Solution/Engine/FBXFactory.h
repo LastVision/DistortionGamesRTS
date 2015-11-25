@@ -35,6 +35,8 @@ class Effect;
 
 		struct FBXData
 		{
+			FBXData() :myData(nullptr){}
+			~FBXData();
 			FbxModelData* myData;
 			std::string myPath;
 		};

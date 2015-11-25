@@ -18,6 +18,7 @@ class Component;
 
 class Entity
 {
+	friend class AnimationComponent;
 	friend class GraphicsComponent;
 public:
 	Entity(eEntityType aType, Prism::Scene& aScene, Prism::eOctreeType anOctreeType, const std::string& aName = "");

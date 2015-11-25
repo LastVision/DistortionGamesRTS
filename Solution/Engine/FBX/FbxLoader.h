@@ -56,6 +56,13 @@ struct AnimationData
 
 struct ModelData
 {
+	~ModelData()
+	{
+		mSubMeshes.DeleteAll();
+		SAFE_DELETE(myVertexBuffer);
+		SAFE_DELETE(myIndicies);
+	}
+
 	enum
 	{
 		VERTEX_VBO,
@@ -156,6 +163,21 @@ public:
 		myLight = nullptr;
 		myCamera = nullptr;
 		myLodGroup = nullptr;
+	}
+
+	~FbxModelData()
+	{
+		SAFE_DELETE(myLodGroup);
+		SAFE_DELETE(myData);
+		SAFE_DELETE(myLight);
+		SAFE_DELETE(myCamera);
+		SAFE_DELETE(myAnimation);
+		SAFE_DELETE(myTextureData);
+		SAFE_DELETE(myAnimationCurves);
+		if (myChildren.Size() > 0)
+		{
+			myChildren.DeleteAll();
+		}
 	}
 
 	Prism::LodGroup* CreateLodGroup(){ myLodGroup = new Prism::LodGroup(); return myLodGroup; }

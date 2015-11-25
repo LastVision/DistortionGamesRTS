@@ -14,7 +14,9 @@
 #include "InGameState.h"
 #include <InputWrapper.h>
 #include <ModelLoader.h>
+#include <StreakDataContainer.h>
 #include <ParticleDataContainer.h>
+
 #include <PostMaster.h>
 #include <ResizeMessage.h>
 #include <SystemMonitor.h>
@@ -50,6 +52,7 @@ Game::~Game()
 	SAFE_DELETE(myCursor);
 	Prism::Audio::AudioInterface::GetInstance()->PostEvent("Stop_MenuMusic", 0);
 	Prism::Audio::AudioInterface::Destroy();
+	Prism::StreakDataContainer::Destroy();
 	Prism::ParticleDataContainer::Destroy();
 	PostMaster::Destroy();
 	myStateStack.Clear();

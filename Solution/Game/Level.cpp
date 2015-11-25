@@ -16,12 +16,14 @@ Level::Level(const Prism::Camera& aCamera)
 	myTerrain = new Prism::Terrain("Data/Resource/Texture/Terrain/playground.tga"
 		, "Data/Resource/Texture/Terrain/T_rock.dds", { 256.f, 256.f }, 25.5f, CU::Matrix44<float>());
 
+	myScene = new Prism::Scene(aCamera, *myTerrain);
 
 	myUnit = new Entity(eEntityType::PLAYER, *myScene, Prism::eOctreeType::DYNAMIC, "TestUnit");
 	myUnit->AddComponent(new GraphicsComponent(*myUnit, "Data/Resource/Model/BoxBro/boxBro_idle_anim.fbx"
 		, "Data/Resource/Shader/S_effect_no_texture.fx"));
+	
+	myScene->AddInstance(myUnit->GetComponent<GraphicsComponent>()->GetInstance());
 
-	myScene = new Prism::Scene(aCamera, *myTerrain);
 
 	myLight = new Prism::DirectionalLight();
 	myLight->SetColor({ 0.5f, 0.5f, 0.9f, 1.f });

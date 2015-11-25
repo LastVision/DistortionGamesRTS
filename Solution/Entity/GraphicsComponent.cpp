@@ -24,6 +24,8 @@ GraphicsComponent::GraphicsComponent(Entity& aEntity, const char* aModelPath, co
 		, aEffectPath);
 
 	myInstance = new Prism::Instance(*model, myEntity.myOrientation, myEntity.GetOctreeType(), myCullingRadius);
+
+	myEntity.myOrientation.SetPos({ 10.f, 95.f, 0.f });
 }
 
 GraphicsComponent::~GraphicsComponent()

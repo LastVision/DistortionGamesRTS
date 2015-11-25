@@ -51,7 +51,6 @@ private:
 	Level* myLevel;
 	Prism::Camera* myCamera;
 	CU::Matrix44<float> myCameraOrientation;
-
 	bool myIsComplete;
 };
 

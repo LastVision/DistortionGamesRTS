@@ -36,7 +36,7 @@ namespace Prism
 		, myModelFactory(new FBXFactory())
 		, myIsLoading(false)
 		, myClearLoadJobs(true)
-		, myIsPaused(true)
+		, myIsPaused(false)
 		, myHasPrefetched(false)
 	{
 		myBuffers[0].Init(4096);
