@@ -41,7 +41,7 @@ namespace Prism
 		InitVertexBuffer(sizeof(VertexPosNormUV), D3D11_USAGE_IMMUTABLE, 0);
 
 		InitIndexBuffer();
-		InitSurface("DiffuseTexture", myFileName);
+		InitSurface("AlbedoTexture", myFileName);
 		InitBlendState("Terrain::BlendState");
 
 		ZeroMemory(myInitData, sizeof(myInitData));
