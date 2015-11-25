@@ -25,7 +25,7 @@ Level::Level(const Prism::Camera& aCamera)
 
 	myLight = new Prism::DirectionalLight();
 	myLight->SetColor({ 0.5f, 0.5f, 0.9f, 100.f });
-	myLight->SetDir({ 0, -1.f, 0 });
+	myLight->SetDir(CU::Vector3<float>(0, 1, 0) * CU::Matrix44<float>::CreateRotateAroundZ(-3.14f / 2.f));
 	myScene->AddLight(myLight);
 }
 
