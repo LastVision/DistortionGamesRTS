@@ -23,7 +23,6 @@ namespace Prism
 
 		void Render();
 		void Render(CU::GrowingArray<Instance*>& someBulletInstances);
-		void RenderCockpit();
 
 		void AddInstance(Instance* aInstance);
 		void AddLight(DirectionalLight* aLight);
@@ -36,7 +35,6 @@ namespace Prism
 		void operator=(Scene&) = delete;
 #ifdef SCENE_USE_OCTREE
 		Octree* myOctree;
-		Instance* myPlayerInstance;
 #endif
 		CU::GrowingArray<Instance*> myInstances;
 		CU::GrowingArray<Instance*> myDynamicInstances;
