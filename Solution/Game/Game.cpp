@@ -80,7 +80,7 @@ bool Game::Destroy()
 bool Game::Update()
 {
 	myInputWrapper->Update();
-
+	CU::TimerManager::GetInstance()->Update();
 	float deltaTime = CU::TimerManager::GetInstance()->GetMasterTimer().GetTime().GetFrameTime();
 	float realDeltaTime = deltaTime;
 	if (deltaTime > 1.0f / 10.0f)
