@@ -41,6 +41,8 @@ void InGameState::InitState(StateStackProxy* aStateStackProxy)
 	OnResize(windowSize.x, windowSize.y);
 	PostMaster::GetInstance()->Subscribe(eMessageType::GAME_STATE, this);
 
+
+
 	myIsActiveState = true;
 }
 
@@ -70,7 +72,6 @@ const eStateStatus InGameState::Update(const float& aDeltaTime)
 void InGameState::Render()
 {
 	VTUNE_EVENT_BEGIN(VTUNE::GAME_RENDER);
-
 	myLevel->Render();
 
 	VTUNE_EVENT_END();

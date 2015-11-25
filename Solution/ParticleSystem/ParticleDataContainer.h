@@ -5,8 +5,6 @@
 namespace Prism
 {
 	class ParticleEmitterData;
-	class StreakEmitterData;
-
 
 	class ParticleDataContainer
 	{

@@ -238,8 +238,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Internal|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="StreakEmitterData.cpp" />
-    <ClCompile Include="StreakEmitterInstance.cpp" />
     <ClCompile Include="Surface.cpp" />
     <ClCompile Include="SystemMonitor.cpp" />
     <ClCompile Include="DebugText.cpp" />
@@ -290,10 +288,6 @@
     <ClInclude Include="SetupInfo.h" />
     <ClInclude Include="SpotLight.h" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="StreakData.h" />
-    <ClInclude Include="StreakEmitterData.h" />
-    <ClInclude Include="StreakEmitterInstance.h" />
-    <ClInclude Include="StreakInstance.h" />
     <ClInclude Include="Surface.h" />
     <ClInclude Include="SystemMonitor.h" />
     <ClInclude Include="DebugText.h" />
