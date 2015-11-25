@@ -37,6 +37,19 @@ void Entity::Update(float aDeltaTime)
 	}
 }
 
+void Entity::AddComponent(Component* aComponent)
+{
+	DL_ASSERT_EXP(myComponents[int(aComponent->GetType())] == nullptr, "Tried to add component several times");
+	myComponents[int(aComponent->GetType())] = aComponent;
+}
+
+void Entity::RemoveComponent(eComponentType aComponent)
+{
+	DL_ASSERT_EXP(myComponents[int(aComponent)] != nullptr, "Tried to remove an nonexisting component");
+	delete myComponents[int(aComponent)];
+	myComponents[int(aComponent)] = nullptr;
+}
+
 void Entity::Kill()
 {
 	myAlive = false;

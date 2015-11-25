@@ -126,20 +126,10 @@ void Prism::Scene::Render(CU::GrowingArray<Instance*>& someBulletInstances)
 	}
 }
 
-void Prism::Scene::RenderCockpit()
-{
-	myPlayerInstance->Render(myCamera);
-}
-
 void Prism::Scene::AddInstance(Instance* aInstance)
 {
 #ifdef SCENE_USE_OCTREE
-	if (aInstance->GetOctreeType() == eOctreeType::PLAYER)
-	{
-		DL_ASSERT_EXP(myPlayerInstance == nullptr, "Tried to add Player twice to Scene");
-		myPlayerInstance = aInstance;
-	}
-	else if (aInstance->GetOctreeType() == eOctreeType::DYNAMIC)
+	if (aInstance->GetOctreeType() == eOctreeType::DYNAMIC)
 	{
 		myDynamicInstances.Add(aInstance);
 	}
