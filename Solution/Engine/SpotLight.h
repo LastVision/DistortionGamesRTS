@@ -51,7 +51,7 @@ namespace Prism
 	{
 		myPosition = myOriginalPosition * myOrientation;
 
-		myDirection = myOriginalDirection * myOrientation;
+		myDirection = CU::Vector4<float>(myOriginalDirection, 0) * myOrientation;
 	}
 
 	inline const CU::Vector4<float>& SpotLight::GetColor() const

@@ -28,7 +28,7 @@ inline void Prism::DirectionalLight::Update()
 {
 	CU::Vector3f newDir = myOriginalDirection * myOrientation;
 
-	myDirection = newDir;
+	myDirection = CU::Vector4<float>(newDir, 0);
 }
 
 inline CU::Vector4<float> Prism::DirectionalLight::GetCurrentDir() const
@@ -61,5 +61,5 @@ inline void Prism::DirectionalLight::SetColor(const CU::Vector4<float>& aVector)
 inline void Prism::DirectionalLight::SetDir(const CU::Vector3<float>& aVector)
 {
 	myOriginalDirection = aVector;
-	myDirection = aVector;
+	myDirection = CU::Vector4<float>(aVector, 0);
 }

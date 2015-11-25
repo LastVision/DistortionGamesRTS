@@ -12,20 +12,8 @@ namespace CU
 		Vector3(T aX, T aY, T aZ);
 		~Vector3();
 
-
-		union
-		{
-			T x;
-		};
-
-		union
-		{
-			T y;
-		};
-
-		union
-		{
-			T z;
-		};
+		T x;
+		T y;
+		T z;
 	};
 }
