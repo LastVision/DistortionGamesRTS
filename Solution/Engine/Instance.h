@@ -19,8 +19,8 @@ namespace Prism
 			, const float& aObjectCullingRadius);
 		~Instance();
 
-		void Render(Camera& aCamera);
-		void Render(const CU::Matrix44<float>& aParentMatrix, Camera& aCamera);
+		void Render(const Camera& aCamera);
+		void Render(const CU::Matrix44<float>& aParentMatrix, const Camera& aCamera);
 
 		CU::Vector3<float> GetPosition() const;
 

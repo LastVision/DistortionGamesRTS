@@ -23,7 +23,7 @@ Prism::Instance::~Instance()
 	delete &myProxy;
 }
 
-void Prism::Instance::Render(Camera& aCamera)
+void Prism::Instance::Render(const Camera& aCamera)
 {
 	if (myProxy.IsLoaded())
 	{
@@ -37,7 +37,7 @@ void Prism::Instance::Render(Camera& aCamera)
 	}
 }
 
-void Prism::Instance::Render(const CU::Matrix44<float>& aParentMatrix, Camera& aCamera)
+void Prism::Instance::Render(const CU::Matrix44<float>& aParentMatrix, const Camera& aCamera)
 {
 	if (myProxy.IsLoaded())
 	{
