@@ -28,6 +28,9 @@
     <ClCompile Include="GraphicsComponent.cpp">
       <Filter>Component\Graphic</Filter>
     </ClCompile>
+    <ClCompile Include="AnimationComponent.cpp">
+      <Filter>Component\Graphic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -41,6 +44,9 @@
       <Filter>EntityEnum</Filter>
     </ClInclude>
     <ClInclude Include="GraphicsComponent.h">
+      <Filter>Component\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationComponent.h">
       <Filter>Component\Graphic</Filter>
     </ClInclude>
   </ItemGroup>
