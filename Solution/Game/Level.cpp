@@ -13,7 +13,7 @@
 
 Level::Level(const Prism::Camera& aCamera)
 {
-	myTerrain = new Prism::Terrain("Data/Resource/Texture/Terrain/heightmap.tga"
+	myTerrain = new Prism::Terrain("Data/Resource/Texture/Terrain/playground.tga"
 		, "Data/Resource/Texture/Terrain/T_rock.dds", { 256.f, 256.f }, 25.5f, CU::Matrix44<float>());
 
 
@@ -24,8 +24,8 @@ Level::Level(const Prism::Camera& aCamera)
 	myScene = new Prism::Scene(aCamera, *myTerrain);
 
 	myLight = new Prism::DirectionalLight();
-	myLight->SetColor({ 0.5f, 0.5f, 0.9f, 100.f });
-	myLight->SetDir(CU::Vector3<float>(0, 1, 0) * CU::Matrix44<float>::CreateRotateAroundZ(-3.14f / 2.f));
+	myLight->SetColor({ 0.5f, 0.5f, 0.9f, 1.f });
+	myLight->SetDir(CU::Vector3<float>(0, 1, 0) * CU::Matrix44<float>::CreateRotateAroundZ(-3.14f / 3.f));
 	myScene->AddLight(myLight);
 }
 
@@ -39,6 +39,8 @@ Level::~Level()
 
 bool Level::LogicUpdate(float aDeltaTime)
 {
+	//CU::Vector3<float> lightDir(myLight->GetCurrentDir().x, myLight->GetCurrentDir().y, myLight->GetCurrentDir().z);
+	//myLight->SetDir(lightDir * CU::Matrix44<float>::CreateRotateAroundZ(-3.14f * aDeltaTime / 3.f));
 	return true;
 }
 
