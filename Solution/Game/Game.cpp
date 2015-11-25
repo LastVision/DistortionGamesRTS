@@ -84,7 +84,7 @@ bool Game::Update()
 	myInputWrapper->Update();
 	CU::TimerManager::GetInstance()->Update();
 	float deltaTime = CU::TimerManager::GetInstance()->GetMasterTimer().GetTime().GetFrameTime();
-	float realDeltaTime = deltaTime;
+	//float realDeltaTime = deltaTime;
 	if (deltaTime > 1.0f / 10.0f)
 	{
 		deltaTime = 1.0f / 10.0f;
@@ -150,7 +150,7 @@ void Game::ReceiveMessage(const GameStateMessage& aMessage)
 	case eGameState::LOAD_GAME:
 		myGame = new InGameState(myInputWrapper);
 		myStateStack.PushMainGameState(myGame);
-		myGame->SetLevel(aMessage.GetID(), aMessage.GetSecondID());
+		myGame->SetLevel();
 		break;
 	case eGameState::LOAD_MENU:
 		break;

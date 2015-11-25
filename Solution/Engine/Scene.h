@@ -18,7 +18,7 @@ namespace Prism
 	class Scene
 	{
 	public:
-		Scene();
+		Scene(const Camera& aCamera);
 		~Scene();
 
 		void Render();
@@ -31,11 +31,9 @@ namespace Prism
 		void AddLight(SpotLight* aLight);
 
 		void RemoveInstance(Instance* aInstance);
-
-		void SetCamera(Camera* aCamera);
-		Camera& GetCamera();
-
+		
 	private:
+		void operator=(Scene&) = delete;
 #ifdef SCENE_USE_OCTREE
 		Octree* myOctree;
 		Instance* myPlayerInstance;
@@ -46,7 +44,7 @@ namespace Prism
 		CU::GrowingArray<PointLight*> myPointLights;
 		CU::GrowingArray<SpotLight*> mySpotLights;
 
-		Camera* myCamera;
+		const Camera& myCamera;
 
 		CU::StaticArray<DirectionalLightData, NUMBER_OF_DIRECTIONAL_LIGHTS> myDirectionalLightData;
 		CU::StaticArray<PointLightData, NUMBER_OF_POINT_LIGHTS> myPointLightData;

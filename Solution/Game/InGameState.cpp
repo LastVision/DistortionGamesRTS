@@ -75,8 +75,10 @@ const eStateStatus InGameState::Update(const float& aDeltaTime)
 void InGameState::Render()
 {
 	VTUNE_EVENT_BEGIN(VTUNE::GAME_RENDER);
+
+	myLevel->Render();
 	myEmitter->Render(myCamera);
-	myLevel->Render(myIsActiveState, *myCamera);
+	
 
 	VTUNE_EVENT_END();
 }
@@ -109,11 +111,9 @@ void InGameState::ReceiveMessage(const GameStateMessage& aMessage)
 	}
 }
 
-void InGameState::SetLevel(int aLevelID, int aDifficultID)
+void InGameState::SetLevel()
 {
-	myLevel = new Level();
-	aLevelID;
-	aDifficultID;
+	myLevel = new Level(*myCamera);
 }
 
 void InGameState::CompleteLevel()

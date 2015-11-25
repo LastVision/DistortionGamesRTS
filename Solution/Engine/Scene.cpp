@@ -14,9 +14,10 @@
 #include "Octree.h"
 #endif
 
-Prism::Scene::Scene()
+Prism::Scene::Scene(const Camera& aCamera)
+	: myCamera(aCamera)
 #ifdef SCENE_USE_OCTREE
-	: myOctree(new Octree(6))
+	, myOctree(new Octree(6))
 	, myPlayerInstance(nullptr)
 #endif
 {
@@ -75,22 +76,22 @@ void Prism::Scene::Render()
 		mySpotLightData[i].myCone = mySpotLights[i]->GetCone();
 	}
 
-	myPlayerInstance->UpdateDirectionalLights(myDirectionalLightData);
-	myPlayerInstance->UpdatePointLights(myPointLightData);
-	myPlayerInstance->UpdateSpotLights(mySpotLightData);
+	//myPlayerInstance->UpdateDirectionalLights(myDirectionalLightData);
+	//myPlayerInstance->UpdatePointLights(myPointLightData);
+	//myPlayerInstance->UpdateSpotLights(mySpotLightData);
 	//myPlayerInstance->Render(*myCamera);
 
 #ifdef SCENE_USE_OCTREE
 	myOctree->Update();
 	myInstances.RemoveAll();
-	myOctree->GetOccupantsInAABB(myCamera->GetFrustum(), myInstances);
+	myOctree->GetOccupantsInAABB(myCamera.GetFrustum(), myInstances);
 
 	for (int i = 0; i < myDynamicInstances.Size(); ++i)
 	{
 		myDynamicInstances[i]->UpdateDirectionalLights(myDirectionalLightData);
 		myDynamicInstances[i]->UpdatePointLights(myPointLightData);
 		myDynamicInstances[i]->UpdateSpotLights(mySpotLightData);
-		myDynamicInstances[i]->Render(*myCamera);
+		myDynamicInstances[i]->Render(myCamera);
 	}
 #ifdef SHOW_OCTREE_DEBUG
 	Engine::GetInstance()->PrintText(myInstances.Size(), { 600.f, -600.f });
@@ -101,7 +102,7 @@ void Prism::Scene::Render()
 		myInstances[i]->UpdateDirectionalLights(myDirectionalLightData);
 		myInstances[i]->UpdatePointLights(myPointLightData);
 		myInstances[i]->UpdateSpotLights(mySpotLightData);
-		myInstances[i]->Render(*myCamera);
+		myInstances[i]->Render(myCamera);
 	}
 }
 
@@ -114,13 +115,13 @@ void Prism::Scene::Render(CU::GrowingArray<Instance*>& someBulletInstances)
 		someBulletInstances[i]->UpdateDirectionalLights(myDirectionalLightData);
 		someBulletInstances[i]->UpdatePointLights(myPointLightData);
 		someBulletInstances[i]->UpdateSpotLights(mySpotLightData);
-		someBulletInstances[i]->Render(*myCamera);
+		someBulletInstances[i]->Render(myCamera);
 	}
 }
 
 void Prism::Scene::RenderCockpit()
 {
-	myPlayerInstance->Render(*myCamera);
+	myPlayerInstance->Render(myCamera);
 }
 
 void Prism::Scene::AddInstance(Instance* aInstance)
@@ -173,14 +174,4 @@ void Prism::Scene::RemoveInstance(Instance* aInstance)
 #else
 	myInstances.RemoveCyclic(aInstance);
 #endif
-}
-
-void Prism::Scene::SetCamera(Camera* aCamera)
-{
-	myCamera = aCamera;
-}
-
-Prism::Camera& Prism::Scene::GetCamera()
-{
-	return *myCamera;
 }
