@@ -201,6 +201,9 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="AnimationCurve.cpp" />
+    <ClCompile Include="AnimationNode.cpp" />
     <ClCompile Include="BaseModel.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="DirectX.cpp" />
@@ -222,6 +225,7 @@
     <ClCompile Include="FontFile.cpp" />
     <ClCompile Include="Frustum.cpp" />
     <ClCompile Include="FullScreenHelper.cpp" />
+    <ClCompile Include="HierarchyBone.cpp" />
     <ClCompile Include="Instance.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="Renderer.cpp" />
@@ -249,9 +253,16 @@
     <ClCompile Include="TextureContainer.cpp" />
     <ClCompile Include="Tga32.cpp" />
     <ClCompile Include="Token.cpp" />
+    <ClCompile Include="TransformationNode.cpp" />
+    <ClCompile Include="TransformationNodeCurves.cpp" />
+    <ClCompile Include="TransformationNodeHierarchy.cpp" />
+    <ClCompile Include="TransformationNodeInstance.cpp" />
     <ClCompile Include="TreeNode.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Animation.h" />
+    <ClInclude Include="AnimationCurve.h" />
+    <ClInclude Include="AnimationNode.h" />
     <ClInclude Include="BaseModel.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Defines.h" />
@@ -272,6 +283,7 @@
     <ClInclude Include="FontFile.h" />
     <ClInclude Include="Frustum.h" />
     <ClInclude Include="FullScreenHelper.h" />
+    <ClInclude Include="HierarchyBone.h" />
     <ClInclude Include="IndexBufferWrapper.h" />
     <ClInclude Include="Instance.h" />
     <ClInclude Include="DirectionalLight.h" />
@@ -299,6 +311,10 @@
     <ClInclude Include="TextureContainer.h" />
     <ClInclude Include="Tga32.h" />
     <ClInclude Include="Token.h" />
+    <ClInclude Include="TransformationNode.h" />
+    <ClInclude Include="TransformationNodeCurves.h" />
+    <ClInclude Include="TransformationNodeHierarchy.h" />
+    <ClInclude Include="TransformationNodeInstance.h" />
     <ClInclude Include="TreeNode.h" />
     <ClInclude Include="VertexBufferWrapper.h" />
     <ClInclude Include="VertexDataWrapper.h" />

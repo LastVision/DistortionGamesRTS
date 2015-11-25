@@ -25,6 +25,7 @@ public:
 
 private:
 	Prism::Instance* myInstance;
+	float myCullingRadius;
 };
 
 inline Prism::Instance* AnimationComponent::GetInstance()
