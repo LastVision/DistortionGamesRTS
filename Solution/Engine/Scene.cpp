@@ -9,13 +9,16 @@
 #include "PointLight.h"
 #include "Scene.h"
 #include "SpotLight.h"
+#include "Terrain.h"
 #include <XMLReader.h>
+
 #ifdef SCENE_USE_OCTREE
 #include "Octree.h"
 #endif
 
-Prism::Scene::Scene(const Camera& aCamera)
+Prism::Scene::Scene(const Camera& aCamera, Terrain& aTerrain)
 	: myCamera(aCamera)
+	, myTerrain(aTerrain)
 #ifdef SCENE_USE_OCTREE
 	, myOctree(new Octree(6))
 	, myPlayerInstance(nullptr)
@@ -76,6 +79,7 @@ void Prism::Scene::Render()
 		mySpotLightData[i].myCone = mySpotLights[i]->GetCone();
 	}
 
+	myTerrain.Render(myCamera);
 	//myPlayerInstance->UpdateDirectionalLights(myDirectionalLightData);
 	//myPlayerInstance->UpdatePointLights(myPointLightData);
 	//myPlayerInstance->UpdateSpotLights(mySpotLightData);

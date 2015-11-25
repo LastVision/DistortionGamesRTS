@@ -11,6 +11,7 @@ namespace Prism
 	class Instance;
 	class PointLight;
 	class SpotLight;
+	class Terrain;
 #ifdef SCENE_USE_OCTREE
 	class Octree;
 #endif
@@ -18,7 +19,7 @@ namespace Prism
 	class Scene
 	{
 	public:
-		Scene(const Camera& aCamera);
+		Scene(const Camera& aCamera, Terrain& aTerrain);
 		~Scene();
 
 		void Render();
@@ -43,6 +44,7 @@ namespace Prism
 		CU::GrowingArray<SpotLight*> mySpotLights;
 
 		const Camera& myCamera;
+		Terrain& myTerrain;
 
 		CU::StaticArray<DirectionalLightData, NUMBER_OF_DIRECTIONAL_LIGHTS> myDirectionalLightData;
 		CU::StaticArray<PointLightData, NUMBER_OF_POINT_LIGHTS> myPointLightData;
