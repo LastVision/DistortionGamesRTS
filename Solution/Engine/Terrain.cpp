@@ -25,6 +25,8 @@ namespace Prism
 		, myOrientation(aOrientation)
 		, myVertexFormat(4)
 	{
+		DL_ASSERT_EXP(mySize.x == mySize.y, "Can't create non-quad terrain.");
+
 		myFileName = aTexturePath;
 
 		myEffect = EffectContainer::GetInstance()->GetEffect("Data/Resource/Shader/S_effect_skybox.fx");
