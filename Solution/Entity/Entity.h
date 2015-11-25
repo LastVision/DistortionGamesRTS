@@ -37,13 +37,13 @@ public:
 	const CU::Matrix44<float>& GetOrientation() const;
 	Prism::Scene& GetScene();
 	eEntityType GetType() const;
+	Prism::eOctreeType GetOctreeType() const;
 	bool GetAlive() const;
 	void Kill();
 	const std::string& GetName() const;
 	void SetName(const std::string& aName);
 	void Reset();
 
-	Prism::eOctreeType GetOctreeType() const;
 
 private:
 	void operator=(Entity&) = delete;
@@ -57,19 +57,6 @@ private:
 
 	CU::Matrix44<float> myOrientation;
 };
-
-inline void Entity::AddComponent(Component* aComponent)
-{
-	DL_ASSERT_EXP(myComponents[int(aComponent->GetType())] == nullptr, "Tried to add component several times");
-	myComponents[int(aComponent->GetType())] = aComponent;
-}
-
-inline void Entity::RemoveComponent(eComponentType aComponent)
-{
-	DL_ASSERT_EXP(myComponents[int(aComponent)] != nullptr, "Tried to remove an nonexisting component");
-	delete myComponents[int(aComponent)];
-	myComponents[int(aComponent)] = nullptr;
-}
 
 //
 //template <typename T>
@@ -135,6 +122,11 @@ inline Prism::Scene& Entity::GetScene()
 inline eEntityType Entity::GetType() const
 {
 	return myType;
+}
+
+inline Prism::eOctreeType Entity::GetOctreeType() const
+{
+	return myOctreeType;
 }
 
 inline bool Entity::GetAlive() const
