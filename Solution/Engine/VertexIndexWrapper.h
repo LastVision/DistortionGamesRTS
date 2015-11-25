@@ -5,6 +5,10 @@ namespace Prism
 {
 	struct VertexIndexWrapper
 	{
+		~VertexIndexWrapper()
+		{
+			SAFE_DELETE(myIndexData);
+		}
 		DXGI_FORMAT myFormat;
 		char* myIndexData;
 		int myNumberOfIndices;

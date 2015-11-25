@@ -483,7 +483,8 @@ bool FillData(ModelData* someData, FbxNode* aNode, AnimationData* aAnimation)
 		{
 			someData->mSubMeshes.Init(1);
 		}
-		someData->mSubMeshes.RemoveAll();
+		//someData->mSubMeshes.RemoveAll();
+		someData->mSubMeshes.DeleteAll();
 		someData->mSubMeshes.Add(new ModelData::SubMesh());
 	}
 

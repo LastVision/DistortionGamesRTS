@@ -12,6 +12,11 @@
 #include <TimerManager.h>
 
 
+Prism::FBXFactory::FBXData::~FBXData()
+{
+	delete myData;
+}
+
 Prism::FBXFactory::FBXFactory()
 {
 	CU::Matrix44f test;
@@ -100,13 +105,17 @@ void Prism::FBXFactory::FillData(ModelData* someData, Model* outData, Effect* aE
 		}
 		else if (currentLayout.myType == ModelData::VERTEX_SKINWEIGHTS)
 		{
-			break;
+			SAFE_DELETE(desc);
+			continue;
+			//break;
 			//desc->SemanticName = "WEIGHTS";
 			//desc->Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
 		}
 		else if (currentLayout.myType == ModelData::VERTEX_BONEID)
 		{
-			break;
+			SAFE_DELETE(desc);
+			continue;
+			//break;
 			//desc->SemanticName = "BONES";
 			//desc->Format = DXGI_FORMAT_R32G32B32A32_SINT;
 		}
