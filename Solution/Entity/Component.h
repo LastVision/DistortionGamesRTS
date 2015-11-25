@@ -15,7 +15,7 @@ public:
 	Entity& GetEntity();
 
 	static eComponentType GetTypeStatic();
-	eComponentType GetType();
+	virtual eComponentType GetType();
 
 	virtual void Reset();
 
