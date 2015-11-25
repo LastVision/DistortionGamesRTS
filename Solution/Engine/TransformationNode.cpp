@@ -2,7 +2,7 @@
 #include "TransformationNode.h"
 
 
-namespace Easy3D
+namespace Prism
 {
 	TransformationNode::TransformationNode()
 	{

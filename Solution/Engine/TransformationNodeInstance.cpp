@@ -4,7 +4,7 @@
 #include "TransformationNodeInstance.h"
 
 
-namespace Easy3D
+namespace Prism
 {
 	TransformationNodeInstance::TransformationNodeInstance()
 		: myTransformationNode(nullptr)

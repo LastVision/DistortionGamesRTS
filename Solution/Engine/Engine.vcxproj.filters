@@ -132,6 +132,9 @@
     <ClCompile Include="TransformationNodeInstance.cpp">
       <Filter>Rendering\Animation</Filter>
     </ClCompile>
+    <ClCompile Include="ModelAnimated.cpp">
+      <Filter>Rendering\Model</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h" />
@@ -300,6 +303,9 @@
     </ClInclude>
     <ClInclude Include="TransformationNodeInstance.h">
       <Filter>Rendering\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelAnimated.h">
+      <Filter>Rendering\Model</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

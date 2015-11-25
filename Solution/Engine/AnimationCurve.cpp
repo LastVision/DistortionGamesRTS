@@ -3,7 +3,7 @@
 #include "AnimationCurve.h"
 #include <MathHelper.h>
 
-namespace Easy3D
+namespace Prism
 {
 	AnimationCurve::AnimationCurve()
 		: myKeyFrames(4)

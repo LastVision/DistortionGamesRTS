@@ -4,11 +4,14 @@
 #include "LightStructs.h"
 #include <Matrix.h>
 #include <StaticArray.h>
+#include "TransformationNodeInstance.h"
 
 namespace Prism
 {
+	class Animation;
 	class Camera;
 	class Light;
+	class ModelAnimated;
 	class ModelProxy;
 	enum class eOctreeType;
 
@@ -18,6 +21,8 @@ namespace Prism
 		Instance(ModelProxy& aModel, const CU::Matrix44<float>& anOrientation, eOctreeType anOctreeType
 			, const float& aObjectCullingRadius);
 		~Instance();
+
+		void Update(float aDelta);
 
 		void Render(const Camera& aCamera);
 		void Render(const CU::Matrix44<float>& aParentMatrix, const Camera& aCamera);
@@ -41,12 +46,20 @@ namespace Prism
 	private:
 		void operator=(Instance&) = delete;
 
+		void BuildHierarchy(TransformationNodeInstance& aHierarchy, ModelAnimated* aModel);
+		bool myHierarchyIsBuilt;
+
 		ModelProxy& myProxy;
 		const eOctreeType myOctreeType;
 		const CU::Matrix44<float>& myOrientation;
 		CU::Vector3<float> myScale;
 
 		const float& myObjectCullingRadius;
+
+		TransformationNodeInstance myHierarchy;
+		Animation* myAnimation;
+		float myTotalTime;
+		CU::StaticArray<CU::Matrix44<float>, MAX_NR_OF_BONES> myBones;
 	};
 
 	inline float Instance::GetObjectCullingRadius() const

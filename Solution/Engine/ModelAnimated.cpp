@@ -1,0 +1,313 @@
+#include "stdafx.h"
+
+#include <CommonHelper.h>
+#include <d3dx11effect.h>
+#include "Effect.h"
+#include "EffectContainer.h"
+#include "Engine.h"
+#include "IndexBufferWrapper.h"
+#include "ModelAnimated.h"
+#include "Surface.h"
+#include "VertexBufferWrapper.h"
+#include "VertexDataWrapper.h"
+#include "VertexIndexWrapper.h"
+#include "TransformationNode.h"
+
+Prism::ModelAnimated::ModelAnimated()
+	: BaseModel()
+	, myChildren(32)
+	, myChildTransforms(32)
+	, myVertexFormat(8)
+	, myIsNULLObject(true)
+	, myVertexBaseData(nullptr)
+	, myIndexBaseData(nullptr)
+	, myIsLodGroup(false)
+	, myLodGroup(nullptr)
+	, myInited(false)
+	, myParent(nullptr)
+	, myVertexCount(0)
+{
+}
+
+Prism::ModelAnimated::~ModelAnimated()
+{
+	myChildren.DeleteAll();
+	myChildTransforms.DeleteAll();
+	myVertexFormat.DeleteAll();
+	delete myVertexBaseData;
+	delete myIndexBaseData;
+}
+
+void Prism::ModelAnimated::Init()
+{
+	DL_ASSERT_EXP(myInited == false, "Tried to Init a ModelAnimated twice");
+
+	if (myIsNULLObject == false)
+	{
+		const int size = myVertexFormat.Size();
+		D3D11_INPUT_ELEMENT_DESC* vertexDesc = new D3D11_INPUT_ELEMENT_DESC[size];
+		for (int i = 0; i < myVertexFormat.Size(); ++i)
+		{
+			vertexDesc[i] = *myVertexFormat[i];
+		}
+
+		InitInputLayout(vertexDesc, size, "ModelAnimated::InputLayout");
+		delete[] vertexDesc;
+		InitVertexBuffer(myVertexBaseData->myStride, D3D11_USAGE_IMMUTABLE, 0);
+		InitIndexBuffer();
+
+		SetupVertexBuffer(myVertexBaseData->myNumberOfVertices
+			, myVertexBaseData->myStride, myVertexBaseData->myVertexData, "ModelAnimated::VertexBuffer");
+
+		SetupIndexBuffer(myIndexBaseData->myNumberOfIndices, myIndexBaseData->myIndexData, "ModelAnimated::IndexBuffer");
+
+		myVertexCount = myVertexBaseData->myNumberOfVertices;
+	}
+
+	for (int i = 0; i < myChildren.Size(); ++i)
+	{
+		myChildren[i]->myFileName = myFileName;
+		myChildren[i]->Init();
+	}
+
+
+	myInited = true;
+
+	if (myEffect->GetFileName() == "Data/Resource/Shader/S_effect_pbl.fx")
+	{
+		for (int i = 0; i < mySurfaces.Size(); ++i)
+		{
+			if (mySurfaces[i]->VerifyTextures(myFileName) == false)
+			{
+				DL_ASSERT(CU::Concatenate("Missing PBL-texture from ModelAnimated: %s", myFileName.c_str()));
+			}
+		}
+	}
+}
+
+void Prism::ModelAnimated::InitCube(const float aWidth, const float aHeight, const float aDepth, CU::Vector4f aColour)
+{
+	DL_ASSERT_EXP(myInited == false, "Tried to Init a ModelAnimated twice");
+	myEffect = EffectContainer::GetInstance()->GetEffect("Data/Resource/Shader/S_effect_cube_colored.fx");
+
+
+	if (myEffect == nullptr)
+	{
+		DL_MESSAGE_BOX("Failed to GetEffect", "InitLightCube", MB_ICONWARNING);
+	}
+
+	D3D11_INPUT_ELEMENT_DESC vertexDesc[] =
+	{
+		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "COLOR", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+	};
+	InitInputLayout(vertexDesc, ARRAYSIZE(vertexDesc), "ModelAnimated::InputLayout");
+
+
+#pragma region Vertices
+	CU::GrowingArray<VertexPosColor> vertices;
+	vertices.Init(24);
+
+	float halfWidth = aWidth / 2.f;
+	float halfHeight = aHeight / 2.f;
+	float halfDepth = aDepth / 2.f;
+
+	//0 - 3 (Top)
+	vertices.Add({ { -halfWidth, halfHeight, -halfDepth }, aColour });
+	vertices.Add({ { halfWidth, halfHeight, -halfDepth }, aColour });
+	vertices.Add({ { halfWidth, halfHeight, halfDepth }, aColour });
+	vertices.Add({ { -halfWidth, halfHeight, halfDepth }, aColour });
+
+	//4 - 7 (Bottom)
+	vertices.Add({ { -halfWidth, -halfHeight, -halfDepth }, aColour });
+	vertices.Add({ { halfWidth, -halfHeight, -halfDepth }, aColour });
+	vertices.Add({ { halfWidth, -halfHeight, halfDepth }, aColour });
+	vertices.Add({ { -halfWidth, -halfHeight, halfDepth }, aColour });
+
+	//8 - 11 (Left)
+	vertices.Add({ { -halfWidth, -halfHeight, halfDepth }, aColour });
+	vertices.Add({ { -halfWidth, -halfHeight, -halfDepth }, aColour });
+	vertices.Add({ { -halfWidth, halfHeight, -halfDepth }, aColour });
+	vertices.Add({ { -halfWidth, halfHeight, halfDepth }, aColour });
+
+	//12 - 15 (Right)
+	vertices.Add({ { halfWidth, -halfHeight, halfDepth }, aColour });
+	vertices.Add({ { halfWidth, -halfHeight, -halfDepth }, aColour });
+	vertices.Add({ { halfWidth, halfHeight, -halfDepth }, aColour });
+	vertices.Add({ { halfWidth, halfHeight, halfDepth }, aColour });
+
+	//16 - 19 (Front)
+	vertices.Add({ { -halfWidth, -halfHeight, -halfDepth }, aColour });
+	vertices.Add({ { halfWidth, -halfHeight, -halfDepth }, aColour });
+	vertices.Add({ { halfWidth, halfHeight, -halfDepth }, aColour });
+	vertices.Add({ { -halfWidth, halfHeight, -halfDepth }, aColour });
+
+	//20 - 23 (Back)
+	vertices.Add({ { -halfWidth, -halfHeight, halfDepth }, aColour });
+	vertices.Add({ { halfWidth, -halfHeight, halfDepth }, aColour });
+	vertices.Add({ { halfWidth, halfHeight, halfDepth }, aColour });
+	vertices.Add({ { -halfWidth, halfHeight, halfDepth }, aColour });
+#pragma endregion
+
+#pragma region Indices
+
+	CU::GrowingArray<int> indices(24);
+	//Top
+	indices.Add(3);
+	indices.Add(1);
+	indices.Add(0);
+
+	indices.Add(2);
+	indices.Add(1);
+	indices.Add(3);
+
+	//Bottom
+	indices.Add(6);
+	indices.Add(4);
+	indices.Add(5);
+
+	indices.Add(7);
+	indices.Add(4);
+	indices.Add(6);
+
+	//Left
+	indices.Add(11);
+	indices.Add(9);
+	indices.Add(8);
+
+	indices.Add(10);
+	indices.Add(9);
+	indices.Add(11);
+
+	//Right
+	indices.Add(14);
+	indices.Add(12);
+	indices.Add(13);
+
+	indices.Add(15);
+	indices.Add(12);
+	indices.Add(14);
+
+	//Front
+	indices.Add(19);
+	indices.Add(17);
+	indices.Add(16);
+
+	indices.Add(18);
+	indices.Add(17);
+	indices.Add(19);
+
+	//Back
+	indices.Add(22);
+	indices.Add(20);
+	indices.Add(21);
+
+	indices.Add(23);
+	indices.Add(20);
+	indices.Add(22);
+
+#pragma endregion
+
+
+	InitVertexBuffer(sizeof(VertexPosColor), D3D11_USAGE_IMMUTABLE, 0);
+	InitIndexBuffer();
+
+	SetupVertexBuffer(vertices.Size(), sizeof(VertexPosColor), reinterpret_cast<char*>(&vertices[0]), "ModelAnimated::VertexBuffer");
+	SetupIndexBuffer(indices.Size(), reinterpret_cast<char*>(&indices[0]), "ModelAnimated::IndexBuffer");
+
+	Surface surf;
+	surf.SetEffect(myEffect);
+	surf.SetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	surf.SetVertexStart(0);
+	surf.SetVertexCount(vertices.Size());
+	surf.SetIndexStart(0);
+	surf.SetIndexCount(indices.Size());
+	surf.SetTexture("DiffuseTexture", "Data/resources/texture/seafloor.dds", true);
+
+	mySurfaces.Add(new Surface(surf));
+
+	myIsNULLObject = false;
+	myInited = true;
+}
+
+void Prism::ModelAnimated::AddChild(ModelAnimated* aChild)
+{
+	aChild->myParent = this;
+	myChildren.Add(aChild);
+	myChildTransforms.Add(new TransformationNode(aChild->myOrientation));
+}
+
+void Prism::ModelAnimated::SetLodGroup(LodGroup* aLodGroup)
+{
+	myLodGroup = aLodGroup;
+	if (myLodGroup != nullptr)
+	{
+		myIsLodGroup = true;
+	}
+}
+
+void Prism::ModelAnimated::SetEffect(Effect* aEffect)
+{
+	myEffect = aEffect;
+	myEffect->AddListener(this);
+
+	for (int i = 0; i < mySurfaces.Size(); ++i)
+	{
+		mySurfaces[i]->SetEffect(myEffect);
+		mySurfaces[i]->ReloadSurface();
+	}
+
+	for (int i = 0; i < myChildren.Size(); ++i)
+	{
+		myChildren[i]->SetEffect(aEffect);
+	}
+}
+
+void Prism::ModelAnimated::Render(const CU::Matrix44<float>& aOrientation, const CU::Vector3<float>& aCameraPosition)
+{
+	if (myIsLodGroup == true)
+	{
+		float lengthBetweenCameraAndModelAnimated = CU::Length(aCameraPosition - aOrientation.GetPos());
+		int level = 0;
+
+		ModelAnimated* toRender = nullptr;
+		for (int i = myChildren.Size() - 1; i >= 0; i--)
+		{
+			LodGroup* group = myLodGroup;
+			double threshold = group->myThreshHolds[i];
+			threshold /= 100;
+			if (threshold <= lengthBetweenCameraAndModelAnimated)
+			{
+				toRender = myChildren[i];
+				level = i;
+				break;
+			}
+		}
+
+		if (toRender)
+		{
+			toRender->Render(aOrientation, aCameraPosition);
+		}
+	}
+	else
+	{
+		if (myIsNULLObject == false)
+		{
+			float blendFactor[4];
+			blendFactor[0] = 0.f;
+			blendFactor[1] = 0.f;
+			blendFactor[2] = 0.f;
+			blendFactor[3] = 0.f;
+
+			myEffect->SetBlendState(NULL, blendFactor);
+			myEffect->SetWorldMatrix(aOrientation);
+
+			BaseModel::Render();
+		}
+
+		//for (int i = 0; i < myChildren.Size(); ++i)
+		//{
+		//	myChildren[i]->Render(myChildTransforms[i] * aOrientation, aCameraPosition);
+		//}
+	}
+}

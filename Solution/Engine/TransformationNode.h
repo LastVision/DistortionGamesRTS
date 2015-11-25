@@ -2,7 +2,7 @@
 
 #include <Matrix44.h>
 
-namespace Easy3D
+namespace Prism
 {
 	class TransformationNode
 	{

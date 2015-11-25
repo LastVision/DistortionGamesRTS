@@ -7,6 +7,7 @@ namespace Prism
 
 	class ModelProxy
 	{
+		friend class Instance;
 	public:
 		ModelProxy();
 

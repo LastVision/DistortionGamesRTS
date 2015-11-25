@@ -228,6 +228,7 @@
     <ClCompile Include="HierarchyBone.cpp" />
     <ClCompile Include="Instance.cpp" />
     <ClCompile Include="Model.cpp" />
+    <ClCompile Include="ModelAnimated.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="ModelLoader.cpp" />
@@ -290,6 +291,7 @@
     <ClInclude Include="LightStructs.h" />
     <ClInclude Include="LodStructs.h" />
     <ClInclude Include="Model.h" />
+    <ClInclude Include="ModelAnimated.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="ModelLoader.h" />
