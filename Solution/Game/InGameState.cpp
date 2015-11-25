@@ -7,8 +7,6 @@
 #include "InGameState.h"
 #include <InputWrapper.h>
 #include "Level.h"
-#include <ParticleEmitterInstance.h>
-#include <ParticleDataContainer.h>
 #include <PostMaster.h>
 #include <TimerManager.h>
 #include <VTuneApi.h>
@@ -27,7 +25,6 @@ InGameState::InGameState(CU::InputWrapper* anInputWrapper)
 
 InGameState::~InGameState()
 {
-	SAFE_DELETE(myEmitter);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::GAME_STATE, this);
 	SAFE_DELETE(myCamera);
 }
@@ -44,7 +41,6 @@ void InGameState::InitState(StateStackProxy* aStateStackProxy)
 	OnResize(windowSize.x, windowSize.y);
 	PostMaster::GetInstance()->Subscribe(eMessageType::GAME_STATE, this);
 
-	myEmitter = new Prism::ParticleEmitterInstance(Prism::ParticleDataContainer::GetInstance()->GetParticleData("Data/Resource/Particle/particle.xml"));
 	myIsActiveState = true;
 }
 
@@ -56,7 +52,6 @@ void InGameState::EndState()
 const eStateStatus InGameState::Update(const float& aDeltaTime)
 {
 	UpdateCamera(aDeltaTime);
-	myEmitter->Update(aDeltaTime, CU::Matrix44f());
 	if (myInputWrapper->KeyDown(DIK_ESCAPE))
 	{
 		myIsActiveState = false;
@@ -77,8 +72,6 @@ void InGameState::Render()
 	VTUNE_EVENT_BEGIN(VTUNE::GAME_RENDER);
 
 	myLevel->Render();
-	myEmitter->Render(myCamera);
-	
 
 	VTUNE_EVENT_END();
 }
