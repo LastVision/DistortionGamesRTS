@@ -1,4 +1,4 @@
-
+#pragma warning(disable:4005)
 #ifndef __dxgitype_h__
 #define __dxgitype_h__
 
