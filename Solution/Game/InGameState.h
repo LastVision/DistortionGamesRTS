@@ -3,8 +3,6 @@
 #include <Matrix.h>
 #include <GrowingArray.h>
 #include <Subscriber.h>
-#include <ParticleEmitterInstance.h>
-
 
 class Level;
 
@@ -15,8 +13,8 @@ namespace CU
 
 namespace Prism
 {
-	class Sprite;
 	class Camera;
+	class Sprite;
 }
 
 class InGameState : public GameState, public Subscriber
@@ -47,11 +45,12 @@ public:
 	bool IsComplete() const;
 
 private:
+	void UpdateCamera(float aDeltaTime);
 	void ShowMessage(const std::string& aBackgroundPath, const CU::Vector2<float>& aSize, std::string aText, GameStateMessage* aMessage = nullptr);
-	Prism::ParticleEmitterInstance* myEmitter;
 
 	Level* myLevel;
 	Prism::Camera* myCamera;
+	CU::Matrix44<float> myCameraOrientation;
 
 	bool myIsComplete;
 };

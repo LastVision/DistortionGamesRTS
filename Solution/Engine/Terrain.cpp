@@ -25,6 +25,8 @@ namespace Prism
 		, myOrientation(aOrientation)
 		, myVertexFormat(4)
 	{
+		DL_ASSERT_EXP(mySize.x == mySize.y, "Can't create non-quad terrain.");
+
 		myFileName = aTexturePath;
 
 		myEffect = EffectContainer::GetInstance()->GetEffect("Data/Resource/Shader/S_effect_skybox.fx");
@@ -41,7 +43,7 @@ namespace Prism
 		InitVertexBuffer(sizeof(VertexPosNormUV), D3D11_USAGE_IMMUTABLE, 0);
 
 		InitIndexBuffer();
-		InitSurface("DiffuseTexture", myFileName);
+		InitSurface("AlbedoTexture", myFileName);
 		InitBlendState("Terrain::BlendState");
 
 		ZeroMemory(myInitData, sizeof(myInitData));
@@ -57,7 +59,7 @@ namespace Prism
 	void Terrain::Render(const Camera& aCamera)
 	{
 		CU::Matrix44<float> world;
-		world.SetPos(CU::Vector3<float>(0, -110.f, 0));
+		//world.SetPos(CU::Vector3<float>(0, -110.f, 0));
 		myEffect->SetWorldMatrix(world);
 		myEffect->SetViewProjectionMatrix(aCamera.GetViewProjection());
 		BaseModel::Render();
@@ -88,13 +90,22 @@ namespace Prism
 		{
 			for (int x = 0; x < myHeightMap->myWidth - 1; ++x)
 			{
+				//original clock-wise, seem to have to turn it (see below) remove comment when sorted out
+				//indices.Add(z * myHeightMap->myWidth + x);
+				//indices.Add(z * myHeightMap->myWidth + x + 1);
+				//indices.Add((z + 1) * myHeightMap->myWidth + x);
+
+				//indices.Add((z + 1) * myHeightMap->myWidth + x);
+				//indices.Add(z * myHeightMap->myWidth + x + 1);
+				//indices.Add((z + 1) * myHeightMap->myWidth + x + 1);
+
 				indices.Add(z * myHeightMap->myWidth + x);
-				indices.Add(z * myHeightMap->myWidth + x + 1);
 				indices.Add((z + 1) * myHeightMap->myWidth + x);
+				indices.Add(z * myHeightMap->myWidth + x + 1);
 
 				indices.Add((z + 1) * myHeightMap->myWidth + x);
-				indices.Add(z * myHeightMap->myWidth + x + 1);
 				indices.Add((z + 1) * myHeightMap->myWidth + x + 1);
+				indices.Add(z * myHeightMap->myWidth + x + 1);
 			}
 		}
 

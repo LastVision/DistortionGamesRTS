@@ -17,14 +17,12 @@ namespace GUI
 		GUIManager(CU::InputWrapper* anInputWrapper, Cursor* aCursor);
 		~GUIManager();
 
-		void AddWidget(const std::string& aName, Widget* aWidget);
+		void AddWidget(Widget* aWidget);
 		void Update();
 		void Render();
 
 		void SetPosition(const CU::Vector2<float>& aPosition);
 		void SetSize(const CU::Vector2<float>& aSize);
-
-		Widget* FindWidget(const std::string& aWidgetName);
 
 	private:
 

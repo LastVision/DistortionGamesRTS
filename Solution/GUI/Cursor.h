@@ -24,6 +24,8 @@ namespace GUI
 
 		const CU::Vector2<float>& GetMousePosition() const;
 
+		void ClipCursor(); // for software cursor
+
 	private:
 		CU::Vector2<float> myPosition;
 		CU::Vector2<float> myWindowSize;

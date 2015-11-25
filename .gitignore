@@ -82,3 +82,5 @@ Tools/CSharpUtilities/CSharpUtilities/obj/
 /Solution/GUI/Debug/GUI.tlog
 /Solution/GUI/Debug
 /Solution/Application/log
+*.lastbuildstate
+*.log

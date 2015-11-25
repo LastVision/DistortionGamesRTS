@@ -14,7 +14,8 @@ public:
 
 	Entity& GetEntity();
 
-	static eComponentType GetType();
+	static eComponentType GetTypeStatic();
+	eComponentType GetType();
 
 	virtual void Reset();
 
@@ -24,10 +25,16 @@ protected:
 	Entity& myEntity;
 };
 
-inline eComponentType Component::GetType()
+inline eComponentType Component::GetTypeStatic()
 {
 	return eComponentType::NOT_USED;
 }
+
+inline eComponentType Component::GetType()
+{
+	return GetTypeStatic();
+}
+
 
 inline Entity& Component::GetEntity()
 {

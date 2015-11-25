@@ -12,7 +12,7 @@ namespace GUI
 		myWindowSize.x = float(aWindowSize.x);
 		myWindowSize.y = float(aWindowSize.y);
 
-		mySprite = new Prism::Sprite("Data/Resource/Texture/Star.dds", { 100.f, 100.f }, { 50.f, 50.f });
+		mySprite = new Prism::Sprite("Data/Resource/Texture/Star.dds", { 100.f, 100.f }, { 0.f, 0.f });
 		myPosition = myWindowSize / 2.f;
 	}
 
@@ -24,8 +24,12 @@ namespace GUI
 
 	void Cursor::Update()
 	{
-		myPosition.x += myInputWrapper->GetMouseDX();
-		myPosition.y += -myInputWrapper->GetMouseDY();
+		// uncomment for software cursor:
+		//myPosition.x += myInputWrapper->GetMouseDX();
+		//myPosition.y -= myInputWrapper->GetMouseDY();
+
+		myPosition.x = myInputWrapper->GetMousePosition().x;
+		myPosition.y = myWindowSize.y - myInputWrapper->GetMousePosition().y;
 	}
 
 	void Cursor::Render()
@@ -36,5 +40,26 @@ namespace GUI
 	const CU::Vector2<float>& Cursor::GetMousePosition() const
 	{
 		return myPosition;
+	}
+
+	void Cursor::ClipCursor()
+	{
+		if (myPosition.x < 0.f)
+		{
+			myPosition.x = 0.f;
+		}
+		else if (myPosition.x > myWindowSize.x)
+		{
+			myPosition.x = myWindowSize.x;
+		}
+
+		if (myPosition.y < 0.f)
+		{
+			myPosition.y = 0.f;
+		}
+		else if (myPosition.y > myWindowSize.y)
+		{
+			myPosition.y = myWindowSize.y;
+		}
 	}
 }

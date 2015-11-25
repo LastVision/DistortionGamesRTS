@@ -6,64 +6,48 @@ namespace GUI
 {
 	WidgetContainer::WidgetContainer()
 		: myBackground(nullptr)
+		, myWidgets(8)
 	{
 	}
 
 	WidgetContainer::~WidgetContainer()
 	{
-		for (auto widget : myWidgets)
-		{
-			delete widget.second;
-			widget.second = nullptr;
-		}
+		myWidgets.DeleteAll();
 
 		delete myBackground;
 		myBackground = nullptr;
 	}
 
-	void WidgetContainer::AddWidget(const std::string& aName, Widget* aWidget)
+	void WidgetContainer::AddWidget(Widget* aWidget)
 	{
-		std::string message = "[GUI] Widget with name " + aName + " already exists.";
-		assert(myWidgets.find(aName) == myWidgets.end() && message.c_str());
-		myWidgets[aName] = aWidget;
+		myWidgets.Add(aWidget);
 	}
 
 	void WidgetContainer::Update()
 	{
-		for (auto it = myWidgets.begin(); it != myWidgets.end(); ++it)
+		for (int i = 0; i < myWidgets.Size(); i++)
 		{
-			it->second->Update();
+			myWidgets[i]->Update();
 		}
 	}
 
-	void WidgetContainer::Render(const CU::Vector2<float>&)
+	void WidgetContainer::Render(const CU::Vector2<float>& aParentPosition)
 	{
-		for (auto it = myWidgets.begin(); it != myWidgets.end(); ++it)
+		for (int i = 0; i < myWidgets.Size(); i++)
 		{
-			it->second->Render(myPosition);
+			myWidgets[i]->Render(myPosition - aParentPosition);
 		}
-	}
-
-	Widget* WidgetContainer::FindWidget(const std::string& aName)
-	{
-		auto widget = myWidgets.find(aName);
-		if (widget != myWidgets.end())
-		{
-			return widget->second;
-		}
-
-		return nullptr;
 	}
 
 	Widget* WidgetContainer::MouseIsOver(const CU::Vector2<float>& aPosition)
 	{
 		if (IsInside(aPosition) == true)
 		{
-			for (auto it = myWidgets.begin(); it != myWidgets.end(); ++it)
+			for (int i = 0; i < myWidgets.Size(); i++)
 			{
-				if (it->second->IsVisible() == true && it->second->IsInside(aPosition - myPosition) == true)
+				if (myWidgets[i]->IsVisible() == true && myWidgets[i]->IsInside(aPosition - myPosition) == true)
 				{
-					Widget* childWidget = it->second->MouseIsOver(aPosition - myPosition);
+					Widget* childWidget = myWidgets[i]->MouseIsOver(aPosition - myPosition);
 					if (childWidget != nullptr)
 					{
 						return childWidget;

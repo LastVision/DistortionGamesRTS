@@ -1,6 +1,6 @@
 #pragma once
 #include "Widget.h"
-#include <unordered_map>
+#include <GrowingArray.h>
 
 namespace Prism
 {
@@ -16,15 +16,14 @@ namespace GUI
 		WidgetContainer();
 		~WidgetContainer();
 
-		void AddWidget(const std::string& aName, Widget* aWidget);
+		void AddWidget(Widget* aWidget);
 		void Update() override;
 		void Render(const CU::Vector2<float>& aParentPosition) override;
 
-		Widget* FindWidget(const std::string& aName) override;
 		Widget* MouseIsOver(const CU::Vector2<float>& aPosition) override;
 
 	private:
 		Prism::Sprite* myBackground;
-		std::unordered_map<std::string, Widget*> myWidgets;
+		CU::GrowingArray<Widget*> myWidgets;
 	};
 }

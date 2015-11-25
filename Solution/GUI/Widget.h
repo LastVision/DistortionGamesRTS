@@ -19,7 +19,6 @@ namespace GUI
 		virtual void OnMouseMoved(const CU::Vector2<float>& aPosition);
 
 		virtual Widget*	MouseIsOver(const CU::Vector2<float>& aPosition);
-		virtual Widget* FindWidget(const std::string& aName);
 
 		virtual bool IsInside(const CU::Vector2<float>& aPosition) const;
 
