@@ -31,7 +31,9 @@ struct GraphicalParticle
 		, myRotation(0.f)
 	{
 	}
-
+	~GraphicalParticle()
+	{
+	}
 	CU::Vector3f myPosition;
 	CU::Vector3f myColor;
 	float myAlpha;
@@ -46,6 +48,9 @@ struct LogicalParticle
 		: mySpeed(0)
 		, myIsAlive(false)
 		, myRotation(0)
+	{
+	}
+	~LogicalParticle()
 	{
 	}
 	bool myIsAlive;

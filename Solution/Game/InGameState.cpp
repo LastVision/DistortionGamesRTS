@@ -52,7 +52,6 @@ void InGameState::EndState()
 const eStateStatus InGameState::Update(const float& aDeltaTime)
 {
 	UpdateCamera(aDeltaTime);
-
 	if (myInputWrapper->KeyDown(DIK_ESCAPE))
 	{
 		myIsActiveState = false;

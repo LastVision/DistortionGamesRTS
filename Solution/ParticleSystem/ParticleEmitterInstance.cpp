@@ -10,7 +10,7 @@
 #include <Engine.h>
 namespace Prism
 {
-	ParticleEmitterInstance::ParticleEmitterInstance()
+	ParticleEmitterInstance::ParticleEmitterInstance(ParticleEmitterData* someData, bool anAllowManyParticles)
 		: myVertexWrapper(nullptr)
 		, myIsActive(false)
 		, myShouldLive(false)
@@ -20,32 +20,12 @@ namespace Prism
 		, myParticleIndex(0)
 		, myDeadParticleCount(0)
 	{
-	}
-
-	ParticleEmitterInstance::~ParticleEmitterInstance()
-	{
-		if (myVertexWrapper != nullptr && myVertexWrapper->myVertexBuffer != nullptr)
-		{
-			myVertexWrapper->myVertexBuffer->Release();
-		}
-
-		delete myVertexWrapper;
-		myVertexWrapper = nullptr;
-	}
-
-	void ParticleEmitterInstance::ReleaseData() 
-	{
-		myParticleEmitterData = nullptr;
-	}
-
-	void ParticleEmitterInstance::Initiate(ParticleEmitterData* someData, bool anAllowManyParticles)
-	{
 		myParticleEmitterData = someData;
 		myEmitterPath = myParticleEmitterData->myFileName;
 
 		int particleCount = static_cast<int>(myParticleEmitterData->myParticlesPerEmitt * myParticleEmitterData->myParticlesLifeTime / myParticleEmitterData->myEmissionRate) + 1;
 
-		
+
 		DL_DEBUG(("Loading :" + myEmitterPath).c_str());
 		DL_ASSERT_EXP(anAllowManyParticles == true || particleCount <= 201, "Can't have more than 201 particles in an emitter!");
 
@@ -69,6 +49,22 @@ namespace Prism
 
 		myEmitterLife = myParticleEmitterData->myEmitterLifeTime;
 		CreateVertexBuffer();
+	}
+
+	ParticleEmitterInstance::~ParticleEmitterInstance()
+	{
+		if (myVertexWrapper != nullptr && myVertexWrapper->myVertexBuffer != nullptr)
+		{
+			myVertexWrapper->myVertexBuffer->Release();
+		}
+
+
+		SAFE_DELETE(myVertexWrapper);
+	}
+
+	void ParticleEmitterInstance::ReleaseData() 
+	{
+		myParticleEmitterData = nullptr;
 	}
 
 	void ParticleEmitterInstance::Render(Camera* aCamera)
