@@ -139,7 +139,7 @@ void InGameState::UpdateCamera(float aDeltaTime)
 
 	CU::Vector3<float> cameraPos = myCameraOrientation.GetPos();
 
-	float cameraSpeed = 0.01f;
+	float cameraSpeed = 100.f * aDeltaTime;
 
 	if (myInputWrapper->KeyIsPressed(DIK_DOWNARROW) == true)
 	{
@@ -167,7 +167,7 @@ void InGameState::UpdateCamera(float aDeltaTime)
 	}
 	myCameraOrientation.SetPos(cameraPos);
 
-	float rotationSpeed = 0.0001f;
+	float rotationSpeed = 1.f * aDeltaTime;
 
 	if (myInputWrapper->KeyIsPressed(DIK_W) == true)
 	{
