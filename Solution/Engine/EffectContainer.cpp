@@ -110,7 +110,7 @@ namespace Prism
 			|| aFilePath == "Data/Resource/Shader/S_effect_sprite.fx"
 			|| aFilePath == "Data/Resource/Shader/S_effect_graph.fx"
 			|| aFilePath == "Data/Resource/Shader/S_effect_debug.fx"
-			|| aFilePath == "Data/Resource/Shader/S_effect_skybox.fx"
+			|| aFilePath == "Data/Resource/Shader/S_effect_terrain.fx"
 			|| aFilePath == "Data/Resource/Shader/S_effect_basic.fx"
 			|| aFilePath == "Data/Resource/Shader/S_effect_particle.fx"
 			|| aFilePath == "Data/Resource/Shader/S_effect_streak.fx"

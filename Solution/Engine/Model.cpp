@@ -243,11 +243,6 @@ void Prism::Model::SetLodGroup(LodGroup* aLodGroup)
 	}
 }
 
-Prism::Effect* Prism::Model::GetEffect()
-{
-	return myEffect;
-}
-
 void Prism::Model::SetEffect(Effect* aEffect)
 {
 	myEffect = aEffect;

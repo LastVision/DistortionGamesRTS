@@ -79,6 +79,9 @@ void Prism::Scene::Render()
 		mySpotLightData[i].myCone = mySpotLights[i]->GetCone();
 	}
 
+	myTerrain.GetEffect()->UpdateDirectionalLights(myDirectionalLightData);
+	//myTerrain.UpdatePointLights(myPointLightData);
+	//myTerrain.UpdateSpotLights(mySpotLightData);
 	myTerrain.Render(myCamera);
 	//myPlayerInstance->UpdateDirectionalLights(myDirectionalLightData);
 	//myPlayerInstance->UpdatePointLights(myPointLightData);

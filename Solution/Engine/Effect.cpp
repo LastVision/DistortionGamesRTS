@@ -181,7 +181,7 @@ bool Prism::Effect::ReloadShader(const std::string& aFile)
 	unsigned int shaderFlags = 0;
 
 #if defined (DEBUG) || defined(_DEBUG)
-	shaderFlags |= D3D10_SHADER_DEBUG;
+	shaderFlags |= D3D10_SHADER_DEBUG | D3D10_SHADER_SKIP_OPTIMIZATION;
 #endif
 
 	ID3D10Blob* compiledShader = nullptr;

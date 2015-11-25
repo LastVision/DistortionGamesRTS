@@ -34,7 +34,7 @@ namespace Prism
 		void AddChild(Model* aChild);
 		void SetLodGroup(LodGroup* aLodGroup);
 
-		Effect* GetEffect();
+		
 		void SetEffect(Effect* aEffect);
 
 		void Render(const CU::Matrix44<float>& aOrientation, const CU::Vector3<float>& aCameraPosition);

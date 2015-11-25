@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+#include <DirectionalLight.h>
 #include <Engine.h>
 #include "Level.h"
 #include <Scene.h>
@@ -11,12 +12,18 @@ Level::Level(const Prism::Camera& aCamera)
 		, "Data/Resource/Texture/Terrain/T_rock.dds", { 256.f, 256.f }, 25.5f, CU::Matrix44<float>());
 
 	myScene = new Prism::Scene(aCamera, *myTerrain);
+
+	myLight = new Prism::DirectionalLight();
+	myLight->SetColor({ 0.5f, 0.5f, 0.9f, 100.f });
+	myLight->SetDir({ 0, -1.f, 0 });
+	myScene->AddLight(myLight);
 }
 
 Level::~Level()
 {
 	SAFE_DELETE(myTerrain);
 	SAFE_DELETE(myScene);
+	SAFE_DELETE(myLight);
 }
 
 bool Level::LogicUpdate(float aDeltaTime)
