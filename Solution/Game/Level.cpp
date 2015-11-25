@@ -8,9 +8,9 @@
 Level::Level(const Prism::Camera& aCamera)
 {
 	myTerrain = new Prism::Terrain("Data/Resource/Texture/Terrain/heightmap.tga"
-		, "Data/Resource/Texture/Terrain/T_rock.dds", { 1000.f, 1000.f }, 100.f, CU::Matrix44<float>());
+		, "Data/Resource/Texture/Terrain/T_rock.dds", { 256.f, 256.f }, 25.5f, CU::Matrix44<float>());
 
-	myScene = new Prism::Scene(aCamera);
+	myScene = new Prism::Scene(aCamera, *myTerrain);
 }
 
 Level::~Level()
@@ -28,7 +28,6 @@ void Level::Render()
 {
 	Prism::Engine::GetInstance()->SetClearColor({ 1.0f, 0.f, 0.f, 1.f });
 
-	//myTerrain->Render(aCamera);
 	myScene->Render();
 }
 
