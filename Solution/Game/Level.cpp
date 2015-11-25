@@ -20,8 +20,8 @@ Level::Level(const Prism::Camera& aCamera)
 	myUnit->AddComponent(new GraphicsComponent(*myUnit, "Data/Resource/Model/BoxBro/boxBro_idle_anim.fbx"
 		, "Data/Resource/Shader/S_effect_no_texture.fx"));
 
-	myScene->AddInstance(myUnit->GetComponent<GraphicsComponent>()->GetInstance());
 	myScene = new Prism::Scene(aCamera, *myTerrain);
+	myScene->AddInstance(myUnit->GetComponent<GraphicsComponent>()->GetInstance());
 }
 
 Level::~Level()
