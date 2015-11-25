@@ -2,7 +2,6 @@
 
 #include "DirectX.h"
 #include "EffectContainer.h"
-#include "EmitterDataContainer.h"
 #include "Engine.h"
 #include "FBXFactory.h"
 #include "FileWatcher.h"
@@ -51,7 +50,6 @@ namespace Prism
 
 		TextureContainer::Destroy();
 		EffectContainer::Destroy();
-		EmitterDataContainer::Destroy();
 		FileWatcher::Destroy();
 
 		ModelLoader::GetInstance()->ClearLoadJobs();

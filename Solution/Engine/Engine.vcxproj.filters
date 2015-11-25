@@ -99,19 +99,12 @@
     <ClCompile Include="Renderer.cpp">
       <Filter>Rendering\PostProcessing</Filter>
     </ClCompile>
-    <ClCompile Include="ParticleEmitterInstance.cpp">
-      <Filter>Rendering\Particle</Filter>
-    </ClCompile>
-    <ClCompile Include="ParticleEmitterData.cpp">
-      <Filter>Rendering\Particle</Filter>
-    </ClCompile>
     <ClCompile Include="StreakEmitterData.cpp">
       <Filter>Rendering\Streak</Filter>
     </ClCompile>
     <ClCompile Include="StreakEmitterInstance.cpp">
       <Filter>Rendering\Streak</Filter>
     </ClCompile>
-    <ClCompile Include="EmitterDataContainer.cpp" />
     <ClCompile Include="Tga32.cpp">
       <Filter>Tga32</Filter>
     </ClCompile>
@@ -194,9 +187,6 @@
     <ClInclude Include="LodStructs.h">
       <Filter>FBX</Filter>
     </ClInclude>
-    <ClInclude Include="ParticleData.h">
-      <Filter>Rendering\Particle</Filter>
-    </ClInclude>
     <ClInclude Include="Sprite.h">
       <Filter>Rendering</Filter>
     </ClInclude>
@@ -257,12 +247,6 @@
     <ClInclude Include="Renderer.h">
       <Filter>Rendering\PostProcessing</Filter>
     </ClInclude>
-    <ClInclude Include="ParticleEmitterInstance.h">
-      <Filter>Rendering\Particle</Filter>
-    </ClInclude>
-    <ClInclude Include="ParticleEmitterData.h">
-      <Filter>Rendering\Particle</Filter>
-    </ClInclude>
     <ClInclude Include="StreakData.h">
       <Filter>Rendering\Streak</Filter>
     </ClInclude>
@@ -275,7 +259,6 @@
     <ClInclude Include="StreakInstance.h">
       <Filter>Rendering\Streak</Filter>
     </ClInclude>
-    <ClInclude Include="EmitterDataContainer.h" />
     <ClInclude Include="Tga32.h">
       <Filter>Tga32</Filter>
     </ClInclude>
@@ -310,9 +293,6 @@
     </Filter>
     <Filter Include="Octree">
       <UniqueIdentifier>{0468ca14-fae5-470f-a05b-94c6c2fd9450}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Rendering\Particle">
-      <UniqueIdentifier>{d380eca4-b468-48dd-9f92-cfcff3f864e4}</UniqueIdentifier>
     </Filter>
     <Filter Include="Rendering\Effect">
       <UniqueIdentifier>{1117f290-3613-4c3a-8597-128b3d9aa91d}</UniqueIdentifier>

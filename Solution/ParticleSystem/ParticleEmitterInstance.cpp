@@ -5,6 +5,9 @@
 #include <MathHelper.h>
 #include "ParticleEmitterInstance.h"
 #include "VertexBufferWrapper.h"
+#include <Effect.h>
+#include <TextureContainer.h>
+#include <Engine.h>
 namespace Prism
 {
 	ParticleEmitterInstance::ParticleEmitterInstance()

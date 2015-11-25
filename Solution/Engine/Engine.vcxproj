@@ -206,10 +206,7 @@
     <ClCompile Include="DirectX.cpp" />
     <ClCompile Include="Effect.cpp" />
     <ClCompile Include="EffectContainer.cpp" />
-    <ClCompile Include="EmitterDataContainer.cpp" />
     <ClCompile Include="HeightMapFactory.cpp" />
-    <ClCompile Include="ParticleEmitterData.cpp" />
-    <ClCompile Include="ParticleEmitterInstance.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="FBXFactory.cpp" />
     <ClCompile Include="FBX\FbxLoader.cpp">
@@ -264,11 +261,8 @@
     <ClInclude Include="Effect.h" />
     <ClInclude Include="EffectContainer.h" />
     <ClInclude Include="EffectListener.h" />
-    <ClInclude Include="EmitterDataContainer.h" />
     <ClInclude Include="HeightMap.h" />
     <ClInclude Include="HeightMapFactory.h" />
-    <ClInclude Include="ParticleEmitterData.h" />
-    <ClInclude Include="ParticleEmitterInstance.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="EngineEnums.h" />
     <ClInclude Include="FBXFactory.h" />
@@ -291,7 +285,6 @@
     <ClInclude Include="ModelLoader.h" />
     <ClInclude Include="ModelProxy.h" />
     <ClInclude Include="Octree.h" />
-    <ClInclude Include="ParticleData.h" />
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SetupInfo.h" />
