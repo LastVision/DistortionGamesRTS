@@ -23,6 +23,7 @@ namespace Prism
 	public:
 		BaseModel();
 		~BaseModel();
+		Effect* GetEffect();
 
 	protected:
 		void Render();

@@ -78,7 +78,10 @@ void Prism::Scene::Render()
 		mySpotLightData[i].myCone = mySpotLights[i]->GetCone();
 	}
 
-	//myTerrain.Render(myCamera);
+	myTerrain.GetEffect()->UpdateDirectionalLights(myDirectionalLightData);
+	//myTerrain.UpdatePointLights(myPointLightData);
+	//myTerrain.UpdateSpotLights(mySpotLightData);
+	myTerrain.Render(myCamera);
 
 #ifdef SCENE_USE_OCTREE
 	myOctree->Update();

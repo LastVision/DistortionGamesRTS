@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+#include <DirectionalLight.h>
 #include <Engine.h>
 #include <EngineEnums.h>
 #include "Level.h"
@@ -21,7 +22,11 @@ Level::Level(const Prism::Camera& aCamera)
 		, "Data/Resource/Shader/S_effect_no_texture.fx"));
 
 	myScene = new Prism::Scene(aCamera, *myTerrain);
-	myScene->AddInstance(myUnit->GetComponent<GraphicsComponent>()->GetInstance());
+
+	myLight = new Prism::DirectionalLight();
+	myLight->SetColor({ 0.5f, 0.5f, 0.9f, 100.f });
+	myLight->SetDir({ 0, -1.f, 0 });
+	myScene->AddLight(myLight);
 }
 
 Level::~Level()
@@ -29,6 +34,7 @@ Level::~Level()
 	SAFE_DELETE(myTerrain);
 	SAFE_DELETE(myUnit);
 	SAFE_DELETE(myScene);
+	SAFE_DELETE(myLight);
 }
 
 bool Level::LogicUpdate(float aDeltaTime)

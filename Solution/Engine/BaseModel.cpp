@@ -52,6 +52,11 @@ namespace Prism
 		mySurfaces.DeleteAll();
 	}
 
+	Prism::Effect* Prism::BaseModel::GetEffect()
+	{
+		return myEffect;
+	}
+
 	void BaseModel::Render()
 	{
 		Engine::GetInstance()->GetContex()->IASetInputLayout(myVertexLayout);
