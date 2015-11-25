@@ -148,8 +148,8 @@ namespace Prism
 
 	float Terrain::GetHeight(unsigned int aX, unsigned int aY) const
 	{
-		DL_ASSERT_EXP(aX >= 0 && aX < myHeightMap->myWidth, "X out of range");
-		DL_ASSERT_EXP(aY >= 0 && aY < myHeightMap->myDepth, "Y out of range");
+		DL_ASSERT_EXP(aX < static_cast<unsigned int>(myHeightMap->myWidth), "X out of range");
+		DL_ASSERT_EXP(aY < static_cast<unsigned int>(myHeightMap->myDepth), "Y out of range");
 		return myHeightMap->myData[(myHeightMap->myDepth - (1 + aY)) * myHeightMap->myWidth + aX] / 255.f;
 	}
 }
