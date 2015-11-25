@@ -13,17 +13,15 @@ namespace Prism
 class GraphicsComponent : public Component
 {
 public:
-	GraphicsComponent(Entity& aEntity);
+	GraphicsComponent(Entity& aEntity, const char* aModelPath, const char* aEffectPath);
 	~GraphicsComponent();
 
-	void Init(const char* aModelPath, const char* aEffectPath, const CU::Matrix44<float>* aCockpitOrientation = nullptr);
 	void InitDLL(const char* aModelPath, const char* aEffectPath);
-	void InitGeometry(const Prism::MeshData& aMeshData);
 	void InitCube(float aWidth, float aHeight, float aDepth);
 	void Update(float aDeltaTime);
 	Prism::Instance* GetInstance();
 	static eComponentType GetTypeStatic();
-	eComponentType GetType();
+	eComponentType GetType() override;
 
 	void SetPosition(const CU::Vector3<float>& aPosition);
 	void SetScale(const CU::Vector3<float>& aScale);

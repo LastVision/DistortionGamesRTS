@@ -15,11 +15,15 @@
 #include <XMLReader.h>
 
 
-GraphicsComponent::GraphicsComponent(Entity& aEntity)
+GraphicsComponent::GraphicsComponent(Entity& aEntity, const char* aModelPath, const char* aEffectPath)
 	: Component(aEntity)
 	, myInstance(nullptr)
 	, myCullingRadius(10.f)
 {
+	Prism::ModelProxy* model = Prism::ModelLoader::GetInstance()->LoadModel(aModelPath
+		, aEffectPath);
+
+	myInstance = new Prism::Instance(*model, myEntity.myOrientation, myEntity.GetOctreeType(), myCullingRadius);
 }
 
 GraphicsComponent::~GraphicsComponent()
@@ -30,14 +34,6 @@ GraphicsComponent::~GraphicsComponent()
 	}
 	delete myInstance;
 	myInstance = nullptr;
-}
-
-void GraphicsComponent::Init(const char* aModelPath, const char* aEffectPath, const CU::Matrix44<float>* aCockpitOrientation)
-{
-	Prism::ModelProxy* model = Prism::ModelLoader::GetInstance()->LoadModel(aModelPath
-		, aEffectPath);
-
-	myInstance = new Prism::Instance(*model, myEntity.myOrientation, myEntity.GetOctreeType(), myCullingRadius);
 }
 
 void GraphicsComponent::InitDLL(const char* aModelPath, const char* aEffectPath)
