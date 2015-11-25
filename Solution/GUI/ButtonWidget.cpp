@@ -23,9 +23,9 @@ namespace GUI
 		myImageCurrent = nullptr;
 	}
 
-	void ButtonWidget::Render(const CU::Vector2<float>&)
+	void ButtonWidget::Render(const CU::Vector2<float>& aParentPosition)
 	{
-		myImageCurrent->Render(myPosition);
+		myImageCurrent->Render(myPosition - aParentPosition);
 	}
 
 	void ButtonWidget::OnMousePressed(const CU::Vector2<float>&)

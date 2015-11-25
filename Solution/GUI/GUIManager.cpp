@@ -18,12 +18,12 @@ namespace GUI
 		myWidgets = new WidgetContainer;
 
 		ButtonWidget* widget = new ButtonWidget;
-		widget->myImageHover = new Prism::Sprite("Data/Resource/Texture/Menu/T_button_start_hover.dds", { 500.f, 500.f }, { 250.f, 250.f });
-		widget->myImageNormal = new Prism::Sprite("Data/Resource/Texture/Menu/T_button_start.dds", { 500.f, 500.f }, { 250.f, 250.f });
-		widget->myImagePressed = new Prism::Sprite("Data/Resource/Texture/Menu/T_button_start_pressed.dds", { 500.f, 500.f }, { 250.f, 250.f });
+		widget->myImageHover = new Prism::Sprite("Data/Resource/Texture/Menu/T_button_start_hover.dds", { 100.f, 100.f }, { 50.f, 50.f });
+		widget->myImageNormal = new Prism::Sprite("Data/Resource/Texture/Menu/T_button_start.dds", { 100.f, 100.f }, { 50.f, 50.f });
+		widget->myImagePressed = new Prism::Sprite("Data/Resource/Texture/Menu/T_button_start_pressed.dds", { 100.f, 100.f }, { 50.f, 50.f });
 		widget->myImageCurrent = widget->myImageNormal;
-		widget->SetPosition({ 500.f, 700.f});
-		widget->SetSize({ 500.f, 500.f });
+		widget->SetPosition({ 100.f, 100.f});
+		widget->SetSize({ 100.f, 100.f });
 		myWidgets->AddWidget(widget);
 
 		SetPosition({ 0.f, 0.f });
@@ -101,6 +101,7 @@ namespace GUI
 			if (myInputWrapper->MouseUp(0) == true)
 			{
 				myActiveWidget->OnMouseUp();
+				myActiveWidget->OnMouseEnter(); // hover button again after pressing it
 			}
 		}
 	}
