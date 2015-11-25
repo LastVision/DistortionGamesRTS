@@ -15,6 +15,7 @@ namespace Prism
 {
 	class Camera;
 	class Sprite;
+	class ParticleEmitterInstance;
 }
 
 class InGameState : public GameState, public Subscriber
@@ -50,6 +51,7 @@ private:
 
 	Level* myLevel;
 	Prism::Camera* myCamera;
+	Prism::ParticleEmitterInstance* myEmitter;
 	CU::Matrix44<float> myCameraOrientation;
 
 	bool myIsComplete;
