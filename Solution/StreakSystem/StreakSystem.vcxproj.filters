@@ -18,9 +18,33 @@
     <ClInclude Include="stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="StreakData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StreakEmitterData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StreakEmitterInstance.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StreakInstance.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StreakDataContainer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StreakEmitterData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StreakEmitterInstance.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StreakDataContainer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

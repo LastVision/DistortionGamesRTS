@@ -1,7 +1,6 @@
 #include "stdafx.h"
-#include "ParticleDataContainer.h"
-
-#include "ParticleEmitterData.h"
+#include "StreakDataContainer.h"
+#include "StreakEmitterData.h"
 
 #ifdef DLL_EXPORT
 #include "Engine.h"
@@ -10,24 +9,24 @@
 
 namespace Prism
 {
-	ParticleDataContainer* ParticleDataContainer::myInstance = nullptr;
+	StreakDataContainer* StreakDataContainer::myInstance = nullptr;
 
-	ParticleDataContainer* ParticleDataContainer::GetInstance()
+	StreakDataContainer* StreakDataContainer::GetInstance()
 	{
 		if (myInstance == nullptr)
 		{
-			myInstance = new ParticleDataContainer();
+			myInstance = new StreakDataContainer();
 		}
 
 		return myInstance;
 	}
 
-	void ParticleDataContainer::Destroy()
+	void StreakDataContainer::Destroy()
 	{
 		SAFE_DELETE(myInstance);
 	}
 
-	ParticleDataContainer::~ParticleDataContainer()
+	StreakDataContainer::~StreakDataContainer()
 	{
 		for (auto it = myParticleData.begin(); it != myParticleData.end(); ++it)
 		{
@@ -36,7 +35,7 @@ namespace Prism
 		}
 	}
 
-	ParticleEmitterData* ParticleDataContainer::GetParticleData(const char* aFilePath)
+	StreakEmitterData* StreakDataContainer::GetStreakData(const char* aFilePath)
 	{
 #ifndef DLL_EXPORT
 		auto it = myParticleData.find(aFilePath);
@@ -62,9 +61,9 @@ namespace Prism
 #endif
 	}
 
-	void ParticleDataContainer::LoadParticleData(const char* aFilePath)
+	void StreakDataContainer::LoadParticleData(const char* aFilePath)
 	{
-		ParticleEmitterData* newData = new ParticleEmitterData();
+		StreakEmitterData* newData = new StreakEmitterData();
 
 		newData->LoadDataFile(aFilePath);
 		DL_ASSERT_EXP(newData != nullptr, "Failed to load data. newData became nullptr.");

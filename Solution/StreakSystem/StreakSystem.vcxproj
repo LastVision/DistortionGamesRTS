@@ -42,13 +42,13 @@
     <TargetName>$(ProjectName)_$(Configuration)</TargetName>
     <IntDir>$(SolutionDir)..\temp\$(ProjectName)\</IntDir>
     <OutDir>$(SolutionDir)..\Libs\</OutDir>
-    <IncludePath>$(SolutionDir)\Memory;$(SolutionDir)\DL_Debug;$(SolutionDir)\Engine;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\Memory;$(SolutionDir)\DL_Debug;$(SolutionDir)\Engine;$(SolutionDir)\..\DirectX\Include;$(SolutionDir)\CommonUtilities;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <TargetName>$(ProjectName)_$(Configuration)</TargetName>
     <IntDir>$(SolutionDir)..\temp\$(ProjectName)\</IntDir>
     <OutDir>$(SolutionDir)..\Libs\</OutDir>
-    <IncludePath>$(SolutionDir)\Memory;$(SolutionDir)\DL_Debug;$(SolutionDir)\Engine;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\Memory;$(SolutionDir)\DL_Debug;$(SolutionDir)\Engine;$(SolutionDir)\..\DirectX\Include;$(SolutionDir)\CommonUtilities;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -78,9 +78,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="StreakData.h" />
+    <ClInclude Include="StreakDataContainer.h" />
+    <ClInclude Include="StreakEmitterData.h" />
+    <ClInclude Include="StreakEmitterInstance.h" />
+    <ClInclude Include="StreakInstance.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="StreakDataContainer.cpp" />
+    <ClCompile Include="StreakEmitterData.cpp" />
+    <ClCompile Include="StreakEmitterInstance.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DL_Debug\DL_Debug.vcxproj">
