@@ -8,6 +8,8 @@ namespace Prism
 	class Terrain;
 }
 
+class Entity;
+
 class Level
 {
 public:
@@ -23,5 +25,7 @@ private:
 	Prism::Terrain* myTerrain;
 	Prism::DirectionalLight* myLight;
 	Prism::Scene* myScene;
+
+	Entity* myUnit;
 };
 

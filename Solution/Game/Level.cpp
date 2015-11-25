@@ -1,9 +1,14 @@
 #include "stdafx.h"
 
 #include <Engine.h>
+#include <EngineEnums.h>
 #include "Level.h"
 #include <Scene.h>
 #include <Terrain.h>
+
+
+#include <Entity.h>
+#include <GraphicsComponent.h>
 
 Level::Level(const Prism::Camera& aCamera)
 {
@@ -11,11 +16,18 @@ Level::Level(const Prism::Camera& aCamera)
 		, "Data/Resource/Texture/Terrain/T_rock.dds", { 1000.f, 1000.f }, 100.f, CU::Matrix44<float>());
 
 	myScene = new Prism::Scene(aCamera);
+
+	myUnit = new Entity(eEntityType::PLAYER, *myScene, Prism::eOctreeType::DYNAMIC, "TestUnit");
+	myUnit->AddComponent(new GraphicsComponent(*myUnit, "Data/Resource/Model/BoxBro/boxBro_idle_anim.fbx"
+		, "Data/Resource/Shader/S_effect_no_texture.fx"));
+
+	myScene->AddInstance(myUnit->GetComponent<GraphicsComponent>()->GetInstance());
 }
 
 Level::~Level()
 {
 	SAFE_DELETE(myTerrain);
+	SAFE_DELETE(myUnit);
 	SAFE_DELETE(myScene);
 }
 
