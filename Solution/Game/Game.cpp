@@ -21,6 +21,7 @@
 #include <VTuneApi.h>
 #include <Vector.h>
 #include <XMLReader.h>
+#include <ParticleDataContainer.h>
 
 Game::Game()
 	: myLockMouse(true)
@@ -39,6 +40,9 @@ Game::Game()
 	myGUIManager = new GUI::GUIManager(myInputWrapper, myCursor);
 
 	SetCursorPos(Prism::Engine::GetInstance()->GetWindowSize().x / 2, Prism::Engine::GetInstance()->GetWindowSize().y / 2);
+
+
+
 }
 
 Game::~Game()
@@ -50,6 +54,7 @@ Game::~Game()
 	Prism::Audio::AudioInterface::GetInstance()->PostEvent("Stop_MenuMusic", 0);
 	Prism::Audio::AudioInterface::Destroy();
 	PostMaster::Destroy();
+	Prism::ParticleDataContainer::Destroy();
 	myStateStack.Clear();
 }
 
@@ -67,6 +72,8 @@ bool Game::Init(HWND& aHwnd)
 	myWindowSize.y = Prism::Engine::GetInstance()->GetWindowSize().y;
 
 	PostMaster::GetInstance()->SendMessage(GameStateMessage(eGameState::LOAD_GAME, 1));
+	
+	
 
 	GAME_LOG("Init Successful");
 	return true;
@@ -80,6 +87,7 @@ bool Game::Destroy()
 bool Game::Update()
 {
 	myInputWrapper->Update();
+
 
 	float deltaTime = CU::TimerManager::GetInstance()->GetMasterTimer().GetTime().GetFrameTime();
 	float realDeltaTime = deltaTime;

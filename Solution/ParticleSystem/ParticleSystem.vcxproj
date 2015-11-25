@@ -42,13 +42,13 @@
     <OutDir>$(SolutionDir)..\Libs\</OutDir>
     <IntDir>$(SolutionDir)..\temp\$(ProjectName)\</IntDir>
     <TargetName>$(ProjectName)_$(Configuration)</TargetName>
-    <IncludePath>$(SolutionDir)\Memory;$(SolutionDir)\DL_Debug;$(SolutionDir)\Engine;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\Memory;$(SolutionDir)\DL_Debug;$(SolutionDir)\Engine;$(SolutionDir)\..\DirectX\Include;$(SolutionDir)\CommonUtilities;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)..\Libs\</OutDir>
     <IntDir>$(SolutionDir)..\temp\$(ProjectName)\</IntDir>
     <TargetName>$(ProjectName)_$(Configuration)</TargetName>
-    <IncludePath>$(SolutionDir)\Memory;$(SolutionDir)\DL_Debug;$(SolutionDir)\Engine;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\Memory;$(SolutionDir)\DL_Debug;$(SolutionDir)\Engine;$(SolutionDir)\..\DirectX\Include;$(SolutionDir)\CommonUtilities;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -77,6 +77,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ParticleDataContainer.h" />
+    <ClInclude Include="ParticleData.h" />
+    <ClInclude Include="ParticleEmitterData.h" />
+    <ClInclude Include="ParticleEmitterInstance.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
@@ -91,6 +95,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ParticleDataContainer.cpp" />
+    <ClCompile Include="ParticleEmitterData.cpp" />
+    <ClCompile Include="ParticleEmitterInstance.cpp" />
     <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

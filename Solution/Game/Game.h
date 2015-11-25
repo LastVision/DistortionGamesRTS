@@ -38,6 +38,7 @@ public:
 private:
 	void operator=(Game& aApp) = delete;
 
+
 	GUI::GUIManager* myGUIManager;
 	GUI::Cursor* myCursor;
 

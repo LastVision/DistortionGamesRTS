@@ -1,8 +1,11 @@
 #include "stdafx.h"
 
 #include <d3dx11effect.h>
-
+#include <Effect.h>
+#include <EffectContainer.h>
+#include <Engine.h>
 #include "ParticleEmitterData.h"
+#include <TextureContainer.h>
 #include <XMLReader.h>
 
 namespace Prism
@@ -40,10 +43,8 @@ namespace Prism
 		read.ReadAttribute(element, "y", myEmitterSize.y);
 		read.ReadAttribute(element, "z", myEmitterSize.z);
 
-
 		element = read.ForceFindFirstChild(emitter, "ParticleMaxRotation");
 		read.ReadAttribute(element, "value", myMaxRotation);
-
 
 		element = read.ForceFindFirstChild(emitter, "ParticleMinRotation");
 		read.ReadAttribute(element, "value", myMinRotation);
@@ -61,9 +62,6 @@ namespace Prism
 		element = read.ForceFindFirstChild(emitter, "ParticleSpeedMultiplier");
 		read.ReadAttribute(element, "value", mySpeedMultiplier);
 
-
-
-
 		element = read.ForceFindFirstChild(emitter, "ParticleStartColor");
 		read.ReadAttribute(element, "r", myData.myStartColor.x);
 		read.ReadAttribute(element, "g", myData.myStartColor.y);
@@ -73,7 +71,6 @@ namespace Prism
 		read.ReadAttribute(element, "r", myData.myEndColor.x);
 		read.ReadAttribute(element, "g", myData.myEndColor.y);
 		read.ReadAttribute(element, "b", myData.myEndColor.z);
-
 
 		element = read.ForceFindFirstChild(emitter, "ParticleLifeTime");
 		read.ReadAttribute(element, "value", myParticlesLifeTime);

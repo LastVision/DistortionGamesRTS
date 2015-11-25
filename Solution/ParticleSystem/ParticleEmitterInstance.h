@@ -1,5 +1,6 @@
 #pragma once
 
+#include <GrowingArray.h>
 #include "ParticleEmitterData.h"
 #include "ParticleData.h"
 #include <bitset>
