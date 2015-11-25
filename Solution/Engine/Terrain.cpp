@@ -76,7 +76,7 @@ namespace Prism
 			{
 				VertexPosNormUV vertex;
 				vertex.myPos.x = float(x) * mySize.x / float(myHeightMap->myWidth);
-				vertex.myPos.y = myHeightMap->myData[z * myHeightMap->myWidth + x] * myHeight / 255.f; 
+				vertex.myPos.y = myHeightMap->myData[(myHeightMap->myDepth - (1 + z)) * myHeightMap->myWidth + x] * myHeight / 255.f; 
 				vertex.myPos.z = float(z) * mySize.y / float(myHeightMap->myDepth);
 				vertex.myUV.x = float(x) / float(myHeightMap->myWidth);
 				vertex.myUV.y = float(z) / float(myHeightMap->myDepth);
@@ -130,15 +130,15 @@ namespace Prism
 		{
 			for (unsigned int x = 0; x<width; ++x)
 			{
-				float sx = GetHeight(x<width - 1 ? x + 1 : x, y) - GetHeight(x == 0 ? x - 1 : x, y);
+				float sx = GetHeight(x<width - 1 ? x + 1 : x, y) - GetHeight(x == 0 ? x : x - 1, y);
 				if (x == 0 || x == width - 1)
 					sx *= 2;
 
-				float sy = GetHeight(x, y<height - 1 ? y + 1 : y) - GetHeight(x, y == 0 ? y - 1 : y);
+				float sy = GetHeight(x, y<height - 1 ? y + 1 : y) - GetHeight(x, y == 0 ? y : y - 1);
 				if (y == 0 || y == height - 1)
 					sy *= 2;
 
-				CU::Vector3<float> normal(-sx*yScale, 2 * xzScale, sy*yScale);
+				CU::Vector3<float> normal(-sx*xzScale, yScale, sy*xzScale);
 				CU::Normalize(normal);
 
 				someVertices[y*width + x].myNorm = normal;
@@ -148,6 +148,8 @@ namespace Prism
 
 	float Terrain::GetHeight(unsigned int aX, unsigned int aY) const
 	{
-		return myHeightMap->myData[aY * myHeightMap->myWidth + aX] / 255.f;
+		DL_ASSERT_EXP(aX < static_cast<unsigned int>(myHeightMap->myWidth), "X out of range");
+		DL_ASSERT_EXP(aY < static_cast<unsigned int>(myHeightMap->myDepth), "Y out of range");
+		return myHeightMap->myData[(myHeightMap->myDepth - (1 + aY)) * myHeightMap->myWidth + aX] / 255.f;
 	}
 }
