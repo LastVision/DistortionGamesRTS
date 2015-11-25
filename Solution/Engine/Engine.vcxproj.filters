@@ -99,12 +99,6 @@
     <ClCompile Include="Renderer.cpp">
       <Filter>Rendering\PostProcessing</Filter>
     </ClCompile>
-    <ClCompile Include="StreakEmitterData.cpp">
-      <Filter>Rendering\Streak</Filter>
-    </ClCompile>
-    <ClCompile Include="StreakEmitterInstance.cpp">
-      <Filter>Rendering\Streak</Filter>
-    </ClCompile>
     <ClCompile Include="Tga32.cpp">
       <Filter>Tga32</Filter>
     </ClCompile>
@@ -247,18 +241,6 @@
     <ClInclude Include="Renderer.h">
       <Filter>Rendering\PostProcessing</Filter>
     </ClInclude>
-    <ClInclude Include="StreakData.h">
-      <Filter>Rendering\Streak</Filter>
-    </ClInclude>
-    <ClInclude Include="StreakEmitterData.h">
-      <Filter>Rendering\Streak</Filter>
-    </ClInclude>
-    <ClInclude Include="StreakEmitterInstance.h">
-      <Filter>Rendering\Streak</Filter>
-    </ClInclude>
-    <ClInclude Include="StreakInstance.h">
-      <Filter>Rendering\Streak</Filter>
-    </ClInclude>
     <ClInclude Include="Tga32.h">
       <Filter>Tga32</Filter>
     </ClInclude>
@@ -311,9 +293,6 @@
     </Filter>
     <Filter Include="Rendering\PostProcessing">
       <UniqueIdentifier>{9eae83a0-4dc4-4207-9000-7994f620f042}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Rendering\Streak">
-      <UniqueIdentifier>{dd92a4e0-d37f-466b-9b7a-966645f4818d}</UniqueIdentifier>
     </Filter>
     <Filter Include="Tga32">
       <UniqueIdentifier>{18b9410f-d7c0-46f2-af85-b20098396534}</UniqueIdentifier>

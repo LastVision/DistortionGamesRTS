@@ -18,12 +18,7 @@ namespace Prism
 		void ReleaseData();
 		void Render(Camera* aCamera);
 		void Update(float aDeltaTime, const CU::Matrix44f& aWorldMatrix);
-		bool GetIsActive();
-		void ToggleActive();
-		void ToggleActive(bool aIsActive);
-		void ShouldLive(bool aToStop);
 		void SetPosition(CU::Vector3f aPosition);
-		void SetIsCloseToPlayer(bool aIsCloseToPlayer);
 	private:
 
 		void CreateVertexBuffer();
@@ -51,22 +46,7 @@ namespace Prism
 		int myDeadParticleCount;
 
 		bool myIsActive;
-		bool myShouldLive;
-		bool myIsCloseToPlayer;
-
 
 		std::string myEmitterPath;
 	};
-
-	inline void ParticleEmitterInstance::ShouldLive(bool aToStop)
-	{
-		myShouldLive = aToStop;
-	}
-
-	inline void ParticleEmitterInstance::SetIsCloseToPlayer(bool aIsCloseToPlayer)
-	{
-		myIsCloseToPlayer = aIsCloseToPlayer;
-	}
-
-
 }
