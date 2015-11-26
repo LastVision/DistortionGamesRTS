@@ -11,7 +11,7 @@ namespace GUI
 		myWindowSize.x = float(aWindowSize.x);
 		myWindowSize.y = float(aWindowSize.y);
 
-		mySprite = new Prism::Sprite("Data/Resource/Texture/Star.dds", { 100.f, 100.f }, { 0.f, 0.f });
+		mySprite = new Prism::Sprite("Data/Resource/Texture/Star.dds", { 100.f, 100.f }, { 0.f, 100.f });
 		myPosition = myWindowSize / 2.f;
 	}
 

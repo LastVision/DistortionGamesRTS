@@ -1,43 +1,68 @@
 #include "stdafx.h"
+#include "ButtonWidget.h"
 #include "Cursor.h"
 #include <Engine.h>
 #include "GUIManager.h"
 #include "../InputWrapper/InputWrapper.h"
-#include "WidgetContainer.h"
-#include "ButtonWidget.h"
 #include <Sprite.h>
+#include "WidgetContainer.h"
+#include <XMLReader.h>
 
 namespace GUI
 {
-	GUIManager::GUIManager(Cursor* aCursor)
+	GUIManager::GUIManager(Cursor* aCursor, const std::string& aXMLPath)
 		: myActiveWidget(nullptr)
 		, myCursor(aCursor)
 		, myMousePosition({ 0.f, 0.f })
 	{
-		myWidgets = new WidgetContainer;
+		std::string path = "";
+		bool isWindowSize = false;
+		XMLReader reader;
+		reader.OpenDocument(aXMLPath);
 
-		CU::Vector2<float> buttonSize(100.f, 100.f);
+		tinyxml2::XMLElement* rootElement = reader.FindFirstChild("root");
 
-		ButtonWidget* widget = new ButtonWidget;
-		widget->myImageHover = new Prism::Sprite("Data/Resource/Texture/Menu/T_button_start_hover.dds", buttonSize, buttonSize / 2.f);
-		widget->myImageNormal = new Prism::Sprite("Data/Resource/Texture/Menu/T_button_start.dds", buttonSize, buttonSize / 2.f);
-		widget->myImagePressed = new Prism::Sprite("Data/Resource/Texture/Menu/T_button_start_pressed.dds", buttonSize, buttonSize / 2.f);
-		widget->myImageCurrent = widget->myImageNormal;
-		widget->SetPosition({ 0.f, 0.f});
-		widget->SetSize(buttonSize);
-		myWidgets->AddWidget(widget);
+		reader.ForceReadAttribute(reader.ForceFindFirstChild(rootElement, "backgroundsprite"), "path", path);
+		reader.ForceReadAttribute(reader.ForceFindFirstChild(rootElement, "backgroundsprite"), "windowsize", isWindowSize);
 
-		ButtonWidget* widget2 = new ButtonWidget;
-		widget2->myImageHover = new Prism::Sprite("Data/Resource/Texture/Menu/T_button_start_hover.dds", buttonSize, buttonSize / 2.f);
-		widget2->myImageNormal = new Prism::Sprite("Data/Resource/Texture/Menu/T_button_start.dds", buttonSize, buttonSize / 2.f);
-		widget2->myImagePressed = new Prism::Sprite("Data/Resource/Texture/Menu/T_button_start_pressed.dds", buttonSize, buttonSize / 2.f);
-		widget2->myImageCurrent = widget2->myImageNormal;
-		widget2->SetPosition({ 200.f, 200.f });
-		widget2->SetSize(buttonSize);
-		myWidgets->AddWidget(widget2);
+		Prism::Sprite* backgroundSprite = nullptr;
 
-		SetPosition({ 0.f, 0.f });
-		SetSize({ float(Prism::Engine::GetInstance()->GetWindowSize().x), float(Prism::Engine::GetInstance()->GetWindowSize().y) });
+		if (isWindowSize == false)
+		{
+			//CU::Vector2<float> size;
+			//reader.ForceReadAttribute(reader.ForceFindFirstChild(rootElement, "backgroundsprite"), "sizex", size.x);
+			//reader.ForceReadAttribute(reader.ForceFindFirstChild(rootElement, "backgroundsprite"), "sizey", size.y);
+			//backgroundSprite = new Prism::Sprite(path, size);
+		}
+		else
+		{
+			backgroundSprite = new Prism::Sprite(path, Prism::Engine::GetInstance()->GetWindowSizeInFloat());
+		}
+
+		myWidgets = new WidgetContainer(backgroundSprite, isWindowSize);
+
+		tinyxml2::XMLElement* widgetElement = reader.FindFirstChild(rootElement, "widget");
+		for (; widgetElement != nullptr; widgetElement = reader.FindNextElement(widgetElement))
+		{
+			std::string type = "";
+
+			reader.ForceReadAttribute(widgetElement, "type", type);
+
+			if (type == "container")
+			{
+				WidgetContainer* container = new WidgetContainer(&reader, widgetElement);
+				myWidgets->AddWidget(container);
+			}
+			else if (type == "button")
+			{
+				ButtonWidget* container = new ButtonWidget(&reader, widgetElement);
+				myWidgets->AddWidget(container);
+			}
+		}
+
+		reader.CloseDocument();
+
+		SetSize({ float(Prism::Engine::GetInstance()->GetWindowSize().x) * 2.f, float(Prism::Engine::GetInstance()->GetWindowSize().y) * 2.f });
 	}
 
 	GUIManager::~GUIManager()
@@ -70,6 +95,11 @@ namespace GUI
 	void GUIManager::Render()
 	{
 		myWidgets->Render({ 0.f, 0.f });
+
+		if (myActiveWidget != nullptr && myActiveWidget->GetHoverText() != "")
+		{
+			Prism::Engine::GetInstance()->PrintText(myActiveWidget->GetHoverText(), { 500.f, -500.f }, Prism::eTextType::RELEASE_TEXT);
+		}
 	}
 
 	void GUIManager::SetPosition(const CU::Vector2<float>& aPosition)

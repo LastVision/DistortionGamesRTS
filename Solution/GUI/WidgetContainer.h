@@ -7,13 +7,21 @@ namespace Prism
 	class Sprite;
 }
 
+namespace tinyxml2
+{
+	class XMLElement;
+}
+
+class XMLReader;
+
 namespace GUI
 {
 	class WidgetContainer : public Widget
 	{
 	public:
 
-		WidgetContainer();
+		WidgetContainer(Prism::Sprite* aBackgroundSprite, bool aIsWindowSize = false);
+		WidgetContainer(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement);
 		~WidgetContainer();
 
 		void AddWidget(Widget* aWidget);
@@ -25,5 +33,6 @@ namespace GUI
 	private:
 		Prism::Sprite* myBackground;
 		CU::GrowingArray<Widget*> myWidgets;
+		bool myIsWindowSize;
 	};
 }

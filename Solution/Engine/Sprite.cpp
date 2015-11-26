@@ -123,7 +123,7 @@ void Prism::Sprite::CreateVertices()
 
 	float left = 0 - myHotspot.x;
 	float right = left + mySize.x;
-	float bottom = 0 + myHotspot.y;
+	float bottom = 0 - myHotspot.y;
 	float top = bottom + mySize.y;
 
 	VertexPosUV vert;

@@ -14,7 +14,7 @@ enum class eGameState
 	COMPLETE_GAME
 };
 
-class GameStateMessage : public Message
+struct GameStateMessage : public Message
 {
 public:
 	GameStateMessage(eGameState aGameState);
