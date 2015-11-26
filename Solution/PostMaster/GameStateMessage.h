@@ -14,7 +14,7 @@ enum class eGameState
 	COMPLETE_GAME
 };
 
-class GameStateMessage : public Message
+struct GameStateMessage : public Message
 {
 public:
 	GameStateMessage(eGameState aGameState);
@@ -24,42 +24,9 @@ public:
 	GameStateMessage(eGameState aGameState, const int& anID, const int& anSecondID);
 	GameStateMessage(eGameState aGameState, const bool& anIsMouseLocked);
 
-	const eGameState& GetGameState() const;
-	const std::string& GetFilePath() const;
-	const int GetID() const;
-	const int GetSecondID() const;
-	const bool& GetMouseLocked() const;
-
-private:
-
 	eGameState myGameState;
 	std::string myFilePath;
 	int myID;
 	int mySecondID;
-	bool myMouseIsLocked; // temp
+	bool myMouseIsLocked; 
 };
-
-inline const eGameState& GameStateMessage::GetGameState() const
-{
-	return myGameState;
-}
-
-inline const std::string& GameStateMessage::GetFilePath() const
-{
-	return myFilePath;
-}
-
-inline const int GameStateMessage::GetID() const
-{
-	return myID;
-}
-
-inline const int GameStateMessage::GetSecondID() const
-{
-	return mySecondID;
-}
-
-inline const bool& GameStateMessage::GetMouseLocked() const
-{
-	return myMouseIsLocked;
-}

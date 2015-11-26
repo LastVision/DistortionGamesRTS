@@ -2,13 +2,12 @@
 
 #include "MessageEnum.h"
 
-class Message
+struct Message
 {
-public:
 	Message(eMessageType aMessageType);
 	eMessageType GetMessageType() const;
 
-protected:
+
 	void operator=(Message&) = delete;
 	const eMessageType myMessageType;
 };

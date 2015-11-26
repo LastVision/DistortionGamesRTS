@@ -38,7 +38,7 @@ Game::Game()
 	Prism::Engine::GetInstance()->SetShowDebugText(myShowSystemInfo);
 
 	myCursor = new GUI::Cursor(Prism::Engine::GetInstance()->GetWindowSize());
-	myGUIManager = new GUI::GUIManager(myCursor);
+	myGUIManager = new GUI::GUIManager(myCursor, "Data/Resource/GUI/GUI_ingame.xml");
 
 	SetCursorPos(Prism::Engine::GetInstance()->GetWindowSize().x / 2, Prism::Engine::GetInstance()->GetWindowSize().y / 2);
 }
@@ -149,7 +149,7 @@ void Game::OnResize(int aWidth, int aHeight)
 
 void Game::ReceiveMessage(const GameStateMessage& aMessage)
 {
-	switch (aMessage.GetGameState())
+	switch (aMessage.myGameState)
 	{
 	case eGameState::LOAD_GAME:
 		myGame = new InGameState();

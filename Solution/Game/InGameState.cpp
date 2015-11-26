@@ -90,7 +90,7 @@ void InGameState::OnResize(int aWidth, int aHeight)
 
 void InGameState::ReceiveMessage(const GameStateMessage& aMessage)
 {
-	switch (aMessage.GetGameState())
+	switch (aMessage.myGameState)
 	{
 	case eGameState::RELOAD_LEVEL:
 		

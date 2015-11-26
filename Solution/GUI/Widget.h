@@ -29,10 +29,13 @@ namespace GUI
 		inline const CU::Vector2<float>& GetPosition() const;
 		inline bool IsVisible() const;
 
+		const std::string& GetHoverText() const;
+
 	protected:
 		CU::Vector2<float> myPosition;
 		CU::Vector2<float> mySize;
 		bool myIsVisible;
+		std::string myHoverText;
 	};
 
 	inline void Widget::SetSize(const CU::Vector2<float>& aSize)
@@ -63,5 +66,10 @@ namespace GUI
 	inline bool Widget::IsVisible() const
 	{
 		return myIsVisible;
+	}
+
+	inline const std::string& Widget::GetHoverText() const
+	{
+		return myHoverText;
 	}
 }
