@@ -23,17 +23,22 @@ Prism::Instance::Instance(ModelProxy& aModel, const CU::Matrix44<float>& anOrien
 
 Prism::Instance::~Instance()
 {
-	delete &myProxy;
 }
 
 void Prism::Instance::Update(float aDelta)
 {
-	if (myProxy.IsLoaded() == true)
+	if (myProxy.IsLoaded() == true && myProxy.IsAnimated())
 	{
 		if (myHierarchyIsBuilt == false)
 		{
-			//BuildHierarchy(myHierarchy, myProxy.myModel);
+			if (myProxy.myModelAnimated->myAnimation != nullptr)
+			{
+				myAnimation = myProxy.myModelAnimated->myAnimation;
+			}
+
+			BuildHierarchy(myHierarchy, myProxy.myModelAnimated);
 			myHierarchyIsBuilt = true;
+			
 		}
 
 		myTotalTime += aDelta;
@@ -49,27 +54,35 @@ void Prism::Instance::Render(const Camera& aCamera)
 {
 	if (myProxy.IsLoaded())
 	{
-		myProxy.GetEffect()->SetViewMatrix(CU::InverseSimple(aCamera.GetOrientation()));
-		//myProxy.GetEffect()->SetProjectionMatrix(aCamera.GetProjection());
 		myProxy.GetEffect()->SetViewProjectionMatrix(aCamera.GetViewProjection());
 		myProxy.GetEffect()->SetScaleVector(myScale);
 		myProxy.GetEffect()->SetCameraPosition(aCamera.GetOrientation().GetPos());
 
-		myProxy.Render(myOrientation, aCamera.GetOrientation().GetPos());
+		if (myProxy.IsAnimated() == true)
+		{
+			myProxy.GetEffect()->SetBones(myBones);
+			RenderModelAnimated(myProxy.myModelAnimated, myOrientation, aCamera, myHierarchy);
+		}
+		else
+		{
+			myProxy.Render(myOrientation, aCamera.GetOrientation().GetPos());
+		}
 	}
 }
 
-void Prism::Instance::Render(const CU::Matrix44<float>& aParentMatrix, const Camera& aCamera)
+void Prism::Instance::RenderModelAnimated(ModelAnimated* aModel, const CU::Matrix44<float>& aParent
+	, const Camera& aCamera, TransformationNodeInstance& aHierarchy)
 {
-	if (myProxy.IsLoaded())
+	if (aModel->myIsNULLObject == false)
 	{
-		//myProxy.GetEffect()->SetViewMatrix(CU::InverseSimple(aCamera.GetOrientation()));
-		//myProxy.GetEffect()->SetProjectionMatrix(aCamera.GetProjection());
-		myProxy.GetEffect()->SetViewProjectionMatrix(aCamera.GetViewProjection());
-		myProxy.GetEffect()->SetScaleVector(myScale);
-		myProxy.GetEffect()->SetCameraPosition(aCamera.GetOrientation().GetPos());
+		aModel->Render(aHierarchy.GetTransformation() * aParent, aCamera.GetOrientation().GetPos());
+	}
 
-		myProxy.Render(myOrientation * aParentMatrix, aCamera.GetOrientation().GetPos());
+	for (int i = 0; i < aHierarchy.GetChildren().Size(); ++i)
+	{
+		DL_ASSERT_EXP(aModel->myChildren[i] != nullptr, "Missmatch number of TransformationNodes and number of Models");
+
+		RenderModelAnimated(aModel->myChildren[i], aHierarchy.GetTransformation() * aParent, aCamera, *aHierarchy.GetChildren()[i]);
 	}
 }
 

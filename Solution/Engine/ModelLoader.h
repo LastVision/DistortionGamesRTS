@@ -25,6 +25,7 @@ namespace Prism
 		void WaitUntilFinished() const;
 
 		ModelProxy* LoadModel(const std::string& aModelPath, const std::string& aEffectPath);
+		ModelProxy* LoadModelAnimated(const std::string& aModelPath, const std::string& aEffectPath);
 		ModelProxy* LoadCube(float aWidth = 1.f, float aHeight = 1.f, float aDepth = 1.f
 			, CU::Vector4f aColour = { 1.f, 1.f, 1.f, 1.f });
 
@@ -32,6 +33,7 @@ namespace Prism
 		enum class eLoadType
 		{
 			MODEL,
+			MODEL_ANIMATED,
 			CUBE,
 			GEOMETRY,
 		};
@@ -66,6 +68,7 @@ namespace Prism
 
 		FBXFactory* myModelFactory;
 		CU::GrowingArray<Model*> myNonFXBModels;
+		std::unordered_map<std::string, ModelProxy*> myProxies;
 
 		static ModelLoader* myInstance;
 	};

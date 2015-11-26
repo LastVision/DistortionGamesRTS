@@ -12,15 +12,15 @@
 #include <VTuneApi.h>
 #include <Vector.h>
 
-InGameState::InGameState(CU::InputWrapper* anInputWrapper)
+InGameState::InGameState()
 {
 	myIsActiveState = false;
-	myInputWrapper = anInputWrapper;
 	myCamera = new Prism::Camera(myCameraOrientation);
 
-	myCameraOrientation.SetPos(CU::Vector3<float>(10.f, 100.f, 0));
+	/*myCameraOrientation.SetPos(CU::Vector3<float>(10.f, 100.f, 0));
+	myCameraOrientation = CU::Matrix44<float>::CreateRotateAroundX(0.0174532925f * 70.f) * myCameraOrientation;*/
 
-	myCameraOrientation = CU::Matrix44<float>::CreateRotateAroundX(0.0174532925f * 70.f) * myCameraOrientation;
+	myCameraOrientation.SetPos(CU::Vector3<float>(30.f, 80.f, 0));
 }
 
 InGameState::~InGameState()
@@ -54,7 +54,7 @@ void InGameState::EndState()
 const eStateStatus InGameState::Update(const float& aDeltaTime)
 {
 	UpdateCamera(aDeltaTime);
-	if (myInputWrapper->KeyDown(DIK_ESCAPE))
+	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_ESCAPE))
 	{
 		myIsActiveState = false;
 		delete myLevel;
@@ -140,27 +140,27 @@ void InGameState::UpdateCamera(float aDeltaTime)
 
 	float cameraSpeed = 100.f * aDeltaTime;
 
-	if (myInputWrapper->KeyIsPressed(DIK_S) == true)
+	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_S) == true)
 	{
 		cameraPos.z -= cameraSpeed;
 	}
-	if (myInputWrapper->KeyIsPressed(DIK_W) == true)
+	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_W) == true)
 	{
 		cameraPos.z += cameraSpeed;
 	}
-	if (myInputWrapper->KeyIsPressed(DIK_A) == true)
+	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_A) == true)
 	{
 		cameraPos.x -= cameraSpeed;
 	}
-	if (myInputWrapper->KeyIsPressed(DIK_D) == true)
+	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_D) == true)
 	{
 		cameraPos.x += cameraSpeed;
 	}
-	if (myInputWrapper->KeyIsPressed(DIK_Q) == true)
+	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_Q) == true)
 	{
 		cameraPos.y -= cameraSpeed;
 	}
-	if (myInputWrapper->KeyIsPressed(DIK_E) == true)
+	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_E) == true)
 	{
 		cameraPos.y += cameraSpeed;
 	}
@@ -168,19 +168,19 @@ void InGameState::UpdateCamera(float aDeltaTime)
 
 	float rotationSpeed = 1.f * aDeltaTime;
 
-	if (myInputWrapper->KeyIsPressed(DIK_UPARROW) == true)
+	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_UPARROW) == true)
 	{
 		myCameraOrientation = CU::Matrix44<float>::CreateRotateAroundX(-rotationSpeed) * myCameraOrientation;
 	}
-	if (myInputWrapper->KeyIsPressed(DIK_DOWNARROW) == true)
+	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_DOWNARROW) == true)
 	{
 		myCameraOrientation = CU::Matrix44<float>::CreateRotateAroundX(rotationSpeed) * myCameraOrientation;
 	}
-	if (myInputWrapper->KeyIsPressed(DIK_LEFTARROW) == true)
+	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_LEFTARROW) == true)
 	{
 		myCameraOrientation = CU::Matrix44<float>::CreateRotateAroundY(-rotationSpeed) * myCameraOrientation;
 	}
-	if (myInputWrapper->KeyIsPressed(DIK_RIGHTARROW) == true)
+	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_RIGHTARROW) == true)
 	{
 		myCameraOrientation = CU::Matrix44<float>::CreateRotateAroundY(rotationSpeed) * myCameraOrientation;
 	}

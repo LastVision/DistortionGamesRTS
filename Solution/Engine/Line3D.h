@@ -14,7 +14,8 @@ struct Line3DVertex
 struct Line3D
 {
 	Line3D(){};
-	Line3D(const CU::Vector3<float>& aFirstPoint, const CU::Vector3<float>& aSecondPoint, const CU::Vector4<float>& aColor);
+	Line3D(const CU::Vector3<float>& aFirstPoint, const CU::Vector3<float>& aSecondPoint
+		, const CU::Vector4<float>& aColor, const CU::Vector4<float>& aSecondColor = { -1.f, -1.f, -1.f, -1.f });
 
 
 	Line3DVertex myFirstPoint;

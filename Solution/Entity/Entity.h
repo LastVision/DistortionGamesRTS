@@ -21,7 +21,8 @@ class Entity
 	friend class AnimationComponent;
 	friend class GraphicsComponent;
 public:
-	Entity(eEntityType aType, Prism::Scene& aScene, Prism::eOctreeType anOctreeType, const std::string& aName = "");
+	Entity(eEntityType aType, Prism::Scene& aScene, Prism::eOctreeType anOctreeType, const std::string& aName = ""
+		, const CU::Vector3<float> aStartPosition = { 0.f, 0.f, 0.f });
 	~Entity();
 
 	virtual void Update(float aDeltaTime);
@@ -38,6 +39,7 @@ public:
 	const CU::Matrix44<float>& GetOrientation() const;
 	Prism::Scene& GetScene();
 	eEntityType GetType() const;
+	eEntityState GetState() const;
 	Prism::eOctreeType GetOctreeType() const;
 	bool GetAlive() const;
 	void Kill();
@@ -53,6 +55,7 @@ private:
 	bool myAlive;
 	std::string myName;
 	const eEntityType myType;
+	eEntityState myState;
 	const Prism::eOctreeType myOctreeType;
 	Prism::Scene& myScene;
 
@@ -123,6 +126,11 @@ inline Prism::Scene& Entity::GetScene()
 inline eEntityType Entity::GetType() const
 {
 	return myType;
+}
+
+inline eEntityState Entity::GetState() const
+{
+	return myState;
 }
 
 inline Prism::eOctreeType Entity::GetOctreeType() const

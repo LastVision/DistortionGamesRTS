@@ -64,6 +64,7 @@ namespace Prism
 		void SetEMPPosition(const CU::Vector3<float>& aPosition);
 
 		void SetAmbientHue(CU::Vector4f aVector);
+		void SetBones(const CU::StaticArray<CU::Matrix44<float>, MAX_NR_OF_BONES>& someBones);
 
 	private:
 		ID3DX11Effect* myEffect;
@@ -98,6 +99,8 @@ namespace Prism
 		ID3DX11EffectScalarVariable* myStreakStartAlpha;
 		ID3DX11EffectScalarVariable* myStreakAlphaDelta;
 		ID3DX11EffectScalarVariable* myEMPScale;
+
+		ID3DX11EffectMatrixVariable* myBonesArray;
 
 		CU::Vector4<float> mySpritePosAndScaleVector;
 		

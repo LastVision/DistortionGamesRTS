@@ -1,12 +1,14 @@
 #include "stdafx.h"
 
 #include "Model.h"
+#include "ModelAnimated.h"
 #include "ModelProxy.h"
 
 namespace Prism
 {
 	ModelProxy::ModelProxy()
 		: myModel(nullptr)
+		, myModelAnimated(nullptr)
 	{
 	}
 
@@ -16,6 +18,10 @@ namespace Prism
 		{
 			myModel->Render(aOrientation, aCameraPosition);
 		}
+		else if (myModelAnimated != nullptr)
+		{
+			myModelAnimated->Render(aOrientation, aCameraPosition);
+		}
 	}
 
 	void ModelProxy::SetModel(Model* aModel)
@@ -23,14 +29,24 @@ namespace Prism
 		myModel = aModel;
 	}
 
+	void ModelProxy::SetModelAnimated(ModelAnimated* aModel)
+	{
+		myModelAnimated = aModel;
+	}
+
 	Effect* ModelProxy::GetEffect()
 	{
-		if (myModel == nullptr)
+		if (myModel != nullptr)
 		{
-			return nullptr;
+			return myModel->GetEffect();
 		}
 
-		return myModel->GetEffect();
+		if (myModelAnimated != nullptr)
+		{
+			return myModelAnimated->GetEffect();
+		}
+
+		return nullptr;
 	}
 
 	void ModelProxy::SetEffect(Effect* aEffect)

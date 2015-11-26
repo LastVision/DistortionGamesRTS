@@ -10,6 +10,7 @@
 #define BLUE_DEBUG CU::Vector4<float>(0.f, 0.f, 1.f, 1.f)
 #define PINK_DEBUG CU::Vector4<float>(1.f, 0.f, 1.f, 1.f)
 #define YELLOW_DEBUG CU::Vector4<float>(1.f, 1.f, 0.f, 1.f)
+#define NOT_USED_DEBUG CU::Vector4<float>(-1.f, -1.f, -1.f, -1.f)
 
 namespace Prism
 {
@@ -24,7 +25,7 @@ namespace Prism
 		//void RenderLine2D(const CU::Vector2<float>& aFirstPoint, const CU::Vector2<float> aSecondPoint
 		//	, const CU::Vector4<float>& aColor = PINK_DEBUG);
 		void RenderLine3D(const CU::Vector3<float>& aFirstPoint, const CU::Vector3<float> aSecondPoint
-			, const CU::Vector4<float>& aColor = PINK_DEBUG);
+			, const CU::Vector4<float>& aColor = PINK_DEBUG, const CU::Vector4<float>& aSecondColor = NOT_USED_DEBUG);
 		//void RenderArrow2D(const CU::Vector2<float>& aFirstPoint, const CU::Vector2<float> aSecondPoint
 		//	, const CU::Vector4<float>& aColor = PINK_DEBUG);
 		void RenderArrow3D(const CU::Vector3<float>& aFirstPoint, const CU::Vector3<float>& aSecondPoint

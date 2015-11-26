@@ -3,17 +3,21 @@
 #include "Component.h"
 #include "Entity.h"
 
-Entity::Entity(eEntityType aType, Prism::Scene& aScene, Prism::eOctreeType anOctreeType, const std::string& aName)
+Entity::Entity(eEntityType aType, Prism::Scene& aScene, Prism::eOctreeType anOctreeType
+	, const std::string& aName, const CU::Vector3<float> aStartPosition)
 	: myAlive(true)
 	, myType(aType)
 	, myScene(aScene)
 	, myOctreeType(anOctreeType)
 	, myName(aName)
+	, myState(eEntityState::IDLE)
 {
 	for (int i = 0; i < static_cast<int>(eComponentType::_COUNT); ++i)
 	{
 		myComponents[i] = nullptr;
 	}
+
+	myOrientation.SetPos(aStartPosition);
 }
 
 Entity::~Entity()

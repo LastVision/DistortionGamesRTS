@@ -28,9 +28,9 @@ namespace Prism
 	//}
 
 	void DebugDrawer::RenderLine3D(const CU::Vector3<float>& aFirstPoint, const CU::Vector3<float> aSecondPoint
-		, const CU::Vector4<float>& aColor)
+		, const CU::Vector4<float>& aColor, const CU::Vector4<float>& aSecondColor)
 	{
-		my3DLines.Add(Line3D(aFirstPoint, aSecondPoint, aColor));
+		my3DLines.Add(Line3D(aFirstPoint, aSecondPoint, aColor, aSecondColor));
 	}
 
 	//void DebugDrawer::RenderArrow2D(const CU::Vector2<float>& aFirstPoint, const CU::Vector2<float> aSecondPoint

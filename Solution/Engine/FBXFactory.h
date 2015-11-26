@@ -5,6 +5,8 @@
 #include <Vector.h>
 #include <Matrix.h>
 
+struct AnimationData;
+struct Bone;
 struct ModelData;
 
 class FBXLoader;
@@ -12,8 +14,11 @@ class FbxModelData;
 
 namespace Prism
 {
-class Model;
-class Effect;
+	class Model;
+	class ModelAnimated;
+	class Effect;
+	class HierarchyBone;
+
 	class FBXFactory
 	{
 	public:
@@ -21,10 +26,17 @@ class Effect;
 		~FBXFactory();
 
 		Model* LoadModel(const char* aFilePath, Effect* aEffect);
+		ModelAnimated* LoadModelAnimated(const char* aFilePath, Effect* aEffect);
 		void LoadModelForRadiusCalc(const char* aFilePath, CU::GrowingArray<CU::Vector3<float>>& someVerticesOut);
 	private:
 		void FillData(ModelData* someData, Model* outData, Effect* aEffect);
+		void FillData(ModelData* someData, ModelAnimated* outData, Effect* aEffect);
+		void FillAnimationData(FbxModelData* someData, ModelAnimated* outData);
+		void FillBoneAnimationData(FbxModelData* someData, ModelAnimated* aOutData);
+		void BuildBoneHierarchy(Bone& aBone, AnimationData* aAnimationData, HierarchyBone& aOutBone);
+
 		Model* CreateModel(FbxModelData* someModelData, Effect* aEffect);
+		ModelAnimated* CreateModelAnimated(FbxModelData* someModelData, Effect* aEffect);
 
 		void CreateModelForRadiusCalc(FbxModelData* someModelData, CU::GrowingArray<CU::Vector3<float>>& someVerticesOut
 			, const CU::Matrix44<float>& aParentOrientation = CU::Matrix44<float>());
@@ -42,5 +54,6 @@ class Effect;
 		};
 		std::vector<FBXData*> myFBXData;
 		std::unordered_map<std::string, Model*> myModels;
+		std::unordered_map<std::string, ModelAnimated*> myModelsAnimated;
 	};
 }

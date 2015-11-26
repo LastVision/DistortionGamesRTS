@@ -14,7 +14,7 @@ namespace GUI
 	class GUIManager
 	{
 	public:
-		GUIManager(CU::InputWrapper* anInputWrapper, Cursor* aCursor, const std::string& aXMLPath);
+		GUIManager(Cursor* aCursor, const std::string& aXMLPath);
 		~GUIManager();
 
 		void AddWidget(Widget* aWidget);
@@ -35,7 +35,6 @@ namespace GUI
 
 		Widget* myActiveWidget;
 		WidgetContainer* myWidgets;
-		CU::InputWrapper* myInputWrapper;
 		Cursor* myCursor;
 
 		CU::Vector2<float> myMousePosition;

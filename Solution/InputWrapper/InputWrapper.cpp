@@ -1,6 +1,28 @@
 #include "InputWrapper.h"
 #include <MemoryMacros.h>
 
+CU::InputWrapper* CU::InputWrapper::myInstance = nullptr;
+
+void CU::InputWrapper::Create(HWND aHwnd, HINSTANCE aHInstance, DWORD aKeyCoopFlags, DWORD aMouseCoopFlags)
+{
+	assert(myInstance == nullptr && "InputWrapper already created!");
+	if (myInstance == nullptr)
+	{
+		myInstance = new CU::InputWrapper();
+		myInstance->Init(aHwnd, aHInstance, aKeyCoopFlags, aMouseCoopFlags);
+	}	
+}
+
+CU::InputWrapper* CU::InputWrapper::GetInstance()
+{
+	return myInstance;
+}
+
+void CU::InputWrapper::Destroy()
+{
+	SAFE_DELETE(myInstance);
+}
+
 CU::InputWrapper::InputWrapper()
 {
 
@@ -29,8 +51,6 @@ void CU::InputWrapper::Init(HWND aHwnd, HINSTANCE aHInstance, DWORD aKeyCoopFlag
 
 	Update();
 }
-
-
 
 CU::InputWrapper::~InputWrapper()
 {

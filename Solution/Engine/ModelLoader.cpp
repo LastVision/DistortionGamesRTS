@@ -51,6 +51,12 @@ namespace Prism
 		delete myModelFactory;
 		myModelFactory = nullptr;
 		myNonFXBModels.DeleteAll();
+
+		for (auto it = myProxies.begin(); it != myProxies.end(); ++it)
+		{
+			SAFE_DELETE(it->second);
+		}
+		myProxies.clear();
 	}
 
 	void ModelLoader::Run()
@@ -125,23 +131,32 @@ namespace Prism
 
 				eLoadType loadType = myLoadArray[i].myLoadType;
 
-				Model* model = nullptr;
 				switch (loadType)
 				{
 				case Prism::ModelLoader::eLoadType::MODEL:
 				{
-					
-					model = myModelFactory->LoadModel(myLoadArray[i].myModelPath.c_str(),
+					Model* model = myModelFactory->LoadModel(myLoadArray[i].myModelPath.c_str(),
 						EffectContainer::GetInstance()->GetEffect(myLoadArray[i].myEffectPath));
-					
+					myLoadArray[i].myProxy->SetModel(model);
+
+					break;
+				}
+				case Prism::ModelLoader::eLoadType::MODEL_ANIMATED:
+				{
+
+					ModelAnimated* model = myModelFactory->LoadModelAnimated(myLoadArray[i].myModelPath.c_str(),
+						EffectContainer::GetInstance()->GetEffect(myLoadArray[i].myEffectPath));
+					myLoadArray[i].myProxy->SetModelAnimated(model);
+
 					break;
 				}
 				case Prism::ModelLoader::eLoadType::CUBE:
 				{
-					model = new Prism::Model();
+					Model* model = new Prism::Model();
 					model->InitCube(myLoadArray[i].mySize.x, myLoadArray[i].mySize.y,
 						myLoadArray[i].mySize.z, myLoadArray[i].myColor);
 
+					myLoadArray[i].myProxy->SetModel(model);
 					myNonFXBModels.Add(model);
 					break;
 				}
@@ -150,12 +165,6 @@ namespace Prism
 					break;
 				}
 
-				if (model == nullptr)
-				{
-					DL_MESSAGE_BOX("Failed to Load model", "ModelLoader->Error", MB_ICONWARNING);
-				}
-
-				myLoadArray[i].myProxy->SetModel(model);
 				myLoadArray.RemoveCyclicAtIndex(i);
 			}
 		}
@@ -208,47 +217,6 @@ namespace Prism
 
 	void ModelLoader::AddPrefetchJobs()
 	{
-		//XMLReader entityReader;
-		//entityReader.OpenDocument("Data/Script/LI_list_entity.xml");
-		//tinyxml2::XMLElement* entityRoot = entityReader.FindFirstChild("root");
-		//tinyxml2::XMLElement* entityPathElement = entityReader.ForceFindFirstChild(entityRoot, "path");
-		//for (; entityPathElement != nullptr; entityPathElement = entityReader.FindNextElement(entityPathElement, "path"))
-		//{
-		//	std::string entityPath;
-		//	entityReader.ForceReadAttribute(entityPathElement, "src", entityPath);
-		//
-		//	XMLReader fbxReader;
-		//	fbxReader.OpenDocument(entityPath);
-		//
-		//	entityRoot = fbxReader.FindFirstChild("root");
-		//	tinyxml2::XMLElement* entityElement = nullptr;
-		//	if (entityRoot != nullptr)
-		//	{
-		//		entityElement = fbxReader.ForceFindFirstChild(entityRoot, "Entity");
-		//	}
-		//	else
-		//	{
-		//		entityElement = fbxReader.ForceFindFirstChild("Entity");
-		//	}
-		//
-		//	tinyxml2::XMLElement* gfxElement = fbxReader.FindFirstChild(entityElement, "GraphicsComponent");
-		//	if (gfxElement != nullptr)
-		//	{
-		//		tinyxml2::XMLElement* modelElement = fbxReader.ForceFindFirstChild(gfxElement, "Model");
-		//		std::string model;
-		//		std::string effect;
-		//
-		//		fbxReader.ForceReadAttribute(modelElement, "modelFile", model);
-		//		fbxReader.ForceReadAttribute(modelElement, "effectFile", effect);
-		//
-		//		LoadModel(model, effect);
-		//	}
-		//
-		//	fbxReader.CloseDocument();
-		//}
-		//
-		//entityReader.CloseDocument();
-
 		myHasPrefetched = true;
 	}
 
@@ -256,6 +224,11 @@ namespace Prism
 	{
 #ifdef THREADED_LOADING
 		WaitUntilAddIsAllowed();
+
+		if (myProxies.find(aModelPath) != myProxies.end())
+		{
+			return myProxies[aModelPath];
+		}
 
 		myCanCopyArray = false;
 
@@ -270,20 +243,71 @@ namespace Prism
 
 		myBuffers[myInactiveBuffer].Add(newData);
 
+		myProxies[aModelPath] = proxy;
+
 		myCanCopyArray = true;
 
 		return proxy;
 #else
+		if (myProxies.find(aModelPath) != myProxies.end())
+		{
+			return myProxies[aModelPath];
+		}
+
 		ModelProxy* proxy = new ModelProxy();
 
 		Model* model = myModelFactory->LoadModel(aModelPath.c_str(),
 			EffectContainer::GetInstance()->GetEffect(aEffectPath));
 
 		proxy->SetModel(model);
-
+		myProxies[aModelPath] = proxy;
 		return proxy;
 #endif
-		
+	}
+
+	ModelProxy* ModelLoader::LoadModelAnimated(const std::string& aModelPath, const std::string& aEffectPath)
+	{
+#ifdef THREADED_LOADING
+		WaitUntilAddIsAllowed();
+
+		if (myProxies.find(aModelPath) != myProxies.end())
+		{
+			return myProxies[aModelPath];
+		}
+
+		myCanCopyArray = false;
+
+		ModelProxy* proxy = new ModelProxy();
+		proxy->SetModel(nullptr);
+
+		LoadData newData;
+		newData.myProxy = proxy;
+		newData.myLoadType = eLoadType::MODEL_ANIMATED;
+		newData.myModelPath = aModelPath;
+		newData.myEffectPath = aEffectPath;
+
+		myBuffers[myInactiveBuffer].Add(newData);
+
+		myProxies[aModelPath] = proxy;
+
+		myCanCopyArray = true;
+
+		return proxy;
+#else
+		if (myProxies.find(aModelPath) != myProxies.end())
+		{
+			return myProxies[aModelPath];
+		}
+
+		ModelProxy* proxy = new ModelProxy();
+
+		Model* model = myModelFactory->LoadModelAnimated(aModelPath.c_str(),
+			EffectContainer::GetInstance()->GetEffect(aEffectPath));
+
+		proxy->SetModel(model);
+		myProxies[aModelPath] = proxy;
+		return proxy;
+#endif
 	}
 
 	ModelProxy* ModelLoader::LoadCube(float aWidth, float aHeight, float aDepth
@@ -291,6 +315,7 @@ namespace Prism
 	{
 #ifdef THREADED_LOADING
 		WaitUntilAddIsAllowed();
+
 
 		myCanCopyArray = false;
 		ModelProxy* proxy = new ModelProxy();
@@ -318,7 +343,6 @@ namespace Prism
 #endif	
 	}
 
-
 	void ModelLoader::WaitUntilCopyIsAllowed()
 	{
 		while (myCanCopyArray == false)
@@ -330,5 +354,4 @@ namespace Prism
 		while (myCanAddToLoadArray == false)
 			; //Should be an empty whileloop!
 	}
-
 }
