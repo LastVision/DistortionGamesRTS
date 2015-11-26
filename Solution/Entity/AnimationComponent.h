@@ -18,7 +18,7 @@ public:
 	AnimationComponent(Entity& aEntity, const char* aModelPath, const char* aEffectPath);
 	~AnimationComponent();
 
-	void AddAnimation(eEntityState aState, const std::string& aAnimationPath);
+	void AddAnimation(eEntityState aState, const std::string& aAnimationPath, bool aLoopFlag, bool aResetTimeOnRestart);
 
 	void Update(float aDeltaTime);
 	Prism::Instance* GetInstance();
@@ -28,9 +28,17 @@ public:
 	void SetPosition(const CU::Vector3<float>& aPosition);
 
 private:
+	struct AnimationData
+	{
+		std::string myFile;
+		bool myShouldLoop;
+		bool myResetTimeOnRestart;
+		float myElapsedTime;
+	};
+
 	Prism::Instance* myInstance;
 	float myCullingRadius;
-	CU::StaticArray<std::string, int(eEntityState::_COUNT)> myAnimations;
+	CU::StaticArray<AnimationData, int(eEntityState::_COUNT)> myAnimations;
 	eEntityState myPrevEntityState;
 };
 

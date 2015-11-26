@@ -27,13 +27,13 @@ Level::Level(const Prism::Camera& aCamera)
 		unit->AddComponent(new AnimationComponent(*unit, "Data/Resource/Model/Animated_Dragon/dragon_tier_02_idle.fbx"
 			, "Data/Resource/Shader/S_effect_no_texture_animated.fx"));
 		unit->GetComponent<AnimationComponent>()->AddAnimation(eEntityState::IDLE
-			, "Data/Resource/Model/Animated_Dragon/dragon_tier_02_idle.fbx");
+			, "Data/Resource/Model/Animated_Dragon/dragon_tier_02_idle.fbx", true, false);
 		unit->GetComponent<AnimationComponent>()->AddAnimation(eEntityState::WALKING
-			, "Data/Resource/Model/Animated_Dragon/dragon_tier_02_runcycle.fbx");
+			, "Data/Resource/Model/Animated_Dragon/dragon_tier_02_runcycle.fbx", true, false);
 		unit->GetComponent<AnimationComponent>()->AddAnimation(eEntityState::ATTACKING
-			, "Data/Resource/Model/Animated_Dragon/dragon_tier_02_attack.fbx");
+			, "Data/Resource/Model/Animated_Dragon/dragon_tier_02_attack.fbx", false, true);
 		unit->GetComponent<AnimationComponent>()->AddAnimation(eEntityState::DYING
-			, "Data/Resource/Model/Animated_Dragon/dragon_tier_02_death.fbx");
+			, "Data/Resource/Model/Animated_Dragon/dragon_tier_02_death.fbx", false, true);
 
 		myScene->AddInstance(unit->GetComponent<AnimationComponent>()->GetInstance());
 		myUnits.Add(unit);
@@ -95,6 +95,29 @@ bool Level::LogicUpdate(float aDeltaTime)
 		for (int i = 0; i < myUnits.Size(); ++i)
 		{
 			myUnits[i]->SetState(eEntityState::NO_ANIMATION);
+		}
+	}
+
+	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_P))
+	{
+		for (int i = 1; i < 26; ++i)
+		{
+			int zRand = rand() % 100;
+			Entity* unit = new Entity(eEntityType::PLAYER, *myScene, Prism::eOctreeType::DYNAMIC, "Dragon", { 60.f + i * 5, 40, zRand*1.f });
+
+			unit->AddComponent(new AnimationComponent(*unit, "Data/Resource/Model/Animated_Dragon/dragon_tier_02_idle.fbx"
+				, "Data/Resource/Shader/S_effect_no_texture_animated.fx"));
+			unit->GetComponent<AnimationComponent>()->AddAnimation(eEntityState::IDLE
+				, "Data/Resource/Model/Animated_Dragon/dragon_tier_02_idle.fbx", true, false);
+			unit->GetComponent<AnimationComponent>()->AddAnimation(eEntityState::WALKING
+				, "Data/Resource/Model/Animated_Dragon/dragon_tier_02_runcycle.fbx", true, false);
+			unit->GetComponent<AnimationComponent>()->AddAnimation(eEntityState::ATTACKING
+				, "Data/Resource/Model/Animated_Dragon/dragon_tier_02_attack.fbx", false, true);
+			unit->GetComponent<AnimationComponent>()->AddAnimation(eEntityState::DYING
+				, "Data/Resource/Model/Animated_Dragon/dragon_tier_02_death.fbx", false, true);
+
+			myScene->AddInstance(unit->GetComponent<AnimationComponent>()->GetInstance());
+			myUnits.Add(unit);
 		}
 	}
 

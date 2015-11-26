@@ -23,13 +23,11 @@ namespace Prism
 		~Instance();
 
 		void Update(float aDelta);
-
 		void Render(const Camera& aCamera);
 
 		CU::Vector3<float> GetPosition() const;
 
 		void SetEffect(const std::string& aEffectFile);
-
 		void SetScale(const CU::Vector3<float>& aScaleVector);
 
 		void UpdateDirectionalLights(
@@ -38,6 +36,8 @@ namespace Prism
 		void UpdateSpotLights(const CU::StaticArray<SpotLightData, NUMBER_OF_SPOT_LIGHTS>& someSpotLightData);
 		
 		void SetAnimation(Animation* aAnimation);
+		bool IsAnimationDone();
+		void ResetAnimationTime(float aTime);
 
 		float GetObjectCullingRadius() const;
 		eOctreeType GetOctreeType() const;

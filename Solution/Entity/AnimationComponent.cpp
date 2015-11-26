@@ -37,21 +37,41 @@ AnimationComponent::~AnimationComponent()
 	myInstance = nullptr;
 }
 
-void AnimationComponent::AddAnimation(eEntityState aState, const std::string& aAnimationPath)
+void AnimationComponent::AddAnimation(eEntityState aState, const std::string& aAnimationPath
+	, bool aLoopFlag, bool aResetTimeOnRestart)
 {
 	Prism::AnimationSystem::GetInstance()->GetAnimation(aAnimationPath.c_str());
-	myAnimations[int(aState)] = aAnimationPath;
+	AnimationData newData;
+	newData.myElapsedTime = 0.f;
+	newData.myFile = aAnimationPath;
+	newData.myShouldLoop = aLoopFlag;
+	newData.myResetTimeOnRestart = aResetTimeOnRestart;
+	myAnimations[int(aState)] = newData;
 }
 
 void AnimationComponent::Update(float aDeltaTime)
 {
+	AnimationData& data = myAnimations[int(myEntity.GetState())];
 	if (myPrevEntityState != myEntity.GetState())
 	{
-		myInstance->SetAnimation(Prism::AnimationSystem::GetInstance()->GetAnimation(myAnimations[int(myEntity.GetState())].c_str()));
+		myInstance->SetAnimation(Prism::AnimationSystem::GetInstance()->GetAnimation(data.myFile.c_str()));
+
+		if (data.myResetTimeOnRestart == true)
+		{
+			myInstance->ResetAnimationTime(0.f);
+		}
+		else
+		{
+			myInstance->ResetAnimationTime(data.myElapsedTime);
+		}
 	}
 
-	myInstance->Update(aDeltaTime);
+	if (myInstance->IsAnimationDone() == false || data.myShouldLoop == true)
+	{
+		myInstance->Update(aDeltaTime);
+	}
 
+	data.myElapsedTime += aDeltaTime;
 	myPrevEntityState = myEntity.GetState();
 }
 
