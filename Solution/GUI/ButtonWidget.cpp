@@ -23,6 +23,7 @@ namespace GUI
 		std::string spritePathHover = "";
 		std::string spritePathPressed = "";
 		std::string hoverText = "";
+		std::string clickEvent = "";
 
 		CU::Vector2<float> size;
 		CU::Vector2<float> position;
@@ -37,6 +38,16 @@ namespace GUI
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "spritepressed"), "path", spritePathPressed);
 
 		aReader->ReadAttribute(aReader->FindFirstChild(anXMLElement, "hover"), "text", hoverText);
+
+		//aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "onclick"), "event", clickEvent);
+		//if (clickEvent == "defeat")
+		//{
+		//
+		//}
+		//else if (clickEvent == "win")
+		//{
+		//
+		//}
 
 		mySize = size;
 		myPosition = position;

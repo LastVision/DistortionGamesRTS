@@ -1,8 +1,8 @@
 #pragma once
 
-class Message;
-class GameStateMessage;
-class ResizeMessage;
+struct Message;
+struct GameStateMessage;
+struct ResizeMessage;
 
 class Subscriber
 {

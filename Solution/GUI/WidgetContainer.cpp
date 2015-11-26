@@ -44,7 +44,7 @@ namespace GUI
 	{
 		if (myBackground != nullptr)
 		{
-			//myBackground->Render(myPosition);
+			myBackground->Render(myPosition);
 		}
 
 		for (int i = 0; i < myWidgets.Size(); i++)
