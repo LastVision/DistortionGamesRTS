@@ -73,7 +73,7 @@ void InGameState::Render()
 {
 	VTUNE_EVENT_BEGIN(VTUNE::GAME_RENDER);
 	myLevel->Render();
-	//Prism::DebugDrawer::GetInstance()->Render(); //Have to be last
+	Prism::DebugDrawer::GetInstance()->Render(); //Have to be last
 
 	VTUNE_EVENT_END();
 }

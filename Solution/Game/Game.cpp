@@ -56,7 +56,7 @@ Game::~Game()
 	Prism::ParticleDataContainer::Destroy();
 	PostMaster::Destroy();
 	myStateStack.Clear();
-	//Prism::DebugDrawer::Destroy();
+	Prism::DebugDrawer::Destroy();
 }
 
 bool Game::Init(HWND& aHwnd)
