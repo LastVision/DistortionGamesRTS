@@ -11,10 +11,10 @@ namespace Prism
 	{
 	public:
 		Sprite(const std::string& aFileName, const CU::Vector2<float>& aSpriteSize
-			, const CU::Vector2<float>& aHotSpot);
+			, const CU::Vector2<float>& aHotSpot = { 0.f, 0.f });
 
 		Sprite(ID3D11Texture2D* aTexture, const CU::Vector2<float>& aSpriteSize
-			, const CU::Vector2<float>& aHotSpot);
+			, const CU::Vector2<float>& aHotSpot = { 0.f, 0.f });
 
 		void Render(const CU::Vector2<float>& aPosition, const CU::Vector2<float>& aScale = { 1.f, 1.f }
 			, const CU::Vector4<float>& aColor = { 1.f, 1.f, 1.f, 1.f });
@@ -27,6 +27,8 @@ namespace Prism
 		void Rotate(float aRadians);
 
 		void CopyFromD3DTexture(ID3D11Texture2D* aTexture);
+
+		const CU::Vector2<float>& GetHotspot() const;
 	private:
 		void CreateVertices();
 
@@ -50,4 +52,9 @@ inline void Prism::Sprite::SetSize(const CU::Vector2<float> aTextureSize, const 
 inline const CU::Vector2<float>& Prism::Sprite::GetSize() const
 {
 	return mySize;
+}
+
+inline const CU::Vector2<float>& Prism::Sprite::GetHotspot() const
+{
+	return myHotspot;
 }
