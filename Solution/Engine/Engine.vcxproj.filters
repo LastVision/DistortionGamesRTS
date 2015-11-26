@@ -141,6 +141,7 @@
     <ClCompile Include="Line3D.cpp">
       <Filter>DebugDrawer</Filter>
     </ClCompile>
+    <ClCompile Include="Line3DRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h" />
@@ -319,6 +320,7 @@
     <ClInclude Include="Line3D.h">
       <Filter>DebugDrawer</Filter>
     </ClInclude>
+    <ClInclude Include="Line3DRenderer.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Precompile">
