@@ -59,4 +59,16 @@ namespace Prism
 		CU::Vector4<float> GetColor(eColorDebug aColor) const;
 
 	};
+
+	static void RenderLine3D(const CU::Vector3<float>& aFirstPoint, const CU::Vector3<float> aSecondPoint
+		, eColorDebug aColor = eColorDebug::PINK, eColorDebug aSecondColor = eColorDebug::NOT_USED)
+	{
+		DebugDrawer::GetInstance()->RenderLine3D(aFirstPoint, aSecondPoint, aColor, aSecondColor);
+	}
+
+	static void RenderBox(const CU::Vector3<float>& aPosition, float aSize = 1.f, eColorDebug aColor = eColorDebug::PINK
+		, bool aWireFrame = false)
+	{
+		DebugDrawer::GetInstance()->RenderBox(aPosition, aSize, aColor, aWireFrame);
+	}
 }
