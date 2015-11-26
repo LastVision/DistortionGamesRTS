@@ -16,7 +16,7 @@ public:
 	Level(const Prism::Camera& aCamera);
 	~Level();
 
-	bool LogicUpdate(float aDeltaTime);
+	bool LogicUpdate(float aDeltaTime, Prism::Camera& aCamer);
 	void Render();
 
 	void OnResize(int aWidth, int aHeigth);
