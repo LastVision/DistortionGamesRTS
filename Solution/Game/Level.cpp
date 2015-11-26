@@ -20,35 +20,24 @@ Level::Level(const Prism::Camera& aCamera)
 
 	myScene = new Prism::Scene(aCamera, *myTerrain);
 	myUnits.Init(20);
-	//for (int i = 1; i < 26; ++i)
-	//{
-		//Entity* Unit = new Entity(eEntityType::PLAYER, *myScene, Prism::eOctreeType::DYNAMIC, "BoxBro", { 20, 1.f, 200 });
-		///*myUnit->AddComponent(new AnimationComponent(*myUnit, "Data/Resource/Model/BoxBro/boxBro_idle_anim.fbx"
-		//, "Data/Resource/Shader/S_effect_no_texture_animated.fx"));*/
-		//Unit->AddComponent(new AnimationComponent(*Unit, "Data/Resource/Model/multiObject_animation.fbx"
-		//	, "Data/Resource/Shader/S_effect_no_texture_animated.fx"));
+	for (int i = 1; i < 26; ++i)
+	{
+		Entity* unit = new Entity(eEntityType::PLAYER, *myScene, Prism::eOctreeType::DYNAMIC, "Dragon", { 60.f + i * 5, 40, 200 });
 
-		//myScene->AddInstance(Unit->GetComponent<AnimationComponent>()->GetInstance());
-		//myUnits.Add(Unit);
-	//}
-	
+		unit->AddComponent(new AnimationComponent(*unit, "Data/Resource/Model/Animated_Dragon/dragon_tier_02_idle.fbx"
+			, "Data/Resource/Shader/S_effect_no_texture_animated.fx"));
+		unit->GetComponent<AnimationComponent>()->AddAnimation(eEntityState::IDLE
+			, "Data/Resource/Model/Animated_Dragon/dragon_tier_02_idle.fbx");
+		unit->GetComponent<AnimationComponent>()->AddAnimation(eEntityState::WALKING
+			, "Data/Resource/Model/Animated_Dragon/dragon_tier_02_runcycle.fbx");
+		unit->GetComponent<AnimationComponent>()->AddAnimation(eEntityState::ATTACKING
+			, "Data/Resource/Model/Animated_Dragon/dragon_tier_02_attack.fbx");
+		unit->GetComponent<AnimationComponent>()->AddAnimation(eEntityState::DYING
+			, "Data/Resource/Model/Animated_Dragon/dragon_tier_02_death.fbx");
 
-	myStaticUnit = new Entity(eEntityType::PLAYER, *myScene, Prism::eOctreeType::DYNAMIC, "BoxBroStatic", { -60, 20, 200 });
-	myStaticUnit->AddComponent(new GraphicsComponent(*myStaticUnit, "Data/Resource/Model/BoxBro/boxBro_idle_anim.fbx"
-		, "Data/Resource/Shader/S_effect_no_texture.fx"));
-	
-	myDragon = new Entity(eEntityType::PLAYER, *myScene, Prism::eOctreeType::DYNAMIC, "Dragon", { 60, 40, 200 });
-	myDragon->AddComponent(new AnimationComponent(*myDragon, "Data/Resource/Model/Animated_Dragon/dragon_tier_02_idle.fbx"
-		, "Data/Resource/Shader/S_effect_no_texture_animated.fx"));
-	myDragon->GetComponent<AnimationComponent>()->AddAnimation(eEntityState::IDLE, "Data/Resource/Model/Animated_Dragon/dragon_tier_02_idle.fbx");
-	myDragon->GetComponent<AnimationComponent>()->AddAnimation(eEntityState::WALKING, "Data/Resource/Model/Animated_Dragon/dragon_tier_02_runcycle.fbx");
-	myDragon->GetComponent<AnimationComponent>()->AddAnimation(eEntityState::ATTACKING, "Data/Resource/Model/Animated_Dragon/dragon_tier_02_attack.fbx");
-	myDragon->GetComponent<AnimationComponent>()->AddAnimation(eEntityState::DYING, "Data/Resource/Model/Animated_Dragon/dragon_tier_02_death.fbx");
-
-	//myScene->AddInstance(myUnit->GetComponent<AnimationComponent>()->GetInstance());
-	myScene->AddInstance(myStaticUnit->GetComponent<GraphicsComponent>()->GetInstance());
-	myScene->AddInstance(myDragon->GetComponent<AnimationComponent>()->GetInstance());
-
+		myScene->AddInstance(unit->GetComponent<AnimationComponent>()->GetInstance());
+		myUnits.Add(unit);
+	}
 
 	myLight = new Prism::DirectionalLight();
 	myLight->SetColor({ 0.5f, 0.5f, 0.9f, 1.f });
@@ -59,9 +48,6 @@ Level::Level(const Prism::Camera& aCamera)
 Level::~Level()
 {
 	SAFE_DELETE(myTerrain);
-	SAFE_DELETE(myUnit);
-	SAFE_DELETE(myStaticUnit);
-	SAFE_DELETE(myDragon);
 	SAFE_DELETE(myScene);
 	SAFE_DELETE(myLight);
 
@@ -78,27 +64,40 @@ bool Level::LogicUpdate(float aDeltaTime)
 
 	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_1))
 	{
-		myDragon->SetState(eEntityState::IDLE);
+		for (int i = 0; i < myUnits.Size(); ++i)
+		{
+			myUnits[i]->SetState(eEntityState::IDLE);
+		}
 	}
 	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_2))
 	{
-		myDragon->SetState(eEntityState::WALKING);
+		for (int i = 0; i < myUnits.Size(); ++i)
+		{
+			myUnits[i]->SetState(eEntityState::WALKING);
+		}
 	}
 	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_3))
 	{
-		myDragon->SetState(eEntityState::ATTACKING);
+		for (int i = 0; i < myUnits.Size(); ++i)
+		{
+			myUnits[i]->SetState(eEntityState::ATTACKING);
+		}
 	}
 	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_4))
 	{
-		myDragon->SetState(eEntityState::DYING);
+		for (int i = 0; i < myUnits.Size(); ++i)
+		{
+			myUnits[i]->SetState(eEntityState::DYING);
+		}
 	}
 	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_5))
 	{
-		myDragon->SetState(eEntityState::NO_ANIMATION);
+		for (int i = 0; i < myUnits.Size(); ++i)
+		{
+			myUnits[i]->SetState(eEntityState::NO_ANIMATION);
+		}
 	}
 
-	//myUnit->Update(aDeltaTime);
-	myDragon->Update(aDeltaTime);
 	for (int i = 0; i < myUnits.Size(); ++i)
 	{
 		myUnits[i]->Update(aDeltaTime);
