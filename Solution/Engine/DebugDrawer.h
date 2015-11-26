@@ -16,6 +16,7 @@ namespace Prism
 {
 	class Camera;
 	class Line3DRenderer;
+	class Cube3DRenderer;
 	class DebugDrawer
 	{
 	public:
@@ -30,7 +31,7 @@ namespace Prism
 		//	, const CU::Vector4<float>& aColor = PINK_DEBUG);
 		void RenderArrow3D(const CU::Vector3<float>& aFirstPoint, const CU::Vector3<float>& aSecondPoint
 			, const CU::Vector4<float>& aColor = PINK_DEBUG);
-		void RenderBox(const CU::Vector3<float>& aPosition, float aSize, const CU::Vector4<float>& aColor = PINK_DEBUG
+		void RenderBox(const CU::Vector3<float>& aPosition, float aSize = 1.f, const CU::Vector4<float>& aColor = PINK_DEBUG
 			, bool aWireFrame = false);
 		void RenderSphere(const CU::Vector3<float>& aPosition, float aSize, const CU::Vector4<float>& aColor = PINK_DEBUG
 			, bool aWireFrame = false);
@@ -47,6 +48,7 @@ namespace Prism
 		~DebugDrawer();
 
 		Line3DRenderer* myLine3DRenderer;
+		Cube3DRenderer* myCube3DRenderer;
 
 		CU::GrowingArray<Line3D> my3DLines;
 

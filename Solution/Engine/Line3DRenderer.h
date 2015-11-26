@@ -4,8 +4,6 @@
 
 #define MAXNROFLINES 1024
 
-struct ID3D11InputLayout;
-
 namespace Prism
 {
 	class Camera;

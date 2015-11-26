@@ -39,8 +39,8 @@ namespace Prism
 
 	struct VertexPosNormColor
 	{
-		CU::Vector3<float> myPos;
-		CU::Vector3<float> myNorm;
+		CU::Vector4<float> myPosition;
+		CU::Vector4<float> myNormal;
 		CU::Vector4<float> myColor;
 	};
 }
