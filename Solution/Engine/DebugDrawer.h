@@ -21,20 +21,20 @@ namespace Prism
 		static DebugDrawer* GetInstance();
 		static void Destroy();
 
-		void RenderLine2D(const CU::Vector2<float>& aFirstPoint, const CU::Vector2<float> aSecondPoint
-			, const CU::Vector4<float>& aColor = PINK_DEBUG);
+		//void RenderLine2D(const CU::Vector2<float>& aFirstPoint, const CU::Vector2<float> aSecondPoint
+		//	, const CU::Vector4<float>& aColor = PINK_DEBUG);
 		void RenderLine3D(const CU::Vector3<float>& aFirstPoint, const CU::Vector3<float> aSecondPoint
 			, const CU::Vector4<float>& aColor = PINK_DEBUG);
-		void RenderArrow2D(const CU::Vector2<float>& aFirstPoint, const CU::Vector2<float> aSecondPoint
-			, const CU::Vector4<float>& aColor = PINK_DEBUG);
+		//void RenderArrow2D(const CU::Vector2<float>& aFirstPoint, const CU::Vector2<float> aSecondPoint
+		//	, const CU::Vector4<float>& aColor = PINK_DEBUG);
 		void RenderArrow3D(const CU::Vector3<float>& aFirstPoint, const CU::Vector3<float>& aSecondPoint
 			, const CU::Vector4<float>& aColor = PINK_DEBUG);
 		void RenderBox(const CU::Vector3<float>& aPosition, float aSize, const CU::Vector4<float>& aColor = PINK_DEBUG
 			, bool aWireFrame = false);
 		void RenderSphere(const CU::Vector3<float>& aPosition, float aSize, const CU::Vector4<float>& aColor = PINK_DEBUG
 			, bool aWireFrame = false);
-		void RenderText2D(const std::string& aText, const CU::Vector2<float>& aPosition
-			, const CU::Vector4<float>& aColor = PINK_DEBUG);
+		//void RenderText2D(const std::string& aText, const CU::Vector2<float>& aPosition
+		//	, const CU::Vector4<float>& aColor = PINK_DEBUG);
 		void RenderText3D(const std::string& aText, const CU::Vector3<float>& aPosition
 			, const CU::Vector4<float>& aColor = PINK_DEBUG);
 

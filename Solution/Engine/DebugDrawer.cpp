@@ -21,11 +21,11 @@ namespace Prism
 		SAFE_DELETE(myInstance);
 	}
 
-	void DebugDrawer::RenderLine2D(const CU::Vector2<float>& aFirstPoint, const CU::Vector2<float> aSecondPoint
-		, const CU::Vector4<float>& aColor)
-	{
-		DL_ASSERT("Not Implemented.");
-	}
+	//void DebugDrawer::RenderLine2D(const CU::Vector2<float>& aFirstPoint, const CU::Vector2<float> aSecondPoint
+	//	, const CU::Vector4<float>& aColor)
+	//{
+	//	DL_ASSERT("Not Implemented.");
+	//}
 
 	void DebugDrawer::RenderLine3D(const CU::Vector3<float>& aFirstPoint, const CU::Vector3<float> aSecondPoint
 		, const CU::Vector4<float>& aColor)
@@ -33,11 +33,11 @@ namespace Prism
 		my3DLines.Add(Line3D(aFirstPoint, aSecondPoint, aColor));
 	}
 
-	void DebugDrawer::RenderArrow2D(const CU::Vector2<float>& aFirstPoint, const CU::Vector2<float> aSecondPoint
-		, const CU::Vector4<float>& aColor)
-	{
-		DL_ASSERT("Not Implemented.");
-	}
+	//void DebugDrawer::RenderArrow2D(const CU::Vector2<float>& aFirstPoint, const CU::Vector2<float> aSecondPoint
+	//	, const CU::Vector4<float>& aColor)
+	//{
+	//	DL_ASSERT("Not Implemented.");
+	//}
 
 	void DebugDrawer::RenderArrow3D(const CU::Vector3<float>& aFirstPoint, const CU::Vector3<float>& aSecondPoint
 		, const CU::Vector4<float>& aColor)
@@ -57,11 +57,11 @@ namespace Prism
 		DL_ASSERT("Not Implemented.");
 	}
 
-	void DebugDrawer::RenderText2D(const std::string& aText, const CU::Vector2<float>& aPosition
-		, const CU::Vector4<float>& aColor)
-	{
-		DL_ASSERT("Not Implemented.");
-	}
+	//void DebugDrawer::RenderText2D(const std::string& aText, const CU::Vector2<float>& aPosition
+	//	, const CU::Vector4<float>& aColor)
+	//{
+	//	DL_ASSERT("Not Implemented.");
+	//}
 
 	void DebugDrawer::RenderText3D(const std::string& aText, const CU::Vector3<float>& aPosition
 		, const CU::Vector4<float>& aColor)
@@ -71,12 +71,10 @@ namespace Prism
 
 	void DebugDrawer::Render(const Camera& aCamera)
 	{
-		//Render
 		myLine3DRenderer->Render(my3DLines, aCamera);
 
 
-
-			my3DLines.RemoveAll();
+		my3DLines.RemoveAll();
 	}
 
 	DebugDrawer::DebugDrawer()
