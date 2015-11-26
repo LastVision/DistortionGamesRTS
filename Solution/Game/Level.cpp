@@ -121,8 +121,11 @@ bool Level::LogicUpdate(float aDeltaTime, Prism::Camera& aCamera)
 			myUnits.Add(unit);
 		}
 	}
-
-	//Prism::RenderBox(myTerrain->CalcIntersection(aCamera.GetOrientation().GetPos(), aCamera.RayCast(CU::Vector2<float>())));
+	//CU::Vector2<float> cursorPos;
+	//cursorPos.x = CU::InputWrapper::GetInstance()->GetMousePosition().x;
+	//cursorPos.y = Prism::Engine::GetInstance()->GetWindowSizeInFloat().y - CU::InputWrapper::GetInstance()->GetMousePosition().y;
+	//cursorPos /= Prism::Engine::GetInstance()->GetWindowSizeInFloat();
+	//Prism::RenderBox(myTerrain->CalcIntersection(aCamera.GetOrientation().GetPos(), aCamera.RayCast(cursorPos)));
 
 	//myUnit->Update(aDeltaTime);
 	for (int i = 0; i < myUnits.Size(); ++i)

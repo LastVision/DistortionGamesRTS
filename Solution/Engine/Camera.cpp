@@ -156,15 +156,23 @@ namespace Prism
 		{
 			return CU::Vector3<float>();
 		}
+		CU::Vector2<float> mouse2D(aMousePosition);
+		mouse2D *= 2.f;
+		mouse2D -= 1.f;
+		CU::Vector3<float> mouse3D(mouse2D.x, mouse2D.y, 0.f);
+		mouse3D += myOrientation.GetForward();
+
+
+
 		CU::Vector3<float> intersection(1.f, 0.f, 0.f);
 		float d = 0.f;
-		float denom = CU::Dot(myOrientation.GetForward(), CU::Vector3<float>( 0.f, 1.f, 0.f ));
+		float denom = CU::Dot(mouse3D, CU::Vector3<float>(0.f, 1.f, 0.f));
 		float t = 0.f;
 		if (denom != 0.f)
 		{
 			t = (d - CU::Dot(myOrientation.GetPos(), CU::Vector3<float>(0.f, 1.f, 0.f ))) / (denom);
 		}
-		intersection = myOrientation.GetPos() + myOrientation.GetForward() * t;
+		intersection = myOrientation.GetPos() + mouse3D * t;
 
 		return intersection;
 	}
