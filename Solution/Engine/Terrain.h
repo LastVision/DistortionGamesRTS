@@ -22,6 +22,7 @@ namespace Prism
 		~Terrain();
 
 		void Render(const Camera& aCamera);
+		void CalcEntityHeight(CU::Matrix44<float>& anOrientation) const;
 
 	private:
 		void operator=(Terrain&) = delete;

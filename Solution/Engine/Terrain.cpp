@@ -65,6 +65,15 @@ namespace Prism
 		BaseModel::Render();
 	}
 
+	void Terrain::CalcEntityHeight(CU::Matrix44<float>& anOrientation) const
+	{
+		CU::Vector3<float> position(anOrientation.GetPos());
+
+		position.y = GetHeight(static_cast<unsigned int>(position.x), static_cast<unsigned int>(position.z));
+
+		anOrientation.SetPos(position);
+	}
+
 	void Terrain::CreateVertices()
 	{
 		CU::GrowingArray<VertexPosNormUV> vertices(myHeightMap->myWidth * myHeightMap->myDepth);
