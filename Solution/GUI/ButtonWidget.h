@@ -12,6 +12,7 @@ namespace tinyxml2
 }
 
 class XMLReader;
+struct OnClickMessage;
 
 namespace GUI
 {
