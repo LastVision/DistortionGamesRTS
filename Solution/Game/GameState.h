@@ -27,7 +27,6 @@ public:
 
 protected:
 
-	CU::InputWrapper* myInputWrapper;
 	StateStackProxy* myStateStack;
 	eStateStatus myStateStatus;
 	bool myIsLetThrough;

@@ -16,7 +16,7 @@ namespace GUI
 	class Cursor
 	{
 	public:
-		Cursor(CU::InputWrapper* anInputWrapper, const CU::Vector2<int>& aWindowSize);
+		Cursor(const CU::Vector2<int>& aWindowSize);
 		~Cursor();
 
 		void Update();
@@ -30,6 +30,5 @@ namespace GUI
 		CU::Vector2<float> myPosition;
 		CU::Vector2<float> myWindowSize;
 		Prism::Sprite* mySprite;
-		CU::InputWrapper* myInputWrapper;
 	};
 }
