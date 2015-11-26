@@ -18,9 +18,10 @@ InGameState::InGameState(CU::InputWrapper* anInputWrapper)
 	myInputWrapper = anInputWrapper;
 	myCamera = new Prism::Camera(myCameraOrientation);
 
-	myCameraOrientation.SetPos(CU::Vector3<float>(10.f, 100.f, 0));
+	/*myCameraOrientation.SetPos(CU::Vector3<float>(10.f, 100.f, 0));
+	myCameraOrientation = CU::Matrix44<float>::CreateRotateAroundX(0.0174532925f * 70.f) * myCameraOrientation;*/
 
-	myCameraOrientation = CU::Matrix44<float>::CreateRotateAroundX(0.0174532925f * 70.f) * myCameraOrientation;
+	myCameraOrientation.SetPos(CU::Vector3<float>(30.f, 80.f, 0));
 }
 
 InGameState::~InGameState()

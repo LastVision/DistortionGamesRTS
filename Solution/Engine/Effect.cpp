@@ -82,6 +82,11 @@ void Prism::Effect::SetAmbientHue(CU::Vector4f aVector)
 	myAmbientHue->SetFloatVector(&aVector.x);
 }
 
+void Prism::Effect::SetBones(const CU::StaticArray<CU::Matrix44<float>, MAX_NR_OF_BONES>& someBones)
+{
+	myBonesArray->SetMatrixArray(&someBones[0].myMatrix[0], 0, MAX_NR_OF_BONES);
+}
+
 void Prism::Effect::SetPosAndScale(const CU::Vector2<float>& aPos
 	, const CU::Vector2<float>& aScale)
 {
@@ -369,6 +374,12 @@ bool Prism::Effect::ReloadShader(const std::string& aFile)
 	if (myAmbientHue->IsValid() == false)
 	{
 		myAmbientHue = nullptr;
+	}
+
+	myBonesArray = myEffect->GetVariableByName("Bones")->AsMatrix();
+	if (myBonesArray->IsValid() == false)
+	{
+		myBonesArray = nullptr;
 	}
 
 	return true;

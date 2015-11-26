@@ -20,12 +20,10 @@ AnimationComponent::AnimationComponent(Entity& aEntity, const char* aModelPath, 
 	, myInstance(nullptr)
 	, myCullingRadius(10.f)
 {
-	Prism::ModelProxy* model = Prism::ModelLoader::GetInstance()->LoadModel(aModelPath
+	Prism::ModelProxy* model = Prism::ModelLoader::GetInstance()->LoadModelAnimated(aModelPath
 		, aEffectPath);
 
 	myInstance = new Prism::Instance(*model, myEntity.myOrientation, myEntity.GetOctreeType(), myCullingRadius);
-
-	myEntity.myOrientation.SetPos({ 10.f, 95.f, 0.f });
 }
 
 AnimationComponent::~AnimationComponent()
@@ -40,7 +38,7 @@ AnimationComponent::~AnimationComponent()
 
 void AnimationComponent::Update(float aDeltaTime)
 {
-	aDeltaTime;
+	myInstance->Update(aDeltaTime);
 }
 
 void AnimationComponent::SetPosition(const CU::Vector3<float>& aPosition)

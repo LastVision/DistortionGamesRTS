@@ -27,5 +27,7 @@ private:
 	Prism::Scene* myScene;
 
 	Entity* myUnit;
+	Entity* myStaticUnit;
+	Entity* myDragon;
 };
 

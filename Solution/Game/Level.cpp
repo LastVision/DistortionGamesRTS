@@ -10,6 +10,7 @@
 
 #include <Entity.h>
 #include <GraphicsComponent.h>
+#include <AnimationComponent.h>
 
 Level::Level(const Prism::Camera& aCamera)
 {
@@ -18,11 +19,22 @@ Level::Level(const Prism::Camera& aCamera)
 
 	myScene = new Prism::Scene(aCamera, *myTerrain);
 
-	myUnit = new Entity(eEntityType::PLAYER, *myScene, Prism::eOctreeType::DYNAMIC, "TestUnit");
-	myUnit->AddComponent(new GraphicsComponent(*myUnit, "Data/Resource/Model/BoxBro/boxBro_idle_anim.fbx"
+	myUnit = new Entity(eEntityType::PLAYER, *myScene, Prism::eOctreeType::DYNAMIC, "BoxBro", { 20, 20, 200 });
+	myUnit->AddComponent(new AnimationComponent(*myUnit, "Data/Resource/Model/BoxBro/boxBro_idle_anim.fbx"
+		, "Data/Resource/Shader/S_effect_no_texture_animated.fx"));
+
+	myStaticUnit = new Entity(eEntityType::PLAYER, *myScene, Prism::eOctreeType::DYNAMIC, "BoxBroStatic", { -60, 20, 200 });
+	myStaticUnit->AddComponent(new GraphicsComponent(*myStaticUnit, "Data/Resource/Model/BoxBro/boxBro_idle_anim.fbx"
 		, "Data/Resource/Shader/S_effect_no_texture.fx"));
+
+	myDragon = new Entity(eEntityType::PLAYER, *myScene, Prism::eOctreeType::DYNAMIC, "Dragon", { 60, 40, 200 });
+	myDragon->AddComponent(new AnimationComponent(*myDragon, "Data/Resource/Model/Animated_Dragon/dragon_tier_02_idle.fbx"
+		, "Data/Resource/Shader/S_effect_no_texture_animated.fx"));
 	
-	myScene->AddInstance(myUnit->GetComponent<GraphicsComponent>()->GetInstance());
+
+	myScene->AddInstance(myUnit->GetComponent<AnimationComponent>()->GetInstance());
+	myScene->AddInstance(myStaticUnit->GetComponent<GraphicsComponent>()->GetInstance());
+	myScene->AddInstance(myDragon->GetComponent<AnimationComponent>()->GetInstance());
 
 
 	myLight = new Prism::DirectionalLight();
@@ -35,6 +47,8 @@ Level::~Level()
 {
 	SAFE_DELETE(myTerrain);
 	SAFE_DELETE(myUnit);
+	SAFE_DELETE(myStaticUnit);
+	SAFE_DELETE(myDragon);
 	SAFE_DELETE(myScene);
 	SAFE_DELETE(myLight);
 }
@@ -43,6 +57,8 @@ bool Level::LogicUpdate(float aDeltaTime)
 {
 	//CU::Vector3<float> lightDir(myLight->GetCurrentDir().x, myLight->GetCurrentDir().y, myLight->GetCurrentDir().z);
 	//myLight->SetDir(lightDir * CU::Matrix44<float>::CreateRotateAroundZ(-3.14f * aDeltaTime / 3.f));
+	myUnit->Update(aDeltaTime);
+	myDragon->Update(aDeltaTime);
 	return true;
 }
 

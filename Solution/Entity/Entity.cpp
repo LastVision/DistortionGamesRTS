@@ -3,7 +3,8 @@
 #include "Component.h"
 #include "Entity.h"
 
-Entity::Entity(eEntityType aType, Prism::Scene& aScene, Prism::eOctreeType anOctreeType, const std::string& aName)
+Entity::Entity(eEntityType aType, Prism::Scene& aScene, Prism::eOctreeType anOctreeType
+	, const std::string& aName, const CU::Vector3<float> aStartPosition)
 	: myAlive(true)
 	, myType(aType)
 	, myScene(aScene)
@@ -14,6 +15,8 @@ Entity::Entity(eEntityType aType, Prism::Scene& aScene, Prism::eOctreeType anOct
 	{
 		myComponents[i] = nullptr;
 	}
+
+	myOrientation.SetPos(aStartPosition);
 }
 
 Entity::~Entity()

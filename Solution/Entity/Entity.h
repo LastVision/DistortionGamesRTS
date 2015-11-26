@@ -21,7 +21,8 @@ class Entity
 	friend class AnimationComponent;
 	friend class GraphicsComponent;
 public:
-	Entity(eEntityType aType, Prism::Scene& aScene, Prism::eOctreeType anOctreeType, const std::string& aName = "");
+	Entity(eEntityType aType, Prism::Scene& aScene, Prism::eOctreeType anOctreeType, const std::string& aName = ""
+		, const CU::Vector3<float> aStartPosition = { 0.f, 0.f, 0.f });
 	~Entity();
 
 	virtual void Update(float aDeltaTime);
