@@ -72,6 +72,7 @@ bool Level::LogicUpdate(float aDeltaTime)
 	//myLight->SetDir(lightDir * CU::Matrix44<float>::CreateRotateAroundZ(-3.14f * aDeltaTime / 3.f));
 
 	Prism::DebugDrawer::GetInstance()->RenderLine3D({ 0.f, 0.f, 0.f }, { 100.f, 100.f, 100.f }, BLACK_DEBUG, BLUE_DEBUG);
+	Prism::DebugDrawer::GetInstance()->RenderBox({ 100.f, 100.f, 100.f });
 
 	//myUnit->Update(aDeltaTime);
 	myDragon->Update(aDeltaTime);

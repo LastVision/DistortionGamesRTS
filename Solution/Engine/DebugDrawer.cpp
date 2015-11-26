@@ -1,6 +1,7 @@
 #include "stdafx.h"
-#include "Engine.h"
+#include "Cube3DRenderer.h"
 #include "DebugDrawer.h"
+#include "Engine.h"
 #include "Line3DRenderer.h"
 
 namespace Prism
@@ -48,7 +49,7 @@ namespace Prism
 	void DebugDrawer::RenderBox(const CU::Vector3<float>& aPosition, float aSize, const CU::Vector4<float>& aColor
 		, bool aWireFrame)
 	{
-		DL_ASSERT("Not Implemented.");
+		myCube3DRenderer->AddCube(aPosition);
 	}
 
 	void DebugDrawer::RenderSphere(const CU::Vector3<float>& aPosition, float aSize, const CU::Vector4<float>& aColor
@@ -72,7 +73,7 @@ namespace Prism
 	void DebugDrawer::Render(const Camera& aCamera)
 	{
 		myLine3DRenderer->Render(my3DLines, aCamera);
-
+		myCube3DRenderer->Render(aCamera);
 
 		my3DLines.RemoveAll();
 	}
@@ -80,6 +81,7 @@ namespace Prism
 	DebugDrawer::DebugDrawer()
 		: my3DLines(1024)
 		, myLine3DRenderer(new Line3DRenderer())
+		, myCube3DRenderer(new Cube3DRenderer())
 	{
 
 	}
@@ -87,5 +89,6 @@ namespace Prism
 	DebugDrawer::~DebugDrawer()
 	{
 		SAFE_DELETE(myLine3DRenderer);
+		SAFE_DELETE(myCube3DRenderer);
 	}
 }
