@@ -39,15 +39,24 @@ namespace GUI
 
 		aReader->ReadAttribute(aReader->FindFirstChild(anXMLElement, "hover"), "text", hoverText);
 
-		//aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "onclick"), "event", clickEvent);
-		//if (clickEvent == "defeat")
-		//{
-		//
-		//}
-		//else if (clickEvent == "win")
-		//{
-		//
-		//}
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "onclick"), "event", clickEvent);
+
+		if (clickEvent == "lose")
+		{
+		
+		}
+		else if (clickEvent == "win")
+		{
+		
+		}
+		else if (clickEvent == "restart")
+		{
+
+		}
+		else if (clickEvent == "quit")
+		{
+
+		}
 
 		mySize = size;
 		myPosition = position;
