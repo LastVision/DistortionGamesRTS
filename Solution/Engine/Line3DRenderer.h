@@ -2,7 +2,7 @@
 
 #include <D3D11.h>
 
-#define MAXNROFLINES 12
+#define MAXNROFLINES 1024
 
 struct ID3D11InputLayout;
 

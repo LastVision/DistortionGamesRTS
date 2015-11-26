@@ -78,7 +78,7 @@ namespace Prism
 	}
 
 	DebugDrawer::DebugDrawer()
-		: my3DLines(64)
+		: my3DLines(1024)
 		, myLine3DRenderer(new Line3DRenderer())
 	{
 
