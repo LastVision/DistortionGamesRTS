@@ -153,6 +153,9 @@
     <ClCompile Include="AnimationSystem.cpp">
       <Filter>Rendering\Animation</Filter>
     </ClCompile>
+    <ClCompile Include="AnimationProxy.cpp">
+      <Filter>Rendering\Animation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h" />
@@ -341,6 +344,9 @@
       <Filter>DebugDrawer</Filter>
     </ClInclude>
     <ClInclude Include="AnimationSystem.h">
+      <Filter>Rendering\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationProxy.h">
       <Filter>Rendering\Animation</Filter>
     </ClInclude>
   </ItemGroup>

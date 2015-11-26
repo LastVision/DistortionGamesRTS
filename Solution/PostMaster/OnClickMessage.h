@@ -1,26 +1,23 @@
 #pragma once
 #include "Message.h"
 
-namespace GUI
+enum class eOnClickEvent
 {
-	enum class eOnClickEvent
-	{
-		QUIT,
-		RESTART,
-		WIN,
-		LOSE
-	};
-}
+	QUIT,
+	RESTART,
+	WIN,
+	LOSE
+};
 
 struct OnClickMessage : public Message
 {
-	OnClickMessage(GUI::eOnClickEvent aEvent);
+	OnClickMessage(eOnClickEvent anEvent);
 
-	const GUI::eOnClickEvent myEvent;
+	const eOnClickEvent myEvent;
 };
 
-OnClickMessage::OnClickMessage(GUI::eOnClickEvent aEvent)
+inline OnClickMessage::OnClickMessage(eOnClickEvent anEvent)
 	: Message(eMessageType::ON_CLICK)
-	, myEvent(aEvent)
+	, myEvent(anEvent)
 {
 }

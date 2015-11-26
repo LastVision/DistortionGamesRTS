@@ -111,6 +111,7 @@ void Prism::ModelAnimated::SetEffect(Effect* aEffect)
 
 void Prism::ModelAnimated::Render(const CU::Matrix44<float>& aOrientation, const CU::Vector3<float>& aCameraPosition)
 {
+	aCameraPosition;
 	if (myIsNULLObject == false)
 	{
 		float blendFactor[4];

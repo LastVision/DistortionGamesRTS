@@ -34,6 +34,7 @@ public:
 	void OnResize(int aWidth, int aHeight) override;
 
 	void ReceiveMessage(const GameStateMessage& aMessage) override;
+	void ReceiveMessage(const OnClickMessage& aMessage) override;
 
 	void SetLevel();
 
