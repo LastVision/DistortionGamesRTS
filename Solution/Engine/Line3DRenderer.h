@@ -8,6 +8,7 @@ struct ID3D11InputLayout;
 
 namespace Prism
 {
+	class Camera;
 	class Effect;
 
 	struct VertexBufferWrapper;
@@ -17,7 +18,7 @@ namespace Prism
 		Line3DRenderer();
 		~Line3DRenderer();
 
-		void Render(const CU::GrowingArray<Line3D>& someLines);
+		void Render(const CU::GrowingArray<Line3D>& someLines, const Camera& aCamera);
 
 	private:
 		VertexBufferWrapper* myVertexBuffer;

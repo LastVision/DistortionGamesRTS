@@ -69,10 +69,10 @@ namespace Prism
 		DL_ASSERT("Not Implemented.");
 	}
 
-	void DebugDrawer::Render()
+	void DebugDrawer::Render(const Camera& aCamera)
 	{
 		//Render
-		myLine3DRenderer->Render(my3DLines);
+		myLine3DRenderer->Render(my3DLines, aCamera);
 
 
 

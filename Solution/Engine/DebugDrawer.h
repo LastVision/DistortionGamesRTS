@@ -13,6 +13,7 @@
 
 namespace Prism
 {
+	class Camera;
 	class Line3DRenderer;
 	class DebugDrawer
 	{
@@ -37,7 +38,7 @@ namespace Prism
 		void RenderText3D(const std::string& aText, const CU::Vector3<float>& aPosition
 			, const CU::Vector4<float>& aColor = PINK_DEBUG);
 
-		void Render();
+		void Render(const Camera& aCamera);
 
 	private:
 		static DebugDrawer* myInstance;

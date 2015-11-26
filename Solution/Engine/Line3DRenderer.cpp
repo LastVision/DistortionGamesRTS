@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+#include "Camera.h"
 #include <d3dx11effect.h>
 #include "EffectContainer.h"
 #include "IndexBufferWrapper.h"
@@ -35,13 +36,31 @@ namespace Prism
 		}
 	}
 
-	void Line3DRenderer::Render(const CU::GrowingArray<Line3D>& someLines)
+	void Line3DRenderer::Render(const CU::GrowingArray<Line3D>& someLines, const Camera& aCamera)
 	{ 
 		UpdateVertexBuffer(someLines);
 
-		Engine::GetInstance()->GetContex()->IASetVertexBuffers(0, 1, &myVertexBuffer->myVertexBuffer
-			, &myVertexBuffer->myStride, &myVertexBuffer->myByteOffset);
+		myEffect->SetWorldMatrix(CU::Matrix44<float>());
+		myEffect->SetViewMatrix(CU::InverseSimple(aCamera.GetOrientation()));
+		myEffect->SetProjectionMatrix(aCamera.GetProjection());
+
+		Engine::GetInstance()->GetContex()->IASetInputLayout(myInputLayout);
 		Engine::GetInstance()->GetContex()->IASetPrimitiveTopology(myPrimitiveTopology);
+		Engine::GetInstance()->GetContex()->IASetVertexBuffers(
+			myVertexBuffer->myStartSlot
+			, myVertexBuffer->myNumberOfBuffers
+			, &myVertexBuffer->myVertexBuffer
+			, &myVertexBuffer->myStride
+			, &myVertexBuffer->myByteOffset);
+
+		D3DX11_TECHNIQUE_DESC techDesc;
+		myEffect->GetTechnique()->GetDesc(&techDesc);
+
+		for (UINT i = 0; i < techDesc.Passes; ++i)
+		{
+			myEffect->GetTechnique()->GetPassByIndex(i)->Apply(0, Engine::GetInstance()->GetContex());
+			Engine::GetInstance()->GetContex()->Draw(someLines.Size() * 2, 0);
+		}
 
 
 	}
@@ -53,9 +72,9 @@ namespace Prism
 
 		if (mappedResource.pData != nullptr)
 		{
-			Line3D* data = (Line3D*)mappedResource.pData;
+			Line3DVertex* data = (Line3DVertex*)mappedResource.pData;
 
-			bool isSafe = sizeof(Line3D) == sizeof(someLines[0]);
+			bool isSafe = sizeof(Line3DVertex) == sizeof(someLines[0].myFirstPoint);
 			DL_ASSERT_EXP(isSafe, "[Line3DRenderer](UpdateVertexBuffer) : Not safe to copy.");
 			memcpy(data, &someLines[0], sizeof(Line3D) * someLines.Size());
 		}
@@ -73,9 +92,8 @@ namespace Prism
 
 		const D3D11_INPUT_ELEMENT_DESC Line3DRendererLayout[] =
 		{
-			{ "STARTPOSITION", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-			{ "ENDPOSITION", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-			{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			{ "POSITION", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		};
 
 		UINT size = ARRAYSIZE(Line3DRendererLayout);
@@ -93,7 +111,7 @@ namespace Prism
 	void Line3DRenderer::InitVertexBuffer()
 	{
 		myVertexBuffer = new VertexBufferWrapper();
-		myVertexBuffer->myStride = sizeof(Line3D);;
+		myVertexBuffer->myStride = sizeof(Line3DVertex);;
 		myVertexBuffer->myByteOffset = 0;
 		myVertexBuffer->myStartSlot = 0;
 		myVertexBuffer->myNumberOfBuffers = 1;
@@ -114,7 +132,7 @@ namespace Prism
 			myVertexBuffer->myVertexBuffer->Release();
 		}
 
-		myVertexBufferDesc->ByteWidth = sizeof(Line3D) * MAXNROFLINES;
+		myVertexBufferDesc->ByteWidth = (sizeof(Line3DVertex) * 2) * MAXNROFLINES;
 
 		hr = Engine::GetInstance()->GetDevice()->CreateBuffer(myVertexBufferDesc, nullptr, &myVertexBuffer->myVertexBuffer);
 		DL_ASSERT_EXP(hr == S_OK, "[Line3DRenderer](CreateVertexBuffer) : Failed to create VertexBuffer");
