@@ -13,10 +13,7 @@
 
 namespace Prism
 {
-	class Effect;
-
-	struct VertexBufferWrapper;
-	struct IndexBufferWrapper;
+	class Line3DRenderer;
 	class DebugDrawer
 	{
 	public:
@@ -47,11 +44,7 @@ namespace Prism
 		DebugDrawer();
 		~DebugDrawer();
 
-		VertexBufferWrapper* myLine3DVertexBuffer;
-		IndexBufferWrapper* myLine3DIndexBuffer;
-		D3D11_PRIMITIVE_TOPOLOGY myPrimitiveTopology;
-
-		Effect* myEffect;
+		Line3DRenderer* myLine3DRenderer;
 
 		CU::GrowingArray<Line3D> my3DLines;
 
