@@ -229,6 +229,7 @@
     <ClCompile Include="HierarchyBone.cpp" />
     <ClCompile Include="Instance.cpp" />
     <ClCompile Include="Line3D.cpp" />
+    <ClCompile Include="Line3DRenderer.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="ModelAnimated.cpp" />
     <ClCompile Include="Renderer.cpp" />
@@ -293,6 +294,7 @@
     <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="LightStructs.h" />
     <ClInclude Include="Line3D.h" />
+    <ClInclude Include="Line3DRenderer.h" />
     <ClInclude Include="LodStructs.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="ModelAnimated.h" />
