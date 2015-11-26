@@ -135,6 +135,15 @@
     <ClCompile Include="ModelAnimated.cpp">
       <Filter>Rendering\Model</Filter>
     </ClCompile>
+    <ClCompile Include="DebugDrawer.cpp">
+      <Filter>DebugDrawer</Filter>
+    </ClCompile>
+    <ClCompile Include="Line3D.cpp">
+      <Filter>DebugDrawer</Filter>
+    </ClCompile>
+    <ClCompile Include="Line3DRenderer.cpp">
+      <Filter>DebugDrawer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h" />
@@ -307,6 +316,15 @@
     <ClInclude Include="ModelAnimated.h">
       <Filter>Rendering\Model</Filter>
     </ClInclude>
+    <ClInclude Include="DebugDrawer.h">
+      <Filter>DebugDrawer</Filter>
+    </ClInclude>
+    <ClInclude Include="Line3D.h">
+      <Filter>DebugDrawer</Filter>
+    </ClInclude>
+    <ClInclude Include="Line3DRenderer.h">
+      <Filter>DebugDrawer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Precompile">
@@ -356,6 +374,9 @@
     </Filter>
     <Filter Include="Rendering\Animation">
       <UniqueIdentifier>{818116f3-0b61-43a9-aa31-5eb1ab31adf6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DebugDrawer">
+      <UniqueIdentifier>{0a5d9478-d6ff-4442-b478-3cdd050b3b17}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
