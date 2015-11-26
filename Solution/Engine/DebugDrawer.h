@@ -60,6 +60,8 @@ namespace Prism
 
 	};
 
+#pragma warning(disable: 4505)
+
 	static void RenderLine3D(const CU::Vector3<float>& aFirstPoint, const CU::Vector3<float> aSecondPoint
 		, eColorDebug aColor = eColorDebug::PINK, eColorDebug aSecondColor = eColorDebug::NOT_USED)
 	{
