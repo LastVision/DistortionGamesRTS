@@ -17,8 +17,8 @@ InGameState::InGameState()
 	myIsActiveState = false;
 	myCamera = new Prism::Camera(myCameraOrientation);
 
-	/*myCameraOrientation.SetPos(CU::Vector3<float>(10.f, 100.f, 0));
-	myCameraOrientation = CU::Matrix44<float>::CreateRotateAroundX(0.0174532925f * 70.f) * myCameraOrientation;*/
+	myCameraOrientation.SetPos(CU::Vector3<float>(10.f, 100.f, 0));
+	myCameraOrientation = CU::Matrix44<float>::CreateRotateAroundX(0.0174532925f * 60.f) * myCameraOrientation;
 
 	myCameraOrientation.SetPos(CU::Vector3<float>(30.f, 80.f, 0));
 }
@@ -61,7 +61,7 @@ const eStateStatus InGameState::Update(const float& aDeltaTime)
 		myLevel = nullptr;
 		return eStateStatus::ePopMainState;
 	}
-	if (myLevel->LogicUpdate(aDeltaTime) == true)
+	if (myLevel->LogicUpdate(aDeltaTime, *myCamera) == true)
 	{
 		return eStateStatus::eKeepState;
 	}
