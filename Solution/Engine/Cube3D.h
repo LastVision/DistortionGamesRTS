@@ -13,7 +13,7 @@ namespace Prism
 
 		void SetPosition(const CU::Vector3<float>& aPosition);
 		void SetSizeAndColor(float aSideLength, const CU::Vector4<float>& aColor);
-
+		void SetWireFrame(bool aWireFrame);
 		void Render(const Camera& aCamera);
 
 	private:
@@ -30,11 +30,17 @@ namespace Prism
 		void InitIndexBuffer();
 
 		CU::Matrix44<float> myOrientation;
+		bool myWireFrame;
 	};
 
 	inline void Cube3D::SetPosition(const CU::Vector3<float>& aPosition)
 	{
 		myOrientation.SetPos(aPosition);
+	}
+
+	inline void Cube3D::SetWireFrame(bool aWireFrame)
+	{
+		myWireFrame = aWireFrame;
 	}
 
 }
