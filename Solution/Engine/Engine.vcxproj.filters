@@ -144,6 +144,12 @@
     <ClCompile Include="Line3DRenderer.cpp">
       <Filter>DebugDrawer</Filter>
     </ClCompile>
+    <ClCompile Include="Cube3D.cpp">
+      <Filter>DebugDrawer</Filter>
+    </ClCompile>
+    <ClCompile Include="Cube3DRenderer.cpp">
+      <Filter>DebugDrawer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h" />
@@ -323,6 +329,12 @@
       <Filter>DebugDrawer</Filter>
     </ClInclude>
     <ClInclude Include="Line3DRenderer.h">
+      <Filter>DebugDrawer</Filter>
+    </ClInclude>
+    <ClInclude Include="Cube3D.h">
+      <Filter>DebugDrawer</Filter>
+    </ClInclude>
+    <ClInclude Include="Cube3DRenderer.h">
       <Filter>DebugDrawer</Filter>
     </ClInclude>
   </ItemGroup>
