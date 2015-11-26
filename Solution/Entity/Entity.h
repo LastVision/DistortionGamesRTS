@@ -40,6 +40,7 @@ public:
 	Prism::Scene& GetScene();
 	eEntityType GetType() const;
 	eEntityState GetState() const;
+	void SetState(eEntityState aState){ myState = aState; };
 	Prism::eOctreeType GetOctreeType() const;
 	bool GetAlive() const;
 	void Kill();

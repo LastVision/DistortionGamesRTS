@@ -1,23 +1,18 @@
 #include "stdafx.h"
 #include "ButtonWidget.h"
+#include <OnClickMessage.h>
 #include <Sprite.h>
+#include <PostMaster.h>
 #include <XMLReader.h>
 
 namespace GUI
 {
-	ButtonWidget::ButtonWidget()
-		: myImageNormal(nullptr)
-		, myImagePressed(nullptr)
-		, myImageHover(nullptr)
-		, myImageCurrent(nullptr)
-	{
-	}
-
 	ButtonWidget::ButtonWidget(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement)
 		: myImageNormal(nullptr)
 		, myImagePressed(nullptr)
 		, myImageHover(nullptr)
 		, myImageCurrent(nullptr)
+		, myClickEvent(nullptr)
 	{
 		std::string spritePathNormal = "";
 		std::string spritePathHover = "";
@@ -43,19 +38,19 @@ namespace GUI
 
 		if (clickEvent == "lose")
 		{
-		
+			myClickEvent = new OnClickMessage(eOnClickEvent::LOSE);
 		}
 		else if (clickEvent == "win")
 		{
-		
+			myClickEvent = new OnClickMessage(eOnClickEvent::WIN);
 		}
 		else if (clickEvent == "restart")
 		{
-
+			myClickEvent = new OnClickMessage(eOnClickEvent::RESTART);
 		}
 		else if (clickEvent == "quit")
 		{
-
+			myClickEvent = new OnClickMessage(eOnClickEvent::QUIT);
 		}
 
 		mySize = size;
@@ -73,10 +68,12 @@ namespace GUI
 		delete myImageNormal;
 		delete myImagePressed;
 		delete myImageHover;
+		delete myClickEvent;
 		myImageNormal = nullptr;
 		myImagePressed = nullptr;
 		myImageHover = nullptr;
 		myImageCurrent = nullptr;
+		myClickEvent = nullptr;
 	}
 
 	void ButtonWidget::Render(const CU::Vector2<float>& aParentPosition)
@@ -131,6 +128,9 @@ namespace GUI
 
 	void ButtonWidget::Click()
 	{
-
+		if (myClickEvent != nullptr)
+		{
+			PostMaster::GetInstance()->SendMessage(*myClickEvent);
+		}
 	}
 }

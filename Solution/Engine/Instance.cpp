@@ -41,12 +41,12 @@ void Prism::Instance::Update(float aDelta)
 			
 		}
 
-		myTotalTime += aDelta;
 		myHierarchy.Update(aDelta);
 		if (myAnimation != nullptr)
 		{
 			myAnimation->Update(myTotalTime, myBones);
 		}
+		myTotalTime += aDelta;
 	}
 }
 
@@ -130,6 +130,25 @@ void Prism::Instance::UpdateSpotLights(
 	{
 		myProxy.GetEffect()->UpdateSpotLights(someSpotLightData);
 	}
+}
+
+void Prism::Instance::SetAnimation(Animation* aAnimation)
+{
+	myAnimation = aAnimation;
+}
+
+bool Prism::Instance::IsAnimationDone()
+{
+	if (myAnimation == nullptr) return true;
+
+	if (myTotalTime > myAnimation->GetAnimationLenght()) return true;
+
+	return false;
+}
+
+void Prism::Instance::ResetAnimationTime(float aTime)
+{
+	myTotalTime = aTime;
 }
 
 Prism::ModelProxy& Prism::Instance::GetModel()

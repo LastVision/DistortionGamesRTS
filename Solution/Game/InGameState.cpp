@@ -7,6 +7,7 @@
 #include "InGameState.h"
 #include <InputWrapper.h>
 #include "Level.h"
+#include <OnClickMessage.h>
 #include <PostMaster.h>
 #include <TimerManager.h>
 #include <VTuneApi.h>
@@ -26,6 +27,7 @@ InGameState::InGameState()
 InGameState::~InGameState()
 {
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::GAME_STATE, this);
+	PostMaster::GetInstance()->UnSubscribe(eMessageType::ON_CLICK, this);
 	SAFE_DELETE(myCamera);
 }
 
@@ -40,7 +42,7 @@ void InGameState::InitState(StateStackProxy* aStateStackProxy)
 
 	OnResize(windowSize.x, windowSize.y);
 	PostMaster::GetInstance()->Subscribe(eMessageType::GAME_STATE, this);
-
+	PostMaster::GetInstance()->Subscribe(eMessageType::ON_CLICK, this);
 
 
 	myIsActiveState = true;
@@ -54,7 +56,7 @@ void InGameState::EndState()
 const eStateStatus InGameState::Update(const float& aDeltaTime)
 {
 	UpdateCamera(aDeltaTime);
-	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_ESCAPE))
+	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_ESCAPE) || myStateStatus == eStateStatus::ePopMainState)
 	{
 		myIsActiveState = false;
 		delete myLevel;
@@ -63,10 +65,10 @@ const eStateStatus InGameState::Update(const float& aDeltaTime)
 	}
 	if (myLevel->LogicUpdate(aDeltaTime, *myCamera) == true)
 	{
-		return eStateStatus::eKeepState;
+		return myStateStatus;
 	}
 
-	return eStateStatus::eKeepState;
+	return myStateStatus;
 }
 
 void InGameState::Render()
@@ -102,6 +104,18 @@ void InGameState::ReceiveMessage(const GameStateMessage& aMessage)
 
 	case eGameState::LOAD_NEXT_LEVEL:
 		
+		break;
+	}
+}
+
+void InGameState::ReceiveMessage(const OnClickMessage& aMessage)
+{
+	switch (aMessage.myEvent)
+	{
+	case eOnClickEvent::QUIT:
+		myStateStatus = eStateStatus::ePopMainState;
+		break;
+	default:
 		break;
 	}
 }

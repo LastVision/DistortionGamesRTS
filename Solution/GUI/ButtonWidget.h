@@ -19,7 +19,6 @@ namespace GUI
 	class ButtonWidget : public Widget
 	{
 	public:
-		ButtonWidget();
 		ButtonWidget(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement);
 		~ButtonWidget();
 
@@ -40,5 +39,7 @@ namespace GUI
 		Prism::Sprite* myImagePressed;
 		Prism::Sprite* myImageHover;
 		Prism::Sprite* myImageCurrent;
+
+		OnClickMessage* myClickEvent;
 	};
 }

@@ -54,7 +54,7 @@ template<typename Message>
 void PostMaster::SendMessage(const Message& aMessage)
 {
 	CU::GrowingArray<SubscriberInfo>& subscribers
-		= mySubscribers[static_cast<int>(aMessage.GetMessageType())];
+		= mySubscribers[static_cast<int>(aMessage.myMessageType)];
 
 	if (subscribers.Size() > 0)
 	{
@@ -68,7 +68,7 @@ void PostMaster::SendMessage(const Message& aMessage)
 			}
 		}
 	}
-	else if (aMessage.GetMessageType() != eMessageType::RESIZE)
+	else if (aMessage.myMessageType != eMessageType::RESIZE)
 	{
 		DL_ASSERT("Message sent without subscriber.");
 	}

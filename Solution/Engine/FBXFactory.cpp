@@ -3,6 +3,7 @@
 #include "Animation.h"
 #include "AnimationCurve.h"
 #include "AnimationNode.h"
+#include "AnimationSystem.h"
 #include "FBXFactory.h"
 #include "FBX/FbxLoader.h"
 #include "HierarchyBone.h"
@@ -361,7 +362,7 @@ void Prism::FBXFactory::FillAnimationData(FbxModelData* someData, ModelAnimated*
 	outData->myTransformation = nodeCurves;
 }
 
-void Prism::FBXFactory::FillBoneAnimationData(FbxModelData* someData, ModelAnimated* aOutData)
+Prism::Animation* Prism::FBXFactory::FillBoneAnimationData(FbxModelData* someData, ModelAnimated* aOutData)
 {
 	auto loadedAnimation = someData->myAnimation;
 	float animationLenght = 0.f;
@@ -404,7 +405,12 @@ void Prism::FBXFactory::FillBoneAnimationData(FbxModelData* someData, ModelAnima
 	animationLenght = someData->myAnimation->myBones[0].myAnimationTime;
 	newAnimation->SetAnimationLenght(animationLenght);
 
-	aOutData->myAnimation = newAnimation;
+	if (aOutData != nullptr)
+	{
+		aOutData->myAnimation = newAnimation;
+	}
+
+	return newAnimation;
 }
 
 void Prism::FBXFactory::BuildBoneHierarchy(Bone& aBone, AnimationData* aAnimationData, HierarchyBone& aOutBone)
@@ -607,6 +613,52 @@ Prism::ModelAnimated* Prism::FBXFactory::LoadModelAnimated(const char* aFilePath
 	}
 
 	return returnModel;
+}
+
+Prism::Animation* Prism::FBXFactory::LoadAnimation(const char* aFilePath)
+{
+	FBXData* found = 0;
+	for (FBXData* data : myFBXData)
+	{
+		if (data->myPath.compare(aFilePath) == 0)
+		{
+			found = data;
+			break;
+		}
+	}
+
+	FbxModelData* modelData = nullptr;
+
+	if (found)
+	{
+		modelData = found->myData;
+	}
+	else
+	{
+		FBXData* data = new FBXData();
+		FbxModelData* fbxModelData = myLoader->loadModel(aFilePath);
+		data->myData = fbxModelData;
+		data->myPath = aFilePath;
+		myFBXData.push_back(data);
+		modelData = data->myData;
+	}
+
+	if (modelData->myAnimation != nullptr && modelData->myAnimation->myRootBone != -1
+		&& modelData->myAnimation->myBones.size() > 0)
+	{
+		return FillBoneAnimationData(modelData, nullptr);
+	}
+	//else
+	//{
+	//	for (int i = 0; i < modelData->myChildren.Size(); ++i)
+	//	{
+	//		auto currentChild = modelData->myChildren[i];
+	//		return FillBoneAnimationData(modelData->myChildren[i], nullptr);
+	//	}
+	//}
+
+	DL_ASSERT("Failed to load animation, please tell Niklas or Daniel");
+	return nullptr;
 }
 
 void Prism::FBXFactory::LoadModelForRadiusCalc(const char* aFilePath

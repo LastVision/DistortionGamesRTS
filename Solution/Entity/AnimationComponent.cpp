@@ -1,6 +1,7 @@
 #include "stdafx.h"
 
 #include "AnimationComponent.h"
+#include "AnimationSystem.h"
 #include <Effect.h>
 #include "Entity.h"
 #include <Engine.h>
@@ -36,22 +37,41 @@ AnimationComponent::~AnimationComponent()
 	myInstance = nullptr;
 }
 
-void AnimationComponent::AddAnimation(eEntityState aState, const std::string& aAnimationPath)
+void AnimationComponent::AddAnimation(eEntityState aState, const std::string& aAnimationPath
+	, bool aLoopFlag, bool aResetTimeOnRestart)
 {
-	myAnimations[int(aState)] = aAnimationPath;
+	Prism::AnimationSystem::GetInstance()->GetAnimation(aAnimationPath.c_str());
+	AnimationData newData;
+	newData.myElapsedTime = 0.f;
+	newData.myFile = aAnimationPath;
+	newData.myShouldLoop = aLoopFlag;
+	newData.myResetTimeOnRestart = aResetTimeOnRestart;
+	myAnimations[int(aState)] = newData;
 }
 
 void AnimationComponent::Update(float aDeltaTime)
 {
+	AnimationData& data = myAnimations[int(myEntity.GetState())];
 	if (myPrevEntityState != myEntity.GetState())
 	{
-		/*Animation* newAnimation = AnimationSystem::GetInstance()->GetAnimation(myAnimations[int(myEntity.GetState())]);
-		myInstance->SetAnimation(newAnimation);
-		myInstance->ResetAnimationTime();*/
+		myInstance->SetAnimation(Prism::AnimationSystem::GetInstance()->GetAnimation(data.myFile.c_str()));
+
+		if (data.myResetTimeOnRestart == true)
+		{
+			myInstance->ResetAnimationTime(0.f);
+		}
+		else
+		{
+			myInstance->ResetAnimationTime(data.myElapsedTime);
+		}
 	}
 
-	myInstance->Update(aDeltaTime);
+	if (myInstance->IsAnimationDone() == false || data.myShouldLoop == true)
+	{
+		myInstance->Update(aDeltaTime);
+	}
 
+	data.myElapsedTime += aDeltaTime;
 	myPrevEntityState = myEntity.GetState();
 }
 

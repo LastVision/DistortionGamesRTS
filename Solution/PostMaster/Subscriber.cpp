@@ -22,3 +22,7 @@ void Subscriber::ReceiveMessage(const ResizeMessage&)
 void Subscriber::ReceiveMessage(const GameStateMessage&)
 {
 }
+
+void Subscriber::ReceiveMessage(const OnClickMessage&)
+{
+}
