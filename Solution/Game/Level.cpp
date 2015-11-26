@@ -71,8 +71,9 @@ bool Level::LogicUpdate(float aDeltaTime)
 	//CU::Vector3<float> lightDir(myLight->GetCurrentDir().x, myLight->GetCurrentDir().y, myLight->GetCurrentDir().z);
 	//myLight->SetDir(lightDir * CU::Matrix44<float>::CreateRotateAroundZ(-3.14f * aDeltaTime / 3.f));
 
-	Prism::DebugDrawer::GetInstance()->RenderLine3D({ 0.f, 0.f, 0.f }, { 100.f, 100.f, 100.f }, BLACK_DEBUG, BLUE_DEBUG);
-	Prism::DebugDrawer::GetInstance()->RenderBox({ 128.f, 129.f, 128.f }, 2.f, YELLOW_DEBUG, false);
+	Prism::DebugDrawer::GetInstance()->RenderLine3D({ 0.f, 0.f, 0.f }, { 100.f, 100.f, 100.f }, eColorDebug::BLACK
+		, eColorDebug::GREEN);
+	Prism::DebugDrawer::GetInstance()->RenderBox({ 128.f, 129.f, 128.f }, 2.f, eColorDebug::BLUE, false);
 
 	//myUnit->Update(aDeltaTime);
 	myDragon->Update(aDeltaTime);
@@ -85,7 +86,7 @@ bool Level::LogicUpdate(float aDeltaTime)
 
 void Level::Render()
 {
-	Prism::Engine::GetInstance()->SetClearColor({ 1.0f, 0.f, 0.f, 1.f });
+	Prism::Engine::GetInstance()->SetClearColor({ 0.2f, 0.2f, 0.2f, 1.f });
 
 	myScene->Render();
 }
