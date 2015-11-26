@@ -42,5 +42,8 @@
     <ClInclude Include="GameStateMessage.h">
       <Filter>Message\StateMessage</Filter>
     </ClInclude>
+    <ClInclude Include="OnClickMessage.h">
+      <Filter>Message</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
