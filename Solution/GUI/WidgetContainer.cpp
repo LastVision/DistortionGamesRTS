@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "WidgetContainer.h"
 #include <Sprite.h>
+#include <Engine.h>
 
 namespace GUI
 {
@@ -8,6 +9,10 @@ namespace GUI
 		: myBackground(nullptr)
 		, myWidgets(8)
 	{
+		CU::Vector2<float> windowSize = { float(Prism::Engine::GetInstance()->GetWindowSize().x), float(Prism::Engine::GetInstance()->GetWindowSize().y) };
+
+		myBackground = new Prism::Sprite("Data/Resource/Texture/UI/ui_test.dds", windowSize, { 0.f, 0.f });
+
 	}
 
 	WidgetContainer::~WidgetContainer()
@@ -33,6 +38,11 @@ namespace GUI
 
 	void WidgetContainer::Render(const CU::Vector2<float>& aParentPosition)
 	{
+		if (myBackground != nullptr)
+		{
+			myBackground->Render(myPosition);
+		}
+
 		for (int i = 0; i < myWidgets.Size(); i++)
 		{
 			myWidgets[i]->Render(myPosition - aParentPosition);

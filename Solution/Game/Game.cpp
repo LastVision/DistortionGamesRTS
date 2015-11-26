@@ -111,7 +111,6 @@ bool Game::Update()
 	}
 
 	myGUIManager->Update();
-	myGUIManager->Render();
 
 	if (myStateStack.UpdateCurrentState(deltaTime) == false)
 	{
@@ -119,6 +118,7 @@ bool Game::Update()
 	}
 
 	myStateStack.RenderCurrentState();
+	myGUIManager->Render();
 
 	CU::TimerManager::GetInstance()->CapFrameRate(100.f);
 	myCursor->Update();

@@ -17,14 +17,25 @@ namespace GUI
 	{
 		myWidgets = new WidgetContainer;
 
+		CU::Vector2<float> buttonSize(100.f, 100.f);
+
 		ButtonWidget* widget = new ButtonWidget;
-		widget->myImageHover = new Prism::Sprite("Data/Resource/Texture/Menu/T_button_start_hover.dds", { 100.f, 100.f }, { 50.f, 50.f });
-		widget->myImageNormal = new Prism::Sprite("Data/Resource/Texture/Menu/T_button_start.dds", { 100.f, 100.f }, { 50.f, 50.f });
-		widget->myImagePressed = new Prism::Sprite("Data/Resource/Texture/Menu/T_button_start_pressed.dds", { 100.f, 100.f }, { 50.f, 50.f });
+		widget->myImageHover = new Prism::Sprite("Data/Resource/Texture/Menu/T_button_start_hover.dds", buttonSize, buttonSize / 2.f);
+		widget->myImageNormal = new Prism::Sprite("Data/Resource/Texture/Menu/T_button_start.dds", buttonSize, buttonSize / 2.f);
+		widget->myImagePressed = new Prism::Sprite("Data/Resource/Texture/Menu/T_button_start_pressed.dds", buttonSize, buttonSize / 2.f);
 		widget->myImageCurrent = widget->myImageNormal;
-		widget->SetPosition({ 100.f, 100.f});
-		widget->SetSize({ 100.f, 100.f });
+		widget->SetPosition({ 0.f, 0.f});
+		widget->SetSize(buttonSize);
 		myWidgets->AddWidget(widget);
+
+		ButtonWidget* widget2 = new ButtonWidget;
+		widget2->myImageHover = new Prism::Sprite("Data/Resource/Texture/Menu/T_button_start_hover.dds", buttonSize, buttonSize / 2.f);
+		widget2->myImageNormal = new Prism::Sprite("Data/Resource/Texture/Menu/T_button_start.dds", buttonSize, buttonSize / 2.f);
+		widget2->myImagePressed = new Prism::Sprite("Data/Resource/Texture/Menu/T_button_start_pressed.dds", buttonSize, buttonSize / 2.f);
+		widget2->myImageCurrent = widget2->myImageNormal;
+		widget2->SetPosition({ 200.f, 200.f });
+		widget2->SetSize(buttonSize);
+		myWidgets->AddWidget(widget2);
 
 		SetPosition({ 0.f, 0.f });
 		SetSize({ float(Prism::Engine::GetInstance()->GetWindowSize().x), float(Prism::Engine::GetInstance()->GetWindowSize().y) });
