@@ -20,7 +20,7 @@ Level::Level(const Prism::Camera& aCamera)
 
 	myScene = new Prism::Scene(aCamera, *myTerrain);
 	myUnits.Init(20);
-	for (int i = 1; i < 26; ++i)
+	/*for (int i = 1; i < 26; ++i)
 	{
 		Entity* unit = new Entity(eEntityType::PLAYER, *myScene, Prism::eOctreeType::DYNAMIC, "Dragon", { 60.f + i * 5, 40, 200 });
 
@@ -37,7 +37,7 @@ Level::Level(const Prism::Camera& aCamera)
 
 		myScene->AddInstance(unit->GetComponent<AnimationComponent>()->GetInstance());
 		myUnits.Add(unit);
-	}
+	}*/
 
 	myLight = new Prism::DirectionalLight();
 	myLight->SetColor({ 0.5f, 0.5f, 0.9f, 1.f });
