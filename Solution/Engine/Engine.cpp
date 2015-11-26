@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+#include "AnimationSystem.h"
 #include "DirectX.h"
 #include "EffectContainer.h"
 #include "Engine.h"
@@ -51,6 +52,7 @@ namespace Prism
 		TextureContainer::Destroy();
 		EffectContainer::Destroy();
 		FileWatcher::Destroy();
+		AnimationSystem::Destroy();
 
 		ModelLoader::GetInstance()->ClearLoadJobs();
 		ModelLoader::GetInstance()->WaitUntilFinished();

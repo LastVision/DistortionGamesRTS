@@ -37,6 +37,8 @@ namespace Prism
 		void UpdatePointLights(const CU::StaticArray<PointLightData, NUMBER_OF_POINT_LIGHTS>& somePointLightData);
 		void UpdateSpotLights(const CU::StaticArray<SpotLightData, NUMBER_OF_SPOT_LIGHTS>& someSpotLightData);
 		
+		void SetAnimation(Animation* aAnimation);
+
 		float GetObjectCullingRadius() const;
 		eOctreeType GetOctreeType() const;
 

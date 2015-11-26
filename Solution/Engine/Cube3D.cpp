@@ -25,7 +25,7 @@ namespace Prism
 
 
 		CU::GrowingArray<int> indices;
-		indices.Init(10, 10);
+		indices.Init(32);
 
 		indices.Add(3);
 		indices.Add(1);

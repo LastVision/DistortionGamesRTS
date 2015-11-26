@@ -15,6 +15,7 @@ namespace Prism
 
 	const CU::Matrix44<float> TransformationNode::GetTransformationForTime(float aTime)
 	{
+		aTime;
 		return myOrientation;
 	}
 

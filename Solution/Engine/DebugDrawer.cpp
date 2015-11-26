@@ -51,11 +51,11 @@ namespace Prism
 	//	DL_ASSERT("Not Implemented.");
 	//}
 
-	void DebugDrawer::RenderArrow3D(const CU::Vector3<float>& aFirstPoint, const CU::Vector3<float>& aSecondPoint
-		, eColorDebug aColor)
-	{
-		DL_ASSERT("Not Implemented.");
-	}
+	//void DebugDrawer::RenderArrow3D(const CU::Vector3<float>& aFirstPoint, const CU::Vector3<float>& aSecondPoint
+	//	, eColorDebug aColor)
+	//{
+	//	DL_ASSERT("Not Implemented.");
+	//}
 
 	void DebugDrawer::RenderBox(const CU::Vector3<float>& aPosition, float aSize, eColorDebug aColor
 		, bool aWireFrame)
@@ -63,11 +63,11 @@ namespace Prism
 		myCube3DRenderer->AddCube(aPosition, aSize, GetColor(aColor), aWireFrame);
 	}
 
-	void DebugDrawer::RenderSphere(const CU::Vector3<float>& aPosition, float aSize, eColorDebug aColor
-		, bool aWireFrame)
-	{
-		DL_ASSERT("Not Implemented.");
-	}
+	//void DebugDrawer::RenderSphere(const CU::Vector3<float>& aPosition, float aSize, eColorDebug aColor
+	//	, bool aWireFrame)
+	//{
+	//	DL_ASSERT("Not Implemented.");
+	//}
 
 	//void DebugDrawer::RenderText2D(const std::string& aText, const CU::Vector2<float>& aPosition
 	//	, const CU::Vector4<float>& aColor)
@@ -75,11 +75,11 @@ namespace Prism
 	//	DL_ASSERT("Not Implemented.");
 	//}
 
-	void DebugDrawer::RenderText3D(const std::string& aText, const CU::Vector3<float>& aPosition
-		, eColorDebug aColor)
-	{
-		DL_ASSERT("Not Implemented.");
-	}
+	//void DebugDrawer::RenderText3D(const std::string& aText, const CU::Vector3<float>& aPosition
+	//	, eColorDebug aColor)
+	//{
+	//	DL_ASSERT("Not Implemented.");
+	//}
 
 	void DebugDrawer::Render(const Camera& aCamera)
 	{

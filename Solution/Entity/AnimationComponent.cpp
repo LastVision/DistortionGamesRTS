@@ -1,6 +1,7 @@
 #include "stdafx.h"
 
 #include "AnimationComponent.h"
+#include "AnimationSystem.h"
 #include <Effect.h>
 #include "Entity.h"
 #include <Engine.h>
@@ -38,6 +39,7 @@ AnimationComponent::~AnimationComponent()
 
 void AnimationComponent::AddAnimation(eEntityState aState, const std::string& aAnimationPath)
 {
+	Prism::AnimationSystem::GetInstance()->GetAnimation(aAnimationPath.c_str());
 	myAnimations[int(aState)] = aAnimationPath;
 }
 
@@ -45,9 +47,7 @@ void AnimationComponent::Update(float aDeltaTime)
 {
 	if (myPrevEntityState != myEntity.GetState())
 	{
-		/*Animation* newAnimation = AnimationSystem::GetInstance()->GetAnimation(myAnimations[int(myEntity.GetState())]);
-		myInstance->SetAnimation(newAnimation);
-		myInstance->ResetAnimationTime();*/
+		myInstance->SetAnimation(Prism::AnimationSystem::GetInstance()->GetAnimation(myAnimations[int(myEntity.GetState())].c_str()));
 	}
 
 	myInstance->Update(aDeltaTime);

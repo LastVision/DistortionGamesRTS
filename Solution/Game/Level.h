@@ -27,8 +27,5 @@ private:
 	Prism::Scene* myScene;
 
 	CU::GrowingArray<Entity*> myUnits;
-	Entity* myUnit;
-	Entity* myStaticUnit;
-	Entity* myDragon;
 };
 

@@ -132,6 +132,11 @@ void Prism::Instance::UpdateSpotLights(
 	}
 }
 
+void Prism::Instance::SetAnimation(Animation* aAnimation)
+{
+	myAnimation = aAnimation;
+}
+
 Prism::ModelProxy& Prism::Instance::GetModel()
 {
 	return myProxy;
