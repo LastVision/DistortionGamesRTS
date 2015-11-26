@@ -185,10 +185,10 @@ namespace Prism
 		memcpy(myIndexBaseData->myIndexData, &indices[0], indices.Size() * sizeof(unsigned int));
 
 		myPrimitiveTopology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
-		ModelLoader::GetInstance()->Pause();
+
 		InitVertexBuffer();
 		InitIndexBuffer();
-		ModelLoader::GetInstance()->UnPause();
+
 	}
 
 

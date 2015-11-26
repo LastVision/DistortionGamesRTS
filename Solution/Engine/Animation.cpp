@@ -19,6 +19,7 @@ namespace Prism
 
 	Animation::~Animation()
 	{
+		myAnimationData.DeleteAll();
 	}
 
 	void Animation::Update(float aCurrentTime, CU::StaticArray<CU::Matrix44<float>, MAX_NR_OF_BONES>& aApplyArray)

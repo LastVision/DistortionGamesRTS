@@ -9,10 +9,12 @@ namespace Prism
 		: myInactiveCubes(MAXNROFCUBES)
 		, myActiveCubes(MAXNROFCUBES)
 	{
+		ModelLoader::GetInstance()->Pause();
 		for (int i = 0; i < MAXNROFCUBES; ++i)
 		{
 			myInactiveCubes.Add(new Cube3D(WHITE_DEBUG));
 		}
+		ModelLoader::GetInstance()->UnPause();
 	}
 
 

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+#include "Animation.h"
 #include <CommonHelper.h>
 #include <d3dx11effect.h>
 #include "Effect.h"
@@ -32,6 +33,7 @@ Prism::ModelAnimated::~ModelAnimated()
 	myChildren.DeleteAll();
 	myChildTransforms.DeleteAll();
 	myVertexFormat.DeleteAll();
+	delete myAnimation;
 	delete myVertexBaseData;
 	delete myIndexBaseData;
 }

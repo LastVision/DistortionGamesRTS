@@ -1,6 +1,8 @@
 #pragma once
 #include "Component.h"
 #include <Matrix.h>
+#include <string>
+#include <StaticArray.h>
 
 namespace Prism
 {
@@ -16,6 +18,8 @@ public:
 	AnimationComponent(Entity& aEntity, const char* aModelPath, const char* aEffectPath);
 	~AnimationComponent();
 
+	void AddAnimation(eEntityState aState, const std::string& aAnimationPath);
+
 	void Update(float aDeltaTime);
 	Prism::Instance* GetInstance();
 	static eComponentType GetTypeStatic();
@@ -26,6 +30,8 @@ public:
 private:
 	Prism::Instance* myInstance;
 	float myCullingRadius;
+	CU::StaticArray<std::string, int(eEntityState::_COUNT)> myAnimations;
+	eEntityState myPrevEntityState;
 };
 
 inline Prism::Instance* AnimationComponent::GetInstance()

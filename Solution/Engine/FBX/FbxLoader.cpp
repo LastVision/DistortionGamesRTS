@@ -1066,7 +1066,7 @@ CU::Matrix44<float> CreateMatrix(FbxAMatrix& aOriention)
 	{
 		for (int x = 0; x < 4; ++x)
 		{
-			returnMatrix.myMatrix[y * 4 + x] = (float)aOriention.Get(x, y);
+			returnMatrix.myMatrix[y * 4 + x] = (float)aOriention.Get(y, x);
 		}
 	}
 	return returnMatrix;
@@ -1272,8 +1272,8 @@ void LoadAnimation(AnimationData& aAnimation, FbxNode* aNode, FbxAMatrix& aParen
 			}
 			FbxAMatrix animationMatrix;
 
-			FbxSkeleton* sekeleton = aNode->GetSkeleton();
-			if (sekeleton->IsSkeletonRoot())
+			FbxSkeleton* skeleton = aNode->GetSkeleton();
+			if (skeleton->IsSkeletonRoot())
 			{
 				aAnimation.myBindMatrix = CU::Matrix44<float>();
 				aAnimation.myRootBone = aAnimation.myBones.size();
