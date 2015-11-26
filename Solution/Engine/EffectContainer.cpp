@@ -110,8 +110,10 @@ namespace Prism
 			|| aFilePath == "Data/Resource/Shader/S_effect_debug.fx"
 			|| aFilePath == "Data/Resource/Shader/S_effect_terrain.fx"
 			|| aFilePath == "Data/Resource/Shader/S_effect_no_texture.fx"
-			|| aFilePath == "Data/Resource/Shader/S_effect_no_texture_animated.fx",
-			CU::Concatenate("Found invalid Shader: %s", aFilePath.c_str()));
+			|| aFilePath == "Data/Resource/Shader/S_effect_no_texture_animated.fx"
+			|| aFilePath == "Data/Resource/Shader/S_effect_no_texture.fx"
+			|| aFilePath == "Data/Resource/Shader/S_effect_line3d.fx"
+			, CU::Concatenate("Found invalid Shader: %s", aFilePath.c_str()));
 	}
 
 	void EffectContainer::Update(const float aDeltaTime)

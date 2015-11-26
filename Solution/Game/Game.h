@@ -42,7 +42,6 @@ private:
 	GUI::GUIManager* myGUIManager;
 	GUI::Cursor* myCursor;
 
-	CU::InputWrapper* myInputWrapper;
 	HWND* myWindowHandler;
 
 	StateStack myStateStack;

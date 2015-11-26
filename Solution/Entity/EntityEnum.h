@@ -21,7 +21,5 @@ enum class eComponentType
 	NOT_USED = -1,
 	GRAPHICS = 0,
 	ANIMATION,
-	TRANSLATION,
-
 	_COUNT,
 };

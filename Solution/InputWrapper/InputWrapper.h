@@ -11,10 +11,12 @@ namespace CU
 	class InputWrapper
 	{
 	public:
-		InputWrapper();
-		~InputWrapper();
 
-		void Init(HWND aHwnd, HINSTANCE aHInstance, DWORD aKeyCoopFlags, DWORD aMouseCoopFlags);
+
+		static void Create(HWND aHwnd, HINSTANCE aHInstance, DWORD aKeyCoopFlags, DWORD aMouseCoopFlags);
+		static void Destroy();
+		static InputWrapper* GetInstance();
+
 
 		float GetMouseDX() const;
 		float GetMouseDY() const;
@@ -35,7 +37,13 @@ namespace CU
 		void ResumeDeltaRecording();
 
 	private:
+		InputWrapper();
+		~InputWrapper();
+		void Init(HWND aHwnd, HINSTANCE aHInstance, DWORD aKeyCoopFlags, DWORD aMouseCoopFlags);
 		void CapturePreviousState();
+
+		static InputWrapper* myInstance;
+
 
 		LPDIRECTINPUT8 myDirectInput;
 		LPDIRECTINPUTDEVICE8 myKeyboardDevice;

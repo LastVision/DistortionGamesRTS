@@ -35,11 +35,10 @@ Game::Game()
 {
 	PostMaster::Create();
 	Prism::Audio::AudioInterface::CreateInstance();
-	myInputWrapper = new CU::InputWrapper();
 	Prism::Engine::GetInstance()->SetShowDebugText(myShowSystemInfo);
 
-	myCursor = new GUI::Cursor(myInputWrapper, Prism::Engine::GetInstance()->GetWindowSize());
-	myGUIManager = new GUI::GUIManager(myInputWrapper, myCursor);
+	myCursor = new GUI::Cursor(Prism::Engine::GetInstance()->GetWindowSize());
+	myGUIManager = new GUI::GUIManager(myCursor);
 
 	SetCursorPos(Prism::Engine::GetInstance()->GetWindowSize().x / 2, Prism::Engine::GetInstance()->GetWindowSize().y / 2);
 }
@@ -47,16 +46,16 @@ Game::Game()
 Game::~Game()
 {
 	SAFE_DELETE(myGUIManager);
-	SAFE_DELETE(myInputWrapper);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::GAME_STATE, this);
 	SAFE_DELETE(myCursor);
 	Prism::Audio::AudioInterface::GetInstance()->PostEvent("Stop_MenuMusic", 0);
 	Prism::Audio::AudioInterface::Destroy();
 	Prism::StreakDataContainer::Destroy();
 	Prism::ParticleDataContainer::Destroy();
+	CU::InputWrapper::Destroy();
 	PostMaster::Destroy();
 	myStateStack.Clear();
-	//Prism::DebugDrawer::Destroy();
+	Prism::DebugDrawer::Destroy();
 }
 
 bool Game::Init(HWND& aHwnd)
@@ -67,8 +66,9 @@ bool Game::Init(HWND& aHwnd)
 	PostMaster::GetInstance()->Subscribe(eMessageType::GAME_STATE, this);
 
 	Prism::Engine::GetInstance()->SetClearColor({ MAGENTA });
-	myInputWrapper->Init(aHwnd, GetModuleHandle(NULL), DISCL_NONEXCLUSIVE 
+	CU::InputWrapper::Create(aHwnd, GetModuleHandle(NULL), DISCL_NONEXCLUSIVE 
 		| DISCL_FOREGROUND, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND);
+
 	myWindowSize.x = Prism::Engine::GetInstance()->GetWindowSize().x;
 	myWindowSize.y = Prism::Engine::GetInstance()->GetWindowSize().y;
 
@@ -85,7 +85,7 @@ bool Game::Destroy()
 
 bool Game::Update()
 {
-	myInputWrapper->Update();
+	CU::InputWrapper::GetInstance()->Update();
 	CU::TimerManager::GetInstance()->Update();
 	float deltaTime = CU::TimerManager::GetInstance()->GetMasterTimer().GetTime().GetFrameTime();
 	//float realDeltaTime = deltaTime;
@@ -152,7 +152,7 @@ void Game::ReceiveMessage(const GameStateMessage& aMessage)
 	switch (aMessage.GetGameState())
 	{
 	case eGameState::LOAD_GAME:
-		myGame = new InGameState(myInputWrapper);
+		myGame = new InGameState();
 		myStateStack.PushMainGameState(myGame);
 		myGame->SetLevel();
 		break;

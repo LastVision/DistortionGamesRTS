@@ -9,9 +9,8 @@
 
 namespace GUI
 {
-	GUIManager::GUIManager(CU::InputWrapper* anInputWrapper, Cursor* aCursor)
+	GUIManager::GUIManager(Cursor* aCursor)
 		: myActiveWidget(nullptr)
-		, myInputWrapper(anInputWrapper)
 		, myCursor(aCursor)
 		, myMousePosition({ 0.f, 0.f })
 	{
@@ -87,7 +86,7 @@ namespace GUI
 	{
 		if (myActiveWidget != nullptr)
 		{
-			if (myInputWrapper->MouseIsPressed(0) == true)
+			if (CU::InputWrapper::GetInstance()->MouseIsPressed(0) == true)
 			{
 				myActiveWidget->OnMousePressed(myMousePosition);
 			}
@@ -98,7 +97,7 @@ namespace GUI
 	{
 		if (myActiveWidget != nullptr)
 		{
-			if (myInputWrapper->MouseDown(0) == true)
+			if (CU::InputWrapper::GetInstance()->MouseDown(0) == true)
 			{
 				myActiveWidget->OnMouseDown(myMousePosition);
 			}
@@ -109,7 +108,7 @@ namespace GUI
 	{
 		if (myActiveWidget != nullptr)
 		{
-			if (myInputWrapper->MouseUp(0) == true)
+			if (CU::InputWrapper::GetInstance()->MouseUp(0) == true)
 			{
 				myActiveWidget->OnMouseUp();
 				myActiveWidget->OnMouseEnter(); // hover button again after pressing it

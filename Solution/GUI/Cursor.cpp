@@ -5,9 +5,8 @@
 
 namespace GUI
 {
-	Cursor::Cursor(CU::InputWrapper* anInputWrapper, const CU::Vector2<int>& aWindowSize)
-		: myInputWrapper(anInputWrapper)
-		, mySprite(nullptr)
+	Cursor::Cursor(const CU::Vector2<int>& aWindowSize)
+		: mySprite(nullptr)
 	{
 		myWindowSize.x = float(aWindowSize.x);
 		myWindowSize.y = float(aWindowSize.y);
@@ -28,8 +27,8 @@ namespace GUI
 		//myPosition.x += myInputWrapper->GetMouseDX();
 		//myPosition.y -= myInputWrapper->GetMouseDY();
 
-		myPosition.x = myInputWrapper->GetMousePosition().x;
-		myPosition.y = myWindowSize.y - myInputWrapper->GetMousePosition().y;
+		myPosition.x = CU::InputWrapper::GetInstance()->GetMousePosition().x;
+		myPosition.y = myWindowSize.y - CU::InputWrapper::GetInstance()->GetMousePosition().y;
 	}
 
 	void Cursor::Render()
