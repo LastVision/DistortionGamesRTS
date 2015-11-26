@@ -150,6 +150,9 @@
     <ClCompile Include="Cube3DRenderer.cpp">
       <Filter>DebugDrawer</Filter>
     </ClCompile>
+    <ClCompile Include="AnimationSystem.cpp">
+      <Filter>Rendering\Animation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h" />
@@ -336,6 +339,9 @@
     </ClInclude>
     <ClInclude Include="Cube3DRenderer.h">
       <Filter>DebugDrawer</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationSystem.h">
+      <Filter>Rendering\Animation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
