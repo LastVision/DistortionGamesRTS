@@ -1,6 +1,6 @@
 #pragma once
 
-namespace Easy3D
+namespace Prism
 {
 	class AnimationNode;
 

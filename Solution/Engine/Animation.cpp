@@ -4,7 +4,7 @@
 #include "AnimationNode.h"
 #include "HierarchyBone.h"
 
-namespace Easy3D
+namespace Prism
 {
 	Animation::Animation()
 		: myAnimationData(4)

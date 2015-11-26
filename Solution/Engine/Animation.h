@@ -4,7 +4,7 @@
 #include "HierarchyBone.h"
 #include <StaticArray.h>
 
-namespace Easy3D
+namespace Prism
 {	
 	class AnimationNode;
 

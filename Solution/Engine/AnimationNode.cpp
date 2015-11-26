@@ -2,7 +2,7 @@
 #include "AnimationNode.h"
 
 
-namespace Easy3D
+namespace Prism
 {
 	AnimationNode::AnimationNode(int aNumOfFrames)
 		: myValues(max(1,aNumOfFrames))

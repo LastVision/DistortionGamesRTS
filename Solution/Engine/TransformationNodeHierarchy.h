@@ -2,7 +2,7 @@
 #include <GrowingArray.h>
 #include "TransformationNode.h"
 
-namespace Easy3D
+namespace Prism
 {
 	class TransformationNodeHierarchy : public TransformationNode
 	{

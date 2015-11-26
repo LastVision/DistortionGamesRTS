@@ -3,7 +3,7 @@
 #include <Vector.h>
 
 
-namespace Easy3D
+namespace Prism
 {
 	struct KeyFrame
 	{

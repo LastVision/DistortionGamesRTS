@@ -1,10 +1,12 @@
 #include "stdafx.h"
 
+#include "Animation.h"
 #include "Camera.h"
 #include "Effect.h"
 #include "EffectContainer.h"
 #include "Instance.h"
 #include "Model.h"
+#include "ModelAnimated.h"
 #include "ModelProxy.h"
 
 
@@ -15,12 +17,32 @@ Prism::Instance::Instance(ModelProxy& aModel, const CU::Matrix44<float>& anOrien
 	, myOrientation(anOrientation)
 	, myScale({1,1,1})
 	, myObjectCullingRadius(aObjectCullingRadius)
+	, myHierarchyIsBuilt(false)
 {
 }
 
 Prism::Instance::~Instance()
 {
 	delete &myProxy;
+}
+
+void Prism::Instance::Update(float aDelta)
+{
+	if (myProxy.IsLoaded() == true)
+	{
+		if (myHierarchyIsBuilt == false)
+		{
+			//BuildHierarchy(myHierarchy, myProxy.myModel);
+			myHierarchyIsBuilt = true;
+		}
+
+		myTotalTime += aDelta;
+		myHierarchy.Update(aDelta);
+		if (myAnimation != nullptr)
+		{
+			myAnimation->Update(myTotalTime, myBones);
+		}
+	}
 }
 
 void Prism::Instance::Render(const Camera& aCamera)
@@ -100,4 +122,18 @@ void Prism::Instance::UpdateSpotLights(
 Prism::ModelProxy& Prism::Instance::GetModel()
 {
 	return myProxy;
+}
+
+void Prism::Instance::BuildHierarchy(TransformationNodeInstance& aHierarchy, ModelAnimated* aModel)
+{
+	aHierarchy.SetTransformationNode(aModel->myTransformation);
+
+	for (int i = 0; i < aModel->myChildTransforms.Size(); ++i)
+	{
+		TransformationNodeInstance* newNode = new TransformationNodeInstance();
+		newNode->SetTransformationNode(aModel->myChildTransforms[i]);
+		aHierarchy.AddChildNode(newNode);
+
+		BuildHierarchy(*newNode, aModel->myChildren[i]);
+	}
 }

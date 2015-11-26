@@ -3,7 +3,7 @@
 #include "AnimationCurve.h"
 #include "TransformationNodeCurves.h"
 
-namespace Easy3D
+namespace Prism
 {
 	TransformationNodeCurves::TransformationNodeCurves()
 	{

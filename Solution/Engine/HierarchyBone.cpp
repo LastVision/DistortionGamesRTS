@@ -4,7 +4,7 @@
 #include "HierarchyBone.h"
 
 
-namespace Easy3D
+namespace Prism
 {
 	HierarchyBone::HierarchyBone()
 		: myCurrentAnimation(nullptr)

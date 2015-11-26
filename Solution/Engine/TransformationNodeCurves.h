@@ -3,7 +3,7 @@
 #include <Vector.h>
 #include "TransformationNode.h"
 
-namespace Easy3D
+namespace Prism
 {
 	struct CurveAnimationFrame
 	{

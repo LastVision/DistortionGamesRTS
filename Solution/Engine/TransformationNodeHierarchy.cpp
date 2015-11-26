@@ -2,7 +2,7 @@
 #include "TransformationNodeHierarchy.h"
 
 
-namespace Easy3D
+namespace Prism
 {
 	TransformationNodeHierarchy::TransformationNodeHierarchy()
 		: myNodes(4)
