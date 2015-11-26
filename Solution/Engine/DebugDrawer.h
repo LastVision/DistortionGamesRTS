@@ -17,6 +17,7 @@ namespace Prism
 	class Camera;
 	class Line3DRenderer;
 	class Cube3DRenderer;
+
 	class DebugDrawer
 	{
 	public:

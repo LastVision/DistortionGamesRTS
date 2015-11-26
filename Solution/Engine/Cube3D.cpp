@@ -15,114 +15,7 @@ namespace Prism
 	Cube3D::Cube3D(const CU::Vector4<float>& aColor)
 	{
 		myEffect = EffectContainer::GetInstance()->GetEffect("Data/Resource/Shader/S_effect_cube3d.fx");
-		VertexPosNormColor temp;
-
-		CU::GrowingArray<VertexPosNormColor> vertices;
-		vertices.Init(16);
-
-		temp.myPosition = { -1.0f, 1.0f, -1.0f, 1.f };
-		temp.myNormal = { 0.0f, 1.0f, 0.0f, 0.f };
-		temp.myColor = aColor;
-		vertices.Add(temp);
-
-		temp.myPosition = { 1.0f, 1.0f, -1.0f, 1.f };
-		temp.myNormal = { 0.0f, 1.0f, 0.0f, 0.f };
-		vertices.Add(temp);
-
-		temp.myPosition = { 1.0f, 1.0f, 1.0f, 1.f };
-		temp.myNormal = { 0.0f, 1.0f, 0.0f, 0.f };
-		vertices.Add(temp);
-
-		temp.myPosition = { -1.0f, 1.0f, 1.0f, 1.f };
-		temp.myNormal = { 0.0f, 1.0f, 0.0f, 0.f };
-		vertices.Add(temp);
-
-		temp.myPosition = { -1.0f, -1.0f, -1.0f, 1.f };
-		temp.myNormal = { 0.0f, -1.0f, 0.0f, 0.f };
-		vertices.Add(temp);
-
-		temp.myPosition = { 1.0f, -1.0f, -1.0f, 1.f };
-		temp.myNormal = { 0.0f, -1.0f, 0.0f, 0.f };
-		vertices.Add(temp);
-
-		temp.myPosition = { 1.0f, -1.0f, 1.0f, 1.f };
-		temp.myNormal = { 0.0f, -1.0f, 0.0f, 0.f };
-		vertices.Add(temp);
-
-		temp.myPosition = { -1.0f, -1.0f, 1.0f, 1.f };
-		temp.myNormal = { 0.0f, -1.0f, 0.0f, 0.f };
-		vertices.Add(temp);
-
-		temp.myPosition = { -1.0f, -1.0f, 1.0f, 1.f };
-		temp.myNormal = { -1.0f, 0.0f, 0.0f, 0.f };
-		vertices.Add(temp);
-
-		temp.myPosition = { -1.0f, -1.0f, -1.0f, 1.f };
-		temp.myNormal = { -1.0f, 0.0f, 0.0f, 0.f };
-		vertices.Add(temp);
-
-		temp.myPosition = { -1.0f, 1.0f, -1.0f, 1.f };
-		temp.myNormal = { -1.0f, 0.0f, 0.0f, 0.f };
-		vertices.Add(temp);
-
-		temp.myPosition = { -1.0f, 1.0f, 1.0f, 1.f };
-		temp.myNormal = { -1.0f, 0.0f, 0.0f, 0.f };
-		vertices.Add(temp);
-
-		temp.myPosition = { 1.0f, -1.0f, 1.0f, 1.f };
-		temp.myNormal = { 1.0f, 0.0f, 0.0f, 0.f };
-		vertices.Add(temp);
-
-		temp.myPosition = { 1.0f, -1.0f, -1.0f, 1.f };
-		temp.myNormal = { 1.0f, 0.0f, 0.0f, 0.f };
-		vertices.Add(temp);
-
-		temp.myPosition = { 1.0f, 1.0f, -1.0f, 1.f };
-		temp.myNormal = { 1.0f, 0.0f, 0.0f, 0.f };
-		vertices.Add(temp);
-
-		temp.myPosition = { 1.0f, 1.0f, 1.0f, 1.f };
-		temp.myNormal = { 1.0f, 0.0f, 0.0f, 0.f };
-		vertices.Add(temp);
-
-		temp.myPosition = { -1.0f, -1.0f, -1.0f, 1.f };
-		temp.myNormal = { 0.0f, 0.0f, -1.0f, 0.f };
-		vertices.Add(temp);
-
-		temp.myPosition = { 1.0f, -1.0f, -1.0f, 1.f };
-		temp.myNormal = { 0.0f, 0.0f, -1.0f, 0.f };
-		vertices.Add(temp);
-
-		temp.myPosition = { 1.0f, 1.0f, -1.0f, 1.f };
-		temp.myNormal = { 0.0f, 0.0f, -1.0f, 0.f };
-		vertices.Add(temp);
-
-		temp.myPosition = { -1.0f, 1.0f, -1.0f, 1.f };
-		temp.myNormal = { 0.0f, 0.0f, -1.0f, 0.f };
-		vertices.Add(temp);
-
-		temp.myPosition = { -1.0f, -1.0f, 1.0f, 1.f };
-		temp.myNormal = { 0.0f, 0.0f, 1.0f, 0.f };
-		vertices.Add(temp);
-
-		temp.myPosition = { 1.0f, -1.0f, 1.0f, 1.f };
-		temp.myNormal = { 0.0f, 0.0f, 1.0f, 0.f };
-		vertices.Add(temp);
-
-		temp.myPosition = { 1.0f, 1.0f, 1.0f, 1.f };
-		temp.myNormal = { 0.0f, 0.0f, 1.0f, 0.f };
-		vertices.Add(temp);
-
-		temp.myPosition = { -1.0f, 1.0f, 1.0f, 1.f };
-		temp.myNormal = { 0.0f, 0.0f, 1.0f, 0.f };
-		vertices.Add(temp);
-		myVertexBaseData = new VertexDataWrapper();
-		myVertexBaseData->myNumberOfVertices = vertices.Size();
-		myVertexBaseData->myStride = sizeof(VertexPosNormColor);
-		myVertexBaseData->mySize = myVertexBaseData->myNumberOfVertices * myVertexBaseData->myStride;
-		myVertexBaseData->myType = VertexType::POS_NORM_COLOR;
-		myVertexBaseData->myVertexData = new char[myVertexBaseData->mySize]();
-		memcpy(myVertexBaseData->myVertexData, &vertices[0], myVertexBaseData->mySize);
+		CreateVertexBuffer(1.f, aColor);
 
 		myIndexBaseData = new VertexIndexWrapper();
 		myIndexBaseData->myFormat = DXGI_FORMAT_R32_UINT;
@@ -188,7 +81,121 @@ namespace Prism
 
 		InitVertexBuffer();
 		InitIndexBuffer();
+	}
 
+
+	void Cube3D::CreateVertexBuffer(float aSideLength, const CU::Vector4<float>& aColor)
+	{
+		VertexPosNormColor temp;
+
+		float offset = aSideLength * 0.5f;
+
+		CU::GrowingArray<VertexPosNormColor> vertices;
+		vertices.Init(16);
+
+		temp.myPosition = { -offset, offset, -offset, 1.f };
+		temp.myNormal = { 0.0f, 1.0f, 0.0f, 0.f };
+		temp.myColor = aColor;
+		vertices.Add(temp);
+
+		temp.myPosition = { offset, offset, -offset, 1.f };
+		temp.myNormal = { 0.0f, 1.0f, 0.0f, 0.f };
+		vertices.Add(temp);
+
+		temp.myPosition = { offset, offset, offset, 1.f };
+		temp.myNormal = { 0.0f, 1.0f, 0.0f, 0.f };
+		vertices.Add(temp);
+
+		temp.myPosition = { -offset, offset, offset, 1.f };
+		temp.myNormal = { 0.0f, 1.0f, 0.0f, 0.f };
+		vertices.Add(temp);
+
+		temp.myPosition = { -offset, -offset, -offset, 1.f };
+		temp.myNormal = { 0.0f, -1.0f, 0.0f, 0.f };
+		vertices.Add(temp);
+
+		temp.myPosition = { offset, -offset, -offset, 1.f };
+		temp.myNormal = { 0.0f, -1.0f, 0.0f, 0.f };
+		vertices.Add(temp);
+
+		temp.myPosition = { offset, -offset, offset, 1.f };
+		temp.myNormal = { 0.0f, -1.0f, 0.0f, 0.f };
+		vertices.Add(temp);
+
+		temp.myPosition = { -offset, -offset, offset, 1.f };
+		temp.myNormal = { 0.0f, -1.0f, 0.0f, 0.f };
+		vertices.Add(temp);
+
+		temp.myPosition = { -offset, -offset, offset, 1.f };
+		temp.myNormal = { -1.0f, 0.0f, 0.0f, 0.f };
+		vertices.Add(temp);
+
+		temp.myPosition = { -offset, -offset, -offset, 1.f };
+		temp.myNormal = { -1.0f, 0.0f, 0.0f, 0.f };
+		vertices.Add(temp);
+
+		temp.myPosition = { -offset, offset, -offset, 1.f };
+		temp.myNormal = { -1.0f, 0.0f, 0.0f, 0.f };
+		vertices.Add(temp);
+
+		temp.myPosition = { -offset, offset, offset, 1.f };
+		temp.myNormal = { -1.0f, 0.0f, 0.0f, 0.f };
+		vertices.Add(temp);
+
+		temp.myPosition = { offset, -offset, offset, 1.f };
+		temp.myNormal = { 1.0f, 0.0f, 0.0f, 0.f };
+		vertices.Add(temp);
+
+		temp.myPosition = { offset, -offset, -offset, 1.f };
+		temp.myNormal = { 1.0f, 0.0f, 0.0f, 0.f };
+		vertices.Add(temp);
+
+		temp.myPosition = { offset, offset, -offset, 1.f };
+		temp.myNormal = { 1.0f, 0.0f, 0.0f, 0.f };
+		vertices.Add(temp);
+
+		temp.myPosition = { offset, offset, offset, 1.f };
+		temp.myNormal = { 1.0f, 0.0f, 0.0f, 0.f };
+		vertices.Add(temp);
+
+		temp.myPosition = { -offset, -offset, -offset, 1.f };
+		temp.myNormal = { 0.0f, 0.0f, -1.0f, 0.f };
+		vertices.Add(temp);
+
+		temp.myPosition = { offset, -offset, -offset, 1.f };
+		temp.myNormal = { 0.0f, 0.0f, -1.0f, 0.f };
+		vertices.Add(temp);
+
+		temp.myPosition = { offset, offset, -offset, 1.f };
+		temp.myNormal = { 0.0f, 0.0f, -1.0f, 0.f };
+		vertices.Add(temp);
+
+		temp.myPosition = { -offset, offset, -offset, 1.f };
+		temp.myNormal = { 0.0f, 0.0f, -1.0f, 0.f };
+		vertices.Add(temp);
+
+		temp.myPosition = { -offset, -offset, offset, 1.f };
+		temp.myNormal = { 0.0f, 0.0f, 1.0f, 0.f };
+		vertices.Add(temp);
+
+		temp.myPosition = { offset, -offset, offset, 1.f };
+		temp.myNormal = { 0.0f, 0.0f, 1.0f, 0.f };
+		vertices.Add(temp);
+
+		temp.myPosition = { offset, offset, offset, 1.f };
+		temp.myNormal = { 0.0f, 0.0f, 1.0f, 0.f };
+		vertices.Add(temp);
+
+		temp.myPosition = { -offset, offset, offset, 1.f };
+		temp.myNormal = { 0.0f, 0.0f, 1.0f, 0.f };
+		vertices.Add(temp);
+		myVertexBaseData = new VertexDataWrapper();
+		myVertexBaseData->myNumberOfVertices = vertices.Size();
+		myVertexBaseData->myStride = sizeof(VertexPosNormColor);
+		myVertexBaseData->mySize = myVertexBaseData->myNumberOfVertices * myVertexBaseData->myStride;
+		myVertexBaseData->myType = VertexType::POS_NORM_COLOR;
+		myVertexBaseData->myVertexData = new char[myVertexBaseData->mySize]();
+		memcpy(myVertexBaseData->myVertexData, &vertices[0], myVertexBaseData->mySize);
 	}
 
 
@@ -198,6 +205,14 @@ namespace Prism
 		SAFE_DELETE(myVertexBuffer);
 		SAFE_DELETE(myIndexBaseData);
 		SAFE_DELETE(myIndexBuffer);
+	}
+
+	void Cube3D::SetSizeAndColor(float aSideLength, const CU::Vector4<float>& aColor)
+	{
+		SAFE_DELETE(myVertexBaseData);
+		CreateVertexBuffer(aSideLength, aColor);
+		SAFE_DELETE(myVertexBuffer);
+		InitVertexBuffer();
 	}
 
 	void Cube3D::InitVertexBuffer()

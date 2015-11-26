@@ -49,7 +49,7 @@ namespace Prism
 	void DebugDrawer::RenderBox(const CU::Vector3<float>& aPosition, float aSize, const CU::Vector4<float>& aColor
 		, bool aWireFrame)
 	{
-		myCube3DRenderer->AddCube(aPosition);
+		myCube3DRenderer->AddCube(aPosition, aSize, aColor);
 	}
 
 	void DebugDrawer::RenderSphere(const CU::Vector3<float>& aPosition, float aSize, const CU::Vector4<float>& aColor

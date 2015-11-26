@@ -24,11 +24,14 @@ namespace Prism
 		myActiveCubes.DeleteAll();
 	}
 
-	void Cube3DRenderer::AddCube(const CU::Vector3<float>& aPosition)
+	void Cube3DRenderer::AddCube(const CU::Vector3<float>& aPosition, float aSideLength, const CU::Vector4<float>& aColor)
 	{
+		ModelLoader::GetInstance()->Pause();
 		myActiveCubes.Add(myInactiveCubes.GetLast());
 		myInactiveCubes.RemoveCyclicAtIndex(myInactiveCubes.Size() - 1);
 		myActiveCubes.GetLast()->SetPosition(aPosition);
+		myActiveCubes.GetLast()->SetSizeAndColor(aSideLength, aColor);
+		ModelLoader::GetInstance()->UnPause();
 	}
 
 	void Cube3DRenderer::Render(const Camera& aCamera)
