@@ -36,6 +36,8 @@ namespace Prism
 
 		void ShakeCamera(float aRotationRate, float aMaxRotation, float aTime);
 
+		CU::Vector3<float> RayCast(const CU::Vector2<float>& aMousePosition) const;
+
 	private:
 		void operator= (const Camera&) = delete;
 

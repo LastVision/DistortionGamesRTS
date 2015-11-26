@@ -49,6 +49,8 @@ namespace Prism
 		ZeroMemory(myInitData, sizeof(myInitData));
 
 		CreateVertices();
+
+		myCellSize = mySize.x / myHeightMap->myWidth;
 	}
 
 	Terrain::~Terrain()
@@ -72,6 +74,23 @@ namespace Prism
 		position.y = GetHeight(static_cast<unsigned int>(position.x), static_cast<unsigned int>(position.z));
 
 		anOrientation.SetPos(position);
+	}
+
+	CU::Vector3<float> Terrain::CalcIntersection(const CU::Vector3<float>& aCameraPos
+		, const CU::Vector3<float>& aRayCastToZero) const
+	{
+		CU::Vector3<float> toCamera(aCameraPos - aRayCastToZero);
+		//float lengthToCamera = CU::Length(toCamera);
+		CU::Normalize(toCamera);
+
+		CU::Vector3<float> intersectionPosition(aRayCastToZero);
+
+		while (GetAbove(intersectionPosition) == false)
+		{
+			intersectionPosition += toCamera;
+		}
+
+		return intersectionPosition;
 	}
 
 	void Terrain::CreateVertices()
@@ -160,5 +179,11 @@ namespace Prism
 		DL_ASSERT_EXP(aX < static_cast<unsigned int>(myHeightMap->myWidth), "X out of range");
 		DL_ASSERT_EXP(aY < static_cast<unsigned int>(myHeightMap->myDepth), "Y out of range");
 		return myHeightMap->myData[(myHeightMap->myDepth - (1 + aY)) * myHeightMap->myWidth + aX] / 255.f;
+	}
+
+	bool Terrain::GetAbove(const CU::Vector3<float>& aPosition) const
+	{
+		return aPosition.y >= GetHeight(static_cast<unsigned int>(aPosition.x / myCellSize)
+			, static_cast<unsigned int>(aPosition.z / myCellSize)) * myHeight;
 	}
 }

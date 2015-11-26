@@ -20,6 +20,8 @@ class Entity
 {
 	friend class AnimationComponent;
 	friend class GraphicsComponent;
+	friend class MovementComponent;
+
 public:
 	Entity(eEntityType aType, Prism::Scene& aScene, Prism::eOctreeType anOctreeType, const std::string& aName = ""
 		, const CU::Vector3<float> aStartPosition = { 0.f, 0.f, 0.f });

@@ -93,7 +93,7 @@ bool Game::Update()
 	{
 		deltaTime = 1.0f / 10.0f;
 	}
-
+	
 	if (myLockMouse == true)
 	{
 		//SetCursorPos(Prism::Engine::GetInstance()->GetWindowSize().x / 2, Prism::Engine::GetInstance()->GetWindowSize().y / 2);

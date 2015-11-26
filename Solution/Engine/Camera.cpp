@@ -149,4 +149,23 @@ namespace Prism
 			myShakeCamera = true;
 		}
 	}
+
+	CU::Vector3<float> Camera::RayCast(const CU::Vector2<float>& aMousePosition) const
+	{
+		if (myOrientation.GetPos().y < 0.f || myOrientation.GetForward().y >= 0.f)
+		{
+			return CU::Vector3<float>();
+		}
+		CU::Vector3<float> intersection(1.f, 0.f, 0.f);
+		float d = 0.f;
+		float denom = CU::Dot(myOrientation.GetForward(), CU::Vector3<float>( 0.f, 1.f, 0.f ));
+		float t = 0.f;
+		if (denom != 0.f)
+		{
+			t = (d - CU::Dot(myOrientation.GetPos(), CU::Vector3<float>(0.f, 1.f, 0.f ))) / (denom);
+		}
+		intersection = myOrientation.GetPos() + myOrientation.GetForward() * t;
+
+		return intersection;
+	}
 }

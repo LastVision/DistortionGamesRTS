@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+#include <Camera.h>
 #include <DirectionalLight.h>
 #include <Engine.h>
 #include <EngineEnums.h>
@@ -54,7 +55,7 @@ Level::~Level()
 	myUnits.DeleteAll();
 }
 
-bool Level::LogicUpdate(float aDeltaTime)
+bool Level::LogicUpdate(float aDeltaTime, Prism::Camera& aCamera)
 {
 	//CU::Vector3<float> lightDir(myLight->GetCurrentDir().x, myLight->GetCurrentDir().y, myLight->GetCurrentDir().z);
 	//myLight->SetDir(lightDir * CU::Matrix44<float>::CreateRotateAroundZ(-3.14f * aDeltaTime / 3.f));
@@ -121,6 +122,9 @@ bool Level::LogicUpdate(float aDeltaTime)
 		}
 	}
 
+	//Prism::RenderBox(myTerrain->CalcIntersection(aCamera.GetOrientation().GetPos(), aCamera.RayCast(CU::Vector2<float>())));
+
+	//myUnit->Update(aDeltaTime);
 	for (int i = 0; i < myUnits.Size(); ++i)
 	{
 		myUnits[i]->Update(aDeltaTime);
