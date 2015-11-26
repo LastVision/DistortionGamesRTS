@@ -149,7 +149,7 @@ void Game::OnResize(int aWidth, int aHeight)
 
 void Game::ReceiveMessage(const GameStateMessage& aMessage)
 {
-	switch (aMessage.GetGameState())
+	switch (aMessage.myGameState)
 	{
 	case eGameState::LOAD_GAME:
 		myGame = new InGameState();
