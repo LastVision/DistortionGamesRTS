@@ -13,6 +13,8 @@ enum eEntityState
 	IDLE,
 	WALKING,
 	ATTACKING,
+	DYING,
+	NO_ANIMATION,
 	_COUNT
 };
 

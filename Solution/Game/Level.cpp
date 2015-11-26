@@ -43,6 +43,7 @@ Level::Level(const Prism::Camera& aCamera)
 	myDragon->GetComponent<AnimationComponent>()->AddAnimation(eEntityState::IDLE, "Data/Resource/Model/Animated_Dragon/dragon_tier_02_idle.fbx");
 	myDragon->GetComponent<AnimationComponent>()->AddAnimation(eEntityState::WALKING, "Data/Resource/Model/Animated_Dragon/dragon_tier_02_runcycle.fbx");
 	myDragon->GetComponent<AnimationComponent>()->AddAnimation(eEntityState::ATTACKING, "Data/Resource/Model/Animated_Dragon/dragon_tier_02_attack.fbx");
+	myDragon->GetComponent<AnimationComponent>()->AddAnimation(eEntityState::DYING, "Data/Resource/Model/Animated_Dragon/dragon_tier_02_death.fbx");
 
 	//myScene->AddInstance(myUnit->GetComponent<AnimationComponent>()->GetInstance());
 	myScene->AddInstance(myStaticUnit->GetComponent<GraphicsComponent>()->GetInstance());
@@ -86,6 +87,14 @@ bool Level::LogicUpdate(float aDeltaTime)
 	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_3))
 	{
 		myDragon->SetState(eEntityState::ATTACKING);
+	}
+	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_4))
+	{
+		myDragon->SetState(eEntityState::DYING);
+	}
+	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_5))
+	{
+		myDragon->SetState(eEntityState::NO_ANIMATION);
 	}
 
 	//myUnit->Update(aDeltaTime);
