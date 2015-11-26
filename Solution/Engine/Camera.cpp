@@ -161,7 +161,7 @@ namespace Prism
 		mouse2D -= 1.f;
 		CU::Vector3<float> mouse3D(mouse2D.x, mouse2D.y, 0.f);
 		mouse3D += myOrientation.GetForward();
-
+		CU::Normalize(mouse3D);
 
 
 		CU::Vector3<float> intersection(1.f, 0.f, 0.f);
