@@ -26,7 +26,7 @@ Level::Level(const Prism::Camera& aCamera)
 	myStaticUnit = new Entity(eEntityType::PLAYER, *myScene, Prism::eOctreeType::DYNAMIC, "BoxBroStatic", { -60, 20, 200 });
 	myStaticUnit->AddComponent(new GraphicsComponent(*myStaticUnit, "Data/Resource/Model/BoxBro/boxBro_idle_anim.fbx"
 		, "Data/Resource/Shader/S_effect_no_texture.fx"));
-
+	
 	myDragon = new Entity(eEntityType::PLAYER, *myScene, Prism::eOctreeType::DYNAMIC, "Dragon", { 60, 40, 200 });
 	myDragon->AddComponent(new AnimationComponent(*myDragon, "Data/Resource/Model/Animated_Dragon/dragon_tier_02_idle.fbx"
 		, "Data/Resource/Shader/S_effect_no_texture_animated.fx"));
@@ -57,6 +57,9 @@ bool Level::LogicUpdate(float aDeltaTime)
 {
 	//CU::Vector3<float> lightDir(myLight->GetCurrentDir().x, myLight->GetCurrentDir().y, myLight->GetCurrentDir().z);
 	//myLight->SetDir(lightDir * CU::Matrix44<float>::CreateRotateAroundZ(-3.14f * aDeltaTime / 3.f));
+
+	//Prism::DebugDrawer::GetInstance()->RenderLine3D({ 0.f, 0.f, 0.f }, { 100.f, 100.f, 100.f });
+
 	myUnit->Update(aDeltaTime);
 	myDragon->Update(aDeltaTime);
 	return true;
