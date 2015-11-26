@@ -36,9 +36,23 @@ AnimationComponent::~AnimationComponent()
 	myInstance = nullptr;
 }
 
+void AnimationComponent::AddAnimation(eEntityState aState, const std::string& aAnimationPath)
+{
+	myAnimations[int(aState)] = aAnimationPath;
+}
+
 void AnimationComponent::Update(float aDeltaTime)
 {
+	if (myPrevEntityState != myEntity.GetState())
+	{
+		/*Animation* newAnimation = AnimationSystem::GetInstance()->GetAnimation(myAnimations[int(myEntity.GetState())]);
+		myInstance->SetAnimation(newAnimation);
+		myInstance->ResetAnimationTime();*/
+	}
+
 	myInstance->Update(aDeltaTime);
+
+	myPrevEntityState = myEntity.GetState();
 }
 
 void AnimationComponent::SetPosition(const CU::Vector3<float>& aPosition)

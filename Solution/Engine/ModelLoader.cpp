@@ -51,6 +51,12 @@ namespace Prism
 		delete myModelFactory;
 		myModelFactory = nullptr;
 		myNonFXBModels.DeleteAll();
+
+		for (auto it = myProxies.begin(); it != myProxies.end(); ++it)
+		{
+			SAFE_DELETE(it->second);
+		}
+		myProxies.clear();
 	}
 
 	void ModelLoader::Run()
@@ -219,6 +225,11 @@ namespace Prism
 #ifdef THREADED_LOADING
 		WaitUntilAddIsAllowed();
 
+		if (myProxies.find(aModelPath) != myProxies.end())
+		{
+			return myProxies[aModelPath];
+		}
+
 		myCanCopyArray = false;
 
 		ModelProxy* proxy = new ModelProxy();
@@ -232,17 +243,24 @@ namespace Prism
 
 		myBuffers[myInactiveBuffer].Add(newData);
 
+		myProxies[aModelPath] = proxy;
+
 		myCanCopyArray = true;
 
 		return proxy;
 #else
+		if (myProxies.find(aModelPath) != myProxies.end())
+		{
+			return myProxies[aModelPath];
+		}
+
 		ModelProxy* proxy = new ModelProxy();
 
 		Model* model = myModelFactory->LoadModel(aModelPath.c_str(),
 			EffectContainer::GetInstance()->GetEffect(aEffectPath));
 
 		proxy->SetModel(model);
-
+		myProxies[aModelPath] = proxy;
 		return proxy;
 #endif
 	}
@@ -251,6 +269,11 @@ namespace Prism
 	{
 #ifdef THREADED_LOADING
 		WaitUntilAddIsAllowed();
+
+		if (myProxies.find(aModelPath) != myProxies.end())
+		{
+			return myProxies[aModelPath];
+		}
 
 		myCanCopyArray = false;
 
@@ -265,17 +288,24 @@ namespace Prism
 
 		myBuffers[myInactiveBuffer].Add(newData);
 
+		myProxies[aModelPath] = proxy;
+
 		myCanCopyArray = true;
 
 		return proxy;
 #else
+		if (myProxies.find(aModelPath) != myProxies.end())
+		{
+			return myProxies[aModelPath];
+		}
+
 		ModelProxy* proxy = new ModelProxy();
 
-		Model* model = myModelFactory->LoadModel(aModelPath.c_str(),
+		Model* model = myModelFactory->LoadModelAnimated(aModelPath.c_str(),
 			EffectContainer::GetInstance()->GetEffect(aEffectPath));
 
 		proxy->SetModel(model);
-
+		myProxies[aModelPath] = proxy;
 		return proxy;
 #endif
 	}
@@ -285,6 +315,7 @@ namespace Prism
 	{
 #ifdef THREADED_LOADING
 		WaitUntilAddIsAllowed();
+
 
 		myCanCopyArray = false;
 		ModelProxy* proxy = new ModelProxy();
@@ -312,7 +343,6 @@ namespace Prism
 #endif	
 	}
 
-
 	void ModelLoader::WaitUntilCopyIsAllowed()
 	{
 		while (myCanCopyArray == false)
@@ -324,5 +354,4 @@ namespace Prism
 		while (myCanAddToLoadArray == false)
 			; //Should be an empty whileloop!
 	}
-
 }

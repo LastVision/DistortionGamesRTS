@@ -10,6 +10,7 @@ Entity::Entity(eEntityType aType, Prism::Scene& aScene, Prism::eOctreeType anOct
 	, myScene(aScene)
 	, myOctreeType(anOctreeType)
 	, myName(aName)
+	, myState(eEntityState::IDLE)
 {
 	for (int i = 0; i < static_cast<int>(eComponentType::_COUNT); ++i)
 	{

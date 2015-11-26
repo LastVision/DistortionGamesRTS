@@ -23,7 +23,6 @@ Prism::Instance::Instance(ModelProxy& aModel, const CU::Matrix44<float>& anOrien
 
 Prism::Instance::~Instance()
 {
-	delete &myProxy;
 }
 
 void Prism::Instance::Update(float aDelta)

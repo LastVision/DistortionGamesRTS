@@ -18,10 +18,19 @@ Level::Level(const Prism::Camera& aCamera)
 		, "Data/Resource/Texture/Terrain/T_rock.dds", { 256.f, 256.f }, 25.5f, CU::Matrix44<float>());
 
 	myScene = new Prism::Scene(aCamera, *myTerrain);
+	myUnits.Init(20);
+	for (int i = 1; i < 26; ++i)
+	{
+		Entity* Unit = new Entity(eEntityType::PLAYER, *myScene, Prism::eOctreeType::DYNAMIC, "BoxBro", { 20, i*1.f, 200 });
+		/*myUnit->AddComponent(new AnimationComponent(*myUnit, "Data/Resource/Model/BoxBro/boxBro_idle_anim.fbx"
+		, "Data/Resource/Shader/S_effect_no_texture_animated.fx"));*/
+		Unit->AddComponent(new AnimationComponent(*Unit, "Data/Resource/Model/blob_animationTest.fbx"
+			, "Data/Resource/Shader/S_effect_no_texture_animated.fx"));
 
-	myUnit = new Entity(eEntityType::PLAYER, *myScene, Prism::eOctreeType::DYNAMIC, "BoxBro", { 20, 20, 200 });
-	myUnit->AddComponent(new AnimationComponent(*myUnit, "Data/Resource/Model/BoxBro/boxBro_idle_anim.fbx"
-		, "Data/Resource/Shader/S_effect_no_texture_animated.fx"));
+		myScene->AddInstance(Unit->GetComponent<AnimationComponent>()->GetInstance());
+		myUnits.Add(Unit);
+	}
+	
 
 	myStaticUnit = new Entity(eEntityType::PLAYER, *myScene, Prism::eOctreeType::DYNAMIC, "BoxBroStatic", { -60, 20, 200 });
 	myStaticUnit->AddComponent(new GraphicsComponent(*myStaticUnit, "Data/Resource/Model/BoxBro/boxBro_idle_anim.fbx"
@@ -30,9 +39,11 @@ Level::Level(const Prism::Camera& aCamera)
 	myDragon = new Entity(eEntityType::PLAYER, *myScene, Prism::eOctreeType::DYNAMIC, "Dragon", { 60, 40, 200 });
 	myDragon->AddComponent(new AnimationComponent(*myDragon, "Data/Resource/Model/Animated_Dragon/dragon_tier_02_idle.fbx"
 		, "Data/Resource/Shader/S_effect_no_texture_animated.fx"));
-	
+	myDragon->GetComponent<AnimationComponent>()->AddAnimation(eEntityState::IDLE, "Data/Resource/Model/Animated_Dragon/dragon_tier_02_idle.fbx");
+	myDragon->GetComponent<AnimationComponent>()->AddAnimation(eEntityState::WALKING, "Data/Resource/Model/Animated_Dragon/dragon_tier_02_walking.fbx");
+	myDragon->GetComponent<AnimationComponent>()->AddAnimation(eEntityState::ATTACKING, "Data/Resource/Model/Animated_Dragon/dragon_tier_02_attack.fbx");
 
-	myScene->AddInstance(myUnit->GetComponent<AnimationComponent>()->GetInstance());
+	//myScene->AddInstance(myUnit->GetComponent<AnimationComponent>()->GetInstance());
 	myScene->AddInstance(myStaticUnit->GetComponent<GraphicsComponent>()->GetInstance());
 	myScene->AddInstance(myDragon->GetComponent<AnimationComponent>()->GetInstance());
 
@@ -51,6 +62,8 @@ Level::~Level()
 	SAFE_DELETE(myDragon);
 	SAFE_DELETE(myScene);
 	SAFE_DELETE(myLight);
+
+	myUnits.DeleteAll();
 }
 
 bool Level::LogicUpdate(float aDeltaTime)
@@ -60,8 +73,12 @@ bool Level::LogicUpdate(float aDeltaTime)
 
 	//Prism::DebugDrawer::GetInstance()->RenderLine3D({ 0.f, 0.f, 0.f }, { 100.f, 100.f, 100.f });
 
-	myUnit->Update(aDeltaTime);
+	//myUnit->Update(aDeltaTime);
 	myDragon->Update(aDeltaTime);
+	for (int i = 0; i < myUnits.Size(); ++i)
+	{
+		myUnits[i]->Update(aDeltaTime);
+	}
 	return true;
 }
 

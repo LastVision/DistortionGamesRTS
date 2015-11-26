@@ -551,7 +551,7 @@ Prism::ModelAnimated* Prism::FBXFactory::LoadModelAnimated(const char* aFilePath
 	}
 #endif
 
-	DL_DEBUG("Load Model %s", aFilePath);
+	DL_DEBUG("Load Animated Model %s", aFilePath);
 	CU::TimerManager::GetInstance()->StartTimer("LoadModelAnimated");
 	FBXData* found = 0;
 	for (FBXData* data : myFBXData)
@@ -587,7 +587,6 @@ Prism::ModelAnimated* Prism::FBXFactory::LoadModelAnimated(const char* aFilePath
 	myFBXData.push_back(data);
 	modelData = data->myData;
 #endif
-
 
 	ModelAnimated* returnModel = CreateModelAnimated(modelData, aEffect);
 	returnModel->myFileName = aFilePath;

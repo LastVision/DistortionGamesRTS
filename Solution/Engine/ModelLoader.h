@@ -68,6 +68,7 @@ namespace Prism
 
 		FBXFactory* myModelFactory;
 		CU::GrowingArray<Model*> myNonFXBModels;
+		std::unordered_map<std::string, ModelProxy*> myProxies;
 
 		static ModelLoader* myInstance;
 	};
