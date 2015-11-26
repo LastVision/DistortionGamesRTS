@@ -206,6 +206,7 @@
     <ClCompile Include="AnimationNode.cpp" />
     <ClCompile Include="BaseModel.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="DebugDrawer.cpp" />
     <ClCompile Include="DirectX.cpp" />
     <ClCompile Include="Effect.cpp" />
     <ClCompile Include="EffectContainer.cpp" />
@@ -227,6 +228,7 @@
     <ClCompile Include="FullScreenHelper.cpp" />
     <ClCompile Include="HierarchyBone.cpp" />
     <ClCompile Include="Instance.cpp" />
+    <ClCompile Include="Line3D.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="ModelAnimated.cpp" />
     <ClCompile Include="Renderer.cpp" />
@@ -266,6 +268,7 @@
     <ClInclude Include="AnimationNode.h" />
     <ClInclude Include="BaseModel.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="DebugDrawer.h" />
     <ClInclude Include="Defines.h" />
     <ClInclude Include="DirectX.h" />
     <ClInclude Include="Effect.h" />
@@ -289,6 +292,7 @@
     <ClInclude Include="Instance.h" />
     <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="LightStructs.h" />
+    <ClInclude Include="Line3D.h" />
     <ClInclude Include="LodStructs.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="ModelAnimated.h" />
