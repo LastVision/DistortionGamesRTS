@@ -43,6 +43,7 @@ namespace Prism
 
 		CU::Matrix44<float>& myOrientation;
 		CU::Matrix44<float> myProjectionMatrix;
+		CU::Matrix44<float> myProjectionMatrixNonInverted; //used to go from projection to view space
 		CU::Matrix44<float> myViewProjectionMatrix;
 		float myNear;
 		float myFar;

@@ -121,13 +121,10 @@ bool Level::LogicUpdate(float aDeltaTime, Prism::Camera& aCamera)
 			myUnits.Add(unit);
 		}
 	}
-	//CU::Vector2<float> cursorPos;
-	//cursorPos.x = CU::InputWrapper::GetInstance()->GetMousePosition().x;
-	//cursorPos.y = Prism::Engine::GetInstance()->GetWindowSizeInFloat().y - CU::InputWrapper::GetInstance()->GetMousePosition().y;
-	//cursorPos /= Prism::Engine::GetInstance()->GetWindowSizeInFloat();
-	//Prism::RenderBox(myTerrain->CalcIntersection(aCamera.GetOrientation().GetPos(), aCamera.RayCast(cursorPos)));
-
 	//myUnit->Update(aDeltaTime);
+
+	CalcCursorWorldPosition(aCamera);
+
 	for (int i = 0; i < myUnits.Size(); ++i)
 	{
 		myUnits[i]->Update(aDeltaTime);
@@ -144,4 +141,22 @@ void Level::Render()
 
 void Level::OnResize(int aWidth, int aHeigth)
 {
+}
+
+void Level::CalcCursorWorldPosition(Prism::Camera& aCamera)
+{
+	CU::Vector2<float> cursorPos;
+	CU::Vector2<float> window = Prism::Engine::GetInstance()->GetWindowSizeInFloat();
+	cursorPos.x = CU::InputWrapper::GetInstance()->GetMousePosition().x;
+	cursorPos.x /= window.x;
+	cursorPos.y = window.x - CU::InputWrapper::GetInstance()->GetMousePosition().y;
+	cursorPos.y += (window.x - window.y) * 0.4f;
+	cursorPos.y /= window.x * (window.x / window.y);
+
+	CU::Vector3<float> worldPos(myTerrain->CalcIntersection(aCamera.GetOrientation().GetPos()
+		, aCamera.RayCast(cursorPos)));
+	
+	//Debug:
+	Prism::RenderBox(worldPos);
+	Prism::RenderLine3D(worldPos, { 100.f, 100.f, 100.f });
 }

@@ -16,12 +16,14 @@ public:
 	Level(const Prism::Camera& aCamera);
 	~Level();
 
-	bool LogicUpdate(float aDeltaTime, Prism::Camera& aCamer);
+	bool LogicUpdate(float aDeltaTime, Prism::Camera& aCamera);
 	void Render();
 
 	void OnResize(int aWidth, int aHeigth);
 
 private:
+	void CalcCursorWorldPosition(Prism::Camera& aCamera);
+
 	Prism::Terrain* myTerrain;
 	Prism::DirectionalLight* myLight;
 	Prism::Scene* myScene;

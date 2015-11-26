@@ -46,6 +46,7 @@ namespace Prism
 	void Camera::OnResize(const int aWidth, const int aHeight)
 	{
 		myProjectionMatrix = CU::Matrix44<float>::CreateProjectionMatrixLH(myNear, myFar, static_cast<float>(aHeight) / static_cast<float>(aWidth), myFOV);
+		myProjectionMatrixNonInverted = CU::InverseSimple(myProjectionMatrix);
 		myFrustum->OnResize(myNear, myFar);
 	}
 
@@ -159,20 +160,27 @@ namespace Prism
 		CU::Vector2<float> mouse2D(aMousePosition);
 		mouse2D *= 2.f;
 		mouse2D -= 1.f;
-		CU::Vector3<float> mouse3D(mouse2D.x, mouse2D.y, 0.f);
-		mouse3D += myOrientation.GetForward();
-		CU::Normalize(mouse3D);
 
+		CU::Vector4<float> mouseNear(0, 0, 0, 0.f);
+		CU::Vector4<float> mouseFar(mouse2D.x, mouse2D.y, 1.f, 0.f);
 
+		mouseNear = mouseNear * myProjectionMatrixNonInverted;
+		mouseNear = mouseNear * myOrientation;
+		mouseFar = mouseFar * myProjectionMatrixNonInverted;
+		mouseFar = mouseFar * myOrientation;
+
+		CU::Vector4<float> ray(CU::GetNormalized<float>(mouseFar - mouseNear));
+		
 		CU::Vector3<float> intersection(1.f, 0.f, 0.f);
 		float d = 0.f;
-		float denom = CU::Dot(mouse3D, CU::Vector3<float>(0.f, 1.f, 0.f));
-		float t = 0.f;
+		float denom = CU::Dot(ray, CU::Vector4<float>(0.f, 1.f, 0.f, 0.f));
+		float t = 1.f;
 		if (denom != 0.f)
 		{
-			t = (d - CU::Dot(myOrientation.GetPos(), CU::Vector3<float>(0.f, 1.f, 0.f ))) / (denom);
+			t = (d - CU::Dot(myOrientation.GetPos4(), CU::Vector4<float>(0.f, 1.f, 0.f, 0.f ))) / (denom);
 		}
-		intersection = myOrientation.GetPos() + mouse3D * t;
+
+		intersection = myOrientation.GetPos() + CU::Vector3<float>(ray.x, ray.y, ray.z) * t;
 
 		return intersection;
 	}

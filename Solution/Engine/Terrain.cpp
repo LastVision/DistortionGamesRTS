@@ -3,7 +3,7 @@
 #include "HeightMap.h"
 #include "HeightMapFactory.h"
 #include "Terrain.h"
-
+#include <CommonHelper.h>
 #include <D3D11.h>
 #include <d3dx11effect.h>
 #include "Camera.h"
@@ -183,7 +183,8 @@ namespace Prism
 
 	bool Terrain::GetAbove(const CU::Vector3<float>& aPosition) const
 	{
-		return aPosition.y >= GetHeight(static_cast<unsigned int>(aPosition.x / myCellSize)
-			, static_cast<unsigned int>(aPosition.z / myCellSize)) * myHeight;
+		return aPosition.y >= GetHeight(
+			static_cast<unsigned int>(CU::Clip(aPosition.x / myCellSize, 0, myHeightMap->myWidth - 1.f))
+			, static_cast<unsigned int>(CU::Clip(aPosition.z / myCellSize, 0, myHeightMap->myDepth - 1.f))) * myHeight;
 	}
 }
