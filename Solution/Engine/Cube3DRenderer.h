@@ -11,7 +11,8 @@ namespace Prism
 		Cube3DRenderer();
 		~Cube3DRenderer();
 
-		void AddCube(const CU::Vector3<float>& aPosition, float aSideLength, const CU::Vector4<float>& aColor);
+		void AddCube(const CU::Vector3<float>& aPosition, float aSideLength, const CU::Vector4<float>& aColor
+			, bool aWireFrame);
 
 		void Render(const Camera& aCamera);
 

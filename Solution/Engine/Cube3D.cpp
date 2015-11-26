@@ -13,6 +13,7 @@
 namespace Prism
 {
 	Cube3D::Cube3D(const CU::Vector4<float>& aColor)
+		: myWireFrame(false)
 	{
 		myEffect = EffectContainer::GetInstance()->GetEffect("Data/Resource/Shader/S_effect_cube3d.fx");
 		CreateVertexBuffer(1.f, aColor);
@@ -303,10 +304,23 @@ namespace Prism
 		myEffect->GetTechnique()->GetDesc(&techDesc);
 
 		Engine::GetInstance()->GetContex()->IASetPrimitiveTopology(myPrimitiveTopology);
-		for (UINT p = 0; p < techDesc.Passes; ++p)
+		if (myWireFrame == true)
 		{
-			myEffect->GetTechnique()->GetPassByIndex(p)->Apply(0, Engine::GetInstance()->GetContex());
-			Engine::GetInstance()->GetContex()->DrawIndexed(myIndexBaseData->myNumberOfIndices, 0, 0);
+			for (UINT p = 0; p < techDesc.Passes; ++p)
+			{
+				myEffect->GetTechnique()->GetPassByIndex(p)->Apply(0, Engine::GetInstance()->GetContex());
+				Engine::GetInstance()->EnableWireframe();
+				Engine::GetInstance()->GetContex()->DrawIndexed(myIndexBaseData->myNumberOfIndices, 0, 0);
+				Engine::GetInstance()->DisableWireframe();
+			}
+		}
+		else
+		{
+			for (UINT p = 0; p < techDesc.Passes; ++p)
+			{
+				myEffect->GetTechnique()->GetPassByIndex(p)->Apply(0, Engine::GetInstance()->GetContex());
+				Engine::GetInstance()->GetContex()->DrawIndexed(myIndexBaseData->myNumberOfIndices, 0, 0);
+			}
 		}
 	}
 }
