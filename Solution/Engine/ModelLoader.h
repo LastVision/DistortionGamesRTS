@@ -5,6 +5,7 @@
 
 namespace Prism
 {
+	class AnimationProxy;
 	class Model;
 	class ModelProxy;
 	class FBXFactory;
@@ -29,18 +30,21 @@ namespace Prism
 		ModelProxy* LoadCube(float aWidth = 1.f, float aHeight = 1.f, float aDepth = 1.f
 			, CU::Vector4f aColour = { 1.f, 1.f, 1.f, 1.f });
 
+		AnimationProxy* LoadAnimation(const char* aPath);
+
 	private:
 		enum class eLoadType
 		{
 			MODEL,
 			MODEL_ANIMATED,
+			ANIMATION,
 			CUBE,
-			GEOMETRY,
 		};
 		struct LoadData
 		{
 			ModelProxy* myProxy;
 			eLoadType myLoadType;
+			AnimationProxy* myAnimationProxy;
 			std::string myModelPath = "";
 			std::string myEffectPath = "";
 			CU::Vector3<float> mySize;

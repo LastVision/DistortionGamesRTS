@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+#include "AnimationProxy.h"
 #include "Engine.h"
 #include "EffectContainer.h"
 #include "Model.h"
@@ -148,6 +149,12 @@ namespace Prism
 						EffectContainer::GetInstance()->GetEffect(myLoadArray[i].myEffectPath));
 					myLoadArray[i].myProxy->SetModelAnimated(model);
 
+					break;
+				}
+				case Prism::ModelLoader::eLoadType::ANIMATION:
+				{
+					myLoadArray[i].myAnimationProxy->myAnimation 
+						= myModelFactory->LoadAnimation(myLoadArray[i].myModelPath.c_str());
 					break;
 				}
 				case Prism::ModelLoader::eLoadType::CUBE:
@@ -341,6 +348,26 @@ namespace Prism
 
 		return proxy;
 #endif	
+	}
+
+	AnimationProxy* ModelLoader::LoadAnimation(const char* aPath)
+	{
+#ifdef THREADED_LOADING
+		WaitUntilAddIsAllowed();
+		myCanCopyArray = false;
+		AnimationProxy* anim = new AnimationProxy();
+
+		LoadData animData;
+		animData.myLoadType = eLoadType::ANIMATION;
+		animData.myModelPath = aPath;
+		animData.myAnimationProxy = anim;
+
+		myBuffers[myInactiveBuffer].Add(animData);
+		myCanCopyArray = true;
+		return anim;
+#else
+		return myModelFactory->LoadAnimation(aPath);
+#endif
 	}
 
 	void ModelLoader::WaitUntilCopyIsAllowed()

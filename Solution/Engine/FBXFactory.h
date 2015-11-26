@@ -14,6 +14,7 @@ class FbxModelData;
 
 namespace Prism
 {
+	class Animation;
 	class Model;
 	class ModelAnimated;
 	class Effect;
@@ -27,12 +28,13 @@ namespace Prism
 
 		Model* LoadModel(const char* aFilePath, Effect* aEffect);
 		ModelAnimated* LoadModelAnimated(const char* aFilePath, Effect* aEffect);
+		Animation* LoadAnimation(const char* aFilePath);
 		void LoadModelForRadiusCalc(const char* aFilePath, CU::GrowingArray<CU::Vector3<float>>& someVerticesOut);
 	private:
 		void FillData(ModelData* someData, Model* outData, Effect* aEffect);
 		void FillData(ModelData* someData, ModelAnimated* outData, Effect* aEffect);
 		void FillAnimationData(FbxModelData* someData, ModelAnimated* outData);
-		void FillBoneAnimationData(FbxModelData* someData, ModelAnimated* aOutData);
+		Animation* FillBoneAnimationData(FbxModelData* someData, ModelAnimated* aOutData);
 		void BuildBoneHierarchy(Bone& aBone, AnimationData* aAnimationData, HierarchyBone& aOutBone);
 
 		Model* CreateModel(FbxModelData* someModelData, Effect* aEffect);
