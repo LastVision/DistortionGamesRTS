@@ -122,7 +122,7 @@ bool Level::LogicUpdate(float aDeltaTime, Prism::Camera& aCamera)
 		}
 	}
 
-	Prism::RenderBox(myTerrain->CalcIntersection(aCamera.GetOrientation().GetPos(), aCamera.RayCast(CU::Vector2<float>())));
+	//Prism::RenderBox(myTerrain->CalcIntersection(aCamera.GetOrientation().GetPos(), aCamera.RayCast(CU::Vector2<float>())));
 
 	//myUnit->Update(aDeltaTime);
 	for (int i = 0; i < myUnits.Size(); ++i)
