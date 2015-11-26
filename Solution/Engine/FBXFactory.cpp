@@ -648,14 +648,17 @@ Prism::Animation* Prism::FBXFactory::LoadAnimation(const char* aFilePath)
 	{
 		return FillBoneAnimationData(modelData, nullptr);
 	}
-	else
-	{
-		for (int i = 0; i < modelData->myChildren.Size(); ++i)
-		{
-			auto currentChild = modelData->myChildren[i];
-			FillBoneAnimationData(currentChild, nullptr);
-		}
-	}
+	//else
+	//{
+	//	for (int i = 0; i < modelData->myChildren.Size(); ++i)
+	//	{
+	//		auto currentChild = modelData->myChildren[i];
+	//		return FillBoneAnimationData(modelData->myChildren[i], nullptr);
+	//	}
+	//}
+
+	DL_ASSERT("Failed to load animation, please tell Niklas or Daniel");
+	return nullptr;
 }
 
 void Prism::FBXFactory::LoadModelForRadiusCalc(const char* aFilePath

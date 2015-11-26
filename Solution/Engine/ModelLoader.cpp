@@ -84,7 +84,7 @@ namespace Prism
 			WaitUntilCopyIsAllowed();
 			myCanAddToLoadArray = false;
 
-			if (myBuffers[myInactiveBuffer].Size() == 0)
+			if (myBuffers[myInactiveBuffer].Size() == 0 && myLoadArray.Size() == 0)
 			{
 				myCanAddToLoadArray = true;
 				myIsLoading = false;
