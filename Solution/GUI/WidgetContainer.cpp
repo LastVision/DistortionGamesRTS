@@ -1,17 +1,21 @@
 #include "stdafx.h"
-#include "WidgetContainer.h"
-#include <Sprite.h>
 #include <Engine.h>
+#include <Sprite.h>
+#include "WidgetContainer.h"
+#include <XMLReader.h>
 
 namespace GUI
 {
-	WidgetContainer::WidgetContainer()
-		: myBackground(nullptr)
+	WidgetContainer::WidgetContainer(Prism::Sprite* aBackgroundSprite, bool aIsWindowSize)
+		: myBackground(aBackgroundSprite)
 		, myWidgets(8)
+		, myIsWindowSize(aIsWindowSize)
 	{
-		CU::Vector2<float> windowSize = { float(Prism::Engine::GetInstance()->GetWindowSize().x), float(Prism::Engine::GetInstance()->GetWindowSize().y) };
+	}
 
-		myBackground = new Prism::Sprite("Data/Resource/Texture/UI/ui_test.dds", windowSize, { 0.f, 0.f });
+	WidgetContainer::WidgetContainer(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement)
+	{
+		
 
 	}
 
@@ -40,7 +44,7 @@ namespace GUI
 	{
 		if (myBackground != nullptr)
 		{
-			//myBackground->Render(myPosition);
+			myBackground->Render(myPosition);
 		}
 
 		for (int i = 0; i < myWidgets.Size(); i++)

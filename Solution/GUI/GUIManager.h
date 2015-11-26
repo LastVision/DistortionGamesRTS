@@ -14,7 +14,7 @@ namespace GUI
 	class GUIManager
 	{
 	public:
-		GUIManager(Cursor* aCursor);
+		GUIManager(Cursor* aCursor, const std::string& aXMLPath);
 		~GUIManager();
 
 		void AddWidget(Widget* aWidget);

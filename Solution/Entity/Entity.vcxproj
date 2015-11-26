@@ -82,6 +82,7 @@
     <ClInclude Include="Entity.h" />
     <ClInclude Include="EntityEnum.h" />
     <ClInclude Include="GraphicsComponent.h" />
+    <ClInclude Include="MovementComponent.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
@@ -89,6 +90,7 @@
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="GraphicsComponent.cpp" />
+    <ClCompile Include="MovementComponent.cpp" />
     <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>

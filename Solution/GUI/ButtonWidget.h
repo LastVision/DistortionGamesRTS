@@ -3,9 +3,16 @@
 
 namespace Prism
 {
-
 	class Sprite;
 }
+
+namespace tinyxml2
+{
+	class XMLElement;
+}
+
+class XMLReader;
+struct OnClickMessage;
 
 namespace GUI
 {
@@ -13,6 +20,7 @@ namespace GUI
 	{
 	public:
 		ButtonWidget();
+		ButtonWidget(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement);
 		~ButtonWidget();
 
 		void Render(const CU::Vector2<float>& aParentPosition) override;
@@ -25,13 +33,12 @@ namespace GUI
 		bool IsInside(const CU::Vector2<float>& aPosition) const override;
 		void SetPosition(const CU::Vector2<float>& aPosition) override;
 
+	private:
+		void Click();
+		
 		Prism::Sprite* myImageNormal;
 		Prism::Sprite* myImagePressed;
 		Prism::Sprite* myImageHover;
 		Prism::Sprite* myImageCurrent;
-	private:
-
-		void Click();
-
 	};
 }
