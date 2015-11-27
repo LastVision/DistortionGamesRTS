@@ -15,7 +15,7 @@ namespace GUI
 }
 
 class InGameState;
-class MenuState;
+class MainMenuState;
 class BulletManager;
 
 class Game : public Subscriber
@@ -45,7 +45,7 @@ private:
 
 	StateStack myStateStack;
 
-	MenuState* myCurrentMenu;
+	MainMenuState* myMainMenu;
 	InGameState* myGame;
 
 	bool myLockMouse;

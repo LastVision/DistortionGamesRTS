@@ -32,7 +32,10 @@ namespace GUI
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "spritehover"), "path", spritePathHover);
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "spritepressed"), "path", spritePathPressed);
 
-		aReader->ReadAttribute(aReader->FindFirstChild(anXMLElement, "hover"), "text", hoverText);
+		if (aReader->FindFirstChild(anXMLElement, "hover") != nullptr)
+		{
+			aReader->ReadAttribute(aReader->FindFirstChild(anXMLElement, "hover"), "text", hoverText);
+		}
 
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "onclick"), "event", clickEvent);
 
@@ -44,6 +47,10 @@ namespace GUI
 		{
 			myClickEvent = new OnClickMessage(eOnClickEvent::WIN);
 		}
+		else if (clickEvent == "start")
+		{
+			myClickEvent = new OnClickMessage(eOnClickEvent::START);
+		}
 		else if (clickEvent == "restart")
 		{
 			myClickEvent = new OnClickMessage(eOnClickEvent::RESTART);
@@ -51,6 +58,17 @@ namespace GUI
 		else if (clickEvent == "quit")
 		{
 			myClickEvent = new OnClickMessage(eOnClickEvent::QUIT);
+		}
+		else if (clickEvent == "unit")
+		{
+			int ID = -1;
+			aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "onclick"), "id", ID);
+			myClickEvent = new OnClickMessage(eOnClickEvent::UNIT, ID);
+		}
+		else
+		{
+			std::string message = "[GUI]: No onclick event named " + clickEvent;
+			DL_ASSERT(message);
 		}
 
 		mySize = size;
