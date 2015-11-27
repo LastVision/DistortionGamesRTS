@@ -6,10 +6,9 @@
 
 namespace GUI
 {
-	WidgetContainer::WidgetContainer(Prism::Sprite* aBackgroundSprite, bool aIsWindowSize)
+	WidgetContainer::WidgetContainer(Prism::Sprite* aBackgroundSprite)
 		: myBackground(aBackgroundSprite)
 		, myWidgets(8)
-		, myIsWindowSize(aIsWindowSize)
 	{
 	}
 
@@ -22,9 +21,7 @@ namespace GUI
 	WidgetContainer::~WidgetContainer()
 	{
 		myWidgets.DeleteAll();
-
-		delete myBackground;
-		myBackground = nullptr;
+		SAFE_DELETE(myBackground);
 	}
 
 	void WidgetContainer::AddWidget(Widget* aWidget)
