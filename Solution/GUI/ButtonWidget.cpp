@@ -65,15 +65,11 @@ namespace GUI
 
 	ButtonWidget::~ButtonWidget()
 	{
-		delete myImageNormal;
-		delete myImagePressed;
-		delete myImageHover;
-		delete myClickEvent;
-		myImageNormal = nullptr;
-		myImagePressed = nullptr;
-		myImageHover = nullptr;
+		SAFE_DELETE(myImageNormal);
+		SAFE_DELETE(myImagePressed);
+		SAFE_DELETE(myImageHover);
+		SAFE_DELETE(myClickEvent);
 		myImageCurrent = nullptr;
-		myClickEvent = nullptr;
 	}
 
 	void ButtonWidget::Render(const CU::Vector2<float>& aParentPosition)
