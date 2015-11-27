@@ -94,10 +94,11 @@ namespace Prism
 		CU::Normalize(toCamera);
 
 		CU::Vector3<float> intersectionPosition(aRayCastToZero);
-
-		while (GetAbove(intersectionPosition) == false)
+		int iterations = 0;
+		while (GetAbove(intersectionPosition) == false && iterations < 100)
 		{
 			intersectionPosition += toCamera;
+			++iterations;
 		}
 
 		return intersectionPosition;

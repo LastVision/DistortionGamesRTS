@@ -12,6 +12,7 @@
 #include <GameStateMessage.h>
 #include "InGameState.h"
 #include <InputWrapper.h>
+#include "MainMenuState.h"
 #include <ModelLoader.h>
 #include <StreakDataContainer.h>
 #include <ParticleDataContainer.h>
@@ -71,6 +72,9 @@ bool Game::Init(HWND& aHwnd)
 	myWindowSize.y = Prism::Engine::GetInstance()->GetWindowSize().y;
 
 	PostMaster::GetInstance()->SendMessage(GameStateMessage(eGameState::LOAD_GAME, 1));
+
+	//myMainMenu = new MainMenuState();
+	//myStateStack.PushMainGameState(myMainMenu);
 
 	GAME_LOG("Init Successful");
 	return true;

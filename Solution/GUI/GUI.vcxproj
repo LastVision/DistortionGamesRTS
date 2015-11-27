@@ -15,6 +15,7 @@
     <ClInclude Include="Cursor.h" />
     <ClInclude Include="GUIManager.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="UnitInfoWidget.h" />
     <ClInclude Include="Widget.h" />
     <ClInclude Include="WidgetContainer.h" />
   </ItemGroup>
@@ -26,6 +27,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="UnitInfoWidget.cpp" />
     <ClCompile Include="Widget.cpp" />
     <ClCompile Include="WidgetContainer.cpp" />
   </ItemGroup>

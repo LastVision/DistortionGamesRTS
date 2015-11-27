@@ -105,9 +105,9 @@ namespace GUI
 		myWidgets->SetSize(aSize);
 	}
 
-	void GUIManager::OnResize(int aHeight, int aWidth)
+	void GUIManager::OnResize(int aWidth, int aHeight)
 	{
-		CU::Vector2<float> newSize = { float(aHeight), float(aWidth) };
+		CU::Vector2<float> newSize = { float(aWidth), float(aHeight) };
 		myWidgets->OnResize(newSize, myWindowSize);
 		myWindowSize = newSize;
 	}
