@@ -2,6 +2,7 @@
 
 #include "AnimationComponent.h"
 #include "Component.h"
+#include "CollisionComponent.h"
 #include "GraphicsComponent.h"
 #include "Entity.h"
 #include "EntityData.h"
@@ -37,6 +38,11 @@ Entity::Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& a
 	if (aEntityData.myMovementData.myExistsInEntity == true)
 	{
 		myComponents[static_cast<int>(eComponentType::MOVEMENT)] = new MovementComponent(*this, aEntityData.myMovementData, aTerrain);
+	}
+
+	if (aEntityData.myCollisionData.myExistsInEntity == true)
+	{
+		myComponents[static_cast<int>(eComponentType::COLLISION)] = new CollisionComponent(*this, aEntityData.myCollisionData);
 	}
 }
 

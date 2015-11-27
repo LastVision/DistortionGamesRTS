@@ -80,6 +80,7 @@
     <ClInclude Include="AnimationComponent.h" />
     <ClInclude Include="AnimationComponentData.h" />
     <ClInclude Include="CollisionComponent.h" />
+    <ClInclude Include="CollisionComponentData.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="ComponentLoader.h" />
     <ClInclude Include="Entity.h" />

@@ -30,5 +30,6 @@ enum class eComponentType
 	GRAPHICS = 0,
 	ANIMATION,
 	MOVEMENT,
+	COLLISION,
 	_COUNT,
 };

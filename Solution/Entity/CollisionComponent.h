@@ -1,8 +1,15 @@
 #pragma once
-class CollisionComponent
+
+#include "Component.h"
+struct CollisionComponentData;
+
+class CollisionComponent : public Component
 {
 public:
-	CollisionComponent();
+	CollisionComponent(Entity& aEntity, CollisionComponentData& aData);
 	~CollisionComponent();
+
+private:
+	float myRadius;
 };
 
