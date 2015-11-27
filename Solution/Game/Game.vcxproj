@@ -158,6 +158,8 @@
     <ClInclude Include="GameState.h" />
     <ClInclude Include="InGameState.h" />
     <ClInclude Include="Level.h" />
+    <ClInclude Include="MainMenuState.h" />
+    <ClInclude Include="MessageState.h" />
     <ClInclude Include="StateEnums.h" />
     <ClInclude Include="StateStack.h" />
     <ClInclude Include="StateStackProxy.h" />
@@ -168,6 +170,8 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="InGameState.cpp" />
     <ClCompile Include="Level.cpp" />
+    <ClCompile Include="MainMenuState.cpp" />
+    <ClCompile Include="MessageState.cpp" />
     <ClCompile Include="StateStack.cpp" />
     <ClCompile Include="StateStackProxy.cpp" />
     <ClCompile Include="stdafx.cpp">
