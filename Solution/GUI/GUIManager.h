@@ -24,6 +24,8 @@ namespace GUI
 		void SetPosition(const CU::Vector2<float>& aPosition);
 		void SetSize(const CU::Vector2<float>& aSize);
 
+		void OnResize(int aHeight, int aWidth);
+
 	private:
 
 		void CheckMousePressed();

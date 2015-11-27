@@ -62,6 +62,8 @@ private:
 
 	CU::Matrix44<float> myCameraOrientation;
 	bool myIsComplete;
+
+	bool myRenderGUI;
 };
 
 inline bool InGameState::IsComplete() const

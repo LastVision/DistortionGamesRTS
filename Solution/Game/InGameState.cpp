@@ -17,6 +17,7 @@
 InGameState::InGameState()
 {
 	myIsActiveState = false;
+	myRenderGUI = true;
 	myCamera = new Prism::Camera(myCameraOrientation);
 
 	myCameraOrientation.SetPos(CU::Vector3<float>(10.f, 100.f, 0));
@@ -60,7 +61,11 @@ void InGameState::EndState()
 const eStateStatus InGameState::Update(const float& aDeltaTime)
 {
 	UpdateCamera(aDeltaTime);
-	myGUIManager->Update();
+
+	if (myRenderGUI == true)
+	{
+		myGUIManager->Update();
+	}
 	
 	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_ESCAPE) || myStateStatus == eStateStatus::ePopMainState)
 	{
@@ -69,11 +74,16 @@ const eStateStatus InGameState::Update(const float& aDeltaTime)
 		myLevel = nullptr;
 		return eStateStatus::ePopMainState;
 	}
+
+	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_G) == true)
+	{
+		myRenderGUI = !myRenderGUI;
+	}
+
 	if (myLevel->LogicUpdate(aDeltaTime, *myCamera) == true)
 	{
 		//return myStateStatus;
 	}
-
 
 	return myStateStatus;
 }
@@ -82,7 +92,12 @@ void InGameState::Render()
 {
 	VTUNE_EVENT_BEGIN(VTUNE::GAME_RENDER);
 	myLevel->Render();
-	myGUIManager->Render();
+
+	if (myRenderGUI == true)
+	{
+		myGUIManager->Render();
+	}
+
 	Prism::DebugDrawer::GetInstance()->Render(*myCamera); //Have to be last
 
 	VTUNE_EVENT_END();

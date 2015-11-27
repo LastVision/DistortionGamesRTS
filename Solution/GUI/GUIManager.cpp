@@ -112,6 +112,11 @@ namespace GUI
 		myWidgets->SetSize(aSize);
 	}
 
+	void GUIManager::OnResize(int aHeight, int aWidth)
+	{
+
+	}
+
 	void GUIManager::CheckMousePressed()
 	{
 		if (myActiveWidget != nullptr)
