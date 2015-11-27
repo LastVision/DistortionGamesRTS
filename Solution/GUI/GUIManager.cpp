@@ -25,7 +25,7 @@ namespace GUI
 
 		tinyxml2::XMLElement* rootElement = reader.FindFirstChild("root");
 
-		myWidgets = new WidgetContainer(nullptr, myWindowSize * 2.f);
+		myWidgets = new WidgetContainer(nullptr, myWindowSize);
 
 		tinyxml2::XMLElement* containerElement = reader.ForceFindFirstChild(rootElement, "container");
 		for (; containerElement != nullptr; containerElement = reader.FindNextElement(containerElement))
@@ -34,7 +34,7 @@ namespace GUI
 			reader.ForceReadAttribute(reader.ForceFindFirstChild(containerElement, "backgroundsprite"), "sizex", size.x);
 			reader.ForceReadAttribute(reader.ForceFindFirstChild(containerElement, "backgroundsprite"), "sizey", size.y);
 			Prism::Sprite* backgroundSprite = new Prism::Sprite(path, size);
-			GUI::WidgetContainer* container = new WidgetContainer(backgroundSprite, size * 2.f);
+			GUI::WidgetContainer* container = new WidgetContainer(backgroundSprite, size);
 
 			tinyxml2::XMLElement* widgetElement = reader.FindFirstChild(containerElement, "widget");
 			for (; widgetElement != nullptr; widgetElement = reader.FindNextElement(widgetElement))

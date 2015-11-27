@@ -63,17 +63,17 @@ namespace GUI
 	bool Widget::IsInside(const CU::Vector2<float>& aPosition) const
 	{
 		return	aPosition.x >= myPosition.x &&
-			aPosition.x >= myPosition.x &&
+			aPosition.y >= myPosition.y &&
 			aPosition.x <= myPosition.x + mySize.x &&
-			aPosition.x <= myPosition.x + mySize.y;
+			aPosition.y <= myPosition.y + mySize.y;
 	}
 
-	void Widget::OnResize(const CU::Vector2<float>& aNewSize, const CU::Vector2<float>& anOldSize)
+	void Widget::OnResize(const CU::Vector2<float>& aNewWindowSize, const CU::Vector2<float>& anOldWindowSize)
 	{
-		CU::Vector2<float> ratioPostion = myPosition / anOldSize;
-		myPosition = ratioPostion * aNewSize;
+		CU::Vector2<float> ratioPostion = myPosition / anOldWindowSize;
+		myPosition = ratioPostion * aNewWindowSize;
 
-		CU::Vector2<float> ratioSize = mySize / anOldSize;
-		mySize = ratioSize * aNewSize;
+		CU::Vector2<float> ratioSize = mySize / anOldWindowSize;
+		mySize = ratioSize * aNewWindowSize;
 	}
 }

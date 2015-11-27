@@ -22,7 +22,7 @@ namespace GUI
 
 		virtual bool IsInside(const CU::Vector2<float>& aPosition) const;
 
-		virtual void OnResize(const CU::Vector2<float>& aNewSize, const CU::Vector2<float>& anOldSize);
+		virtual void OnResize(const CU::Vector2<float>& aNewWindowSize, const CU::Vector2<float>& anOldWindowSize);
 
 		virtual inline void SetSize(const CU::Vector2<float>& aSize);
 		virtual inline void SetPosition(const CU::Vector2<float>& aPosition);
