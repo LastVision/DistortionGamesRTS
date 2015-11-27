@@ -76,6 +76,7 @@ namespace Prism
 			{
 				myCanAddToLoadArray = true;
 				myIsLoading = false;
+				Engine::GetInstance()->myIsLoading = false;
 				std::this_thread::yield();
 				continue;
 			}
@@ -88,6 +89,7 @@ namespace Prism
 			{
 				myCanAddToLoadArray = true;
 				myIsLoading = false;
+				Engine::GetInstance()->myIsLoading = false;
 				std::this_thread::yield();
 				continue;
 			}
@@ -95,6 +97,7 @@ namespace Prism
 			if (myIsRunning == false || myClearLoadJobs == true)
 			{
 				myIsLoading = false;
+				Engine::GetInstance()->myIsLoading = false;
 				myClearLoadJobs = false;
 				myCanAddToLoadArray = true;
 				continue;
@@ -107,6 +110,7 @@ namespace Prism
 
 			myCanAddToLoadArray = true;
 			myIsLoading = true;
+			Engine::GetInstance()->myIsLoading = true;
 
 			for (int i = 0; i < myBuffers[myActiveBuffer].Size(); ++i)
 			{
