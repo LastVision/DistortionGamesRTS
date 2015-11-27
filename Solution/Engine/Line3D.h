@@ -1,4 +1,5 @@
 #pragma once
+#include <Vector.h>
 
 struct Line3DVertex
 {

@@ -1,20 +1,22 @@
 #include "stdafx.h"
 
+#include <AnimationComponent.h>
 #include <Camera.h>
+#include <CollisionComponent.h>
 #include <DirectionalLight.h>
 #include <Engine.h>
 #include <EngineEnums.h>
+#include <Entity.h>
+#include <EntityFactory.h>
+#include <GraphicsComponent.h>
+#include <InputWrapper.h>
+#include <Intersection.h>
 #include "Level.h"
+#include <MovementComponent.h>
 #include <Scene.h>
 #include <Terrain.h>
-#include <EntityFactory.h>
 
 
-#include <Entity.h>
-#include <GraphicsComponent.h>
-#include <AnimationComponent.h>
-#include <InputWrapper.h>
-#include <MovementComponent.h>
 
 Level::Level(const Prism::Camera& aCamera)
 {
@@ -25,11 +27,11 @@ Level::Level(const Prism::Camera& aCamera)
 
 	myScene = new Prism::Scene(aCamera, *myTerrain);
 	myUnits.Init(20);
-	/*for (int i = 0; i < 1; ++i)
+	for (int i = 0; i < 1; ++i)
 	{
 		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::PLAYER, eEntityType::DRAGON, Prism::eOctreeType::DYNAMIC,
 			*myScene, { 20.f + i, 20.f, 200.f }, *myTerrain));
-	}*/
+	}
 
 	myWaypoints.Init(4);
 	myLight = new Prism::DirectionalLight();
@@ -87,6 +89,22 @@ bool Level::LogicUpdate(float aDeltaTime, Prism::Camera& aCamera)
 
 	if (CU::InputWrapper::GetInstance()->MouseDown(1))
 	{
+		CU::Vector3<float> targetPos = CalcCursorWorldPosition(aCamera);
+		CU::Intersection::LineSegment3D line(aCamera.GetOrientation().GetPos(), targetPos);
+
+		for (int i = 0; i < myUnits.Size();  ++i)
+		{
+			if (myUnits[i]->GetComponent<CollisionComponent>()->Collide(line) == true)
+			{
+				myUnits[i]->SetSelect(true);
+			}
+			else
+			{
+				myUnits[i]->SetSelect(false);
+			}
+		}
+
+
 		for (int i = 0; i < myUnits.Size(); ++i)
 		{
 			myUnits[i]->GetComponent<MovementComponent>()->SetWayPoints(myWaypoints);
@@ -107,7 +125,7 @@ bool Level::LogicUpdate(float aDeltaTime, Prism::Camera& aCamera)
 	}
 	
 
-	CalcCursorWorldPosition(aCamera);
+
 
 	for (int i = 0; i < myUnits.Size(); ++i)
 	{
