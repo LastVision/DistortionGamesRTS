@@ -40,5 +40,6 @@ namespace GUI
 		Cursor* myCursor;
 
 		CU::Vector2<float> myMousePosition;
+		CU::Vector2<float> myWindowSize;
 	};
 }

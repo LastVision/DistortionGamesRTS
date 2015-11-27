@@ -73,4 +73,16 @@ namespace GUI
 		}
 		return nullptr;
 	}
+
+	void WidgetContainer::OnResize(const CU::Vector2<float>& aNewSize, const CU::Vector2<float>& anOldSize)
+	{
+		for (int i = 0; i < myWidgets.Size(); i++)
+		{
+			myWidgets[i]->OnResize(aNewSize, anOldSize);
+		}
+		if (myBackground != nullptr)
+		{
+			myBackground->SetSize(aNewSize, { 0.f, 0.f });
+		}
+	}
 }

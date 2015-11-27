@@ -15,6 +15,7 @@ namespace GUI
 		, myCursor(aCursor)
 		, myMousePosition({ 0.f, 0.f })
 	{
+		myWindowSize = { 1920.f, 1080.f };
 		std::string path = "";
 		bool isWindowSize = false;
 		XMLReader reader;
@@ -36,7 +37,7 @@ namespace GUI
 		}
 		else
 		{
-			backgroundSprite = new Prism::Sprite(path, Prism::Engine::GetInstance()->GetWindowSizeInFloat());
+			backgroundSprite = new Prism::Sprite(path, myWindowSize);
 		}
 
 		myWidgets = new WidgetContainer(backgroundSprite, isWindowSize);
@@ -62,7 +63,7 @@ namespace GUI
 
 		reader.CloseDocument();
 
-		SetSize({ float(Prism::Engine::GetInstance()->GetWindowSize().x) * 2.f, float(Prism::Engine::GetInstance()->GetWindowSize().y) * 2.f });
+		SetSize(myWindowSize * 2.f);
 	}
 
 	GUIManager::~GUIManager()
@@ -114,7 +115,9 @@ namespace GUI
 
 	void GUIManager::OnResize(int aHeight, int aWidth)
 	{
-
+		CU::Vector2<float> newSize = { float(aHeight), float(aWidth) };
+		myWidgets->OnResize(newSize, myWindowSize);
+		myWindowSize = newSize;
 	}
 
 	void GUIManager::CheckMousePressed()

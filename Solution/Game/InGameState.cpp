@@ -111,6 +111,7 @@ void InGameState::ResumeState()
 void InGameState::OnResize(int aWidth, int aHeight)
 {
 	myLevel->OnResize(aWidth, aHeight);
+	myGUIManager->OnResize(aWidth, aHeight);
 }
 
 void InGameState::ReceiveMessage(const GameStateMessage& aMessage)

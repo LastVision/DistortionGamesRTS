@@ -138,6 +138,7 @@ void Game::OnResize(int aWidth, int aHeight)
 	myWindowSize.x = aWidth;
 	myWindowSize.y = aHeight;
 	myStateStack.OnResize(aWidth, aHeight);
+	myCursor->OnResize(aWidth, aHeight);
 	PostMaster::GetInstance()->SendMessage(ResizeMessage(aWidth, aHeight));
 }
 
