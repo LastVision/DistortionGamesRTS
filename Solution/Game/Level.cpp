@@ -149,9 +149,11 @@ void Level::CalcCursorWorldPosition(Prism::Camera& aCamera)
 	CU::Vector2<float> cursorPos;
 	CU::Vector2<float> window = Prism::Engine::GetInstance()->GetWindowSizeInFloat();
 
-	//static float tweakValue = 2.0f;
+	//static float tweakValue = 1.4f;
 	//tweakValue -= 0.0001f;
-	float tweakValue = 1.95f;
+	//float tweakValue = 1.85f; // for 16:9
+	//float tweakValue = 1.255f; // for 5:4
+	float tweakValue = 1.665f; //for 16:10 ?
 
 
 	float padding = (window.x - window.y) * 0.5f;
