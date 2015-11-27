@@ -65,6 +65,11 @@ void Entity::Update(float aDeltaTime)
 			myComponents[i]->Update(aDeltaTime);
 		}
 	}
+
+	if (mySelected == true)
+	{
+		Prism::RenderBox(myOrientation.GetPos());
+	}
 }
 
 void Entity::AddComponent(Component* aComponent)
@@ -95,4 +100,9 @@ void Entity::Reset()
 			myComponents[i]->Reset();
 		}
 	}
+}
+
+void Entity::SetSelect(bool aStatus)
+{
+	mySelected = aStatus;
 }

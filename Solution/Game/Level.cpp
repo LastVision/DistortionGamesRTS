@@ -2,6 +2,7 @@
 
 #include <AnimationComponent.h>
 #include <Camera.h>
+#include <CollisionComponent.h>
 #include <DirectionalLight.h>
 #include <Engine.h>
 #include <EngineEnums.h>
@@ -93,11 +94,14 @@ bool Level::LogicUpdate(float aDeltaTime, Prism::Camera& aCamera)
 
 		for (int i = 0; i < myUnits.Size();  ++i)
 		{
-			//if (myUnits[i]->GetComponent<CollisionComponent>()->Collide(line) == true)
+			if (myUnits[i]->GetComponent<CollisionComponent>()->Collide(line) == true)
 			{
-				//myUnits[i]->Select();
+				myUnits[i]->SetSelect(true);
 			}
-			//CU::Intersection::LineVsSphere(const CU::Intersection::LineSegment3D& aLine, mySphere, CU::Vector3<float>());
+			else
+			{
+				myUnits[i]->SetSelect(false);
+			}
 		}
 
 
