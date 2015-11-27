@@ -2,6 +2,7 @@
 
 #include "AnimationComponent.h"
 #include "Component.h"
+#include "CollisionComponent.h"
 #include "GraphicsComponent.h"
 #include "Entity.h"
 #include "EntityData.h"
@@ -38,6 +39,11 @@ Entity::Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& a
 	{
 		myComponents[static_cast<int>(eComponentType::MOVEMENT)] = new MovementComponent(*this, aEntityData.myMovementData, aTerrain);
 	}
+
+	if (aEntityData.myCollisionData.myExistsInEntity == true)
+	{
+		myComponents[static_cast<int>(eComponentType::COLLISION)] = new CollisionComponent(*this, aEntityData.myCollisionData);
+	}
 }
 
 Entity::~Entity()
@@ -58,6 +64,11 @@ void Entity::Update(float aDeltaTime)
 		{
 			myComponents[i]->Update(aDeltaTime);
 		}
+	}
+
+	if (mySelected == true)
+	{
+		Prism::RenderBox(myOrientation.GetPos());
 	}
 }
 
@@ -89,4 +100,9 @@ void Entity::Reset()
 			myComponents[i]->Reset();
 		}
 	}
+}
+
+void Entity::SetSelect(bool aStatus)
+{
+	mySelected = aStatus;
 }

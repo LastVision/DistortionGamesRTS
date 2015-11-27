@@ -91,6 +91,12 @@ void EntityFactory::LoadEntity(const char* aEntityPath)
 
 			myComponentLoader->LoadMovementComponent(entityDocument, e, newData.myMovementData);
 		}
+		else if (elementName == CU::ToLower("CollisionComponent"))
+		{
+			if (newData.myCollisionData.myExistsInEntity == true) DL_ASSERT("You already have a CollisionComponent");
+
+			myComponentLoader->LoadCollisionComponent(entityDocument, e, newData.myCollisionData);
+		}
 		else 
 		{
 			std::string errorMessage = "The component " + elementName + 

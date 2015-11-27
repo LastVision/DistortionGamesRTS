@@ -3,6 +3,7 @@
 #include "AnimationComponentData.h"
 #include <CommonHelper.h>
 #include "ComponentLoader.h"
+#include "CollisionComponentData.h"
 #include "GraphicsComponentData.h"
 #include "MovementComponentData.h"
 #include <XMLReader.h>
@@ -78,6 +79,24 @@ void ComponentLoader::LoadMovementComponent(XMLReader& aDocument, tinyxml2::XMLE
 		if (elementName == CU::ToLower("Speed"))
 		{
 			aDocument.ForceReadAttribute(e, "value", aOutputData.myMovementSpeed);
+		}
+		else
+		{
+			FailedToReadChildElementMessage(e->Name(), aSourceElement->Name());
+		}
+	}
+}
+
+void ComponentLoader::LoadCollisionComponent(XMLReader& aDocument, tinyxml2::XMLElement* aSourceElement, CollisionComponentData& aOutputData)
+{
+	aOutputData.myExistsInEntity = true;
+
+	for (tinyxml2::XMLElement* e = aDocument.FindFirstChild(aSourceElement); e != nullptr; e = aDocument.FindNextElement(e))
+	{
+		std::string elementName = CU::ToLower(e->Name());
+		if (elementName == CU::ToLower("Radius"))
+		{
+			aDocument.ForceReadAttribute(e, "value", aOutputData.myRadius);
 		}
 		else
 		{
