@@ -77,16 +77,12 @@ void MovementComponent::MoveTo(CU::Vector3<float> aPointToMoveTo)
 	CU::Normalize(forward);
 
 	if (forward != myDirection)
-{
-		float angle = acos(CU::Dot(forward, myDirection));
+	{
 		CU::Vector3<float> planeNormal(0, 1.f, 0);
-		CU::Vector3<float> first(forward);
-		CU::Vector3<float> second(myDirection);
+		float dot = CU::Dot(forward, myDirection);
+		float det = CU::Dot(planeNormal, CU::Cross(forward, myDirection));
 
-		float dot = CU::Dot(first, second);
-		float det = CU::Dot(planeNormal, CU::Cross(first, second));
-
-		angle = atan2(det, dot);
+		float angle = atan2(det, dot);
 
 		CU::Vector3<float> pos = myEntity.myOrientation.GetPos();
 		myEntity.myOrientation.SetPos({ 0.f, 0.f, 0.f });

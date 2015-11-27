@@ -25,11 +25,11 @@ Level::Level(const Prism::Camera& aCamera)
 
 	myScene = new Prism::Scene(aCamera, *myTerrain);
 	myUnits.Init(20);
-	for (int i = 0; i < 1; ++i)
+	/*for (int i = 0; i < 1; ++i)
 	{
 		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::PLAYER, eEntityType::DRAGON, Prism::eOctreeType::DYNAMIC,
 			*myScene, { 20.f + i, 20.f, 200.f }, *myTerrain));
-	}
+	}*/
 
 	myWaypoints.Init(4);
 	myLight = new Prism::DirectionalLight();
@@ -85,19 +85,13 @@ bool Level::LogicUpdate(float aDeltaTime, Prism::Camera& aCamera)
 		}
 	}
 
-	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_P))
-	{
-		for (int i = 1; i < 26; ++i)
-		{
-			int zRand = rand() % 100;
-			myUnits.Add(EntityFactory::CreateEntity(eOwnerType::PLAYER, eEntityType::DRAGON_STATIC, Prism::eOctreeType::DYNAMIC, 
-				*myScene, { 20.f, 20.f, zRand * 1.f }, *myTerrain));
-		}
-	}
-
 	if (CU::InputWrapper::GetInstance()->MouseDown(1))
 	{
-		myUnits[0]->GetComponent<MovementComponent>()->SetWayPoints(myWaypoints);
+		for (int i = 0; i < myUnits.Size(); ++i)
+		{
+			myUnits[i]->GetComponent<MovementComponent>()->SetWayPoints(myWaypoints);
+		}
+		
 		myWaypoints.RemoveAll();
 	}
 

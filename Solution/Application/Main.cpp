@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include <Game.h>
+#include <ModelLoader.h>
 #include <SetupInfo.h>
 #include <string.h>
 #include <istream>
@@ -90,10 +91,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPTSTR, int aNumberCommands)
 
 	globalPreviousFullscreenState = Prism::Engine::GetInstance()->IsFullscreen();
 
-#ifdef RELEASE_BUILD
-	//Prism::Engine::GetInstance()->SetFullscreen(true);
-	//globalPreviousFullscreenState = true;
-#endif
+//#ifdef RELEASE_BUILD
+	Prism::Engine::GetInstance()->SetFullscreen(true);
+	globalPreviousFullscreenState = true;
+//#endif
 
 	MSG msg;
 	while (1)
@@ -230,6 +231,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 void OnResize()
 {
+	Prism::ModelLoader::GetInstance()->Pause();
 	Prism::Engine::GetInstance()->OnResize(globalClientWidth, globalClientHeight);
 
 	if (globalGame != nullptr)
@@ -240,6 +242,7 @@ void OnResize()
 		}
 		globalGame->OnResize(globalClientWidth, globalClientHeight);
 	}
+	Prism::ModelLoader::GetInstance()->UnPause();
 }
 
 bool ReadSetup(Prism::SetupInfo& aSetup, const std::string& aFilePath)
