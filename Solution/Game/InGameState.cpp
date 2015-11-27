@@ -4,6 +4,7 @@
 #include <ColoursForBG.h>
 #include <Engine.h>
 #include <GameStateMessage.h>
+#include <GUIManager.h>
 #include "InGameState.h"
 #include <InputWrapper.h>
 #include "Level.h"
@@ -29,14 +30,17 @@ InGameState::~InGameState()
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::GAME_STATE, this);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::ON_CLICK, this);
 	SAFE_DELETE(myCamera);
+	SAFE_DELETE(myGUIManager);
 }
 
-void InGameState::InitState(StateStackProxy* aStateStackProxy)
+void InGameState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCursor)
 {
 	myIsLetThrough = false;
 	myIsComplete = false;
 	myStateStack = aStateStackProxy;
 	myStateStatus = eStateStatus::eKeepState;
+	myCursor = aCursor;
+	myGUIManager = new GUI::GUIManager(myCursor, "Data/Resource/GUI/GUI_ingame.xml");
 
 	CU::Vector2<int> windowSize = Prism::Engine::GetInstance()->GetWindowSize();
 
@@ -56,6 +60,8 @@ void InGameState::EndState()
 const eStateStatus InGameState::Update(const float& aDeltaTime)
 {
 	UpdateCamera(aDeltaTime);
+	myGUIManager->Update();
+	
 	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_ESCAPE) || myStateStatus == eStateStatus::ePopMainState)
 	{
 		myIsActiveState = false;
@@ -65,8 +71,9 @@ const eStateStatus InGameState::Update(const float& aDeltaTime)
 	}
 	if (myLevel->LogicUpdate(aDeltaTime, *myCamera) == true)
 	{
-		return myStateStatus;
+		//return myStateStatus;
 	}
+
 
 	return myStateStatus;
 }
@@ -75,6 +82,7 @@ void InGameState::Render()
 {
 	VTUNE_EVENT_BEGIN(VTUNE::GAME_RENDER);
 	myLevel->Render();
+	myGUIManager->Render();
 	Prism::DebugDrawer::GetInstance()->Render(*myCamera); //Have to be last
 
 	VTUNE_EVENT_END();

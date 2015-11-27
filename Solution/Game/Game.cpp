@@ -10,7 +10,6 @@
 #include <FileWatcher.h>
 #include "Game.h"
 #include <GameStateMessage.h>
-#include <GUIManager.h>
 #include "InGameState.h"
 #include <InputWrapper.h>
 #include <ModelLoader.h>
@@ -38,14 +37,13 @@ Game::Game()
 	Prism::Engine::GetInstance()->SetShowDebugText(myShowSystemInfo);
 
 	myCursor = new GUI::Cursor(Prism::Engine::GetInstance()->GetWindowSize());
-	myGUIManager = new GUI::GUIManager(myCursor, "Data/Resource/GUI/GUI_ingame.xml");
 
 	SetCursorPos(Prism::Engine::GetInstance()->GetWindowSize().x / 2, Prism::Engine::GetInstance()->GetWindowSize().y / 2);
+	myStateStack.SetCursor(myCursor);
 }
 
 Game::~Game()
 {
-	SAFE_DELETE(myGUIManager);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::GAME_STATE, this);
 	SAFE_DELETE(myCursor);
 	Prism::Audio::AudioInterface::GetInstance()->PostEvent("Stop_MenuMusic", 0);
@@ -97,7 +95,6 @@ bool Game::Update()
 	if (myLockMouse == true)
 	{
 		//SetCursorPos(Prism::Engine::GetInstance()->GetWindowSize().x / 2, Prism::Engine::GetInstance()->GetWindowSize().y / 2);
-	
 		RECT windowRect;
 		GetWindowRect(*myWindowHandler, &windowRect);
 		if (Prism::Engine::GetInstance()->IsFullscreen() == false)
@@ -110,15 +107,12 @@ bool Game::Update()
 		ClipCursor(&windowRect);
 	}
 
-	myGUIManager->Update();
-
 	if (myStateStack.UpdateCurrentState(deltaTime) == false)
 	{
 		return false;
 	}
 
 	myStateStack.RenderCurrentState();
-	myGUIManager->Render();
 
 	CU::TimerManager::GetInstance()->CapFrameRate(100.f);
 	myCursor->Update();

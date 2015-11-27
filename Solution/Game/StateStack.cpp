@@ -64,7 +64,7 @@ void StateStack::PushSubGameState(GameState* aSubGameState)
 
 	myGameStates[myMainIndex].Add(aSubGameState);
 
-	aSubGameState->InitState(myStateStackProxy);
+	aSubGameState->InitState(myStateStackProxy, myCursor);
 
 	mySubIndex = myGameStates[myMainIndex].Size() - 1;
 }
