@@ -31,9 +31,11 @@ namespace CU
 		}
 
 		template <typename T>
-		inline T Remap(T aValue, T aOrginalMin, T aOrginalMax, T aNewMin, T aNewMax)
+		inline T Remap(T aValue, T aOriginalMin, T aOriginalMax, T aNewMin, T aNewMax)
 		{
-			return (aValue - aOrginalMin) / (aOrginalMax - aOrginalMin) * (aNewMax - aNewMin) + aNewMin;
+			DL_ASSERT_EXP(aValue >= aOriginalMin, "Value too small");
+			DL_ASSERT_EXP(aValue <= aOriginalMax, "Value too big");
+			return (aValue - aOriginalMin) / (aOriginalMax - aOriginalMin) * (aNewMax - aNewMin) + aNewMin;
 		}
 
 		Vector2<float> RandomVector(const Vector2<float>& aMin, const Vector2<float>& aMax);
