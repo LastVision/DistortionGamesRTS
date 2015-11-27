@@ -61,6 +61,7 @@ void MovementComponent::SetWayPoints(const CU::GrowingArray<CU::Vector3<float>>&
 	}
 
 	myCurrentWayPoint = 0;
+	myEntity.SetState(eEntityState::IDLE);
 }
 
 void MovementComponent::MoveTo(CU::Vector3<float> aPointToMoveTo)

@@ -22,12 +22,14 @@ public:
 	void OnResize(int aWidth, int aHeigth);
 
 private:
-	void CalcCursorWorldPosition(Prism::Camera& aCamera);
+	CU::Vector3<float> CalcCursorWorldPosition(Prism::Camera& aCamera);
 
 	Prism::Terrain* myTerrain;
 	Prism::DirectionalLight* myLight;
 	Prism::Scene* myScene;
 
 	CU::GrowingArray<Entity*> myUnits;
+	CU::GrowingArray<CU::Vector3<float>> myWaypoints;
+	int myCurrentWaypoint;
 };
 

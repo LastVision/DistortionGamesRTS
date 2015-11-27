@@ -13,6 +13,7 @@
 #include <GraphicsComponent.h>
 #include <AnimationComponent.h>
 #include <InputWrapper.h>
+#include <MovementComponent.h>
 
 Level::Level(const Prism::Camera& aCamera)
 {
@@ -21,9 +22,10 @@ Level::Level(const Prism::Camera& aCamera)
 
 	myScene = new Prism::Scene(aCamera, *myTerrain);
 	myUnits.Init(20);
-	/*for (int i = 1; i < 26; ++i)
+	for (int i = 0; i < 1; ++i)
 	{
-		Entity* unit = new Entity(eEntityType::PLAYER, *myScene, Prism::eOctreeType::DYNAMIC, "Dragon", { 60.f + i * 5, 40, 200 });
+		//Entity* unit = new Entity(eEntityType::PLAYER, *myScene, Prism::eOctreeType::DYNAMIC, "Dragon", { 60.f + i * 5, 40, 200 });
+		Entity* unit = new Entity(eEntityType::PLAYER, *myScene, Prism::eOctreeType::DYNAMIC, "Dragon", { 0.f, 0.f, 0.f });
 
 		unit->AddComponent(new AnimationComponent(*unit, "Data/Resource/Model/Animated_Dragon/dragon_tier_02_idle.fbx"
 			, "Data/Resource/Shader/S_effect_no_texture_animated.fx"));
@@ -36,9 +38,13 @@ Level::Level(const Prism::Camera& aCamera)
 		unit->GetComponent<AnimationComponent>()->AddAnimation(eEntityState::DYING
 			, "Data/Resource/Model/Animated_Dragon/dragon_tier_02_death.fbx", false, true);
 
+		unit->AddComponent(new MovementComponent(*unit, 20.f, *myTerrain));
+
 		myScene->AddInstance(unit->GetComponent<AnimationComponent>()->GetInstance());
 		myUnits.Add(unit);
-	}*/
+	}
+
+	myWaypoints.Init(4);
 
 	myLight = new Prism::DirectionalLight();
 	myLight->SetColor({ 0.5f, 0.5f, 0.9f, 1.f });
@@ -112,16 +118,33 @@ bool Level::LogicUpdate(float aDeltaTime, Prism::Camera& aCamera)
 				, "Data/Resource/Model/Animated_Dragon/dragon_tier_02_idle.fbx", true, false);
 			unit->GetComponent<AnimationComponent>()->AddAnimation(eEntityState::WALKING
 				, "Data/Resource/Model/Animated_Dragon/dragon_tier_02_runcycle.fbx", true, false);
-			unit->GetComponent<AnimationComponent>()->AddAnimation(eEntityState::ATTACKING
+			/*unit->GetComponent<AnimationComponent>()->AddAnimation(eEntityState::ATTACKING
 				, "Data/Resource/Model/Animated_Dragon/dragon_tier_02_attack.fbx", false, true);
 			unit->GetComponent<AnimationComponent>()->AddAnimation(eEntityState::DYING
-				, "Data/Resource/Model/Animated_Dragon/dragon_tier_02_death.fbx", false, true);
+				, "Data/Resource/Model/Animated_Dragon/dragon_tier_02_death.fbx", false, true);*/
 
 			myScene->AddInstance(unit->GetComponent<AnimationComponent>()->GetInstance());
 			myUnits.Add(unit);
 		}
 	}
-	//myUnit->Update(aDeltaTime);
+
+	if (CU::InputWrapper::GetInstance()->MouseDown(1))
+	{
+		myUnits[0]->GetComponent<MovementComponent>()->SetWayPoints(myWaypoints);
+		myWaypoints.RemoveAll();
+	}
+
+	if (CU::InputWrapper::GetInstance()->MouseDown(0))
+	{
+		CU::Vector3<float> newPos(CalcCursorWorldPosition(aCamera));
+		myWaypoints.Add({ newPos.x, 0.f, newPos.z });
+	}
+	if (CU::InputWrapper::GetInstance()->MouseIsPressed(0) && CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_LSHIFT))
+	{
+		CU::Vector3<float> newPos(CalcCursorWorldPosition(aCamera));
+		myWaypoints.Add({ newPos.x, 0.f, newPos.z });
+	}
+	
 
 	CalcCursorWorldPosition(aCamera);
 
@@ -143,7 +166,7 @@ void Level::OnResize(int aWidth, int aHeigth)
 {
 }
 
-void Level::CalcCursorWorldPosition(Prism::Camera& aCamera)
+CU::Vector3<float> Level::CalcCursorWorldPosition(Prism::Camera& aCamera)
 {
 	CU::Vector2<float> cursorPos;
 	CU::Vector2<float> window = Prism::Engine::GetInstance()->GetWindowSizeInFloat();
@@ -159,4 +182,6 @@ void Level::CalcCursorWorldPosition(Prism::Camera& aCamera)
 	//Debug:
 	Prism::RenderBox(worldPos);
 	Prism::RenderLine3D(worldPos, { 100.f, 100.f, 100.f });
+
+	return worldPos;
 }
