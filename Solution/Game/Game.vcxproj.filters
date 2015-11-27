@@ -24,6 +24,7 @@
     <ClCompile Include="MessageState.cpp">
       <Filter>StateStack</Filter>
     </ClCompile>
+    <ClCompile Include="Actor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -55,6 +56,7 @@
     <ClInclude Include="MessageState.h">
       <Filter>StateStack</Filter>
     </ClInclude>
+    <ClInclude Include="Actor.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="PreCompile">
