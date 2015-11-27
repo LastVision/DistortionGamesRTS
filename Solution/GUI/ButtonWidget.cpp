@@ -59,6 +59,12 @@ namespace GUI
 		{
 			myClickEvent = new OnClickMessage(eOnClickEvent::QUIT);
 		}
+		else if (clickEvent == "unit")
+		{
+			int ID = -1;
+			aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "onclick"), "id", ID);
+			myClickEvent = new OnClickMessage(eOnClickEvent::UNIT, ID);
+		}
 		else
 		{
 			std::string message = "[GUI]: No onclick event named " + clickEvent;
