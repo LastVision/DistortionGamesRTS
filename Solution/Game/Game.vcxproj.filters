@@ -25,6 +25,8 @@
       <Filter>StateStack</Filter>
     </ClCompile>
     <ClCompile Include="Actor.cpp" />
+    <ClCompile Include="AIActor.cpp" />
+    <ClCompile Include="PlayerActor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -57,6 +59,8 @@
       <Filter>StateStack</Filter>
     </ClInclude>
     <ClInclude Include="Actor.h" />
+    <ClInclude Include="AIActor.h" />
+    <ClInclude Include="PlayerActor.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="PreCompile">
