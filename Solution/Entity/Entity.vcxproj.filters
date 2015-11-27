@@ -55,6 +55,9 @@
     <ClCompile Include="ComponentLoader.cpp">
       <Filter>EntityFactory\Component</Filter>
     </ClCompile>
+    <ClCompile Include="CollisionComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -93,6 +96,9 @@
     </ClInclude>
     <ClInclude Include="ComponentLoader.h">
       <Filter>EntityFactory\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionComponent.h">
+      <Filter>Component</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
