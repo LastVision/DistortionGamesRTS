@@ -71,7 +71,7 @@ namespace Prism
 	{
 		CU::Vector3<float> position(anOrientation.GetPos());
 
-		position.y = GetHeight(static_cast<unsigned int>(position.x), static_cast<unsigned int>(position.z));
+		position.y = GetHeight(static_cast<unsigned int>(position.x / myCellSize), static_cast<unsigned int>(position.z / myCellSize)) * myHeight;
 
 		anOrientation.SetPos(position);
 	}

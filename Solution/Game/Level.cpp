@@ -14,6 +14,7 @@
 #include <GraphicsComponent.h>
 #include <AnimationComponent.h>
 #include <InputWrapper.h>
+#include <MovementComponent.h>
 
 Level::Level(const Prism::Camera& aCamera)
 {
@@ -24,12 +25,13 @@ Level::Level(const Prism::Camera& aCamera)
 
 	myScene = new Prism::Scene(aCamera, *myTerrain);
 	myUnits.Init(20);
-	for (int i = 1; i < 26; ++i)
+	for (int i = 0; i < 1; ++i)
 	{
 		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::PLAYER, eEntityType::DRAGON, Prism::eOctreeType::DYNAMIC,
-			*myScene, { 20.f + i, 20.f, 200.f }));
+			*myScene, { 20.f + i, 20.f, 200.f }, *myTerrain));
 	}
 
+	myWaypoints.Init(4);
 	myLight = new Prism::DirectionalLight();
 	myLight->SetColor({ 0.5f, 0.5f, 0.9f, 1.f });
 	myLight->SetDir(CU::Vector3<float>(0, 1, 0) * CU::Matrix44<float>::CreateRotateAroundZ(-3.14f / 3.f));
@@ -89,10 +91,27 @@ bool Level::LogicUpdate(float aDeltaTime, Prism::Camera& aCamera)
 		{
 			int zRand = rand() % 100;
 			myUnits.Add(EntityFactory::CreateEntity(eOwnerType::PLAYER, eEntityType::DRAGON_STATIC, Prism::eOctreeType::DYNAMIC, 
-				*myScene, { 20.f, 20.f, zRand * 1.f }));
+				*myScene, { 20.f, 20.f, zRand * 1.f }, *myTerrain));
 		}
 	}
-	//myUnit->Update(aDeltaTime);
+
+	if (CU::InputWrapper::GetInstance()->MouseDown(1))
+	{
+		myUnits[0]->GetComponent<MovementComponent>()->SetWayPoints(myWaypoints);
+		myWaypoints.RemoveAll();
+	}
+
+	if (CU::InputWrapper::GetInstance()->MouseDown(0))
+	{
+		CU::Vector3<float> newPos(CalcCursorWorldPosition(aCamera));
+		myWaypoints.Add({ newPos.x, 0.f, newPos.z });
+	}
+	if (CU::InputWrapper::GetInstance()->MouseIsPressed(0) && CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_LSHIFT))
+	{
+		CU::Vector3<float> newPos(CalcCursorWorldPosition(aCamera));
+		myWaypoints.Add({ newPos.x, 0.f, newPos.z });
+	}
+	
 
 	CalcCursorWorldPosition(aCamera);
 
@@ -114,7 +133,7 @@ void Level::OnResize(int aWidth, int aHeigth)
 {
 }
 
-void Level::CalcCursorWorldPosition(Prism::Camera& aCamera)
+CU::Vector3<float> Level::CalcCursorWorldPosition(Prism::Camera& aCamera)
 {
 	CU::Vector2<float> inputPos(CU::InputWrapper::GetInstance()->GetMousePosition());
 	CU::Vector2<float> cursorPos;
@@ -149,8 +168,10 @@ void Level::CalcCursorWorldPosition(Prism::Camera& aCamera)
 
 	CU::Vector3<float> worldPos(myTerrain->CalcIntersection(aCamera.GetOrientation().GetPos()
 		, aCamera.RayCast(cursorPos)));
-
+	
 	//Debug:
 	Prism::RenderBox(worldPos);
 	Prism::RenderLine3D(worldPos, { 100.f, 100.f, 100.f });
+
+	return worldPos;
 }

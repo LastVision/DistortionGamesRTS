@@ -10,6 +10,7 @@ class Entity;
 namespace Prism
 {
 	class Scene;
+	class Terrain;
 }
 
 class EntityFactory
@@ -20,7 +21,7 @@ public:
 
 	void LoadEntities(const char* aEntityListXML);
 	static Entity* CreateEntity(eOwnerType aOwner, eEntityType aType, Prism::eOctreeType aOctreeType, 
-		Prism::Scene& aScene, CU::Vector3f aPostion);
+		Prism::Scene& aScene, CU::Vector3f aPostion, Prism::Terrain& aTerrian);
 private:
 	void LoadEntity(const char* aEntityPath);
 	EntityFactory();

@@ -42,12 +42,12 @@ void EntityFactory::LoadEntities(const char* aEntityListXML)
 }
 
 Entity* EntityFactory::CreateEntity(eOwnerType aOwner, eEntityType aType, Prism::eOctreeType aOctreeType, 
-	Prism::Scene& aScene, CU::Vector3f aPostion)
+	Prism::Scene& aScene, CU::Vector3f aPostion, Prism::Terrain& aTerrian)
 {
 	if (myInstance->myLoadedEntityData.find(aType) != myInstance->myLoadedEntityData.end())
 	{
 		EntityData loadedEntityData = myInstance->myLoadedEntityData.find(aType)->second;
-		Entity* newEntity = new Entity(aOwner, aOctreeType, loadedEntityData, aScene, aPostion);
+		Entity* newEntity = new Entity(aOwner, aOctreeType, loadedEntityData, aScene, aPostion, aTerrian);
 		return newEntity;
 	}
 	DL_ASSERT("Entity not found.");

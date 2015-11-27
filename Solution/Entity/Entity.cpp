@@ -9,7 +9,7 @@
 #include <Scene.h>
 
 Entity::Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& aEntityData,
-	Prism::Scene& aScene, const CU::Vector3<float> aStartPosition)
+	Prism::Scene& aScene, const CU::Vector3<float> aStartPosition, Prism::Terrain& aTerrain)
 	: myAlive(true)
 	, myOwner(aOwner)
 	, myScene(aScene)
@@ -36,7 +36,7 @@ Entity::Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& a
 	}
 	if (aEntityData.myMovementData.myExistsInEntity == true)
 	{
-		myComponents[static_cast<int>(eComponentType::MOVEMENT)] = new MovementComponent(*this, aEntityData.myMovementData);
+		myComponents[static_cast<int>(eComponentType::MOVEMENT)] = new MovementComponent(*this, aEntityData.myMovementData, aTerrain);
 	}
 }
 
