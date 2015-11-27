@@ -15,6 +15,7 @@ namespace Prism
 
 class Component;
 
+struct EntityData;
 
 class Entity
 {
@@ -23,8 +24,8 @@ class Entity
 	friend class MovementComponent;
 
 public:
-	Entity(eEntityType aType, Prism::Scene& aScene, Prism::eOctreeType anOctreeType, const std::string& aName = ""
-		, const CU::Vector3<float> aStartPosition = { 0.f, 0.f, 0.f });
+	Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& aEntityData,
+		Prism::Scene& aScene, const CU::Vector3<float> aStartPosition);
 	~Entity();
 
 	virtual void Update(float aDeltaTime);
@@ -40,14 +41,13 @@ public:
 
 	const CU::Matrix44<float>& GetOrientation() const;
 	Prism::Scene& GetScene();
+	eOwnerType GetOwner() const;
 	eEntityType GetType() const;
 	eEntityState GetState() const;
 	void SetState(eEntityState aState){ myState = aState; };
 	Prism::eOctreeType GetOctreeType() const;
 	bool GetAlive() const;
 	void Kill();
-	const std::string& GetName() const;
-	void SetName(const std::string& aName);
 	void Reset();
 
 
@@ -56,8 +56,8 @@ private:
 	CU::StaticArray<Component*, static_cast<int>(eComponentType::_COUNT)> myComponents;
 	
 	bool myAlive;
-	std::string myName;
 	const eEntityType myType;
+	const eOwnerType myOwner;
 	eEntityState myState;
 	const Prism::eOctreeType myOctreeType;
 	Prism::Scene& myScene;
@@ -126,6 +126,11 @@ inline Prism::Scene& Entity::GetScene()
 	return myScene;
 }
 
+inline eOwnerType Entity::GetOwner() const
+{
+	return myOwner;
+}
+
 inline eEntityType Entity::GetType() const
 {
 	return myType;
@@ -144,14 +149,4 @@ inline Prism::eOctreeType Entity::GetOctreeType() const
 inline bool Entity::GetAlive() const
 {
 	return myAlive;
-}
-
-inline const std::string& Entity::GetName() const
-{
-	return myName;
-}
-
-inline void Entity::SetName(const std::string& aName)
-{
-	myName = aName;
 }

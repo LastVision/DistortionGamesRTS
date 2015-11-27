@@ -19,6 +19,18 @@
     <Filter Include="Component\Movement">
       <UniqueIdentifier>{691588cd-2b7b-4f2e-a84b-81f62dc4aebf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="EntityFactory">
+      <UniqueIdentifier>{94dbb678-3cf6-475a-9a70-5fc1e44b6b12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EntityFactory\EntityData">
+      <UniqueIdentifier>{b9395685-1388-4cca-aa34-acf4cec8cfe0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EntityFactory\EntityData\ComponentData">
+      <UniqueIdentifier>{e3b82c10-ba2d-44a2-afe6-824a2ae7bf96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EntityFactory\Component">
+      <UniqueIdentifier>{d78471a9-14e8-41c7-8352-3d64f1f6778b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -36,6 +48,12 @@
     </ClCompile>
     <ClCompile Include="MovementComponent.cpp">
       <Filter>Component\Movement</Filter>
+    </ClCompile>
+    <ClCompile Include="EntityFactory.cpp">
+      <Filter>EntityFactory</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentLoader.cpp">
+      <Filter>EntityFactory\Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -57,6 +75,24 @@
     </ClInclude>
     <ClInclude Include="MovementComponent.h">
       <Filter>Component\Movement</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityData.h">
+      <Filter>EntityFactory\EntityData</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationComponentData.h">
+      <Filter>EntityFactory\EntityData\ComponentData</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicsComponentData.h">
+      <Filter>EntityFactory\EntityData\ComponentData</Filter>
+    </ClInclude>
+    <ClInclude Include="MovementComponentData.h">
+      <Filter>EntityFactory\EntityData\ComponentData</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityFactory.h">
+      <Filter>EntityFactory</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentLoader.h">
+      <Filter>EntityFactory\Component</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -78,17 +78,25 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AnimationComponent.h" />
+    <ClInclude Include="AnimationComponentData.h" />
     <ClInclude Include="Component.h" />
+    <ClInclude Include="ComponentLoader.h" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="EntityData.h" />
     <ClInclude Include="EntityEnum.h" />
+    <ClInclude Include="EntityFactory.h" />
     <ClInclude Include="GraphicsComponent.h" />
+    <ClInclude Include="GraphicsComponentData.h" />
     <ClInclude Include="MovementComponent.h" />
+    <ClInclude Include="MovementComponentData.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AnimationComponent.cpp" />
     <ClCompile Include="Component.cpp" />
+    <ClCompile Include="ComponentLoader.cpp" />
     <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="EntityFactory.cpp" />
     <ClCompile Include="GraphicsComponent.cpp" />
     <ClCompile Include="MovementComponent.cpp" />
     <ClCompile Include="stdafx.cpp" />

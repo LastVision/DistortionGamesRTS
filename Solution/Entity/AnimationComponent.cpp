@@ -1,6 +1,7 @@
 #include "stdafx.h"
 
 #include "AnimationComponent.h"
+#include "AnimationComponentData.h"
 #include "AnimationSystem.h"
 #include <Effect.h>
 #include "Entity.h"
@@ -15,21 +16,26 @@
 #include <Texture.h>
 #include <XMLReader.h>
 
-
-AnimationComponent::AnimationComponent(Entity& aEntity, const char* aModelPath, const char* aEffectPath)
+AnimationComponent::AnimationComponent(Entity& aEntity, AnimationComponentData& aComponentData)
 	: Component(aEntity)
 	, myInstance(nullptr)
 	, myCullingRadius(10.f)
 {
-	Prism::ModelProxy* model = Prism::ModelLoader::GetInstance()->LoadModelAnimated(aModelPath
-		, aEffectPath);
+	Prism::ModelProxy* model = Prism::ModelLoader::GetInstance()->LoadModelAnimated(aComponentData.myModelPath
+		, aComponentData.myEffectPath);
 
 	myInstance = new Prism::Instance(*model, myEntity.myOrientation, myEntity.GetOctreeType(), myCullingRadius);
+
+	for (int i = 0; i < static_cast<int>(eEntityState::_COUNT); ++i)
+	{
+		AnimationLoadData loadAnimation = aComponentData.myAnimations[i];
+		AddAnimation(loadAnimation.myEntityState, loadAnimation.myAnimationPath, loadAnimation.myLoopFlag, loadAnimation.myResetTimeOnRestart);
+	}
 }
 
 AnimationComponent::~AnimationComponent()
 {
-	if (myEntity.GetOctreeType() != Prism::eOctreeType::NOT_IN_OCTREE && myEntity.GetType() != eEntityType::PLAYER)
+	if (myEntity.GetOctreeType() != Prism::eOctreeType::NOT_IN_OCTREE && myEntity.GetOwner() != eOwnerType::PLAYER)
 	{
 		myEntity.GetScene().RemoveInstance(myInstance);
 	}

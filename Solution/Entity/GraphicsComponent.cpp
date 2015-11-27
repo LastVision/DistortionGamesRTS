@@ -1,6 +1,7 @@
 #include "stdafx.h"
 
 #include "GraphicsComponent.h"
+#include "GraphicsComponentData.h"
 #include <Effect.h>
 #include "Entity.h"
 #include <Engine.h>
@@ -14,21 +15,20 @@
 #include <Texture.h>
 #include <XMLReader.h>
 
-
-GraphicsComponent::GraphicsComponent(Entity& aEntity, const char* aModelPath, const char* aEffectPath)
+GraphicsComponent::GraphicsComponent(Entity& aEntity, GraphicsComponentData& aComponentData)
 	: Component(aEntity)
 	, myInstance(nullptr)
 	, myCullingRadius(10.f)
 {
-	Prism::ModelProxy* model = Prism::ModelLoader::GetInstance()->LoadModel(aModelPath
-		, aEffectPath);
+	Prism::ModelProxy* model = Prism::ModelLoader::GetInstance()->LoadModel(aComponentData.myModelPath
+		, aComponentData.myEffectPath);
 
 	myInstance = new Prism::Instance(*model, myEntity.myOrientation, myEntity.GetOctreeType(), myCullingRadius);
 }
 
 GraphicsComponent::~GraphicsComponent()
 {
-	if (myEntity.GetOctreeType() != Prism::eOctreeType::NOT_IN_OCTREE && myEntity.GetType() != eEntityType::PLAYER)
+	if (myEntity.GetOctreeType() != Prism::eOctreeType::NOT_IN_OCTREE && myEntity.GetOwner() != eOwnerType::PLAYER)
 	{
 		myEntity.GetScene().RemoveInstance(myInstance);
 	}

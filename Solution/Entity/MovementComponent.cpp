@@ -1,12 +1,14 @@
 #include "stdafx.h"
 #include "Entity.h"
 #include "MovementComponent.h"
+#include "MovementComponentData.h"
 #include <XMLReader.h>
 
-MovementComponent::MovementComponent(Entity& aEntity, float aMovementSpeed)
+MovementComponent::MovementComponent(Entity& aEntity, MovementComponentData& aComponentData)
 	: Component(aEntity)
-	, myMovementSpeed(aMovementSpeed)
+	, myMovementSpeed(aComponentData.myMovementSpeed)
 {
+
 }
 
 MovementComponent::~MovementComponent()
