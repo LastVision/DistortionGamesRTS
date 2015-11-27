@@ -436,6 +436,9 @@ namespace Prism
 			return FALSE;
 		}
 
+		myWindowSize.x = rc.right - rc.left;
+		myWindowSize.y = rc.bottom - rc.top;
+
 		ENGINE_LOG("Window Setup Successful");
 		return TRUE;
 	}
