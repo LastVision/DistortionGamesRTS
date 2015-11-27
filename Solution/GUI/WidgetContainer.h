@@ -20,7 +20,7 @@ namespace GUI
 	{
 	public:
 
-		WidgetContainer(Prism::Sprite* aBackgroundSprite);
+		WidgetContainer(Prism::Sprite* aBackgroundSprite, const CU::Vector2<float>& aSize);
 		WidgetContainer(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement);
 		~WidgetContainer();
 
