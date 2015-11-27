@@ -8,10 +8,13 @@ namespace Prism
 	class Terrain;
 }
 
+
+struct MovementComponentData;
+
 class MovementComponent : public Component
 {
 public:
-	MovementComponent(Entity& aEntity, float aMovementSpeed, Prism::Terrain& aTerrain);
+	MovementComponent(Entity& aEntity, MovementComponentData& aComponentData, Prism::Terrain& aTerrain);
 	~MovementComponent();
 
 	void Update(float aDeltaTime) override;

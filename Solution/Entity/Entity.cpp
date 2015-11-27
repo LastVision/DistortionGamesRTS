@@ -1,16 +1,21 @@
 #include "stdafx.h"
 
+#include "AnimationComponent.h"
 #include "Component.h"
+#include "GraphicsComponent.h"
 #include "Entity.h"
+#include "EntityData.h"
+#include "MovementComponent.h"
+#include <Scene.h>
 
-Entity::Entity(eEntityType aType, Prism::Scene& aScene, Prism::eOctreeType anOctreeType
-	, const std::string& aName, const CU::Vector3<float> aStartPosition)
+Entity::Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& aEntityData,
+	Prism::Scene& aScene, const CU::Vector3<float> aStartPosition, Prism::Terrain& aTerrain)
 	: myAlive(true)
-	, myType(aType)
+	, myOwner(aOwner)
 	, myScene(aScene)
 	, myOctreeType(anOctreeType)
-	, myName(aName)
 	, myState(eEntityState::IDLE)
+	, myType(aEntityData.myType)
 {
 	for (int i = 0; i < static_cast<int>(eComponentType::_COUNT); ++i)
 	{
@@ -18,6 +23,21 @@ Entity::Entity(eEntityType aType, Prism::Scene& aScene, Prism::eOctreeType anOct
 	}
 
 	myOrientation.SetPos(aStartPosition);
+
+	if (aEntityData.myAnimationData.myExistsInEntity == true)
+	{
+		myComponents[static_cast<int>(eComponentType::ANIMATION)] = new AnimationComponent(*this, aEntityData.myAnimationData);
+		myScene.AddInstance(GetComponent<AnimationComponent>()->GetInstance());
+	}
+	else if (aEntityData.myGraphicsData.myExistsInEntity == true)
+	{
+		myComponents[static_cast<int>(eComponentType::GRAPHICS)] = new GraphicsComponent(*this, aEntityData.myGraphicsData);
+		myScene.AddInstance(GetComponent<GraphicsComponent>()->GetInstance());
+	}
+	if (aEntityData.myMovementData.myExistsInEntity == true)
+	{
+		myComponents[static_cast<int>(eComponentType::MOVEMENT)] = new MovementComponent(*this, aEntityData.myMovementData, aTerrain);
+	}
 }
 
 Entity::~Entity()

@@ -1,6 +1,6 @@
 #pragma once
 
-enum eEntityType
+enum eOwnerType
 {
 	NOT_USED = -1,
 	PLAYER = 1,
@@ -8,14 +8,20 @@ enum eEntityType
 	TRIGGER = 4,
 };
 
-enum eEntityState
+enum eEntityType
+{
+	DRAGON,
+	DRAGON_STATIC,
+	_COUNT,
+};
+
+enum class eEntityState : int
 {
 	IDLE,
 	WALKING,
 	ATTACKING,
 	DYING,
-	NO_ANIMATION,
-	_COUNT
+	_COUNT,
 };
 
 enum class eComponentType

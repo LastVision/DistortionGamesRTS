@@ -1,17 +1,19 @@
 #include "stdafx.h"
 #include "Entity.h"
 #include "MovementComponent.h"
+#include "MovementComponentData.h"
 #include <Terrain.h>
 #include <XMLReader.h>
 
-MovementComponent::MovementComponent(Entity& aEntity, float aMovementSpeed, Prism::Terrain& aTerrain)
+MovementComponent::MovementComponent(Entity& aEntity, MovementComponentData& aComponentData, Prism::Terrain& aTerrain)
 	: Component(aEntity)
-	, myMovementSpeed(aMovementSpeed)
+	, myMovementSpeed(aComponentData.myMovementSpeed)
 	, myTargetPosition(myEntity.myOrientation.GetPos())
 	, myWayPoints(8)
 	, myCurrentWayPoint(0)
 	, myTerrain(aTerrain)
 {
+
 }
 
 MovementComponent::~MovementComponent()

@@ -7,6 +7,7 @@
 #include "Level.h"
 #include <Scene.h>
 #include <Terrain.h>
+#include <EntityFactory.h>
 
 
 #include <Entity.h>
@@ -17,6 +18,8 @@
 
 Level::Level(const Prism::Camera& aCamera)
 {
+	EntityFactory::GetInstance()->LoadEntities("Data/Resource/Entity/LI_entity.xml");
+
 	myTerrain = new Prism::Terrain("Data/Resource/Texture/Terrain/playground.tga"
 		, "Data/Resource/Texture/Terrain/T_rock.dds", { 256.f, 256.f }, 25.5f, CU::Matrix44<float>());
 
@@ -24,28 +27,11 @@ Level::Level(const Prism::Camera& aCamera)
 	myUnits.Init(20);
 	for (int i = 0; i < 1; ++i)
 	{
-		//Entity* unit = new Entity(eEntityType::PLAYER, *myScene, Prism::eOctreeType::DYNAMIC, "Dragon", { 60.f + i * 5, 40, 200 });
-		Entity* unit = new Entity(eEntityType::PLAYER, *myScene, Prism::eOctreeType::DYNAMIC, "Dragon", { 0.f, 0.f, 0.f });
-
-		unit->AddComponent(new AnimationComponent(*unit, "Data/Resource/Model/Animated_Dragon/dragon_tier_02_idle.fbx"
-			, "Data/Resource/Shader/S_effect_no_texture_animated.fx"));
-		unit->GetComponent<AnimationComponent>()->AddAnimation(eEntityState::IDLE
-			, "Data/Resource/Model/Animated_Dragon/dragon_tier_02_idle.fbx", true, false);
-		unit->GetComponent<AnimationComponent>()->AddAnimation(eEntityState::WALKING
-			, "Data/Resource/Model/Animated_Dragon/dragon_tier_02_runcycle.fbx", true, false);
-		unit->GetComponent<AnimationComponent>()->AddAnimation(eEntityState::ATTACKING
-			, "Data/Resource/Model/Animated_Dragon/dragon_tier_02_attack.fbx", false, true);
-		unit->GetComponent<AnimationComponent>()->AddAnimation(eEntityState::DYING
-			, "Data/Resource/Model/Animated_Dragon/dragon_tier_02_death.fbx", false, true);
-
-		unit->AddComponent(new MovementComponent(*unit, 20.f, *myTerrain));
-
-		myScene->AddInstance(unit->GetComponent<AnimationComponent>()->GetInstance());
-		myUnits.Add(unit);
+		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::PLAYER, eEntityType::DRAGON, Prism::eOctreeType::DYNAMIC,
+			*myScene, { 20.f + i, 20.f, 200.f }, *myTerrain));
 	}
 
 	myWaypoints.Init(4);
-
 	myLight = new Prism::DirectionalLight();
 	myLight->SetColor({ 0.5f, 0.5f, 0.9f, 1.f });
 	myLight->SetDir(CU::Vector3<float>(0, 1, 0) * CU::Matrix44<float>::CreateRotateAroundZ(-3.14f / 3.f));
@@ -59,6 +45,7 @@ Level::~Level()
 	SAFE_DELETE(myLight);
 
 	myUnits.DeleteAll();
+	EntityFactory::Destroy();
 }
 
 bool Level::LogicUpdate(float aDeltaTime, Prism::Camera& aCamera)
@@ -97,34 +84,14 @@ bool Level::LogicUpdate(float aDeltaTime, Prism::Camera& aCamera)
 			myUnits[i]->SetState(eEntityState::DYING);
 		}
 	}
-	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_5))
-	{
-		for (int i = 0; i < myUnits.Size(); ++i)
-		{
-			myUnits[i]->SetState(eEntityState::NO_ANIMATION);
-		}
-	}
 
 	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_P))
 	{
 		for (int i = 1; i < 26; ++i)
 		{
 			int zRand = rand() % 100;
-			Entity* unit = new Entity(eEntityType::PLAYER, *myScene, Prism::eOctreeType::DYNAMIC, "Dragon", { 60.f + i * 5, 40, zRand*1.f });
-
-			unit->AddComponent(new AnimationComponent(*unit, "Data/Resource/Model/Animated_Dragon/dragon_tier_02_idle.fbx"
-				, "Data/Resource/Shader/S_effect_no_texture_animated.fx"));
-			unit->GetComponent<AnimationComponent>()->AddAnimation(eEntityState::IDLE
-				, "Data/Resource/Model/Animated_Dragon/dragon_tier_02_idle.fbx", true, false);
-			unit->GetComponent<AnimationComponent>()->AddAnimation(eEntityState::WALKING
-				, "Data/Resource/Model/Animated_Dragon/dragon_tier_02_runcycle.fbx", true, false);
-			/*unit->GetComponent<AnimationComponent>()->AddAnimation(eEntityState::ATTACKING
-				, "Data/Resource/Model/Animated_Dragon/dragon_tier_02_attack.fbx", false, true);
-			unit->GetComponent<AnimationComponent>()->AddAnimation(eEntityState::DYING
-				, "Data/Resource/Model/Animated_Dragon/dragon_tier_02_death.fbx", false, true);*/
-
-			myScene->AddInstance(unit->GetComponent<AnimationComponent>()->GetInstance());
-			myUnits.Add(unit);
+			myUnits.Add(EntityFactory::CreateEntity(eOwnerType::PLAYER, eEntityType::DRAGON_STATIC, Prism::eOctreeType::DYNAMIC, 
+				*myScene, { 20.f, 20.f, zRand * 1.f }, *myTerrain));
 		}
 	}
 

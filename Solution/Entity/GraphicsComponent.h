@@ -10,10 +10,12 @@ namespace Prism
 	class Texture;
 };
 
+struct GraphicsComponentData;
+
 class GraphicsComponent : public Component
 {
 public:
-	GraphicsComponent(Entity& aEntity, const char* aModelPath, const char* aEffectPath);
+	GraphicsComponent(Entity& aEntity, GraphicsComponentData& aComponentData);
 	~GraphicsComponent();
 
 	void InitDLL(const char* aModelPath, const char* aEffectPath);

@@ -12,10 +12,12 @@ namespace Prism
 	class Texture;
 };
 
+struct AnimationComponentData;
+
 class AnimationComponent : public Component
 {
 public:
-	AnimationComponent(Entity& aEntity, const char* aModelPath, const char* aEffectPath);
+	AnimationComponent(Entity& aEntity, AnimationComponentData& aComponentData);
 	~AnimationComponent();
 
 	void AddAnimation(eEntityState aState, const std::string& aAnimationPath, bool aLoopFlag, bool aResetTimeOnRestart);
