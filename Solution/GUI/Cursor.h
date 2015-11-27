@@ -23,12 +23,14 @@ namespace GUI
 		void Render();
 
 		const CU::Vector2<float>& GetMousePosition() const;
+		const CU::Vector2<float>& GetMousePositionZeroToOne() const;
 		void OnResize(int aWidth, int aHeight);
 
 		void ClipCursor(); // for software cursor
 
 	private:
 		CU::Vector2<float> myPosition;
+		CU::Vector2<float> myPositionZeroToOne;
 		CU::Vector2<float> myWindowSize;
 		Prism::Sprite* mySprite;
 	};

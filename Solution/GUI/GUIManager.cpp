@@ -112,6 +112,32 @@ namespace GUI
 		myWindowSize = newSize;
 	}
 
+	CU::Vector3<float> GUIManager::CalcCameraMovement() const
+	{
+		CU::Vector3<float> movement;
+
+		float epsilon = 0.05f;
+		if (myCursor->GetMousePositionZeroToOne().x < epsilon)
+		{
+			movement.x = -1.f;
+		}
+		if (myCursor->GetMousePositionZeroToOne().x > 1.f - epsilon)
+		{
+			movement.x = 1.f;
+		}
+
+		if (myCursor->GetMousePositionZeroToOne().y < epsilon)
+		{
+			movement.z = -1.f;
+		}
+		if (myCursor->GetMousePositionZeroToOne().y > 1.f - epsilon)
+		{
+			movement.z = 1.f;
+		}
+
+		return movement;
+	}
+
 	void GUIManager::CheckMousePressed()
 	{
 		if (myActiveWidget != nullptr)

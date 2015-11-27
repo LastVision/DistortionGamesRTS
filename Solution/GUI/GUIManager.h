@@ -26,6 +26,8 @@ namespace GUI
 
 		void OnResize(int aWidth, int aHeight);
 
+		CU::Vector3<float> CalcCameraMovement() const;
+
 	private:
 
 		void CheckMousePressed();

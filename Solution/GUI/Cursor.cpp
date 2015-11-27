@@ -1,8 +1,8 @@
 #include "stdafx.h"
+#include <CommonHelper.h>
 #include "Cursor.h"
 #include "../InputWrapper/InputWrapper.h"
 #include <Sprite.h>
-
 namespace GUI
 {
 	Cursor::Cursor(const CU::Vector2<int>& aWindowSize)
@@ -13,6 +13,9 @@ namespace GUI
 
 		mySprite = new Prism::Sprite("Data/Resource/Texture/UI/T_crosshair_default.dds", { 70.f, 70.f }, { 35.f, 35.f });
 		myPosition = myWindowSize / 2.f;
+
+		myPositionZeroToOne = myPosition / myWindowSize;
+
 	}
 
 	Cursor::~Cursor()
@@ -29,6 +32,10 @@ namespace GUI
 
 		myPosition.x = CU::InputWrapper::GetInstance()->GetMousePosition().x;
 		myPosition.y = myWindowSize.y - CU::InputWrapper::GetInstance()->GetMousePosition().y;
+
+		myPositionZeroToOne = myPosition / myWindowSize;
+		myPositionZeroToOne.x = CU::Clip(myPositionZeroToOne.x, 0, 1.f);
+		myPositionZeroToOne.y = CU::Clip(myPositionZeroToOne.y, 0, 1.f);
 	}
 
 	void Cursor::Render()
@@ -39,6 +46,11 @@ namespace GUI
 	const CU::Vector2<float>& Cursor::GetMousePosition() const
 	{
 		return myPosition;
+	}
+
+	const CU::Vector2<float>& Cursor::GetMousePositionZeroToOne() const
+	{
+		return myPositionZeroToOne;
 	}
 
 	void Cursor::OnResize(int aWidth, int aHeight)
