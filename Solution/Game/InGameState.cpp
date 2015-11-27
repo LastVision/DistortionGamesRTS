@@ -20,10 +20,10 @@ InGameState::InGameState()
 	myRenderGUI = true;
 	myCamera = new Prism::Camera(myCameraOrientation);
 
-	myCameraOrientation.SetPos(CU::Vector3<float>(10.f, 100.f, 0));
+	//myCameraOrientation.SetPos(CU::Vector3<float>(10.f, 25.f, 0));
 	myCameraOrientation = CU::Matrix44<float>::CreateRotateAroundX(0.0174532925f * 60.f) * myCameraOrientation;
 
-	myCameraOrientation.SetPos(CU::Vector3<float>(30.f, 80.f, 0));
+	myCameraOrientation.SetPos(CU::Vector3<float>(30.f, 35.f, 0));
 }
 
 InGameState::~InGameState()
@@ -179,7 +179,7 @@ void InGameState::UpdateCamera(float aDeltaTime, const CU::Vector3<float>& aCame
 
 	CU::Vector3<float> cameraPos = myCameraOrientation.GetPos();
 
-	float cameraSpeed = 100.f * aDeltaTime;
+	float cameraSpeed = 40.f * aDeltaTime;
 
 	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_S) == true)
 	{
