@@ -103,6 +103,14 @@ namespace GUI
 		myImageCurrent = myImageNormal;
 	}
 
+	void ButtonWidget::OnResize(const CU::Vector2<float>& aNewSize, const CU::Vector2<float>& anOldSize)
+	{
+		Widget::OnResize(aNewSize, anOldSize);
+		myImageNormal->SetSize(mySize, mySize / 2.f);
+		myImagePressed->SetSize(mySize, mySize / 2.f);
+		myImageHover->SetSize(mySize, mySize / 2.f);
+	}
+
 	bool ButtonWidget::IsInside(const CU::Vector2<float>& aPosition) const
 	{
 		return aPosition.x >= myPosition.x - myImageCurrent->GetHotspot().x &&

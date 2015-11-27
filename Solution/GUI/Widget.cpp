@@ -67,4 +67,13 @@ namespace GUI
 			aPosition.x <= myPosition.x + mySize.x &&
 			aPosition.x <= myPosition.x + mySize.y;
 	}
+
+	void Widget::OnResize(const CU::Vector2<float>& aNewSize, const CU::Vector2<float>& anOldSize)
+	{
+		CU::Vector2<float> ratioPostion = myPosition / anOldSize;
+		myPosition = ratioPostion * aNewSize;
+
+		CU::Vector2<float> ratioSize = mySize / anOldSize;
+		mySize = ratioSize * aNewSize;
+	}
 }

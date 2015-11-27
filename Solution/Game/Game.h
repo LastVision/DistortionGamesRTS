@@ -11,7 +11,6 @@ namespace CU
 
 namespace GUI
 {
-	class GUIManager;
 	class Cursor;
 }
 
@@ -39,7 +38,7 @@ private:
 	void operator=(Game& aApp) = delete;
 
 
-	GUI::GUIManager* myGUIManager;
+	
 	GUI::Cursor* myCursor;
 
 	HWND* myWindowHandler;
