@@ -4,6 +4,7 @@
 #include <ColoursForBG.h>
 #include <Engine.h>
 #include <GameStateMessage.h>
+#include <GUIManager.h>
 #include "InGameState.h"
 #include <InputWrapper.h>
 #include "Level.h"
@@ -16,6 +17,7 @@
 InGameState::InGameState()
 {
 	myIsActiveState = false;
+	myRenderGUI = true;
 	myCamera = new Prism::Camera(myCameraOrientation);
 
 	myCameraOrientation.SetPos(CU::Vector3<float>(10.f, 100.f, 0));
@@ -29,14 +31,17 @@ InGameState::~InGameState()
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::GAME_STATE, this);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::ON_CLICK, this);
 	SAFE_DELETE(myCamera);
+	SAFE_DELETE(myGUIManager);
 }
 
-void InGameState::InitState(StateStackProxy* aStateStackProxy)
+void InGameState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCursor)
 {
 	myIsLetThrough = false;
 	myIsComplete = false;
 	myStateStack = aStateStackProxy;
 	myStateStatus = eStateStatus::eKeepState;
+	myCursor = aCursor;
+	myGUIManager = new GUI::GUIManager(myCursor, "Data/Resource/GUI/GUI_ingame.xml");
 
 	CU::Vector2<int> windowSize = Prism::Engine::GetInstance()->GetWindowSize();
 
@@ -56,6 +61,12 @@ void InGameState::EndState()
 const eStateStatus InGameState::Update(const float& aDeltaTime)
 {
 	UpdateCamera(aDeltaTime);
+
+	if (myRenderGUI == true)
+	{
+		myGUIManager->Update();
+	}
+	
 	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_ESCAPE) || myStateStatus == eStateStatus::ePopMainState)
 	{
 		myIsActiveState = false;
@@ -63,9 +74,15 @@ const eStateStatus InGameState::Update(const float& aDeltaTime)
 		myLevel = nullptr;
 		return eStateStatus::ePopMainState;
 	}
+
+	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_G) == true)
+	{
+		myRenderGUI = !myRenderGUI;
+	}
+
 	if (myLevel->LogicUpdate(aDeltaTime, *myCamera) == true)
 	{
-		return myStateStatus;
+		//return myStateStatus;
 	}
 
 	return myStateStatus;
@@ -75,6 +92,12 @@ void InGameState::Render()
 {
 	VTUNE_EVENT_BEGIN(VTUNE::GAME_RENDER);
 	myLevel->Render();
+
+	if (myRenderGUI == true)
+	{
+		myGUIManager->Render();
+	}
+
 	Prism::DebugDrawer::GetInstance()->Render(*myCamera); //Have to be last
 
 	VTUNE_EVENT_END();
@@ -88,6 +111,7 @@ void InGameState::ResumeState()
 void InGameState::OnResize(int aWidth, int aHeight)
 {
 	myLevel->OnResize(aWidth, aHeight);
+	myGUIManager->OnResize(aWidth, aHeight);
 }
 
 void InGameState::ReceiveMessage(const GameStateMessage& aMessage)

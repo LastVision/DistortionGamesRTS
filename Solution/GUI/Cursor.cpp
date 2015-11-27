@@ -41,6 +41,12 @@ namespace GUI
 		return myPosition;
 	}
 
+	void Cursor::OnResize(int aWidth, int aHeight)
+	{
+		myWindowSize.x = float(aWidth);
+		myWindowSize.y = float(aHeight);
+	}
+
 	void Cursor::ClipCursor()
 	{
 		if (myPosition.x < 0.f)

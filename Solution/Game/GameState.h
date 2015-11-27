@@ -7,6 +7,11 @@ namespace CU
 	class InputWrapper;
 }
 
+namespace GUI
+{
+	class Cursor;
+}
+
 class StateStackProxy;
 
 class GameState
@@ -15,7 +20,7 @@ public:
 
 	virtual ~GameState();
 
-	virtual void InitState(StateStackProxy* aStateStackProxy) = 0;
+	virtual void InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCursor) = 0;
 	virtual void EndState() = 0;
 	
 	virtual const eStateStatus Update(const float& aDeltaTime) = 0;
@@ -27,6 +32,7 @@ public:
 
 protected:
 
+	GUI::Cursor* myCursor;
 	StateStackProxy* myStateStack;
 	eStateStatus myStateStatus;
 	bool myIsLetThrough;

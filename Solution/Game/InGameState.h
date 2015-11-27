@@ -17,6 +17,12 @@ namespace Prism
 	class Sprite;
 }
 
+namespace GUI
+{
+	class GUIManager;
+	class Cursor;
+}
+
 class InGameState : public GameState, public Subscriber
 {
 public:
@@ -24,7 +30,7 @@ public:
 	InGameState();
 	~InGameState();
 
-	void InitState(StateStackProxy* aStateStackProxy) override;
+	void InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCursor) override;
 	void EndState() override;
 
 	const eStateStatus Update(const float& aDeltaTime) override;
@@ -51,8 +57,13 @@ private:
 
 	Level* myLevel;
 	Prism::Camera* myCamera;
+
+	GUI::GUIManager* myGUIManager;
+
 	CU::Matrix44<float> myCameraOrientation;
 	bool myIsComplete;
+
+	bool myRenderGUI;
 };
 
 inline bool InGameState::IsComplete() const

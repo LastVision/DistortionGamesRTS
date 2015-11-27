@@ -22,6 +22,8 @@ namespace GUI
 
 		virtual bool IsInside(const CU::Vector2<float>& aPosition) const;
 
+		virtual void OnResize(const CU::Vector2<float>& aNewSize, const CU::Vector2<float>& anOldSize);
+
 		virtual inline void SetSize(const CU::Vector2<float>& aSize);
 		virtual inline void SetPosition(const CU::Vector2<float>& aPosition);
 		virtual inline void SetVisibility(bool aVisibility);
@@ -30,6 +32,7 @@ namespace GUI
 		inline bool IsVisible() const;
 
 		const std::string& GetHoverText() const;
+
 
 	protected:
 		CU::Vector2<float> myPosition;
