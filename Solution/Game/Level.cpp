@@ -1,20 +1,21 @@
 #include "stdafx.h"
 
+#include <AnimationComponent.h>
 #include <Camera.h>
 #include <DirectionalLight.h>
 #include <Engine.h>
 #include <EngineEnums.h>
+#include <Entity.h>
+#include <EntityFactory.h>
+#include <GraphicsComponent.h>
+#include <InputWrapper.h>
+#include <Intersection.h>
 #include "Level.h"
+#include <MovementComponent.h>
 #include <Scene.h>
 #include <Terrain.h>
-#include <EntityFactory.h>
 
 
-#include <Entity.h>
-#include <GraphicsComponent.h>
-#include <AnimationComponent.h>
-#include <InputWrapper.h>
-#include <MovementComponent.h>
 
 Level::Level(const Prism::Camera& aCamera)
 {
@@ -87,6 +88,19 @@ bool Level::LogicUpdate(float aDeltaTime, Prism::Camera& aCamera)
 
 	if (CU::InputWrapper::GetInstance()->MouseDown(1))
 	{
+		CU::Vector3<float> targetPos = CalcCursorWorldPosition(aCamera);
+		CU::Intersection::LineSegment3D line(aCamera.GetOrientation().GetPos(), targetPos);
+
+		for (int i = 0; i < myUnits.Size();  ++i)
+		{
+			//if (myUnits[i]->GetComponent<CollisionComponent>()->Collide(line) == true)
+			{
+				//myUnits[i]->Select();
+			}
+			//CU::Intersection::LineVsSphere(const CU::Intersection::LineSegment3D& aLine, mySphere, CU::Vector3<float>());
+		}
+
+
 		for (int i = 0; i < myUnits.Size(); ++i)
 		{
 			myUnits[i]->GetComponent<MovementComponent>()->SetWayPoints(myWaypoints);
@@ -107,7 +121,7 @@ bool Level::LogicUpdate(float aDeltaTime, Prism::Camera& aCamera)
 	}
 	
 
-	CalcCursorWorldPosition(aCamera);
+
 
 	for (int i = 0; i < myUnits.Size(); ++i)
 	{
