@@ -297,6 +297,7 @@ namespace Prism
 		TextCommand toAdd;
 		toAdd.myText = aText;
 		toAdd.myPosition = aPosition;
+		toAdd.myPosition.y -= myWindowSize.y;
 		toAdd.myScale = aScale;
 		toAdd.myColor = aColor;
 		if (aTextType == eTextType::RELEASE_TEXT)

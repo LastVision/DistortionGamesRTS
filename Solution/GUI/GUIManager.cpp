@@ -15,7 +15,7 @@ namespace GUI
 		, myCursor(aCursor)
 		, myMousePosition({ 0.f, 0.f })
 	{
-		myWindowSize = { 1920.f, 1080.f }; // XML coordinates respond to this resolution, will be reseized
+		myWindowSize = { 1920.f, 1080.f }; // XML coordinates respond to this resolution, will be resized
 
 		std::string path = "";
 		CU::Vector2<float> size;
@@ -53,8 +53,6 @@ namespace GUI
 		}
 
 		reader.CloseDocument();
-
-		//SetSize(myWindowSize * 2.f);
 	}
 
 	GUIManager::~GUIManager()
@@ -89,7 +87,7 @@ namespace GUI
 
 		if (myActiveWidget != nullptr && myActiveWidget->GetHoverText() != "")
 		{
-			Prism::Engine::GetInstance()->PrintText(myActiveWidget->GetHoverText(), { 500.f, -500.f }, Prism::eTextType::RELEASE_TEXT);
+			Prism::Engine::GetInstance()->PrintText(myActiveWidget->GetHoverText(), { 500.f, 500.f }, Prism::eTextType::RELEASE_TEXT);
 		}
 	}
 
