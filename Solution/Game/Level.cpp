@@ -149,12 +149,17 @@ void Level::CalcCursorWorldPosition(Prism::Camera& aCamera)
 	CU::Vector2<float> cursorPos;
 	CU::Vector2<float> window = Prism::Engine::GetInstance()->GetWindowSizeInFloat();
 
-	//static float tweakValue = 1.4f;
-	//tweakValue -= 0.0001f;
-	//float tweakValue = 1.85f; // for 16:9
-	//float tweakValue = 1.255f; // for 5:4
-	float tweakValue = 1.665f; //for 16:10 ?
-
+	float tweakValue = 1.85f; // for 16:9
+	float epsilon = 0.1f;
+	float aspect = window.x / window.y;
+	if (aspect <= 5.f / 4.f + epsilon)
+	{
+		tweakValue = 1.255f;
+	}
+	else if (aspect <= 16.f / 10.f + epsilon)
+	{
+		tweakValue = 1.605f;
+	}
 
 	float padding = (window.x - window.y) * 0.5f;
 	float mult = window.y / window.x;
@@ -163,63 +168,13 @@ void Level::CalcCursorWorldPosition(Prism::Camera& aCamera)
 	cursorPos.y = window.y - cursorPos.y;
 	cursorPos.y /= window.y;
 	cursorPos.y *= mult / tweakValue;
-	//cursorPos.y += tweakValue * padding / window.x;
 	cursorPos.y += (1.f - mult / tweakValue) / 2.f;
 
 	cursorPos.x /= window.x;
 
-	//cursorPos.y -= padding * (window.y / window.x) * 0.3f;
-	//cursorPos /= window.x;
-	//cursorPos.y = 1.f - cursorPos.y;
-	//cursorPos.y /= window.x / window.y;
-
-	//SetWindowTextA(GetActiveWindow(), itoa(cursorPos.x));
 	Prism::Engine::GetInstance()->PrintText(cursorPos.x, { 50.f, -50.f }, Prism::eTextType::DEBUG_TEXT);
 	Prism::Engine::GetInstance()->PrintText(cursorPos.y, { 280.f, -50.f }, Prism::eTextType::DEBUG_TEXT);
 	Prism::Engine::GetInstance()->PrintText(tweakValue, { 480.f, -50.f }, Prism::eTextType::DEBUG_TEXT);
-
-
-	//padding /= window.x;
-
-	//float m = padding; // y = kx + m
-
-
-
-
-	////m *= 2.f;
-	//m = 1.f - m;
-
-	//float m2 = 1.f - m;
-
-	//float k = (m2 - m) / window.x;
-
-	//cursorPos.y = k * inputPos.y + m;
-
-	//cursorPos.y -= padding * 0.5f;
-
-	////float k = -m * 2.f / window.y;
-
-	//
-	////float m = 1.f;
-	////float k = -m / window.y;
-
-	////cursorPos.y = k * inputPos.y + m;
-
-
-
-
-
-
-	////float aspect = window.x / window.y;
-	//cursorPos.x = inputPos.x;
-	//cursorPos.x /= window.x;
-	////cursorPos.y = window.x - ((inputPos.y / aspect) + padding);
-	//////cursorPos.y += (window.x - window.y) * 0.4f;
-	////cursorPos.y /= window.x;// *aspect;
-
-	////cursorPos.y = window.y - (inputPos.y + padding);
-	////cursorPos.y /= aspect;
-	////cursorPos.y /= window.y;
 
 	CU::Vector3<float> worldPos(myTerrain->CalcIntersection(aCamera.GetOrientation().GetPos()
 		, aCamera.RayCast(cursorPos)));
