@@ -16,6 +16,9 @@
     <Filter Include="Component\Graphic">
       <UniqueIdentifier>{04e1e5b4-fd4d-484e-882c-295f20cb2c9c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Component\Movement">
+      <UniqueIdentifier>{691588cd-2b7b-4f2e-a84b-81f62dc4aebf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -32,7 +35,7 @@
       <Filter>Component\Graphic</Filter>
     </ClCompile>
     <ClCompile Include="MovementComponent.cpp">
-      <Filter>Component</Filter>
+      <Filter>Component\Movement</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -53,7 +56,7 @@
       <Filter>Component\Graphic</Filter>
     </ClInclude>
     <ClInclude Include="MovementComponent.h">
-      <Filter>Component</Filter>
+      <Filter>Component\Movement</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
