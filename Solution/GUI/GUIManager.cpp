@@ -15,32 +15,21 @@ namespace GUI
 		, myCursor(aCursor)
 		, myMousePosition({ 0.f, 0.f })
 	{
-		myWindowSize = { 1920.f, 1080.f };
+		myWindowSize = { 1920.f, 1080.f }; // XML coordinates respond to this resolution, will be reseized
+
 		std::string path = "";
-		bool isWindowSize = false;
+		CU::Vector2<float> size;
+
 		XMLReader reader;
 		reader.OpenDocument(aXMLPath);
 
 		tinyxml2::XMLElement* rootElement = reader.FindFirstChild("root");
-
 		reader.ForceReadAttribute(reader.ForceFindFirstChild(rootElement, "backgroundsprite"), "path", path);
-		reader.ForceReadAttribute(reader.ForceFindFirstChild(rootElement, "backgroundsprite"), "windowsize", isWindowSize);
+		reader.ForceReadAttribute(reader.ForceFindFirstChild(rootElement, "backgroundsprite"), "sizex", size.x);
+		reader.ForceReadAttribute(reader.ForceFindFirstChild(rootElement, "backgroundsprite"), "sizey", size.y);
 
-		Prism::Sprite* backgroundSprite = nullptr;
-
-		if (isWindowSize == false)
-		{
-			//CU::Vector2<float> size;
-			//reader.ForceReadAttribute(reader.ForceFindFirstChild(rootElement, "backgroundsprite"), "sizex", size.x);
-			//reader.ForceReadAttribute(reader.ForceFindFirstChild(rootElement, "backgroundsprite"), "sizey", size.y);
-			//backgroundSprite = new Prism::Sprite(path, size);
-		}
-		else
-		{
-			backgroundSprite = new Prism::Sprite(path, myWindowSize);
-		}
-
-		myWidgets = new WidgetContainer(backgroundSprite, isWindowSize);
+		Prism::Sprite* backgroundSprite = new Prism::Sprite(path, size);
+		myWidgets = new WidgetContainer(backgroundSprite);
 
 		tinyxml2::XMLElement* widgetElement = reader.FindFirstChild(rootElement, "widget");
 		for (; widgetElement != nullptr; widgetElement = reader.FindNextElement(widgetElement))
@@ -68,8 +57,7 @@ namespace GUI
 
 	GUIManager::~GUIManager()
 	{
-		delete myWidgets;
-		myWidgets = nullptr;
+		SAFE_DELETE(myWidgets);
 		myActiveWidget = nullptr;
 	}
 

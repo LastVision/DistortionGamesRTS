@@ -20,7 +20,7 @@ namespace GUI
 	{
 	public:
 
-		WidgetContainer(Prism::Sprite* aBackgroundSprite, bool aIsWindowSize = false);
+		WidgetContainer(Prism::Sprite* aBackgroundSprite);
 		WidgetContainer(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement);
 		~WidgetContainer();
 
@@ -33,8 +33,7 @@ namespace GUI
 		void OnResize(const CU::Vector2<float>& aNewSize, const CU::Vector2<float>& anOldSize) override;
 
 	private:
-		Prism::Sprite* myBackground;
 		CU::GrowingArray<Widget*> myWidgets;
-		bool myIsWindowSize;
+		Prism::Sprite* myBackground;
 	};
 }
