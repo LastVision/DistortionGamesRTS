@@ -162,9 +162,9 @@ CU::Vector3<float> Level::CalcCursorWorldPosition(Prism::Camera& aCamera)
 
 	cursorPos.x /= window.x;
 
-	Prism::Engine::GetInstance()->PrintText(cursorPos.x, { 50.f, -50.f }, Prism::eTextType::DEBUG_TEXT);
-	Prism::Engine::GetInstance()->PrintText(cursorPos.y, { 280.f, -50.f }, Prism::eTextType::DEBUG_TEXT);
-	Prism::Engine::GetInstance()->PrintText(tweakValue, { 480.f, -50.f }, Prism::eTextType::DEBUG_TEXT);
+	Prism::Engine::GetInstance()->PrintText(cursorPos.x, { 50.f, 50.f }, Prism::eTextType::DEBUG_TEXT);
+	Prism::Engine::GetInstance()->PrintText(cursorPos.y, { 280.f, 50.f }, Prism::eTextType::DEBUG_TEXT);
+	Prism::Engine::GetInstance()->PrintText(tweakValue, { 480.f, 50.f }, Prism::eTextType::DEBUG_TEXT);
 
 	CU::Vector3<float> worldPos(myTerrain->CalcIntersection(aCamera.GetOrientation().GetPos()
 		, aCamera.RayCast(cursorPos)));
