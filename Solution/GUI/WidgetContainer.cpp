@@ -6,10 +6,11 @@
 
 namespace GUI
 {
-	WidgetContainer::WidgetContainer(Prism::Sprite* aBackgroundSprite)
+	WidgetContainer::WidgetContainer(Prism::Sprite* aBackgroundSprite, const CU::Vector2<float>& aSize)
 		: myBackground(aBackgroundSprite)
 		, myWidgets(8)
 	{
+		mySize = aSize;
 	}
 
 	WidgetContainer::WidgetContainer(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement)

@@ -24,35 +24,37 @@ namespace GUI
 		reader.OpenDocument(aXMLPath);
 
 		tinyxml2::XMLElement* rootElement = reader.FindFirstChild("root");
-		reader.ForceReadAttribute(reader.ForceFindFirstChild(rootElement, "backgroundsprite"), "path", path);
-		reader.ForceReadAttribute(reader.ForceFindFirstChild(rootElement, "backgroundsprite"), "sizex", size.x);
-		reader.ForceReadAttribute(reader.ForceFindFirstChild(rootElement, "backgroundsprite"), "sizey", size.y);
 
-		Prism::Sprite* backgroundSprite = new Prism::Sprite(path, size);
-		myWidgets = new WidgetContainer(backgroundSprite);
+		myWidgets = new WidgetContainer(nullptr, myWindowSize * 2.f);
 
-		tinyxml2::XMLElement* widgetElement = reader.FindFirstChild(rootElement, "widget");
-		for (; widgetElement != nullptr; widgetElement = reader.FindNextElement(widgetElement))
+		tinyxml2::XMLElement* containerElement = reader.ForceFindFirstChild(rootElement, "container");
+		for (; containerElement != nullptr; containerElement = reader.FindNextElement(containerElement))
 		{
-			std::string type = "";
+			reader.ForceReadAttribute(reader.ForceFindFirstChild(containerElement, "backgroundsprite"), "path", path);
+			reader.ForceReadAttribute(reader.ForceFindFirstChild(containerElement, "backgroundsprite"), "sizex", size.x);
+			reader.ForceReadAttribute(reader.ForceFindFirstChild(containerElement, "backgroundsprite"), "sizey", size.y);
+			Prism::Sprite* backgroundSprite = new Prism::Sprite(path, size);
+			GUI::WidgetContainer* container = new WidgetContainer(backgroundSprite, size * 2.f);
 
-			reader.ForceReadAttribute(widgetElement, "type", type);
+			tinyxml2::XMLElement* widgetElement = reader.FindFirstChild(containerElement, "widget");
+			for (; widgetElement != nullptr; widgetElement = reader.FindNextElement(widgetElement))
+			{
+				std::string type = "";
 
-			if (type == "container")
-			{
-				WidgetContainer* container = new WidgetContainer(&reader, widgetElement);
-				myWidgets->AddWidget(container);
+				reader.ForceReadAttribute(widgetElement, "type", type);
+
+				if (type == "button")
+				{
+					ButtonWidget* button = new ButtonWidget(&reader, widgetElement);
+					container->AddWidget(button);
+				}
 			}
-			else if (type == "button")
-			{
-				ButtonWidget* container = new ButtonWidget(&reader, widgetElement);
-				myWidgets->AddWidget(container);
-			}
+			myWidgets->AddWidget(container);
 		}
 
 		reader.CloseDocument();
 
-		SetSize(myWindowSize * 2.f);
+		//SetSize(myWindowSize * 2.f);
 	}
 
 	GUIManager::~GUIManager()
