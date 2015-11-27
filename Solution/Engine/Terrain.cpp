@@ -76,6 +76,16 @@ namespace Prism
 		anOrientation.SetPos(position);
 	}
 
+	CU::Vector3<float> Terrain::GetHeight(const CU::Vector3<float>& aPosition, float aHeightOffset) const
+	{
+		CU::Vector3<float> position(aPosition);
+
+		position.y = GetHeight(static_cast<unsigned int>(position.x / myCellSize)
+			, static_cast<unsigned int>(position.z / myCellSize)) * myHeight + aHeightOffset;
+
+		return position;
+	}
+
 	CU::Vector3<float> Terrain::CalcIntersection(const CU::Vector3<float>& aCameraPos
 		, const CU::Vector3<float>& aRayCastToZero) const
 	{

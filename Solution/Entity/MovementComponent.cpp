@@ -24,13 +24,14 @@ void MovementComponent::Update(float aDeltaTime)
 {
 	if (myEntity.GetState() == eEntityState::IDLE && myWayPoints.Size() > 0)
 	{
-		MoveTo(myWayPoints[myCurrentWayPoint]);
-		++myCurrentWayPoint;
+		MoveTo(myWayPoints[0]);
+		myWayPoints.RemoveNonCyclicAtIndex(0);
+		/*++myCurrentWayPoint;
 		if (myCurrentWayPoint >= myWayPoints.Size())
 		{
 			myWayPoints.RemoveAll();
 			myCurrentWayPoint = 0;
-		}
+		}*/
 	}
 	else if (myEntity.GetState() == eEntityState::WALKING)
 	{
@@ -53,18 +54,53 @@ void MovementComponent::Update(float aDeltaTime)
 
 		myTerrain.CalcEntityHeight(myEntity.myOrientation);
 	}
+
+
+	if (myEntity.GetState() == eEntityState::WALKING)
+	{
+		CU::Vector3<float> targetPosition = myTerrain.GetHeight(myTargetPosition, 2.f);
+		Prism::RenderBox(targetPosition, 1.f, eColorDebug::BLUE);
+		Prism::RenderLine3D(myTerrain.GetHeight(myEntity.myOrientation.GetPos(), 2.f), targetPosition);
+
+		if (myWayPoints.Size() > 0)
+		{
+			Prism::RenderBox(myTerrain.GetHeight(myWayPoints[0], 2.f), 0.5f, eColorDebug::GREEN);
+			Prism::RenderLine3D(targetPosition, myTerrain.GetHeight(myWayPoints[0], 2.f));
+
+			for (int i = 1; i < myWayPoints.Size(); ++i)
+			{
+				Prism::RenderLine3D(myTerrain.GetHeight(myWayPoints[i - 1], 2.f), myTerrain.GetHeight(myWayPoints[i], 2.f));
+				Prism::RenderBox(myTerrain.GetHeight(myWayPoints[i], 2.f), 0.5f, eColorDebug::GREEN);
+			}
+		}
+	}
 }
 
-void MovementComponent::SetWayPoints(const CU::GrowingArray<CU::Vector3<float>>& someWayPoints)
+void MovementComponent::AddWayPoints(const CU::GrowingArray<CU::Vector3<float>>& someWayPoints, bool aRemovePreviousPoints)
 {
-	myWayPoints.RemoveAll();
+	if (aRemovePreviousPoints == true)
+	{
+		myWayPoints.RemoveAll();
+		myEntity.SetState(eEntityState::IDLE);
+		myCurrentWayPoint = 0;
+	}
+
 	for (int i = 0; i < someWayPoints.Size(); ++i)
 	{
 		myWayPoints.Add(someWayPoints[i]);
 	}
+}
 
-	myCurrentWayPoint = 0;
-	myEntity.SetState(eEntityState::IDLE);
+void MovementComponent::AddWayPoint(const CU::Vector3<float>& aWayPoint, bool aRemovePreviousPoints)
+{
+	if (aRemovePreviousPoints == true)
+	{
+		myWayPoints.RemoveAll();
+		myEntity.SetState(eEntityState::IDLE);
+		myCurrentWayPoint = 0;
+	}
+
+	myWayPoints.Add(aWayPoint);
 }
 
 void MovementComponent::MoveTo(CU::Vector3<float> aPointToMoveTo)

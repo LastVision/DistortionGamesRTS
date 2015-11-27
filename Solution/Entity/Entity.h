@@ -52,6 +52,7 @@ public:
 	void Reset();
 
 	void SetSelect(bool aStatus);
+	bool IsSelected() const;
 
 private:
 	void operator=(Entity&) = delete;

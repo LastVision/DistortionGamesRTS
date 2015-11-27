@@ -18,7 +18,8 @@ public:
 	~MovementComponent();
 
 	void Update(float aDeltaTime) override;
-	void SetWayPoints(const CU::GrowingArray<CU::Vector3<float>>& someWayPoints);
+	void AddWayPoints(const CU::GrowingArray<CU::Vector3<float>>& someWayPoints, bool aRemovePreviousPoints);
+	void AddWayPoint(const CU::Vector3<float>& aWayPoint, bool aRemovePreviousPoints);
 
 	static eComponentType GetTypeStatic();
 	eComponentType GetType() override;

@@ -17,6 +17,7 @@ Entity::Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& a
 	, myOctreeType(anOctreeType)
 	, myState(eEntityState::IDLE)
 	, myType(aEntityData.myType)
+	, mySelected(false)
 {
 	for (int i = 0; i < static_cast<int>(eComponentType::_COUNT); ++i)
 	{
@@ -105,4 +106,9 @@ void Entity::Reset()
 void Entity::SetSelect(bool aStatus)
 {
 	mySelected = aStatus;
+}
+
+bool Entity::IsSelected() const
+{
+	return mySelected;
 }

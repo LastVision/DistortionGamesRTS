@@ -58,41 +58,12 @@ bool Level::LogicUpdate(float aDeltaTime, Prism::Camera& aCamera)
 	Prism::RenderLine3D({ 0.f, 0.f, 0.f }, { 100.f, 100.f, 100.f }, eColorDebug::BLACK, eColorDebug::GREEN);
 	Prism::RenderBox({ 128.f, 129.f, 128.f }, 2.f, eColorDebug::BLUE, false);
 
-	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_1))
-	{
-		for (int i = 0; i < myUnits.Size(); ++i)
-		{
-			myUnits[i]->SetState(eEntityState::IDLE);
-		}
-	}
-	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_2))
-	{
-		for (int i = 0; i < myUnits.Size(); ++i)
-		{
-			myUnits[i]->SetState(eEntityState::WALKING);
-		}
-	}
-	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_3))
-	{
-		for (int i = 0; i < myUnits.Size(); ++i)
-		{
-			myUnits[i]->SetState(eEntityState::ATTACKING);
-		}
-	}
-	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_4))
-	{
-		for (int i = 0; i < myUnits.Size(); ++i)
-		{
-			myUnits[i]->SetState(eEntityState::DYING);
-		}
-	}
-
-	if (CU::InputWrapper::GetInstance()->MouseDown(1))
+	if (CU::InputWrapper::GetInstance()->MouseDown(0))
 	{
 		CU::Vector3<float> targetPos = CalcCursorWorldPosition(aCamera);
 		CU::Intersection::LineSegment3D line(aCamera.GetOrientation().GetPos(), targetPos);
 
-		for (int i = 0; i < myUnits.Size();  ++i)
+		for (int i = 0; i < myUnits.Size(); ++i)
 		{
 			if (myUnits[i]->GetComponent<CollisionComponent>()->Collide(line) == true)
 			{
@@ -103,29 +74,30 @@ bool Level::LogicUpdate(float aDeltaTime, Prism::Camera& aCamera)
 				myUnits[i]->SetSelect(false);
 			}
 		}
+	}
 
-
+	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_LSHIFT) && CU::InputWrapper::GetInstance()->MouseDown(1))
+	{
+		CU::Vector3<float> newPos(CalcCursorWorldPosition(aCamera));
 		for (int i = 0; i < myUnits.Size(); ++i)
 		{
-			myUnits[i]->GetComponent<MovementComponent>()->SetWayPoints(myWaypoints);
+			if (myUnits[i]->IsSelected())
+			{
+				myUnits[i]->GetComponent<MovementComponent>()->AddWayPoint(newPos, false);
+			}
 		}
-		
-		myWaypoints.RemoveAll();
 	}
-
-	if (CU::InputWrapper::GetInstance()->MouseDown(0))
+	else if (CU::InputWrapper::GetInstance()->MouseDown(1))
 	{
 		CU::Vector3<float> newPos(CalcCursorWorldPosition(aCamera));
-		myWaypoints.Add({ newPos.x, 0.f, newPos.z });
+		for (int i = 0; i < myUnits.Size(); ++i)
+		{
+			if (myUnits[i]->IsSelected())
+			{
+				myUnits[i]->GetComponent<MovementComponent>()->AddWayPoint(newPos, true);
+			}
+		}
 	}
-	if (CU::InputWrapper::GetInstance()->MouseIsPressed(0) && CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_LSHIFT))
-	{
-		CU::Vector3<float> newPos(CalcCursorWorldPosition(aCamera));
-		myWaypoints.Add({ newPos.x, 0.f, newPos.z });
-	}
-	
-
-
 
 	for (int i = 0; i < myUnits.Size(); ++i)
 	{
