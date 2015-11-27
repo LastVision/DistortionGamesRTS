@@ -60,7 +60,7 @@ void InGameState::EndState()
 
 const eStateStatus InGameState::Update(const float& aDeltaTime)
 {
-	UpdateCamera(aDeltaTime);
+	UpdateCamera(aDeltaTime, myGUIManager->CalcCameraMovement());
 
 	if (myRenderGUI == true)
 	{
@@ -173,7 +173,7 @@ void InGameState::LoadPlayerSettings()
 
 }
 
-void InGameState::UpdateCamera(float aDeltaTime)
+void InGameState::UpdateCamera(float aDeltaTime, const CU::Vector3<float>& aCameraMovement)
 {
 	myCamera->Update(aDeltaTime);
 
@@ -205,6 +205,9 @@ void InGameState::UpdateCamera(float aDeltaTime)
 	{
 		cameraPos.y += cameraSpeed;
 	}
+
+	cameraPos += aCameraMovement * cameraSpeed;
+
 	myCameraOrientation.SetPos(cameraPos);
 
 	float rotationSpeed = 1.f * aDeltaTime;

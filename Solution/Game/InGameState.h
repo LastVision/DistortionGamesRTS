@@ -52,15 +52,15 @@ public:
 	bool IsComplete() const;
 
 private:
-	void UpdateCamera(float aDeltaTime);
+	void UpdateCamera(float aDeltaTime, const CU::Vector3<float>& aCameraMovement);
 	void ShowMessage(const std::string& aBackgroundPath, const CU::Vector2<float>& aSize, std::string aText, GameStateMessage* aMessage = nullptr);
 
 	Level* myLevel;
 	Prism::Camera* myCamera;
+	CU::Matrix44<float> myCameraOrientation;
 
 	GUI::GUIManager* myGUIManager;
 
-	CU::Matrix44<float> myCameraOrientation;
 	bool myIsComplete;
 
 	bool myRenderGUI;
