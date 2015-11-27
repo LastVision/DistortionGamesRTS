@@ -18,6 +18,13 @@
       <Filter>Level</Filter>
     </ClCompile>
     <ClCompile Include="Console.cpp" />
+    <ClCompile Include="MainMenuState.cpp">
+      <Filter>StateStack</Filter>
+    </ClCompile>
+    <ClCompile Include="MessageState.cpp">
+      <Filter>StateStack</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -43,6 +50,13 @@
       <Filter>Level</Filter>
     </ClInclude>
     <ClInclude Include="Console.h" />
+    <ClInclude Include="MainMenuState.h">
+      <Filter>StateStack</Filter>
+    </ClInclude>
+    <ClInclude Include="MessageState.h">
+      <Filter>StateStack</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="PreCompile">
