@@ -55,7 +55,7 @@ void InGameState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCur
 
 void InGameState::EndState()
 {
-	
+
 }
 
 const eStateStatus InGameState::Update(const float& aDeltaTime)
@@ -66,7 +66,7 @@ const eStateStatus InGameState::Update(const float& aDeltaTime)
 	{
 		myGUIManager->Update();
 	}
-	
+
 	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_ESCAPE) || myStateStatus == eStateStatus::ePopMainState)
 	{
 		myIsActiveState = false;
@@ -119,28 +119,31 @@ void InGameState::ReceiveMessage(const GameStateMessage& aMessage)
 	switch (aMessage.myGameState)
 	{
 	case eGameState::RELOAD_LEVEL:
-		
+
 		break;
 
 	case eGameState::COMPLETE_LEVEL:
-		
+
 		break;
 
 	case eGameState::LOAD_NEXT_LEVEL:
-		
+
 		break;
 	}
 }
 
 void InGameState::ReceiveMessage(const OnClickMessage& aMessage)
 {
-	switch (aMessage.myEvent)
+	if (myIsActiveState == true)
 	{
-	case eOnClickEvent::QUIT:
-		myStateStatus = eStateStatus::ePopMainState;
-		break;
-	default:
-		break;
+		switch (aMessage.myEvent)
+		{
+		case eOnClickEvent::QUIT:
+			myStateStatus = eStateStatus::ePopMainState;
+			break;
+		default:
+			break;
+		}
 	}
 }
 
@@ -151,23 +154,23 @@ void InGameState::SetLevel()
 
 void InGameState::CompleteLevel()
 {
-	
+
 }
 
 void InGameState::CompleteGame()
 {
-	
+
 	myIsComplete = true;
 }
 
 void InGameState::LoadLevelSettings()
 {
-	
+
 }
 
 void InGameState::LoadPlayerSettings()
 {
-	
+
 }
 
 void InGameState::UpdateCamera(float aDeltaTime)
@@ -226,7 +229,7 @@ void InGameState::UpdateCamera(float aDeltaTime)
 
 }
 
-void InGameState::ShowMessage(const std::string& aBackgroundPath, 
+void InGameState::ShowMessage(const std::string& aBackgroundPath,
 	const CU::Vector2<float>& aSize, std::string aText, GameStateMessage* aMessage)
 {
 	aBackgroundPath;

@@ -3,6 +3,7 @@
 
 enum class eOnClickEvent
 {
+	START,
 	QUIT,
 	RESTART,
 	WIN,
