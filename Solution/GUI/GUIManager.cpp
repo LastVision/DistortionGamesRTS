@@ -87,7 +87,11 @@ namespace GUI
 
 		if (myActiveWidget != nullptr && myActiveWidget->GetHoverText() != "")
 		{
-			Prism::Engine::GetInstance()->PrintText(myActiveWidget->GetHoverText(), { 500.f, 500.f }, Prism::eTextType::RELEASE_TEXT);
+			CU::Vector2<float> hoverPosition = { myActiveWidget->GetPosition().x - myActiveWidget->GetSize().x / 2.f
+				, myActiveWidget->GetPosition().y + myActiveWidget->GetSize().y / 2.f };
+			
+			Prism::Engine::GetInstance()->PrintText(myActiveWidget->GetHoverText(), hoverPosition
+				, Prism::eTextType::RELEASE_TEXT);
 		}
 	}
 
