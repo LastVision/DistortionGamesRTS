@@ -23,6 +23,7 @@ namespace GUI
 		void Render();
 
 		const CU::Vector2<float>& GetMousePosition() const;
+		void OnResize(int aWidth, int aHeight);
 
 		void ClipCursor(); // for software cursor
 

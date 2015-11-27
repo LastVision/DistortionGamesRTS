@@ -116,13 +116,36 @@ void Level::OnResize(int aWidth, int aHeigth)
 
 void Level::CalcCursorWorldPosition(Prism::Camera& aCamera)
 {
+	CU::Vector2<float> inputPos(CU::InputWrapper::GetInstance()->GetMousePosition());
 	CU::Vector2<float> cursorPos;
 	CU::Vector2<float> window = Prism::Engine::GetInstance()->GetWindowSizeInFloat();
-	cursorPos.x = CU::InputWrapper::GetInstance()->GetMousePosition().x;
+
+	float tweakValue = 1.85f; // for 16:9
+	float epsilon = 0.1f;
+	float aspect = window.x / window.y;
+	if (aspect <= 5.f / 4.f + epsilon)
+	{
+		tweakValue = 1.255f;
+	}
+	else if (aspect <= 16.f / 10.f + epsilon)
+	{
+		tweakValue = 1.605f;
+	}
+
+	float padding = (window.x - window.y) * 0.5f;
+	float mult = window.y / window.x;
+	cursorPos = inputPos;
+
+	cursorPos.y = window.y - cursorPos.y;
+	cursorPos.y /= window.y;
+	cursorPos.y *= mult / tweakValue;
+	cursorPos.y += (1.f - mult / tweakValue) / 2.f;
+
 	cursorPos.x /= window.x;
-	cursorPos.y = window.x - CU::InputWrapper::GetInstance()->GetMousePosition().y;
-	cursorPos.y += (window.x - window.y) * 0.4f;
-	cursorPos.y /= window.x * (window.x / window.y);
+
+	Prism::Engine::GetInstance()->PrintText(cursorPos.x, { 50.f, -50.f }, Prism::eTextType::DEBUG_TEXT);
+	Prism::Engine::GetInstance()->PrintText(cursorPos.y, { 280.f, -50.f }, Prism::eTextType::DEBUG_TEXT);
+	Prism::Engine::GetInstance()->PrintText(tweakValue, { 480.f, -50.f }, Prism::eTextType::DEBUG_TEXT);
 
 	CU::Vector3<float> worldPos(myTerrain->CalcIntersection(aCamera.GetOrientation().GetPos()
 		, aCamera.RayCast(cursorPos)));

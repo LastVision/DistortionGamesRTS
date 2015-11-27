@@ -202,16 +202,20 @@ namespace Prism
 
 	Cube3D::~Cube3D()
 	{
+		myVertexBuffer->myVertexBuffer->Release();
+		myIndexBuffer->myIndexBuffer->Release();
 		SAFE_DELETE(myVertexBaseData);
 		SAFE_DELETE(myVertexBuffer);
 		SAFE_DELETE(myIndexBaseData);
 		SAFE_DELETE(myIndexBuffer);
+		SAFE_RELEASE(myInputLayout);
 	}
 
 	void Cube3D::SetSizeAndColor(float aSideLength, const CU::Vector4<float>& aColor)
 	{
 		SAFE_DELETE(myVertexBaseData);
 		CreateVertexBuffer(aSideLength, aColor);
+		myVertexBuffer->myVertexBuffer->Release();
 		SAFE_DELETE(myVertexBuffer);
 		InitVertexBuffer();
 	}
@@ -221,27 +225,30 @@ namespace Prism
 		myVertexBuffer = new VertexBufferWrapper();
 		HRESULT hr;
 
-		D3DX11_PASS_DESC passDesc;
-		hr = myEffect->GetTechnique()->GetPassByIndex(0)->GetDesc(&passDesc);
-		DL_ASSERT_EXP(!FAILED(hr), "[Cube3D](CreateInputLayout) : Failed to get Pass Description!");
-
-		const D3D11_INPUT_ELEMENT_DESC Cube3DRendererLayout[] =
+		if (myInputLayout == nullptr)
 		{
-			{ "POSITION", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-			{ "NORMAL", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 16, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-			{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 32, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		};
+			D3DX11_PASS_DESC passDesc;
+			hr = myEffect->GetTechnique()->GetPassByIndex(0)->GetDesc(&passDesc);
+			DL_ASSERT_EXP(!FAILED(hr), "[Cube3D](CreateInputLayout) : Failed to get Pass Description!");
 
-		UINT size = ARRAYSIZE(Cube3DRendererLayout);
+			const D3D11_INPUT_ELEMENT_DESC Cube3DRendererLayout[] =
+			{
+				{ "POSITION", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+				{ "NORMAL", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 16, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+				{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 32, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			};
 
-		hr = Engine::GetInstance()->GetDevice()->CreateInputLayout(Cube3DRendererLayout
-			, size
-			, passDesc.pIAInputSignature
-			, passDesc.IAInputSignatureSize
-			, &myInputLayout);
-		DL_ASSERT_EXP(!FAILED(hr), "[Cube3D](CreateInputLayout) : Failed to Create InputLayout!");
+			UINT size = ARRAYSIZE(Cube3DRendererLayout);
 
-		Engine::GetInstance()->SetDebugName(myInputLayout, "Cube3D::myInputLayout");
+			hr = Engine::GetInstance()->GetDevice()->CreateInputLayout(Cube3DRendererLayout
+				, size
+				, passDesc.pIAInputSignature
+				, passDesc.IAInputSignatureSize
+				, &myInputLayout);
+			DL_ASSERT_EXP(!FAILED(hr), "[Cube3D](CreateInputLayout) : Failed to Create InputLayout!");
+
+			Engine::GetInstance()->SetDebugName(myInputLayout, "Cube3D::myInputLayout");
+		}
 
 		D3D11_BUFFER_DESC vertexBufferDescription;
 		vertexBufferDescription.Usage = D3D11_USAGE_DYNAMIC;
@@ -261,6 +268,9 @@ namespace Prism
 		{
 			DL_ASSERT("Failed to create vertexbuffer in CUBE3D");
 		}
+
+		Engine::GetInstance()->SetDebugName(myVertexBuffer->myVertexBuffer, "Cube3D::myVertexBuffer");
+
 
 	}
 
@@ -284,6 +294,9 @@ namespace Prism
 		{
 			DL_ASSERT("FAILED TO CREATE INDEXBUFFER IN CUBE3D");
 		}
+
+		Engine::GetInstance()->SetDebugName(myIndexBuffer->myIndexBuffer, "Cube3D::myIndexBuffer");
+
 	}
 
 	void Cube3D::Render(const Camera& aCamera)

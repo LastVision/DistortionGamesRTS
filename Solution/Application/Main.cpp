@@ -23,7 +23,7 @@ Prism::SetupInfo globalSetup;
 
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPTSTR, int aNumberCommands)
 {
-	ShowCursor(true);
+	ShowCursor(false);
 	DL_Debug::Debug::Create();
 	CU::TimerManager::Create();
 

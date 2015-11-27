@@ -65,15 +65,11 @@ namespace GUI
 
 	ButtonWidget::~ButtonWidget()
 	{
-		delete myImageNormal;
-		delete myImagePressed;
-		delete myImageHover;
-		delete myClickEvent;
-		myImageNormal = nullptr;
-		myImagePressed = nullptr;
-		myImageHover = nullptr;
+		SAFE_DELETE(myImageNormal);
+		SAFE_DELETE(myImagePressed);
+		SAFE_DELETE(myImageHover);
+		SAFE_DELETE(myClickEvent);
 		myImageCurrent = nullptr;
-		myClickEvent = nullptr;
 	}
 
 	void ButtonWidget::Render(const CU::Vector2<float>& aParentPosition)
@@ -105,6 +101,14 @@ namespace GUI
 	void ButtonWidget::OnMouseExit()
 	{
 		myImageCurrent = myImageNormal;
+	}
+
+	void ButtonWidget::OnResize(const CU::Vector2<float>& aNewSize, const CU::Vector2<float>& anOldSize)
+	{
+		Widget::OnResize(aNewSize, anOldSize);
+		myImageNormal->SetSize(mySize, mySize / 2.f);
+		myImagePressed->SetSize(mySize, mySize / 2.f);
+		myImageHover->SetSize(mySize, mySize / 2.f);
 	}
 
 	bool ButtonWidget::IsInside(const CU::Vector2<float>& aPosition) const

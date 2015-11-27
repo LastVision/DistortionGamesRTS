@@ -11,7 +11,7 @@ namespace GUI
 		myWindowSize.x = float(aWindowSize.x);
 		myWindowSize.y = float(aWindowSize.y);
 
-		mySprite = new Prism::Sprite("Data/Resource/Texture/Star.dds", { 100.f, 100.f }, { 0.f, 100.f });
+		mySprite = new Prism::Sprite("Data/Resource/Texture/UI/T_crosshair_default.dds", { 70.f, 70.f }, { 35.f, 35.f });
 		myPosition = myWindowSize / 2.f;
 	}
 
@@ -39,6 +39,12 @@ namespace GUI
 	const CU::Vector2<float>& Cursor::GetMousePosition() const
 	{
 		return myPosition;
+	}
+
+	void Cursor::OnResize(int aWidth, int aHeight)
+	{
+		myWindowSize.x = float(aWidth);
+		myWindowSize.y = float(aHeight);
 	}
 
 	void Cursor::ClipCursor()

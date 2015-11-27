@@ -6,6 +6,11 @@ namespace CU
 	class InputWrapper;
 }
 
+namespace GUI
+{
+	class Cursor;
+}
+
 class GameState;
 class StateStackProxy;
 
@@ -25,9 +30,12 @@ public:
 	void Clear();
 
 	void SetInputWrapper(CU::InputWrapper* anInputWrapper);
+	void SetCursor(GUI::Cursor* aCursor);
 
 private:
 	CU::GrowingArray<CU::GrowingArray<GameState*, int>, int> myGameStates;
+	GUI::Cursor* myCursor;
+
 	void PopSubGameState();
 	void PopMainGameState();
 	void RenderStateAtIndex(int aIndex);
@@ -42,4 +50,9 @@ private:
 inline void StateStack::SetInputWrapper(CU::InputWrapper* anInputWrapper)
 {
 	myInputWrapper = anInputWrapper;
+}
+
+inline void StateStack::SetCursor(GUI::Cursor* aCursor)
+{
+	myCursor = aCursor;
 }
