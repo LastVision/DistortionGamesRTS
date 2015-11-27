@@ -51,6 +51,7 @@ public:
 	void Kill();
 	void Reset();
 
+	void SetSelect(bool aStatus);
 
 private:
 	void operator=(Entity&) = delete;
@@ -64,40 +65,9 @@ private:
 	Prism::Scene& myScene;
 
 	CU::Matrix44<float> myOrientation;
+
+	bool mySelected;
 };
-
-//
-//template <typename T>
-//T* Entity::AddComponent()
-//{
-//	DL_ASSERT_EXP(T::GetType() != eComponentType::NOT_USED, "Tried to add invalid component.");
-//
-//	int index = static_cast<int>(T::GetType());
-//	if (myComponents[index] != nullptr)
-//	{
-//		DL_ASSERT("Tried to add a component twice to the same entity.");
-//	}
-//
-//	T* component = new T(*this);
-//	myComponents[index] = component;
-//
-//	return component;
-//}
-
-//template <typename T>
-//void Entity::RemoveComponent()
-//{
-//	DL_ASSERT_EXP(T::GetType() != eComponentType::NOT_USED, "Tried to add invalid component.");
-//
-//	int index = static_cast<int>(T::GetTypeStatic());
-//	if (myComponents[index] == nullptr)
-//	{
-//		DL_ASSERT("Tried to remove a component from a entity that wasnt added.");
-//	}
-//
-//	delete myComponents[index];
-//	myComponents[index] = nullptr;
-//}
 
 template <typename T>
 T* Entity::GetComponent()
