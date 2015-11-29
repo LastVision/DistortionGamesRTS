@@ -1,7 +1,7 @@
-
-#include <AudioInterface.h>
+#include <string>
 #include <Camera.h>
 #include <DirectionalLight.h>
+
 #include <DL_Debug.h>
 #include "DLLApp.h"
 #include "DLLCamera.h"
@@ -10,31 +10,22 @@
 #include <EffectContainer.h>
 #include <Engine.h>
 #include <EngineEnums.h>
-#include <Entity.h>
 #include <FileWatcher.h>
-#include <GraphicsComponent.h>
 #include <Instance.h>
-#include <InputComponent.h>
 #include <InputWrapper.h>
 #include <Matrix.h>
-#include <PostMaster.h>
 #include <Scene.h>
 #include <SetupInfo.h>
 #include <TimerManager.h>
 
-#define AudioInstance Prism::Audio::AudioInterface::GetInstance()
 #define EngineInstance Prism::Engine::GetInstance()
+#define InputInstance CU::InputWrapper::GetInstance()
 
 DLLApp::DLLApp(int* aHwnd, Prism::SetupInfo& aWindowSetup, WNDPROC aWindowProc)
 {
 	DL_Debug::Debug::Create();
 	CU::TimerManager::Create();
-	PostMaster::Create();
-	Prism::Audio::AudioInterface::CreateInstance();
-	AudioInstance->Init("Data/Resource/Sound/Init.bnk");
-	AudioInstance->LoadBank("Data/Resource/Sound/SpaceShooterBank.bnk");
 
-	myScene = new Prism::Scene();
 	myPanelWindowHandler = (HWND)aHwnd;
 
 	Prism::Engine::Create(myEngineWindowHandler, aWindowProc, aWindowSetup);
@@ -43,35 +34,46 @@ DLLApp::DLLApp(int* aHwnd, Prism::SetupInfo& aWindowSetup, WNDPROC aWindowProc)
 	SetupInput();
 	SetParentWindow(aWindowSetup);
 	SetupCubeMap();
-	myCamera = new DLLCamera(myInput, aWindowSetup, *myScene, 1.0f, 1.0f, 1.0f);
-	myModel = new DLLModel(myInput, *myScene);
-	myParticle = new DLLParticle(*myScene);
+
+	CU::Vector2<float> windowSize(aWindowSetup.myScreenWidth, aWindowSetup.myScreenHeight);
+	myCamera = new DLLCamera(windowSize, 1.0f, 1.0f, 1.0f);
+	myModel = new DLLModel();
+	myParticle = new DLLParticle();
 }
 
 DLLApp::~DLLApp()
 {
-	delete myScene;
-	myScene = nullptr;
-
 	delete myCamera;
 	myCamera = nullptr;
 
 	delete myModel;
 	myModel = nullptr;
+
+	delete myParticle;
+	myParticle = nullptr;
 }
 
 void DLLApp::Render()
 {
 	Prism::Engine::GetInstance()->Render();
-	myScene->Render();
-	myParticle->Render();
+
+	myDirectionalLight->Update();
+	myDirectionalLightData[0].myDirection = myDirectionalLight->GetCurrentDir();
+	myDirectionalLightData[0].myColor = myDirectionalLight->GetColor();
+
+	if (myModel->GetInstance() != nullptr)
+	{
+		myModel->GetInstance()->UpdateDirectionalLights(myDirectionalLightData);
+		myModel->GetInstance()->Render(*myCamera->GetCamera());
+	}
+	//myParticle->Render();
 }
 
 void DLLApp::Update()
 {
 	CU::TimerManager::GetInstance()->Update();
 	float deltaTime = CU::TimerManager::GetInstance()->GetMasterTimer().GetTime().GetFrameTime();
-	myInput.Update();
+	CU::InputWrapper::GetInstance()->Update();
 	LogicUpdate(deltaTime);
 }
 
@@ -91,28 +93,27 @@ void DLLApp::LoadParticle(const char* aParticleFile)
 
 void DLLApp::SetClearColor(CU::Vector4f& aClearColor)
 {
-	Prism::Engine::GetInstance()->SetClearColor({ aClearColor.myR, aClearColor.myG, aClearColor.myB, aClearColor.myA });
+	Prism::Engine::GetInstance()->SetClearColor({ aClearColor.x, aClearColor.y, aClearColor.z, aClearColor.w });
 }
 
 void DLLApp::SetCubeMap(const char* aCubeMapFile)
 {
-	DL_DEBUG("Stuff happend!");
-	EngineInstance->GetEffectContainer()->SetCubeMap(aCubeMapFile);
+	Prism::EffectContainer::GetInstance()->SetCubeMap(aCubeMapFile);
 	LoadModel(myModelFile.c_str(), myShaderFile.c_str());
 }
 
 void DLLApp::LogicUpdate(float aDeltaTime)
 {
 	if (GetActiveWindow()) {
-		if (myInput.KeyIsPressed(DIK_LALT) && myInput.MouseIsPressed(0))
+		if (InputInstance->KeyIsPressed(DIK_LALT) && InputInstance->MouseIsPressed(0))
 		{
 			myCamera->Zoom(aDeltaTime, myMouseSensitivty);
 		}
-		if (myInput.KeyIsPressed(DIK_LALT) && myInput.MouseIsPressed(2))
+		if (InputInstance->KeyIsPressed(DIK_LALT) && InputInstance->MouseIsPressed(2))
 		{
 			myCamera->Pan(aDeltaTime, myMouseSensitivty);
 		}
-		if (myInput.KeyIsPressed(DIK_LALT) && myInput.MouseIsPressed(1))
+		if (InputInstance->KeyIsPressed(DIK_LALT) && InputInstance->MouseIsPressed(1))
 		{
 			myCamera->Rotate(aDeltaTime, myMouseSensitivty);
 		}
@@ -123,13 +124,13 @@ void DLLApp::LogicUpdate(float aDeltaTime)
 
 void DLLApp::SetupCubeMap()
 {
-	EngineInstance->GetEffectContainer()->SetCubeMap("Data/Resource/Texture/CubeMap/T_cubemap_test.dds");
+	Prism::EffectContainer::GetInstance()->SetCubeMap("Data/Resource/Texture/CubeMap/T_cubemap_test.dds");
 	EngineInstance->SetClearColor(CU::Vector4f(0.3f, 0.3f, 0.3f, 1.f));
 }
 
 void DLLApp::SetupInput()
 {
-	myInput.Init(myPanelWindowHandler, GetModuleHandle(NULL),
+	CU::InputWrapper::GetInstance()->Create(myPanelWindowHandler, GetModuleHandle(NULL),
 		DISCL_NONEXCLUSIVE | DISCL_FOREGROUND, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND);
 }
 
@@ -147,7 +148,7 @@ void DLLApp::SetupLight()
 	myDirectionalLight->SetDir(CU::Vector3f( 0.f, 0.f, -1.f ));
 	myDirectionalLight->SetColor(CU::Vector4f(1.f, 1.f, 1.f, 1.f));
 
-	myScene->AddLight(myDirectionalLight);
+	memset(&myDirectionalLightData[0], 0, sizeof(Prism::DirectionalLightData) * NUMBER_OF_DIRECTIONAL_LIGHTS);
 }
 
 void DLLApp::SetDirectionalLightRotation(CU::Vector3f aRotation)

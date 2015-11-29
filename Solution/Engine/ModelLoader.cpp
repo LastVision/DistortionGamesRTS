@@ -312,10 +312,10 @@ namespace Prism
 
 		ModelProxy* proxy = new ModelProxy();
 
-		Model* model = myModelFactory->LoadModelAnimated(aModelPath.c_str(),
+		ModelAnimated* model = myModelFactory->LoadModelAnimated(aModelPath.c_str(),
 			EffectContainer::GetInstance()->GetEffect(aEffectPath));
 
-		proxy->SetModel(model);
+		proxy->SetModelAnimated(model);
 		myProxies[aModelPath] = proxy;
 		return proxy;
 #endif
@@ -370,7 +370,9 @@ namespace Prism
 		myCanCopyArray = true;
 		return anim;
 #else
-		return myModelFactory->LoadAnimation(aPath);
+		AnimationProxy* anim = new AnimationProxy();
+		anim->myAnimation = myModelFactory->LoadAnimation(aPath);
+		return anim;
 #endif
 	}
 

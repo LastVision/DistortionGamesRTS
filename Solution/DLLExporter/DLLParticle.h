@@ -1,17 +1,11 @@
 #pragma once
 #include <string>
 #include <Matrix.h>
-class Entity;
-
-namespace Prism 
-{
-	class Scene;
-}
 
 class DLLParticle
 {
 public:
-	DLLParticle(Prism::Scene& aScene);
+	DLLParticle();
 	~DLLParticle();
 
 	void LoadParticle(std::string& aParticleFile);
@@ -23,8 +17,7 @@ private:
 
 	bool myIsLoaded;
 
-	Entity* myEntity;
-	Prism::Scene* myScene;
+	CU::Matrix44<float> myOrientation;
 
 	std::string myParticleFile;
 };

@@ -70,28 +70,28 @@
     <OutDir>$(SolutionDir)..\Workbed\</OutDir>
     <IntDir>$(SolutionDir)..\temp\$(ProjectName)\</IntDir>
     <TargetName>$(ProjectName)_$(Configuration)</TargetName>
-    <IncludePath>$(SolutionDir)..\FBX\;$(SolutionDir)\Engine;$(SolutionDir)\DL_Debug;$(SolutionDir)\Game;$(SolutionDir)\CommonUtilities;$(SolutionDir)\Timer;$(SolutionDir)\InputWrapper;$(SolutionDir)\..\DirectX\Include;$(VTUNE_DIR)\include\;$(SolutionDir)\Audio;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)..\FBX\;$(SolutionDir)\Engine;$(SolutionDir)\DL_Debug;$(SolutionDir)\CommonUtilities;$(SolutionDir)\Timer;$(SolutionDir)\InputWrapper;$(SolutionDir)\..\DirectX\Include;$(VTUNE_DIR)\include\;$(IncludePath)</IncludePath>
     <LibraryPath>$(LibraryPath);$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)..\Workbed\</OutDir>
     <IntDir>$(SolutionDir)..\temp\$(ProjectName)\</IntDir>
     <TargetName>$(ProjectName)_$(Configuration)</TargetName>
-    <IncludePath>$(SolutionDir)..\FBX\;$(SolutionDir)\Engine;$(SolutionDir)\DL_Debug;$(SolutionDir)\Game;$(SolutionDir)\CommonUtilities;$(SolutionDir)\Timer;$(SolutionDir)\InputWrapper;$(SolutionDir)\..\DirectX\Include;$(VTUNE_DIR)\include\;$(SolutionDir)\Audio;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)..\FBX\;$(SolutionDir)\Engine;$(SolutionDir)\DL_Debug;$(SolutionDir)\CommonUtilities;$(SolutionDir)\Timer;$(SolutionDir)\InputWrapper;$(SolutionDir)\..\DirectX\Include;$(VTUNE_DIR)\include\;$(IncludePath)</IncludePath>
     <LibraryPath>$(LibraryPath);$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DLL_Release|Win32'">
     <OutDir>$(SolutionDir)..\Workbed\bin\</OutDir>
     <IntDir>$(SolutionDir)..\temp\$(ProjectName)\</IntDir>
     <TargetName>$(ProjectName)_Release</TargetName>
-    <IncludePath>$(SolutionDir)..\FBX\;$(SolutionDir)\Engine;$(SolutionDir)\DL_Debug;$(SolutionDir)\Game;$(SolutionDir)\CommonUtilities;$(SolutionDir)\Timer;$(SolutionDir)\InputWrapper;$(SolutionDir)\..\DirectX\Include;$(VTUNE_DIR)\include\;$(SolutionDir)\Audio;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)..\FBX\;$(SolutionDir)Engine;$(SolutionDir)\DL_Debug;$(SolutionDir)\CommonUtilities;$(SolutionDir)\Timer;$(SolutionDir)\InputWrapper;$(SolutionDir)\..\DirectX\Include;$(VTUNE_DIR)\include\;$(IncludePath)</IncludePath>
     <LibraryPath>$(LibraryPath);$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Internal|Win32'">
     <OutDir>$(SolutionDir)..\Workbed\</OutDir>
     <IntDir>$(SolutionDir)..\temp\$(ProjectName)\</IntDir>
     <TargetName>$(ProjectName)_$(Configuration)</TargetName>
-    <IncludePath>$(SolutionDir)..\FBX\;$(SolutionDir)\Engine;$(SolutionDir)\DL_Debug;$(SolutionDir)\Game;$(SolutionDir)\CommonUtilities;$(SolutionDir)\Timer;$(SolutionDir)\InputWrapper;$(SolutionDir)\..\DirectX\Include;$(VTUNE_DIR)\include\;$(SolutionDir)\Audio;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)..\FBX\;$(SolutionDir)\Engine;$(SolutionDir)\DL_Debug;$(SolutionDir)\CommonUtilities;$(SolutionDir)\Timer;$(SolutionDir)\InputWrapper;$(SolutionDir)\..\DirectX\Include;$(VTUNE_DIR)\include\;$(IncludePath)</IncludePath>
     <LibraryPath>$(LibraryPath);$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -181,8 +181,8 @@
     <ProjectReference Include="..\Engine\Engine.vcxproj">
       <Project>{56e2c751-a07c-49d7-9073-839a5d0a71d2}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\Game\Game.vcxproj">
-      <Project>{040c55cc-94ac-4543-a75b-b121ac5af085}</Project>
+    <ProjectReference Include="..\InputWrapper\InputWrapper.vcxproj">
+      <Project>{e6bd4153-64be-4109-8d3c-724baadab8af}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

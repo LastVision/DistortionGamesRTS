@@ -38,48 +38,48 @@ void Update()
 
 void UpdateFilewatcher()
 {
-	Prism::Engine::GetInstance()->GetFileWatcher()->CheckFiles();
+	Prism::FileWatcher::GetInstance()->CheckFiles();
 }
 
 void RotateObjectAtX(float aSpeed)
 {
 	CU::Vector3f rotationSpeed(locDLLApplication->GetModel()->GetAutoRotationSpeed());
-	rotationSpeed.myX = aSpeed;
+	rotationSpeed.x = aSpeed;
 	locDLLApplication->GetModel()->SetAutoRotationSpeed(rotationSpeed);
 }
 
 void RotateObjectAtY(float aSpeed)
 {
 	CU::Vector3f rotationSpeed(locDLLApplication->GetModel()->GetAutoRotationSpeed());
-	rotationSpeed.myY = aSpeed;
+	rotationSpeed.y = aSpeed;
 	locDLLApplication->GetModel()->SetAutoRotationSpeed(rotationSpeed);
 }
 
 void RotateObjectAtZ(float aSpeed)
 {
 	CU::Vector3f rotationSpeed(locDLLApplication->GetModel()->GetAutoRotationSpeed());
-	rotationSpeed.myZ = aSpeed;
+	rotationSpeed.z = aSpeed;
 	locDLLApplication->GetModel()->SetAutoRotationSpeed(rotationSpeed);
 }
 
 void SetRotateObjectAtX(float aAngle)
 {
 	CU::Vector3f rotationAngle(locDLLApplication->GetModel()->GetManualRotationAngle());
-	rotationAngle.myX = aAngle;
+	rotationAngle.x = aAngle;
 	locDLLApplication->GetModel()->SetManualRotationAngle(rotationAngle);
 }
 
 void SetRotateObjectAtY(float aAngle)
 {
 	CU::Vector3f rotationAngle(locDLLApplication->GetModel()->GetManualRotationAngle());
-	rotationAngle.myY = aAngle;
+	rotationAngle.y = aAngle;
 	locDLLApplication->GetModel()->SetManualRotationAngle(rotationAngle);
 }
 
 void SetRotateObjectAtZ(float aAngle)
 {
 	CU::Vector3f rotationAngle(locDLLApplication->GetModel()->GetManualRotationAngle());
-	rotationAngle.myZ = aAngle;
+	rotationAngle.z = aAngle;
 	locDLLApplication->GetModel()->SetManualRotationAngle(rotationAngle);
 }
 
@@ -126,37 +126,37 @@ float GetCameraRotationSpeed()
 void DirectionaLightRotateX(float aAngle)
 {
 	CU::Vector3<float> rotatedDirection(locDLLApplication->GetDirectionalLightRotation());
-	rotatedDirection.myX = aAngle;
+	rotatedDirection.x = aAngle;
 	locDLLApplication->SetDirectionalLightRotation(rotatedDirection);
 }
 
 void DirectionaLightRotateY(float aAngle)
 {
 	CU::Vector3<float> rotatedDirection(locDLLApplication->GetDirectionalLightRotation());
-	rotatedDirection.myY = aAngle;
+	rotatedDirection.y = aAngle;
 	locDLLApplication->SetDirectionalLightRotation(rotatedDirection);
 }
 
 void DirectionaLightRotateZ(float aAngle)
 {
 	CU::Vector3<float> rotatedDirection(locDLLApplication->GetDirectionalLightRotation());
-	rotatedDirection.myZ = aAngle;
+	rotatedDirection.z = aAngle;
 	locDLLApplication->SetDirectionalLightRotation(rotatedDirection);
 }
 
 float GetDirectionaLightXRotation()
 {
-	return locDLLApplication->GetDirectionalLightRotation().myX;
+	return locDLLApplication->GetDirectionalLightRotation().x;
 }
 
 float GetDirectionaLightYRotation()
 {
-	return locDLLApplication->GetDirectionalLightRotation().myY;
+	return locDLLApplication->GetDirectionalLightRotation().y;
 }
 
 float GetDirectionaLightZRotation()
 {
-	return locDLLApplication->GetDirectionalLightRotation().myZ;
+	return locDLLApplication->GetDirectionalLightRotation().z;
 }
 
 void LoadModel(const char* aModelFile, const char* aShaderFile)

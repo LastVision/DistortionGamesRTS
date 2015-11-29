@@ -84,7 +84,7 @@
     <OutDir>$(SolutionDir)..\Libs\</OutDir>
     <IntDir>$(SolutionDir)..\temp\$(ProjectName)\</IntDir>
     <IncludePath>$(SolutionDir)\Memory;$(FBX_SDK_ROOT)\include\;$(SolutionDir)\InputWrapper;$(SolutionDir)\DL_Debug;$(SolutionDir)\CommonUtilities;$(SolutionDir)\Timer;$(SolutionDir)\..\DirectX\Include;$(SolutionDir)..\FBX\;$(VTUNE_DIR)\include\;$(IncludePath)</IncludePath>
-    <TargetName>$(ProjectName)_$(Configuration)</TargetName>
+    <TargetName>$(ProjectName)_Release</TargetName>
     <LibraryPath>$(SolutionDir)..\Libs3rdParty\;$(SolutionDir)..\Libs3rdParty\DirectXLibs\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Internal|Win32'">

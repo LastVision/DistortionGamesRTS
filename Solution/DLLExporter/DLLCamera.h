@@ -1,13 +1,9 @@
 #pragma once
-
-class Entity;
+#include <Matrix.h>
 
 namespace Prism
 {
 	class Camera;
-	class Scene;
-
-	struct SetupInfo;
 }
 
 namespace CU
@@ -18,8 +14,7 @@ namespace CU
 class DLLCamera
 {
 public:
-	DLLCamera(CU::InputWrapper& aInput, Prism::SetupInfo& aWindowSetup, Prism::Scene& aScene, 
-		float aMovementSpeed, float aRotationSpeed, float aZoomSpeed);
+	DLLCamera(CU::Vector2<float>& aWindowSize, float aMovementSpeed, float aRotationSpeed, float aZoomSpeed);
 	~DLLCamera();
 
 	void Zoom(float aDeltaTime, float aMouseSens);
@@ -34,19 +29,19 @@ public:
 
 	void SetRotationSpeed(float aValue);
 	float GetRotationSpeed() const;
+
+	Prism::Camera* GetCamera() const;
 private:
 	bool HasMouseDeltaXMoved(float aSens);
 	bool HasMouseDeltaYMoved(float aSens);
-
-	CU::InputWrapper& myInput;
-
-	Entity* myEntity;
 
 	Prism::Camera* myCamera;
 
 	float myMovementSpeed;
 	float myRotationSpeed;
 	float myZoomSpeed;
+
+	CU::Matrix44<float> myOrientation;
 };
 
 inline void DLLCamera::SetZoomSpeed(float aValue)
@@ -74,4 +69,9 @@ inline void DLLCamera::SetRotationSpeed(float aValue)
 inline float DLLCamera::GetRotationSpeed() const
 {
 	return myRotationSpeed;
+}
+
+inline Prism::Camera* DLLCamera::GetCamera() const
+{
+	return myCamera;
 }

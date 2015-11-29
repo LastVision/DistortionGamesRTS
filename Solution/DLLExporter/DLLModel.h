@@ -1,24 +1,15 @@
 #pragma once
-#include <Vector.h>
 #include <Matrix.h>
-#include <string>
-
-class Entity;
 
 namespace Prism
 {
-	class Scene;
-}
-
-namespace CU 
-{
-	class InputWrapper;
+	class Instance;
 }
 
 class DLLModel
 {
 public:
-	DLLModel(CU::InputWrapper& aInput, Prism::Scene& aScene);
+	DLLModel();
 	~DLLModel();
 
 	void Update(float aDeltaTime);
@@ -29,20 +20,19 @@ public:
 
 	void SetManualRotationAngle(const CU::Vector3f& aRotationAngle);
 	const CU::Vector3f& GetManualRotationAngle() const;
+
+	Prism::Instance* GetInstance() const;
 private:
 	void WatchFiles(const char* aModelFile, const char* aShaderFile);
 
 	void AutoRotate(float aDeltaTime);
 	void ManualRotate();
 
-	Entity* myEntity;
+	CU::Matrix44f myOrientation;
+	Prism::Instance* myInstance;
 
 	CU::Vector3f myAutoRotationSpeed;
 	CU::Vector3f myManualRotationAngle;
-
-	CU::InputWrapper* myInput;
-
-	Prism::Scene* myScene;
 };
 
 inline void DLLModel::SetAutoRotationSpeed(const CU::Vector3f& aRotationSpeed)
@@ -63,4 +53,9 @@ inline void DLLModel::SetManualRotationAngle(const CU::Vector3f& aRotationAngle)
 inline const CU::Vector3f& DLLModel::GetManualRotationAngle() const
 {
 	return myManualRotationAngle;
+}
+
+inline Prism::Instance* DLLModel::GetInstance() const
+{
+	return myInstance;
 }

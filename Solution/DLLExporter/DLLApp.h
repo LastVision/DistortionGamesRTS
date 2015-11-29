@@ -1,7 +1,10 @@
 #pragma once
 #pragma warning(disable : 4005)
+#include <Defines.h>
 #include <InputWrapper.h>
+#include <LightStructs.h>
 #include <string>
+#include <StaticArray.h>
 #include <Vector.h>
 #include <Windows.h>
 
@@ -58,13 +61,12 @@ private:
 	void SetupCubeMap();
 	void SetParentWindow(Prism::SetupInfo &aWindowSetup);
 
-	CU::InputWrapper myInput;
-
 	DLLCamera* myCamera;
 	DLLModel* myModel;
 	DLLParticle* myParticle;
 
 	Prism::DirectionalLight* myDirectionalLight;
+	CU::StaticArray<Prism::DirectionalLightData, NUMBER_OF_DIRECTIONAL_LIGHTS> myDirectionalLightData;
 	Prism::Scene* myScene;
 
 	CU::Vector3f myDirectionalLightRotation;
@@ -80,12 +82,12 @@ private:
 
 inline bool DLLApp::HasMouseDeltaYMoved()
 {
-	return (myInput.GetMouseDY() < myMouseSensitivty || myInput.GetMouseDY() > myMouseSensitivty);
+	return (CU::InputWrapper::GetInstance()->GetMouseDY() < myMouseSensitivty || CU::InputWrapper::GetInstance()->GetMouseDY() > myMouseSensitivty);
 }
 
 inline bool DLLApp::HasMouseDeltaXMoved()
 {
-	return (myInput.GetMouseDX() < myMouseSensitivty || myInput.GetMouseDX() > myMouseSensitivty);
+	return (CU::InputWrapper::GetInstance()->GetMouseDX() < myMouseSensitivty || CU::InputWrapper::GetInstance()->GetMouseDX() > myMouseSensitivty);
 }
 
 inline float DLLApp::GetMouseSensitivty() const
