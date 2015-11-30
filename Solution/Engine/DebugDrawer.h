@@ -3,6 +3,8 @@
 #include "Line3D.h"
 #include <GrowingArray.h>
 
+#define DEBUG_PRINT(aVariable) Prism::DebugDrawer::GetInstance()->RenderText(#aVariable, aVariable)
+
 enum class eColorDebug
 {
 	WHITE,
@@ -35,7 +37,7 @@ namespace Prism
 		//	, const CU::Vector4<float>& aColor = PINK_DEBUG);
 		//void RenderArrow3D(const CU::Vector3<float>& aFirstPoint, const CU::Vector3<float>& aSecondPoint
 		//	, eColorDebug aColor = eColorDebug::PINK);
-		void RenderBox(const CU::Vector3<float>& aPosition, float aSize = 1.f, eColorDebug aColor = eColorDebug::PINK
+		void RenderBox(const CU::Vector3<float>& aPosition, eColorDebug aColor = eColorDebug::PINK, float aSize = 0.2f
 			, bool aWireFrame = false);
 		//void RenderSphere(const CU::Vector3<float>& aPosition, float aSize, eColorDebug aColor = eColorDebug::PINK
 		//	, bool aWireFrame = false);
@@ -44,9 +46,26 @@ namespace Prism
 		//void RenderText3D(const std::string& aText, const CU::Vector3<float>& aPosition
 		//	, eColorDebug aColor = eColorDebug::PINK);
 
+		void RenderText(const char* aName, bool aValue);
+		void RenderText(const char* aName, const CU::Vector2<float>& aValue);
+		void RenderText(const char* aName, const CU::Vector3<float>& aValue);
+		void RenderText(const char* aName, const CU::Vector4<float>& aValue);
+		void RenderText(const char* aName, float aValue);
+		void RenderText(const char* aName, int aValue);
+		void RenderText(const char* aName, const std::string& aValue);
+
 		void Render(const Camera& aCamera);
 
 	private:
+
+		struct DebugText
+		{
+			DebugText(){}
+			DebugText(const char* aName, const std::string& aValue) : myName(aName), myValue(aValue){}
+			std::string myName;
+			std::string myValue;
+		};
+
 		static DebugDrawer* myInstance;
 		DebugDrawer();
 		~DebugDrawer();
@@ -55,6 +74,7 @@ namespace Prism
 		Cube3DRenderer* myCube3DRenderer;
 
 		CU::GrowingArray<Line3D> my3DLines;
+		CU::GrowingArray<DebugText> myDebugTexts;
 
 		CU::Vector4<float> GetColor(eColorDebug aColor) const;
 
@@ -68,9 +88,9 @@ namespace Prism
 		DebugDrawer::GetInstance()->RenderLine3D(aFirstPoint, aSecondPoint, aColor, aSecondColor);
 	}
 
-	static void RenderBox(const CU::Vector3<float>& aPosition, float aSize = 1.f, eColorDebug aColor = eColorDebug::PINK
+	static void RenderBox(const CU::Vector3<float>& aPosition, eColorDebug aColor = eColorDebug::PINK, float aSize = 0.2f
 		, bool aWireFrame = false)
 	{
-		DebugDrawer::GetInstance()->RenderBox(aPosition, aSize, aColor, aWireFrame);
+		DebugDrawer::GetInstance()->RenderBox(aPosition, aColor, aSize, aWireFrame);
 	}
 }

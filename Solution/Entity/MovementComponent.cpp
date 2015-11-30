@@ -59,18 +59,18 @@ void MovementComponent::Update(float aDeltaTime)
 	if (myEntity.GetState() == eEntityState::WALKING)
 	{
 		CU::Vector3<float> targetPosition = myTerrain.GetHeight(myTargetPosition, 2.f);
-		Prism::RenderBox(targetPosition, 1.f, eColorDebug::BLUE);
+		Prism::RenderBox(targetPosition, eColorDebug::BLUE);
 		Prism::RenderLine3D(myTerrain.GetHeight(myEntity.myOrientation.GetPos(), 2.f), targetPosition);
 
 		if (myWayPoints.Size() > 0)
 		{
-			Prism::RenderBox(myTerrain.GetHeight(myWayPoints[0], 2.f), 0.5f, eColorDebug::GREEN);
+			Prism::RenderBox(myTerrain.GetHeight(myWayPoints[0], 2.f), eColorDebug::GREEN);
 			Prism::RenderLine3D(targetPosition, myTerrain.GetHeight(myWayPoints[0], 2.f));
 
 			for (int i = 1; i < myWayPoints.Size(); ++i)
 			{
 				Prism::RenderLine3D(myTerrain.GetHeight(myWayPoints[i - 1], 2.f), myTerrain.GetHeight(myWayPoints[i], 2.f));
-				Prism::RenderBox(myTerrain.GetHeight(myWayPoints[i], 2.f), 0.5f, eColorDebug::GREEN);
+				Prism::RenderBox(myTerrain.GetHeight(myWayPoints[i], 2.f), eColorDebug::GREEN);
 			}
 		}
 	}

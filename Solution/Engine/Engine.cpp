@@ -96,6 +96,9 @@ namespace Prism
 
 	void Engine::Render()
 	{
+		DEBUG_PRINT(MemoryTracker::GetInstance()->GetRunTime());
+		DEBUG_PRINT(GetWindowSize());
+
 		for (int i = 0; i < myTexts.Size(); ++i)
 		{
 			myText->SetText(myTexts[i].myText);
@@ -153,21 +156,23 @@ namespace Prism
 
 	void Engine::OnResize(int aWidth, int aHeigth)
 	{
-		myWindowSize.x = aWidth;
-		myWindowSize.y = aHeigth;
+		myWindowSizeInt.x = aWidth;
+		myWindowSizeInt.y = aHeigth;
+		myWindowSize.x = static_cast<float>(myWindowSizeInt.x);
+		myWindowSize.y = static_cast<float>(myWindowSizeInt.y);
+
 		if (myDirectX != nullptr) 
 		{
 			myDirectX->OnResize(aWidth, aHeigth);
 		}
 
-		myOrthogonalMatrix = CU::Matrix44<float>::CreateOrthogonalMatrixLH(static_cast<float>(myWindowSize.x)
-			, static_cast<float>(myWindowSize.y), 0.1f, 1000.f);
+		myOrthogonalMatrix = CU::Matrix44<float>::CreateOrthogonalMatrixLH(myWindowSize.x
+			, myWindowSize.y, 0.1f, 1000.f);
 
 		if (myFadeData.mySprite != nullptr)
 		{
 			myFadeData.mySprite->ResizeTexture(myDirectX->GetBackbufferTexture());
-			myFadeData.mySprite->SetSize({ static_cast<float>(myWindowSize.x)
-				, static_cast<float>(myWindowSize.y) }, { 0.f, 0.f });
+			myFadeData.mySprite->SetSize(myWindowSize, { 0.f, 0.f });
 		}
 	}
 
@@ -237,8 +242,10 @@ namespace Prism
 
 	bool Engine::Init(HWND& aHwnd, WNDPROC aWndProc)
 	{
-		myWindowSize.x = mySetupInfo->myScreenWidth;
-		myWindowSize.y = mySetupInfo->myScreenHeight;
+		myWindowSizeInt.x = mySetupInfo->myScreenWidth;
+		myWindowSizeInt.y = mySetupInfo->myScreenHeight;
+		myWindowSize.x = static_cast<float>(myWindowSizeInt.x);
+		myWindowSize.y = static_cast<float>(myWindowSizeInt.y);
 
 		if (WindowSetup(aHwnd, aWndProc) == false)
 		{

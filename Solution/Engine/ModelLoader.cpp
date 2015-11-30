@@ -65,6 +65,7 @@ namespace Prism
 #ifndef THREADED_LOADING
 		return;
 #else
+		MemoryTracker::GetInstance()->AllowNewDuringRunTime(std::this_thread::get_id());
 		while (myIsRunning == true)
 		{
 			if (myHasPrefetched == false)

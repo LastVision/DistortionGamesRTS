@@ -3,7 +3,7 @@
 #include "DebugDrawer.h"
 #include "Engine.h"
 #include "Line3DRenderer.h"
-
+#include <sstream>
 
 #define WHITE_DEBUG CU::Vector4<float>(1.f, 1.f, 1.f, 1.f)
 #define BLACK_DEBUG CU::Vector4<float>(0.f, 0.f, 0.f, 1.f)
@@ -57,7 +57,7 @@ namespace Prism
 	//	DL_ASSERT("Not Implemented.");
 	//}
 
-	void DebugDrawer::RenderBox(const CU::Vector3<float>& aPosition, float aSize, eColorDebug aColor
+	void DebugDrawer::RenderBox(const CU::Vector3<float>& aPosition, eColorDebug aColor, float aSize
 		, bool aWireFrame)
 	{
 		myCube3DRenderer->AddCube(aPosition, aSize, GetColor(aColor), aWireFrame);
@@ -81,20 +81,81 @@ namespace Prism
 	//	DL_ASSERT("Not Implemented.");
 	//}
 
+	void DebugDrawer::RenderText(const char* aName, bool aValue)
+	{
+		myDebugTexts.Add(DebugText(aName, aValue ? "true" : "false"));
+	}
+
+	void DebugDrawer::RenderText(const char* aName, const CU::Vector2<float>& aValue)
+	{
+		std::stringstream ss;
+		ss.precision(4);
+		ss << "(" << aValue.x << ", " << aValue.y << ")";
+		myDebugTexts.Add(DebugText(aName, ss.str()));
+	}
+
+	void DebugDrawer::RenderText(const char* aName, const CU::Vector3<float>& aValue)
+	{
+		std::stringstream ss;
+		ss.precision(4);
+		ss << "(" << aValue.x << ", " << aValue.y << ", " << aValue.z << ")";
+		myDebugTexts.Add(DebugText(aName, ss.str()));
+	}
+
+	void DebugDrawer::RenderText(const char* aName, const CU::Vector4<float>& aValue)
+	{
+		std::stringstream ss;
+		ss.precision(4);
+		ss << "(" << aValue.x << ", " << aValue.y << ", " << aValue.z << ", " << aValue.w << ")";
+		myDebugTexts.Add(DebugText(aName, ss.str()));
+	}
+
+	void DebugDrawer::RenderText(const char* aName, float aValue)
+	{
+		std::stringstream ss;
+		ss.precision(4);
+		ss << aValue;
+		myDebugTexts.Add(DebugText(aName, ss.str()));
+	}
+
+	void DebugDrawer::RenderText(const char* aName, int aValue)
+	{
+		std::stringstream ss;
+		ss.precision(4);
+		ss << aValue;
+		myDebugTexts.Add(DebugText(aName, ss.str()));
+	}
+
+	void DebugDrawer::RenderText(const char* aName, const std::string& aValue)
+	{
+		myDebugTexts.Add(DebugText(aName, aValue));
+	}
+
 	void DebugDrawer::Render(const Camera& aCamera)
 	{
 		myLine3DRenderer->Render(my3DLines, aCamera);
 		myCube3DRenderer->Render(aCamera);
 
+		CU::Vector2<float> window(Engine::GetInstance()->GetWindowSize());
+
+		float rowHeight = 28.f;
+		CU::Vector2<float> textPos(10.f, window.y - rowHeight * 2.f);
+		for (int i = 0; i < myDebugTexts.Size(); ++i)
+		{
+			Engine::GetInstance()->PrintText(myDebugTexts[i].myName + ": " + myDebugTexts[i].myValue
+				, textPos, eTextType::DEBUG_TEXT, 1.f, { 1.f, 0.3f, 0.3f, 1.f });
+			textPos.y -= rowHeight;
+		}
 		my3DLines.RemoveAll();
+		myDebugTexts.RemoveAll();
 	}
 
 	DebugDrawer::DebugDrawer()
 		: my3DLines(1024)
+		, myDebugTexts(64)
 		, myLine3DRenderer(new Line3DRenderer())
 		, myCube3DRenderer(new Cube3DRenderer())
 	{
-
 	}
 
 	DebugDrawer::~DebugDrawer()

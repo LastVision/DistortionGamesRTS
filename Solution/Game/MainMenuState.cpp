@@ -27,7 +27,7 @@ void MainMenuState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aC
 	myCursor = aCursor;
 	myGUIManager = new GUI::GUIManager(myCursor, "Data/Resource/GUI/GUI_main_menu.xml");
 
-	CU::Vector2<int> windowSize = Prism::Engine::GetInstance()->GetWindowSize();
+	CU::Vector2<int> windowSize = Prism::Engine::GetInstance()->GetWindowSizeInt();
 	OnResize(windowSize.x, windowSize.y);
 }
 

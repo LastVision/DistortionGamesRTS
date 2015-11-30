@@ -12,11 +12,13 @@
 
 namespace Prism
 {
-	Cube3D::Cube3D(const CU::Vector4<float>& aColor)
+	Cube3D::Cube3D()
 		: myWireFrame(false)
+		, mySize(1.f, 1.f, 1.f)
+		, myColor(1.f, 1.f, 1.f, 1.f)
 	{
 		myEffect = EffectContainer::GetInstance()->GetEffect("Data/Resource/Shader/S_effect_cube3d.fx");
-		CreateVertexBuffer(1.f, aColor);
+		CreateVertexBuffer(1.f);
 
 		myIndexBaseData = new VertexIndexWrapper();
 		myIndexBaseData->myFormat = DXGI_FORMAT_R32_UINT;
@@ -85,7 +87,7 @@ namespace Prism
 	}
 
 
-	void Cube3D::CreateVertexBuffer(float aSideLength, const CU::Vector4<float>& aColor)
+	void Cube3D::CreateVertexBuffer(float aSideLength)
 	{
 		VertexPosNormColor temp;
 
@@ -96,7 +98,7 @@ namespace Prism
 
 		temp.myPosition = { -offset, offset, -offset, 1.f };
 		temp.myNormal = { 0.0f, 1.0f, 0.0f, 0.f };
-		temp.myColor = aColor;
+		temp.myColor = myColor;
 		vertices.Add(temp);
 
 		temp.myPosition = { offset, offset, -offset, 1.f };
@@ -202,8 +204,8 @@ namespace Prism
 
 	Cube3D::~Cube3D()
 	{
-		myVertexBuffer->myVertexBuffer->Release();
-		myIndexBuffer->myIndexBuffer->Release();
+		SAFE_RELEASE(myVertexBuffer->myVertexBuffer);
+		SAFE_RELEASE(myIndexBuffer->myIndexBuffer);
 		SAFE_DELETE(myVertexBaseData);
 		SAFE_DELETE(myVertexBuffer);
 		SAFE_DELETE(myIndexBaseData);
@@ -213,11 +215,10 @@ namespace Prism
 
 	void Cube3D::SetSizeAndColor(float aSideLength, const CU::Vector4<float>& aColor)
 	{
-		SAFE_DELETE(myVertexBaseData);
-		CreateVertexBuffer(aSideLength, aColor);
-		myVertexBuffer->myVertexBuffer->Release();
-		SAFE_DELETE(myVertexBuffer);
-		InitVertexBuffer();
+		mySize.x = aSideLength;
+		mySize.y = aSideLength;
+		mySize.z = aSideLength;
+		myColor = aColor;
 	}
 
 	void Cube3D::InitVertexBuffer()
@@ -304,6 +305,8 @@ namespace Prism
 		myEffect->SetWorldMatrix(myOrientation);
 		myEffect->SetViewMatrix(CU::InverseSimple(aCamera.GetOrientation()));
 		myEffect->SetProjectionMatrix(aCamera.GetProjection());
+		myEffect->SetScaleVector(mySize);
+		myEffect->SetColor(myColor);
 
 		unsigned int stride = myVertexBaseData->myStride;
 		unsigned int offset = 0;

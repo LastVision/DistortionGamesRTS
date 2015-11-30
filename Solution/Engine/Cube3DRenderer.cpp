@@ -10,10 +10,9 @@ namespace Prism
 		, myActiveCubes(MAXNROFCUBES)
 	{
 		ModelLoader::GetInstance()->Pause();
-		CU::Vector4<float> color(1.f, 1.f, 1.f, 1.f);
 		for (int i = 0; i < MAXNROFCUBES; ++i)
 		{
-			myInactiveCubes.Add(new Cube3D(color));
+			myInactiveCubes.Add(new Cube3D());
 		}
 		ModelLoader::GetInstance()->UnPause();
 	}

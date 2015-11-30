@@ -104,7 +104,7 @@ void Prism::Effect::SetPosAndScale(const CU::Vector2<float>& aPos
 
 void Prism::Effect::SetColor(const CU::Vector4<float>& aColor)
 {
-	mySpriteColor->SetFloatVector(&aColor.x);
+	myColor->SetFloatVector(&aColor.x);
 }
 
 void Prism::Effect::SetSpriteOrientation(const CU::Matrix44<float>& aOrientation)
@@ -316,10 +316,10 @@ bool Prism::Effect::ReloadShader(const std::string& aFile)
 		mySpritePosAndScale = nullptr;
 	}
 
-	mySpriteColor = myEffect->GetVariableByName("SpriteColor")->AsVector();
-	if (mySpriteColor->IsValid() == false)
+	myColor = myEffect->GetVariableByName("Color")->AsVector();
+	if (myColor->IsValid() == false)
 	{
-		mySpriteColor = nullptr;
+		myColor = nullptr;
 	}
 
 	mySpriteOrientation = myEffect->GetVariableByName("SpriteOrientation")->AsMatrix();

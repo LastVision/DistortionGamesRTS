@@ -19,6 +19,7 @@ InGameState::InGameState()
 	myIsActiveState = false;
 	myRenderGUI = true;
 	myCamera = new Prism::Camera(myCameraOrientation);
+	SetLevel();
 
 	//myCameraOrientation.SetPos(CU::Vector3<float>(10.f, 25.f, 0));
 	myCameraOrientation = CU::Matrix44<float>::CreateRotateAroundX(0.0174532925f * 60.f) * myCameraOrientation;
@@ -43,7 +44,7 @@ void InGameState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCur
 	myCursor = aCursor;
 	myGUIManager = new GUI::GUIManager(myCursor, "Data/Resource/GUI/GUI_ingame.xml");
 
-	CU::Vector2<int> windowSize = Prism::Engine::GetInstance()->GetWindowSize();
+	CU::Vector2<int> windowSize = Prism::Engine::GetInstance()->GetWindowSizeInt();
 
 	OnResize(windowSize.x, windowSize.y);
 	PostMaster::GetInstance()->Subscribe(eMessageType::GAME_STATE, this);

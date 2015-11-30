@@ -37,9 +37,9 @@ Game::Game()
 	Prism::Audio::AudioInterface::CreateInstance();
 	Prism::Engine::GetInstance()->SetShowDebugText(myShowSystemInfo);
 
-	myCursor = new GUI::Cursor(Prism::Engine::GetInstance()->GetWindowSize());
+	myCursor = new GUI::Cursor(Prism::Engine::GetInstance()->GetWindowSizeInt());
 
-	SetCursorPos(Prism::Engine::GetInstance()->GetWindowSize().x / 2, Prism::Engine::GetInstance()->GetWindowSize().y / 2);
+	SetCursorPos(Prism::Engine::GetInstance()->GetWindowSizeInt().x / 2, Prism::Engine::GetInstance()->GetWindowSizeInt().y / 2);
 	myStateStack.SetCursor(myCursor);
 }
 
@@ -67,10 +67,7 @@ bool Game::Init(HWND& aHwnd)
 	Prism::Engine::GetInstance()->SetClearColor({ MAGENTA });
 	CU::InputWrapper::Create(aHwnd, GetModuleHandle(NULL), DISCL_NONEXCLUSIVE 
 		| DISCL_FOREGROUND, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND);
-
-	myWindowSize.x = Prism::Engine::GetInstance()->GetWindowSize().x;
-	myWindowSize.y = Prism::Engine::GetInstance()->GetWindowSize().y;
-
+	
 	PostMaster::GetInstance()->SendMessage(GameStateMessage(eGameState::LOAD_GAME, 1));
 
 	//myMainMenu = new MainMenuState();
@@ -139,8 +136,6 @@ void Game::UnPause()
 
 void Game::OnResize(int aWidth, int aHeight)
 {
-	myWindowSize.x = aWidth;
-	myWindowSize.y = aHeight;
 	myStateStack.OnResize(aWidth, aHeight);
 	myCursor->OnResize(aWidth, aHeight);
 	PostMaster::GetInstance()->SendMessage(ResizeMessage(aWidth, aHeight));
@@ -151,9 +146,9 @@ void Game::ReceiveMessage(const GameStateMessage& aMessage)
 	switch (aMessage.myGameState)
 	{
 	case eGameState::LOAD_GAME:
+		Prism::MemoryTracker::GetInstance()->SetRunTime(false);
 		myGame = new InGameState();
 		myStateStack.PushMainGameState(myGame);
-		myGame->SetLevel();
 		break;
 	case eGameState::LOAD_MENU:
 		break;

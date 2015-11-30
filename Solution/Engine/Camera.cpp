@@ -39,7 +39,7 @@ namespace Prism
 		reader.ForceReadAttribute(levelElement, "nearplane", myNear);
 		reader.ForceReadAttribute(levelElement, "farplane", myFar);
 		myFOV *= 3.14159f / 180.f;
-		OnResize(Engine::GetInstance()->GetWindowSize().x, Engine::GetInstance()->GetWindowSize().y);
+		OnResize(Engine::GetInstance()->GetWindowSizeInt().x, Engine::GetInstance()->GetWindowSizeInt().y);
 		reader.CloseDocument();
 	}
 

@@ -80,7 +80,9 @@ namespace Prism
 		ID3DX11EffectScalarVariable* myTotalTime;
 		ID3DX11EffectScalarVariable* myPlayerVariable;
 
+		ID3DX11EffectVectorVariable* myColor;
 		ID3DX11EffectVectorVariable* myScaleVector;
+		
 		ID3DX11EffectVectorVariable* myAmbientHue;
 		ID3DX11EffectVectorVariable* myEMPPosition;
 
@@ -91,7 +93,6 @@ namespace Prism
 		ID3DX11EffectShaderResourceVariable* myTexture;
 
 		ID3DX11EffectVectorVariable* mySpritePosAndScale;
-		ID3DX11EffectVectorVariable* mySpriteColor;
 		ID3DX11EffectMatrixVariable* mySpriteOrientation;
 
 		ID3DX11EffectShaderResourceVariable* myStreakDiffuse;

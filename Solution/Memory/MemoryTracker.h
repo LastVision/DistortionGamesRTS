@@ -1,6 +1,6 @@
 #pragma once
-
 #include "MemoryStatistics.h"
+#include <thread>
 namespace std
 {
 	class mutex;
@@ -44,6 +44,8 @@ namespace Prism
 		void Free(void* aAddress);
 
 		void SetRunTime(bool aStatus);
+		bool GetRunTime() const;
+		void AllowNewDuringRunTime(const std::thread::id& aThreadId);
 	private:
 		static void Create();
 		MemoryTracker();
@@ -61,5 +63,16 @@ namespace Prism
 		std::mutex* myMutex;
 
 		static MemoryTracker* myInstance;
+		std::thread::id myAllowThread;
 	};
+
+	inline bool MemoryTracker::GetRunTime() const
+	{
+		return myRuntime;
+	}
+
+	inline void MemoryTracker::AllowNewDuringRunTime(const std::thread::id& aThreadId)
+	{
+		myAllowThread = aThreadId;
+	}
 }

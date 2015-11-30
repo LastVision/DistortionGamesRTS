@@ -35,8 +35,9 @@ void Prism::Instance::Update(float aDelta)
 			{
 				myAnimation = myProxy.myModelAnimated->myAnimation;
 			}
-
+			MemoryTracker::GetInstance()->SetRunTime(false);
 			BuildHierarchy(myHierarchy, myProxy.myModelAnimated);
+			MemoryTracker::GetInstance()->SetRunTime(true);
 			myHierarchyIsBuilt = true;
 			
 		}

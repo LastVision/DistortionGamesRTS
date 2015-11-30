@@ -64,8 +64,8 @@ namespace Prism
 
 		Model* DLLLoadModel(const std::string& aModelPath, Effect* aEffect);
 
-		const CU::Vector2<int>& GetWindowSize() const;
-		const CU::Vector2<float> GetWindowSizeInFloat() const;
+		const CU::Vector2<float>& GetWindowSize() const;
+		const CU::Vector2<int>& GetWindowSizeInt() const;
 		const CU::Matrix44<float>& GetOrthogonalMatrix() const;
 
 		void PrintText(const std::string& aText, const CU::Vector2<float>& aPosition, eTextType aTextType, float aScale = 1.f, CU::Vector4<float> aColor = { 1.f, 1.f, 1.f, 1.f });
@@ -124,7 +124,8 @@ namespace Prism
 		FadeData myFadeData;
 
 		CU::Vector4<float> myClearColor;
-		CU::Vector2<int> myWindowSize;
+		CU::Vector2<int> myWindowSizeInt;
+		CU::Vector2<float> myWindowSize;
 		CU::Matrix44<float> myOrthogonalMatrix;
 
 
@@ -140,14 +141,14 @@ namespace Prism
 	};
 }
 
-inline const CU::Vector2<int>& Prism::Engine::GetWindowSize() const
+inline const CU::Vector2<float>& Prism::Engine::GetWindowSize() const
 {
 	return myWindowSize;
 }
 
-inline const CU::Vector2<float> Prism::Engine::GetWindowSizeInFloat() const
+inline const CU::Vector2<int>& Prism::Engine::GetWindowSizeInt() const
 {
-	return { float(myWindowSize.x), float(myWindowSize.y) };
+	return myWindowSizeInt;
 }
 
 inline const CU::Matrix44<float>& Prism::Engine::GetOrthogonalMatrix() const

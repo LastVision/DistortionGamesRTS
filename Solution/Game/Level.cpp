@@ -56,7 +56,7 @@ bool Level::LogicUpdate(float aDeltaTime, Prism::Camera& aCamera)
 	//myLight->SetDir(lightDir * CU::Matrix44<float>::CreateRotateAroundZ(-3.14f * aDeltaTime / 3.f));
 
 	Prism::RenderLine3D({ 0.f, 0.f, 0.f }, { 100.f, 100.f, 100.f }, eColorDebug::BLACK, eColorDebug::GREEN);
-	Prism::RenderBox({ 128.f, 129.f, 128.f }, 2.f, eColorDebug::BLUE, false);
+	Prism::RenderBox({ 128.f, 129.f, 128.f }, eColorDebug::BLUE, false);
 
 	if (CU::InputWrapper::GetInstance()->MouseDown(0))
 	{
@@ -121,7 +121,7 @@ CU::Vector3<float> Level::CalcCursorWorldPosition(Prism::Camera& aCamera)
 {
 	CU::Vector2<float> inputPos(CU::InputWrapper::GetInstance()->GetMousePosition());
 	CU::Vector2<float> cursorPos;
-	CU::Vector2<float> window = Prism::Engine::GetInstance()->GetWindowSizeInFloat();
+	CU::Vector2<float> window = Prism::Engine::GetInstance()->GetWindowSize();
 
 	float tweakValue = 1.85f; // for 16:9
 	float epsilon = 0.1f;

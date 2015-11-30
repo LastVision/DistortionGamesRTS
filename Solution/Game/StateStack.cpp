@@ -2,6 +2,7 @@
 #include "StateStack.h"
 #include <DL_Assert.h>
 #include "GameState.h"
+#include <ModelLoader.h>
 
 StateStack::StateStack()
 {
@@ -63,8 +64,10 @@ void StateStack::PushSubGameState(GameState* aSubGameState)
 	DL_ASSERT_EXP(myMainIndex < 20 && mySubIndex < 20, "Can't add more than 20 states, it's unreasonable!");
 
 	myGameStates[myMainIndex].Add(aSubGameState);
-
+	Prism::ModelLoader::GetInstance()->Pause();
 	aSubGameState->InitState(myStateStackProxy, myCursor);
+	Prism::ModelLoader::GetInstance()->UnPause();
+	Prism::MemoryTracker::GetInstance()->SetRunTime(true);
 
 	mySubIndex = myGameStates[myMainIndex].Size() - 1;
 }

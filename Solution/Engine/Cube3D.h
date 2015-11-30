@@ -8,7 +8,7 @@ namespace Prism
 	class Cube3D
 	{
 	public:
-		Cube3D(const CU::Vector4<float>& aColor);
+		Cube3D();
 		~Cube3D();
 
 		void SetPosition(const CU::Vector3<float>& aPosition);
@@ -25,12 +25,14 @@ namespace Prism
 		D3D11_PRIMITIVE_TOPOLOGY myPrimitiveTopology;
 		ID3D11InputLayout*	myInputLayout;
 
-		void CreateVertexBuffer(float aSideLength, const CU::Vector4<float>& aColor);
+		void CreateVertexBuffer(float aSideLength);
 		void InitVertexBuffer();
 		void InitIndexBuffer();
 
 		CU::Matrix44<float> myOrientation;
 		bool myWireFrame;
+		CU::Vector3<float> mySize;
+		CU::Vector4<float> myColor;
 	};
 
 	inline void Cube3D::SetPosition(const CU::Vector3<float>& aPosition)
