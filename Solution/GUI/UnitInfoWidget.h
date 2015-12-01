@@ -28,6 +28,8 @@ namespace GUI
 		void OnResize(const CU::Vector2<float>& aNewWindowSize, const CU::Vector2<float>& anOldWindowSize) override;
 
 	private:
+		void operator=(UnitInfoWidget&) = delete;
+
 		Prism::Sprite* myUnitPortrait;
 
 		const CU::GrowingArray<Entity*>& myUnits;

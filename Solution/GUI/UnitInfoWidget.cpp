@@ -50,7 +50,11 @@ namespace GUI
 
 	void UnitInfoWidget::OnResize(const CU::Vector2<float>& aNewWindowSize, const CU::Vector2<float>& anOldWindowSize)
 	{
-		aNewWindowSize;
-		anOldWindowSize;
+		Widget::OnResize(aNewWindowSize, anOldWindowSize);
+
+		CU::Vector2<float> ratioSize = myUnitPortrait->GetSize() / anOldWindowSize;
+		CU::Vector2<float> newSize = ratioSize * aNewWindowSize;
+
+		myUnitPortrait->SetSize(newSize, newSize / 2.f);
 	}
 }

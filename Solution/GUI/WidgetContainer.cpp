@@ -68,6 +68,8 @@ namespace GUI
 
 	void WidgetContainer::OnResize(const CU::Vector2<float>& aNewSize, const CU::Vector2<float>& anOldSize)
 	{
+		Widget::OnResize(aNewSize, anOldSize);
+
 		for (int i = 0; i < myWidgets.Size(); i++)
 		{
 			myWidgets[i]->OnResize(aNewSize, anOldSize);
