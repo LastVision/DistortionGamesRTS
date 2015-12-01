@@ -7,10 +7,11 @@
 #include <Sprite.h>
 #include "WidgetContainer.h"
 #include <XMLReader.h>
+#include "UnitInfoWidget.h"
 
 namespace GUI
 {
-	GUIManager::GUIManager(Cursor* aCursor, const std::string& aXMLPath)
+	GUIManager::GUIManager(Cursor* aCursor, const std::string& aXMLPath, const CU::GrowingArray<Entity*>& someUnits)
 		: myActiveWidget(nullptr)
 		, myCursor(aCursor)
 		, myMousePosition({ 0.f, 0.f })
@@ -47,6 +48,11 @@ namespace GUI
 				{
 					ButtonWidget* button = new ButtonWidget(&reader, widgetElement);
 					container->AddWidget(button);
+				}
+				else if (type == "unitinfo")
+				{
+					UnitInfoWidget* unitInfo = new UnitInfoWidget(&reader, widgetElement, someUnits);
+					container->AddWidget(unitInfo);
 				}
 			}
 			myWidgets->AddWidget(container);

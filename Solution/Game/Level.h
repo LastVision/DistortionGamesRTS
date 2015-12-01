@@ -21,6 +21,8 @@ public:
 
 	void OnResize(int aWidth, int aHeigth);
 
+	const CU::GrowingArray<Entity*>& GetSelectedUnits() const;
+
 private:
 	CU::Vector3<float> CalcCursorWorldPosition(Prism::Camera& aCamera);
 
@@ -33,3 +35,7 @@ private:
 	int myCurrentWaypoint;
 };
 
+inline const CU::GrowingArray<Entity*>& Level::GetSelectedUnits() const
+{
+	return myUnits;
+}

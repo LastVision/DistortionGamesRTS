@@ -13,12 +13,6 @@ namespace GUI
 		mySize = aSize;
 	}
 
-	WidgetContainer::WidgetContainer(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement)
-	{
-		
-
-	}
-
 	WidgetContainer::~WidgetContainer()
 	{
 		myWidgets.DeleteAll();
