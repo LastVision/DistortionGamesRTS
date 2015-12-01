@@ -13,12 +13,6 @@ namespace GUI
 		mySize = aSize;
 	}
 
-	WidgetContainer::WidgetContainer(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement)
-	{
-		
-
-	}
-
 	WidgetContainer::~WidgetContainer()
 	{
 		myWidgets.DeleteAll();
@@ -47,7 +41,7 @@ namespace GUI
 
 		for (int i = 0; i < myWidgets.Size(); i++)
 		{
-			myWidgets[i]->Render(myPosition - aParentPosition);
+			myWidgets[i]->Render(myPosition + aParentPosition);
 		}
 	}
 
@@ -80,7 +74,8 @@ namespace GUI
 		}
 		if (myBackground != nullptr)
 		{
-			myBackground->SetSize(aNewSize, { 0.f, 0.f });
+			CU::Vector2<float> ratio = myBackground->GetSize() / anOldSize;
+			myBackground->SetSize(aNewSize * ratio, { 0.f, 0.f });
 		}
 	}
 }

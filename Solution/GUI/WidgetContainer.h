@@ -21,7 +21,6 @@ namespace GUI
 	public:
 
 		WidgetContainer(Prism::Sprite* aBackgroundSprite, const CU::Vector2<float>& aSize);
-		WidgetContainer(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement);
 		~WidgetContainer();
 
 		void AddWidget(Widget* aWidget);
@@ -32,8 +31,15 @@ namespace GUI
 
 		void OnResize(const CU::Vector2<float>& aNewSize, const CU::Vector2<float>& anOldSize) override;
 
+		int GetSize() const;
+
 	private:
 		CU::GrowingArray<Widget*> myWidgets;
 		Prism::Sprite* myBackground;
 	};
+
+	inline int WidgetContainer::GetSize() const
+	{
+		return myWidgets.Size();
+	}
 }

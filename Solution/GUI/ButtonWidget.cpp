@@ -92,7 +92,7 @@ namespace GUI
 
 	void ButtonWidget::Render(const CU::Vector2<float>& aParentPosition)
 	{
-		myImageCurrent->Render(myPosition - aParentPosition);
+		myImageCurrent->Render(myPosition + aParentPosition);
 	}
 
 	void ButtonWidget::OnMousePressed(const CU::Vector2<float>&)

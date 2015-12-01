@@ -5,6 +5,8 @@ namespace CU
 	class InputWrapper;
 }
 
+class Entity;
+
 namespace GUI
 {
 	class WidgetContainer;
@@ -14,7 +16,7 @@ namespace GUI
 	class GUIManager
 	{
 	public:
-		GUIManager(Cursor* aCursor, const std::string& aXMLPath);
+		GUIManager(Cursor* aCursor, const std::string& aXMLPath, const CU::GrowingArray<Entity*>& someUnits);
 		~GUIManager();
 
 		void AddWidget(Widget* aWidget);
