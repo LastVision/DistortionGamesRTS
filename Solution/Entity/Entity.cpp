@@ -8,6 +8,7 @@
 #include "EntityData.h"
 #include "MovementComponent.h"
 #include <Scene.h>
+#include <Terrain.h>
 
 Entity::Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& aEntityData,
 	Prism::Scene& aScene, const CU::Vector3<float> aStartPosition, Prism::Terrain& aTerrain)
@@ -25,6 +26,7 @@ Entity::Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& a
 	}
 
 	myOrientation.SetPos(aStartPosition);
+	aTerrain.CalcEntityHeight(myOrientation);
 
 	if (aEntityData.myAnimationData.myExistsInEntity == true)
 	{
