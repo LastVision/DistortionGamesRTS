@@ -12,6 +12,7 @@ namespace GUI
 		: myUnits(someUnits)
 		, myUnitActionButtons(nullptr)
 		, myBuildingActionButtons(nullptr)
+		, myIsUnitSelected(false)
 	{
 		CU::Vector2<float> size;
 		CU::Vector2<float> position;
@@ -53,15 +54,30 @@ namespace GUI
 
 	void UnitActionWidget::Render(const CU::Vector2<float>& aParentPosition)
 	{
-		if (myUnits[0] != nullptr && myUnits[0]->IsSelected() == true)
+		if (myIsUnitSelected == true)
 		{
 			myUnitActionButtons->Render(myPosition + aParentPosition);
 		}
 	}
 
+	void UnitActionWidget::Update()
+	{
+		Widget::Update();
+
+		myIsUnitSelected = false;
+
+		for (int i = 0; i < myUnits.Size(); i++)
+		{
+			if (myUnits[i] != nullptr && myUnits[i]->IsSelected() == true)
+			{
+				myIsUnitSelected = true;
+			}
+		}
+	}
+
 	Widget* UnitActionWidget::MouseIsOver(const CU::Vector2<float>& aPosition)
 	{
-		if (myUnits[0] != nullptr && myUnits[0]->IsSelected() == true)
+		if (myIsUnitSelected == true)
 		{
 			return myUnitActionButtons->MouseIsOver(aPosition - myPosition);
 		}

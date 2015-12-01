@@ -4,6 +4,7 @@
 #include <Camera.h>
 #include <CollisionComponent.h>
 #include <DirectionalLight.h>
+#include <EffectContainer.h>
 #include <Engine.h>
 #include <EngineEnums.h>
 #include <Entity.h>
@@ -12,6 +13,7 @@
 #include <InputWrapper.h>
 #include <Intersection.h>
 #include "Level.h"
+#include <ModelLoader.h>
 #include <MovementComponent.h>
 #include "PlayerActor.h"
 #include <Scene.h>
@@ -26,7 +28,9 @@ Level::Level(const Prism::Camera& aCamera)
 		, "Data/Resource/Texture/Terrain/T_rock.dds", { 256.f, 256.f }, 25.5f, CU::Matrix44<float>());
 
 	myScene = new Prism::Scene(aCamera, *myTerrain);
-
+	Prism::ModelLoader::GetInstance()->Pause();
+	Prism::EffectContainer::GetInstance()->SetCubeMap("Data/Resource/Texture/CubeMap/T_cubemap_level01.dds");
+	Prism::ModelLoader::GetInstance()->UnPause();
 	myLight = new Prism::DirectionalLight();
 	myLight->SetColor({ 0.5f, 0.5f, 0.9f, 1.f });
 	myLight->SetDir(CU::Vector3<float>(0, 1, 0) * CU::Matrix44<float>::CreateRotateAroundZ(-3.14f / 3.f));

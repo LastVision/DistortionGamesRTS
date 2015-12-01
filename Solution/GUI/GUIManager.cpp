@@ -95,6 +95,8 @@ namespace GUI
 	{
 		myMousePosition = myCursor->GetMousePosition();
 
+		myWidgets->Update();
+
 		CheckMouseMoved();
 		CheckMouseExited();
 		CheckMouseDown();
@@ -103,31 +105,11 @@ namespace GUI
 
 		CheckMouseEntered();
 
-		myWidgets->Update();
 	}
 
 	void GUIManager::Render()
 	{
 		myWidgets->Render({ 0.f, 0.f });
-
-		if (myActiveWidget != nullptr && myActiveWidget->GetHoverText() != "")
-		{
-			CU::Vector2<float> hoverPosition = { myActiveWidget->GetPosition().x - myActiveWidget->GetSize().x / 2.f
-				, myActiveWidget->GetPosition().y + myActiveWidget->GetSize().y / 2.f };
-			
-			Prism::Engine::GetInstance()->PrintText(myActiveWidget->GetHoverText(), hoverPosition
-				, Prism::eTextType::RELEASE_TEXT);
-		}
-	}
-
-	void GUIManager::SetPosition(const CU::Vector2<float>& aPosition)
-	{
-		myWidgets->SetPosition(aPosition);
-	}
-	
-	void GUIManager::SetSize(const CU::Vector2<float>& aSize)
-	{
-		myWidgets->SetSize(aSize);
 	}
 
 	void GUIManager::OnResize(int aWidth, int aHeight)

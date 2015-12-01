@@ -23,9 +23,6 @@ namespace GUI
 		void Update();
 		void Render();
 
-		void SetPosition(const CU::Vector2<float>& aPosition);
-		void SetSize(const CU::Vector2<float>& aSize);
-
 		void OnResize(int aWidth, int aHeight);
 
 		CU::Vector3<float> CalcCameraMovement() const;

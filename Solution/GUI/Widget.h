@@ -24,7 +24,6 @@ namespace GUI
 
 		virtual void OnResize(const CU::Vector2<float>& aNewWindowSize, const CU::Vector2<float>& anOldWindowSize);
 
-		virtual inline void SetSize(const CU::Vector2<float>& aSize);
 		virtual inline void SetPosition(const CU::Vector2<float>& aPosition);
 		virtual inline void SetVisibility(bool aVisibility);
 		inline const CU::Vector2<float>& GetSize() const;
@@ -33,18 +32,12 @@ namespace GUI
 
 		const std::string& GetHoverText() const;
 
-
 	protected:
 		CU::Vector2<float> myPosition;
 		CU::Vector2<float> mySize;
-		bool myIsVisible;
 		std::string myHoverText;
+		bool myIsVisible;
 	};
-
-	inline void Widget::SetSize(const CU::Vector2<float>& aSize)
-	{
-		mySize = aSize;
-	}
 
 	inline void Widget::SetPosition(const CU::Vector2<float>& aPosition)
 	{
