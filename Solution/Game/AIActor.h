@@ -3,7 +3,9 @@
 class AIActor : public Actor
 {
 public:
-	AIActor();
+	AIActor(const Prism::Terrain& aTerrain);
 	~AIActor();
+
+	void Update(float aDeltaTime) override;
 };
 

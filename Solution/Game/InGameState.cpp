@@ -32,7 +32,7 @@ InGameState::~InGameState()
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::GAME_STATE, this);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::ON_CLICK, this);
 	SAFE_DELETE(myCamera);
-	SAFE_DELETE(myGUIManager);
+	//SAFE_DELETE(myGUIManager);
 }
 
 void InGameState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCursor)
@@ -42,7 +42,7 @@ void InGameState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCur
 	myStateStack = aStateStackProxy;
 	myStateStatus = eStateStatus::eKeepState;
 	myCursor = aCursor;
-	myGUIManager = new GUI::GUIManager(myCursor, "Data/Resource/GUI/GUI_ingame.xml", myLevel->GetSelectedUnits());
+	//myGUIManager = new GUI::GUIManager(myCursor, "Data/Resource/GUI/GUI_ingame.xml", myLevel->GetSelectedUnits());
 
 	CU::Vector2<int> windowSize = Prism::Engine::GetInstance()->GetWindowSizeInt();
 
@@ -61,11 +61,12 @@ void InGameState::EndState()
 
 const eStateStatus InGameState::Update(const float& aDeltaTime)
 {
-	UpdateCamera(aDeltaTime, myGUIManager->CalcCameraMovement());
+	//UpdateCamera(aDeltaTime, myGUIManager->CalcCameraMovement());
+	UpdateCamera(aDeltaTime, { 0, 0, 0 });
 
 	if (myRenderGUI == true)
 	{
-		myGUIManager->Update();
+		//myGUIManager->Update();
 	}
 
 	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_ESCAPE) || myStateStatus == eStateStatus::ePopMainState)
@@ -81,7 +82,7 @@ const eStateStatus InGameState::Update(const float& aDeltaTime)
 		myRenderGUI = !myRenderGUI;
 	}
 
-	if (myLevel->LogicUpdate(aDeltaTime, *myCamera) == true)
+	if (myLevel->Update(aDeltaTime, *myCamera) == true)
 	{
 		//return myStateStatus;
 	}
@@ -96,7 +97,7 @@ void InGameState::Render()
 
 	if (myRenderGUI == true)
 	{
-		myGUIManager->Render();
+		//myGUIManager->Render();
 	}
 
 	Prism::DebugDrawer::GetInstance()->Render(*myCamera); //Have to be last
@@ -112,7 +113,7 @@ void InGameState::ResumeState()
 void InGameState::OnResize(int aWidth, int aHeight)
 {
 	myLevel->OnResize(aWidth, aHeight);
-	myGUIManager->OnResize(aWidth, aHeight);
+	//myGUIManager->OnResize(aWidth, aHeight);
 }
 
 void InGameState::ReceiveMessage(const GameStateMessage& aMessage)

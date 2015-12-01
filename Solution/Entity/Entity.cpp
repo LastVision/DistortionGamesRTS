@@ -10,8 +10,8 @@
 #include <Scene.h>
 #include <Terrain.h>
 
-Entity::Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& aEntityData,
-	Prism::Scene& aScene, const CU::Vector3<float> aStartPosition, Prism::Terrain& aTerrain)
+Entity::Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& aEntityData
+		, Prism::Scene& aScene, const CU::Vector3<float> aStartPosition, const Prism::Terrain& aTerrain)
 	: myAlive(true)
 	, myOwner(aOwner)
 	, myScene(aScene)

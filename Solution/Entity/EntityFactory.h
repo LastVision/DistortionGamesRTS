@@ -3,9 +3,9 @@
 #include "EntityData.h"
 #include <unordered_map>
 #include <Vector.h>
+#include "Entity.h"
 
 class ComponentLoader;
-class Entity;
 
 namespace Prism
 {
@@ -21,7 +21,7 @@ public:
 
 	void LoadEntities(const char* aEntityListXML);
 	static Entity* CreateEntity(eOwnerType aOwner, eEntityType aType, Prism::eOctreeType aOctreeType, 
-		Prism::Scene& aScene, CU::Vector3f aPostion, Prism::Terrain& aTerrian);
+		Prism::Scene& aScene, CU::Vector3f aPostion, const Prism::Terrain& aTerrian);
 private:
 	void LoadEntity(const char* aEntityPath);
 	EntityFactory();

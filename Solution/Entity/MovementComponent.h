@@ -14,7 +14,7 @@ struct MovementComponentData;
 class MovementComponent : public Component
 {
 public:
-	MovementComponent(Entity& aEntity, MovementComponentData& aComponentData, Prism::Terrain& aTerrain);
+	MovementComponent(Entity& aEntity, MovementComponentData& aComponentData, const Prism::Terrain& aTerrain);
 	~MovementComponent();
 
 	void Update(float aDeltaTime) override;
@@ -25,6 +25,8 @@ public:
 	eComponentType GetType() override;
 
 private:
+	void operator=(MovementComponent&) = delete;
+
 	void MoveTo(CU::Vector3<float> aPointToMoveTo);
 
 	float myMovementSpeed;
@@ -32,7 +34,7 @@ private:
 	CU::Vector3<float> myDirection;
 	CU::GrowingArray<CU::Vector3<float>> myWayPoints;
 	int myCurrentWayPoint;
-	Prism::Terrain& myTerrain;
+	const Prism::Terrain& myTerrain;
 };
 
 inline eComponentType MovementComponent::GetTypeStatic()

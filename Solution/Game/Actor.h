@@ -4,22 +4,30 @@ class Entity;
 
 enum class eActorType
 {
-	PLAYER1,
+	PLAYER,
 	AI,
 	COUNT
 };
 
+namespace Prism
+{
+	class Terrain;
+}
 
 class Actor
 {
 public:
-	Actor();
+	Actor(eActorType aActorType, const Prism::Terrain& aTerrain);
 	virtual ~Actor();
 
-private:
+	virtual void Update(float aDeltaTime);
 	
-	eActorType myActorType;
+protected:
 	CU::GrowingArray<Entity*> myUnits;
+	const eActorType myActorType;
+	const Prism::Terrain& myTerrain;
 
+private:
+	void operator=(Actor&) = delete;
 };
 
