@@ -10,7 +10,6 @@ namespace GUI
 	UnitInfoWidget::UnitInfoWidget(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement, const CU::GrowingArray<Entity*>& someUnits)
 		: myUnits(someUnits)
 	{
-		std::string backgroundPath = "";
 		std::string unitPath = "";
 		CU::Vector2<float> size;
 		CU::Vector2<float> unitSize;
@@ -22,25 +21,17 @@ namespace GUI
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "unitsize"), "y", unitSize.y);
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "position"), "x", position.x);
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "position"), "y", position.y);
-		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "backgroundsprite"), "path", backgroundPath);
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "testunitsprite"), "path", unitPath);
 
 		mySize = size;
 		myPosition = position;
-		myBackground = new Prism::Sprite(backgroundPath, mySize);
 		myUnitPortrait = new Prism::Sprite(unitPath, unitSize);
 
 	}
 
 	UnitInfoWidget::~UnitInfoWidget()
 	{
-		SAFE_DELETE(myBackground);
 		SAFE_DELETE(myUnitPortrait);
-	}
-
-	void UnitInfoWidget::Update()
-	{
-
 	}
 
 	void UnitInfoWidget::Render(const CU::Vector2<float>& aParentPosition)
@@ -49,7 +40,9 @@ namespace GUI
 		{
 			if (myUnits[i] != nullptr && myUnits[i]->IsSelected() == true)
 			{
-				myUnitPortrait->Render({ myPosition.x + myUnitPortrait->GetSize().x * i, myPosition.y });
+				CU::Vector2<float> position = { myPosition.x + myUnitPortrait->GetSize().x * i, myPosition.y };
+				position += aParentPosition;
+				myUnitPortrait->Render(position);
 				// render health
 			}
 		}

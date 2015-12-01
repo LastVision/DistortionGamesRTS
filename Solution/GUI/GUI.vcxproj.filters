@@ -26,6 +26,9 @@
     <ClInclude Include="UnitInfoWidget.h">
       <Filter>Widget</Filter>
     </ClInclude>
+    <ClInclude Include="UnitActionWidget.h">
+      <Filter>Widget</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -43,6 +46,9 @@
     </ClCompile>
     <ClCompile Include="Cursor.cpp" />
     <ClCompile Include="UnitInfoWidget.cpp">
+      <Filter>Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitActionWidget.cpp">
       <Filter>Widget</Filter>
     </ClCompile>
   </ItemGroup>
