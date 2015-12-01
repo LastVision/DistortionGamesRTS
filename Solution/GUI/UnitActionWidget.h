@@ -26,6 +26,7 @@ namespace GUI
 		~UnitActionWidget();
 
 		void Render(const CU::Vector2<float>& aParentPosition) override;
+		void Update() override;
 
 		Widget* MouseIsOver(const CU::Vector2<float>& aPosition) override;
 
@@ -38,5 +39,7 @@ namespace GUI
 
 		WidgetContainer* myUnitActionButtons;
 		WidgetContainer* myBuildingActionButtons;
+
+		bool myIsUnitSelected;
 	};
 }

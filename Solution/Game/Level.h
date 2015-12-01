@@ -26,6 +26,8 @@ public:
 private:
 	CU::Vector3<float> CalcCursorWorldPosition(Prism::Camera& aCamera);
 
+	void UpdateMouseInteraction(Prism::Camera& aCamera);
+
 	Prism::Terrain* myTerrain;
 	Prism::DirectionalLight* myLight;
 	Prism::Scene* myScene;
