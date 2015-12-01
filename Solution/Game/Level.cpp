@@ -4,6 +4,7 @@
 #include <Camera.h>
 #include <CollisionComponent.h>
 #include <DirectionalLight.h>
+#include <EffectContainer.h>
 #include <Engine.h>
 #include <EngineEnums.h>
 #include <Entity.h>
@@ -12,6 +13,7 @@
 #include <InputWrapper.h>
 #include <Intersection.h>
 #include "Level.h"
+#include <ModelLoader.h>
 #include <MovementComponent.h>
 #include <Scene.h>
 #include <Terrain.h>
@@ -24,7 +26,7 @@ Level::Level(const Prism::Camera& aCamera)
 
 	myTerrain = new Prism::Terrain("Data/Resource/Texture/Terrain/playground.tga"
 		, "Data/Resource/Texture/Terrain/T_rock.dds", { 256.f, 256.f }, 25.5f, CU::Matrix44<float>());
-
+	
 	myScene = new Prism::Scene(aCamera, *myTerrain);
 	myUnits.Init(20);
 	for (int i = 0; i < 1; ++i)
@@ -32,6 +34,9 @@ Level::Level(const Prism::Camera& aCamera)
 		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::PLAYER, eEntityType::DRAGON, Prism::eOctreeType::DYNAMIC,
 			*myScene, { 20.f + i, 0.f, 200.f }, *myTerrain));
 	}
+	Prism::ModelLoader::GetInstance()->Pause();
+	Prism::EffectContainer::GetInstance()->SetCubeMap("Data/Resource/Texture/CubeMap/T_cubemap_level01.dds");
+	Prism::ModelLoader::GetInstance()->UnPause();
 
 	myWaypoints.Init(4);
 	myLight = new Prism::DirectionalLight();
