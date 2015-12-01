@@ -30,7 +30,7 @@ Level::Level(const Prism::Camera& aCamera)
 	for (int i = 0; i < 15; ++i)
 	{
 		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::PLAYER, eEntityType::DRAGON, Prism::eOctreeType::DYNAMIC,
-			*myScene, { 20.f + i, 0.f, 200.f }, *myTerrain));
+			*myScene, { 20.f + i, 0.f, 20.f }, *myTerrain));
 	}
 
 	myWaypoints.Init(4);
