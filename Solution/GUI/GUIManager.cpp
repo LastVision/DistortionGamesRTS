@@ -120,16 +120,6 @@ namespace GUI
 		}
 	}
 
-	void GUIManager::SetPosition(const CU::Vector2<float>& aPosition)
-	{
-		myWidgets->SetPosition(aPosition);
-	}
-	
-	void GUIManager::SetSize(const CU::Vector2<float>& aSize)
-	{
-		myWidgets->SetSize(aSize);
-	}
-
 	void GUIManager::OnResize(int aWidth, int aHeight)
 	{
 		CU::Vector2<float> newSize = { float(aWidth), float(aHeight) };
