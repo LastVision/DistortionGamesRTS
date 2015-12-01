@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "ButtonWidget.h"
+#include <Engine.h>
 #include <OnClickMessage.h>
 #include <Sprite.h>
 #include <PostMaster.h>
@@ -97,6 +98,15 @@ namespace GUI
 	void ButtonWidget::Render(const CU::Vector2<float>& aParentPosition)
 	{
 		myImageCurrent->Render(myPosition + aParentPosition);
+
+		if (myImageCurrent == myImageHover && myHoverText != "")
+		{
+			CU::Vector2<float> hoverPosition = { myPosition.x - mySize.x / 2.f
+				, myPosition.y + mySize.y / 2.f };
+			hoverPosition += aParentPosition;
+
+			Prism::Engine::GetInstance()->PrintText(myHoverText, hoverPosition, Prism::eTextType::RELEASE_TEXT);
+		}
 	}
 
 	void ButtonWidget::OnMousePressed(const CU::Vector2<float>&)

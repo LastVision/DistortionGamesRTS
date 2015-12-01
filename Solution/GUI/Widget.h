@@ -32,12 +32,11 @@ namespace GUI
 
 		const std::string& GetHoverText() const;
 
-
 	protected:
 		CU::Vector2<float> myPosition;
 		CU::Vector2<float> mySize;
-		bool myIsVisible;
 		std::string myHoverText;
+		bool myIsVisible;
 	};
 
 	inline void Widget::SetPosition(const CU::Vector2<float>& aPosition)

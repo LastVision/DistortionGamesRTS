@@ -62,6 +62,8 @@ namespace GUI
 
 	void UnitActionWidget::Update()
 	{
+		Widget::Update();
+
 		myIsUnitSelected = false;
 
 		for (int i = 0; i < myUnits.Size(); i++)
