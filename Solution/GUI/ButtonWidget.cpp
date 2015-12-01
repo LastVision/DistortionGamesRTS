@@ -39,31 +39,35 @@ namespace GUI
 
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "onclick"), "event", clickEvent);
 
-		if (clickEvent == "lose")
+		if (clickEvent == "game_lose")
 		{
-			myClickEvent = new OnClickMessage(eOnClickEvent::LOSE);
+			myClickEvent = new OnClickMessage(eOnClickEvent::GAME_LOSE);
 		}
-		else if (clickEvent == "win")
+		else if (clickEvent == "game_win")
 		{
-			myClickEvent = new OnClickMessage(eOnClickEvent::WIN);
+			myClickEvent = new OnClickMessage(eOnClickEvent::GAME_WIN);
 		}
-		else if (clickEvent == "start")
+		else if (clickEvent == "game_start")
 		{
-			myClickEvent = new OnClickMessage(eOnClickEvent::START);
+			myClickEvent = new OnClickMessage(eOnClickEvent::GAME_START);
 		}
-		else if (clickEvent == "restart")
+		else if (clickEvent == "game_restart")
 		{
-			myClickEvent = new OnClickMessage(eOnClickEvent::RESTART);
+			myClickEvent = new OnClickMessage(eOnClickEvent::GAME_RESTART);
 		}
-		else if (clickEvent == "quit")
+		else if (clickEvent == "game_quit")
 		{
-			myClickEvent = new OnClickMessage(eOnClickEvent::QUIT);
+			myClickEvent = new OnClickMessage(eOnClickEvent::GAME_QUIT);
 		}
-		else if (clickEvent == "unit")
+		else if (clickEvent == "action_move")
+		{
+			myClickEvent = new OnClickMessage(eOnClickEvent::UNIT_ACTION_MOVE);
+		}
+		else if (clickEvent == "spawn_unit")
 		{
 			int ID = -1;
 			aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "onclick"), "id", ID);
-			myClickEvent = new OnClickMessage(eOnClickEvent::UNIT, ID);
+			myClickEvent = new OnClickMessage(eOnClickEvent::SPAWN_UNIT, ID);
 		}
 		else
 		{

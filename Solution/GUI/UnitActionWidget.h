@@ -27,6 +27,8 @@ namespace GUI
 
 		void Render(const CU::Vector2<float>& aParentPosition) override;
 
+		Widget* MouseIsOver(const CU::Vector2<float>& aPosition) override;
+
 		void OnResize(const CU::Vector2<float>& aNewWindowSize, const CU::Vector2<float>& anOldWindowSize) override;
 
 	private:

@@ -73,7 +73,7 @@ void MainMenuState::ReceiveMessage(const OnClickMessage& aMessage)
 	{
 		switch (aMessage.myEvent)
 		{
-		case eOnClickEvent::QUIT:
+		case eOnClickEvent::GAME_QUIT:
 			myStateStatus = eStateStatus::ePopMainState;
 			break;
 		default:
