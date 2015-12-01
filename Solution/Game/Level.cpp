@@ -27,7 +27,7 @@ Level::Level(const Prism::Camera& aCamera)
 
 	myScene = new Prism::Scene(aCamera, *myTerrain);
 	myUnits.Init(20);
-	for (int i = 0; i < 1; ++i)
+	for (int i = 0; i < 15; ++i)
 	{
 		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::PLAYER, eEntityType::DRAGON, Prism::eOctreeType::DYNAMIC,
 			*myScene, { 20.f + i, 0.f, 200.f }, *myTerrain));
@@ -58,46 +58,8 @@ bool Level::LogicUpdate(float aDeltaTime, Prism::Camera& aCamera)
 	Prism::RenderLine3D({ 0.f, 0.f, 0.f }, { 100.f, 100.f, 100.f }, eColorDebug::BLACK, eColorDebug::GREEN);
 	Prism::RenderBox({ 128.f, 129.f, 128.f }, eColorDebug::BLUE, false);
 
-	if (CU::InputWrapper::GetInstance()->MouseDown(0))
-	{
-		CU::Vector3<float> targetPos = CalcCursorWorldPosition(aCamera);
-		CU::Intersection::LineSegment3D line(aCamera.GetOrientation().GetPos(), targetPos);
 
-		for (int i = 0; i < myUnits.Size(); ++i)
-		{
-			if (myUnits[i]->GetComponent<CollisionComponent>()->Collide(line) == true)
-			{
-				myUnits[i]->SetSelect(true);
-			}
-			else
-			{
-				myUnits[i]->SetSelect(false);
-			}
-		}
-	}
-
-	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_LSHIFT) && CU::InputWrapper::GetInstance()->MouseDown(1))
-	{
-		CU::Vector3<float> newPos(CalcCursorWorldPosition(aCamera));
-		for (int i = 0; i < myUnits.Size(); ++i)
-		{
-			if (myUnits[i]->IsSelected())
-			{
-				myUnits[i]->GetComponent<MovementComponent>()->AddWayPoint(newPos, false);
-			}
-		}
-	}
-	else if (CU::InputWrapper::GetInstance()->MouseDown(1))
-	{
-		CU::Vector3<float> newPos(CalcCursorWorldPosition(aCamera));
-		for (int i = 0; i < myUnits.Size(); ++i)
-		{
-			if (myUnits[i]->IsSelected())
-			{
-				myUnits[i]->GetComponent<MovementComponent>()->AddWayPoint(newPos, true);
-			}
-		}
-	}
+	UpdateMouseInteraction(aCamera);
 
 	for (int i = 0; i < myUnits.Size(); ++i)
 	{
@@ -158,4 +120,62 @@ CU::Vector3<float> Level::CalcCursorWorldPosition(Prism::Camera& aCamera)
 	Prism::RenderLine3D(worldPos, { 100.f, 100.f, 100.f });
 
 	return worldPos;
+}
+
+void Level::UpdateMouseInteraction(Prism::Camera& aCamera)
+{
+	CU::Vector3<float> targetPos = CalcCursorWorldPosition(aCamera);
+	CU::Intersection::LineSegment3D line(aCamera.GetOrientation().GetPos(), targetPos);
+
+	bool leftClicked = CU::InputWrapper::GetInstance()->MouseDown(0);
+	bool hasSelected = false;
+	bool hasHovered = false;
+	for (int i = 0; i < myUnits.Size(); ++i)
+	{
+		bool mouseOnUnit = myUnits[i]->GetComponent<CollisionComponent>()->Collide(line);
+
+		if (leftClicked == true)
+		{
+			myUnits[i]->SetSelect(false);
+		}
+
+		myUnits[i]->SetHovered(false);
+
+		if (mouseOnUnit == true)
+		{
+			if (leftClicked == true && hasSelected == false)
+			{
+				myUnits[i]->SetSelect(true);
+				hasSelected = true;
+			}
+			else if (hasHovered == false)
+			{
+				myUnits[i]->SetHovered(true);
+				hasHovered = true;
+			}
+		}
+	}
+
+	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_LSHIFT) && CU::InputWrapper::GetInstance()->MouseDown(1))
+	{
+		CU::Vector3<float> newPos(CalcCursorWorldPosition(aCamera));
+		for (int i = 0; i < myUnits.Size(); ++i)
+		{
+			if (myUnits[i]->IsSelected())
+			{
+				myUnits[i]->GetComponent<MovementComponent>()->AddWayPoint(newPos, false);
+			}
+		}
+	}
+	else if (CU::InputWrapper::GetInstance()->MouseDown(1))
+	{
+		CU::Vector3<float> newPos(CalcCursorWorldPosition(aCamera));
+		for (int i = 0; i < myUnits.Size(); ++i)
+		{
+			if (myUnits[i]->IsSelected())
+			{
+				myUnits[i]->GetComponent<MovementComponent>()->AddWayPoint(newPos, true);
+			}
+		}
+	}
 }

@@ -19,6 +19,7 @@ Entity::Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& a
 	, myState(eEntityState::IDLE)
 	, myType(aEntityData.myType)
 	, mySelected(false)
+	, myHovered(false)
 {
 	for (int i = 0; i < static_cast<int>(eComponentType::_COUNT); ++i)
 	{
@@ -73,6 +74,10 @@ void Entity::Update(float aDeltaTime)
 	{
 		Prism::RenderBox(myOrientation.GetPos());
 	}
+	else if (myHovered == true)
+	{
+		Prism::RenderBox(myOrientation.GetPos(), eColorDebug::WHITE);
+	}
 }
 
 void Entity::AddComponent(Component* aComponent)
@@ -113,4 +118,14 @@ void Entity::SetSelect(bool aStatus)
 bool Entity::IsSelected() const
 {
 	return mySelected;
+}
+
+void Entity::SetHovered(bool aStatus)
+{
+	myHovered = aStatus;
+}
+
+bool Entity::IsHovered() const
+{
+	return myHovered;
 }
