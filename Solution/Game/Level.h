@@ -9,7 +9,7 @@ namespace Prism
 }
 
 class Entity;
-class PlayerActor;
+class PlayerDirector;
 
 class Level
 {
@@ -27,5 +27,5 @@ private:
 	Prism::DirectionalLight* myLight;
 	Prism::Scene* myScene;
 
-	PlayerActor* myPlayer;
+	PlayerDirector* myPlayer;
 };

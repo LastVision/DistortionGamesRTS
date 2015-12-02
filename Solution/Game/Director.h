@@ -1,8 +1,10 @@
 #pragma once
 
+#include <GrowingArray.h>
+
 class Entity;
 
-enum class eActorType
+enum class eDirectorType
 {
 	PLAYER,
 	AI,
@@ -14,20 +16,20 @@ namespace Prism
 	class Terrain;
 }
 
-class Actor
+class Director
 {
 public:
-	Actor(eActorType aActorType, const Prism::Terrain& aTerrain);
-	virtual ~Actor();
+	Director(eDirectorType aDirectorType, const Prism::Terrain& aTerrain);
+	virtual ~Director();
 
 	virtual void Update(float aDeltaTime);
 	
 protected:
 	CU::GrowingArray<Entity*> myUnits;
-	const eActorType myActorType;
+	const eDirectorType myDirectorType;
 	const Prism::Terrain& myTerrain;
 
 private:
-	void operator=(Actor&) = delete;
+	void operator=(Director&) = delete;
 };
 

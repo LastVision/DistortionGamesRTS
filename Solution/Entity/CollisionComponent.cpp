@@ -17,12 +17,13 @@ CollisionComponent::~CollisionComponent()
 {
 }
 
-void CollisionComponent::Update(float aDelta)
+void CollisionComponent::Update(float)
 {
 	mySphere.myCenterPosition = myEntity.GetOrientation().GetPos();
 }
 
 bool CollisionComponent::Collide(const CU::Intersection::LineSegment3D& aLine) const
 {
-	return CU::Intersection::LineVsSphere(aLine, mySphere, CU::Vector3<float>());
+	CU::Vector3<float> notUsed;
+	return CU::Intersection::LineVsSphere(aLine, mySphere, notUsed);
 }

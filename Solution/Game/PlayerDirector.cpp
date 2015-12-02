@@ -6,11 +6,11 @@
 #include <Intersection.h>
 #include <InputWrapper.h>
 #include <MovementComponent.h>
-#include "PlayerActor.h"
+#include "PlayerDirector.h"
 #include <Terrain.h>
 
-PlayerActor::PlayerActor(const Prism::Terrain& aTerrain, Prism::Scene& aScene)
-	: Actor(eActorType::PLAYER, aTerrain)
+PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aScene)
+	: Director(eDirectorType::PLAYER, aTerrain)
 {
 	for (int i = 0; i < 15; ++i)
 	{
@@ -20,17 +20,17 @@ PlayerActor::PlayerActor(const Prism::Terrain& aTerrain, Prism::Scene& aScene)
 }
 
 
-PlayerActor::~PlayerActor()
+PlayerDirector::~PlayerDirector()
 {
 }
 
-void PlayerActor::Update(float aDeltaTime, const Prism::Camera& aCamera)
+void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 {
-	Actor::Update(aDeltaTime);
+	Director::Update(aDeltaTime);
 	UpdateMouseInteraction(aCamera);
 }
 
-CU::Vector3<float> PlayerActor::CalcCursorWorldPosition(const Prism::Camera& aCamera)
+CU::Vector3<float> PlayerDirector::CalcCursorWorldPosition(const Prism::Camera& aCamera)
 {
 	CU::Vector2<float> inputPos(CU::InputWrapper::GetInstance()->GetMousePosition());
 	CU::Vector2<float> cursorPos;
@@ -73,7 +73,7 @@ CU::Vector3<float> PlayerActor::CalcCursorWorldPosition(const Prism::Camera& aCa
 	return worldPos;
 }
 
-void PlayerActor::UpdateMouseInteraction(const Prism::Camera& aCamera)
+void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 {
 	CU::Vector3<float> targetPos = CalcCursorWorldPosition(aCamera);
 	CU::Intersection::LineSegment3D line(aCamera.GetOrientation().GetPos(), targetPos);

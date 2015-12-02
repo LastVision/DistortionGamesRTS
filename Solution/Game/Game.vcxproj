@@ -153,8 +153,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Actor.h" />
-    <ClInclude Include="AIActor.h" />
+    <ClInclude Include="Director.h" />
+    <ClInclude Include="AIDirector.h" />
     <ClInclude Include="Console.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameState.h" />
@@ -163,15 +163,15 @@
     <ClInclude Include="LevelFactory.h" />
     <ClInclude Include="MainMenuState.h" />
     <ClInclude Include="MessageState.h" />
-    <ClInclude Include="PlayerActor.h" />
+    <ClInclude Include="PlayerDirector.h" />
     <ClInclude Include="StateEnums.h" />
     <ClInclude Include="StateStack.h" />
     <ClInclude Include="StateStackProxy.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Actor.cpp" />
-    <ClCompile Include="AIActor.cpp" />
+    <ClCompile Include="Director.cpp" />
+    <ClCompile Include="AIDirector.cpp" />
     <ClCompile Include="Console.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="InGameState.cpp" />
@@ -179,7 +179,7 @@
     <ClCompile Include="LevelFactory.cpp" />
     <ClCompile Include="MainMenuState.cpp" />
     <ClCompile Include="MessageState.cpp" />
-    <ClCompile Include="PlayerActor.cpp" />
+    <ClCompile Include="PlayerDirector.cpp" />
     <ClCompile Include="StateStack.cpp" />
     <ClCompile Include="StateStackProxy.cpp" />
     <ClCompile Include="stdafx.cpp">

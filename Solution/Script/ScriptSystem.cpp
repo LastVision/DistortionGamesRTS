@@ -112,7 +112,7 @@ namespace LUA
 		myOutputFile.flush();
 	}
 
-	void ScriptSystem::ReInit(const std::string& aString)
+	void ScriptSystem::ReInit(const std::string&)
 	{
 		if (myLuaState != nullptr)
 		{
@@ -128,7 +128,7 @@ namespace LUA
 
 		AddLuaFunction("Update", 1);
 
-		for (int i = 0; i < myActiveFiles.size(); ++i)
+		for (unsigned int i = 0; i < myActiveFiles.size(); ++i)
 		{
 			CheckError(luaL_dofile(myLuaState, myActiveFiles[i].c_str()));
 		}
@@ -196,7 +196,7 @@ namespace LUA
 	{
 		std::fstream file;
 		file.open("exposedScriptFunctions.txt", std::ios::out);
-		for (int i = 0; i < myDocumentation.size(); ++i)
+		for (unsigned int i = 0; i < myDocumentation.size(); ++i)
 		{
 			file << myDocumentation[i].myFunction << "(" << myDocumentation[i].myArguments << ") --" << myDocumentation[i].myHelpText << std::endl;
 		}

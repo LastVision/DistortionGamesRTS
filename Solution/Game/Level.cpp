@@ -15,7 +15,7 @@
 #include "Level.h"
 #include <ModelLoader.h>
 #include <MovementComponent.h>
-#include "PlayerActor.h"
+#include "PlayerDirector.h"
 #include <Scene.h>
 #include <Terrain.h>
 
@@ -36,7 +36,7 @@ Level::Level(const Prism::Camera& aCamera)
 	myLight->SetDir(CU::Vector3<float>(0, 1, 0) * CU::Matrix44<float>::CreateRotateAroundZ(-3.14f / 3.f));
 	myScene->AddLight(myLight);
 
-	myPlayer = new PlayerActor(*myTerrain, *myScene);
+	myPlayer = new PlayerDirector(*myTerrain, *myScene);
 }
 
 Level::~Level()

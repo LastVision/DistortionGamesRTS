@@ -24,11 +24,17 @@
     <ClCompile Include="MessageState.cpp">
       <Filter>StateStack</Filter>
     </ClCompile>
-    <ClCompile Include="Actor.cpp" />
-    <ClCompile Include="AIActor.cpp" />
-    <ClCompile Include="PlayerActor.cpp" />
     <ClCompile Include="LevelFactory.cpp">
       <Filter>Level\Factory</Filter>
+    </ClCompile>
+    <ClCompile Include="Director.cpp">
+      <Filter>Director</Filter>
+    </ClCompile>
+    <ClCompile Include="AIDirector.cpp">
+      <Filter>Director</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerDirector.cpp">
+      <Filter>Director</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -61,11 +67,17 @@
     <ClInclude Include="MessageState.h">
       <Filter>StateStack</Filter>
     </ClInclude>
-    <ClInclude Include="Actor.h" />
-    <ClInclude Include="AIActor.h" />
-    <ClInclude Include="PlayerActor.h" />
     <ClInclude Include="LevelFactory.h">
       <Filter>Level\Factory</Filter>
+    </ClInclude>
+    <ClInclude Include="Director.h">
+      <Filter>Director</Filter>
+    </ClInclude>
+    <ClInclude Include="AIDirector.h">
+      <Filter>Director</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerDirector.h">
+      <Filter>Director</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -80,6 +92,9 @@
     </Filter>
     <Filter Include="Level\Factory">
       <UniqueIdentifier>{3c9c6bc0-db40-40b5-9f1a-ab2f76588575}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Director">
+      <UniqueIdentifier>{813e0f36-1b0e-449d-950d-3c113f49a12c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

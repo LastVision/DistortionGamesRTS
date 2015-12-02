@@ -1,5 +1,5 @@
 #pragma once
-#include "Actor.h"
+#include "Director.h"
 
 namespace Prism
 {
@@ -8,11 +8,11 @@ namespace Prism
 	class Scene;
 }
 
-class PlayerActor :	public Actor
+class PlayerDirector :	public Director
 {
 public:
-	PlayerActor(const Prism::Terrain& aTerrain, Prism::Scene& aScene);
-	~PlayerActor();
+	PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aScene);
+	~PlayerDirector();
 
 	void Update(float aDeltaTime, const Prism::Camera& aCamera);
 

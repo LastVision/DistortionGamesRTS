@@ -1,21 +1,21 @@
 #include "stdafx.h"
-#include "Actor.h"
+#include "Director.h"
 #include <Entity.h>
 
-Actor::Actor(eActorType aActorType, const Prism::Terrain& aTerrain)
-	: myActorType(aActorType)
+Director::Director(eDirectorType aDirectorType, const Prism::Terrain& aTerrain)
+	: myDirectorType(aDirectorType)
 	, myTerrain(aTerrain)
 	, myUnits(64)
 {
 }
 
 
-Actor::~Actor()
+Director::~Director()
 {
 	myUnits.DeleteAll();
 }
 
-void Actor::Update(float aDeltaTime)
+void Director::Update(float aDeltaTime)
 {
 	for (int i = 0; i < myUnits.Size(); ++i)
 	{
