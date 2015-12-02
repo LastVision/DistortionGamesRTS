@@ -27,7 +27,8 @@ public:
 	static eComponentType GetTypeStatic();
 	eComponentType GetType() override;
 
-	void SetPosition(const CU::Vector3<float>& aPosition);
+	bool IsCurrentAnimationDone() const;
+	void RestartCurrentAnimation();
 
 private:
 	struct AnimationData

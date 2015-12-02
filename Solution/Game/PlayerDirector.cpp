@@ -2,24 +2,29 @@
 
 #include <Camera.h>
 #include <CollisionComponent.h>
+#include <ControllerComponent.h>
 #include <EntityFactory.h>
 #include <Intersection.h>
 #include <InputWrapper.h>
 #include "PlayerDirector.h"
+#include "PollingStation.h"
 #include <Terrain.h>
 
-#include <ControllerComponent.h>
 
 PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aScene)
 	: Director(eDirectorType::PLAYER, aTerrain)
 {
-	for (int i = 0; i < 15; ++i)
+	for (int i = 0; i < 1; ++i)
 	{
 		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::PLAYER, eEntityType::DRAGON, Prism::eOctreeType::DYNAMIC,
 			aScene, { 20.f + i, 0.f, 20.f }, aTerrain));
 	}
-}
 
+	for (int i = 0; i < myUnits.Size(); ++i)
+	{
+		PollingStation::GetInstance()->RegisterEntity(myUnits[i]);
+	}
+}
 
 PlayerDirector::~PlayerDirector()
 {
