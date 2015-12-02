@@ -6,6 +6,7 @@
 
 class Level;
 class LevelFactory;
+class MessageState;
 
 namespace CU
 {
@@ -45,8 +46,10 @@ public:
 
 	void SetLevel();
 
+	void RestartLevel();
 	void CompleteLevel();
 	void CompleteGame();
+
 	void LoadLevelSettings(); 
 	void LoadPlayerSettings();
 
@@ -60,6 +63,8 @@ private:
 	LevelFactory* myLevelFactory;
 	Prism::Camera* myCamera;
 	GUI::GUIManager* myGUIManager;
+
+	MessageState* myMessageScreen;
 
 	CU::Matrix44<float> myCameraOrientation;
 
