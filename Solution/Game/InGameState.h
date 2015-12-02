@@ -57,13 +57,12 @@ private:
 
 	Level* myLevel;
 	Prism::Camera* myCamera;
-	CU::Matrix44<float> myCameraOrientation;
-
 	GUI::GUIManager* myGUIManager;
 
-	bool myIsComplete;
+	CU::Matrix44<float> myCameraOrientation;
 
-	bool myRenderGUI;
+	bool myIsComplete;
+	bool myIsShuttingDown;
 };
 
 inline bool InGameState::IsComplete() const

@@ -17,9 +17,7 @@
 InGameState::InGameState()
 {
 	myIsActiveState = false;
-	myRenderGUI = true;
 	myCamera = new Prism::Camera(myCameraOrientation);
-	SetLevel();
 
 	//myCameraOrientation.SetPos(CU::Vector3<float>(10.f, 25.f, 0));
 	myCameraOrientation = CU::Matrix44<float>::CreateRotateAroundX(0.0174532925f * 60.f) * myCameraOrientation;
@@ -32,17 +30,17 @@ InGameState::~InGameState()
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::GAME_STATE, this);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::ON_CLICK, this);
 	SAFE_DELETE(myCamera);
-	//SAFE_DELETE(myGUIManager);
 }
 
 void InGameState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCursor)
 {
+	myIsShuttingDown = false;
 	myIsLetThrough = false;
 	myIsComplete = false;
 	myStateStack = aStateStackProxy;
 	myStateStatus = eStateStatus::eKeepState;
 	myCursor = aCursor;
-	//myGUIManager = new GUI::GUIManager(myCursor, "Data/Resource/GUI/GUI_ingame.xml", myLevel->GetSelectedUnits());
+	SetLevel();
 
 	CU::Vector2<int> windowSize = Prism::Engine::GetInstance()->GetWindowSizeInt();
 
@@ -61,25 +59,14 @@ void InGameState::EndState()
 
 const eStateStatus InGameState::Update(const float& aDeltaTime)
 {
-	//UpdateCamera(aDeltaTime, myGUIManager->CalcCameraMovement());
 	UpdateCamera(aDeltaTime, { 0, 0, 0 });
 
-	if (myRenderGUI == true)
-	{
-		//myGUIManager->Update();
-	}
-
-	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_ESCAPE) || myStateStatus == eStateStatus::ePopMainState)
+	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_ESCAPE) || myIsShuttingDown == true)
 	{
 		myIsActiveState = false;
 		delete myLevel;
 		myLevel = nullptr;
 		return eStateStatus::ePopMainState;
-	}
-
-	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_G) == true)
-	{
-		myRenderGUI = !myRenderGUI;
 	}
 
 	if (myLevel->Update(aDeltaTime, *myCamera) == true)
@@ -95,11 +82,6 @@ void InGameState::Render()
 	VTUNE_EVENT_BEGIN(VTUNE::GAME_RENDER);
 	myLevel->Render();
 
-	if (myRenderGUI == true)
-	{
-		//myGUIManager->Render();
-	}
-
 	Prism::DebugDrawer::GetInstance()->Render(*myCamera); //Have to be last
 
 	VTUNE_EVENT_END();
@@ -113,7 +95,6 @@ void InGameState::ResumeState()
 void InGameState::OnResize(int aWidth, int aHeight)
 {
 	myLevel->OnResize(aWidth, aHeight);
-	//myGUIManager->OnResize(aWidth, aHeight);
 }
 
 void InGameState::ReceiveMessage(const GameStateMessage& aMessage)
@@ -141,7 +122,7 @@ void InGameState::ReceiveMessage(const OnClickMessage& aMessage)
 		switch (aMessage.myEvent)
 		{
 		case eOnClickEvent::GAME_QUIT:
-			myStateStatus = eStateStatus::ePopMainState;
+			myIsShuttingDown = true;
 			break;
 		default:
 			break;
@@ -151,7 +132,7 @@ void InGameState::ReceiveMessage(const OnClickMessage& aMessage)
 
 void InGameState::SetLevel()
 {
-	myLevel = new Level(*myCamera);
+	myLevel = new Level(*myCamera, myCursor);
 }
 
 void InGameState::CompleteLevel()
