@@ -8,6 +8,7 @@
 #include <InputWrapper.h>
 #include "PlayerDirector.h"
 #include <Terrain.h>
+#include <ModelLoader.h>
 
 #include <ControllerComponent.h>
 
@@ -22,7 +23,9 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::PLAYER, eEntityType::DRAGON, Prism::eOctreeType::DYNAMIC,
 			aScene, { 20.f + i, 0.f, 20.f }, aTerrain));
 	}
+	Prism::ModelLoader::GetInstance()->Pause();
 	myGUIManager = new GUI::GUIManager(aCursor, "Data/Resource/GUI/GUI_ingame.xml", myUnits);
+	Prism::ModelLoader::GetInstance()->UnPause();
 }
 
 
