@@ -58,6 +58,12 @@
     <ClCompile Include="CollisionComponent.cpp">
       <Filter>Component</Filter>
     </ClCompile>
+    <ClCompile Include="ActorComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="ControllerComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -101,6 +107,18 @@
       <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="CollisionComponentData.h">
+      <Filter>EntityFactory\EntityData\ComponentData</Filter>
+    </ClInclude>
+    <ClInclude Include="ActorComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="ActorComponentData.h">
+      <Filter>EntityFactory\EntityData\ComponentData</Filter>
+    </ClInclude>
+    <ClInclude Include="ControllerComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="ControllerComponentData.h">
       <Filter>EntityFactory\EntityData\ComponentData</Filter>
     </ClInclude>
   </ItemGroup>

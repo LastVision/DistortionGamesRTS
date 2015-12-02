@@ -27,9 +27,11 @@ enum class eEntityState : int
 enum class eComponentType
 {
 	NOT_USED = -1,
-	GRAPHICS = 0,
+	ACTOR,
 	ANIMATION,
-	MOVEMENT,
 	COLLISION,
+	CONTROLLER,
+	GRAPHICS,
+	MOVEMENT,
 	_COUNT,
 };

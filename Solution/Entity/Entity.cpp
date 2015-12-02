@@ -1,7 +1,9 @@
 #include "stdafx.h"
 
+#include "ActorComponent.h"
 #include "AnimationComponent.h"
 #include "Component.h"
+#include "ControllerComponent.h"
 #include "CollisionComponent.h"
 #include "GraphicsComponent.h"
 #include "Entity.h"
@@ -47,6 +49,16 @@ Entity::Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& a
 	if (aEntityData.myCollisionData.myExistsInEntity == true)
 	{
 		myComponents[static_cast<int>(eComponentType::COLLISION)] = new CollisionComponent(*this, aEntityData.myCollisionData);
+	}
+
+	if (aEntityData.myActorData.myExistsInEntity == true)
+	{
+		myComponents[static_cast<int>(eComponentType::ACTOR)] = new ActorComponent(*this, aEntityData.myActorData);
+	}
+
+	if (aEntityData.myControllerData.myExistsInEntity == true)
+	{
+		myComponents[static_cast<int>(eComponentType::CONTROLLER)] = new ControllerComponent(*this, aEntityData.myControllerData);
 	}
 }
 

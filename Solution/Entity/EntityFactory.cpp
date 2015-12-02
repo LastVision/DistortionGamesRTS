@@ -97,6 +97,18 @@ void EntityFactory::LoadEntity(const char* aEntityPath)
 
 			myComponentLoader->LoadCollisionComponent(entityDocument, e, newData.myCollisionData);
 		}
+		else if (elementName == CU::ToLower("ActorComponent"))
+		{
+			if (newData.myActorData.myExistsInEntity == true) DL_ASSERT("You already have a ActorComponent");
+
+			myComponentLoader->LoadActorComponent(entityDocument, e, newData.myActorData);
+		}
+		else if (elementName == CU::ToLower("ControllerComponent"))
+		{
+			if (newData.myControllerData.myExistsInEntity == true) DL_ASSERT("You already have a ControllerComponent");
+
+			myComponentLoader->LoadControllerComponent(entityDocument, e, newData.myControllerData);
+		}
 		else 
 		{
 			std::string errorMessage = "The component " + elementName + 
