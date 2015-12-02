@@ -14,12 +14,13 @@ namespace GUI
 }
 
 class Entity;
-class PlayerActor;
+class PlayerDirector;
 
 class Level
 {
+	friend class LevelFactory;
 public:
-	Level(const Prism::Camera& aCamera, GUI::Cursor* aCursor);
+	Level(const Prism::Camera& aCamera, Prism::Terrain* aTerrain, GUI::Cursor* aCursor);
 	~Level();
 
 	bool Update(float aDeltaTime, Prism::Camera& aCamera);
@@ -32,5 +33,6 @@ private:
 	Prism::DirectionalLight* myLight;
 	Prism::Scene* myScene;
 
-	PlayerActor* myPlayer;
+	CU::GrowingArray<Entity*> myEntities;
+	PlayerDirector* myPlayer;
 };

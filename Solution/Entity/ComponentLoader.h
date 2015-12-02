@@ -1,9 +1,10 @@
 #pragma once
 
+struct ActorComponentData;
 struct AnimationComponentData;
+struct ControllerComponentData;
 struct CollisionComponentData;
 struct GraphicsComponentData;
-struct MovementComponentData;
 
 class XMLReader;
 
@@ -17,8 +18,9 @@ class ComponentLoader
 public:
 	void LoadAnimationComponent(XMLReader& aDocument, tinyxml2::XMLElement* aSourceElement, AnimationComponentData& aOutputData);
 	void LoadGraphicsComponent(XMLReader& aDocument, tinyxml2::XMLElement* aSourceElement, GraphicsComponentData& aOutputData);
-	void LoadMovementComponent(XMLReader& aDocument, tinyxml2::XMLElement* aSourceElement, MovementComponentData& aOutputData);
 	void LoadCollisionComponent(XMLReader& aDocument, tinyxml2::XMLElement* aSourceElement, CollisionComponentData& aOutputData);
+	void LoadActorComponent(XMLReader& aDocument, tinyxml2::XMLElement* aSourceElement, ActorComponentData& aOutputData);
+	void LoadControllerComponent(XMLReader& aDocument, tinyxml2::XMLElement* aSourceElement, ControllerComponentData& aOutputData);
 private:
 	void FailedToReadChildElementMessage(const std::string& aElement, const std::string& aParent);
 };

@@ -6,12 +6,13 @@
 #include <GUIManager.h>
 #include <Intersection.h>
 #include <InputWrapper.h>
-#include <MovementComponent.h>
-#include "PlayerActor.h"
+#include "PlayerDirector.h"
 #include <Terrain.h>
 
-PlayerActor::PlayerActor(const Prism::Terrain& aTerrain, Prism::Scene& aScene, GUI::Cursor* aCursor)
-	: Actor(eActorType::PLAYER, aTerrain)
+#include <ControllerComponent.h>
+
+PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aScene, GUI::Cursor* aCursor)
+	: Director(eDirectorType::PLAYER, aTerrain)
 	, myRenderGUI(true)
 	, myCursor(aCursor)
 	, myGUIManager(nullptr)
@@ -24,19 +25,20 @@ PlayerActor::PlayerActor(const Prism::Terrain& aTerrain, Prism::Scene& aScene, G
 	myGUIManager = new GUI::GUIManager(aCursor, "Data/Resource/GUI/GUI_ingame.xml", myUnits);
 }
 
-PlayerActor::~PlayerActor()
+
+PlayerDirector::~PlayerDirector()
 {
 	SAFE_DELETE(myGUIManager);
 }
 
-void PlayerActor::Update(float aDeltaTime, const Prism::Camera& aCamera)
+void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 {
 	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_G) == true)
 	{
 		myRenderGUI = !myRenderGUI;
 	}
 
-	Actor::Update(aDeltaTime);
+	Director::Update(aDeltaTime);
 	UpdateMouseInteraction(aCamera);
 
 	if (myRenderGUI == true)
@@ -58,7 +60,7 @@ void PlayerActor::OnResize(int aWidth, int aHeight)
 	myGUIManager->OnResize(aWidth, aHeight);
 }
 
-CU::Vector3<float> PlayerActor::CalcCursorWorldPosition(const Prism::Camera& aCamera)
+CU::Vector3<float> PlayerDirector::CalcCursorWorldPosition(const Prism::Camera& aCamera)
 {
 	CU::Vector2<float> inputPos(CU::InputWrapper::GetInstance()->GetMousePosition());
 	CU::Vector2<float> cursorPos;
@@ -101,7 +103,7 @@ CU::Vector3<float> PlayerActor::CalcCursorWorldPosition(const Prism::Camera& aCa
 	return worldPos;
 }
 
-void PlayerActor::UpdateMouseInteraction(const Prism::Camera& aCamera)
+void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 {
 	CU::Vector3<float> targetPos = CalcCursorWorldPosition(aCamera);
 	CU::Intersection::LineSegment3D line(aCamera.GetOrientation().GetPos(), targetPos);
@@ -142,7 +144,7 @@ void PlayerActor::UpdateMouseInteraction(const Prism::Camera& aCamera)
 		{
 			if (myUnits[i]->IsSelected())
 			{
-				myUnits[i]->GetComponent<MovementComponent>()->AddWayPoint(newPos, false);
+				myUnits[i]->GetComponent<ControllerComponent>()->MoveTo(newPos, false);
 			}
 		}
 	}
@@ -153,7 +155,7 @@ void PlayerActor::UpdateMouseInteraction(const Prism::Camera& aCamera)
 		{
 			if (myUnits[i]->IsSelected())
 			{
-				myUnits[i]->GetComponent<MovementComponent>()->AddWayPoint(newPos, true);
+				myUnits[i]->GetComponent<ControllerComponent>()->MoveTo(newPos, true);
 			}
 		}
 	}

@@ -6,6 +6,7 @@ enum eOwnerType
 	PLAYER = 1,
 	ENEMY = 2,
 	TRIGGER = 4,
+	NEUTRAL = 8
 };
 
 enum eEntityType
@@ -27,9 +28,11 @@ enum class eEntityState : int
 enum class eComponentType
 {
 	NOT_USED = -1,
-	GRAPHICS = 0,
+	CONTROLLER,
+	ACTOR,
 	ANIMATION,
-	MOVEMENT,
 	COLLISION,
+	GRAPHICS,
+	MOVEMENT,
 	_COUNT,
 };

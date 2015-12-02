@@ -14,18 +14,18 @@
 #include <Intersection.h>
 #include "Level.h"
 #include <ModelLoader.h>
-#include <MovementComponent.h>
-#include "PlayerActor.h"
+#include "PlayerDirector.h"
 #include <Scene.h>
 #include <Terrain.h>
 
 
-Level::Level(const Prism::Camera& aCamera, GUI::Cursor* aCursor)
+Level::Level(const Prism::Camera& aCamera, Prism::Terrain* aTerrain, GUI::Cursor* aCursor)
+	: myEntities(64)
 {
 	EntityFactory::GetInstance()->LoadEntities("Data/Resource/Entity/LI_entity.xml");
-
-	myTerrain = new Prism::Terrain("Data/Resource/Texture/Terrain/playground.tga"
-		, "Data/Resource/Texture/Terrain/T_rock.dds", { 256.f, 256.f }, 25.5f, CU::Matrix44<float>());
+	myTerrain = aTerrain;
+	/*myTerrain = new Prism::Terrain("Data/Resource/Texture/Terrain/playground.tga"
+		, "Data/Resource/Texture/Terrain/T_rock.dds", { 256.f, 256.f }, 25.5f, CU::Matrix44<float>());*/
 
 	myScene = new Prism::Scene(aCamera, *myTerrain);
 	Prism::ModelLoader::GetInstance()->Pause();
@@ -36,11 +36,12 @@ Level::Level(const Prism::Camera& aCamera, GUI::Cursor* aCursor)
 	myLight->SetDir(CU::Vector3<float>(0, 1, 0) * CU::Matrix44<float>::CreateRotateAroundZ(-3.14f / 3.f));
 	myScene->AddLight(myLight);
 
-	myPlayer = new PlayerActor(*myTerrain, *myScene, aCursor);
+	myPlayer = new PlayerDirector(*myTerrain, *myScene);
 }
 
 Level::~Level()
 {
+	myEntities.DeleteAll();
 	SAFE_DELETE(myTerrain);
 	SAFE_DELETE(myScene);
 	SAFE_DELETE(myLight);
@@ -56,6 +57,7 @@ bool Level::Update(float aDeltaTime, Prism::Camera& aCamera)
 
 	Prism::RenderLine3D({ 0.f, 0.f, 0.f }, { 100.f, 100.f, 100.f }, eColorDebug::BLACK, eColorDebug::GREEN);
 	Prism::RenderBox({ 128.f, 129.f, 128.f }, eColorDebug::BLUE, false);
+	DEBUG_PRINT(myEntities[0]->GetOrientation().GetPos());
 
 	myPlayer->Update(aDeltaTime, aCamera);
 

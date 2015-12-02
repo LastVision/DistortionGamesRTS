@@ -85,17 +85,23 @@ void EntityFactory::LoadEntity(const char* aEntityPath)
 
 			myComponentLoader->LoadGraphicsComponent(entityDocument, e, newData.myGraphicsData);
 		}
-		else if (elementName == CU::ToLower("MovementComponent"))
-		{
-			if (newData.myMovementData.myExistsInEntity == true) DL_ASSERT("You already have a MovementComponent");
-
-			myComponentLoader->LoadMovementComponent(entityDocument, e, newData.myMovementData);
-		}
 		else if (elementName == CU::ToLower("CollisionComponent"))
 		{
 			if (newData.myCollisionData.myExistsInEntity == true) DL_ASSERT("You already have a CollisionComponent");
 
 			myComponentLoader->LoadCollisionComponent(entityDocument, e, newData.myCollisionData);
+		}
+		else if (elementName == CU::ToLower("ActorComponent"))
+		{
+			if (newData.myActorData.myExistsInEntity == true) DL_ASSERT("You already have a ActorComponent");
+
+			myComponentLoader->LoadActorComponent(entityDocument, e, newData.myActorData);
+		}
+		else if (elementName == CU::ToLower("ControllerComponent"))
+		{
+			if (newData.myControllerData.myExistsInEntity == true) DL_ASSERT("You already have a ControllerComponent");
+
+			myComponentLoader->LoadControllerComponent(entityDocument, e, newData.myControllerData);
 		}
 		else 
 		{
@@ -120,7 +126,7 @@ EntityFactory::~EntityFactory()
 	SAFE_DELETE(myComponentLoader);
 }
 
-const eEntityType EntityFactory::ConvertStringToEntityType(std::string entityType)
+const eEntityType EntityFactory::ConvertStringToEntityType(const std::string& entityType)
 {
 	if (entityType == "dragon")
 	{

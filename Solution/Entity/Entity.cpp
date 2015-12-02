@@ -1,12 +1,13 @@
 #include "stdafx.h"
 
+#include "ActorComponent.h"
 #include "AnimationComponent.h"
 #include "Component.h"
+#include "ControllerComponent.h"
 #include "CollisionComponent.h"
 #include "GraphicsComponent.h"
 #include "Entity.h"
 #include "EntityData.h"
-#include "MovementComponent.h"
 #include <Scene.h>
 #include <Terrain.h>
 
@@ -39,14 +40,26 @@ Entity::Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& a
 		myComponents[static_cast<int>(eComponentType::GRAPHICS)] = new GraphicsComponent(*this, aEntityData.myGraphicsData);
 		myScene.AddInstance(GetComponent<GraphicsComponent>()->GetInstance());
 	}
-	if (aEntityData.myMovementData.myExistsInEntity == true)
-	{
-		myComponents[static_cast<int>(eComponentType::MOVEMENT)] = new MovementComponent(*this, aEntityData.myMovementData, aTerrain);
-	}
 
 	if (aEntityData.myCollisionData.myExistsInEntity == true)
 	{
 		myComponents[static_cast<int>(eComponentType::COLLISION)] = new CollisionComponent(*this, aEntityData.myCollisionData);
+	}
+
+	if (aEntityData.myActorData.myExistsInEntity == true)
+	{
+		myComponents[static_cast<int>(eComponentType::ACTOR)] = new ActorComponent(*this, aEntityData.myActorData, aTerrain);
+	}
+
+	if (aEntityData.myControllerData.myExistsInEntity == true)
+	{
+		myComponents[static_cast<int>(eComponentType::CONTROLLER)] = new ControllerComponent(*this, aEntityData.myControllerData, aTerrain);
+	}
+
+	if (aEntityData.myActorData.myExistsInEntity == true)
+	{
+		DL_ASSERT_EXP(myComponents[static_cast<int>(eComponentType::CONTROLLER)] != nullptr
+			, "ActorComponent wont work witout a ControllerComponent");
 	}
 }
 

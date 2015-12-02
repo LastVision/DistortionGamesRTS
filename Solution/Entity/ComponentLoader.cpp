@@ -1,11 +1,12 @@
 #include "stdafx.h"
 
+#include "ActorComponentData.h"
 #include "AnimationComponentData.h"
 #include <CommonHelper.h>
 #include "ComponentLoader.h"
+#include "ControllerComponentData.h"
 #include "CollisionComponentData.h"
 #include "GraphicsComponentData.h"
-#include "MovementComponentData.h"
 #include <XMLReader.h>
 
 void ComponentLoader::LoadAnimationComponent(XMLReader& aDocument, tinyxml2::XMLElement* aSourceElement, AnimationComponentData& aOutputData)
@@ -69,24 +70,6 @@ void ComponentLoader::LoadGraphicsComponent(XMLReader& aDocument, tinyxml2::XMLE
 	}
 }
 
-void ComponentLoader::LoadMovementComponent(XMLReader& aDocument, tinyxml2::XMLElement* aSourceElement, MovementComponentData& aOutputData)
-{
-	aOutputData.myExistsInEntity = true;
-
-	for (tinyxml2::XMLElement* e = aDocument.FindFirstChild(aSourceElement); e != nullptr; e = aDocument.FindNextElement(e))
-	{
-		std::string elementName = CU::ToLower(e->Name());
-		if (elementName == CU::ToLower("Speed"))
-		{
-			aDocument.ForceReadAttribute(e, "value", aOutputData.myMovementSpeed);
-		}
-		else
-		{
-			FailedToReadChildElementMessage(e->Name(), aSourceElement->Name());
-		}
-	}
-}
-
 void ComponentLoader::LoadCollisionComponent(XMLReader& aDocument, tinyxml2::XMLElement* aSourceElement, CollisionComponentData& aOutputData)
 {
 	aOutputData.myExistsInEntity = true;
@@ -104,6 +87,43 @@ void ComponentLoader::LoadCollisionComponent(XMLReader& aDocument, tinyxml2::XML
 		}
 	}
 }
+
+void ComponentLoader::LoadActorComponent(XMLReader& aDocument, tinyxml2::XMLElement* aSourceElement, ActorComponentData& aOutputData)
+{
+	aOutputData.myExistsInEntity = true;
+
+	for (tinyxml2::XMLElement* e = aDocument.FindFirstChild(aSourceElement); e != nullptr; e = aDocument.FindNextElement(e))
+	{
+		std::string elementName = CU::ToLower(e->Name());
+		if (elementName == CU::ToLower("Speed"))
+		{
+			aDocument.ForceReadAttribute(e, "value", aOutputData.myMoveSpeed);
+		}
+		else
+		{
+			FailedToReadChildElementMessage(e->Name(), aSourceElement->Name());
+		}
+	}
+}
+
+void ComponentLoader::LoadControllerComponent(XMLReader& aDocument, tinyxml2::XMLElement* aSourceElement, ControllerComponentData& aOutputData)
+{
+	aOutputData.myExistsInEntity = true;
+
+	for (tinyxml2::XMLElement* e = aDocument.FindFirstChild(aSourceElement); e != nullptr; e = aDocument.FindNextElement(e))
+	{
+		std::string elementName = CU::ToLower(e->Name());
+		if (elementName == CU::ToLower("Radius"))
+		{
+			//aDocument.ForceReadAttribute(e, "value", aOutputData.myRadius);
+		}
+		else
+		{
+			FailedToReadChildElementMessage(e->Name(), aSourceElement->Name());
+		}
+	}
+}
+
 
 void ComponentLoader::FailedToReadChildElementMessage(const std::string& aElement, const std::string& aParent)
 {

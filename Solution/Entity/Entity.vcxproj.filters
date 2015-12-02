@@ -16,9 +16,6 @@
     <Filter Include="Component\Graphic">
       <UniqueIdentifier>{04e1e5b4-fd4d-484e-882c-295f20cb2c9c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Component\Movement">
-      <UniqueIdentifier>{691588cd-2b7b-4f2e-a84b-81f62dc4aebf}</UniqueIdentifier>
-    </Filter>
     <Filter Include="EntityFactory">
       <UniqueIdentifier>{94dbb678-3cf6-475a-9a70-5fc1e44b6b12}</UniqueIdentifier>
     </Filter>
@@ -46,9 +43,6 @@
     <ClCompile Include="AnimationComponent.cpp">
       <Filter>Component\Graphic</Filter>
     </ClCompile>
-    <ClCompile Include="MovementComponent.cpp">
-      <Filter>Component\Movement</Filter>
-    </ClCompile>
     <ClCompile Include="EntityFactory.cpp">
       <Filter>EntityFactory</Filter>
     </ClCompile>
@@ -56,6 +50,12 @@
       <Filter>EntityFactory\Component</Filter>
     </ClCompile>
     <ClCompile Include="CollisionComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="ActorComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="ControllerComponent.cpp">
       <Filter>Component</Filter>
     </ClCompile>
   </ItemGroup>
@@ -76,9 +76,6 @@
     <ClInclude Include="AnimationComponent.h">
       <Filter>Component\Graphic</Filter>
     </ClInclude>
-    <ClInclude Include="MovementComponent.h">
-      <Filter>Component\Movement</Filter>
-    </ClInclude>
     <ClInclude Include="EntityData.h">
       <Filter>EntityFactory\EntityData</Filter>
     </ClInclude>
@@ -86,9 +83,6 @@
       <Filter>EntityFactory\EntityData\ComponentData</Filter>
     </ClInclude>
     <ClInclude Include="GraphicsComponentData.h">
-      <Filter>EntityFactory\EntityData\ComponentData</Filter>
-    </ClInclude>
-    <ClInclude Include="MovementComponentData.h">
       <Filter>EntityFactory\EntityData\ComponentData</Filter>
     </ClInclude>
     <ClInclude Include="EntityFactory.h">
@@ -101,6 +95,18 @@
       <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="CollisionComponentData.h">
+      <Filter>EntityFactory\EntityData\ComponentData</Filter>
+    </ClInclude>
+    <ClInclude Include="ActorComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="ActorComponentData.h">
+      <Filter>EntityFactory\EntityData\ComponentData</Filter>
+    </ClInclude>
+    <ClInclude Include="ControllerComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="ControllerComponentData.h">
       <Filter>EntityFactory\EntityData\ComponentData</Filter>
     </ClInclude>
   </ItemGroup>

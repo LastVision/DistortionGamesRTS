@@ -8,6 +8,7 @@
 #include "InGameState.h"
 #include <InputWrapper.h>
 #include "Level.h"
+#include "LevelFactory.h"
 #include <OnClickMessage.h>
 #include <PostMaster.h>
 #include <TimerManager.h>
@@ -18,6 +19,10 @@ InGameState::InGameState()
 {
 	myIsActiveState = false;
 	myCamera = new Prism::Camera(myCameraOrientation);
+	myLevelFactory = new LevelFactory("Data/Level/LI_level.xml", *myCamera);
+	myLevel = myLevelFactory->LoadLevel(1);
+
+	//SetLevel();
 
 	//myCameraOrientation.SetPos(CU::Vector3<float>(10.f, 25.f, 0));
 	myCameraOrientation = CU::Matrix44<float>::CreateRotateAroundX(0.0174532925f * 60.f) * myCameraOrientation;
@@ -30,6 +35,7 @@ InGameState::~InGameState()
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::GAME_STATE, this);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::ON_CLICK, this);
 	SAFE_DELETE(myCamera);
+	SAFE_DELETE(myLevelFactory);
 }
 
 void InGameState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCursor)
@@ -64,8 +70,7 @@ const eStateStatus InGameState::Update(const float& aDeltaTime)
 	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_ESCAPE) || myIsShuttingDown == true)
 	{
 		myIsActiveState = false;
-		delete myLevel;
-		myLevel = nullptr;
+		SAFE_DELETE(myLevel);
 		return eStateStatus::ePopMainState;
 	}
 
@@ -132,7 +137,7 @@ void InGameState::ReceiveMessage(const OnClickMessage& aMessage)
 
 void InGameState::SetLevel()
 {
-	myLevel = new Level(*myCamera, myCursor);
+	//myLevel = new Level(*myCamera);
 }
 
 void InGameState::CompleteLevel()
