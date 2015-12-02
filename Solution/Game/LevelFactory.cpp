@@ -324,15 +324,15 @@ void LevelFactory::LoadProps(XMLReader& aReader, tinyxml2::XMLElement* aLevelEle
 
 		propElement = aReader.ForceFindFirstChild(entityElement, "rotation");
 		CU::Vector3<float> propRotation;
-		aReader.ForceReadAttribute(propElement, "X", propPosition.x);
-		aReader.ForceReadAttribute(propElement, "Y", propPosition.y);
-		aReader.ForceReadAttribute(propElement, "Z", propPosition.z);
+		aReader.ForceReadAttribute(propElement, "X", propRotation.x);
+		aReader.ForceReadAttribute(propElement, "Y", propRotation.y);
+		aReader.ForceReadAttribute(propElement, "Z", propRotation.z);
 
 		propElement = aReader.ForceFindFirstChild(entityElement, "scale");
 		CU::Vector3<float> propScale;
-		aReader.ForceReadAttribute(propElement, "X", propPosition.x);
-		aReader.ForceReadAttribute(propElement, "Y", propPosition.y);
-		aReader.ForceReadAttribute(propElement, "Z", propPosition.z);
+		aReader.ForceReadAttribute(propElement, "X", propScale.x);
+		aReader.ForceReadAttribute(propElement, "Y", propScale.y);
+		aReader.ForceReadAttribute(propElement, "Z", propScale.z);
 
 		myCurrentLevel->myEntities.Add(EntityFactory::CreateEntity(eOwnerType::NEUTRAL, EntityFactory::ConvertStringToEntityType(propType),
 			Prism::eOctreeType::STATIC, *myCurrentLevel->myScene, propPosition, *myCurrentLevel->myTerrain));
