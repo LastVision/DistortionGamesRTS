@@ -47,7 +47,7 @@ void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 	}
 }
 
-void PlayerActor::Render()
+void PlayerDirector::Render()
 {
 	if (myRenderGUI == true)
 	{
@@ -55,7 +55,7 @@ void PlayerActor::Render()
 	}
 }
 
-void PlayerActor::OnResize(int aWidth, int aHeight)
+void PlayerDirector::OnResize(int aWidth, int aHeight)
 {
 	myGUIManager->OnResize(aWidth, aHeight);
 }

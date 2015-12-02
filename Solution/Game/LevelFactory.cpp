@@ -14,7 +14,7 @@
 #include <Scene.h>
 #include <XMLReader.h>
 
-LevelFactory::LevelFactory(const std::string& aLevelListPath, Prism::Camera& aCamera)
+LevelFactory::LevelFactory(const std::string& aLevelListPath, Prism::Camera& aCamera, GUI::Cursor* aCursor)
 	: myCurrentLevel(nullptr)
 	, myCurrentID(0)
 	, myOldLevel(nullptr)
@@ -25,6 +25,7 @@ LevelFactory::LevelFactory(const std::string& aLevelListPath, Prism::Camera& aCa
 	, myPointLights(4)
 	, myLevelPaths(2)
 	, myCamera(aCamera)
+	, myCursor(aCursor)
 {
 	ReadLevelList(aLevelListPath);
 }
@@ -53,7 +54,7 @@ Level* LevelFactory::LoadCurrentLevel()
 	myCurrentLevel = nullptr;
 
 	LoadTerrain(myLevelPaths[myCurrentID]);
-	myCurrentLevel = new Level(myCamera, myTerrain);
+	myCurrentLevel = new Level(myCamera, myTerrain, myCursor);
 
 	SAFE_DELETE(myLoadLevelThread);
 	//myLoadLevelThread = new std::thread(&LevelFactory::ReadLevel, this, myLevelPaths[myCurrentID]);

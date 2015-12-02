@@ -19,8 +19,6 @@ InGameState::InGameState()
 {
 	myIsActiveState = false;
 	myCamera = new Prism::Camera(myCameraOrientation);
-	myLevelFactory = new LevelFactory("Data/Level/LI_level.xml", *myCamera);
-	myLevel = myLevelFactory->LoadLevel(1);
 
 	//SetLevel();
 
@@ -46,7 +44,8 @@ void InGameState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCur
 	myStateStack = aStateStackProxy;
 	myStateStatus = eStateStatus::eKeepState;
 	myCursor = aCursor;
-	SetLevel();
+	myLevelFactory = new LevelFactory("Data/Level/LI_level.xml", *myCamera, myCursor);
+	myLevel = myLevelFactory->LoadLevel(1);
 
 	CU::Vector2<int> windowSize = Prism::Engine::GetInstance()->GetWindowSizeInt();
 

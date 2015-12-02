@@ -36,7 +36,7 @@ Level::Level(const Prism::Camera& aCamera, Prism::Terrain* aTerrain, GUI::Cursor
 	myLight->SetDir(CU::Vector3<float>(0, 1, 0) * CU::Matrix44<float>::CreateRotateAroundZ(-3.14f / 3.f));
 	myScene->AddLight(myLight);
 
-	myPlayer = new PlayerDirector(*myTerrain, *myScene);
+	myPlayer = new PlayerDirector(*myTerrain, *myScene, aCursor);
 }
 
 Level::~Level()
