@@ -27,7 +27,8 @@ class Entity
 
 public:
 	Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& aEntityData,
-		Prism::Scene& aScene, const CU::Vector3<float> aStartPosition, const Prism::Terrain& aTerrain);
+		Prism::Scene& aScene, const CU::Vector3<float> aStartPosition, const Prism::Terrain& aTerrain, 
+		const CU::Vector3f& aRotation, const CU::Vector3f& aScale);
 	~Entity();
 
 	virtual void Update(float aDeltaTime);

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+#include <CommonHelper.h>
 #include <Effect.h>
 #include <EffectContainer.h>
 #include <EngineEnums.h>
@@ -315,7 +316,7 @@ void LevelFactory::LoadProps(XMLReader& aReader, tinyxml2::XMLElement* aLevelEle
 	{
 		std::string propType;
 		aReader.ForceReadAttribute(entityElement, "propType", propType);
-
+		propType = CU::ToLower(propType);
 		tinyxml2::XMLElement* propElement = aReader.ForceFindFirstChild(entityElement, "position");
 		CU::Vector3<float> propPosition;
 		aReader.ForceReadAttribute(propElement, "X", propPosition.x);

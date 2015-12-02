@@ -13,6 +13,7 @@ enum eEntityType
 {
 	DRAGON,
 	DRAGON_STATIC,
+	PINE_TREE,
 	_COUNT,
 };
 

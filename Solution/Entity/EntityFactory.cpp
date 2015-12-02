@@ -42,7 +42,8 @@ void EntityFactory::LoadEntities(const char* aEntityListXML)
 }
 
 Entity* EntityFactory::CreateEntity(eOwnerType aOwner, eEntityType aType, Prism::eOctreeType aOctreeType, 
-	Prism::Scene& aScene, CU::Vector3f aPostion, const Prism::Terrain& aTerrian)
+	Prism::Scene& aScene, CU::Vector3f aPostion, const Prism::Terrain& aTerrian, const CU::Vector3f& aRotation, 
+	const CU::Vector3f& aScale)
 {
 	if (myInstance->myLoadedEntityData.find(aType) != myInstance->myLoadedEntityData.end())
 	{
@@ -135,6 +136,10 @@ const eEntityType EntityFactory::ConvertStringToEntityType(const std::string& en
 	else if(entityType == "dragonstatic")
 	{
 		return eEntityType::DRAGON_STATIC;
+	}
+	else if (entityType == "pinetree")
+	{
+		return eEntityType::PINE_TREE;
 	}
 	DL_ASSERT("This type is not supported, please tell Daniel about it.");
 	return eEntityType::_COUNT;

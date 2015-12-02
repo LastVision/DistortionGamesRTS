@@ -64,6 +64,11 @@ void GraphicsComponent::SetPosition(const CU::Vector3<float>& aPosition)
 	myEntity.myOrientation.SetPos(aPosition);
 }
 
+void GraphicsComponent::SetRotation(const CU::Vector3<float>& aRotation)
+{
+	CU::Vector3f position(myEntity.myOrientation.GetPos());
+}
+
 void GraphicsComponent::SetScale(const CU::Vector3<float>& aScale)
 {
 	myInstance->SetScale(aScale);
