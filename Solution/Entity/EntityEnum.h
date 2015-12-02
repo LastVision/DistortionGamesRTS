@@ -6,6 +6,7 @@ enum eOwnerType
 	PLAYER = 1,
 	ENEMY = 2,
 	TRIGGER = 4,
+	NEUTRAL = 8
 };
 
 enum eEntityType

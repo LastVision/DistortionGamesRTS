@@ -120,7 +120,7 @@ EntityFactory::~EntityFactory()
 	SAFE_DELETE(myComponentLoader);
 }
 
-const eEntityType EntityFactory::ConvertStringToEntityType(std::string entityType)
+const eEntityType EntityFactory::ConvertStringToEntityType(const std::string& entityType)
 {
 	if (entityType == "dragon")
 	{

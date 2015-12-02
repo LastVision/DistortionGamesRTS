@@ -67,6 +67,9 @@
     <ClInclude Include="LevelFactory.h">
       <Filter>Level\Factory</Filter>
     </ClInclude>
+    <ClInclude Include="dirent.h">
+      <Filter>Level\Factory</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="PreCompile">

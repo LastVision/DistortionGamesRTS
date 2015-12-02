@@ -12,6 +12,7 @@ class Entity;
 
 class Level
 {
+	friend class LevelFactory;
 public:
 	Level(const Prism::Camera& aCamera);
 	~Level();
@@ -31,6 +32,7 @@ private:
 	Prism::Scene* myScene;
 
 	CU::GrowingArray<Entity*> myUnits;
+	CU::GrowingArray<Entity*> myEntities;
 	CU::GrowingArray<CU::Vector3<float>> myWaypoints;
 	int myCurrentWaypoint;
 };

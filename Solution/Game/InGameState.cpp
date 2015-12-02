@@ -8,6 +8,7 @@
 #include "InGameState.h"
 #include <InputWrapper.h>
 #include "Level.h"
+#include "LevelFactory.h"
 #include <OnClickMessage.h>
 #include <PostMaster.h>
 #include <TimerManager.h>
@@ -19,7 +20,10 @@ InGameState::InGameState()
 	myIsActiveState = false;
 	myRenderGUI = true;
 	myCamera = new Prism::Camera(myCameraOrientation);
-	SetLevel();
+	myLevelFactory = new LevelFactory("Data/Level/LI_level.xml", *myCamera);
+
+	myLevel = myLevelFactory->LoadLevel(1);
+	//SetLevel();
 
 	//myCameraOrientation.SetPos(CU::Vector3<float>(10.f, 25.f, 0));
 	myCameraOrientation = CU::Matrix44<float>::CreateRotateAroundX(0.0174532925f * 60.f) * myCameraOrientation;
@@ -71,8 +75,7 @@ const eStateStatus InGameState::Update(const float& aDeltaTime)
 	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_ESCAPE) || myStateStatus == eStateStatus::ePopMainState)
 	{
 		myIsActiveState = false;
-		delete myLevel;
-		myLevel = nullptr;
+		SAFE_DELETE(myLevel);
 		return eStateStatus::ePopMainState;
 	}
 

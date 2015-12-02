@@ -19,11 +19,12 @@
 
 
 Level::Level(const Prism::Camera& aCamera)
+	: myEntities(64)
 {
 	EntityFactory::GetInstance()->LoadEntities("Data/Resource/Entity/LI_entity.xml");
 
-	myTerrain = new Prism::Terrain("Data/Resource/Texture/Terrain/playground.tga"
-		, "Data/Resource/Texture/Terrain/T_rock.dds", { 256.f, 256.f }, 25.5f, CU::Matrix44<float>());
+	/*myTerrain = new Prism::Terrain("Data/Resource/Texture/Terrain/playground.tga"
+		, "Data/Resource/Texture/Terrain/T_rock.dds", { 256.f, 256.f }, 25.5f, CU::Matrix44<float>());*/
 
 	myScene = new Prism::Scene(aCamera, *myTerrain);
 	myUnits.Init(20);

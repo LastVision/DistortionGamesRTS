@@ -5,6 +5,7 @@
 #include <Subscriber.h>
 
 class Level;
+class LevelFactory;
 
 namespace CU
 {
@@ -56,6 +57,7 @@ private:
 	void ShowMessage(const std::string& aBackgroundPath, const CU::Vector2<float>& aSize, std::string aText, GameStateMessage* aMessage = nullptr);
 
 	Level* myLevel;
+	LevelFactory* myLevelFactory;
 	Prism::Camera* myCamera;
 	CU::Matrix44<float> myCameraOrientation;
 
