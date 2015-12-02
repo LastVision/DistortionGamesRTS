@@ -14,7 +14,6 @@
 #include <Intersection.h>
 #include "Level.h"
 #include <ModelLoader.h>
-#include <MovementComponent.h>
 #include "PlayerDirector.h"
 #include <Scene.h>
 #include <Terrain.h>

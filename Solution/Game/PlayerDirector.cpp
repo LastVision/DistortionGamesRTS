@@ -5,9 +5,10 @@
 #include <EntityFactory.h>
 #include <Intersection.h>
 #include <InputWrapper.h>
-#include <MovementComponent.h>
 #include "PlayerDirector.h"
 #include <Terrain.h>
+
+#include <ControllerComponent.h>
 
 PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aScene)
 	: Director(eDirectorType::PLAYER, aTerrain)
@@ -114,7 +115,7 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 		{
 			if (myUnits[i]->IsSelected())
 			{
-				myUnits[i]->GetComponent<MovementComponent>()->AddWayPoint(newPos, false);
+				myUnits[i]->GetComponent<ControllerComponent>()->MoveTo(newPos, false);
 			}
 		}
 	}
@@ -125,7 +126,7 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 		{
 			if (myUnits[i]->IsSelected())
 			{
-				myUnits[i]->GetComponent<MovementComponent>()->AddWayPoint(newPos, true);
+				myUnits[i]->GetComponent<ControllerComponent>()->MoveTo(newPos, true);
 			}
 		}
 	}
