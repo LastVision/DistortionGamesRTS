@@ -33,7 +33,7 @@ MessageState::~MessageState()
 
 void MessageState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCursor)
 {
-	myIsLetThrough = false;
+	myIsLetThrough = true;
 	myStateStack = aStateStackProxy;
 	CU::Matrix44<float> orientation;
 	myCursor = aCursor;

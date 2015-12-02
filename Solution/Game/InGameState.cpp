@@ -98,7 +98,10 @@ void InGameState::Render()
 	VTUNE_EVENT_BEGIN(VTUNE::GAME_RENDER);
 	myLevel->Render();
 
-	Prism::DebugDrawer::GetInstance()->Render(*myCamera); //Have to be last
+	if (myIsActiveState == true)
+	{
+		Prism::DebugDrawer::GetInstance()->Render(*myCamera); //Have to be last
+	}
 
 	VTUNE_EVENT_END();
 }
@@ -144,6 +147,12 @@ void InGameState::ReceiveMessage(const OnClickMessage& aMessage)
 		{
 		case eOnClickEvent::GAME_QUIT:
 			myIsShuttingDown = true;
+			break;
+		case eOnClickEvent::GAME_LOSE:
+			RestartLevel();
+			break;
+		case eOnClickEvent::GAME_WIN:
+			CompleteGame();
 			break;
 		default:
 			break;
