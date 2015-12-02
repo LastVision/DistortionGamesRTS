@@ -67,6 +67,13 @@ void GraphicsComponent::SetPosition(const CU::Vector3<float>& aPosition)
 void GraphicsComponent::SetRotation(const CU::Vector3<float>& aRotation)
 {
 	CU::Vector3f position(myEntity.myOrientation.GetPos());
+	myEntity.myOrientation.SetPos(CU::Vector3f());
+
+	myEntity.myOrientation = CU::Matrix44f::CreateRotateAroundX(aRotation.x) * myEntity.myOrientation;
+	myEntity.myOrientation = CU::Matrix44f::CreateRotateAroundY(aRotation.y) * myEntity.myOrientation;
+	myEntity.myOrientation = CU::Matrix44f::CreateRotateAroundZ(aRotation.z) * myEntity.myOrientation;
+
+	myEntity.myOrientation.SetPos(position);
 }
 
 void GraphicsComponent::SetScale(const CU::Vector3<float>& aScale)

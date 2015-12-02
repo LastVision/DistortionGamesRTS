@@ -57,6 +57,16 @@ namespace CU
 			return CapValue(0.f, 1.f, aValue);
 		}
 
+		float RadToDegree(float aValue)
+		{
+			return aValue * 57.2957795f;
+		}
+
+		float DegreeToRad(float aValue)
+		{
+			return aValue * 0.0174532925f;
+		}
+
 		Vector2<float> RandomVector(const Vector2<float>& aMin, const Vector2<float>& aMax)
 		{
 			return Vector2<float>(RandomRange<float>(aMin.x, aMax.x)

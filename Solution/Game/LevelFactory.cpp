@@ -9,6 +9,7 @@
 #include "dirent.h"
 #include "Level.h"
 #include "LevelFactory.h"
+#include <MathHelper.h>
 #include <ModelLoader.h>
 #include <Terrain.h>
 #include <TextureContainer.h>
@@ -336,8 +337,12 @@ void LevelFactory::LoadProps(XMLReader& aReader, tinyxml2::XMLElement* aLevelEle
 		aReader.ForceReadAttribute(propElement, "Y", propScale.y);
 		aReader.ForceReadAttribute(propElement, "Z", propScale.z);
 
+		propRotation.x = CU::Math::DegreeToRad(propRotation.x);
+		propRotation.y = CU::Math::DegreeToRad(propRotation.y);
+		propRotation.z = CU::Math::DegreeToRad(propRotation.z);
+
 		myCurrentLevel->myEntities.Add(EntityFactory::CreateEntity(eOwnerType::NEUTRAL, EntityFactory::ConvertStringToEntityType(propType),
-			Prism::eOctreeType::STATIC, *myCurrentLevel->myScene, propPosition, *myCurrentLevel->myTerrain));
+			Prism::eOctreeType::STATIC, *myCurrentLevel->myScene, propPosition, *myCurrentLevel->myTerrain, propRotation, propScale));
 	}
 }
 

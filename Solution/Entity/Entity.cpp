@@ -39,6 +39,8 @@ Entity::Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& a
 	else if (aEntityData.myGraphicsData.myExistsInEntity == true)
 	{
 		myComponents[static_cast<int>(eComponentType::GRAPHICS)] = new GraphicsComponent(*this, aEntityData.myGraphicsData);
+		GetComponent<GraphicsComponent>()->SetRotation(aRotation);
+		GetComponent<GraphicsComponent>()->SetScale(aScale);
 		myScene.AddInstance(GetComponent<GraphicsComponent>()->GetInstance());
 	}
 
