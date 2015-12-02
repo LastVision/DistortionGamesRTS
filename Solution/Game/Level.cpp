@@ -20,7 +20,7 @@
 #include <Terrain.h>
 
 
-Level::Level(const Prism::Camera& aCamera, Prism::Terrain* aTerrain)
+Level::Level(const Prism::Camera& aCamera, Prism::Terrain* aTerrain, GUI::Cursor* aCursor)
 	: myEntities(64)
 {
 	EntityFactory::GetInstance()->LoadEntities("Data/Resource/Entity/LI_entity.xml");
@@ -60,6 +60,7 @@ bool Level::Update(float aDeltaTime, Prism::Camera& aCamera)
 
 	Prism::RenderLine3D({ 0.f, 0.f, 0.f }, { 100.f, 100.f, 100.f }, eColorDebug::BLACK, eColorDebug::GREEN);
 	Prism::RenderBox({ 128.f, 129.f, 128.f }, eColorDebug::BLUE, false);
+	DEBUG_PRINT(myEntities[0]->GetOrientation().GetPos());
 
 	myPlayer->Update(aDeltaTime, aCamera);
 	myAI->Update(aDeltaTime);
@@ -72,8 +73,11 @@ void Level::Render()
 	Prism::Engine::GetInstance()->SetClearColor({ 0.2f, 0.2f, 0.2f, 1.f });
 
 	myScene->Render();
+
+	myPlayer->Render();
 }
 
 void Level::OnResize(int aWidth, int aHeigth)
 {
+	myPlayer->OnResize(aWidth, aHeigth);
 }

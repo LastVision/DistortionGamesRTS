@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+#include <CommonHelper.h>
 #include <Effect.h>
 #include <EffectContainer.h>
 #include <EngineEnums.h>
@@ -14,7 +15,7 @@
 #include <Scene.h>
 #include <XMLReader.h>
 
-LevelFactory::LevelFactory(const std::string& aLevelListPath, Prism::Camera& aCamera)
+LevelFactory::LevelFactory(const std::string& aLevelListPath, Prism::Camera& aCamera, GUI::Cursor* aCursor)
 	: myCurrentLevel(nullptr)
 	, myCurrentID(0)
 	, myOldLevel(nullptr)
@@ -25,6 +26,7 @@ LevelFactory::LevelFactory(const std::string& aLevelListPath, Prism::Camera& aCa
 	, myPointLights(4)
 	, myLevelPaths(2)
 	, myCamera(aCamera)
+	, myCursor(aCursor)
 {
 	ReadLevelList(aLevelListPath);
 }
@@ -53,7 +55,7 @@ Level* LevelFactory::LoadCurrentLevel()
 	myCurrentLevel = nullptr;
 
 	LoadTerrain(myLevelPaths[myCurrentID]);
-	myCurrentLevel = new Level(myCamera, myTerrain);
+	myCurrentLevel = new Level(myCamera, myTerrain, myCursor);
 
 	SAFE_DELETE(myLoadLevelThread);
 	//myLoadLevelThread = new std::thread(&LevelFactory::ReadLevel, this, myLevelPaths[myCurrentID]);
@@ -315,7 +317,7 @@ void LevelFactory::LoadProps(XMLReader& aReader, tinyxml2::XMLElement* aLevelEle
 	{
 		std::string propType;
 		aReader.ForceReadAttribute(entityElement, "propType", propType);
-
+		propType = CU::ToLower(propType);
 		tinyxml2::XMLElement* propElement = aReader.ForceFindFirstChild(entityElement, "position");
 		CU::Vector3<float> propPosition;
 		aReader.ForceReadAttribute(propElement, "X", propPosition.x);
@@ -324,15 +326,15 @@ void LevelFactory::LoadProps(XMLReader& aReader, tinyxml2::XMLElement* aLevelEle
 
 		propElement = aReader.ForceFindFirstChild(entityElement, "rotation");
 		CU::Vector3<float> propRotation;
-		aReader.ForceReadAttribute(propElement, "X", propPosition.x);
-		aReader.ForceReadAttribute(propElement, "Y", propPosition.y);
-		aReader.ForceReadAttribute(propElement, "Z", propPosition.z);
+		aReader.ForceReadAttribute(propElement, "X", propRotation.x);
+		aReader.ForceReadAttribute(propElement, "Y", propRotation.y);
+		aReader.ForceReadAttribute(propElement, "Z", propRotation.z);
 
 		propElement = aReader.ForceFindFirstChild(entityElement, "scale");
 		CU::Vector3<float> propScale;
-		aReader.ForceReadAttribute(propElement, "X", propPosition.x);
-		aReader.ForceReadAttribute(propElement, "Y", propPosition.y);
-		aReader.ForceReadAttribute(propElement, "Z", propPosition.z);
+		aReader.ForceReadAttribute(propElement, "X", propScale.x);
+		aReader.ForceReadAttribute(propElement, "Y", propScale.y);
+		aReader.ForceReadAttribute(propElement, "Z", propScale.z);
 
 		myCurrentLevel->myEntities.Add(EntityFactory::CreateEntity(eOwnerType::NEUTRAL, EntityFactory::ConvertStringToEntityType(propType),
 			Prism::eOctreeType::STATIC, *myCurrentLevel->myScene, propPosition, *myCurrentLevel->myTerrain));

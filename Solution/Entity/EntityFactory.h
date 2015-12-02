@@ -21,7 +21,8 @@ public:
 
 	void LoadEntities(const char* aEntityListXML);
 	static Entity* CreateEntity(eOwnerType aOwner, eEntityType aType, Prism::eOctreeType aOctreeType, 
-		Prism::Scene& aScene, CU::Vector3f aPostion, const Prism::Terrain& aTerrian);
+		Prism::Scene& aScene, CU::Vector3f aPostion, const Prism::Terrain& aTerrian, 
+		const CU::Vector3f& aRotation = CU::Vector3f(), const CU::Vector3f& aScale = { 1.f, 1.f, 1.f });
 
 	static const eEntityType ConvertStringToEntityType(const std::string& entityType);
 private:
