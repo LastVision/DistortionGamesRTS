@@ -3,5 +3,6 @@
 
 struct ActorComponentData
 {
+	float myMoveSpeed;
 	bool myExistsInEntity = false;
 };

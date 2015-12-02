@@ -85,12 +85,6 @@ void EntityFactory::LoadEntity(const char* aEntityPath)
 
 			myComponentLoader->LoadGraphicsComponent(entityDocument, e, newData.myGraphicsData);
 		}
-		else if (elementName == CU::ToLower("MovementComponent"))
-		{
-			if (newData.myMovementData.myExistsInEntity == true) DL_ASSERT("You already have a MovementComponent");
-
-			myComponentLoader->LoadMovementComponent(entityDocument, e, newData.myMovementData);
-		}
 		else if (elementName == CU::ToLower("CollisionComponent"))
 		{
 			if (newData.myCollisionData.myExistsInEntity == true) DL_ASSERT("You already have a CollisionComponent");

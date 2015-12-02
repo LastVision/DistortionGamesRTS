@@ -20,9 +20,10 @@ struct EntityData;
 
 class Entity
 {
+	friend class ActorComponent;
 	friend class AnimationComponent;
+	friend class ControllerComponent;
 	friend class GraphicsComponent;
-	friend class MovementComponent;
 
 public:
 	Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& aEntityData,

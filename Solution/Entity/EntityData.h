@@ -6,7 +6,6 @@
 #include "ControllerComponentData.h"
 #include "EntityEnum.h"
 #include "GraphicsComponentData.h"
-#include "MovementComponentData.h"
 
 struct EntityData
 {
@@ -16,5 +15,4 @@ struct EntityData
 	CollisionComponentData myCollisionData;
 	ControllerComponentData myControllerData;
 	GraphicsComponentData myGraphicsData;
-	MovementComponentData myMovementData;
 };

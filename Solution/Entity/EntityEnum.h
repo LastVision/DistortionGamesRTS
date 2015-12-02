@@ -28,10 +28,10 @@ enum class eEntityState : int
 enum class eComponentType
 {
 	NOT_USED = -1,
+	CONTROLLER,
 	ACTOR,
 	ANIMATION,
 	COLLISION,
-	CONTROLLER,
 	GRAPHICS,
 	MOVEMENT,
 	_COUNT,
