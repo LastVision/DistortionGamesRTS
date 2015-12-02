@@ -39,7 +39,7 @@ void MessageState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCu
 	myCursor = aCursor;
 	//myCamera = new Prism::Camera(orientation);
 
-	OnResize(Prism::Engine::GetInstance()->GetWindowSize().x, Prism::Engine::GetInstance()->GetWindowSize().y);
+	OnResize(Prism::Engine::GetInstance()->GetWindowSizeInt().x, Prism::Engine::GetInstance()->GetWindowSizeInt().y);
 	//PostMaster::GetInstance()->SendMessage(FadeMessage(1.f / 3.f));
 
 }
