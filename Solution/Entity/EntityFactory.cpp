@@ -48,7 +48,7 @@ Entity* EntityFactory::CreateEntity(eOwnerType aOwner, eEntityType aType, Prism:
 	if (myInstance->myLoadedEntityData.find(aType) != myInstance->myLoadedEntityData.end())
 	{
 		EntityData loadedEntityData = myInstance->myLoadedEntityData.find(aType)->second;
-		Entity* newEntity = new Entity(aOwner, aOctreeType, loadedEntityData, aScene, aPostion, aTerrian);
+		Entity* newEntity = new Entity(aOwner, aOctreeType, loadedEntityData, aScene, aPostion, aTerrian, aRotation, aScale);
 		return newEntity;
 	}
 	DL_ASSERT("Entity not found.");
