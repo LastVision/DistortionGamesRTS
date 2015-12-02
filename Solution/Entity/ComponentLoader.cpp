@@ -113,9 +113,13 @@ void ComponentLoader::LoadControllerComponent(XMLReader& aDocument, tinyxml2::XM
 	for (tinyxml2::XMLElement* e = aDocument.FindFirstChild(aSourceElement); e != nullptr; e = aDocument.FindNextElement(e))
 	{
 		std::string elementName = CU::ToLower(e->Name());
-		if (elementName == CU::ToLower("Radius"))
+		if (elementName == CU::ToLower("VisionRange"))
 		{
-			//aDocument.ForceReadAttribute(e, "value", aOutputData.myRadius);
+			aDocument.ForceReadAttribute(e, "value", aOutputData.myVisionRange);
+		}
+		else if (elementName == CU::ToLower("AttackRange"))
+		{
+			aDocument.ForceReadAttribute(e, "value", aOutputData.myAttackRange);
 		}
 		else
 		{

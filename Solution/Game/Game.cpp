@@ -16,7 +16,7 @@
 #include <ModelLoader.h>
 #include <StreakDataContainer.h>
 #include <ParticleDataContainer.h>
-
+#include "PollingStation.h"
 #include <PostMaster.h>
 #include <ResizeMessage.h>
 #include <SystemMonitor.h>
@@ -55,6 +55,7 @@ Game::~Game()
 	PostMaster::Destroy();
 	myStateStack.Clear();
 	Prism::DebugDrawer::Destroy();
+	PollingStation::Destroy();
 }
 
 bool Game::Init(HWND& aHwnd)

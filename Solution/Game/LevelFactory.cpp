@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+#include <CommonHelper.h>
 #include <Effect.h>
 #include <EffectContainer.h>
 #include <EngineEnums.h>
@@ -8,13 +9,14 @@
 #include "dirent.h"
 #include "Level.h"
 #include "LevelFactory.h"
+#include <MathHelper.h>
 #include <ModelLoader.h>
 #include <Terrain.h>
 #include <TextureContainer.h>
 #include <Scene.h>
 #include <XMLReader.h>
 
-LevelFactory::LevelFactory(const std::string& aLevelListPath, Prism::Camera& aCamera)
+LevelFactory::LevelFactory(const std::string& aLevelListPath, Prism::Camera& aCamera, GUI::Cursor* aCursor)
 	: myCurrentLevel(nullptr)
 	, myCurrentID(0)
 	, myOldLevel(nullptr)
@@ -25,6 +27,7 @@ LevelFactory::LevelFactory(const std::string& aLevelListPath, Prism::Camera& aCa
 	, myPointLights(4)
 	, myLevelPaths(2)
 	, myCamera(aCamera)
+	, myCursor(aCursor)
 {
 	ReadLevelList(aLevelListPath);
 }
@@ -53,7 +56,7 @@ Level* LevelFactory::LoadCurrentLevel()
 	myCurrentLevel = nullptr;
 
 	LoadTerrain(myLevelPaths[myCurrentID]);
-	myCurrentLevel = new Level(myCamera, myTerrain);
+	myCurrentLevel = new Level(myCamera, myTerrain, myCursor);
 
 	SAFE_DELETE(myLoadLevelThread);
 	//myLoadLevelThread = new std::thread(&LevelFactory::ReadLevel, this, myLevelPaths[myCurrentID]);
@@ -315,7 +318,7 @@ void LevelFactory::LoadProps(XMLReader& aReader, tinyxml2::XMLElement* aLevelEle
 	{
 		std::string propType;
 		aReader.ForceReadAttribute(entityElement, "propType", propType);
-
+		propType = CU::ToLower(propType);
 		tinyxml2::XMLElement* propElement = aReader.ForceFindFirstChild(entityElement, "position");
 		CU::Vector3<float> propPosition;
 		aReader.ForceReadAttribute(propElement, "X", propPosition.x);
@@ -334,8 +337,12 @@ void LevelFactory::LoadProps(XMLReader& aReader, tinyxml2::XMLElement* aLevelEle
 		aReader.ForceReadAttribute(propElement, "Y", propScale.y);
 		aReader.ForceReadAttribute(propElement, "Z", propScale.z);
 
+		propRotation.x = CU::Math::DegreeToRad(propRotation.x);
+		propRotation.y = CU::Math::DegreeToRad(propRotation.y);
+		propRotation.z = CU::Math::DegreeToRad(propRotation.z);
+
 		myCurrentLevel->myEntities.Add(EntityFactory::CreateEntity(eOwnerType::NEUTRAL, EntityFactory::ConvertStringToEntityType(propType),
-			Prism::eOctreeType::STATIC, *myCurrentLevel->myScene, propPosition, *myCurrentLevel->myTerrain));
+			Prism::eOctreeType::STATIC, *myCurrentLevel->myScene, propPosition, *myCurrentLevel->myTerrain, propRotation, propScale));
 	}
 }
 

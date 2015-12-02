@@ -87,6 +87,7 @@
     <ClInclude Include="ComponentLoader.h" />
     <ClInclude Include="ControllerComponent.h" />
     <ClInclude Include="ControllerComponentData.h" />
+    <ClInclude Include="DamageNote.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="EntityData.h" />
     <ClInclude Include="EntityEnum.h" />

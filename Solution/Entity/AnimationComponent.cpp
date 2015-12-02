@@ -81,7 +81,12 @@ void AnimationComponent::Update(float aDeltaTime)
 	myPrevEntityState = myEntity.GetState();
 }
 
-void AnimationComponent::SetPosition(const CU::Vector3<float>& aPosition)
+bool AnimationComponent::IsCurrentAnimationDone() const
 {
-	myEntity.myOrientation.SetPos(aPosition);
+	return myInstance->IsAnimationDone();
+}
+
+void AnimationComponent::RestartCurrentAnimation()
+{
+	myInstance->ResetAnimationTime(0.f);
 }

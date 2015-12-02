@@ -16,6 +16,9 @@ namespace CU
 
 		float Saturate(const float aValue);
 
+		float RadToDegree(float aValue);
+		float DegreeToRad(float aValue);
+
 		template <typename T>
 		inline T RandomRange(const T aMinValue, const T aMaxValue)
 		{

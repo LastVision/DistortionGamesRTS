@@ -9,6 +9,8 @@
 #include <InputWrapper.h>
 #include "Level.h"
 #include "LevelFactory.h"
+#include <MemoryTracker.h>
+#include "MessageState.h"
 #include <OnClickMessage.h>
 #include <PostMaster.h>
 #include <TimerManager.h>
@@ -18,11 +20,8 @@
 InGameState::InGameState()
 {
 	myIsActiveState = false;
-	myRenderGUI = true;
 	myCamera = new Prism::Camera(myCameraOrientation);
-	myLevelFactory = new LevelFactory("Data/Level/LI_level.xml", *myCamera);
-	myLevel = myLevelFactory->LoadLevel(1);
-	
+
 	//SetLevel();
 
 	//myCameraOrientation.SetPos(CU::Vector3<float>(10.f, 25.f, 0));
@@ -37,17 +36,18 @@ InGameState::~InGameState()
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::ON_CLICK, this);
 	SAFE_DELETE(myCamera);
 	SAFE_DELETE(myLevelFactory);
-	//SAFE_DELETE(myGUIManager);
 }
 
 void InGameState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCursor)
 {
+	myIsShuttingDown = false;
 	myIsLetThrough = false;
 	myIsComplete = false;
 	myStateStack = aStateStackProxy;
 	myStateStatus = eStateStatus::eKeepState;
 	myCursor = aCursor;
-	//myGUIManager = new GUI::GUIManager(myCursor, "Data/Resource/GUI/GUI_ingame.xml", myLevel->GetSelectedUnits());
+	myLevelFactory = new LevelFactory("Data/Level/LI_level.xml", *myCamera, myCursor);
+	myLevel = myLevelFactory->LoadLevel(1);
 
 	CU::Vector2<int> windowSize = Prism::Engine::GetInstance()->GetWindowSizeInt();
 
@@ -66,24 +66,23 @@ void InGameState::EndState()
 
 const eStateStatus InGameState::Update(const float& aDeltaTime)
 {
-	//UpdateCamera(aDeltaTime, myGUIManager->CalcCameraMovement());
 	UpdateCamera(aDeltaTime, { 0, 0, 0 });
 
-	if (myRenderGUI == true)
-	{
-		//myGUIManager->Update();
-	}
-
-	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_ESCAPE) || myStateStatus == eStateStatus::ePopMainState)
+	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_ESCAPE) || myIsShuttingDown == true || myIsComplete == true)
 	{
 		myIsActiveState = false;
 		SAFE_DELETE(myLevel);
 		return eStateStatus::ePopMainState;
 	}
 
-	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_G) == true)
+	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_M) == true)
 	{
-		myRenderGUI = !myRenderGUI;
+		CompleteGame();
+	}
+
+	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_B) == true)
+	{
+		RestartLevel();
 	}
 
 	if (myLevel->Update(aDeltaTime, *myCamera) == true)
@@ -99,12 +98,10 @@ void InGameState::Render()
 	VTUNE_EVENT_BEGIN(VTUNE::GAME_RENDER);
 	myLevel->Render();
 
-	if (myRenderGUI == true)
+	if (myIsActiveState == true)
 	{
-		//myGUIManager->Render();
+		Prism::DebugDrawer::GetInstance()->Render(*myCamera); //Have to be last
 	}
-
-	Prism::DebugDrawer::GetInstance()->Render(*myCamera); //Have to be last
 
 	VTUNE_EVENT_END();
 }
@@ -117,15 +114,19 @@ void InGameState::ResumeState()
 void InGameState::OnResize(int aWidth, int aHeight)
 {
 	myLevel->OnResize(aWidth, aHeight);
-	//myGUIManager->OnResize(aWidth, aHeight);
 }
 
 void InGameState::ReceiveMessage(const GameStateMessage& aMessage)
 {
+	bool runtime;
+
 	switch (aMessage.myGameState)
 	{
 	case eGameState::RELOAD_LEVEL:
-
+		runtime = Prism::MemoryTracker::GetInstance()->GetRunTime();
+		Prism::MemoryTracker::GetInstance()->SetRunTime(false);
+		myLevel = myLevelFactory->LoadCurrentLevel();
+		Prism::MemoryTracker::GetInstance()->SetRunTime(runtime);
 		break;
 
 	case eGameState::COMPLETE_LEVEL:
@@ -145,7 +146,13 @@ void InGameState::ReceiveMessage(const OnClickMessage& aMessage)
 		switch (aMessage.myEvent)
 		{
 		case eOnClickEvent::GAME_QUIT:
-			myStateStatus = eStateStatus::ePopMainState;
+			myIsShuttingDown = true;
+			break;
+		case eOnClickEvent::GAME_LOSE:
+			RestartLevel();
+			break;
+		case eOnClickEvent::GAME_WIN:
+			CompleteGame();
 			break;
 		default:
 			break;
@@ -158,14 +165,27 @@ void InGameState::SetLevel()
 	//myLevel = new Level(*myCamera);
 }
 
+void InGameState::RestartLevel()
+{
+	bool runtime = Prism::MemoryTracker::GetInstance()->GetRunTime();
+	Prism::MemoryTracker::GetInstance()->SetRunTime(false);
+	GameStateMessage* newEvent = new GameStateMessage(eGameState::RELOAD_LEVEL);
+	ShowMessage("Data/Resource/Texture/Menu/T_background_game_over.dds", { 1024, 1024 }, "Press [space] to restart.", newEvent);
+	Prism::MemoryTracker::GetInstance()->SetRunTime(runtime);
+}
+
 void InGameState::CompleteLevel()
 {
-
+	bool runtime = Prism::MemoryTracker::GetInstance()->GetRunTime();
+	Prism::MemoryTracker::GetInstance()->SetRunTime(false);
+	GameStateMessage* newEvent = new GameStateMessage(eGameState::LOAD_NEXT_LEVEL);
+	ShowMessage("Data/Resource/Texture/Menu/T_background_completed_level.dds", { 1024, 1024 }, "Press [space] to continue.", newEvent);
+	Prism::MemoryTracker::GetInstance()->SetRunTime(runtime);
 }
 
 void InGameState::CompleteGame()
 {
-
+	ShowMessage("Data/Resource/Texture/Menu/T_background_completed_game.dds", { 1024, 1024 }, "Press [space] to continue.");
 	myIsComplete = true;
 }
 
@@ -234,15 +254,17 @@ void InGameState::UpdateCamera(float aDeltaTime, const CU::Vector3<float>& aCame
 	{
 		myCameraOrientation = CU::Matrix44<float>::CreateRotateAroundY(rotationSpeed) * myCameraOrientation;
 	}
-
-
 }
 
 void InGameState::ShowMessage(const std::string& aBackgroundPath,
 	const CU::Vector2<float>& aSize, std::string aText, GameStateMessage* aMessage)
 {
-	aBackgroundPath;
-	aSize;
-	aText;
-	aMessage;
+	bool runtime = Prism::MemoryTracker::GetInstance()->GetRunTime();
+	Prism::MemoryTracker::GetInstance()->SetRunTime(false);
+	myIsActiveState = false;
+	myMessageScreen = new MessageState(aBackgroundPath, aSize);
+	myMessageScreen->SetText(aText);
+	myMessageScreen->SetEvent(aMessage);
+	myStateStack->PushSubGameState(myMessageScreen);
+	Prism::MemoryTracker::GetInstance()->SetRunTime(runtime);
 }

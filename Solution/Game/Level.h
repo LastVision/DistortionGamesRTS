@@ -8,6 +8,12 @@ namespace Prism
 	class Terrain;
 }
 
+namespace GUI
+{
+	class Cursor;
+}
+
+class AIDirector;
 class Entity;
 class PlayerDirector;
 
@@ -15,7 +21,7 @@ class Level
 {
 	friend class LevelFactory;
 public:
-	Level(const Prism::Camera& aCamera, Prism::Terrain* aTerrain);
+	Level(const Prism::Camera& aCamera, Prism::Terrain* aTerrain, GUI::Cursor* aCursor);
 	~Level();
 
 	bool Update(float aDeltaTime, Prism::Camera& aCamera);
@@ -30,4 +36,5 @@ private:
 
 	CU::GrowingArray<Entity*> myEntities;
 	PlayerDirector* myPlayer;
+	AIDirector* myAI;
 };
