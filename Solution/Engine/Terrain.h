@@ -33,6 +33,9 @@ namespace Prism
 		void CreateVertices();
 		void CalcNormals(CU::GrowingArray<VertexPosNormUV>& someVertices) const;
 		float GetHeight(unsigned int aX, unsigned int aY) const;
+		float GetHeight(unsigned int aIndex) const;
+		void GetPoint(CU::Vector3<float>& aPoint) const;
+		int GetIndex(const CU::Vector3<float>& aPosition) const;
 		bool GetAbove(const CU::Vector3<float>& aPosition) const;
 		const HeightMap* myHeightMap;
 		const CU::Vector2<float> mySize;

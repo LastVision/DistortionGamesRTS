@@ -10,10 +10,11 @@
 #include "Effect.h"
 #include "EffectContainer.h"
 #include "Engine.h"
-#include "VertexBufferWrapper.h"
 #include "IndexBufferWrapper.h"
+#include <MathHelper.h>
 #include "Surface.h"
 #include "TextureContainer.h"
+#include "VertexBufferWrapper.h"
 
 namespace Prism
 {
@@ -69,21 +70,33 @@ namespace Prism
 
 	void Terrain::CalcEntityHeight(CU::Matrix44<float>& anOrientation) const
 	{
-		CU::Vector3<float> position(anOrientation.GetPos());
-
-		position.y = GetHeight(static_cast<unsigned int>(position.x / myCellSize), static_cast<unsigned int>(position.z / myCellSize)) * myHeight;
-
-		anOrientation.SetPos(position);
+		anOrientation.SetPos(GetHeight(anOrientation.GetPos(), 0));
 	}
 
 	CU::Vector3<float> Terrain::GetHeight(const CU::Vector3<float>& aPosition, float aHeightOffset) const
 	{
-		CU::Vector3<float> position(aPosition);
+		CU::Vector3<float> position00(aPosition);
+		CU::Vector3<float> position10({ aPosition.x + myCellSize, aPosition.y, aPosition.z });
+		CU::Vector3<float> position01({ aPosition.x, aPosition.y, aPosition.z + myCellSize });
+		CU::Vector3<float> position11({ aPosition.x + myCellSize, aPosition.y, aPosition.z + myCellSize });
 
-		position.y = GetHeight(static_cast<unsigned int>(position.x / myCellSize)
-			, static_cast<unsigned int>(position.z / myCellSize)) * myHeight + aHeightOffset;
+		GetPoint(position00);
+		GetPoint(position10);
+		GetPoint(position01);
+		GetPoint(position11);
+		
+		float epsilon = 0.00001f;
+		float alphaX = (aPosition.x - position00.x) / (position11.x - position00.x + epsilon);
+		float alphaZ = (aPosition.z - position00.z) / (position11.z - position00.z + epsilon);
 
-		return position;
+		CU::Vector3<float> returnPosition(aPosition);
+		float lowerY = CU::Math::Lerp<float>(position00.y, position10.y, alphaX);
+		float upperY = CU::Math::Lerp<float>(position01.y, position11.y, alphaX);
+
+		returnPosition.y = CU::Math::Lerp<float>(lowerY, upperY, alphaZ);
+
+		returnPosition.y += aHeightOffset;
+		return returnPosition;
 	}
 
 	CU::Vector3<float> Terrain::CalcIntersection(const CU::Vector3<float>& aCameraPos
@@ -190,6 +203,28 @@ namespace Prism
 		DL_ASSERT_EXP(aX < static_cast<unsigned int>(myHeightMap->myWidth), "X out of range");
 		DL_ASSERT_EXP(aY < static_cast<unsigned int>(myHeightMap->myDepth), "Y out of range");
 		return myHeightMap->myData[(myHeightMap->myDepth - (1 + aY)) * myHeightMap->myWidth + aX] / 255.f;
+	}
+
+	float Terrain::GetHeight(unsigned int aIndex) const
+	{
+		DL_ASSERT_EXP(aIndex < static_cast<unsigned int>(myHeightMap->myWidth * myHeightMap->myDepth), "index out of range");
+		return myHeightMap->myData[aIndex] / 255.f;
+	}
+
+	void Terrain::GetPoint(CU::Vector3<float>& aPoint) const
+	{
+		aPoint.y = GetHeight(GetIndex(aPoint)) * myHeight;
+
+		aPoint.x = floorf(aPoint.x / myCellSize) * myCellSize;
+		aPoint.z = floorf(aPoint.z / myCellSize) * myCellSize;
+	}
+
+	int Terrain::GetIndex(const CU::Vector3<float>& aPosition) const
+	{
+		CU::Vector2<int> position(static_cast<unsigned int>(CU::Clip(aPosition.x / myCellSize, 0, myHeightMap->myWidth - 1.f))
+			, static_cast<unsigned int>(CU::Clip(aPosition.z / myCellSize, 0, myHeightMap->myDepth - 1.f)));
+
+		return (myHeightMap->myDepth - (1 + position.y)) * myHeightMap->myWidth + position.x;
 	}
 
 	bool Terrain::GetAbove(const CU::Vector3<float>& aPosition) const
