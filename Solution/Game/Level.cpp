@@ -81,3 +81,8 @@ void Level::OnResize(int aWidth, int aHeigth)
 {
 	myPlayer->OnResize(aWidth, aHeigth);
 }
+
+void Level::SpawnUnit()
+{
+	myPlayer->SpawnUnit(*myScene);
+}

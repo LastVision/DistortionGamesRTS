@@ -29,6 +29,8 @@ public:
 
 	void OnResize(int aWidth, int aHeigth);
 
+	void SpawnUnit();
+
 private:
 	Prism::Terrain* myTerrain;
 	Prism::DirectionalLight* myLight;

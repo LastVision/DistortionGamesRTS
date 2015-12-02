@@ -141,6 +141,8 @@ void InGameState::ReceiveMessage(const GameStateMessage& aMessage)
 
 void InGameState::ReceiveMessage(const OnClickMessage& aMessage)
 {
+	bool runtime;
+
 	if (myIsActiveState == true)
 	{
 		switch (aMessage.myEvent)
@@ -153,6 +155,12 @@ void InGameState::ReceiveMessage(const OnClickMessage& aMessage)
 			break;
 		case eOnClickEvent::GAME_WIN:
 			CompleteGame();
+			break;
+		case eOnClickEvent::SPAWN_UNIT:
+			runtime = Prism::MemoryTracker::GetInstance()->GetRunTime();
+			Prism::MemoryTracker::GetInstance()->SetRunTime(false);
+			myLevel->SpawnUnit();
+			Prism::MemoryTracker::GetInstance()->SetRunTime(runtime);
 			break;
 		default:
 			break;

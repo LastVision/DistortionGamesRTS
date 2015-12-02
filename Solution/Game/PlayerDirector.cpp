@@ -68,6 +68,16 @@ void PlayerDirector::OnResize(int aWidth, int aHeight)
 	myGUIManager->OnResize(aWidth, aHeight);
 }
 
+void PlayerDirector::SpawnUnit(Prism::Scene& aScene)
+{
+	if (myUnits.Size() < 64)
+	{
+		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::PLAYER, eEntityType::DRAGON, Prism::eOctreeType::DYNAMIC,
+			aScene, { 20.f, 0.f, 20.f }, myTerrain));
+		PollingStation::GetInstance()->RegisterEntity(myUnits.GetLast());
+	}
+}
+
 CU::Vector3<float> PlayerDirector::CalcCursorWorldPosition(const Prism::Camera& aCamera)
 {
 	CU::Vector2<float> inputPos(CU::InputWrapper::GetInstance()->GetMousePosition());

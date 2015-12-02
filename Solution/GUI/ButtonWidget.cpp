@@ -112,7 +112,7 @@ namespace GUI
 	void ButtonWidget::OnMousePressed(const CU::Vector2<float>&)
 	{
 		myImageCurrent = myImagePressed;
-		Click();
+		//Click();
 	}
 
 	void ButtonWidget::OnMouseDown(const CU::Vector2<float>&)
