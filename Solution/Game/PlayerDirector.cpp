@@ -125,7 +125,7 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 	CU::Vector3<float> targetPos = CalcCursorWorldPosition(aCamera);
 	CU::Intersection::LineSegment3D line(aCamera.GetOrientation().GetPos(), targetPos);
 
-	bool leftClicked = CU::InputWrapper::GetInstance()->MouseDown(0);
+	bool leftClicked = CU::InputWrapper::GetInstance()->MouseDown(0) && !(myGUIManager->MouseOverGUI());
 	bool hasSelected = false;
 	bool hasHovered = false;
 	for (int i = 0; i < myUnits.Size(); ++i)

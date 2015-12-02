@@ -27,6 +27,8 @@ namespace GUI
 
 		CU::Vector3<float> CalcCameraMovement() const;
 
+		bool MouseOverGUI();
+
 	private:
 
 		void CheckMousePressed();

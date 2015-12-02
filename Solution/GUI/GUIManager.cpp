@@ -145,6 +145,11 @@ namespace GUI
 		return movement;
 	}
 
+	bool GUIManager::MouseOverGUI()
+	{
+		return myActiveWidget != nullptr && myActiveWidget != myWidgets;
+	}
+
 	void GUIManager::CheckMousePressed()
 	{
 		if (myActiveWidget != nullptr)
