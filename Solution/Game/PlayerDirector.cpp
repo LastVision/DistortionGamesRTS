@@ -86,7 +86,6 @@ CU::Vector3<float> PlayerDirector::CalcCursorWorldPosition(const Prism::Camera& 
 		tweakValue = 1.605f;
 	}
 
-	float padding = (window.x - window.y) * 0.5f;
 	float mult = window.y / window.x;
 	cursorPos = inputPos;
 

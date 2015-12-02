@@ -95,7 +95,7 @@ void ControllerComponent::Attack(Entity* aTarget)
 	}
 }
 
-void ControllerComponent::DoMoveAction(float aDelta)
+void ControllerComponent::DoMoveAction(float)
 {
 	if (myEntity.GetState() == eEntityState::IDLE && myWayPoints.Size() > 0)
 	{
