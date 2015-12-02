@@ -19,7 +19,7 @@
 #include <Terrain.h>
 
 
-Level::Level(const Prism::Camera& aCamera, Prism::Terrain* aTerrain)
+Level::Level(const Prism::Camera& aCamera, Prism::Terrain* aTerrain, GUI::Cursor* aCursor)
 	: myEntities(64)
 {
 	EntityFactory::GetInstance()->LoadEntities("Data/Resource/Entity/LI_entity.xml");
@@ -36,7 +36,7 @@ Level::Level(const Prism::Camera& aCamera, Prism::Terrain* aTerrain)
 	myLight->SetDir(CU::Vector3<float>(0, 1, 0) * CU::Matrix44<float>::CreateRotateAroundZ(-3.14f / 3.f));
 	myScene->AddLight(myLight);
 
-	myPlayer = new PlayerDirector(*myTerrain, *myScene);
+	myPlayer = new PlayerDirector(*myTerrain, *myScene, aCursor);
 }
 
 Level::~Level()
@@ -69,8 +69,11 @@ void Level::Render()
 	Prism::Engine::GetInstance()->SetClearColor({ 0.2f, 0.2f, 0.2f, 1.f });
 
 	myScene->Render();
+
+	myPlayer->Render();
 }
 
 void Level::OnResize(int aWidth, int aHeigth)
 {
+	myPlayer->OnResize(aWidth, aHeigth);
 }

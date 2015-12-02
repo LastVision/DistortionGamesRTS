@@ -3,32 +3,64 @@
 #include <Camera.h>
 #include <CollisionComponent.h>
 #include <EntityFactory.h>
+#include <GUIManager.h>
 #include <Intersection.h>
 #include <InputWrapper.h>
 #include "PlayerDirector.h"
 #include <Terrain.h>
+#include <ModelLoader.h>
 
 #include <ControllerComponent.h>
 
-PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aScene)
+PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aScene, GUI::Cursor* aCursor)
 	: Director(eDirectorType::PLAYER, aTerrain)
+	, myRenderGUI(true)
+	, myCursor(aCursor)
+	, myGUIManager(nullptr)
 {
 	for (int i = 0; i < 15; ++i)
 	{
 		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::PLAYER, eEntityType::DRAGON, Prism::eOctreeType::DYNAMIC,
 			aScene, { 20.f + i, 0.f, 20.f }, aTerrain));
 	}
+	Prism::ModelLoader::GetInstance()->Pause();
+	myGUIManager = new GUI::GUIManager(aCursor, "Data/Resource/GUI/GUI_ingame.xml", myUnits);
+	Prism::ModelLoader::GetInstance()->UnPause();
 }
 
 
 PlayerDirector::~PlayerDirector()
 {
+	SAFE_DELETE(myGUIManager);
 }
 
 void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 {
+	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_G) == true)
+	{
+		myRenderGUI = !myRenderGUI;
+	}
+
 	Director::Update(aDeltaTime);
 	UpdateMouseInteraction(aCamera);
+
+	if (myRenderGUI == true)
+	{
+		myGUIManager->Update();
+	}
+}
+
+void PlayerDirector::Render()
+{
+	if (myRenderGUI == true)
+	{
+		myGUIManager->Render();
+	}
+}
+
+void PlayerDirector::OnResize(int aWidth, int aHeight)
+{
+	myGUIManager->OnResize(aWidth, aHeight);
 }
 
 CU::Vector3<float> PlayerDirector::CalcCursorWorldPosition(const Prism::Camera& aCamera)

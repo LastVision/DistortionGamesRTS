@@ -14,6 +14,11 @@ namespace Prism
 	class Terrain;
 }
 
+namespace GUI
+{
+	class Cursor;
+}
+
 namespace tinyxml2
 {
 	class XMLElement;
@@ -22,7 +27,7 @@ namespace tinyxml2
 class LevelFactory
 {
 public:
-	LevelFactory(const std::string& aLevelListPath, Prism::Camera& aCamera);
+	LevelFactory(const std::string& aLevelListPath, Prism::Camera& aCamera, GUI::Cursor* aCursor);
 	~LevelFactory();
 
 	Level* LoadLevel(const int& aID);
@@ -66,6 +71,8 @@ private:
 	volatile bool myIsLoading;
 
 	std::thread* myLoadLevelThread;
+
+	GUI::Cursor* myCursor;
 };
 
 inline const volatile bool& LevelFactory::IsLevelLoading() const
