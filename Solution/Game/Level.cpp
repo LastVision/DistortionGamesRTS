@@ -20,11 +20,11 @@
 #include <Terrain.h>
 
 
-Level::Level(const Prism::Camera& aCamera)
+Level::Level(const Prism::Camera& aCamera, Prism::Terrain* aTerrain)
 	: myEntities(64)
 {
 	EntityFactory::GetInstance()->LoadEntities("Data/Resource/Entity/LI_entity.xml");
-
+	myTerrain = aTerrain;
 	/*myTerrain = new Prism::Terrain("Data/Resource/Texture/Terrain/playground.tga"
 		, "Data/Resource/Texture/Terrain/T_rock.dds", { 256.f, 256.f }, 25.5f, CU::Matrix44<float>());*/
 
@@ -42,6 +42,7 @@ Level::Level(const Prism::Camera& aCamera)
 
 Level::~Level()
 {
+	myEntities.DeleteAll();
 	SAFE_DELETE(myTerrain);
 	SAFE_DELETE(myScene);
 	SAFE_DELETE(myLight);

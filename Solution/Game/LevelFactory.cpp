@@ -32,6 +32,7 @@ LevelFactory::LevelFactory(const std::string& aLevelListPath, Prism::Camera& aCa
 LevelFactory::~LevelFactory()
 {
 	SAFE_DELETE(myLoadLevelThread);
+	myDirectionalLights.DeleteAll();
 }
 
 Level* LevelFactory::LoadLevel(const int& aID)
@@ -51,12 +52,12 @@ Level* LevelFactory::LoadCurrentLevel()
 	delete myCurrentLevel;
 	myCurrentLevel = nullptr;
 
-	myCurrentLevel = new Level(myCamera);
+	LoadTerrain(myLevelPaths[myCurrentID]);
+	myCurrentLevel = new Level(myCamera, myTerrain);
 
-	delete myLoadLevelThread;
-	myLoadLevelThread = nullptr;
-
-	myLoadLevelThread = new std::thread(&LevelFactory::ReadLevel, this, myLevelPaths[myCurrentID]);
+	SAFE_DELETE(myLoadLevelThread);
+	//myLoadLevelThread = new std::thread(&LevelFactory::ReadLevel, this, myLevelPaths[myCurrentID]);
+	ReadLevel(myLevelPaths[myCurrentID]);
 
 	return myCurrentLevel;
 }
@@ -142,7 +143,6 @@ void LevelFactory::ReadLevel(const std::string& aLevelPath)
 	effectContainer->SetCubeMap(cubeMap);
 
 	LoadLights(reader, levelElement);
-	LoadTerrain(reader, levelElement);
 	LoadProps(reader, levelElement);
 	reader.CloseDocument();
 
@@ -316,19 +316,19 @@ void LevelFactory::LoadProps(XMLReader& aReader, tinyxml2::XMLElement* aLevelEle
 		std::string propType;
 		aReader.ForceReadAttribute(entityElement, "propType", propType);
 
-		tinyxml2::XMLElement* propElement = aReader.ForceFindFirstChild(aLevelElement, "position");
+		tinyxml2::XMLElement* propElement = aReader.ForceFindFirstChild(entityElement, "position");
 		CU::Vector3<float> propPosition;
 		aReader.ForceReadAttribute(propElement, "X", propPosition.x);
 		aReader.ForceReadAttribute(propElement, "Y", propPosition.y);
 		aReader.ForceReadAttribute(propElement, "Z", propPosition.z);
 
-		propElement = aReader.ForceFindFirstChild(aLevelElement, "rotation");
+		propElement = aReader.ForceFindFirstChild(entityElement, "rotation");
 		CU::Vector3<float> propRotation;
 		aReader.ForceReadAttribute(propElement, "X", propPosition.x);
 		aReader.ForceReadAttribute(propElement, "Y", propPosition.y);
 		aReader.ForceReadAttribute(propElement, "Z", propPosition.z);
 
-		propElement = aReader.ForceFindFirstChild(aLevelElement, "scale");
+		propElement = aReader.ForceFindFirstChild(entityElement, "scale");
 		CU::Vector3<float> propScale;
 		aReader.ForceReadAttribute(propElement, "X", propPosition.x);
 		aReader.ForceReadAttribute(propElement, "Y", propPosition.y);
@@ -339,14 +339,19 @@ void LevelFactory::LoadProps(XMLReader& aReader, tinyxml2::XMLElement* aLevelEle
 	}
 }
 
-void LevelFactory::LoadTerrain(XMLReader& aReader, tinyxml2::XMLElement* aLevelElement)
+void LevelFactory::LoadTerrain(const std::string& aLevelPath)
 {
+	XMLReader reader;
+	reader.OpenDocument(aLevelPath);
+	tinyxml2::XMLElement* levelElement = reader.ForceFindFirstChild("root");
+	levelElement = reader.ForceFindFirstChild(levelElement, "scene");
 	std::string heightMap;
 	std::string texturePath;
 
-	tinyxml2::XMLElement* terrainElement = aReader.FindFirstChild(aLevelElement, "terrain");
-	aReader.ForceReadAttribute(terrainElement, "heightmap", heightMap);
-	aReader.ForceReadAttribute(terrainElement, "texture", texturePath);
+	tinyxml2::XMLElement* terrainElement = reader.FindFirstChild(levelElement, "terrain");
+	reader.ForceReadAttribute(terrainElement, "heightmap", heightMap);
+	reader.ForceReadAttribute(terrainElement, "texture", texturePath);
 
-	myCurrentLevel->myTerrain = new Prism::Terrain(heightMap, texturePath, { 256.f, 256.f }, 25.5f, CU::Matrix44<float>());
+	myTerrain = new Prism::Terrain(heightMap, texturePath, { 256.f, 256.f }, 25.5f, CU::Matrix44<float>());
+	reader.CloseDocument();
 }

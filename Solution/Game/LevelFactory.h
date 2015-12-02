@@ -11,6 +11,7 @@ namespace Prism
 	class PointLight;
 	class SpotLight;
 	class Camera;
+	class Terrain;
 }
 
 namespace tinyxml2
@@ -45,12 +46,13 @@ private:
 	void LoadLights(XMLReader& aReader, tinyxml2::XMLElement* aLevelElement);
 	void LoadDirectionalLights(XMLReader& aReader, tinyxml2::XMLElement* aLevelElement);
 	void LoadProps(XMLReader& aReader, tinyxml2::XMLElement* aLevelElement);
-	void LoadTerrain(XMLReader& aReader, tinyxml2::XMLElement* aLevelElement);
+	void LoadTerrain(const std::string& aLevelPath);
 
 	Level* myCurrentLevel;
 	Level* myOldLevel;
 
 	Prism::Camera& myCamera;
+	Prism::Terrain* myTerrain;
 
 	CU::Vector4f myAmbientHue;
 	CU::GrowingArray<Prism::DirectionalLight*> myDirectionalLights;

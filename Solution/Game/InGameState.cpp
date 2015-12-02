@@ -21,8 +21,8 @@ InGameState::InGameState()
 	myRenderGUI = true;
 	myCamera = new Prism::Camera(myCameraOrientation);
 	myLevelFactory = new LevelFactory("Data/Level/LI_level.xml", *myCamera);
-
 	myLevel = myLevelFactory->LoadLevel(1);
+	
 	//SetLevel();
 
 	//myCameraOrientation.SetPos(CU::Vector3<float>(10.f, 25.f, 0));
@@ -36,6 +36,7 @@ InGameState::~InGameState()
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::GAME_STATE, this);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::ON_CLICK, this);
 	SAFE_DELETE(myCamera);
+	SAFE_DELETE(myLevelFactory);
 	//SAFE_DELETE(myGUIManager);
 }
 
@@ -154,7 +155,7 @@ void InGameState::ReceiveMessage(const OnClickMessage& aMessage)
 
 void InGameState::SetLevel()
 {
-	myLevel = new Level(*myCamera);
+	//myLevel = new Level(*myCamera);
 }
 
 void InGameState::CompleteLevel()
