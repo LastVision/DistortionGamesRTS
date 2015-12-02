@@ -42,6 +42,8 @@ public:
 	bool IsClean();
 	void Cleanup();
 private:
+	void operator=(LevelFactory) = delete;
+
 	void ReadLevelList(const std::string& aLevelListPath);
 	void ReadLevel(const std::string& aLevelPath);
 	void ReadLevelSetting(const std::string& aLevelPath);

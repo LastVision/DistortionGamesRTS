@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+#include "AIDirector.h"
 #include <AnimationComponent.h>
 #include <Camera.h>
 #include <CollisionComponent.h>
@@ -37,15 +38,17 @@ Level::Level(const Prism::Camera& aCamera, Prism::Terrain* aTerrain, GUI::Cursor
 	myScene->AddLight(myLight);
 
 	myPlayer = new PlayerDirector(*myTerrain, *myScene, aCursor);
+	myAI = new AIDirector(*myTerrain, *myScene);
 }
 
 Level::~Level()
 {
 	myEntities.DeleteAll();
 	SAFE_DELETE(myTerrain);
-	SAFE_DELETE(myScene);
 	SAFE_DELETE(myLight);
 	SAFE_DELETE(myPlayer);
+	SAFE_DELETE(myAI);
+	SAFE_DELETE(myScene);
 
 	EntityFactory::Destroy();
 }
@@ -60,6 +63,7 @@ bool Level::Update(float aDeltaTime, Prism::Camera& aCamera)
 	DEBUG_PRINT(myEntities[0]->GetOrientation().GetPos());
 
 	myPlayer->Update(aDeltaTime, aCamera);
+	myAI->Update(aDeltaTime);
 
 	return true;
 }

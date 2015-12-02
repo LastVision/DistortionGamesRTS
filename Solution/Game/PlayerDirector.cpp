@@ -2,15 +2,16 @@
 
 #include <Camera.h>
 #include <CollisionComponent.h>
+#include <ControllerComponent.h>
 #include <EntityFactory.h>
 #include <GUIManager.h>
 #include <Intersection.h>
 #include <InputWrapper.h>
 #include "PlayerDirector.h"
+#include "PollingStation.h"
 #include <Terrain.h>
 #include <ModelLoader.h>
 
-#include <ControllerComponent.h>
 
 PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aScene, GUI::Cursor* aCursor)
 	: Director(eDirectorType::PLAYER, aTerrain)
@@ -18,7 +19,7 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 	, myCursor(aCursor)
 	, myGUIManager(nullptr)
 {
-	for (int i = 0; i < 15; ++i)
+	for (int i = 0; i < 1; ++i)
 	{
 		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::PLAYER, eEntityType::DRAGON, Prism::eOctreeType::DYNAMIC,
 			aScene, { 20.f + i, 0.f, 20.f }, aTerrain));
@@ -26,8 +27,12 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 	Prism::ModelLoader::GetInstance()->Pause();
 	myGUIManager = new GUI::GUIManager(aCursor, "Data/Resource/GUI/GUI_ingame.xml", myUnits);
 	Prism::ModelLoader::GetInstance()->UnPause();
-}
 
+	for (int i = 0; i < myUnits.Size(); ++i)
+	{
+		PollingStation::GetInstance()->RegisterEntity(myUnits[i]);
+	}
+}
 
 PlayerDirector::~PlayerDirector()
 {

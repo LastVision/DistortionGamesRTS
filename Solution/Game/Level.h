@@ -13,6 +13,7 @@ namespace GUI
 	class Cursor;
 }
 
+class AIDirector;
 class Entity;
 class PlayerDirector;
 
@@ -35,4 +36,5 @@ private:
 
 	CU::GrowingArray<Entity*> myEntities;
 	PlayerDirector* myPlayer;
+	AIDirector* myAI;
 };

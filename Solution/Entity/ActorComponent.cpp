@@ -35,10 +35,6 @@ void ActorComponent::Update(float aDelta)
 		myEntity.myOrientation.SetPos(position);
 		myTerrain.CalcEntityHeight(myEntity.myOrientation);
 	}
-	else
-	{
-		myEntity.SetState(eEntityState::IDLE);
-	}
 }
 
 void ActorComponent::LookAt(const CU::Vector3<float>& aDirection)

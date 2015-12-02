@@ -33,13 +33,13 @@ MessageState::~MessageState()
 
 void MessageState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCursor)
 {
-	myIsLetThrough = false;
+	myIsLetThrough = true;
 	myStateStack = aStateStackProxy;
 	CU::Matrix44<float> orientation;
 	myCursor = aCursor;
 	//myCamera = new Prism::Camera(orientation);
 
-	OnResize(Prism::Engine::GetInstance()->GetWindowSize().x, Prism::Engine::GetInstance()->GetWindowSize().y);
+	OnResize(Prism::Engine::GetInstance()->GetWindowSizeInt().x, Prism::Engine::GetInstance()->GetWindowSizeInt().y);
 	//PostMaster::GetInstance()->SendMessage(FadeMessage(1.f / 3.f));
 
 }
