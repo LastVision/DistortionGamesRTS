@@ -3,12 +3,13 @@
 
 enum class eOnClickEvent
 {
-	START,
-	QUIT,
-	RESTART,
-	WIN,
-	LOSE,
-	UNIT
+	GAME_START,
+	GAME_QUIT,
+	GAME_RESTART,
+	GAME_WIN,
+	GAME_LOSE,
+	SPAWN_UNIT,
+	UNIT_ACTION_MOVE,
 };
 
 struct OnClickMessage : public Message

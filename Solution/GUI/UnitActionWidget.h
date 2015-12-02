@@ -26,14 +26,20 @@ namespace GUI
 		~UnitActionWidget();
 
 		void Render(const CU::Vector2<float>& aParentPosition) override;
+		void Update() override;
+
+		Widget* MouseIsOver(const CU::Vector2<float>& aPosition) override;
 
 		void OnResize(const CU::Vector2<float>& aNewWindowSize, const CU::Vector2<float>& anOldWindowSize) override;
 
 	private:
+		void operator=(UnitActionWidget&) = delete;
 
 		const CU::GrowingArray<Entity*>& myUnits;
 
 		WidgetContainer* myUnitActionButtons;
 		WidgetContainer* myBuildingActionButtons;
+
+		bool myIsUnitSelected;
 	};
 }

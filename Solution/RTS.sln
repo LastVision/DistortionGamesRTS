@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Application", "Application\Application.vcxproj", "{7F3313DC-157F-4FD3-81F1-F918848BBCEE}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -46,6 +46,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ParticleSystem", "ParticleSystem\ParticleSystem.vcxproj", "{F9457655-C0BD-4C0F-A7F9-1197DA5C5C6A}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "StreakSystem", "StreakSystem\StreakSystem.vcxproj", "{1C904C93-25EC-4BF5-AEFC-F324A26F2122}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Script", "Script\Script.vcxproj", "{BEDE80BE-C4C8-4F8C-8632-51C0908BFA5E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -387,6 +389,26 @@ Global
 		{1C904C93-25EC-4BF5-AEFC-F324A26F2122}.Release|Mixed Platforms.Build.0 = Release|Win32
 		{1C904C93-25EC-4BF5-AEFC-F324A26F2122}.Release|Win32.ActiveCfg = Release|Win32
 		{1C904C93-25EC-4BF5-AEFC-F324A26F2122}.Release|Win32.Build.0 = Release|Win32
+		{BEDE80BE-C4C8-4F8C-8632-51C0908BFA5E}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{BEDE80BE-C4C8-4F8C-8632-51C0908BFA5E}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{BEDE80BE-C4C8-4F8C-8632-51C0908BFA5E}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{BEDE80BE-C4C8-4F8C-8632-51C0908BFA5E}.Debug|Win32.ActiveCfg = Debug|Win32
+		{BEDE80BE-C4C8-4F8C-8632-51C0908BFA5E}.Debug|Win32.Build.0 = Debug|Win32
+		{BEDE80BE-C4C8-4F8C-8632-51C0908BFA5E}.DLL_Release|Any CPU.ActiveCfg = Release|Win32
+		{BEDE80BE-C4C8-4F8C-8632-51C0908BFA5E}.DLL_Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{BEDE80BE-C4C8-4F8C-8632-51C0908BFA5E}.DLL_Release|Mixed Platforms.Build.0 = Release|Win32
+		{BEDE80BE-C4C8-4F8C-8632-51C0908BFA5E}.DLL_Release|Win32.ActiveCfg = Release|Win32
+		{BEDE80BE-C4C8-4F8C-8632-51C0908BFA5E}.DLL_Release|Win32.Build.0 = Release|Win32
+		{BEDE80BE-C4C8-4F8C-8632-51C0908BFA5E}.Internal|Any CPU.ActiveCfg = Release|Win32
+		{BEDE80BE-C4C8-4F8C-8632-51C0908BFA5E}.Internal|Mixed Platforms.ActiveCfg = Release|Win32
+		{BEDE80BE-C4C8-4F8C-8632-51C0908BFA5E}.Internal|Mixed Platforms.Build.0 = Release|Win32
+		{BEDE80BE-C4C8-4F8C-8632-51C0908BFA5E}.Internal|Win32.ActiveCfg = Release|Win32
+		{BEDE80BE-C4C8-4F8C-8632-51C0908BFA5E}.Internal|Win32.Build.0 = Release|Win32
+		{BEDE80BE-C4C8-4F8C-8632-51C0908BFA5E}.Release|Any CPU.ActiveCfg = Release|Win32
+		{BEDE80BE-C4C8-4F8C-8632-51C0908BFA5E}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{BEDE80BE-C4C8-4F8C-8632-51C0908BFA5E}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{BEDE80BE-C4C8-4F8C-8632-51C0908BFA5E}.Release|Win32.ActiveCfg = Release|Win32
+		{BEDE80BE-C4C8-4F8C-8632-51C0908BFA5E}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

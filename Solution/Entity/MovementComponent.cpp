@@ -5,7 +5,7 @@
 #include <Terrain.h>
 #include <XMLReader.h>
 
-MovementComponent::MovementComponent(Entity& aEntity, MovementComponentData& aComponentData, Prism::Terrain& aTerrain)
+MovementComponent::MovementComponent(Entity& aEntity, MovementComponentData& aComponentData, const Prism::Terrain& aTerrain)
 	: Component(aEntity)
 	, myMovementSpeed(aComponentData.myMovementSpeed)
 	, myTargetPosition(myEntity.myOrientation.GetPos())

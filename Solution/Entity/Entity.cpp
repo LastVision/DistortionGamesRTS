@@ -1,16 +1,19 @@
 #include "stdafx.h"
 
+#include "ActorComponent.h"
 #include "AnimationComponent.h"
 #include "Component.h"
+#include "ControllerComponent.h"
 #include "CollisionComponent.h"
 #include "GraphicsComponent.h"
 #include "Entity.h"
 #include "EntityData.h"
 #include "MovementComponent.h"
 #include <Scene.h>
+#include <Terrain.h>
 
-Entity::Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& aEntityData,
-	Prism::Scene& aScene, const CU::Vector3<float> aStartPosition, Prism::Terrain& aTerrain)
+Entity::Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& aEntityData
+		, Prism::Scene& aScene, const CU::Vector3<float> aStartPosition, const Prism::Terrain& aTerrain)
 	: myAlive(true)
 	, myOwner(aOwner)
 	, myScene(aScene)
@@ -18,6 +21,7 @@ Entity::Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& a
 	, myState(eEntityState::IDLE)
 	, myType(aEntityData.myType)
 	, mySelected(false)
+	, myHovered(false)
 {
 	for (int i = 0; i < static_cast<int>(eComponentType::_COUNT); ++i)
 	{
@@ -25,6 +29,7 @@ Entity::Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& a
 	}
 
 	myOrientation.SetPos(aStartPosition);
+	aTerrain.CalcEntityHeight(myOrientation);
 
 	if (aEntityData.myAnimationData.myExistsInEntity == true)
 	{
@@ -44,6 +49,16 @@ Entity::Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& a
 	if (aEntityData.myCollisionData.myExistsInEntity == true)
 	{
 		myComponents[static_cast<int>(eComponentType::COLLISION)] = new CollisionComponent(*this, aEntityData.myCollisionData);
+	}
+
+	if (aEntityData.myActorData.myExistsInEntity == true)
+	{
+		myComponents[static_cast<int>(eComponentType::ACTOR)] = new ActorComponent(*this, aEntityData.myActorData);
+	}
+
+	if (aEntityData.myControllerData.myExistsInEntity == true)
+	{
+		myComponents[static_cast<int>(eComponentType::CONTROLLER)] = new ControllerComponent(*this, aEntityData.myControllerData);
 	}
 }
 
@@ -70,6 +85,10 @@ void Entity::Update(float aDeltaTime)
 	if (mySelected == true)
 	{
 		Prism::RenderBox(myOrientation.GetPos());
+	}
+	else if (myHovered == true)
+	{
+		Prism::RenderBox(myOrientation.GetPos(), eColorDebug::WHITE);
 	}
 }
 
@@ -111,4 +130,14 @@ void Entity::SetSelect(bool aStatus)
 bool Entity::IsSelected() const
 {
 	return mySelected;
+}
+
+void Entity::SetHovered(bool aStatus)
+{
+	myHovered = aStatus;
+}
+
+bool Entity::IsHovered() const
+{
+	return myHovered;
 }

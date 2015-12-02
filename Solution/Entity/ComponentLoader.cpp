@@ -1,8 +1,10 @@
 #include "stdafx.h"
 
+#include "ActorComponentData.h"
 #include "AnimationComponentData.h"
 #include <CommonHelper.h>
 #include "ComponentLoader.h"
+#include "ControllerComponentData.h"
 #include "CollisionComponentData.h"
 #include "GraphicsComponentData.h"
 #include "MovementComponentData.h"
@@ -104,6 +106,46 @@ void ComponentLoader::LoadCollisionComponent(XMLReader& aDocument, tinyxml2::XML
 		}
 	}
 }
+
+void ComponentLoader::LoadActorComponent(XMLReader& aDocument, tinyxml2::XMLElement* aSourceElement, ActorComponentData& aOutputData)
+{
+	DL_ASSERT("NOT IMPLEMENTED");
+
+	aOutputData.myExistsInEntity = true;
+
+	for (tinyxml2::XMLElement* e = aDocument.FindFirstChild(aSourceElement); e != nullptr; e = aDocument.FindNextElement(e))
+	{
+		std::string elementName = CU::ToLower(e->Name());
+		if (elementName == CU::ToLower("Radius"))
+		{
+			//aDocument.ForceReadAttribute(e, "value", aOutputData.myRadius);
+		}
+		else
+		{
+			FailedToReadChildElementMessage(e->Name(), aSourceElement->Name());
+		}
+	}
+}
+
+void ComponentLoader::LoadControllerComponent(XMLReader& aDocument, tinyxml2::XMLElement* aSourceElement, ControllerComponentData& aOutputData)
+{
+	DL_ASSERT("NOT IMPLEMENTED");
+	aOutputData.myExistsInEntity = true;
+
+	for (tinyxml2::XMLElement* e = aDocument.FindFirstChild(aSourceElement); e != nullptr; e = aDocument.FindNextElement(e))
+	{
+		std::string elementName = CU::ToLower(e->Name());
+		if (elementName == CU::ToLower("Radius"))
+		{
+			//aDocument.ForceReadAttribute(e, "value", aOutputData.myRadius);
+		}
+		else
+		{
+			FailedToReadChildElementMessage(e->Name(), aSourceElement->Name());
+		}
+	}
+}
+
 
 void ComponentLoader::FailedToReadChildElementMessage(const std::string& aElement, const std::string& aParent)
 {

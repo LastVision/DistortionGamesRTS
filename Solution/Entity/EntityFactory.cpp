@@ -42,7 +42,7 @@ void EntityFactory::LoadEntities(const char* aEntityListXML)
 }
 
 Entity* EntityFactory::CreateEntity(eOwnerType aOwner, eEntityType aType, Prism::eOctreeType aOctreeType, 
-	Prism::Scene& aScene, CU::Vector3f aPostion, Prism::Terrain& aTerrian)
+	Prism::Scene& aScene, CU::Vector3f aPostion, const Prism::Terrain& aTerrian)
 {
 	if (myInstance->myLoadedEntityData.find(aType) != myInstance->myLoadedEntityData.end())
 	{
@@ -96,6 +96,18 @@ void EntityFactory::LoadEntity(const char* aEntityPath)
 			if (newData.myCollisionData.myExistsInEntity == true) DL_ASSERT("You already have a CollisionComponent");
 
 			myComponentLoader->LoadCollisionComponent(entityDocument, e, newData.myCollisionData);
+		}
+		else if (elementName == CU::ToLower("ActorComponent"))
+		{
+			if (newData.myActorData.myExistsInEntity == true) DL_ASSERT("You already have a ActorComponent");
+
+			myComponentLoader->LoadActorComponent(entityDocument, e, newData.myActorData);
+		}
+		else if (elementName == CU::ToLower("ControllerComponent"))
+		{
+			if (newData.myControllerData.myExistsInEntity == true) DL_ASSERT("You already have a ControllerComponent");
+
+			myComponentLoader->LoadControllerComponent(entityDocument, e, newData.myControllerData);
 		}
 		else 
 		{

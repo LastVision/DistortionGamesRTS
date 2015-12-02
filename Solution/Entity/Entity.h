@@ -26,7 +26,7 @@ class Entity
 
 public:
 	Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& aEntityData,
-		Prism::Scene& aScene, const CU::Vector3<float> aStartPosition, Prism::Terrain& aTerrain);
+		Prism::Scene& aScene, const CU::Vector3<float> aStartPosition, const Prism::Terrain& aTerrain);
 	~Entity();
 
 	virtual void Update(float aDeltaTime);
@@ -54,6 +54,9 @@ public:
 	void SetSelect(bool aStatus);
 	bool IsSelected() const;
 
+	void SetHovered(bool aStatus);
+	bool IsHovered() const;
+
 private:
 	void operator=(Entity&) = delete;
 	CU::StaticArray<Component*, static_cast<int>(eComponentType::_COUNT)> myComponents;
@@ -68,6 +71,7 @@ private:
 	CU::Matrix44<float> myOrientation;
 
 	bool mySelected;
+	bool myHovered;
 };
 
 template <typename T>

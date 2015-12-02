@@ -3,9 +3,9 @@
 #include "EntityData.h"
 #include <unordered_map>
 #include <Vector.h>
+#include "Entity.h"
 
 class ComponentLoader;
-class Entity;
 
 namespace Prism
 {
