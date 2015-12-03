@@ -34,6 +34,15 @@ namespace Prism
 		Texture * influence = Prism::TextureContainer::GetInstance()
 			->GetTexture("Data/Resource/Texture/Terrain/SplatMap/T_InfluenceToSplatMap.dds");
 		myEffect->SetTexture(influence);
+
+		myEffect->SetSplatTexture1(Prism::TextureContainer::GetInstance()
+			->GetTexture("Data/Resource/Texture/Terrain/SplatMap/T_Splat1.dds"));
+		myEffect->SetSplatTexture2(Prism::TextureContainer::GetInstance()
+			->GetTexture("Data/Resource/Texture/Terrain/SplatMap/T_Splat2.dds"));
+		myEffect->SetSplatTexture3(Prism::TextureContainer::GetInstance()
+			->GetTexture("Data/Resource/Texture/Terrain/SplatMap/T_Splat3.dds"));
+
+
 		D3D11_INPUT_ELEMENT_DESC vertexDesc[] =
 		{
 			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
