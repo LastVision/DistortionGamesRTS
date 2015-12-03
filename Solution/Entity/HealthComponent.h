@@ -11,8 +11,13 @@ public:
 	static eComponentType GetTypeStatic();
 	eComponentType GetType() override;
 
+	bool TakeDamage(int aDamage);
+	void Heal(int aHealing);
+	bool IsAlive() const;
+
 private:
-	int myHealth;
+	int myMaxHealth;
+	int myCurrentHealth;
 };
 
 inline eComponentType HealthComponent::GetTypeStatic()
