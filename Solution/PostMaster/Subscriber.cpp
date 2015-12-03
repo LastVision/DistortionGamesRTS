@@ -26,3 +26,7 @@ void Subscriber::ReceiveMessage(const GameStateMessage&)
 void Subscriber::ReceiveMessage(const OnClickMessage&)
 {
 }
+
+void Subscriber::ReceiveMessage(const MoveCameraMessage&)
+{
+}

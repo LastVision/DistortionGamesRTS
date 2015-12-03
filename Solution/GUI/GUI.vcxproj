@@ -14,6 +14,7 @@
     <ClInclude Include="ButtonWidget.h" />
     <ClInclude Include="Cursor.h" />
     <ClInclude Include="GUIManager.h" />
+    <ClInclude Include="MiniMapWidget.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="UnitActionWidget.h" />
     <ClInclude Include="UnitInfoWidget.h" />
@@ -24,6 +25,7 @@
     <ClCompile Include="ButtonWidget.cpp" />
     <ClCompile Include="Cursor.cpp" />
     <ClCompile Include="GUIManager.cpp" />
+    <ClCompile Include="MiniMapWidget.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

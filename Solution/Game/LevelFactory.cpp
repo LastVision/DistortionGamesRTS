@@ -1,16 +1,18 @@
 #include "stdafx.h"
 
 #include <CommonHelper.h>
+#include <DirectionalLight.h>
+#include "dirent.h"
 #include <Effect.h>
 #include <EffectContainer.h>
 #include <EngineEnums.h>
 #include <EntityFactory.h>
-#include <DirectionalLight.h>
-#include "dirent.h"
 #include "Level.h"
 #include "LevelFactory.h"
 #include <MathHelper.h>
 #include <ModelLoader.h>
+#include <PointLight.h>
+#include <SpotLight.h>
 #include <Terrain.h>
 #include <TextureContainer.h>
 #include <Scene.h>

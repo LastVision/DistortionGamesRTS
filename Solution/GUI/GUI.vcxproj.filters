@@ -29,6 +29,9 @@
     <ClInclude Include="UnitActionWidget.h">
       <Filter>Widget</Filter>
     </ClInclude>
+    <ClInclude Include="MiniMapWidget.h">
+      <Filter>Widget</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -49,6 +52,9 @@
       <Filter>Widget</Filter>
     </ClCompile>
     <ClCompile Include="UnitActionWidget.cpp">
+      <Filter>Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="MiniMapWidget.cpp">
       <Filter>Widget</Filter>
     </ClCompile>
   </ItemGroup>

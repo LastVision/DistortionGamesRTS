@@ -1,6 +1,7 @@
 #include "stdafx.h"
 
 #include <Camera.h>
+#include <MoveCameraMessage.h>
 #include <ColoursForBG.h>
 #include <Engine.h>
 #include <GameStateMessage.h>
@@ -141,6 +142,8 @@ void InGameState::ReceiveMessage(const GameStateMessage& aMessage)
 
 void InGameState::ReceiveMessage(const OnClickMessage& aMessage)
 {
+	bool runtime;
+
 	if (myIsActiveState == true)
 	{
 		switch (aMessage.myEvent)
@@ -154,10 +157,23 @@ void InGameState::ReceiveMessage(const OnClickMessage& aMessage)
 		case eOnClickEvent::GAME_WIN:
 			CompleteGame();
 			break;
+		case eOnClickEvent::SPAWN_UNIT:
+			runtime = Prism::MemoryTracker::GetInstance()->GetRunTime();
+			Prism::MemoryTracker::GetInstance()->SetRunTime(false);
+			myLevel->SpawnUnit();
+			Prism::MemoryTracker::GetInstance()->SetRunTime(runtime);
+			break;
 		default:
 			break;
 		}
 	}
+}
+
+void InGameState::ReceiveMessage(const MoveCameraMessage& aMessage)
+{
+	CU::Vector2<float> position = aMessage.myPosition * 255.f;
+
+	myCamera->SetPosition({ position.x, position.y, myCamera->GetOrientation().GetPos().z });
 }
 
 void InGameState::SetLevel()

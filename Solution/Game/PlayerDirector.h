@@ -25,6 +25,8 @@ public:
 
 	void OnResize(int aWidth, int aHeight);
 
+	void SpawnUnit(Prism::Scene& aScene);
+
 private:
 	CU::Vector3<float> CalcCursorWorldPosition(const Prism::Camera& aCamera);
 	void UpdateMouseInteraction(const Prism::Camera& aCamera);

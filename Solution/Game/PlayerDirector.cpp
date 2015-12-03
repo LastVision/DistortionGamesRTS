@@ -68,6 +68,16 @@ void PlayerDirector::OnResize(int aWidth, int aHeight)
 	myGUIManager->OnResize(aWidth, aHeight);
 }
 
+void PlayerDirector::SpawnUnit(Prism::Scene& aScene)
+{
+	if (myUnits.Size() < 64)
+	{
+		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::PLAYER, eEntityType::DRAGON, Prism::eOctreeType::DYNAMIC,
+			aScene, { 20.f, 0.f, 20.f }, myTerrain));
+		PollingStation::GetInstance()->RegisterEntity(myUnits.GetLast());
+	}
+}
+
 CU::Vector3<float> PlayerDirector::CalcCursorWorldPosition(const Prism::Camera& aCamera)
 {
 	CU::Vector2<float> inputPos(CU::InputWrapper::GetInstance()->GetMousePosition());
@@ -115,7 +125,16 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 	CU::Vector3<float> targetPos = CalcCursorWorldPosition(aCamera);
 	CU::Intersection::LineSegment3D line(aCamera.GetOrientation().GetPos(), targetPos);
 
-	bool leftClicked = CU::InputWrapper::GetInstance()->MouseDown(0);
+	bool leftClicked;
+	if (myRenderGUI == true) // no inworld clicking when mouse is over gui:
+	{
+		leftClicked = CU::InputWrapper::GetInstance()->MouseDown(0) && !(myGUIManager->MouseOverGUI()); 
+	}
+	else
+	{
+		leftClicked = CU::InputWrapper::GetInstance()->MouseDown(0);
+	}
+
 	bool hasSelected = false;
 	bool hasHovered = false;
 	for (int i = 0; i < myUnits.Size(); ++i)
