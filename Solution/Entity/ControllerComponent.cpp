@@ -172,6 +172,12 @@ void ControllerComponent::Attack(Entity* aTarget)
 	}
 }
 
+void ControllerComponent::Spawn(const CU::Vector3f& aPosition)
+{
+	myEntity.myOrientation.SetPos(aPosition);
+	myTerrain.CalcEntityHeight(myEntity.myOrientation);
+}
+
 void ControllerComponent::DoMoveAction(float)
 {
 	if (myEntity.GetState() == eEntityState::IDLE && myWayPoints.Size() > 0)

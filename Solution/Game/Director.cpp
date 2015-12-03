@@ -7,6 +7,7 @@ Director::Director(eDirectorType aDirectorType, const Prism::Terrain& aTerrain)
 	: myDirectorType(aDirectorType)
 	, myTerrain(aTerrain)
 	, myUnits(64)
+	, myActiveUnits(64)
 {
 	PostMaster::GetInstance()->Subscribe(eMessageType::SPAWN_UNIT, this);
 }
@@ -21,19 +22,19 @@ Director::~Director()
 
 void Director::Update(float aDeltaTime)
 {
-	for (int i = 0; i < myUnits.Size(); ++i)
+	for (int i = 0; i < myActiveUnits.Size(); ++i)
 	{
-		myUnits[i]->Update(aDeltaTime);
+		myActiveUnits[i]->Update(aDeltaTime);
 	}
 }
 
 void Director::CleanUp()
 {
-	for (int i = myUnits.Size()-1; i >= 0; --i)
+	for (int i = myActiveUnits.Size() - 1; i >= 0; --i)
 	{
-		if (myUnits[i]->GetAlive() == false)
+		if (myActiveUnits[i]->GetAlive() == false)
 		{
-			myUnits.DeleteCyclicAtIndex(i);
+			myActiveUnits.RemoveCyclicAtIndex(i);
 		}
 	}
 }

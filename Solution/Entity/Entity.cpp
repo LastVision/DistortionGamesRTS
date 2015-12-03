@@ -16,7 +16,7 @@
 Entity::Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& aEntityData
 	, Prism::Scene& aScene, const CU::Vector3<float> aStartPosition, const Prism::Terrain& aTerrain
 	,const CU::Vector3f& aRotation, const CU::Vector3f& aScale)
-	: myAlive(true)
+	: myAlive(false)
 	, myOwner(aOwner)
 	, myScene(aScene)
 	, myOctreeType(anOctreeType)
@@ -36,14 +36,12 @@ Entity::Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& a
 	if (aEntityData.myAnimationData.myExistsInEntity == true)
 	{
 		myComponents[static_cast<int>(eComponentType::ANIMATION)] = new AnimationComponent(*this, aEntityData.myAnimationData);
-		myScene.AddInstance(GetComponent<AnimationComponent>()->GetInstance());
 	}
 	else if (aEntityData.myGraphicsData.myExistsInEntity == true)
 	{
 		myComponents[static_cast<int>(eComponentType::GRAPHICS)] = new GraphicsComponent(*this, aEntityData.myGraphicsData);
 		GetComponent<GraphicsComponent>()->SetRotation(aRotation);
 		GetComponent<GraphicsComponent>()->SetScale(aScale);
-		myScene.AddInstance(GetComponent<GraphicsComponent>()->GetInstance());
 	}
 
 	if (aEntityData.myBuildingData.myExistsInEntity == true)
@@ -80,6 +78,7 @@ Entity::Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& a
 
 Entity::~Entity()
 {
+	AddToScene();
 	for (int i = 0; i < static_cast<int>(eComponentType::_COUNT); ++i)
 	{
 		delete myComponents[i];
@@ -121,10 +120,42 @@ void Entity::RemoveComponent(eComponentType aComponent)
 	myComponents[int(aComponent)] = nullptr;
 }
 
+void Entity::AddToScene()
+{
+	if (GetComponent<GraphicsComponent>() != nullptr)
+	{
+		myScene.AddInstance(GetComponent<GraphicsComponent>()->GetInstance());
+	}
+	else if (GetComponent<AnimationComponent>() != nullptr)
+	{
+		myScene.AddInstance(GetComponent<AnimationComponent>()->GetInstance());
+	}
+}
+
+void Entity::RemoveFromScene()
+{
+	if (GetComponent<GraphicsComponent>() != nullptr)
+	{
+		myScene.RemoveInstance(GetComponent<GraphicsComponent>()->GetInstance());
+	}
+	else if (GetComponent<AnimationComponent>() != nullptr)
+	{
+		myScene.RemoveInstance(GetComponent<AnimationComponent>()->GetInstance());
+	}
+}
+
 void Entity::Kill()
 {
-	//DL_ASSERT_EXP(myAlive == true, "Tried to kill an Entity multiple times");
+	DL_ASSERT_EXP(myAlive == true, "Tried to kill an Entity multiple times");
 	myAlive = false;
+	RemoveFromScene();
+}
+
+void Entity::Spawn(const CU::Vector3f& aSpawnPosition)
+{
+	Reset();
+	GetComponent<ControllerComponent>()->Spawn(aSpawnPosition);
+	AddToScene();
 }
 
 void Entity::Reset()

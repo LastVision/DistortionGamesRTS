@@ -26,6 +26,8 @@ public:
 	void AttackMove(const CU::Vector3<float>& aPosition);
 	void Attack(Entity* aTarget);
 
+	void Spawn(const CU::Vector3f& aPosition);
+
 	const ControllerData& GetControllerData() const;
 	float GetVisionRange() const;
 	float GetAttackRange() const;
