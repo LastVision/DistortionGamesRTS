@@ -36,7 +36,6 @@
     <ClCompile Include="PlayerDirector.cpp">
       <Filter>Director</Filter>
     </ClCompile>
-    <ClCompile Include="PollingStation.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -83,7 +82,6 @@
     <ClInclude Include="dirent.h">
       <Filter>Level\Factory</Filter>
     </ClInclude>
-    <ClInclude Include="PollingStation.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="PreCompile">

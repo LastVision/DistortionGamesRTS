@@ -1,7 +1,7 @@
 #pragma once
 #include <GrowingArray.h>
 #include <Vector.h>
-#include <EntityEnum.h>
+#include "EntityEnum.h"
 
 class Entity;
 class PollingStation

@@ -23,6 +23,7 @@ public:
 	void Update(float aDelta) override;
 
 	void MoveTo(const CU::Vector3<float>& aPosition, bool aClearPreviousPoints);
+	void AttackMove(const CU::Vector3<float>& aPosition);
 	void Attack(Entity* aTarget);
 
 	const ControllerData& GetControllerData() const;
@@ -37,7 +38,7 @@ private:
 	{
 		MOVE,
 		ATTACK,
-		MOVE_ATTACK,
+		ATTACK_MOVE,
 	};
 
 	void DoMoveAction(float aDelta);

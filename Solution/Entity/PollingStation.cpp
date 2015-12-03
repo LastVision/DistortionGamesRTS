@@ -1,7 +1,7 @@
 #include "stdafx.h"
 
-#include <CollisionComponent.h>
-#include <Entity.h>
+#include "CollisionComponent.h"
+#include "Entity.h"
 #include "PollingStation.h"
 
 PollingStation* PollingStation::myInstance = nullptr;
@@ -92,12 +92,12 @@ Entity* PollingStation::FindEntityAtPosition(const CU::Vector3<float>& aPosition
 		{
 			if (myPlayerUnits[i]->GetAlive() == true)
 			{
-				 collision = myPlayerUnits[i]->GetComponent<CollisionComponent>();
-				 if (collision != nullptr && collision->Collide(aPosition))
-				 {
-					 entity = myPlayerUnits[i];
-					 break;
-				 }
+				collision = myPlayerUnits[i]->GetComponent<CollisionComponent>();
+				if (collision != nullptr && collision->Collide(aPosition))
+				{
+					entity = myPlayerUnits[i];
+					break;
+				}
 			}
 		}
 	}
@@ -122,7 +122,7 @@ Entity* PollingStation::FindEntityAtPosition(const CU::Vector3<float>& aPosition
 
 void PollingStation::CleanUp()
 {
-	for (int i = myPlayerUnits.Size()-1; i >= 0; --i)
+	for (int i = myPlayerUnits.Size() - 1; i >= 0; --i)
 	{
 		if (myPlayerUnits[i]->GetAlive() == false)
 		{

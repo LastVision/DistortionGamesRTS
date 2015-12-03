@@ -48,6 +48,10 @@ void ControllerComponent::Update(float aDelta)
 			DoMoveAction(aDelta);
 		}
 	}
+	else if (myCurrentAction == eAction::ATTACK_MOVE)
+	{
+
+	}
 
 
 	if (myEntity.GetState() == eEntityState::WALKING)
@@ -82,6 +86,16 @@ void ControllerComponent::MoveTo(const CU::Vector3<float>& aPosition, bool aClea
 
 	myAttackTarget = nullptr;
 	myCurrentAction = eAction::MOVE;
+}
+
+void ControllerComponent::AttackMove(const CU::Vector3<float>& aPosition)
+{
+	myWayPoints.RemoveAll();
+	myEntity.SetState(eEntityState::IDLE);
+
+	myWayPoints.Add(aPosition);
+	myAttackTarget = nullptr;
+	myCurrentAction = eAction::ATTACK_MOVE;
 }
 
 void ControllerComponent::Attack(Entity* aTarget)
