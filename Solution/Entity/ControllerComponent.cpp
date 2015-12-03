@@ -31,17 +31,17 @@ void ControllerComponent::Update(float aDelta)
 	if (myCurrentAction == eAction::MOVE)
 	{
 		if (myEntity.GetState() == eEntityState::IDLE)
-	{
-			if (myWayPoints.Size() > 0)
 		{
+			if (myWayPoints.Size() > 0)
+			{
 				myMoveTarget = GetNextWayPoint();
 				DoMoveAction(myMoveTarget);
-		}
-		else
-		{
+			}
+			else
+			{
 				myCurrentAction = eAction::IDLE;
+			}
 		}
-	}
 		else if (myEntity.GetState() == eEntityState::WALKING)
 		{
 			DoMoveAction(myMoveTarget);
@@ -53,14 +53,14 @@ void ControllerComponent::Update(float aDelta)
 			, eOwnerType::ENEMY, myVisionRange);
 
 		if (enemyInVision != nullptr)
-			{
+		{
 			//Start Moving towards enemy
 			myAttackTarget = enemyInVision;
-				myChaseOrigin = myEntity.GetOrientation().GetPos();
-				myCurrentAction = eAction::CHASE;
-			}
-			else
-			{
+			myChaseOrigin = myEntity.GetOrientation().GetPos();
+			myCurrentAction = eAction::CHASE;
+		}
+		else
+		{
 			//Keep moving towards the clickposition
 			DoMoveAction(myMoveTarget);
 
@@ -70,10 +70,10 @@ void ControllerComponent::Update(float aDelta)
 			}
 		}
 	}
-	else if (myCurrentAction == eAction::CHASE)
+	else if (myCurrentAction == eAction::CHASE || myCurrentAction == eAction::ATTACK)
 	{
 		float distChased = CU::Length2(myChaseOrigin - myEntity.GetOrientation().GetPos());
-		if (distChased > 100 /*myMaxChaseDistance*/)
+		if (distChased > 100 /*myMaxChaseDistance*/ && myCurrentAction == eAction::CHASE)
 		{
 			myCurrentAction = eAction::ATTACK_MOVE;
 		}
@@ -87,11 +87,19 @@ void ControllerComponent::Update(float aDelta)
 				DoAttackAction();
 				if (myAttackTarget->GetAlive() == false)
 				{
-					myCurrentAction = eAction::ATTACK_MOVE;
-		}
-	}
+					if (myCurrentAction == eAction::CHASE)
+					{
+						myCurrentAction = eAction::ATTACK_MOVE;
+					}
+					else
+					{
+						myEntity.SetState(eEntityState::IDLE);
+						myCurrentAction = eAction::IDLE;
+					}
+				}
+			}
 			else
-	{
+			{
 				DoMoveAction(myAttackTarget->GetOrientation().GetPos());
 			}
 		}

@@ -12,10 +12,13 @@ AIDirector::AIDirector(const Prism::Terrain& aTerrain, Prism::Scene& aScene)
 	{
 		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::ENEMY, eEntityType::DRAGON, Prism::eOctreeType::DYNAMIC,
 			aScene, { 20.f + i, 0.f, 40.f }, aTerrain));
+		myUnits[i]->Spawn({ 20.f + i, 0.f, 40.f });
 	}
 
 	myUnits.Add(EntityFactory::CreateEntity(eOwnerType::ENEMY, eEntityType::DRAGON, Prism::eOctreeType::DYNAMIC,
 		aScene, { 200.f, 0.f, 200.f }, aTerrain));
+	myUnits.GetLast()->Spawn({ 200.f, 0.f, 200.f });
+
 
 	myBuilding = EntityFactory::CreateEntity(eOwnerType::ENEMY, eEntityType::BASE_BUILING, Prism::eOctreeType::STATIC, aScene, { 130, 0, 140 }, aTerrain);
 	myBuilding->AddToScene();
@@ -23,6 +26,12 @@ AIDirector::AIDirector(const Prism::Terrain& aTerrain, Prism::Scene& aScene)
 	for (int i = 0; i < myUnits.Size(); ++i)
 	{
 		PollingStation::GetInstance()->RegisterEntity(myUnits[i]);
+	}
+
+	for (int i = 0; i < myUnits.Size(); ++i)
+	{
+		myActiveUnits.Add(myUnits[i]);
+		PollingStation::GetInstance()->RegisterEntity(myActiveUnits[i]);
 	}
 }
 
@@ -35,19 +44,19 @@ void AIDirector::Update(float aDeltaTime)
 {
 	Director::Update(aDeltaTime);
 
-	for (int i = 0; i < myUnits.Size(); ++i)
+	for (int i = 0; i < myActiveUnits.Size(); ++i)
 	{
-		ControllerComponent* controller = myUnits[i]->GetComponent<ControllerComponent>();
+		ControllerComponent* controller = myActiveUnits[i]->GetComponent<ControllerComponent>();
 		Entity* closestPlayerEntity = PollingStation::GetInstance()->FindClosestEntity(
-			myUnits[i]->GetOrientation().GetPos(), eOwnerType::PLAYER, controller->GetVisionRange());
+			myActiveUnits[i]->GetOrientation().GetPos(), eOwnerType::PLAYER, controller->GetVisionRange());
 
 		if (closestPlayerEntity != nullptr)
 		{
-			myUnits[i]->GetComponent<ControllerComponent>()->Attack(closestPlayerEntity);
+			myActiveUnits[i]->GetComponent<ControllerComponent>()->Attack(closestPlayerEntity);
 		}
 		else
 		{
-			myUnits[i]->SetState(eEntityState::IDLE);
+			myActiveUnits[i]->SetState(eEntityState::IDLE);
 		}
 	}
 }
