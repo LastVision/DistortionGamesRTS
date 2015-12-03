@@ -35,12 +35,15 @@ public:
 
 	void SpawnUnit(Prism::Scene& aScene);
 
+	void SelectUnit(Entity* anEntity);
+
 private:
 	CU::Vector3<float> CalcCursorWorldPosition(const Prism::Camera& aCamera);
 	void UpdateMouseInteraction(const Prism::Camera& aCamera);
 	void SelectOrHoverEntity(Entity* aEntity, bool &aSelected, bool &aHovered
 		, const CU::Intersection::LineSegment3D& aMouseRay);
 
+	CU::GrowingArray<Entity*> mySelectedUnits;
 	GUI::GUIManager* myGUIManager;
 	GUI::Cursor* myCursor;
 

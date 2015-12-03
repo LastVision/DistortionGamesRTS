@@ -212,6 +212,7 @@
     <ClCompile Include="Cube3DRenderer.cpp" />
     <ClCompile Include="DebugDrawer.cpp" />
     <ClCompile Include="DirectX.cpp" />
+    <ClCompile Include="Edge.cpp" />
     <ClCompile Include="Effect.cpp" />
     <ClCompile Include="EffectContainer.cpp" />
     <ClCompile Include="HeightMapFactory.cpp" />
@@ -236,6 +237,8 @@
     <ClCompile Include="Line3DRenderer.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="ModelAnimated.cpp" />
+    <ClCompile Include="NavMesh.cpp" />
+    <ClCompile Include="PathFinder.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="ModelLoader.cpp" />
@@ -266,6 +269,7 @@
     <ClCompile Include="TransformationNodeHierarchy.cpp" />
     <ClCompile Include="TransformationNodeInstance.cpp" />
     <ClCompile Include="TreeNode.cpp" />
+    <ClCompile Include="Triangle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
@@ -280,6 +284,7 @@
     <ClInclude Include="DebugDrawer.h" />
     <ClInclude Include="Defines.h" />
     <ClInclude Include="DirectX.h" />
+    <ClInclude Include="Edge.h" />
     <ClInclude Include="Effect.h" />
     <ClInclude Include="EffectContainer.h" />
     <ClInclude Include="EffectListener.h" />
@@ -300,12 +305,15 @@
     <ClInclude Include="IndexBufferWrapper.h" />
     <ClInclude Include="Instance.h" />
     <ClInclude Include="DirectionalLight.h" />
+    <ClInclude Include="LesserTriangle.h" />
     <ClInclude Include="LightStructs.h" />
     <ClInclude Include="Line3D.h" />
     <ClInclude Include="Line3DRenderer.h" />
     <ClInclude Include="LodStructs.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="ModelAnimated.h" />
+    <ClInclude Include="NavMesh.h" />
+    <ClInclude Include="PathFinder.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="ModelLoader.h" />
@@ -332,6 +340,8 @@
     <ClInclude Include="TransformationNodeHierarchy.h" />
     <ClInclude Include="TransformationNodeInstance.h" />
     <ClInclude Include="TreeNode.h" />
+    <ClInclude Include="Triangle.h" />
+    <ClInclude Include="Vertex.h" />
     <ClInclude Include="VertexBufferWrapper.h" />
     <ClInclude Include="VertexDataWrapper.h" />
     <ClInclude Include="VertexIndexWrapper.h" />
