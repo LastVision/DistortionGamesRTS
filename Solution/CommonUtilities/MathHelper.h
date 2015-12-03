@@ -2,6 +2,12 @@
 #define MATH_HELPER_HEADER
 #include <cstdlib>
 #include "Vector.h"
+#define _USE_MATH_DEFINES
+#include <math.h>
+
+#define CU_PI static_cast<float>(M_PI)
+#define CU_PI_DIV_2 static_cast<float>(M_PI) / 2.f
+#define CU_PI_DIV_4 static_cast<float>(M_PI) / 4.f
 
 namespace CU
 {
