@@ -37,6 +37,8 @@ public:
 
 	void SelectUnit(Entity* anEntity);
 
+	void ReceiveMessage(const SpawnUnitMessage& aMessage) override;
+
 private:
 	CU::Vector3<float> CalcCursorWorldPosition(const Prism::Camera& aCamera);
 	void UpdateMouseInteraction(const Prism::Camera& aCamera);

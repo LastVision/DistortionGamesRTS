@@ -2,6 +2,7 @@
 
 #include "ActorComponent.h"
 #include "AnimationComponent.h"
+#include "BuildingComponent.h"
 #include "Component.h"
 #include "ControllerComponent.h"
 #include "CollisionComponent.h"
@@ -43,6 +44,11 @@ Entity::Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& a
 		GetComponent<GraphicsComponent>()->SetRotation(aRotation);
 		GetComponent<GraphicsComponent>()->SetScale(aScale);
 		myScene.AddInstance(GetComponent<GraphicsComponent>()->GetInstance());
+	}
+
+	if (aEntityData.myBuildingData.myExistsInEntity == true)
+	{
+		myComponents[static_cast<int>(eComponentType::BUILDING)] = new BuildingComponent(*this, aEntityData.myBuildingData);
 	}
 
 	if (aEntityData.myCollisionData.myExistsInEntity == true)
@@ -117,7 +123,7 @@ void Entity::RemoveComponent(eComponentType aComponent)
 
 void Entity::Kill()
 {
-	DL_ASSERT_EXP(myAlive == true, "Tried to kill an Entity multiple times");
+	//DL_ASSERT_EXP(myAlive == true, "Tried to kill an Entity multiple times");
 	myAlive = false;
 }
 

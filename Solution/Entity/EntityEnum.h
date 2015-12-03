@@ -11,9 +11,11 @@ enum eOwnerType
 
 enum eEntityType
 {
+	EMPTY = -1,
 	DRAGON,
 	DRAGON_STATIC,
 	PINE_TREE,
+	BASE_BUILING,
 	_COUNT,
 };
 
@@ -36,5 +38,6 @@ enum class eComponentType
 	GRAPHICS,
 	MOVEMENT,
 	HEALTH,
+	BUILDING,
 	_COUNT,
 };

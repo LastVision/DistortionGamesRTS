@@ -11,6 +11,7 @@
 #include <PollingStation.h>
 #include <Terrain.h>
 #include <ModelLoader.h>
+#include <SpawnUnitMessage.h>
 
 
 PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aScene, GUI::Cursor* aCursor)
@@ -25,6 +26,7 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::PLAYER, eEntityType::DRAGON, Prism::eOctreeType::DYNAMIC,
 			aScene, { 20.f + i, 0.f, 20.f }, aTerrain));
 	}
+	myBuilding = EntityFactory::CreateEntity(eOwnerType::PLAYER, eEntityType::BASE_BUILING, Prism::eOctreeType::STATIC, aScene, { 30, 0, 40 }, aTerrain);
 	Prism::ModelLoader::GetInstance()->Pause();
 	myGUIManager = new GUI::GUIManager(aCursor, "Data/Resource/GUI/GUI_ingame.xml", mySelectedUnits);
 	Prism::ModelLoader::GetInstance()->UnPause();
@@ -49,6 +51,8 @@ void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 
 	Director::Update(aDeltaTime);
 	UpdateMouseInteraction(aCamera);
+
+	myBuilding->Update(aDeltaTime);
 
 	if (myRenderGUI == true)
 	{
@@ -76,6 +80,21 @@ void PlayerDirector::SpawnUnit(Prism::Scene& aScene)
 		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::PLAYER, eEntityType::DRAGON, Prism::eOctreeType::DYNAMIC,
 			aScene, { 20.f, 0.f, 20.f }, myTerrain));
 		PollingStation::GetInstance()->RegisterEntity(myUnits.GetLast());
+	}
+}
+
+void PlayerDirector::ReceiveMessage(const SpawnUnitMessage& aMessage)
+{
+	if (aMessage.myOwnerType != static_cast<int>(eOwnerType::PLAYER)) return;
+	if (myUnits.Size() < 64)
+	{
+		Prism::MemoryTracker::GetInstance()->SetRunTime(false);
+		Prism::ModelLoader::GetInstance()->Pause();
+		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::PLAYER, static_cast<eEntityType>(aMessage.myUnitType), Prism::eOctreeType::DYNAMIC,
+			aMessage.myScene, myBuilding->GetOrientation().GetPos() + CU::Vector3f(2.f, 0.f, 2.f), myTerrain));
+		PollingStation::GetInstance()->RegisterEntity(myUnits.GetLast());
+		Prism::MemoryTracker::GetInstance()->SetRunTime(true);
+		Prism::ModelLoader::GetInstance()->UnPause();
 	}
 }
 
@@ -159,7 +178,7 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 	{
 		leftClicked = CU::InputWrapper::GetInstance()->MouseDown(0);
 	}
-	
+
 	if (leftClicked == true && shiftPressed == false)
 	{
 		mySelectedUnits.RemoveAll();
@@ -185,6 +204,7 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 			}
 		}
 	}
+	SelectOrHoverEntity(myBuilding, hasSelected, hasHovered, line);
 }
 
 void PlayerDirector::SelectOrHoverEntity(Entity* aEntity, bool &aSelected, bool &aHovered
@@ -200,7 +220,7 @@ void PlayerDirector::SelectOrHoverEntity(Entity* aEntity, bool &aSelected, bool 
 		leftClicked = CU::InputWrapper::GetInstance()->MouseDown(0);
 	}
 
-	bool hasPressedShift = CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_LSHIFT) 
+	bool hasPressedShift = CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_LSHIFT)
 		|| CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_RSHIFT);
 	bool mouseOnUnit = aEntity->GetComponent<CollisionComponent>()->Collide(aMouseRay);
 
