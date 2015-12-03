@@ -27,6 +27,8 @@ public:
 
 	void SpawnUnit(Prism::Scene& aScene);
 
+	void SelectUnit(Entity* anEntity);
+
 private:
 	CU::Vector3<float> CalcCursorWorldPosition(const Prism::Camera& aCamera);
 	void UpdateMouseInteraction(const Prism::Camera& aCamera);

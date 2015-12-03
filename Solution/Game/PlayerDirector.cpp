@@ -79,6 +79,20 @@ void PlayerDirector::SpawnUnit(Prism::Scene& aScene)
 	}
 }
 
+void PlayerDirector::SelectUnit(Entity* anEntity)
+{
+	for (int i = 0; i < mySelectedUnits.Size(); i++)
+	{
+		if (mySelectedUnits[i] == anEntity)
+		{
+			return;
+		}
+	}
+
+	anEntity->SetSelect(true);
+	mySelectedUnits.Add(anEntity);
+}
+
 CU::Vector3<float> PlayerDirector::CalcCursorWorldPosition(const Prism::Camera& aCamera)
 {
 	CU::Vector2<float> inputPos(CU::InputWrapper::GetInstance()->GetMousePosition());
@@ -160,9 +174,8 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 		{
 			if (leftClicked == true && hasSelected == false)
 			{
-				myUnits[i]->SetSelect(true);
+				SelectUnit(myUnits[i]);
 				hasSelected = true;
-				mySelectedUnits.Add(myUnits[i]);
 			}
 			else if (hasHovered == false)
 			{
