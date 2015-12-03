@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+#include <BuildingComponent.h>
 #include <Camera.h>
 #include <CollisionComponent.h>
 #include <ControllerComponent.h>
@@ -75,12 +76,14 @@ void PlayerDirector::OnResize(int aWidth, int aHeight)
 
 void PlayerDirector::SpawnUnit(Prism::Scene& aScene)
 {
-	if (myUnits.Size() < 64)
-	{
-		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::PLAYER, eEntityType::DRAGON, Prism::eOctreeType::DYNAMIC,
-			aScene, { 20.f, 0.f, 20.f }, myTerrain));
-		PollingStation::GetInstance()->RegisterEntity(myUnits.GetLast());
-	}
+	myBuilding->GetComponent<BuildingComponent>()->BuildUnit(eEntityType::DRAGON);
+
+	//if (myUnits.Size() < 64)
+	//{
+	//	myUnits.Add(EntityFactory::CreateEntity(eOwnerType::PLAYER, eEntityType::DRAGON, Prism::eOctreeType::DYNAMIC,
+	//		aScene, { 20.f, 0.f, 20.f }, myTerrain));
+	//	PollingStation::GetInstance()->RegisterEntity(myUnits.GetLast());
+	//}
 }
 
 void PlayerDirector::ReceiveMessage(const SpawnUnitMessage& aMessage)

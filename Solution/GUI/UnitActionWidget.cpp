@@ -13,6 +13,7 @@ namespace GUI
 		, myUnitActionButtons(nullptr)
 		, myBuildingActionButtons(nullptr)
 		, myIsUnitSelected(false)
+		, mySelectedType(eEntityType::_COUNT)
 	{
 		CU::Vector2<float> size;
 		CU::Vector2<float> position;
@@ -43,7 +44,22 @@ namespace GUI
 		}
 		myUnitActionButtons = container;
 
-		// load in building actions
+		tinyxml2::XMLElement* buildingElement = aReader->ForceFindFirstChild(anXMLElement, "building");
+		GUI::WidgetContainer* buildingContainer = new WidgetContainer(nullptr, size);
+		tinyxml2::XMLElement* buildingWidgetElement = aReader->FindFirstChild(buildingElement, "widget");
+		for (; buildingWidgetElement != nullptr; buildingWidgetElement = aReader->FindNextElement(buildingWidgetElement))
+		{
+			std::string type = "";
+
+			aReader->ForceReadAttribute(buildingWidgetElement, "type", type);
+
+			if (type == "button")
+			{
+				ButtonWidget* button = new ButtonWidget(aReader, buildingWidgetElement);
+				buildingContainer->AddWidget(button);
+			}
+		}
+		myBuildingActionButtons = buildingContainer;
 	}
 
 	UnitActionWidget::~UnitActionWidget()
@@ -56,7 +72,14 @@ namespace GUI
 	{
 		if (myIsUnitSelected == true)
 		{
-			myUnitActionButtons->Render(myPosition + aParentPosition);
+			if (mySelectedType == eEntityType::DRAGON)
+			{
+				myUnitActionButtons->Render(myPosition + aParentPosition);
+			}
+			else if (mySelectedType == eEntityType::BASE_BUILING)
+			{
+				myBuildingActionButtons->Render(myPosition + aParentPosition);
+			}
 		}
 	}
 
@@ -65,14 +88,24 @@ namespace GUI
 		Widget::Update();
 
 		myIsUnitSelected = myUnits.Size() > 0;
-
+		if (myIsUnitSelected == true)
+		{
+			mySelectedType = myUnits[0]->GetType();
+		}
 	}
 
 	Widget* UnitActionWidget::MouseIsOver(const CU::Vector2<float>& aPosition)
 	{
 		if (myIsUnitSelected == true)
 		{
-			return myUnitActionButtons->MouseIsOver(aPosition - myPosition);
+			if (mySelectedType == eEntityType::DRAGON)
+			{
+				return myUnitActionButtons->MouseIsOver(aPosition - myPosition);
+			}
+			else if (mySelectedType == eEntityType::BASE_BUILING)
+			{
+				return myBuildingActionButtons->MouseIsOver(aPosition - myPosition);
+			}
 		}
 		return nullptr;
 	}
@@ -81,5 +114,6 @@ namespace GUI
 	{
 		Widget::OnResize(aNewWindowSize, anOldWindowSize);
 		myUnitActionButtons->OnResize(aNewWindowSize, anOldWindowSize);
+		myBuildingActionButtons->OnResize(aNewWindowSize, anOldWindowSize);
 	}
 }
