@@ -13,7 +13,9 @@ namespace CU
 	namespace Intersection
 	{
 		//2D
-		bool LineVsLine(LineSegment2D aLine1, LineSegment2D aLine2, CU::Vector2<float>& aIntersectionPoint);
+		bool LineSegmentVsLineSegment(const LineSegment2D& aLine1, const LineSegment2D& aLine2, CU::Vector2<float>& aIntersectionPoint);
+		bool LineVsLineSegment(const LineSegment2D& aLine, const LineSegment2D& aLineSegment, CU::Vector2<float>& aIntersectionPoint);
+		bool PointInsideTriangle(const Vector2<float>& aPoint, const Vector2<float>& aTriangle1, const Vector2<float>& aTriangle2, const Vector2<float>& aTriangle3);
 		bool PointVsRect(Vector2<float> aPoint, Vector2<float> aRectTopLeft, Vector2<float> aRectBottomRight);
 		bool CircleVsCircle(Vector2<float> aCenter1, float aRadius1, Vector2<float> aCenter2, float aRadius2);
 		bool CircleVsRect(Vector2<float> aCenter, float aRadius, Vector2<float> aRectTopLeft, Vector2<float> aRectBottomRight);
@@ -41,6 +43,22 @@ namespace CU
 		return false;
 	}
 
+	static float sign(const Vector2<float>& p1, const Vector2<float>& p2, const Vector2<float>& p3)
+	{
+		return (p1.x - p3.x) * (p2.y - p3.y) - (p2.x - p3.x) * (p1.y - p3.y);
+	}
+
+	inline bool Intersection::PointInsideTriangle(const Vector2<float>& aPoint, const Vector2<float>& aTriangle1, const Vector2<float>& aTriangle2, const Vector2<float>& aTriangle3)
+	{
+		bool b1, b2, b3;
+
+		b1 = sign(aPoint, aTriangle1, aTriangle2) < 0.0f;
+		b2 = sign(aPoint, aTriangle2, aTriangle3) < 0.0f;
+		b3 = sign(aPoint, aTriangle3, aTriangle1) < 0.0f;
+
+		return ((b1 == b2) && (b2 == b3));
+	}
+
 	inline bool Intersection::PointVsRect(Vector2<float> aPoint, Vector2<float> aRectTopLeft, Vector2<float> aRectBottomRight)
 	{
 		if (aPoint.x < aRectTopLeft.x) return false;
@@ -56,10 +74,10 @@ namespace CU
 		return PointVsRect(aCenter, Vector2<float>(aRectTopLeft.x - aRadius, aRectTopLeft.y - aRadius), Vector2<float>(aRectBottomRight.x + aRadius, aRectBottomRight.y + aRadius));
 	}
 
-	inline bool Intersection::LineVsLine(LineSegment2D aLine1, LineSegment2D aLine2, CU::Vector2<float>& aIntersectionPoint)
+	inline bool Intersection::LineSegmentVsLineSegment(const LineSegment2D& aLine1, const LineSegment2D& aLine2, CU::Vector2<float>& aIntersectionPoint)
 	{
 		CU::Line<float> line1(aLine1.myStartPos, aLine1.myEndPos);
-		CU::Line<float> line2(aLine2.myStartPos, aLine2.myEndPos); 
+		CU::Line<float> line2(aLine2.myStartPos, aLine2.myEndPos);
 
 
 		float numX = line2.myABC.y * line1.myABC.z - line1.myABC.y * line2.myABC.z;
@@ -132,6 +150,78 @@ namespace CU
 		CU::Vector2<float> v2(aLine2.myEndPos - aLine2.myStartPos);
 
 		CU::Vector2<float> v2intersect(aIntersectionPoint - aLine2.myStartPos);
+
+		if (CU::Dot(v2, v2intersect) < 0 || CU::Length2(v2intersect) > CU::Length2(v2))
+		{
+			return false;
+		}
+
+		return true;
+	}
+
+	inline bool Intersection::LineVsLineSegment(const LineSegment2D& aLine, const LineSegment2D& aLineSegment, CU::Vector2<float>& aIntersectionPoint)
+	{
+		CU::Line<float> line1(aLine.myStartPos, aLine.myEndPos);
+		CU::Line<float> line2(aLineSegment.myStartPos, aLineSegment.myEndPos);
+
+
+		float numX = line2.myABC.y * line1.myABC.z - line1.myABC.y * line2.myABC.z;
+		float denX = line1.myABC.x * line2.myABC.y - line2.myABC.x * line1.myABC.y;
+
+		float numY = line1.myABC.x * line2.myABC.z - line2.myABC.x * line1.myABC.z;
+		float denY = line1.myABC.x * line2.myABC.y - line2.myABC.x * line1.myABC.y;
+
+		if (denX == 0 || denY == 0)
+		{
+			if (line1.myABC.z != line2.myABC.z)
+			{
+				return false;
+			}
+
+			// check segment overlap
+
+			CU::Vector2<float> dir1 = aLine.myEndPos - aLine.myStartPos;
+			CU::Vector2<float> dir2 = aLineSegment.myEndPos - aLineSegment.myStartPos;
+
+			float lengthDir1 = CU::Length(dir1);
+			dir1 /= lengthDir1;
+
+			float lengthDir2 = CU::Length(dir2);
+			dir2 /= lengthDir2;
+
+			if (CU::Dot(dir1, aLineSegment.myEndPos - aLine.myStartPos) < lengthDir1 &&
+				CU::Dot(dir1, aLineSegment.myEndPos - aLine.myStartPos) > 0)
+			{
+				aIntersectionPoint = aLineSegment.myEndPos;
+				return true;
+			}
+
+			if (CU::Dot(dir1, aLineSegment.myStartPos - aLine.myStartPos) < lengthDir1 &&
+				CU::Dot(dir1, aLineSegment.myStartPos - aLine.myStartPos) > 0)
+			{
+				aIntersectionPoint = aLineSegment.myStartPos;
+				return true;
+			}
+
+			aIntersectionPoint = aLineSegment.myStartPos;
+			return true;
+		}
+
+		aIntersectionPoint = CU::Vector2<float>(numX / denX, numY / denY);
+
+
+		//CU::Vector2<float> v1(aLine.myEndPos - aLine.myStartPos);
+
+		//CU::Vector2<float> v1intersect(aIntersectionPoint - aLine.myStartPos);
+
+		//if (CU::Dot(v1, v1intersect) < 0 || CU::Length2(v1intersect) > CU::Length2(v1))
+		//{
+		//	return false;
+		//}
+
+		CU::Vector2<float> v2(aLineSegment.myEndPos - aLineSegment.myStartPos);
+
+		CU::Vector2<float> v2intersect(aIntersectionPoint - aLineSegment.myStartPos);
 
 		if (CU::Dot(v2, v2intersect) < 0 || CU::Length2(v2intersect) > CU::Length2(v2))
 		{

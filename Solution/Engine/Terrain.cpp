@@ -12,6 +12,7 @@
 #include "Engine.h"
 #include "IndexBufferWrapper.h"
 #include <MathHelper.h>
+#include "NavMesh.h"
 #include "Surface.h"
 #include "TextureContainer.h"
 #include "VertexBufferWrapper.h"
@@ -72,7 +73,9 @@ namespace Prism
 
 	Terrain::~Terrain()
 	{
-		delete myHeightMap;
+		SAFE_DELETE(myHeightMap);
+		SAFE_DELETE(myPathFinder);
+		SAFE_DELETE(myNavMesh);
 	}
 
 	void Terrain::Render(const Camera& aCamera)
@@ -82,6 +85,8 @@ namespace Prism
 		myEffect->SetWorldMatrix(world);
 		myEffect->SetViewProjectionMatrix(aCamera.GetViewProjection());
 		BaseModel::Render();
+
+		myNavMesh->Render();
 	}
 
 	void Terrain::CalcEntityHeight(CU::Matrix44<float>& anOrientation) const
@@ -135,7 +140,7 @@ namespace Prism
 
 	void Terrain::CreateNavMesh()
 	{
-		bool notImpYet = true;
+		myNavMesh = new Navigation::NavMesh();
 	}
 
 	void Terrain::CreatePathFinder()

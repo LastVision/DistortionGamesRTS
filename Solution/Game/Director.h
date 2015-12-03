@@ -32,6 +32,7 @@ public:
 	virtual void ReceiveMessage(const SpawnUnitMessage& aMessage) override;
 protected:
 	CU::GrowingArray<Entity*> myUnits;
+	CU::GrowingArray<Entity*> myActiveUnits;
 	Entity* myBuilding;
 	const eDirectorType myDirectorType;
 	const Prism::Terrain& myTerrain;

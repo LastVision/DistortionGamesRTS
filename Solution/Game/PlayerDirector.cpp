@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+#include <BuildingComponent.h>
 #include <Camera.h>
 #include <CollisionComponent.h>
 #include <ControllerComponent.h>
@@ -21,12 +22,14 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 	, myGUIManager(nullptr)
 	, mySelectedUnits(56)
 {
-	for (int i = 0; i < 1; ++i)
+	for (int i = 0; i < 64; ++i)
 	{
 		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::PLAYER, eEntityType::DRAGON, Prism::eOctreeType::DYNAMIC,
 			aScene, { 20.f + i, 0.f, 20.f }, aTerrain));
 	}
 	myBuilding = EntityFactory::CreateEntity(eOwnerType::PLAYER, eEntityType::BASE_BUILING, Prism::eOctreeType::STATIC, aScene, { 30, 0, 40 }, aTerrain);
+	myBuilding->AddToScene();
+	myBuilding->Reset();
 	Prism::ModelLoader::GetInstance()->Pause();
 	myGUIManager = new GUI::GUIManager(aCursor, "Data/Resource/GUI/GUI_ingame.xml", mySelectedUnits);
 	Prism::ModelLoader::GetInstance()->UnPause();
@@ -75,31 +78,41 @@ void PlayerDirector::OnResize(int aWidth, int aHeight)
 
 void PlayerDirector::SpawnUnit(Prism::Scene& aScene)
 {
-	if (myUnits.Size() < 64)
-	{
-		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::PLAYER, eEntityType::DRAGON, Prism::eOctreeType::DYNAMIC,
-			aScene, { 20.f, 0.f, 20.f }, myTerrain));
-		PollingStation::GetInstance()->RegisterEntity(myUnits.GetLast());
-	}
+	myBuilding->GetComponent<BuildingComponent>()->BuildUnit(eEntityType::DRAGON);
+
+	//if (myUnits.Size() < 64)
+	//{
+	//	myUnits.Add(EntityFactory::CreateEntity(eOwnerType::PLAYER, eEntityType::DRAGON, Prism::eOctreeType::DYNAMIC,
+	//		aScene, { 20.f, 0.f, 20.f }, myTerrain));
+	//	PollingStation::GetInstance()->RegisterEntity(myUnits.GetLast());
+	//}
 }
 
 void PlayerDirector::ReceiveMessage(const SpawnUnitMessage& aMessage)
 {
 	if (aMessage.myOwnerType != static_cast<int>(eOwnerType::PLAYER)) return;
-	if (myUnits.Size() < 64)
+	if (myActiveUnits.Size() < 64)
 	{
-		Prism::MemoryTracker::GetInstance()->SetRunTime(false);
-		Prism::ModelLoader::GetInstance()->Pause();
-		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::PLAYER, static_cast<eEntityType>(aMessage.myUnitType), Prism::eOctreeType::DYNAMIC,
-			aMessage.myScene, myBuilding->GetOrientation().GetPos() + CU::Vector3f(2.f, 0.f, 2.f), myTerrain));
+		for (int i = 0; i < myUnits.Size(); ++i)
+		{
+			if (myUnits[i]->GetType() == static_cast<eEntityType>(aMessage.myUnitType) && myUnits[i]->GetAlive() == false)
+			{
+				myUnits[i]->Spawn(myBuilding->GetOrientation().GetPos() + CU::Vector3f(2.f, 0.f, 2.f));
+				myActiveUnits.Add(myUnits[i]);
+				break;
+			}
+		}
 		PollingStation::GetInstance()->RegisterEntity(myUnits.GetLast());
-		Prism::MemoryTracker::GetInstance()->SetRunTime(true);
-		Prism::ModelLoader::GetInstance()->UnPause();
 	}
 }
 
 void PlayerDirector::SelectUnit(Entity* anEntity)
 {
+	if (mySelectedUnits.Size() > 0 && mySelectedUnits[0]->GetType() != anEntity->GetType())
+	{
+		return;
+	}
+
 	for (int i = 0; i < mySelectedUnits.Size(); i++)
 	{
 		if (mySelectedUnits[i] == anEntity)
@@ -195,7 +208,14 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 				ControllerComponent* controller = myUnits[i]->GetComponent<ControllerComponent>();
 				if (hoveredEnemy == nullptr)
 				{
-					controller->MoveTo(targetPos, !shiftPressed);
+					if (shiftPressed == true)
+					{
+						controller->MoveTo(targetPos, false);
+					}
+					else
+					{
+						controller->AttackMove(targetPos);
+					}
 				}
 				else
 				{
@@ -236,7 +256,7 @@ void PlayerDirector::SelectOrHoverEntity(Entity* aEntity, bool &aSelected, bool 
 		if (leftClicked == true && aSelected == false)
 		{
 			SelectUnit(aEntity);
-			aEntity->SetSelect(true);
+			//aEntity->SetSelect(true);
 			aSelected = true;
 		}
 		else if (aHovered == false)
