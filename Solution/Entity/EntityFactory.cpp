@@ -104,6 +104,12 @@ void EntityFactory::LoadEntity(const char* aEntityPath)
 
 			myComponentLoader->LoadControllerComponent(entityDocument, e, newData.myControllerData);
 		}
+		else if (elementName == CU::ToLower("HealthComponent"))
+		{
+			if (newData.myHealthData.myExistsInEntity == true) DL_ASSERT("You already have a HealthComponent");
+
+			myComponentLoader->LoadHealthComponent(entityDocument, e, newData.myHealthData);
+		}
 		else 
 		{
 			std::string errorMessage = "The component " + elementName + 

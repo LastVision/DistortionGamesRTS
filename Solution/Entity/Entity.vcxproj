@@ -94,6 +94,8 @@
     <ClInclude Include="EntityFactory.h" />
     <ClInclude Include="GraphicsComponent.h" />
     <ClInclude Include="GraphicsComponentData.h" />
+    <ClInclude Include="HealthComponent.h" />
+    <ClInclude Include="HealthComponentData.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
@@ -106,6 +108,7 @@
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="EntityFactory.cpp" />
     <ClCompile Include="GraphicsComponent.cpp" />
+    <ClCompile Include="HealthComponent.cpp" />
     <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>

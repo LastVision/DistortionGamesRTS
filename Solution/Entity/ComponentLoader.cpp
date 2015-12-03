@@ -7,6 +7,7 @@
 #include "ControllerComponentData.h"
 #include "CollisionComponentData.h"
 #include "GraphicsComponentData.h"
+#include "HealthComponentData.h"
 #include <XMLReader.h>
 
 void ComponentLoader::LoadAnimationComponent(XMLReader& aDocument, tinyxml2::XMLElement* aSourceElement, AnimationComponentData& aOutputData)
@@ -120,6 +121,24 @@ void ComponentLoader::LoadControllerComponent(XMLReader& aDocument, tinyxml2::XM
 		else if (elementName == CU::ToLower("AttackRange"))
 		{
 			aDocument.ForceReadAttribute(e, "value", aOutputData.myAttackRange);
+		}
+		else
+		{
+			FailedToReadChildElementMessage(e->Name(), aSourceElement->Name());
+		}
+	}
+}
+
+void ComponentLoader::LoadHealthComponent(XMLReader& aDocument, tinyxml2::XMLElement* aSourceElement, HealthComponentData& aOutputData)
+{
+	aOutputData.myExistsInEntity = true;
+
+	for (tinyxml2::XMLElement* e = aDocument.FindFirstChild(aSourceElement); e != nullptr; e = aDocument.FindNextElement(e))
+	{
+		std::string elementName = CU::ToLower(e->Name());
+		if (elementName == CU::ToLower("Health"))
+		{
+			aDocument.ForceReadAttribute(e, "value", aOutputData.myHealth);
 		}
 		else
 		{
