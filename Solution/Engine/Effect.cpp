@@ -366,22 +366,34 @@ namespace Prism
 			myAmbientHue = nullptr;
 		}
 
-		mySplatTexture1 = myEffect->GetVariableByName("mySplatTexture1")->AsShaderResource();
-		if (mySplatTexture1->IsValid() == false)
+		mySplatTextureBase = myEffect->GetVariableByName("mySplatTextureBase")->AsShaderResource();
+		if (mySplatTextureBase->IsValid() == false)
 		{
-			mySplatTexture1 = nullptr;
+			mySplatTextureBase = nullptr;
 		}
 
-		mySplatTexture2 = myEffect->GetVariableByName("mySplatTexture2")->AsShaderResource();
-		if (mySplatTexture2->IsValid() == false)
+		mySplatTextureR = myEffect->GetVariableByName("mySplatTextureR")->AsShaderResource();
+		if (mySplatTextureR->IsValid() == false)
 		{
-			mySplatTexture2 = nullptr;
+			mySplatTextureR = nullptr;
 		}
 
-		mySplatTexture3 = myEffect->GetVariableByName("mySplatTexture3")->AsShaderResource();
-		if (mySplatTexture3->IsValid() == false)
+		mySplatTextureG = myEffect->GetVariableByName("mySplatTextureG")->AsShaderResource();
+		if (mySplatTextureG->IsValid() == false)
 		{
-			mySplatTexture3 = nullptr;
+			mySplatTextureG = nullptr;
+		}
+
+		mySplatTextureB = myEffect->GetVariableByName("mySplatTextureB")->AsShaderResource();
+		if (mySplatTextureB->IsValid() == false)
+		{
+			mySplatTextureB = nullptr;
+		}
+
+		mySplatTextureA = myEffect->GetVariableByName("mySplatTextureA")->AsShaderResource();
+		if (mySplatTextureA->IsValid() == false)
+		{
+			mySplatTextureA = nullptr;
 		}
 
 		myBonesArray = myEffect->GetVariableByName("Bones")->AsMatrix();
@@ -401,19 +413,29 @@ namespace Prism
 		}
 	}
 
-	void Effect::SetSplatTexture1(const Texture* aSplatTexture)
+	void Effect::SetSplatTextureBase(const Texture* aSplatTexture)
 	{
-		mySplatTexture1->SetResource(aSplatTexture->GetShaderView());
+		mySplatTextureBase->SetResource(aSplatTexture->GetShaderView());
 	}
 
-	void Effect::SetSplatTexture2(const Texture* aSplatTexture)
+	void Effect::SetSplatTextureR(const Texture* aSplatTexture)
 	{
-		mySplatTexture2->SetResource(aSplatTexture->GetShaderView());
+		mySplatTextureR->SetResource(aSplatTexture->GetShaderView());
 	}
 
-	void Effect::SetSplatTexture3(const Texture* aSplatTexture)
+	void Effect::SetSplatTextureG(const Texture* aSplatTexture)
 	{
-		mySplatTexture3->SetResource(aSplatTexture->GetShaderView());
+		mySplatTextureG->SetResource(aSplatTexture->GetShaderView());
+	}
+
+	void Effect::SetSplatTextureB(const Texture* aSplatTexture)
+	{
+		mySplatTextureB->SetResource(aSplatTexture->GetShaderView());
+	}
+
+	void Effect::SetSplatTextureA(const Texture* aSplatTexture)
+	{
+		mySplatTextureA->SetResource(aSplatTexture->GetShaderView());
 	}
 
 }
