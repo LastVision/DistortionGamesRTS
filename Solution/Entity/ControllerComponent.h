@@ -39,6 +39,7 @@ private:
 		MOVE,
 		ATTACK,
 		ATTACK_MOVE,
+		CHASE,
 	};
 
 	void DoMoveAction(float aDelta);
@@ -49,9 +50,12 @@ private:
 	ControllerData myData;
 	CU::GrowingArray<CU::Vector3<float>> myWayPoints;
 	CU::Vector3<float> myCurrentWayPoint;
+	CU::Vector3<float> myLastMoveTarget;
+	CU::Vector3<float> myChaseOrigin;
 	const Prism::Terrain& myTerrain;
 	float myVisionRange;
 	float myAttackRange;
+	float myChaseDistance;
 };
 
 inline const ControllerComponent::ControllerData& ControllerComponent::GetControllerData() const

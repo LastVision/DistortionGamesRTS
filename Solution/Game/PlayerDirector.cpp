@@ -8,7 +8,7 @@
 #include <Intersection.h>
 #include <InputWrapper.h>
 #include "PlayerDirector.h"
-#include "PollingStation.h"
+#include <PollingStation.h>
 #include <Terrain.h>
 #include <ModelLoader.h>
 

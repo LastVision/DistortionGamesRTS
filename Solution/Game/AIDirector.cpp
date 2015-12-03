@@ -3,7 +3,7 @@
 #include <ControllerComponent.h>
 #include <Entity.h>
 #include <EntityFactory.h>
-#include "PollingStation.h"
+#include <PollingStation.h>
 
 AIDirector::AIDirector(const Prism::Terrain& aTerrain, Prism::Scene& aScene)
 	: Director(eDirectorType::AI, aTerrain)

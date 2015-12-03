@@ -6,6 +6,7 @@
 #include "ControllerComponentData.h"
 #include "HealthComponent.h"
 #include "Entity.h"
+#include "PollingStation.h"
 #include <Terrain.h>
 
 ControllerComponent::ControllerComponent(Entity& aEntity, ControllerComponentData& aData, const Prism::Terrain& aTerrain)
@@ -50,8 +51,67 @@ void ControllerComponent::Update(float aDelta)
 	}
 	else if (myCurrentAction == eAction::ATTACK_MOVE)
 	{
+		Entity* enemyInRange = PollingStation::GetInstance()->FindClosestEntity(myEntity.GetOrientation().GetPos()
+			, eOwnerType::ENEMY, myVisionRange);
+		if (enemyInRange != nullptr)
+		{
+			float distToTarget = CU::Length2(myAttackTarget->GetOrientation().GetPos() - myEntity.GetOrientation().GetPos());
+
+			if (distToTarget < myAttackRange)
+			{
+				DoAttackAction();
+			}
+			else if (distToTarget < myVisionRange)
+			{
+				myChaseOrigin = myEntity.GetOrientation().GetPos();
+				myCurrentAction = eAction::CHASE;
+				myAttackTarget = enemyInRange;
+			}
+			else
+			{
+				myWayPoints.RemoveAll();
+				myEntity.SetState(eEntityState::IDLE);
+				myWayPoints.Add(myAttackTarget->GetOrientation().GetPos());
+
+				DoMoveAction(aDelta);
+			}
+		}
+		else
+		{
+			DoMoveAction(aDelta);
+		}
+	}
+	else if (myCurrentAction == eAction::CHASE)
+	{
+		myWayPoints.RemoveAll();
+		myEntity.SetState(eEntityState::IDLE);
+		myWayPoints.Add(myAttackTarget->GetOrientation().GetPos());
+
+		DoMoveAction(aDelta);
+
+		float distFromChaseOrigin = CU::Length2(myAttackTarget->GetOrientation().GetPos() - myChaseOrigin);
 
 	}
+
+
+	//if (myCurrentAction == eAction::ATTACK_MOVE)
+	//{
+	//	Entity* enemyInVision = PollingStation::GetInstance()->FindClosestEntity(myEntity.GetOrientation().GetPos()
+	//		, eOwnerType::ENEMY, myVisionRange);
+
+	//	if (enemyInVision != nullptr)
+	//	{
+	//		//Start Moving towards enemy
+	//		myAttackTarget = enemyInVision;
+	//		myChaseOrigin = myEntity.GetOrientation().GetPos();
+	//		myCurrentAction = eAction::CHASE;
+	//	}
+	//	else
+	//	{
+	//		//Keep moving towards the clickposition
+	//		DoMoveAction(aDelta);
+	//	}
+	//}
 
 
 	if (myEntity.GetState() == eEntityState::WALKING)
@@ -96,6 +156,8 @@ void ControllerComponent::AttackMove(const CU::Vector3<float>& aPosition)
 	myWayPoints.Add(aPosition);
 	myAttackTarget = nullptr;
 	myCurrentAction = eAction::ATTACK_MOVE;
+
+	myLastMoveTarget = aPosition;
 }
 
 void ControllerComponent::Attack(Entity* aTarget)
