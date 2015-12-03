@@ -13,6 +13,9 @@
     <Filter Include="Message\StateMessage">
       <UniqueIdentifier>{d387a4d5-0a6e-4895-8fa3-78744878958f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Message\EntityMessage">
+      <UniqueIdentifier>{eacc85d7-2561-408f-bede-6bd45eda86f2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -47,6 +50,9 @@
     </ClInclude>
     <ClInclude Include="MoveCameraMessage.h">
       <Filter>Message</Filter>
+    </ClInclude>
+    <ClInclude Include="SpawnUnitMessage.h">
+      <Filter>Message\EntityMessage</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

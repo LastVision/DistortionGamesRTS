@@ -13,7 +13,6 @@ ActorComponent::ActorComponent(Entity& aEntity, ActorComponentData& aData, const
 {
 }
 
-
 ActorComponent::~ActorComponent()
 {
 }

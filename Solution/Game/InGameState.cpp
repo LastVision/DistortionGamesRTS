@@ -12,6 +12,7 @@
 #include "LevelFactory.h"
 #include <MemoryTracker.h>
 #include "MessageState.h"
+#include <ModelLoader.h>
 #include <OnClickMessage.h>
 #include <PostMaster.h>
 #include <TimerManager.h>
@@ -77,6 +78,8 @@ const eStateStatus InGameState::Update(const float& aDeltaTime)
 		return eStateStatus::ePopMainState;
 	}
 
+	
+
 	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_M) == true)
 	{
 		CompleteGame();
@@ -90,6 +93,15 @@ const eStateStatus InGameState::Update(const float& aDeltaTime)
 	if (myLevel->Update(aDeltaTime, *myCamera) == true)
 	{
 		//return myStateStatus;
+	}
+
+	if (myLevel->HasPlayerWon())
+	{
+		CompleteGame();
+	}
+	else if (myLevel->HasAIWon())
+	{
+		RestartLevel();
 	}
 
 	return myStateStatus;
@@ -115,7 +127,9 @@ void InGameState::ResumeState()
 
 void InGameState::OnResize(int aWidth, int aHeight)
 {
+	Prism::ModelLoader::GetInstance()->Pause();
 	myLevel->OnResize(aWidth, aHeight);
+	Prism::ModelLoader::GetInstance()->UnPause();
 }
 
 void InGameState::ReceiveMessage(const GameStateMessage& aMessage)

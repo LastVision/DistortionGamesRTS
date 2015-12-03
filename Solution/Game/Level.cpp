@@ -92,3 +92,13 @@ void Level::SpawnUnit()
 {
 	myPlayer->SpawnUnit(*myScene);
 }
+
+bool Level::HasPlayerWon() const
+{
+	return myAI->GetUnitCount() <= 0;
+}
+
+bool Level::HasAIWon() const
+{
+	return myPlayer->GetUnitCount() <= 0;
+}

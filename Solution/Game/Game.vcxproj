@@ -165,7 +165,6 @@
     <ClInclude Include="MainMenuState.h" />
     <ClInclude Include="MessageState.h" />
     <ClInclude Include="PlayerDirector.h" />
-    <ClInclude Include="PollingStation.h" />
     <ClInclude Include="StateEnums.h" />
     <ClInclude Include="StateStack.h" />
     <ClInclude Include="StateStackProxy.h" />
@@ -182,7 +181,6 @@
     <ClCompile Include="MainMenuState.cpp" />
     <ClCompile Include="MessageState.cpp" />
     <ClCompile Include="PlayerDirector.cpp" />
-    <ClCompile Include="PollingStation.cpp" />
     <ClCompile Include="StateStack.cpp" />
     <ClCompile Include="StateStackProxy.cpp" />
     <ClCompile Include="stdafx.cpp">

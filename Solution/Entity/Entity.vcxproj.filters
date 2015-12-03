@@ -79,6 +79,7 @@
     <ClCompile Include="HealthComponent.cpp">
       <Filter>Component\Health</Filter>
     </ClCompile>
+    <ClCompile Include="PollingStation.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -141,6 +142,10 @@
     </ClInclude>
     <ClInclude Include="HealthComponent.h">
       <Filter>Component\Health</Filter>
+    </ClInclude>
+    <ClInclude Include="PollingStation.h" />
+    <ClInclude Include="BuildingComponentData.h">
+      <Filter>EntityFactory\EntityData\ComponentData</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -42,7 +42,11 @@ public:
 	template <typename T>
 	void SendNote(const T& aNote);
 
+	void AddToScene();
+	void RemoveFromScene();
+
 	const CU::Matrix44<float>& GetOrientation() const;
+	void SetPosition(const CU::Vector3f& aPosition);
 	Prism::Scene& GetScene();
 	eOwnerType GetOwner() const;
 	eEntityType GetType() const;
@@ -51,6 +55,7 @@ public:
 	Prism::eOctreeType GetOctreeType() const;
 	bool GetAlive() const;
 	void Kill();
+	void Spawn(const CU::Vector3f& aSpawnPosition);
 	void Reset();
 
 	void SetSelect(bool aStatus);

@@ -1,7 +1,7 @@
 #include "stdafx.h"
 
-#include <CollisionComponent.h>
-#include <Entity.h>
+#include "CollisionComponent.h"
+#include "Entity.h"
 #include "PollingStation.h"
 
 PollingStation* PollingStation::myInstance = nullptr;
@@ -36,47 +36,39 @@ void PollingStation::RegisterEntity(Entity* aEntity)
 	}
 }
 
-Entity* PollingStation::FindClosestEntity(const CU::Vector3<float>& aPosition, eOwnerType aEntityOwner)
+Entity* PollingStation::FindClosestEntity(const CU::Vector3<float>& aPosition, eOwnerType aEntityOwner, float aMaxDistance)
 {
 	float bestDist = FLT_MAX;
 	float dist = 0;
 	Entity* entity = nullptr;
-	if (aEntityOwner == eOwnerType::PLAYER)
+	CU::GrowingArray<Entity*>* list = nullptr;
+	switch (aEntityOwner)
 	{
-		for (int i = 0; i < myPlayerUnits.Size(); ++i)
-		{
-			if (myPlayerUnits[i]->GetAlive() == true)
-			{
-				dist = CU::Length2(myPlayerUnits[i]->GetOrientation().GetPos() - aPosition);
-
-				if (dist < bestDist)
-				{
-					bestDist = dist;
-					entity = myPlayerUnits[i];
-				}
-			}
-		}
-	}
-	else if (aEntityOwner == eOwnerType::ENEMY)
-	{
-		for (int i = 0; i < myAIUnits.Size(); ++i)
-		{
-			if (myAIUnits[i]->GetAlive() == true)
-			{
-				dist = CU::Length2(myAIUnits[i]->GetOrientation().GetPos() - aPosition);
-
-				if (dist < bestDist)
-				{
-					bestDist = dist;
-					entity = myAIUnits[i];
-				}
-			}
-		}
-	}
-	else
-	{
+	case PLAYER:
+		list = &myPlayerUnits;
+		break;
+	case ENEMY:
+		list = &myAIUnits;
+		break;
+	default:
 		DL_ASSERT("PollingStation tried to FindClosestEntity of an unknown type");
+		break;
 	}
+
+	for (int i = 0; i < (*list).Size(); ++i)
+	{
+		if ((*list)[i]->GetAlive() == true)
+		{
+			dist = CU::Length2((*list)[i]->GetOrientation().GetPos() - aPosition);
+
+			if (dist < bestDist && dist < aMaxDistance)
+			{
+				bestDist = dist;
+				entity = (*list)[i];
+			}
+		}
+	}
+
 
 	return entity;
 }
@@ -92,12 +84,12 @@ Entity* PollingStation::FindEntityAtPosition(const CU::Vector3<float>& aPosition
 		{
 			if (myPlayerUnits[i]->GetAlive() == true)
 			{
-				 collision = myPlayerUnits[i]->GetComponent<CollisionComponent>();
-				 if (collision != nullptr && collision->Collide(aPosition))
-				 {
-					 entity = myPlayerUnits[i];
-					 break;
-				 }
+				collision = myPlayerUnits[i]->GetComponent<CollisionComponent>();
+				if (collision != nullptr && collision->Collide(aPosition))
+				{
+					entity = myPlayerUnits[i];
+					break;
+				}
 			}
 		}
 	}
@@ -122,7 +114,7 @@ Entity* PollingStation::FindEntityAtPosition(const CU::Vector3<float>& aPosition
 
 void PollingStation::CleanUp()
 {
-	for (int i = myPlayerUnits.Size()-1; i >= 0; --i)
+	for (int i = myPlayerUnits.Size() - 1; i >= 0; --i)
 	{
 		if (myPlayerUnits[i]->GetAlive() == false)
 		{

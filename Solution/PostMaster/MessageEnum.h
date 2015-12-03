@@ -6,5 +6,6 @@ enum class eMessageType
 	RESIZE,
 	ON_CLICK,
 	MOVE_CAMERA,
+	SPAWN_UNIT,
 	COUNT,
 };

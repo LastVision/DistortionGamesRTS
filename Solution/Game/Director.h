@@ -1,6 +1,7 @@
 #pragma once
 
 #include <GrowingArray.h>
+#include <Subscriber.h>
 
 class Entity;
 
@@ -16,7 +17,7 @@ namespace Prism
 	class Terrain;
 }
 
-class Director
+class Director : public Subscriber
 {
 public:
 	Director(eDirectorType aDirectorType, const Prism::Terrain& aTerrain);
@@ -25,9 +26,14 @@ public:
 	virtual void Update(float aDeltaTime);
 
 	void CleanUp();
+
+	int GetUnitCount() const;
 	
+	virtual void ReceiveMessage(const SpawnUnitMessage& aMessage) override;
 protected:
 	CU::GrowingArray<Entity*> myUnits;
+	CU::GrowingArray<Entity*> myActiveUnits;
+	Entity* myBuilding;
 	const eDirectorType myDirectorType;
 	const Prism::Terrain& myTerrain;
 
@@ -35,3 +41,7 @@ private:
 	void operator=(Director&) = delete;
 };
 
+inline int Director::GetUnitCount() const
+{
+	return myUnits.Size();
+}

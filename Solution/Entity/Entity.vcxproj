@@ -54,7 +54,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PrecompiledHeader>Create</PrecompiledHeader>
-      <AdditionalIncludeDirectories>$(SolutionDir)\Memory;$(SolutionDir)\CommonUtilities;$(SolutionDir)\DL_Debug;$(SolutionDir)\Engine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\Memory;$(SolutionDir)\CommonUtilities;$(SolutionDir)\DL_Debug;$(SolutionDir)\Engine;$(SolutionDir)\PostMaster;$(SolutionDir)\InputWrapper;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -68,7 +68,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PrecompiledHeader>Create</PrecompiledHeader>
-      <AdditionalIncludeDirectories>$(SolutionDir)\Memory;$(SolutionDir)\CommonUtilities;$(SolutionDir)\DL_Debug;$(SolutionDir)\Engine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\Memory;$(SolutionDir)\CommonUtilities;$(SolutionDir)\DL_Debug;$(SolutionDir)\Engine;$(SolutionDir)\PostMaster;$(SolutionDir)\InputWrapper;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -82,6 +82,7 @@
     <ClInclude Include="AnimationComponent.h" />
     <ClInclude Include="AnimationComponentData.h" />
     <ClInclude Include="BuildingComponent.h" />
+    <ClInclude Include="BuildingComponentData.h" />
     <ClInclude Include="CollisionComponent.h" />
     <ClInclude Include="CollisionComponentData.h" />
     <ClInclude Include="Component.h" />
@@ -97,6 +98,7 @@
     <ClInclude Include="GraphicsComponentData.h" />
     <ClInclude Include="HealthComponent.h" />
     <ClInclude Include="HealthComponentData.h" />
+    <ClInclude Include="PollingStation.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
@@ -111,6 +113,7 @@
     <ClCompile Include="EntityFactory.cpp" />
     <ClCompile Include="GraphicsComponent.cpp" />
     <ClCompile Include="HealthComponent.cpp" />
+    <ClCompile Include="PollingStation.cpp" />
     <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
