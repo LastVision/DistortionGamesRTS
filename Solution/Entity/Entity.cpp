@@ -152,3 +152,10 @@ bool Entity::IsHovered() const
 {
 	return myHovered;
 }
+
+CU::GrowingArray<CU::Vector2<float>> Entity::GetCutMesh() const
+{
+	CU::GrowingArray<CU::Vector2<float>> points(8);
+	bool notImpYet = true;
+	return points;
+}

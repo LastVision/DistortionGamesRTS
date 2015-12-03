@@ -129,6 +129,16 @@ namespace Prism
 		return intersectionPosition;
 	}
 
+	void Terrain::CreateNavMesh()
+	{
+		bool notImpYet = true;
+	}
+
+	void Terrain::CreatePathFinder()
+	{
+		bool notImpYet = true;
+	}
+
 	void Terrain::CreateVertices()
 	{
 		CU::GrowingArray<VertexPosNormUV> vertices(myHeightMap->myWidth * myHeightMap->myDepth);
