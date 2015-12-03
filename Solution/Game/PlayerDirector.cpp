@@ -137,11 +137,13 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 
 	bool hasSelected = false;
 	bool hasHovered = false;
+	bool hasPressedShift = CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_LSHIFT) || CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_RSHIFT);
+	
 	for (int i = 0; i < myUnits.Size(); ++i)
 	{
 		bool mouseOnUnit = myUnits[i]->GetComponent<CollisionComponent>()->Collide(line);
 
-		if (leftClicked == true)
+		if (leftClicked == true && hasPressedShift == false)
 		{
 			myUnits[i]->SetSelect(false);
 		}
