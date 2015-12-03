@@ -40,14 +40,11 @@ namespace GUI
 
 		for (int i = 0; i < myUnits.Size(); i++)
 		{
-			if (myUnits[i] != nullptr && myUnits[i]->IsSelected() == true)
-			{
-				CU::Vector2<float> position = { myPosition.x + myUnitPortrait->GetSize().x * amountToRender, myPosition.y };
-				position += aParentPosition;
-				myUnitPortrait->Render(position);
-				amountToRender++;
-				// render health
-			}
+			CU::Vector2<float> position = { myPosition.x + myUnitPortrait->GetSize().x * amountToRender, myPosition.y };
+			position += aParentPosition;
+			myUnitPortrait->Render(position);
+			amountToRender++;
+			// render health
 		}
 	}
 

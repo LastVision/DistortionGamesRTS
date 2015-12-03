@@ -35,12 +35,16 @@ namespace Prism
 			->GetTexture("Data/Resource/Texture/Terrain/SplatMap/T_InfluenceToSplatMap.dds");
 		myEffect->SetTexture(influence);
 
-		myEffect->SetSplatTexture1(Prism::TextureContainer::GetInstance()
-			->GetTexture("Data/Resource/Texture/Terrain/SplatMap/T_Splat1.dds"));
-		myEffect->SetSplatTexture2(Prism::TextureContainer::GetInstance()
-			->GetTexture("Data/Resource/Texture/Terrain/SplatMap/T_Splat2.dds"));
-		myEffect->SetSplatTexture3(Prism::TextureContainer::GetInstance()
-			->GetTexture("Data/Resource/Texture/Terrain/SplatMap/T_Splat3.dds"));
+		myEffect->SetSplatTextureBase(Prism::TextureContainer::GetInstance()
+			->GetTexture("Data/Resource/Texture/Terrain/SplatMap/T_SplatBase.dds"));
+		myEffect->SetSplatTextureR(Prism::TextureContainer::GetInstance()
+			->GetTexture("Data/Resource/Texture/Terrain/SplatMap/T_SplatR.dds"));
+		myEffect->SetSplatTextureG(Prism::TextureContainer::GetInstance()
+			->GetTexture("Data/Resource/Texture/Terrain/SplatMap/T_SplatG.dds"));
+		myEffect->SetSplatTextureB(Prism::TextureContainer::GetInstance()
+			->GetTexture("Data/Resource/Texture/Terrain/SplatMap/T_SplatB.dds"));
+		myEffect->SetSplatTextureA(Prism::TextureContainer::GetInstance()
+			->GetTexture("Data/Resource/Texture/Terrain/SplatMap/T_SplatA.dds"));
 
 
 		D3D11_INPUT_ELEMENT_DESC vertexDesc[] =

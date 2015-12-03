@@ -64,9 +64,11 @@ namespace Prism
 		void SetAmbientHue(CU::Vector4f aVector);
 		void SetBones(const CU::StaticArray<CU::Matrix44<float>, MAX_NR_OF_BONES>& someBones);
 
-		void SetSplatTexture1(const Texture* aSplatTexture);
-		void SetSplatTexture2(const Texture* aSplatTexture);
-		void SetSplatTexture3(const Texture* aSplatTexture);
+		void SetSplatTextureBase(const Texture* aSplatTexture);
+		void SetSplatTextureR(const Texture* aSplatTexture);
+		void SetSplatTextureG(const Texture* aSplatTexture);
+		void SetSplatTextureB(const Texture* aSplatTexture);
+		void SetSplatTextureA(const Texture* aSplatTexture);
 
 	private:
 		ID3DX11Effect* myEffect;
@@ -101,9 +103,11 @@ namespace Prism
 		ID3DX11EffectScalarVariable* myStreakStartAlpha;
 		ID3DX11EffectScalarVariable* myStreakAlphaDelta;
 
-		ID3DX11EffectShaderResourceVariable* mySplatTexture1;
-		ID3DX11EffectShaderResourceVariable* mySplatTexture2;
-		ID3DX11EffectShaderResourceVariable* mySplatTexture3;
+		ID3DX11EffectShaderResourceVariable* mySplatTextureBase;
+		ID3DX11EffectShaderResourceVariable* mySplatTextureR;
+		ID3DX11EffectShaderResourceVariable* mySplatTextureG;
+		ID3DX11EffectShaderResourceVariable* mySplatTextureB;
+		ID3DX11EffectShaderResourceVariable* mySplatTextureA;
 
 		ID3DX11EffectMatrixVariable* myBonesArray;
 

@@ -64,15 +64,8 @@ namespace GUI
 	{
 		Widget::Update();
 
-		myIsUnitSelected = false;
+		myIsUnitSelected = myUnits.Size() > 0;
 
-		for (int i = 0; i < myUnits.Size(); i++)
-		{
-			if (myUnits[i] != nullptr && myUnits[i]->IsSelected() == true)
-			{
-				myIsUnitSelected = true;
-			}
-		}
 	}
 
 	Widget* UnitActionWidget::MouseIsOver(const CU::Vector2<float>& aPosition)
