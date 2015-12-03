@@ -7,6 +7,12 @@
 
 namespace Prism
 {
+	namespace Navigation
+	{
+		class NavMesh;
+		class PathFinder;
+	}
+
 	class Camera;
 
 	struct HeightMap;
@@ -28,6 +34,11 @@ namespace Prism
 		CU::Vector3<float> CalcIntersection(const CU::Vector3<float>& aCameraPos
 			, const CU::Vector3<float>& aRayCastToZero) const;
 
+		void CreateNavMesh();
+		Navigation::NavMesh* GetNavMesh() const;
+
+		void CreatePathFinder();
+
 	private:
 		void operator=(Terrain&) = delete;
 		void CreateVertices();
@@ -47,5 +58,13 @@ namespace Prism
 		VertexDataWrapper* myVertexBaseData;
 		float myCellSize;
 		int myVertexCount;
+
+		Navigation::NavMesh* myNavMesh;
+		Navigation::PathFinder* myPathFinder;
 	};
+
+	inline Navigation::NavMesh* Terrain::GetNavMesh() const
+	{
+		return myNavMesh;
+	}
 }
