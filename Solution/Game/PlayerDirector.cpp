@@ -125,7 +125,16 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 	CU::Vector3<float> targetPos = CalcCursorWorldPosition(aCamera);
 	CU::Intersection::LineSegment3D line(aCamera.GetOrientation().GetPos(), targetPos);
 
-	bool leftClicked = CU::InputWrapper::GetInstance()->MouseDown(0) && !(myGUIManager->MouseOverGUI());
+	bool leftClicked;
+	if (myRenderGUI == true) // no inworld clicking when mouse is over gui:
+	{
+		leftClicked = CU::InputWrapper::GetInstance()->MouseDown(0) && !(myGUIManager->MouseOverGUI()); 
+	}
+	else
+	{
+		leftClicked = CU::InputWrapper::GetInstance()->MouseDown(0);
+	}
+
 	bool hasSelected = false;
 	bool hasHovered = false;
 	for (int i = 0; i < myUnits.Size(); ++i)
