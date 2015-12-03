@@ -102,9 +102,6 @@
     <ClCompile Include="Tga32.cpp">
       <Filter>Tga32</Filter>
     </ClCompile>
-    <ClCompile Include="HeightMapFactory.cpp">
-      <Filter>Terrain</Filter>
-    </ClCompile>
     <ClCompile Include="Terrain.cpp">
       <Filter>Terrain</Filter>
     </ClCompile>
@@ -155,6 +152,21 @@
     </ClCompile>
     <ClCompile Include="AnimationProxy.cpp">
       <Filter>Rendering\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="NavMesh.cpp">
+      <Filter>Terrain\NavMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Triangle.cpp">
+      <Filter>Terrain\NavMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Edge.cpp">
+      <Filter>Terrain\NavMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="PathFinder.cpp">
+      <Filter>Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="HeightMapFactory.cpp">
+      <Filter>Terrain\HeightMap</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -292,12 +304,6 @@
     <ClInclude Include="Tga32.h">
       <Filter>Tga32</Filter>
     </ClInclude>
-    <ClInclude Include="HeightMap.h">
-      <Filter>Terrain</Filter>
-    </ClInclude>
-    <ClInclude Include="HeightMapFactory.h">
-      <Filter>Terrain</Filter>
-    </ClInclude>
     <ClInclude Include="Terrain.h">
       <Filter>Terrain</Filter>
     </ClInclude>
@@ -348,6 +354,30 @@
     </ClInclude>
     <ClInclude Include="AnimationProxy.h">
       <Filter>Rendering\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="NavMesh.h">
+      <Filter>Terrain\NavMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Vertex.h">
+      <Filter>Terrain\NavMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Triangle.h">
+      <Filter>Terrain\NavMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="LesserTriangle.h">
+      <Filter>Terrain\NavMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Edge.h">
+      <Filter>Terrain\NavMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="PathFinder.h">
+      <Filter>Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="HeightMap.h">
+      <Filter>Terrain\HeightMap</Filter>
+    </ClInclude>
+    <ClInclude Include="HeightMapFactory.h">
+      <Filter>Terrain\HeightMap</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -401,6 +431,12 @@
     </Filter>
     <Filter Include="DebugDrawer">
       <UniqueIdentifier>{0a5d9478-d6ff-4442-b478-3cdd050b3b17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Terrain\NavMesh">
+      <UniqueIdentifier>{da07f65d-ff39-43a5-9c69-5b9cfabc302f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Terrain\HeightMap">
+      <UniqueIdentifier>{3e004790-9556-49a3-a41f-68c87da4990a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
