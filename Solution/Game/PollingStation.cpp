@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+#include <CollisionComponent.h>
 #include <Entity.h>
 #include "PollingStation.h"
 
@@ -60,7 +61,7 @@ Entity* PollingStation::FindClosestEntity(const CU::Vector3<float>& aPosition, e
 	{
 		for (int i = 0; i < myAIUnits.Size(); ++i)
 		{
-			if (myPlayerUnits[i]->GetAlive() == true)
+			if (myAIUnits[i]->GetAlive() == true)
 			{
 				dist = CU::Length2(myAIUnits[i]->GetOrientation().GetPos() - aPosition);
 
@@ -75,6 +76,45 @@ Entity* PollingStation::FindClosestEntity(const CU::Vector3<float>& aPosition, e
 	else
 	{
 		DL_ASSERT("PollingStation tried to FindClosestEntity of an unknown type");
+	}
+
+	return entity;
+}
+
+Entity* PollingStation::FindEntityAtPosition(const CU::Vector3<float>& aPosition, eOwnerType aEntityOwner)
+{
+	Entity* entity = nullptr;
+	CollisionComponent* collision = nullptr;
+
+	if (aEntityOwner == eOwnerType::PLAYER)
+	{
+		for (int i = 0; i < myPlayerUnits.Size(); ++i)
+		{
+			if (myPlayerUnits[i]->GetAlive() == true)
+			{
+				 collision = myPlayerUnits[i]->GetComponent<CollisionComponent>();
+				 if (collision != nullptr && collision->Collide(aPosition))
+				 {
+					 entity = myPlayerUnits[i];
+					 break;
+				 }
+			}
+		}
+	}
+	else if (aEntityOwner == eOwnerType::ENEMY)
+	{
+		for (int i = 0; i < myAIUnits.Size(); ++i)
+		{
+			if (myAIUnits[i]->GetAlive() == true)
+			{
+				collision = myAIUnits[i]->GetComponent<CollisionComponent>();
+				if (collision != nullptr && collision->Collide(aPosition))
+				{
+					entity = myAIUnits[i];
+					break;
+				}
+			}
+		}
 	}
 
 	return entity;

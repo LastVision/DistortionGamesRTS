@@ -14,6 +14,7 @@ public:
 
 	void Update(float aDelta) override;
 	bool Collide(const CU::Intersection::LineSegment3D& aLine) const;
+	bool Collide(const CU::Vector3<float>& aPosition) const;
 
 	static eComponentType GetTypeStatic();
 	virtual eComponentType GetType();

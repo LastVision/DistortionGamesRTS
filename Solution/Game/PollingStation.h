@@ -13,6 +13,7 @@ public:
 	void RegisterEntity(Entity* aEntity);
 
 	Entity* FindClosestEntity(const CU::Vector3<float>& aPosition, eOwnerType aEntityOwner);
+	Entity* FindEntityAtPosition(const CU::Vector3<float>& aPosition, eOwnerType aEntityOwner);
 
 	void CleanUp();
 
