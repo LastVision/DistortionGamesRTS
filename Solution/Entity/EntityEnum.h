@@ -29,11 +29,12 @@ enum class eEntityState : int
 enum class eComponentType
 {
 	NOT_USED = -1,
-	CONTROLLER,
+	CONTROLLER, //Controller HAS to be above Actor in this list!!!
 	ACTOR,
 	ANIMATION,
 	COLLISION,
 	GRAPHICS,
 	MOVEMENT,
+	HEALTH,
 	_COUNT,
 };

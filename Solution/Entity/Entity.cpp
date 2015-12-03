@@ -6,6 +6,7 @@
 #include "ControllerComponent.h"
 #include "CollisionComponent.h"
 #include "GraphicsComponent.h"
+#include "HealthComponent.h"
 #include "Entity.h"
 #include "EntityData.h"
 #include <Scene.h>
@@ -63,6 +64,11 @@ Entity::Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& a
 	{
 		DL_ASSERT_EXP(myComponents[static_cast<int>(eComponentType::CONTROLLER)] != nullptr
 			, "ActorComponent wont work witout a ControllerComponent");
+	}
+
+	if (aEntityData.myHealthData.myExistsInEntity == true)
+	{
+		myComponents[static_cast<int>(eComponentType::HEALTH)] = new HealthComponent(*this, aEntityData.myHealthData);
 	}
 }
 

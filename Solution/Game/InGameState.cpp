@@ -1,6 +1,7 @@
 #include "stdafx.h"
 
 #include <Camera.h>
+#include <MoveCameraMessage.h>
 #include <ColoursForBG.h>
 #include <Engine.h>
 #include <GameStateMessage.h>
@@ -166,6 +167,13 @@ void InGameState::ReceiveMessage(const OnClickMessage& aMessage)
 			break;
 		}
 	}
+}
+
+void InGameState::ReceiveMessage(const MoveCameraMessage& aMessage)
+{
+	CU::Vector2<float> position = aMessage.myPosition * 255.f;
+
+	myCamera->SetPosition({ position.x, position.y, myCamera->GetOrientation().GetPos().z });
 }
 
 void InGameState::SetLevel()

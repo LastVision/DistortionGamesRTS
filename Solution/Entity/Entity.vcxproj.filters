@@ -58,6 +58,9 @@
     <ClCompile Include="ControllerComponent.cpp">
       <Filter>Component</Filter>
     </ClCompile>
+    <ClCompile Include="HealthComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -111,6 +114,12 @@
     </ClInclude>
     <ClInclude Include="DamageNote.h">
       <Filter>Notes</Filter>
+    </ClInclude>
+    <ClInclude Include="HealthComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="HealthComponentData.h">
+      <Filter>EntityFactory\EntityData\ComponentData</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
