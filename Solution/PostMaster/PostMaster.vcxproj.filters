@@ -45,5 +45,8 @@
     <ClInclude Include="OnClickMessage.h">
       <Filter>Message</Filter>
     </ClInclude>
+    <ClInclude Include="MoveCameraMessage.h">
+      <Filter>Message</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

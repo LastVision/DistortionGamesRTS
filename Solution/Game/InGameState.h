@@ -43,6 +43,7 @@ public:
 
 	void ReceiveMessage(const GameStateMessage& aMessage) override;
 	void ReceiveMessage(const OnClickMessage& aMessage) override;
+	void ReceiveMessage(const MoveCameraMessage& aMessage) override;
 
 	void SetLevel();
 
