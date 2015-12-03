@@ -31,6 +31,9 @@ namespace Prism
 		myFileName = aTexturePath;
 
 		myEffect = EffectContainer::GetInstance()->GetEffect("Data/Resource/Shader/S_effect_terrain.fx");
+		Texture * influence = Prism::TextureContainer::GetInstance()
+			->GetTexture("Data/Resource/Texture/Terrain/SplatMap/T_InfluenceToSplatMap.dds");
+		myEffect->SetTexture(influence);
 		D3D11_INPUT_ELEMENT_DESC vertexDesc[] =
 		{
 			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
@@ -131,7 +134,7 @@ namespace Prism
 				vertex.myPos.y = myHeightMap->myData[(myHeightMap->myDepth - (1 + z)) * myHeightMap->myWidth + x] * myHeight / 255.f; 
 				vertex.myPos.z = float(z) * mySize.y / float(myHeightMap->myDepth);
 				vertex.myUV.x = float(x) / float(myHeightMap->myWidth);
-				vertex.myUV.y = float(z) / float(myHeightMap->myDepth);
+				vertex.myUV.y = float(1.f - z) / float(myHeightMap->myDepth);
 				vertices.Add(vertex);
 			}
 		}
