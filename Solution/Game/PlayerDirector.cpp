@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+#include <BuildingComponent.h>
 #include <Camera.h>
 #include <CollisionComponent.h>
 #include <ControllerComponent.h>
@@ -77,12 +78,14 @@ void PlayerDirector::OnResize(int aWidth, int aHeight)
 
 void PlayerDirector::SpawnUnit(Prism::Scene& aScene)
 {
-	if (myUnits.Size() < 64)
-	{
-		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::PLAYER, eEntityType::DRAGON, Prism::eOctreeType::DYNAMIC,
-			aScene, { 20.f, 0.f, 20.f }, myTerrain));
-		PollingStation::GetInstance()->RegisterEntity(myUnits.GetLast());
-	}
+	myBuilding->GetComponent<BuildingComponent>()->BuildUnit(eEntityType::DRAGON);
+
+	//if (myUnits.Size() < 64)
+	//{
+	//	myUnits.Add(EntityFactory::CreateEntity(eOwnerType::PLAYER, eEntityType::DRAGON, Prism::eOctreeType::DYNAMIC,
+	//		aScene, { 20.f, 0.f, 20.f }, myTerrain));
+	//	PollingStation::GetInstance()->RegisterEntity(myUnits.GetLast());
+	//}
 }
 
 void PlayerDirector::ReceiveMessage(const SpawnUnitMessage& aMessage)
@@ -105,6 +108,11 @@ void PlayerDirector::ReceiveMessage(const SpawnUnitMessage& aMessage)
 
 void PlayerDirector::SelectUnit(Entity* anEntity)
 {
+	if (mySelectedUnits.Size() > 0 && mySelectedUnits[0]->GetType() != anEntity->GetType())
+	{
+		return;
+	}
+
 	for (int i = 0; i < mySelectedUnits.Size(); i++)
 	{
 		if (mySelectedUnits[i] == anEntity)
@@ -200,7 +208,14 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 				ControllerComponent* controller = myUnits[i]->GetComponent<ControllerComponent>();
 				if (hoveredEnemy == nullptr)
 				{
-					controller->MoveTo(targetPos, !shiftPressed);
+					if (shiftPressed == true)
+					{
+						controller->MoveTo(targetPos, false);
+					}
+					else
+					{
+						controller->AttackMove(targetPos);
+					}
 				}
 				else
 				{
@@ -241,7 +256,7 @@ void PlayerDirector::SelectOrHoverEntity(Entity* aEntity, bool &aSelected, bool 
 		if (leftClicked == true && aSelected == false)
 		{
 			SelectUnit(aEntity);
-			aEntity->SetSelect(true);
+			//aEntity->SetSelect(true);
 			aSelected = true;
 		}
 		else if (aHovered == false)
