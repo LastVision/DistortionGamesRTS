@@ -36,6 +36,7 @@ InGameState::~InGameState()
 {
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::GAME_STATE, this);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::ON_CLICK, this);
+	PostMaster::GetInstance()->UnSubscribe(eMessageType::MOVE_CAMERA, this);
 	SAFE_DELETE(myCamera);
 	SAFE_DELETE(myLevelFactory);
 }
@@ -56,7 +57,7 @@ void InGameState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCur
 	OnResize(windowSize.x, windowSize.y);
 	PostMaster::GetInstance()->Subscribe(eMessageType::GAME_STATE, this);
 	PostMaster::GetInstance()->Subscribe(eMessageType::ON_CLICK, this);
-
+	PostMaster::GetInstance()->Subscribe(eMessageType::MOVE_CAMERA, this);
 
 	myIsActiveState = true;
 }
@@ -77,6 +78,8 @@ const eStateStatus InGameState::Update(const float& aDeltaTime)
 		return eStateStatus::ePopMainState;
 	}
 
+	
+
 	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_M) == true)
 	{
 		CompleteGame();
@@ -90,6 +93,15 @@ const eStateStatus InGameState::Update(const float& aDeltaTime)
 	if (myLevel->Update(aDeltaTime, *myCamera) == true)
 	{
 		//return myStateStatus;
+	}
+
+	if (myLevel->HasPlayerWon())
+	{
+		CompleteGame();
+	}
+	else if (myLevel->HasAIWon())
+	{
+		RestartLevel();
 	}
 
 	return myStateStatus;
@@ -176,7 +188,7 @@ void InGameState::ReceiveMessage(const MoveCameraMessage& aMessage)
 {
 	CU::Vector2<float> position = aMessage.myPosition * 255.f;
 
-	myCamera->SetPosition({ position.x, position.y, myCamera->GetOrientation().GetPos().z });
+	myCamera->SetPosition({ position.x, myCamera->GetOrientation().GetPos().y, position.y });
 }
 
 void InGameState::SetLevel()

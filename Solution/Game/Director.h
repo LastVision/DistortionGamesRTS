@@ -24,6 +24,10 @@ public:
 	virtual ~Director();
 
 	virtual void Update(float aDeltaTime);
+
+	void CleanUp();
+
+	int GetUnitCount() const;
 	
 	virtual void ReceiveMessage(const SpawnUnitMessage& aMessage) override;
 protected:
@@ -36,3 +40,7 @@ private:
 	void operator=(Director&) = delete;
 };
 
+inline int Director::GetUnitCount() const
+{
+	return myUnits.Size();
+}

@@ -11,6 +11,7 @@
 #include "LevelFactory.h"
 #include <MathHelper.h>
 #include <ModelLoader.h>
+#include <NavMesh.h>
 #include <PointLight.h>
 #include <SpotLight.h>
 #include <Terrain.h>
@@ -155,6 +156,14 @@ void LevelFactory::ReadLevel(const std::string& aLevelPath)
 	modelLoader->WaitUntilFinished();
 
 	effectContainer->GetEffect("Data/Resource/Shader/S_effect_pbl.fx")->SetAmbientHue(myAmbientHue);
+
+	myTerrain->CreateNavMesh();
+	for (int i = 0; i < myCurrentLevel->myEntities.Size(); ++i)
+	{
+		myTerrain->GetNavMesh()->Cut(myCurrentLevel->myEntities[i]->GetCutMesh());
+	}
+	myTerrain->CreatePathFinder();
+
 	Prism::Engine::GetInstance()->myIsLoading = false;
 
 	myIsLoading = false;

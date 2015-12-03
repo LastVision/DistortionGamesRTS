@@ -9,402 +9,433 @@
 #include "Engine.h"
 #include "Texture.h"
 
-Prism::Effect::Effect()
+namespace Prism
 {
-	myEffectListeners.Init(512);
-	myEffect = nullptr;
-}
 
-Prism::Effect::~Effect()
-{
-	myEffect->Release();
-}
-
-bool Prism::Effect::Init(const std::string& aEffectFile)
-{
-	//if (myEffect != nullptr)
-	//{
-	//	myEffect->Release();
-	//	myEffect = nullptr;
-	//}
-
-	if (ReloadShader(aEffectFile) == false)
+	Effect::Effect()
 	{
-		return false;
+		myEffectListeners.Init(512);
+		myEffect = nullptr;
 	}
 
-	for (int i = 0; i < myEffectListeners.Size(); ++i)
+	Effect::~Effect()
 	{
-		myEffectListeners[i]->OnEffectLoad();
+		myEffect->Release();
 	}
 
-	return true;
-
-}
-
-void Prism::Effect::SetScaleVector(const CU::Vector3<float>& aScaleVector)
-{
-	myScaleVector->SetFloatVector(&aScaleVector.x);
-}
-
-void Prism::Effect::SetWorldMatrix(const CU::Matrix44<float>& aWorldMatrix)
-{
-	myWorldMatrix->SetMatrix(&aWorldMatrix.myMatrix[0]);
-}
-
-void Prism::Effect::SetViewMatrix(const CU::Matrix44<float>& aViewMatrix)
-{
-	myViewMatrix->SetMatrix(&aViewMatrix.myMatrix[0]);
-}
-
-void Prism::Effect::SetProjectionMatrix(const CU::Matrix44<float>& aProjectionMatrix)
-{
-	myProjectionMatrix->SetMatrix(&aProjectionMatrix.myMatrix[0]);
-}
-
-void Prism::Effect::SetViewProjectionMatrix(const CU::Matrix44<float>& aMatrix)
-{
-	myViewProjectionMatrix->SetMatrix(&aMatrix.myMatrix[0]);
-}
-
-void Prism::Effect::SetBlendState(ID3D11BlendState* aBlendState, float aBlendFactor[4], const unsigned int aSampleMask)
-{
-	Engine::GetInstance()->GetContex()->OMSetBlendState(aBlendState, aBlendFactor, aSampleMask);
-}
-
-void Prism::Effect::SetTexture(Texture* aTexture)
-{
-	myTexture->SetResource(aTexture->GetShaderView());
-}
-
-void Prism::Effect::SetAmbientHue(CU::Vector4f aVector)
-{
-	myAmbientHue->SetFloatVector(&aVector.x);
-}
-
-void Prism::Effect::SetBones(const CU::StaticArray<CU::Matrix44<float>, MAX_NR_OF_BONES>& someBones)
-{
-	myBonesArray->SetMatrixArray(&someBones[0].myMatrix[0], 0, MAX_NR_OF_BONES);
-}
-
-void Prism::Effect::SetPosAndScale(const CU::Vector2<float>& aPos
-	, const CU::Vector2<float>& aScale)
-{
-	DL_ASSERT_EXP(mySpritePosAndScale != nullptr
-		, "Effect2D: Tried to SetPosAndScale but mySpritePosAndScale is nullptr");
-
-	mySpritePosAndScaleVector.x = aPos.x;
-	mySpritePosAndScaleVector.y = aPos.y;
-
-	mySpritePosAndScaleVector.z = aScale.x;
-	mySpritePosAndScaleVector.w = aScale.y;
-
-	mySpritePosAndScale->SetFloatVector(&mySpritePosAndScaleVector.x);
-}
-
-void Prism::Effect::SetColor(const CU::Vector4<float>& aColor)
-{
-	myColor->SetFloatVector(&aColor.x);
-}
-
-void Prism::Effect::SetSpriteOrientation(const CU::Matrix44<float>& aOrientation)
-{
-	mySpriteOrientation->SetMatrix(&aOrientation.myMatrix[0]);
-}
-
-void Prism::Effect::UpdateDirectionalLights(
-	const CU::StaticArray<Prism::DirectionalLightData, NUMBER_OF_DIRECTIONAL_LIGHTS>& someDirectionalLightData)
-{
-	if (myDirectionalLight != nullptr)
+	bool Effect::Init(const std::string& aEffectFile)
 	{
-		myDirectionalLight->SetRawValue(&someDirectionalLightData[0], 0, 
-			sizeof(DirectionalLightData) * NUMBER_OF_DIRECTIONAL_LIGHTS);
-	}
-}
+		//if (myEffect != nullptr)
+		//{
+		//	myEffect->Release();
+		//	myEffect = nullptr;
+		//}
 
-void Prism::Effect::UpdatePointLights(const CU::StaticArray<PointLightData, NUMBER_OF_POINT_LIGHTS>& somePointLightData)
-{
-	if (myPointLight != nullptr)
-	{
-		myPointLight->SetRawValue(&somePointLightData[0], 0, sizeof(PointLightData) * NUMBER_OF_POINT_LIGHTS);
-	}
-}
-
-void Prism::Effect::UpdateSpotLights(const CU::StaticArray<SpotLightData, NUMBER_OF_SPOT_LIGHTS>& someSpotLightData)
-{
-	if (mySpotLight != nullptr)
-	{
-		mySpotLight->SetRawValue(&someSpotLightData[0], 0, sizeof(SpotLightData) * NUMBER_OF_SPOT_LIGHTS);
-	}
-}
-
-void Prism::Effect::UpdateTime(const float aDeltaTime)
-{
-	if (myTotalTime != nullptr)
-	{
-		float newTime = 0.f;
-		myTotalTime->GetFloat(&newTime);
-		newTime += aDeltaTime;
-		myTotalTime->SetFloat(newTime);
-	}
-}
-
-void Prism::Effect::SetStreakTexture(Texture* aTexture)
-{
-	myStreakDiffuse->SetResource(aTexture->GetShaderView());
-}
-
-void Prism::Effect::SetStreakSizeDelta(float aSizeDelta)
-{
-	myStreakSizeDelta->SetFloat(aSizeDelta);
-}
-
-void Prism::Effect::SetStreakStartAlpha(float aStartAlpha)
-{
-	myStreakStartAlpha->SetFloat(aStartAlpha);
-}
-
-void Prism::Effect::SetStreakAlphaDelta(float anAlphaDelta)
-{
-	myStreakAlphaDelta->SetFloat(anAlphaDelta);
-}
-
-
-void Prism::Effect::SetPlayerVariable(int someVariable)
-{
-	if (myPlayerVariable != nullptr)
-	{
-		myPlayerVariable->SetInt(someVariable);
-	}
-}
-
-bool Prism::Effect::ReloadShader(const std::string& aFile)
-{
-	myFileName = aFile;
-
-	HRESULT hr;
-	unsigned int shaderFlags = 0;
-
-#if defined (DEBUG) || defined(_DEBUG)
-	shaderFlags |= D3D10_SHADER_DEBUG | D3D10_SHADER_SKIP_OPTIMIZATION;
-#endif
-
-	ID3D10Blob* compiledShader = nullptr;
-	ID3D10Blob* compilationMsgs = nullptr;
-
-	hr = D3DX11CompileFromFile(myFileName.c_str(), 0, 0, 0, "fx_5_0", shaderFlags, 0, 0, &compiledShader
-		, &compilationMsgs, 0);
-	if (hr != S_OK)
-	{
-		if (compilationMsgs != nullptr)
+		if (ReloadShader(aEffectFile) == false)
 		{
-			DL_MESSAGE_BOX((char*)compilationMsgs->GetBufferPointer(), "Effect Error", MB_ICONWARNING);
-			myEffect = EffectContainer::GetInstance()->GetEffect(
-				"Data/Resource/Shader/S_effect_debug.fx")->myEffect;
-		} 
-		else 
-		{
-			std::string errorMessage = "[Effect]: Could not find the effect " + myFileName;
-			DL_ASSERT(errorMessage.c_str());
-		}
-	}
-	if (compilationMsgs != nullptr)
-	{
-		compilationMsgs->Release();
-	}
-
-	if (hr == S_OK)
-	{
-		hr = D3DX11CreateEffectFromMemory(compiledShader->GetBufferPointer(), compiledShader->GetBufferSize(), NULL
-			, Engine::GetInstance()->GetDevice(), &myEffect);
-
-		if (FAILED(hr))
-		{
-			DL_MESSAGE_BOX("Cant Create Effect", "Effect Error", MB_ICONWARNING);
 			return false;
 		}
 
+		for (int i = 0; i < myEffectListeners.Size(); ++i)
+		{
+			myEffectListeners[i]->OnEffectLoad();
+		}
+
+		return true;
+
 	}
 
-	if (compiledShader != nullptr)
+	void Effect::SetScaleVector(const CU::Vector3<float>& aScaleVector)
 	{
-		compiledShader->Release();
-	}
-	
-
-	myTechnique = myEffect->GetTechniqueByName("Render");
-	if (myTechnique->IsValid() == false)
-	{
-		DL_MESSAGE_BOX("Failed to get Technique", "Effect Error", MB_ICONWARNING);
-		return false;
+		myScaleVector->SetFloatVector(&aScaleVector.x);
 	}
 
-	myScaleVector = myEffect->GetVariableByName("Scale")->AsVector();
-	if (myScaleVector->IsValid() == false)
+	void Effect::SetWorldMatrix(const CU::Matrix44<float>& aWorldMatrix)
 	{
-		myScaleVector = nullptr;
+		myWorldMatrix->SetMatrix(&aWorldMatrix.myMatrix[0]);
 	}
 
-	myWorldMatrix = myEffect->GetVariableByName("World")->AsMatrix();
-	if (myWorldMatrix->IsValid() == false)
+	void Effect::SetViewMatrix(const CU::Matrix44<float>& aViewMatrix)
 	{
-		DL_MESSAGE_BOX("Failed to get WorldMatrix", "Effect Error", MB_ICONWARNING);
-		return false;
+		myViewMatrix->SetMatrix(&aViewMatrix.myMatrix[0]);
 	}
 
-	myViewMatrix = myEffect->GetVariableByName("View")->AsMatrix();
-	if (myViewMatrix->IsValid() == false)
+	void Effect::SetProjectionMatrix(const CU::Matrix44<float>& aProjectionMatrix)
 	{
-		DL_MESSAGE_BOX("Failed to get ViewMatrix", "Effect Error", MB_ICONWARNING);
-		return false;
+		myProjectionMatrix->SetMatrix(&aProjectionMatrix.myMatrix[0]);
 	}
 
-	myProjectionMatrix = myEffect->GetVariableByName("Projection")->AsMatrix();
-	if (myProjectionMatrix->IsValid() == false)
+	void Effect::SetViewProjectionMatrix(const CU::Matrix44<float>& aMatrix)
 	{
-		DL_MESSAGE_BOX("Failed to get ProjectionMatrix", "Effect Error", MB_ICONWARNING);
-		return false;
+		myViewProjectionMatrix->SetMatrix(&aMatrix.myMatrix[0]);
 	}
 
-	myViewProjectionMatrix = myEffect->GetVariableByName("ViewProjection")->AsMatrix();
-	if (myViewProjectionMatrix->IsValid() == false)
+	void Effect::SetBlendState(ID3D11BlendState* aBlendState, float aBlendFactor[4], const unsigned int aSampleMask)
 	{
-		myViewProjectionMatrix = nullptr;
+		Engine::GetInstance()->GetContex()->OMSetBlendState(aBlendState, aBlendFactor, aSampleMask);
 	}
 
-	myTotalTime = nullptr;
-	myTotalTime = myEffect->GetVariableByName("TotalTime")->AsScalar();
-	if (myTotalTime->IsValid() == false)
+	void Effect::SetTexture(Texture* aTexture)
 	{
+		myTexture->SetResource(aTexture->GetShaderView());
+	}
+
+	void Effect::SetAmbientHue(CU::Vector4f aVector)
+	{
+		myAmbientHue->SetFloatVector(&aVector.x);
+	}
+
+	void Effect::SetBones(const CU::StaticArray<CU::Matrix44<float>, MAX_NR_OF_BONES>& someBones)
+	{
+		myBonesArray->SetMatrixArray(&someBones[0].myMatrix[0], 0, MAX_NR_OF_BONES);
+	}
+
+	void Effect::SetPosAndScale(const CU::Vector2<float>& aPos
+		, const CU::Vector2<float>& aScale)
+	{
+		DL_ASSERT_EXP(mySpritePosAndScale != nullptr
+			, "Effect2D: Tried to SetPosAndScale but mySpritePosAndScale is nullptr");
+
+		mySpritePosAndScaleVector.x = aPos.x;
+		mySpritePosAndScaleVector.y = aPos.y;
+
+		mySpritePosAndScaleVector.z = aScale.x;
+		mySpritePosAndScaleVector.w = aScale.y;
+
+		mySpritePosAndScale->SetFloatVector(&mySpritePosAndScaleVector.x);
+	}
+
+	void Effect::SetColor(const CU::Vector4<float>& aColor)
+	{
+		myColor->SetFloatVector(&aColor.x);
+	}
+
+	void Effect::SetSpriteOrientation(const CU::Matrix44<float>& aOrientation)
+	{
+		mySpriteOrientation->SetMatrix(&aOrientation.myMatrix[0]);
+	}
+
+	void Effect::UpdateDirectionalLights(
+		const CU::StaticArray<DirectionalLightData, NUMBER_OF_DIRECTIONAL_LIGHTS>& someDirectionalLightData)
+	{
+		if (myDirectionalLight != nullptr)
+		{
+			myDirectionalLight->SetRawValue(&someDirectionalLightData[0], 0,
+				sizeof(DirectionalLightData) * NUMBER_OF_DIRECTIONAL_LIGHTS);
+		}
+	}
+
+	void Effect::UpdatePointLights(const CU::StaticArray<PointLightData, NUMBER_OF_POINT_LIGHTS>& somePointLightData)
+	{
+		if (myPointLight != nullptr)
+		{
+			myPointLight->SetRawValue(&somePointLightData[0], 0, sizeof(PointLightData) * NUMBER_OF_POINT_LIGHTS);
+		}
+	}
+
+	void Effect::UpdateSpotLights(const CU::StaticArray<SpotLightData, NUMBER_OF_SPOT_LIGHTS>& someSpotLightData)
+	{
+		if (mySpotLight != nullptr)
+		{
+			mySpotLight->SetRawValue(&someSpotLightData[0], 0, sizeof(SpotLightData) * NUMBER_OF_SPOT_LIGHTS);
+		}
+	}
+
+	void Effect::UpdateTime(const float aDeltaTime)
+	{
+		if (myTotalTime != nullptr)
+		{
+			float newTime = 0.f;
+			myTotalTime->GetFloat(&newTime);
+			newTime += aDeltaTime;
+			myTotalTime->SetFloat(newTime);
+		}
+	}
+
+	void Effect::SetStreakTexture(Texture* aTexture)
+	{
+		myStreakDiffuse->SetResource(aTexture->GetShaderView());
+	}
+
+	void Effect::SetStreakSizeDelta(float aSizeDelta)
+	{
+		myStreakSizeDelta->SetFloat(aSizeDelta);
+	}
+
+	void Effect::SetStreakStartAlpha(float aStartAlpha)
+	{
+		myStreakStartAlpha->SetFloat(aStartAlpha);
+	}
+
+	void Effect::SetStreakAlphaDelta(float anAlphaDelta)
+	{
+		myStreakAlphaDelta->SetFloat(anAlphaDelta);
+	}
+
+	void Effect::SetPlayerVariable(int someVariable)
+	{
+		if (myPlayerVariable != nullptr)
+		{
+			myPlayerVariable->SetInt(someVariable);
+		}
+	}
+
+	bool Effect::ReloadShader(const std::string& aFile)
+	{
+		myFileName = aFile;
+
+		HRESULT hr;
+		unsigned int shaderFlags = 0;
+
+#if defined (DEBUG) || defined(_DEBUG)
+		shaderFlags |= D3D10_SHADER_DEBUG | D3D10_SHADER_SKIP_OPTIMIZATION;
+#endif
+
+		ID3D10Blob* compiledShader = nullptr;
+		ID3D10Blob* compilationMsgs = nullptr;
+
+		hr = D3DX11CompileFromFile(myFileName.c_str(), 0, 0, 0, "fx_5_0", shaderFlags, 0, 0, &compiledShader
+			, &compilationMsgs, 0);
+		if (hr != S_OK)
+		{
+			if (compilationMsgs != nullptr)
+			{
+				DL_MESSAGE_BOX((char*)compilationMsgs->GetBufferPointer(), "Effect Error", MB_ICONWARNING);
+				myEffect = EffectContainer::GetInstance()->GetEffect(
+					"Data/Resource/Shader/S_effect_debug.fx")->myEffect;
+			}
+			else
+			{
+				std::string errorMessage = "[Effect]: Could not find the effect " + myFileName;
+				DL_ASSERT(errorMessage.c_str());
+			}
+		}
+		if (compilationMsgs != nullptr)
+		{
+			compilationMsgs->Release();
+		}
+
+		if (hr == S_OK)
+		{
+			hr = D3DX11CreateEffectFromMemory(compiledShader->GetBufferPointer(), compiledShader->GetBufferSize(), NULL
+				, Engine::GetInstance()->GetDevice(), &myEffect);
+
+			if (FAILED(hr))
+			{
+				DL_MESSAGE_BOX("Cant Create Effect", "Effect Error", MB_ICONWARNING);
+				return false;
+			}
+
+		}
+
+		if (compiledShader != nullptr)
+		{
+			compiledShader->Release();
+		}
+
+
+		myTechnique = myEffect->GetTechniqueByName("Render");
+		if (myTechnique->IsValid() == false)
+		{
+			DL_MESSAGE_BOX("Failed to get Technique", "Effect Error", MB_ICONWARNING);
+			return false;
+		}
+
+		myScaleVector = myEffect->GetVariableByName("Scale")->AsVector();
+		if (myScaleVector->IsValid() == false)
+		{
+			myScaleVector = nullptr;
+		}
+
+		myWorldMatrix = myEffect->GetVariableByName("World")->AsMatrix();
+		if (myWorldMatrix->IsValid() == false)
+		{
+			DL_MESSAGE_BOX("Failed to get WorldMatrix", "Effect Error", MB_ICONWARNING);
+			return false;
+		}
+
+		myViewMatrix = myEffect->GetVariableByName("View")->AsMatrix();
+		if (myViewMatrix->IsValid() == false)
+		{
+			DL_MESSAGE_BOX("Failed to get ViewMatrix", "Effect Error", MB_ICONWARNING);
+			return false;
+		}
+
+		myProjectionMatrix = myEffect->GetVariableByName("Projection")->AsMatrix();
+		if (myProjectionMatrix->IsValid() == false)
+		{
+			DL_MESSAGE_BOX("Failed to get ProjectionMatrix", "Effect Error", MB_ICONWARNING);
+			return false;
+		}
+
+		myViewProjectionMatrix = myEffect->GetVariableByName("ViewProjection")->AsMatrix();
+		if (myViewProjectionMatrix->IsValid() == false)
+		{
+			myViewProjectionMatrix = nullptr;
+		}
+
 		myTotalTime = nullptr;
-	}
+		myTotalTime = myEffect->GetVariableByName("TotalTime")->AsScalar();
+		if (myTotalTime->IsValid() == false)
+		{
+			myTotalTime = nullptr;
+		}
 
-	myPlayerVariable = nullptr;
-	myPlayerVariable = myEffect->GetVariableByName("PlayerVariable")->AsScalar();
-	if (myPlayerVariable->IsValid() == false)
-	{
 		myPlayerVariable = nullptr;
+		myPlayerVariable = myEffect->GetVariableByName("PlayerVariable")->AsScalar();
+		if (myPlayerVariable->IsValid() == false)
+		{
+			myPlayerVariable = nullptr;
+		}
+
+		myDirectionalLight = myEffect->GetVariableByName("DirectionalLights");
+		if (myDirectionalLight->IsValid() == false)
+		{
+			myDirectionalLight = nullptr;
+		}
+
+		myPointLight = myEffect->GetVariableByName("PointLights");
+		if (myPointLight->IsValid() == false)
+		{
+			myPointLight = nullptr;
+		}
+
+		mySpotLight = myEffect->GetVariableByName("SpotLights");
+		if (mySpotLight->IsValid() == false)
+		{
+			mySpotLight = nullptr;
+		}
+
+		myTexture = myEffect->GetVariableByName("DiffuseTexture")->AsShaderResource();
+		if (myTexture->IsValid() == false)
+		{
+			myTexture = nullptr;
+		}
+
+		mySpritePosAndScale = myEffect->GetVariableByName("SpritePositionAndScale")->AsVector();
+		if (mySpritePosAndScale->IsValid() == false)
+		{
+			mySpritePosAndScale = nullptr;
+		}
+
+		myColor = myEffect->GetVariableByName("Color")->AsVector();
+		if (myColor->IsValid() == false)
+		{
+			myColor = nullptr;
+		}
+
+		mySpriteOrientation = myEffect->GetVariableByName("SpriteOrientation")->AsMatrix();
+		if (mySpriteOrientation->IsValid() == false)
+		{
+			mySpriteOrientation = nullptr;
+		}
+
+		myStreakDiffuse = myEffect->GetVariableByName("DiffuseTexture")->AsShaderResource();
+		if (myStreakDiffuse->IsValid() == false)
+		{
+			myStreakDiffuse = nullptr;
+		}
+
+		myStreakSizeDelta = myEffect->GetVariableByName("StreakSizeDelta")->AsScalar();
+		if (myStreakSizeDelta->IsValid() == false)
+		{
+			myStreakSizeDelta = nullptr;
+		}
+
+		myStreakStartAlpha = myEffect->GetVariableByName("StreakStartAlpha")->AsScalar();
+		if (myStreakStartAlpha->IsValid() == false)
+		{
+			myStreakStartAlpha = nullptr;
+		}
+
+		myStreakAlphaDelta = myEffect->GetVariableByName("StreakAlphaDelta")->AsScalar();
+		if (myStreakAlphaDelta->IsValid() == false)
+		{
+			myStreakAlphaDelta = nullptr;
+		}
+
+		myCameraPosition = myEffect->GetVariableByName("cameraPosition")->AsVector();
+		if (myCameraPosition->IsValid() == false)
+		{
+			myCameraPosition = nullptr;
+		}
+
+		myAmbientHue = myEffect->GetVariableByName("AmbientHue")->AsVector();
+		if (myAmbientHue->IsValid() == false)
+		{
+			myAmbientHue = nullptr;
+		}
+
+		mySplatTextureBase = myEffect->GetVariableByName("mySplatTextureBase")->AsShaderResource();
+		if (mySplatTextureBase->IsValid() == false)
+		{
+			mySplatTextureBase = nullptr;
+		}
+
+		mySplatTextureR = myEffect->GetVariableByName("mySplatTextureR")->AsShaderResource();
+		if (mySplatTextureR->IsValid() == false)
+		{
+			mySplatTextureR = nullptr;
+		}
+
+		mySplatTextureG = myEffect->GetVariableByName("mySplatTextureG")->AsShaderResource();
+		if (mySplatTextureG->IsValid() == false)
+		{
+			mySplatTextureG = nullptr;
+		}
+
+		mySplatTextureB = myEffect->GetVariableByName("mySplatTextureB")->AsShaderResource();
+		if (mySplatTextureB->IsValid() == false)
+		{
+			mySplatTextureB = nullptr;
+		}
+
+		mySplatTextureA = myEffect->GetVariableByName("mySplatTextureA")->AsShaderResource();
+		if (mySplatTextureA->IsValid() == false)
+		{
+			mySplatTextureA = nullptr;
+		}
+
+		myBonesArray = myEffect->GetVariableByName("Bones")->AsMatrix();
+		if (myBonesArray->IsValid() == false)
+		{
+			myBonesArray = nullptr;
+		}
+
+		return true;
 	}
 
-	myDirectionalLight = myEffect->GetVariableByName("DirectionalLights");
-	if (myDirectionalLight->IsValid() == false)
+	void Effect::SetCameraPosition(const CU::Vector3<float>& aCameraPos)
 	{
-		myDirectionalLight = nullptr;
+		if (myCameraPosition != nullptr)
+		{
+			myCameraPosition->SetFloatVector(static_cast<const float*>(&aCameraPos.x));
+		}
 	}
 
-	myPointLight = myEffect->GetVariableByName("PointLights");
-	if (myPointLight->IsValid() == false)
+	void Effect::SetSplatTextureBase(const Texture* aSplatTexture)
 	{
-		myPointLight = nullptr;
+		mySplatTextureBase->SetResource(aSplatTexture->GetShaderView());
 	}
 
-	mySpotLight = myEffect->GetVariableByName("SpotLights");
-	if (mySpotLight->IsValid() == false)
+	void Effect::SetSplatTextureR(const Texture* aSplatTexture)
 	{
-		mySpotLight = nullptr;
+		mySplatTextureR->SetResource(aSplatTexture->GetShaderView());
 	}
 
-	myTexture = myEffect->GetVariableByName("DiffuseTexture")->AsShaderResource();
-	if (myTexture->IsValid() == false)
+	void Effect::SetSplatTextureG(const Texture* aSplatTexture)
 	{
-		myTexture = nullptr;
+		mySplatTextureG->SetResource(aSplatTexture->GetShaderView());
 	}
 
-	mySpritePosAndScale = myEffect->GetVariableByName("SpritePositionAndScale")->AsVector();
-	if (mySpritePosAndScale->IsValid() == false)
+	void Effect::SetSplatTextureB(const Texture* aSplatTexture)
 	{
-		mySpritePosAndScale = nullptr;
+		mySplatTextureB->SetResource(aSplatTexture->GetShaderView());
 	}
 
-	myColor = myEffect->GetVariableByName("Color")->AsVector();
-	if (myColor->IsValid() == false)
+	void Effect::SetSplatTextureA(const Texture* aSplatTexture)
 	{
-		myColor = nullptr;
+		mySplatTextureA->SetResource(aSplatTexture->GetShaderView());
 	}
 
-	mySpriteOrientation = myEffect->GetVariableByName("SpriteOrientation")->AsMatrix();
-	if (mySpriteOrientation->IsValid() == false)
-	{
-		mySpriteOrientation = nullptr;
-	}
-
-	myStreakDiffuse = myEffect->GetVariableByName("DiffuseTexture")->AsShaderResource();
-	if (myStreakDiffuse->IsValid() == false)
-	{
-		myStreakDiffuse = nullptr;
-	}
-
-	myStreakSizeDelta = myEffect->GetVariableByName("StreakSizeDelta")->AsScalar();
-	if (myStreakSizeDelta->IsValid() == false)
-	{
-		myStreakSizeDelta = nullptr;
-	}
-
-	myStreakStartAlpha = myEffect->GetVariableByName("StreakStartAlpha")->AsScalar();
-	if (myStreakStartAlpha->IsValid() == false)
-	{
-		myStreakStartAlpha = nullptr;
-	}
-
-	myStreakAlphaDelta = myEffect->GetVariableByName("StreakAlphaDelta")->AsScalar();
-	if (myStreakAlphaDelta->IsValid() == false)
-	{
-		myStreakAlphaDelta = nullptr;
-	}
-
-	myEMPScale = myEffect->GetVariableByName("myEMPScale")->AsScalar();
-	if (myEMPScale->IsValid() == false)
-	{
-		myEMPScale = nullptr;
-	}
-
-	myEMPPosition = myEffect->GetVariableByName("myEMPPosition")->AsVector();
-	if (myEMPPosition->IsValid() == false)
-	{
-		myEMPPosition = nullptr;
-	}
-
-	myCameraPosition = myEffect->GetVariableByName("cameraPosition")->AsVector();
-	if (myCameraPosition->IsValid() == false)
-	{
-		myCameraPosition = nullptr;
-	}
-
-	myAmbientHue = myEffect->GetVariableByName("AmbientHue")->AsVector();
-	if (myAmbientHue->IsValid() == false)
-	{
-		myAmbientHue = nullptr;
-	}
-
-	myBonesArray = myEffect->GetVariableByName("Bones")->AsMatrix();
-	if (myBonesArray->IsValid() == false)
-	{
-		myBonesArray = nullptr;
-	}
-
-	return true;
-}
-
-void Prism::Effect::SetCameraPosition(const CU::Vector3<float>& aCameraPos)
-{
-	if (myCameraPosition != nullptr)
-	{
-		myCameraPosition->SetFloatVector(static_cast<const float*>(&aCameraPos.x));
-	}
-}
-
-void Prism::Effect::SetEMPScale(float aScale)
-{
-	if (myEMPScale != nullptr)
-	{
-		myEMPScale->SetFloat(aScale);
-	}
-}
-
-void Prism::Effect::SetEMPPosition(const CU::Vector3<float>& aPosition)
-{
-	if (myEMPPosition != nullptr)
-	{
-		myEMPPosition->SetFloatVector(static_cast<const float*>(&aPosition.x));
-	}
 }

@@ -59,6 +59,8 @@ public:
 	void SetHovered(bool aStatus);
 	bool IsHovered() const;
 
+	CU::GrowingArray<CU::Vector2<float>> GetCutMesh() const;
+
 private:
 	void operator=(Entity&) = delete;
 	CU::StaticArray<Component*, static_cast<int>(eComponentType::_COUNT)> myComponents;

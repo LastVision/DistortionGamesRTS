@@ -129,12 +129,17 @@ void ControllerComponent::DoAttackAction()
 		AnimationComponent* animation = myEntity.GetComponent<AnimationComponent>();
 		if (animation != nullptr && animation->IsCurrentAnimationDone())
 		{
-			animation->RestartCurrentAnimation();
+			bool restartAnimation = true;
 
 			HealthComponent* targetHealth = myAttackTarget->GetComponent<HealthComponent>();
 			if (targetHealth != nullptr)
 			{
-				targetHealth->TakeDamage(5);
+				restartAnimation = targetHealth->TakeDamage(5);
+			}
+
+			if (restartAnimation == true)
+			{
+				animation->RestartCurrentAnimation();
 			}
 		}
 	}

@@ -27,6 +27,17 @@ void Director::Update(float aDeltaTime)
 	}
 }
 
+void Director::CleanUp()
+{
+	for (int i = myUnits.Size()-1; i >= 0; --i)
+	{
+		if (myUnits[i]->GetAlive() == false)
+		{
+			myUnits.DeleteCyclicAtIndex(i);
+		}
+	}
+}
+
 void Director::ReceiveMessage(const SpawnUnitMessage&)
 {
 }

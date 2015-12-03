@@ -27,3 +27,8 @@ bool CollisionComponent::Collide(const CU::Intersection::LineSegment3D& aLine) c
 	CU::Vector3<float> notUsed;
 	return CU::Intersection::LineVsSphere(aLine, mySphere, notUsed);
 }
+
+bool CollisionComponent::Collide(const CU::Vector3<float>& aPosition) const
+{
+	return CU::Intersection::PointInsideSphere(mySphere, aPosition);
+}

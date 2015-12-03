@@ -60,11 +60,15 @@ namespace Prism
 		bool ReloadShader(const std::string& aFile);
 
 		void SetCameraPosition(const CU::Vector3<float>& aCameraPos);
-		void SetEMPScale(float aScale);
-		void SetEMPPosition(const CU::Vector3<float>& aPosition);
 
 		void SetAmbientHue(CU::Vector4f aVector);
 		void SetBones(const CU::StaticArray<CU::Matrix44<float>, MAX_NR_OF_BONES>& someBones);
+
+		void SetSplatTextureBase(const Texture* aSplatTexture);
+		void SetSplatTextureR(const Texture* aSplatTexture);
+		void SetSplatTextureG(const Texture* aSplatTexture);
+		void SetSplatTextureB(const Texture* aSplatTexture);
+		void SetSplatTextureA(const Texture* aSplatTexture);
 
 	private:
 		ID3DX11Effect* myEffect;
@@ -82,9 +86,8 @@ namespace Prism
 
 		ID3DX11EffectVectorVariable* myColor;
 		ID3DX11EffectVectorVariable* myScaleVector;
-		
+
 		ID3DX11EffectVectorVariable* myAmbientHue;
-		ID3DX11EffectVectorVariable* myEMPPosition;
 
 		ID3DX11EffectVariable* myDirectionalLight;
 		ID3DX11EffectVariable* myPointLight;
@@ -99,35 +102,41 @@ namespace Prism
 		ID3DX11EffectScalarVariable* myStreakSizeDelta;
 		ID3DX11EffectScalarVariable* myStreakStartAlpha;
 		ID3DX11EffectScalarVariable* myStreakAlphaDelta;
-		ID3DX11EffectScalarVariable* myEMPScale;
+
+		ID3DX11EffectShaderResourceVariable* mySplatTextureBase;
+		ID3DX11EffectShaderResourceVariable* mySplatTextureR;
+		ID3DX11EffectShaderResourceVariable* mySplatTextureG;
+		ID3DX11EffectShaderResourceVariable* mySplatTextureB;
+		ID3DX11EffectShaderResourceVariable* mySplatTextureA;
 
 		ID3DX11EffectMatrixVariable* myBonesArray;
 
 		CU::Vector4<float> mySpritePosAndScaleVector;
-		
+
 		std::string myFileName;
 
 		CU::GrowingArray<EffectListener*> myEffectListeners;
 	};
-}
-
-inline ID3DX11Effect* Prism::Effect::GetEffect()
-{
-	return myEffect;
-}
-
-inline ID3DX11EffectTechnique* Prism::Effect::GetTechnique()
-{
-	return myTechnique;
-}
-
-inline const std::string& Prism::Effect::GetFileName() const
-{
-	return myFileName;
-}
 
 
-inline void Prism::Effect::AddListener(EffectListener* aListener)
-{
-	myEffectListeners.Add(aListener);
+	inline ID3DX11Effect* Effect::GetEffect()
+	{
+		return myEffect;
+	}
+
+	inline ID3DX11EffectTechnique* Effect::GetTechnique()
+	{
+		return myTechnique;
+	}
+
+	inline const std::string& Effect::GetFileName() const
+	{
+		return myFileName;
+	}
+
+
+	inline void Effect::AddListener(EffectListener* aListener)
+	{
+		myEffectListeners.Add(aListener);
+	}
 }

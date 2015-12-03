@@ -31,6 +31,9 @@ public:
 
 	void SpawnUnit();
 
+	bool HasPlayerWon() const;
+	bool HasAIWon() const;
+
 private:
 	Prism::Terrain* myTerrain;
 	Prism::DirectionalLight* myLight;
