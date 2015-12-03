@@ -11,12 +11,10 @@ public:
 	BuildingComponent(Entity& aEntity, BuildingCompnentData& aData);
 	~BuildingComponent();
 
-	void Update(float aDeltaTime) override;
-
 	static eComponentType GetTypeStatic();
 	eComponentType GetType() override;
-private:
 	void BuildUnit(eEntityType aUnitType);
+private:
 
 	CU::StaticArray<eEntityType, 3> myBuildTypes;
 };
