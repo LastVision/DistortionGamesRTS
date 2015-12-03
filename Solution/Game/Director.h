@@ -23,6 +23,8 @@ public:
 	virtual ~Director();
 
 	virtual void Update(float aDeltaTime);
+
+	void CleanUp();
 	
 protected:
 	CU::GrowingArray<Entity*> myUnits;

@@ -44,12 +44,15 @@ Entity* PollingStation::FindClosestEntity(const CU::Vector3<float>& aPosition, e
 	{
 		for (int i = 0; i < myPlayerUnits.Size(); ++i)
 		{
-			dist = CU::Length2(myPlayerUnits[i]->GetOrientation().GetPos() - aPosition);
-
-			if (dist < bestDist)
+			if (myPlayerUnits[i]->GetAlive() == true)
 			{
-				bestDist = dist;
-				entity = myPlayerUnits[i];
+				dist = CU::Length2(myPlayerUnits[i]->GetOrientation().GetPos() - aPosition);
+
+				if (dist < bestDist)
+				{
+					bestDist = dist;
+					entity = myPlayerUnits[i];
+				}
 			}
 		}
 	}
@@ -57,12 +60,15 @@ Entity* PollingStation::FindClosestEntity(const CU::Vector3<float>& aPosition, e
 	{
 		for (int i = 0; i < myAIUnits.Size(); ++i)
 		{
-			dist = CU::Length2(myAIUnits[i]->GetOrientation().GetPos() - aPosition);
-
-			if (dist < bestDist)
+			if (myPlayerUnits[i]->GetAlive() == true)
 			{
-				bestDist = dist;
-				entity = myAIUnits[i];
+				dist = CU::Length2(myAIUnits[i]->GetOrientation().GetPos() - aPosition);
+
+				if (dist < bestDist)
+				{
+					bestDist = dist;
+					entity = myAIUnits[i];
+				}
 			}
 		}
 	}
@@ -71,8 +77,26 @@ Entity* PollingStation::FindClosestEntity(const CU::Vector3<float>& aPosition, e
 		DL_ASSERT("PollingStation tried to FindClosestEntity of an unknown type");
 	}
 
-	DL_ASSERT_EXP(entity != nullptr, "PollingStation failed to FindClosestEneity");
 	return entity;
+}
+
+void PollingStation::CleanUp()
+{
+	for (int i = myPlayerUnits.Size()-1; i >= 0; --i)
+	{
+		if (myPlayerUnits[i]->GetAlive() == false)
+		{
+			myPlayerUnits.RemoveCyclicAtIndex(i);
+		}
+	}
+
+	for (int i = myAIUnits.Size() - 1; i >= 0; --i)
+	{
+		if (myAIUnits[i]->GetAlive() == false)
+		{
+			myAIUnits.RemoveCyclicAtIndex(i);
+		}
+	}
 }
 
 PollingStation::PollingStation()

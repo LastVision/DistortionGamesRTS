@@ -32,6 +32,12 @@ void AIDirector::Update(float aDeltaTime)
 	Entity* closestPlayerEntity = PollingStation::GetInstance()->FindClosestEntity(
 		myUnits[0]->GetOrientation().GetPos(), eOwnerType::PLAYER);
 
-	//myUnits[0]->GetComponent<ControllerComponent>()->MoveTo(closestPlayerEntity->GetOrientation().GetPos(), true);
-	myUnits[0]->GetComponent<ControllerComponent>()->Attack(closestPlayerEntity);
+	if (closestPlayerEntity != nullptr)
+	{
+		myUnits[0]->GetComponent<ControllerComponent>()->Attack(closestPlayerEntity);
+	}
+	else
+	{
+		myUnits[0]->SetState(eEntityState::IDLE);
+	}
 }

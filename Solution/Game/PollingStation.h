@@ -14,6 +14,8 @@ public:
 
 	Entity* FindClosestEntity(const CU::Vector3<float>& aPosition, eOwnerType aEntityOwner);
 
+	void CleanUp();
+
 private:
 	PollingStation();
 	~PollingStation();

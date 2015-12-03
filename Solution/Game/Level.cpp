@@ -16,6 +16,7 @@
 #include "Level.h"
 #include <ModelLoader.h>
 #include "PlayerDirector.h"
+#include "PollingStation.h"
 #include <Scene.h>
 #include <Terrain.h>
 
@@ -57,6 +58,11 @@ bool Level::Update(float aDeltaTime, Prism::Camera& aCamera)
 {
 	//CU::Vector3<float> lightDir(myLight->GetCurrentDir().x, myLight->GetCurrentDir().y, myLight->GetCurrentDir().z);
 	//myLight->SetDir(lightDir * CU::Matrix44<float>::CreateRotateAroundZ(-3.14f * aDeltaTime / 3.f));
+
+
+	PollingStation::GetInstance()->CleanUp();
+	myPlayer->CleanUp();
+	myAI->CleanUp();
 
 	Prism::RenderLine3D({ 0.f, 0.f, 0.f }, { 100.f, 100.f, 100.f }, eColorDebug::BLACK, eColorDebug::GREEN);
 	Prism::RenderBox({ 128.f, 129.f, 128.f }, eColorDebug::BLUE, false);
