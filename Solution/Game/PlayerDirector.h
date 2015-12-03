@@ -31,6 +31,7 @@ private:
 	CU::Vector3<float> CalcCursorWorldPosition(const Prism::Camera& aCamera);
 	void UpdateMouseInteraction(const Prism::Camera& aCamera);
 
+	CU::GrowingArray<Entity*> mySelectedUnits;
 	GUI::GUIManager* myGUIManager;
 	GUI::Cursor* myCursor;
 

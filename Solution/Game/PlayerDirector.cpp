@@ -18,6 +18,7 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 	, myRenderGUI(true)
 	, myCursor(aCursor)
 	, myGUIManager(nullptr)
+	, mySelectedUnits(56)
 {
 	for (int i = 0; i < 1; ++i)
 	{
@@ -25,7 +26,7 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 			aScene, { 20.f + i, 0.f, 20.f }, aTerrain));
 	}
 	Prism::ModelLoader::GetInstance()->Pause();
-	myGUIManager = new GUI::GUIManager(aCursor, "Data/Resource/GUI/GUI_ingame.xml", myUnits);
+	myGUIManager = new GUI::GUIManager(aCursor, "Data/Resource/GUI/GUI_ingame.xml", mySelectedUnits);
 	Prism::ModelLoader::GetInstance()->UnPause();
 
 	for (int i = 0; i < myUnits.Size(); ++i)
@@ -138,15 +139,20 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 	bool hasSelected = false;
 	bool hasHovered = false;
 	bool hasPressedShift = CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_LSHIFT) || CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_RSHIFT);
-	
+
+	if (leftClicked == true && hasPressedShift == false)
+	{
+		mySelectedUnits.RemoveAll();
+	}
+
 	for (int i = 0; i < myUnits.Size(); ++i)
 	{
-		bool mouseOnUnit = myUnits[i]->GetComponent<CollisionComponent>()->Collide(line);
-
 		if (leftClicked == true && hasPressedShift == false)
 		{
 			myUnits[i]->SetSelect(false);
 		}
+
+		bool mouseOnUnit = myUnits[i]->GetComponent<CollisionComponent>()->Collide(line);
 
 		myUnits[i]->SetHovered(false);
 
@@ -156,6 +162,7 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 			{
 				myUnits[i]->SetSelect(true);
 				hasSelected = true;
+				mySelectedUnits.Add(myUnits[i]);
 			}
 			else if (hasHovered == false)
 			{
@@ -168,23 +175,17 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_LSHIFT) && CU::InputWrapper::GetInstance()->MouseDown(1))
 	{
 		CU::Vector3<float> newPos(CalcCursorWorldPosition(aCamera));
-		for (int i = 0; i < myUnits.Size(); ++i)
+		for (int i = 0; i < mySelectedUnits.Size(); ++i)
 		{
-			if (myUnits[i]->IsSelected())
-			{
-				myUnits[i]->GetComponent<ControllerComponent>()->MoveTo(newPos, false);
-			}
+			mySelectedUnits[i]->GetComponent<ControllerComponent>()->MoveTo(newPos, false);
 		}
 	}
 	else if (CU::InputWrapper::GetInstance()->MouseDown(1))
 	{
 		CU::Vector3<float> newPos(CalcCursorWorldPosition(aCamera));
-		for (int i = 0; i < myUnits.Size(); ++i)
+		for (int i = 0; i < mySelectedUnits.Size(); ++i)
 		{
-			if (myUnits[i]->IsSelected())
-			{
-				myUnits[i]->GetComponent<ControllerComponent>()->MoveTo(newPos, true);
-			}
+			mySelectedUnits[i]->GetComponent<ControllerComponent>()->MoveTo(newPos, true);
 		}
 	}
 }
