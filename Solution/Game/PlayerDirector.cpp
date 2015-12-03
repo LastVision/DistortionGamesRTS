@@ -123,68 +123,77 @@ CU::Vector3<float> PlayerDirector::CalcCursorWorldPosition(const Prism::Camera& 
 void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 {
 	CU::Vector3<float> targetPos = CalcCursorWorldPosition(aCamera);
+	Entity* hoveredEnemy = PollingStation::GetInstance()->FindEntityAtPosition(targetPos, eOwnerType::ENEMY);
+	if (hoveredEnemy != nullptr)
+	{
+		Prism::RenderBox(hoveredEnemy->GetOrientation().GetPos(), eColorDebug::RED);
+	}
+
 	CU::Intersection::LineSegment3D line(aCamera.GetOrientation().GetPos(), targetPos);
 
+	bool hasSelected = false;
+	bool hasHovered = false;
+	
+	for (int i = 0; i < myUnits.Size(); ++i)
+	{
+		SelectOrHoverEntity(myUnits[i], hasSelected, hasHovered, line);
+
+		if (CU::InputWrapper::GetInstance()->MouseDown(1))
+		{
+			bool shiftPressed = CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_LSHIFT)
+				|| CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_RSHIFT);
+
+			if (myUnits[i]->IsSelected())
+			{
+				ControllerComponent* controller = myUnits[i]->GetComponent<ControllerComponent>();
+				if (hoveredEnemy == nullptr)
+				{
+					controller->MoveTo(targetPos, shiftPressed);
+				}
+				else
+				{
+					controller->Attack(hoveredEnemy);
+				}
+			}
+		}
+	}
+}
+
+void PlayerDirector::SelectOrHoverEntity(Entity* aEntity, bool &aSelected, bool &aHovered
+	, const CU::Intersection::LineSegment3D& aMouseRay)
+{
 	bool leftClicked;
 	if (myRenderGUI == true) // no inworld clicking when mouse is over gui:
 	{
-		leftClicked = CU::InputWrapper::GetInstance()->MouseDown(0) && !(myGUIManager->MouseOverGUI()); 
+		leftClicked = CU::InputWrapper::GetInstance()->MouseDown(0) && !(myGUIManager->MouseOverGUI());
 	}
 	else
 	{
 		leftClicked = CU::InputWrapper::GetInstance()->MouseDown(0);
 	}
 
-	bool hasSelected = false;
-	bool hasHovered = false;
-	bool hasPressedShift = CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_LSHIFT) || CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_RSHIFT);
-	
-	for (int i = 0; i < myUnits.Size(); ++i)
+	bool hasPressedShift = CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_LSHIFT) 
+		|| CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_RSHIFT);
+	bool mouseOnUnit = aEntity->GetComponent<CollisionComponent>()->Collide(aMouseRay);
+
+	if (leftClicked == true && hasPressedShift == false)
 	{
-		bool mouseOnUnit = myUnits[i]->GetComponent<CollisionComponent>()->Collide(line);
-
-		if (leftClicked == true && hasPressedShift == false)
-		{
-			myUnits[i]->SetSelect(false);
-		}
-
-		myUnits[i]->SetHovered(false);
-
-		if (mouseOnUnit == true)
-		{
-			if (leftClicked == true && hasSelected == false)
-			{
-				myUnits[i]->SetSelect(true);
-				hasSelected = true;
-			}
-			else if (hasHovered == false)
-			{
-				myUnits[i]->SetHovered(true);
-				hasHovered = true;
-			}
-		}
+		aEntity->SetSelect(false);
 	}
 
-	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_LSHIFT) && CU::InputWrapper::GetInstance()->MouseDown(1))
+	aEntity->SetHovered(false);
+
+	if (mouseOnUnit == true)
 	{
-		CU::Vector3<float> newPos(CalcCursorWorldPosition(aCamera));
-		for (int i = 0; i < myUnits.Size(); ++i)
+		if (leftClicked == true && aSelected == false)
 		{
-			if (myUnits[i]->IsSelected())
-			{
-				myUnits[i]->GetComponent<ControllerComponent>()->MoveTo(newPos, false);
-			}
+			aEntity->SetSelect(true);
+			aSelected = true;
 		}
-	}
-	else if (CU::InputWrapper::GetInstance()->MouseDown(1))
-	{
-		CU::Vector3<float> newPos(CalcCursorWorldPosition(aCamera));
-		for (int i = 0; i < myUnits.Size(); ++i)
+		else if (aHovered == false)
 		{
-			if (myUnits[i]->IsSelected())
-			{
-				myUnits[i]->GetComponent<ControllerComponent>()->MoveTo(newPos, true);
-			}
+			aEntity->SetHovered(true);
+			aHovered = true;
 		}
 	}
 }

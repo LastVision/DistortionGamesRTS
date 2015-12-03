@@ -26,6 +26,8 @@ public:
 	void Attack(Entity* aTarget);
 
 	const ControllerData& GetControllerData() const;
+	float GetVisionRange() const;
+	float GetAttackRange() const;
 
 	static eComponentType GetTypeStatic();
 	eComponentType GetType() override; 
@@ -54,6 +56,16 @@ private:
 inline const ControllerComponent::ControllerData& ControllerComponent::GetControllerData() const
 {
 	return myData;
+}
+
+inline float ControllerComponent::GetVisionRange() const
+{
+	return myVisionRange;
+}
+
+inline float ControllerComponent::GetAttackRange() const
+{
+	return myAttackRange;
 }
 
 inline eComponentType ControllerComponent::GetTypeStatic()

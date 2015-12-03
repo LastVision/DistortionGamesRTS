@@ -14,6 +14,14 @@ namespace GUI
 	class Cursor;
 }
 
+namespace CU
+{
+	namespace Intersection
+	{
+		class LineSegment3D;
+	}
+}
+
 class PlayerDirector : public Director
 {
 public:
@@ -30,6 +38,8 @@ public:
 private:
 	CU::Vector3<float> CalcCursorWorldPosition(const Prism::Camera& aCamera);
 	void UpdateMouseInteraction(const Prism::Camera& aCamera);
+	void SelectOrHoverEntity(Entity* aEntity, bool &aSelected, bool &aHovered
+		, const CU::Intersection::LineSegment3D& aMouseRay);
 
 	GUI::GUIManager* myGUIManager;
 	GUI::Cursor* myCursor;
