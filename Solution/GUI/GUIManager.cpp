@@ -4,6 +4,7 @@
 #include <Engine.h>
 #include "GUIManager.h"
 #include "../InputWrapper/InputWrapper.h"
+#include "MiniMapWidget.h"
 #include <Sprite.h>
 #include "UnitActionWidget.h"
 #include "UnitInfoWidget.h"
@@ -63,15 +64,20 @@ namespace GUI
 					ButtonWidget* button = new ButtonWidget(&reader, widgetElement);
 					container->AddWidget(button);
 				}
-				else if (type == "unitinfo")
+				else if (type == "unit_info")
 				{
 					UnitInfoWidget* unitInfo = new UnitInfoWidget(&reader, widgetElement, someUnits);
 					container->AddWidget(unitInfo);
 				}
-				else if (type == "unitaction")
+				else if (type == "unit_action")
 				{
 					UnitActionWidget* unitActions = new UnitActionWidget(&reader, widgetElement, someUnits);
 					container->AddWidget(unitActions);
+				}
+				else if (type == "minimap")
+				{
+					MiniMapWidget* minimap = new MiniMapWidget(&reader, widgetElement);
+					container->AddWidget(minimap);
 				}
 			}
 			myWidgets->AddWidget(container);
