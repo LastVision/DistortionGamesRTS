@@ -103,6 +103,11 @@ void PlayerDirector::ReceiveMessage(const SpawnUnitMessage& aMessage)
 
 void PlayerDirector::SelectUnit(Entity* anEntity)
 {
+	if (mySelectedUnits.Size() > 0 && mySelectedUnits[0]->GetType() != anEntity->GetType())
+	{
+		return;
+	}
+
 	for (int i = 0; i < mySelectedUnits.Size(); i++)
 	{
 		if (mySelectedUnits[i] == anEntity)
@@ -246,7 +251,7 @@ void PlayerDirector::SelectOrHoverEntity(Entity* aEntity, bool &aSelected, bool 
 		if (leftClicked == true && aSelected == false)
 		{
 			SelectUnit(aEntity);
-			aEntity->SetSelect(true);
+			//aEntity->SetSelect(true);
 			aSelected = true;
 		}
 		else if (aHovered == false)
