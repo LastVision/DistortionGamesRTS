@@ -77,6 +77,8 @@ const eStateStatus InGameState::Update(const float& aDeltaTime)
 		return eStateStatus::ePopMainState;
 	}
 
+	
+
 	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_M) == true)
 	{
 		CompleteGame();
@@ -90,6 +92,15 @@ const eStateStatus InGameState::Update(const float& aDeltaTime)
 	if (myLevel->Update(aDeltaTime, *myCamera) == true)
 	{
 		//return myStateStatus;
+	}
+
+	if (myLevel->HasPlayerWon())
+	{
+		CompleteGame();
+	}
+	else if (myLevel->HasAIWon())
+	{
+		RestartLevel();
 	}
 
 	return myStateStatus;

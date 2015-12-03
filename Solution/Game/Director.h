@@ -25,6 +25,8 @@ public:
 	virtual void Update(float aDeltaTime);
 
 	void CleanUp();
+
+	int GetUnitCount() const;
 	
 protected:
 	CU::GrowingArray<Entity*> myUnits;
@@ -35,3 +37,7 @@ private:
 	void operator=(Director&) = delete;
 };
 
+inline int Director::GetUnitCount() const
+{
+	return myUnits.Size();
+}
