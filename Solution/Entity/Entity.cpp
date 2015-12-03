@@ -155,7 +155,15 @@ bool Entity::IsHovered() const
 
 CU::GrowingArray<CU::Vector2<float>> Entity::GetCutMesh() const
 {
-	CU::GrowingArray<CU::Vector2<float>> points(8);
-	bool notImpYet = true;
+	CU::GrowingArray<CU::Vector2<float>> points(4);
+
+	CU::Vector2<float> pos(myOrientation.GetPos().x, myOrientation.GetPos().z);
+
+	float halfWidth = 3.f;
+	
+	points.Add({ pos.x - halfWidth, pos.y - halfWidth });
+	points.Add({ pos.x - halfWidth, pos.y + halfWidth });
+	points.Add({ pos.x + halfWidth, pos.y + halfWidth });
+	points.Add({ pos.x + halfWidth, pos.y - halfWidth });
 	return points;
 }
