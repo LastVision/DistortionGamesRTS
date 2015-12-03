@@ -142,5 +142,8 @@
     <ClInclude Include="HealthComponent.h">
       <Filter>Component\Health</Filter>
     </ClInclude>
+    <ClInclude Include="BuildingComponentData.h">
+      <Filter>EntityFactory\EntityData\ComponentData</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -12,6 +12,7 @@
 #include "LevelFactory.h"
 #include <MemoryTracker.h>
 #include "MessageState.h"
+#include <ModelLoader.h>
 #include <OnClickMessage.h>
 #include <PostMaster.h>
 #include <TimerManager.h>
@@ -114,7 +115,9 @@ void InGameState::ResumeState()
 
 void InGameState::OnResize(int aWidth, int aHeight)
 {
+	Prism::ModelLoader::GetInstance()->Pause();
 	myLevel->OnResize(aWidth, aHeight);
+	Prism::ModelLoader::GetInstance()->UnPause();
 }
 
 void InGameState::ReceiveMessage(const GameStateMessage& aMessage)

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <GrowingArray.h>
+#include <Subscriber.h>
 
 class Entity;
 
@@ -16,7 +17,7 @@ namespace Prism
 	class Terrain;
 }
 
-class Director
+class Director : public Subscriber
 {
 public:
 	Director(eDirectorType aDirectorType, const Prism::Terrain& aTerrain);
@@ -24,8 +25,10 @@ public:
 
 	virtual void Update(float aDeltaTime);
 	
+	virtual void ReceiveMessage(const SpawnUnitMessage& aMessage) override;
 protected:
 	CU::GrowingArray<Entity*> myUnits;
+	Entity* myBuilding;
 	const eDirectorType myDirectorType;
 	const Prism::Terrain& myTerrain;
 

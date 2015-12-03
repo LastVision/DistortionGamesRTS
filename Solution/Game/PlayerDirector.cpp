@@ -11,6 +11,7 @@
 #include "PollingStation.h"
 #include <Terrain.h>
 #include <ModelLoader.h>
+#include <SpawnUnitMessage.h>
 
 
 PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aScene, GUI::Cursor* aCursor)
@@ -24,6 +25,7 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::PLAYER, eEntityType::DRAGON, Prism::eOctreeType::DYNAMIC,
 			aScene, { 20.f + i, 0.f, 20.f }, aTerrain));
 	}
+	myBuilding = EntityFactory::CreateEntity(eOwnerType::PLAYER, eEntityType::BASE_BUILING, Prism::eOctreeType::STATIC, aScene, { 30, 0, 40 }, aTerrain);
 	Prism::ModelLoader::GetInstance()->Pause();
 	myGUIManager = new GUI::GUIManager(aCursor, "Data/Resource/GUI/GUI_ingame.xml", myUnits);
 	Prism::ModelLoader::GetInstance()->UnPause();
@@ -48,6 +50,8 @@ void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 
 	Director::Update(aDeltaTime);
 	UpdateMouseInteraction(aCamera);
+
+	myBuilding->Update(aDeltaTime);
 
 	if (myRenderGUI == true)
 	{
@@ -75,6 +79,20 @@ void PlayerDirector::SpawnUnit(Prism::Scene& aScene)
 		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::PLAYER, eEntityType::DRAGON, Prism::eOctreeType::DYNAMIC,
 			aScene, { 20.f, 0.f, 20.f }, myTerrain));
 		PollingStation::GetInstance()->RegisterEntity(myUnits.GetLast());
+	}
+}
+
+void PlayerDirector::ReceiveMessage(const SpawnUnitMessage& aMessage)
+{
+	if (aMessage.myOwnerType != static_cast<int>(eOwnerType::PLAYER)) return;
+	if (myUnits.Size() < 64)
+	{
+		Prism::MemoryTracker::GetInstance()->SetRunTime(false);
+		Prism::ModelLoader::GetInstance()->Pause();
+		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::PLAYER, static_cast<eEntityType>(aMessage.myUnitType), Prism::eOctreeType::DYNAMIC,
+			aMessage.myScene, myBuilding->GetOrientation().GetPos() + CU::Vector3f(2.f, 0.f, 2.f), myTerrain));
+		PollingStation::GetInstance()->RegisterEntity(myUnits.GetLast());
+		Prism::ModelLoader::GetInstance()->UnPause();
 	}
 }
 
@@ -163,6 +181,27 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 		}
 	}
 
+	bool mouseOnBuilding = myBuilding->GetComponent<CollisionComponent>()->Collide(line);
+	if (leftClicked == true)
+	{
+		myBuilding->SetSelect(false);
+	}
+
+	myBuilding->SetHovered(false);
+
+	if (mouseOnBuilding == true)
+	{
+		if (leftClicked == true && hasSelected == false)
+		{
+			myBuilding->SetSelect(true);
+			hasSelected = true;
+		}
+		else if (hasHovered == false)
+		{
+			myBuilding->SetHovered(true);
+			hasHovered = true;
+		}
+	}
 	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_LSHIFT) && CU::InputWrapper::GetInstance()->MouseDown(1))
 	{
 		CU::Vector3<float> newPos(CalcCursorWorldPosition(aCamera));

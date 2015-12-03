@@ -30,3 +30,7 @@ void Subscriber::ReceiveMessage(const OnClickMessage&)
 void Subscriber::ReceiveMessage(const MoveCameraMessage&)
 {
 }
+
+void Subscriber::ReceiveMessage(const SpawnUnitMessage& aMessage)
+{
+}

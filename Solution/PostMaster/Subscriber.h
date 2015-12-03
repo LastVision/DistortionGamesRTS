@@ -5,6 +5,7 @@ struct GameStateMessage;
 struct ResizeMessage;
 struct OnClickMessage;
 struct MoveCameraMessage;
+struct SpawnUnitMessage;
 
 class Subscriber
 {
@@ -17,5 +18,6 @@ public:
 	virtual void ReceiveMessage(const GameStateMessage& aMessage);
 	virtual void ReceiveMessage(const OnClickMessage& aMessage);
 	virtual void ReceiveMessage(const MoveCameraMessage& aMessage);
+	virtual void ReceiveMessage(const SpawnUnitMessage& aMessage);
 };
 

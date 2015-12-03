@@ -86,6 +86,12 @@ void EntityFactory::LoadEntity(const char* aEntityPath)
 
 			myComponentLoader->LoadGraphicsComponent(entityDocument, e, newData.myGraphicsData);
 		}
+		else if (elementName == CU::ToLower("BuildingComponent"))
+		{
+			if (newData.myBuildingData.myExistsInEntity == true) DL_ASSERT("You already have a BuildingComponent");
+
+			myComponentLoader->LoadBuidlingComponent(entityDocument, e, newData.myBuildingData);
+		}
 		else if (elementName == CU::ToLower("CollisionComponent"))
 		{
 			if (newData.myCollisionData.myExistsInEntity == true) DL_ASSERT("You already have a CollisionComponent");
@@ -135,18 +141,5 @@ EntityFactory::~EntityFactory()
 
 const eEntityType EntityFactory::ConvertStringToEntityType(const std::string& entityType)
 {
-	if (entityType == "dragon")
-	{
-		return eEntityType::DRAGON;
-	}
-	else if(entityType == "dragonstatic")
-	{
-		return eEntityType::DRAGON_STATIC;
-	}
-	else if (entityType == "pinetree")
-	{
-		return eEntityType::PINE_TREE;
-	}
-	DL_ASSERT("This type is not supported, please tell Daniel about it.");
-	return eEntityType::_COUNT;
+	return ComponentLoader::ConvertStringToEntityType(entityType);
 }
