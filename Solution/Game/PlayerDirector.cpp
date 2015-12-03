@@ -195,7 +195,14 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 				ControllerComponent* controller = myUnits[i]->GetComponent<ControllerComponent>();
 				if (hoveredEnemy == nullptr)
 				{
-					controller->MoveTo(targetPos, !shiftPressed);
+					if (shiftPressed == true)
+					{
+						controller->MoveTo(targetPos, false);
+					}
+					else
+					{
+						controller->AttackMove(targetPos);
+					}
 				}
 				else
 				{
