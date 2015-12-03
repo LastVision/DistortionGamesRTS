@@ -92,6 +92,7 @@ void PlayerDirector::ReceiveMessage(const SpawnUnitMessage& aMessage)
 		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::PLAYER, static_cast<eEntityType>(aMessage.myUnitType), Prism::eOctreeType::DYNAMIC,
 			aMessage.myScene, myBuilding->GetOrientation().GetPos() + CU::Vector3f(2.f, 0.f, 2.f), myTerrain));
 		PollingStation::GetInstance()->RegisterEntity(myUnits.GetLast());
+		Prism::MemoryTracker::GetInstance()->SetRunTime(true);
 		Prism::ModelLoader::GetInstance()->UnPause();
 	}
 }

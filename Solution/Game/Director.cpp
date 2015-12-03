@@ -15,6 +15,7 @@ Director::Director(eDirectorType aDirectorType, const Prism::Terrain& aTerrain)
 Director::~Director()
 {
 	myUnits.DeleteAll();
+	SAFE_DELETE(myBuilding);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::SPAWN_UNIT, this);
 }
 
