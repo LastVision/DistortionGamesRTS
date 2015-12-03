@@ -4,6 +4,7 @@
 #include "AnimationComponent.h"
 #include "ControllerComponent.h"
 #include "ControllerComponentData.h"
+#include "HealthComponent.h"
 #include "Entity.h"
 #include <Terrain.h>
 
@@ -129,6 +130,12 @@ void ControllerComponent::DoAttackAction()
 		if (animation != nullptr && animation->IsCurrentAnimationDone())
 		{
 			animation->RestartCurrentAnimation();
+
+			HealthComponent* targetHealth = myAttackTarget->GetComponent<HealthComponent>();
+			if (targetHealth != nullptr)
+			{
+				targetHealth->TakeDamage(5);
+			}
 		}
 	}
 	else
