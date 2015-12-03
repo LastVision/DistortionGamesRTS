@@ -1,4 +1,6 @@
 #include "stdafx.h"
+
+#include "Entity.h"
 #include "HealthComponent.h"
 #include "HealthComponentData.h"
 
@@ -23,6 +25,7 @@ bool HealthComponent::TakeDamage(int aDamage)
 	if (myCurrentHealth <= 0)
 	{
 		myCurrentHealth = 0;
+		myEntity.Kill();
 		return false;
 	}
 
@@ -32,9 +35,4 @@ bool HealthComponent::TakeDamage(int aDamage)
 void HealthComponent::Heal(int aHealing)
 {
 	myCurrentHealth += aHealing;
-}
-
-bool HealthComponent::IsAlive() const
-{
-	return myCurrentHealth > 0;
 }

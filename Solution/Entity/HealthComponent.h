@@ -13,7 +13,6 @@ public:
 
 	bool TakeDamage(int aDamage);
 	void Heal(int aHealing);
-	bool IsAlive() const;
 
 private:
 	int myMaxHealth;
