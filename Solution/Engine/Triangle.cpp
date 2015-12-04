@@ -28,9 +28,9 @@ namespace Prism
 
 		Triangle::~Triangle()
 		{
-			DeleteEdge(myEdge1);
-			DeleteEdge(myEdge2);
-			DeleteEdge(myEdge3);
+			DeleteEdgeIfSolo(myEdge1);
+			DeleteEdgeIfSolo(myEdge2);
+			DeleteEdgeIfSolo(myEdge3);
 		}
 
 		void Triangle::Render()
@@ -212,7 +212,7 @@ namespace Prism
 			}
 		}
 
-		void Triangle::DeleteEdge(Edge* anEdge)
+		void Triangle::DeleteEdgeIfSolo(Edge* anEdge)
 		{
 			if (anEdge->myTriangle1 == nullptr && anEdge->myTriangle2 == this
 				|| anEdge->myTriangle1 == this && anEdge->myTriangle2 == nullptr)
@@ -227,7 +227,11 @@ namespace Prism
 			}
 			else
 			{
-				DL_ASSERT_EXP(anEdge->myTriangle2 == this, "edge not part of triangle");
+				if (anEdge->myTriangle2 != this)
+				{
+					int apa = 5;
+				}
+				//DL_ASSERT_EXP(anEdge->myTriangle2 == this, "edge not part of triangle");
 				anEdge->myTriangle2 = nullptr;
 			}
 		}

@@ -2,11 +2,17 @@
 #include "PathFinder.h"
 
 
-PathFinder::PathFinder()
+namespace Prism
 {
-}
+	namespace Navigation
+	{
+		PathFinder::PathFinder()
+		{
+		}
 
 
-PathFinder::~PathFinder()
-{
+		PathFinder::~PathFinder()
+		{
+		}
+	}
 }

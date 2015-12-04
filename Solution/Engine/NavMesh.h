@@ -25,6 +25,7 @@ namespace Prism
 		private:
 			void CutTriangle(Edge* anEdgeToCut, Triangle* aTriangle, Edge* aNewEdge1, Edge* aNewEdge2, Vertex* anIntersectionVertex);
 			CU::GrowingArray<Triangle*> myTriangles;
+			CU::GrowingArray<Triangle*> myNewTriangles;
 		};
 
 		inline const CU::GrowingArray<Triangle*> NavMesh::GetTriangles() const

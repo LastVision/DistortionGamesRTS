@@ -53,7 +53,14 @@ namespace Prism
 
 		void Edge::Render()
 		{
-			RenderLine3D(myPosition3D1, myPosition3D2);
+			if (myTriangle1 == nullptr || myTriangle2 == nullptr)
+			{
+				RenderLine3D(myPosition3D1 + CU::Vector3<float>(0, 0.01f, 0), myPosition3D2 + CU::Vector3<float>(0, 0.01f, 0), eColorDebug::YELLOW);
+			}
+			else
+			{
+				RenderLine3D(myPosition3D1, myPosition3D2, eColorDebug::RED);
+			}
 			//DX2D::CDebugDrawer& drawer = DX2D::CEngine::GetInstance()->GetDebugDrawer();
 
 			//DX2D::Vector2f pos1(myVertex1->myPosition.x, myVertex1->myPosition.y);

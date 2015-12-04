@@ -32,7 +32,7 @@ namespace Prism
 			Vertex* GetShared(Edge* anEdge1, Edge* anEdge2) const;
 			void AddUnique(Edge* anEdge, CU::GrowingArray<Edge*>& someEdgesOut) const;
 			void InitEdge(Edge* anEdge);
-			void DeleteEdge(Edge* anEdge);
+			void DeleteEdgeIfSolo(Edge* anEdge);
 			Edge* GetEdgeWithVertex(Vertex* aVertex, Edge* anEdge1, Edge* anEdge2) const;
 			Edge* myEdge1;
 			Edge* myEdge2;

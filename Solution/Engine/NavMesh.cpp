@@ -1,6 +1,7 @@
 #include "stdafx.h"
 
 #include "Edge.h"
+#include <Intersection.h>
 #include "NavMesh.h"
 #include "Triangle.h"
 #include "Vertex.h"
@@ -11,6 +12,7 @@ namespace Prism
 	{
 		NavMesh::NavMesh()
 			: myTriangles(128)
+			, myNewTriangles(128)
 		{
 			Vertex* topLeft = new Vertex(CU::Vector2<float>(0.0f, 0.0f));
 			Vertex* topRight = new Vertex(CU::Vector2<float>(255.f, 0.0f));
@@ -87,10 +89,12 @@ namespace Prism
 			Edge* oldEdge1 = aTriangle->GetOther(anEdgeToCut->myVertex1, anEdgeToCut);
 			oldEdge1->Remove(aTriangle);
 			myTriangles.Add(new Triangle(oldEdge1, newEdge3, aNewEdge1));
+			myNewTriangles.Add(myTriangles.GetLast());
 
 			Edge* oldEdge2 = aTriangle->GetOther(anEdgeToCut->myVertex2, anEdgeToCut);
 			oldEdge2->Remove(aTriangle);
 			myTriangles.Add(new Triangle(oldEdge2, newEdge3, aNewEdge2));
+			myNewTriangles.Add(myTriangles.GetLast());
 		}
 
 		void NavMesh::Cut(const CU::GrowingArray<CU::Vector2<float>>& someVertices)
@@ -109,9 +113,37 @@ namespace Prism
 				Edge* edge = new Edge(new Vertex(someVertices[first]), new Vertex(someVertices[second]));
 
 				Cut(edge);
-
+				
 				SAFE_DELETE(edge);
 			}
+
+			CU::Vector2<float> topLeft(someVertices[0]);
+
+			for (int i = 1; i < someVertices.Size(); ++i)
+			{
+				topLeft.x = fminf(topLeft.x, someVertices[i].x);
+				topLeft.y = fminf(topLeft.y, someVertices[i].y);
+			}
+			CU::Vector2<float> botRight(someVertices[0]);
+
+			for (int i = 1; i < someVertices.Size(); ++i)
+			{
+				botRight.x = fmaxf(botRight.x, someVertices[i].x);
+				botRight.y = fmaxf(botRight.y, someVertices[i].y);
+			}
+			
+			for (int i = myNewTriangles.Size() - 1; i >= 0; --i)
+			{
+				if (CU::Intersection::PointVsRect(myNewTriangles[i]->GetCenter(), topLeft, botRight) == true)
+				{
+					if (myTriangles.Find(myNewTriangles[i]) >= 0)
+					{
+						myTriangles.DeleteCyclic(myNewTriangles[i]);
+					}
+				}
+			}
+
+			myNewTriangles.RemoveAll();
 		}
 	}
 }

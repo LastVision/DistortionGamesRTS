@@ -196,7 +196,7 @@ CU::GrowingArray<CU::Vector2<float>> Entity::GetCutMesh() const
 
 	CU::Vector2<float> pos(myOrientation.GetPos().x, myOrientation.GetPos().z);
 
-	float halfWidth = 3.f;
+	float halfWidth = 0.5f;
 	
 	points.Add({ pos.x - halfWidth, pos.y - halfWidth });
 	points.Add({ pos.x - halfWidth, pos.y + halfWidth });

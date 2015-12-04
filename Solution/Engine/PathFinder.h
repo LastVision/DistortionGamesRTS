@@ -1,8 +1,15 @@
 #pragma once
-class PathFinder
-{
-public:
-	PathFinder();
-	~PathFinder();
-};
 
+
+namespace Prism
+{
+	namespace Navigation
+	{
+		class PathFinder
+		{
+		public:
+			PathFinder();
+			~PathFinder();
+		};
+	}
+}
