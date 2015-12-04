@@ -53,6 +53,8 @@ void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 		myRenderGUI = !myRenderGUI;
 	}
 
+	UpdateInputs();
+
 	Director::Update(aDeltaTime);
 	UpdateMouseInteraction(aCamera);
 
@@ -80,13 +82,6 @@ void PlayerDirector::OnResize(int aWidth, int aHeight)
 void PlayerDirector::SpawnUnit(Prism::Scene& aScene)
 {
 	myBuilding->GetComponent<BuildingComponent>()->BuildUnit(eEntityType::DRAGON);
-
-	//if (myUnits.Size() < 64)
-	//{
-	//	myUnits.Add(EntityFactory::CreateEntity(eOwnerType::PLAYER, eEntityType::DRAGON, Prism::eOctreeType::DYNAMIC,
-	//		aScene, { 20.f, 0.f, 20.f }, myTerrain));
-	//	PollingStation::GetInstance()->RegisterEntity(myUnits.GetLast());
-	//}
 }
 
 void PlayerDirector::ReceiveMessage(const SpawnUnitMessage& aMessage)
@@ -168,6 +163,30 @@ CU::Vector3<float> PlayerDirector::CalcCursorWorldPosition(const Prism::Camera& 
 	return worldPos;
 }
 
+void PlayerDirector::UpdateInputs()
+{
+	myShiftPressed = CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_LSHIFT)
+		|| CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_RSHIFT);
+	myAPressed = CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_A);
+	mySPressed = CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_S);
+	if (myRenderGUI == true) // no inworld clicking when mouse is over gui:
+	{
+		myLeftMouseClicked = CU::InputWrapper::GetInstance()->MouseDown(0) && !(myGUIManager->MouseOverGUI());
+		myRightClicked = CU::InputWrapper::GetInstance()->MouseDown(1) && !(myGUIManager->MouseOverGUI());
+	}
+	else
+	{
+		myLeftMouseClicked = CU::InputWrapper::GetInstance()->MouseDown(0);
+		myRightClicked = CU::InputWrapper::GetInstance()->MouseDown(1);
+	}
+
+
+	if (myLeftMouseClicked == true && myShiftPressed == false && myAPressed == false)
+	{
+		mySelectedUnits.RemoveAll();
+	}
+}
+
 void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 {
 	CU::Vector3<float> targetPos = CalcCursorWorldPosition(aCamera);
@@ -177,31 +196,9 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 		Prism::RenderBox(hoveredEnemy->GetOrientation().GetPos(), eColorDebug::RED);
 	}
 
-	CU::Intersection::LineSegment3D line(aCamera.GetOrientation().GetPos(), targetPos);
-
 	bool hasSelected = false;
 	bool hasHovered = false;
-	bool shiftPressed = CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_LSHIFT)
-		|| CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_RSHIFT);
-	bool aPressed = CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_A);
-	bool leftClicked;
-	bool rightClicked;
-	if (myRenderGUI == true) // no inworld clicking when mouse is over gui:
-	{
-		leftClicked = CU::InputWrapper::GetInstance()->MouseDown(0) && !(myGUIManager->MouseOverGUI());
-		rightClicked = CU::InputWrapper::GetInstance()->MouseDown(1) && !(myGUIManager->MouseOverGUI());
-	}
-	else
-	{
-		leftClicked = CU::InputWrapper::GetInstance()->MouseDown(0);
-		rightClicked = CU::InputWrapper::GetInstance()->MouseDown(1);
-	}
-
-	if (leftClicked == true && shiftPressed == false && aPressed == false)
-	{
-		mySelectedUnits.RemoveAll();
-	}
-
+	CU::Intersection::LineSegment3D line(aCamera.GetOrientation().GetPos(), targetPos);
 	for (int i = 0; i < myUnits.Size(); ++i)
 	{
 		SelectOrHoverEntity(myUnits[i], hasSelected, hasHovered, line);
@@ -209,46 +206,19 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 
 		if (myUnits[i]->IsSelected())
 		{
-			if (aPressed && leftClicked)
+			if (myAPressed && myLeftMouseClicked)
 			{
-				controller->Attack(targetPos, !shiftPressed);
+				controller->Attack(targetPos, !myShiftPressed);
 			}
-			else if (rightClicked)
+			else if (myRightClicked)
 			{
-				controller->MoveTo(targetPos, !shiftPressed);
+				controller->MoveTo(targetPos, !myShiftPressed);
+			}
+			else if (mySPressed)
+			{
+				controller->Stop();
 			}
 		}
-
-
-		//if (CU::InputWrapper::GetInstance()->MouseDown(1))
-		//{
-		//	if (myUnits[i]->IsSelected())
-		//	{
-		//		ControllerComponent* controller = myUnits[i]->GetComponent<ControllerComponent>();
-		//		if (hoveredEnemy == nullptr)
-		//		{
-		//			if (shiftPressed == true)
-		//			{
-		//				controller->MoveTo(targetPos, false);
-		//			}
-		//			else if (aPressed == true)
-		//			{
-		//				controller->Attack(targetPos);
-		//			}
-		//			else
-		//			{
-		//				//controller->MoveTo(targetPos, true);
-		//				int THIS_NEEDS_RESTORING = 5;
-		//				controller->Attack(targetPos);
-
-		//			}
-		//		}
-		//		else
-		//		{
-		//			controller->Attack(hoveredEnemy->GetOrientation().GetPos());
-		//		}
-		//	}
-		//}
 	}
 
 
@@ -258,34 +228,18 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 void PlayerDirector::SelectOrHoverEntity(Entity* aEntity, bool &aSelected, bool &aHovered
 	, const CU::Intersection::LineSegment3D& aMouseRay)
 {
-	bool leftClicked;
-	if (myRenderGUI == true) // no inworld clicking when mouse is over gui:
-	{
-		leftClicked = CU::InputWrapper::GetInstance()->MouseDown(0) && !(myGUIManager->MouseOverGUI());
-	}
-	else
-	{
-		leftClicked = CU::InputWrapper::GetInstance()->MouseDown(0);
-	}
-
-	bool hasPressedShift = CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_LSHIFT)
-		|| CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_RSHIFT);
-	bool aPressed = CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_A);
-	bool mouseOnUnit = aEntity->GetComponent<CollisionComponent>()->Collide(aMouseRay);
-
-	if (leftClicked == true && hasPressedShift == false && aPressed == false)
+	if (myLeftMouseClicked == true && myShiftPressed == false && myAPressed == false)
 	{
 		aEntity->SetSelect(false);
 	}
 
 	aEntity->SetHovered(false);
 
-	if (mouseOnUnit == true)
+	if (aEntity->GetComponent<CollisionComponent>()->Collide(aMouseRay))
 	{
-		if (leftClicked == true && aSelected == false)
+		if (myLeftMouseClicked == true && aSelected == false)
 		{
 			SelectUnit(aEntity);
-			//aEntity->SetSelect(true);
 			aSelected = true;
 		}
 		else if (aHovered == false)

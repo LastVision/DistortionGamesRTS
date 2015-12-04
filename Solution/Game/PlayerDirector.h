@@ -42,6 +42,7 @@ public:
 	const CU::GrowingArray<Entity*>& GetSelectedUnits() const;
 
 private:
+	void UpdateInputs();
 	CU::Vector3<float> CalcCursorWorldPosition(const Prism::Camera& aCamera);
 	void UpdateMouseInteraction(const Prism::Camera& aCamera);
 	void SelectOrHoverEntity(Entity* aEntity, bool &aSelected, bool &aHovered
@@ -50,6 +51,12 @@ private:
 	CU::GrowingArray<Entity*> mySelectedUnits;
 	GUI::GUIManager* myGUIManager;
 	GUI::Cursor* myCursor;
+
+	bool myShiftPressed;
+	bool myAPressed;
+	bool mySPressed;
+	bool myLeftMouseClicked;
+	bool myRightClicked;
 
 	bool myRenderGUI;
 };

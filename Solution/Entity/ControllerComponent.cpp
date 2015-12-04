@@ -43,84 +43,6 @@ ControllerComponent::~ControllerComponent()
 
 void ControllerComponent::Update(float aDelta)
 {
-	//if (myCurrentAction == eAction::MOVE)
-	//{
-	//	if (myEntity.GetState() == eEntityState::IDLE)
-	//	{
-	//		if (myWayPoints.Size() > 0)
-	//		{
-	//			myMoveTarget = GetNextWayPoint();
-	//			DoMoveAction(myMoveTarget);
-	//		}
-	//		else
-	//		{
-	//			myCurrentAction = eAction::IDLE;
-	//		}
-	//	}
-	//	else if (myEntity.GetState() == eEntityState::WALKING)
-	//	{
-	//		DoMoveAction(myMoveTarget);
-	//	}
-	//}
-	//else if (myCurrentAction == eAction::ATTACK_MOVE)
-	//{
-	//	Entity* enemyInVision = PollingStation::GetInstance()->FindClosestEntity(myEntity.GetOrientation().GetPos()
-	//		, eOwnerType::ENEMY, myVisionRange);
-
-	//	if (enemyInVision != nullptr)
-	//	{
-	//		//Start Moving towards enemy
-	//		myAttackTarget = enemyInVision;
-	//		myChaseOrigin = myEntity.GetOrientation().GetPos();
-	//		myCurrentAction = eAction::CHASE;
-	//	}
-	//	else
-	//	{
-	//		//Keep moving towards the clickposition
-	//		DoMoveAction(myMoveTarget);
-
-	//		if (myEntity.GetState() == eEntityState::IDLE)
-	//		{
-	//			myCurrentAction = eAction::IDLE;
-	//		}
-	//	}
-	//}
-	//else if (myCurrentAction == eAction::CHASE || myCurrentAction == eAction::ATTACK)
-	//{
-	//	float distChased = CU::Length2(myChaseOrigin - myEntity.GetOrientation().GetPos());
-	//	if (distChased > 100 /*myMaxChaseDistance*/ && myCurrentAction == eAction::CHASE)
-	//	{
-	//		myCurrentAction = eAction::ATTACK_MOVE;
-	//	}
-	//	else
-	//	{
-	//		float distToTarget = CU::Length2(myAttackTarget->GetOrientation().GetPos()
-	//			- myEntity.GetOrientation().GetPos());
-
-	//		if (distToTarget < myAttackRange)
-	//		{
-	//			DoAttackAction();
-	//			if (myAttackTarget->GetAlive() == false)
-	//			{
-	//				if (myCurrentAction == eAction::CHASE)
-	//				{
-	//					myCurrentAction = eAction::ATTACK_MOVE;
-	//				}
-	//				else
-	//				{
-	//					myEntity.SetState(eEntityState::IDLE);
-	//					myCurrentAction = eAction::IDLE;
-	//				}
-	//			}
-	//		}
-	//		else
-	//		{
-	//			DoMoveAction(myAttackTarget->GetOrientation().GetPos());
-	//		}
-	//	}
-	//}
-
-
 	if (myCurrentAction == eAction::IDLE)
 	{
 		myEntity.SetState(eEntityState::IDLE);
@@ -254,36 +176,19 @@ void ControllerComponent::Attack(const CU::Vector3<float>& aPosition, bool aClea
 	}
 }
 
+void ControllerComponent::Stop()
+{
+	myActions.RemoveAll();
+	myCurrentAction = eAction::IDLE;
+	myCurrentActionPosition = myEntity.GetOrientation().GetPos();
+	myData.myDirection = { 0.f, 0.f, 0.f };
+	myAttackTarget = nullptr;
+}
+
 void ControllerComponent::Spawn(const CU::Vector3f& aPosition)
 {
 	myEntity.myOrientation.SetPos(aPosition);
 	myTerrain.CalcEntityHeight(myEntity.myOrientation);
-}
-
-void ControllerComponent::DoMoveAction()
-{
-	if (myEntity.GetState() == eEntityState::IDLE && myWayPoints.Size() > 0)
-	{
-		CU::Vector3<float> pos = myEntity.myOrientation.GetPos();
-		myCurrentWayPoint = myWayPoints[0];
-		myData.myDirection = myCurrentWayPoint - pos;
-		myWayPoints.RemoveNonCyclicAtIndex(0);
-	}
-	else if (myEntity.GetState() == eEntityState::WALKING)
-	{
-		CU::Vector3<float> position = myEntity.myOrientation.GetPos();
-		myEntity.myOrientation.SetPos({ position.x, 0.f, position.z });
-
-		float dotResult = CU::Dot(myEntity.myOrientation.GetForward(), myCurrentWayPoint - myEntity.myOrientation.GetPos());
-		if (dotResult <= 0)
-		{
-			myEntity.myOrientation.SetPos(myCurrentWayPoint);
-			myData.myDirection = { 0.f, 0.f, 0.f };
-			myEntity.SetState(eEntityState::IDLE);
-		}
-
-		myEntity.myOrientation.SetPos(position);
-	}
 }
 
 void ControllerComponent::DoMoveAction(const CU::Vector3<float>& aTargetPosition)
@@ -337,14 +242,12 @@ void ControllerComponent::DoAttackAction()
 				myEntity.GetComponent<ActorComponent>()->LookAtPoint(myReturnPosition);
 				CU::Vector3<float> pos = myEntity.myOrientation.GetPos();
 				myData.myDirection = myReturnPosition - pos;
-				//Attack(myReturnPosition, true);
 			}
 			else
 			{
 				myAttackTarget = nullptr;
 			}
 		}
-		//return to ReturnPosition if the Target Died, or do what ever is appropiate after the Target dies
 	}
 	else if (shouldReturn == true)
 	{
@@ -352,10 +255,6 @@ void ControllerComponent::DoAttackAction()
 		myEntity.GetComponent<ActorComponent>()->LookAtPoint(myReturnPosition);
 		CU::Vector3<float> pos = myEntity.myOrientation.GetPos();
 		myData.myDirection = myReturnPosition - pos;
-
-		//Attack(myReturnPosition, true);
-
-		//myEntity.SetState(eEntityState::IDLE);
 	}
 	else
 	{
@@ -393,15 +292,6 @@ void ControllerComponent::AttackTarget()
 		myEntity.SetState(eEntityState::ATTACKING);
 		myData.myDirection = { 0.f, 0.f, 0.f };
 	}
-}
-
-CU::Vector3<float> ControllerComponent::GetNextWayPoint()
-{
-	DL_ASSERT_EXP(myWayPoints.Size() > 0, "Tried ot GetNextWayPoints when myWayPoints is empty");
-
-	CU::Vector3<float> waypoint = myWayPoints[0];
-	myWayPoints.RemoveNonCyclicAtIndex(0);
-	return waypoint;
 }
 
 void ControllerComponent::StartNextAction()
