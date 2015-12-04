@@ -893,8 +893,7 @@ bool FillData(ModelData* someData, FbxNode* aNode, AnimationData* aAnimation)
 					static_cast<float>(lCurrentVertex[2]),
 					1);
 
-				CU::Matrix44<float> fixMatrix;
-				fixMatrix = CU::Matrix44<float>::CreateReflectionMatrixAboutAxis(CU::Vector3<float>(1, 0, 0));
+				static CU::Matrix44<float> fixMatrix(CU::Matrix44<float>::CreateReflectionMatrixAboutAxis(CU::Vector3<float>(1, 0, 0)));
 				position = position*fixMatrix;
 
 				lVertices[currentIndex] = position.x;
@@ -935,7 +934,7 @@ bool FillData(ModelData* someData, FbxNode* aNode, AnimationData* aAnimation)
 					lCurrentBiNormal = lBiNormalElement->GetDirectArray().GetAt(lBinormIndexIndex);
 
 					CU::Vector3<float> normal(static_cast<float>(lCurrentBiNormal[0]), static_cast<float>(lCurrentBiNormal[1]), static_cast<float>(lCurrentBiNormal[2]));
-					normal = normal*CU::Matrix44<float>::CreateReflectionMatrixAboutAxis(CU::Vector3<float>(1, 0, 0));
+					normal = normal*fixMatrix;
 					CU::Normalize(normal);
 					lVertices[currentIndex + addedSize] = normal.x;
 					lVertices[currentIndex + addedSize + 1] = normal.y;
@@ -957,7 +956,7 @@ bool FillData(ModelData* someData, FbxNode* aNode, AnimationData* aAnimation)
 					mesh->GetPolygonVertexNormal(lPolygonIndex, lVerticeIndex, lCurrentNormal);
 
 					CU::Vector3<float> normal(static_cast<float>(lCurrentBiNormal[0]), static_cast<float>(lCurrentBiNormal[1]), static_cast<float>(lCurrentBiNormal[2]));
-					normal = normal*CU::Matrix44<float>::CreateReflectionMatrixAboutAxis(CU::Vector3<float>(1, 0, 0));
+					normal = normal*fixMatrix;
 					CU::Normalize(normal);
 					lVertices[currentIndex + addedSize] = normal.x;
 					lVertices[currentIndex + addedSize + 1] = normal.y;
