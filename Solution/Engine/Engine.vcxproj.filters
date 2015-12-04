@@ -168,6 +168,9 @@
     <ClCompile Include="HeightMapFactory.cpp">
       <Filter>Terrain\HeightMap</Filter>
     </ClCompile>
+    <ClCompile Include="SplatMapContainer.cpp">
+      <Filter>Terrain</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h" />
@@ -378,6 +381,9 @@
     </ClInclude>
     <ClInclude Include="HeightMapFactory.h">
       <Filter>Terrain\HeightMap</Filter>
+    </ClInclude>
+    <ClInclude Include="SplatMapContainer.h">
+      <Filter>Terrain</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -240,6 +240,7 @@
     <ClCompile Include="NavMesh.cpp" />
     <ClCompile Include="PathFinder.cpp" />
     <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="SplatMapContainer.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="ModelLoader.cpp" />
     <ClCompile Include="ModelProxy.cpp" />
@@ -315,6 +316,7 @@
     <ClInclude Include="NavMesh.h" />
     <ClInclude Include="PathFinder.h" />
     <ClInclude Include="Renderer.h" />
+    <ClInclude Include="SplatMapContainer.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="ModelLoader.h" />
     <ClInclude Include="ModelProxy.h" />
