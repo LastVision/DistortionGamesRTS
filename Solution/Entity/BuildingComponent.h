@@ -11,12 +11,19 @@ public:
 	BuildingComponent(Entity& aEntity, BuildingCompnentData& aData);
 	~BuildingComponent();
 
+	void Update(float aDeltaTime) override;
+
 	static eComponentType GetTypeStatic();
 	eComponentType GetType() override;
 	void BuildUnit(eEntityType aUnitType);
 private:
 
 	CU::StaticArray<eEntityType, 3> myBuildTypes;
+
+	eEntityType myEntityToSpawn;
+
+	float myCurrentBuildTime;
+	float myMaxBuildTime;
 };
 
 inline eComponentType BuildingComponent::GetTypeStatic()

@@ -53,8 +53,8 @@ private:
 	void LoadLights(XMLReader& aReader, tinyxml2::XMLElement* aLevelElement);
 	void LoadDirectionalLights(XMLReader& aReader, tinyxml2::XMLElement* aLevelElement);
 	void LoadProps(XMLReader& aReader, tinyxml2::XMLElement* aLevelElement);
+	void LoadBases(XMLReader& aReader, tinyxml2::XMLElement* aLevelElement);
 	void LoadTerrain(const std::string& aLevelPath);
-
 	Level* myCurrentLevel;
 	Level* myOldLevel;
 
