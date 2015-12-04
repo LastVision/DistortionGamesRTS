@@ -42,17 +42,18 @@ void AIDirector::Update(float aDeltaTime)
 
 	for (int i = 0; i < myActiveUnits.Size(); ++i)
 	{
-		ControllerComponent* controller = myActiveUnits[i]->GetComponent<ControllerComponent>();
+		/*ControllerComponent* controller = myActiveUnits[i]->GetComponent<ControllerComponent>();
 		Entity* closestPlayerEntity = PollingStation::GetInstance()->FindClosestEntity(
 			myActiveUnits[i]->GetOrientation().GetPos(), eOwnerType::PLAYER, controller->GetVisionRange());
 
 		if (closestPlayerEntity != nullptr)
 		{
-			myActiveUnits[i]->GetComponent<ControllerComponent>()->Attack(closestPlayerEntity);
+			myActiveUnits[i]->GetComponent<ControllerComponent>()->Attack(
+				closestPlayerEntity->GetOrientation().GetPos(), true);
 		}
 		else
-		{
-			myActiveUnits[i]->SetState(eEntityState::IDLE);
-		}
+		{*/
+		//	myActiveUnits[i]->SetState(eEntityState::IDLE);
+		//}
 	}
 }

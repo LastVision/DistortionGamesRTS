@@ -20,8 +20,10 @@ public:
 	static eComponentType GetTypeStatic();
 	eComponentType GetType() override;
 
+
+	void LookInDirection(const CU::Vector3<float>& aDirection);
+	void LookAtPoint(const CU::Vector3<float>& aPoint);
 private:
-	void LookAt(const CU::Vector3<float>& aDirection);
 	float mySpeed;
 	const Prism::Terrain& myTerrain;
 };

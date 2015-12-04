@@ -25,7 +25,7 @@ void ActorComponent::Update(float aDelta)
 	if (CU::Length(direction) > 0.f)
 	{
 		CU::Normalize(direction);
-		LookAt(direction);
+		LookInDirection(direction);
 		myEntity.SetState(eEntityState::WALKING);
 		
 		CU::Vector3<float> position = myEntity.myOrientation.GetPos();
@@ -36,7 +36,7 @@ void ActorComponent::Update(float aDelta)
 	}
 }
 
-void ActorComponent::LookAt(const CU::Vector3<float>& aDirection)
+void ActorComponent::LookInDirection(const CU::Vector3<float>& aDirection)
 {
 	CU::Vector3<float> direction = CU::GetNormalized(aDirection);
 
@@ -56,4 +56,10 @@ void ActorComponent::LookAt(const CU::Vector3<float>& aDirection)
 		myEntity.myOrientation = myEntity.myOrientation * CU::Matrix44<float>::CreateRotateAroundY(angle);
 		myEntity.myOrientation.SetPos(pos);
 	}
+}
+
+void ActorComponent::LookAtPoint(const CU::Vector3<float>& aPoint)
+{
+	CU::Vector3<float> direction = aPoint - myEntity.GetOrientation().GetPos();
+	LookInDirection(direction);
 }
