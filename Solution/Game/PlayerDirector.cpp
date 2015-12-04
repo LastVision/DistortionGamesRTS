@@ -182,6 +182,7 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 	bool hasHovered = false;
 	bool shiftPressed = CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_LSHIFT)
 		|| CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_RSHIFT);
+	bool aPressed = CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_A);
 	bool leftClicked;
 	if (myRenderGUI == true) // no inworld clicking when mouse is over gui:
 	{
@@ -212,9 +213,16 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 					{
 						controller->MoveTo(targetPos, false);
 					}
-					else
+					else if (aPressed == true)
 					{
 						controller->AttackMove(targetPos);
+					}
+					else
+					{
+						//controller->MoveTo(targetPos, true);
+						int THIS_NEEDS_RESTORING = 5;
+						controller->AttackMove(targetPos);
+
 					}
 				}
 				else
