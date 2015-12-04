@@ -1,5 +1,7 @@
 #pragma once
+
 #include "Component.h"
+#include "EntityEnum.h"
 #include <GrowingArray.h>
 #include <Vector.h>
 
@@ -22,9 +24,8 @@ public:
 
 	void Update(float aDelta) override;
 
-	void MoveTo(const CU::Vector3<float>& aPosition, bool aClearPreviousPoints);
-	void AttackMove(const CU::Vector3<float>& aPosition);
-	void Attack(Entity* aTarget);
+	void MoveTo(const CU::Vector3<float>& aPosition, bool aClearCommandQueue);
+	void Attack(const CU::Vector3<float>& aPosition, bool aClearCommandQueue);
 
 	void Spawn(const CU::Vector3f& aPosition);
 
@@ -41,15 +42,24 @@ private:
 		IDLE,
 		MOVE,
 		ATTACK,
-		ATTACK_MOVE,
-		CHASE,
+		RETURN,
+	};
+
+	struct ActionData
+	{
+		eAction myAction;
+		CU::Vector3<float> myPosition;
 	};
 
 	void DoMoveAction();
 	void DoMoveAction(const CU::Vector3<float>& aTargetPosition);
 	void DoAttackAction();
+	void AttackTarget();
 	CU::Vector3<float> GetNextWayPoint();
-
+	void StartNextAction();
+	void RenderDebugLines() const;
+	eColorDebug GetActionColor(eAction aAction) const;
+	
 	eAction myCurrentAction;
 	Entity* myAttackTarget;
 	ControllerData myData;
@@ -57,13 +67,19 @@ private:
 	CU::Vector3<float> myCurrentWayPoint;
 
 	CU::Vector3<float> myMoveTarget;
-	CU::Vector3<float> myChaseOrigin;
+	CU::Vector3<float> myReturnPosition;
 
 	const Prism::Terrain& myTerrain;
+	eOwnerType myOwnerType;
+	eOwnerType myTargetType;
 
 	float myVisionRange;
 	float myAttackRange;
 	float myChaseDistance;
+
+
+	CU::GrowingArray<ActionData> myActions;
+	CU::Vector3<float> myCurrentActionPosition;
 };
 
 inline const ControllerComponent::ControllerData& ControllerComponent::GetControllerData() const

@@ -185,16 +185,19 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 		|| CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_RSHIFT);
 	bool aPressed = CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_A);
 	bool leftClicked;
+	bool rightClicked;
 	if (myRenderGUI == true) // no inworld clicking when mouse is over gui:
 	{
 		leftClicked = CU::InputWrapper::GetInstance()->MouseDown(0) && !(myGUIManager->MouseOverGUI());
+		rightClicked = CU::InputWrapper::GetInstance()->MouseDown(1) && !(myGUIManager->MouseOverGUI());
 	}
 	else
 	{
 		leftClicked = CU::InputWrapper::GetInstance()->MouseDown(0);
+		rightClicked = CU::InputWrapper::GetInstance()->MouseDown(1);
 	}
 
-	if (leftClicked == true && shiftPressed == false)
+	if (leftClicked == true && shiftPressed == false && aPressed == false)
 	{
 		mySelectedUnits.RemoveAll();
 	}
@@ -202,38 +205,51 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 	for (int i = 0; i < myUnits.Size(); ++i)
 	{
 		SelectOrHoverEntity(myUnits[i], hasSelected, hasHovered, line);
+		ControllerComponent* controller = myUnits[i]->GetComponent<ControllerComponent>();
 
-		if (CU::InputWrapper::GetInstance()->MouseDown(1))
+		if (myUnits[i]->IsSelected())
 		{
-			if (myUnits[i]->IsSelected())
+			if (aPressed && leftClicked)
 			{
-				ControllerComponent* controller = myUnits[i]->GetComponent<ControllerComponent>();
-				if (hoveredEnemy == nullptr)
-				{
-					if (shiftPressed == true)
-					{
-						controller->MoveTo(targetPos, false);
-					}
-					else if (aPressed == true)
-					{
-						controller->AttackMove(targetPos);
-					}
-					else
-					{
-						//controller->MoveTo(targetPos, true);
-						int THIS_NEEDS_RESTORING = 5;
-						controller->AttackMove(targetPos);
-
-					}
-				}
-				else
-				{
-					controller->Attack(hoveredEnemy);
-				}
+				controller->Attack(targetPos, !shiftPressed);
+			}
+			else if (rightClicked)
+			{
+				controller->MoveTo(targetPos, !shiftPressed);
 			}
 		}
+
+
+		//if (CU::InputWrapper::GetInstance()->MouseDown(1))
+		//{
+		//	if (myUnits[i]->IsSelected())
+		//	{
+		//		ControllerComponent* controller = myUnits[i]->GetComponent<ControllerComponent>();
+		//		if (hoveredEnemy == nullptr)
+		//		{
+		//			if (shiftPressed == true)
+		//			{
+		//				controller->MoveTo(targetPos, false);
+		//			}
+		//			else if (aPressed == true)
+		//			{
+		//				controller->Attack(targetPos);
+		//			}
+		//			else
+		//			{
+		//				//controller->MoveTo(targetPos, true);
+		//				int THIS_NEEDS_RESTORING = 5;
+		//				controller->Attack(targetPos);
+
+		//			}
+		//		}
+		//		else
+		//		{
+		//			controller->Attack(hoveredEnemy->GetOrientation().GetPos());
+		//		}
+		//	}
+		//}
 	}
-	SelectOrHoverEntity(myBuilding, hasSelected, hasHovered, line);
 }
 
 void PlayerDirector::SelectOrHoverEntity(Entity* aEntity, bool &aSelected, bool &aHovered
@@ -251,9 +267,10 @@ void PlayerDirector::SelectOrHoverEntity(Entity* aEntity, bool &aSelected, bool 
 
 	bool hasPressedShift = CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_LSHIFT)
 		|| CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_RSHIFT);
+	bool aPressed = CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_A);
 	bool mouseOnUnit = aEntity->GetComponent<CollisionComponent>()->Collide(aMouseRay);
 
-	if (leftClicked == true && hasPressedShift == false)
+	if (leftClicked == true && hasPressedShift == false && aPressed == false)
 	{
 		aEntity->SetSelect(false);
 	}

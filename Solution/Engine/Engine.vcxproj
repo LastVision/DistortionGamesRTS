@@ -364,6 +364,25 @@
       <Project>{62c9b6f1-e90e-49c7-b0c6-3809fca2065d}</Project>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_effect_cube3d.fx" />
+    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_effect_debug.fx" />
+    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_effect_font.fx" />
+    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_effect_line3d.fx" />
+    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_effect_no_texture.fx" />
+    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_effect_no_texture_animated.fx" />
+    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_effect_particle.fx" />
+    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_effect_pbl.fx" />
+    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_effect_pbl_animated.fx" />
+    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_effect_sprite.fx" />
+    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_effect_streak.fx" />
+    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_effect_terrain.fx" />
+    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_light_directional.fx" />
+    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_light_point.fx" />
+    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_light_spot.fx" />
+    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_variables_pbl.fx" />
+    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_variables_shader.fx" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
