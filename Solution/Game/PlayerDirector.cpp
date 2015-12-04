@@ -25,16 +25,19 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 	for (int i = 0; i < 64; ++i)
 	{
 		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::PLAYER, eEntityType::DRAGON, Prism::eOctreeType::DYNAMIC,
-			aScene, { 20.f + i, 0.f, 20.f }, aTerrain));
+			aScene, { 65, 0, 40 }, aTerrain));
+		
 	}
 	
 	Prism::ModelLoader::GetInstance()->Pause();
 	myGUIManager = new GUI::GUIManager(aCursor, "Data/Resource/GUI/GUI_ingame.xml", this);
 	Prism::ModelLoader::GetInstance()->UnPause();
 
-	for (int i = 0; i < myUnits.Size(); ++i)
+	myActiveUnits.Add(myUnits[0]);
+	for (int i = 0; i < myActiveUnits.Size(); ++i)
 	{
-		PollingStation::GetInstance()->RegisterEntity(myUnits[i]);
+		myActiveUnits[i]->Spawn({ 65.f, 0.f, 25.f });
+		PollingStation::GetInstance()->RegisterEntity(myActiveUnits[i]);
 	}
 }
 
@@ -95,12 +98,12 @@ void PlayerDirector::ReceiveMessage(const SpawnUnitMessage& aMessage)
 		{
 			if (myUnits[i]->GetType() == static_cast<eEntityType>(aMessage.myUnitType) && myUnits[i]->GetAlive() == false)
 			{
-				myUnits[i]->Spawn(myBuilding->GetOrientation().GetPos() + CU::Vector3f(2.f, 0.f, 2.f));
+				myUnits[i]->Spawn(myBuilding->GetOrientation().GetPos() + CU::Vector3f(0.f, 0.f, -15.f));
 				myActiveUnits.Add(myUnits[i]);
 				break;
 			}
 		}
-		PollingStation::GetInstance()->RegisterEntity(myUnits.GetLast());
+		PollingStation::GetInstance()->RegisterEntity(myActiveUnits.GetLast());
 	}
 }
 
