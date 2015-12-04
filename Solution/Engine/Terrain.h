@@ -18,7 +18,8 @@ namespace Prism
 	struct HeightMap;
 	struct VertexIndexWrapper;
 	struct VertexDataWrapper;
-	struct VertexPosNormUV;
+	struct VertexPosNormUVBiTang;
+	class SplatMapContainer;
 
 	class Terrain : public BaseModel
 	{
@@ -42,7 +43,7 @@ namespace Prism
 	private:
 		void operator=(Terrain&) = delete;
 		void CreateVertices();
-		void CalcNormals(CU::GrowingArray<VertexPosNormUV>& someVertices) const;
+		void CalcNormals(CU::GrowingArray<VertexPosNormUVBiTang>& someVertices) const;
 		float GetHeight(unsigned int aX, unsigned int aY) const;
 		float GetHeight(unsigned int aIndex) const;
 		void GetPoint(CU::Vector3<float>& aPoint) const;
@@ -61,6 +62,8 @@ namespace Prism
 
 		Navigation::NavMesh* myNavMesh;
 		Navigation::PathFinder* myPathFinder;
+
+		SplatMapContainer* mySplatMapContainer;
 	};
 
 	inline Navigation::NavMesh* Terrain::GetNavMesh() const

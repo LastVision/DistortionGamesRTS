@@ -366,36 +366,6 @@ namespace Prism
 			myAmbientHue = nullptr;
 		}
 
-		mySplatTextureBase = myEffect->GetVariableByName("mySplatTextureBase")->AsShaderResource();
-		if (mySplatTextureBase->IsValid() == false)
-		{
-			mySplatTextureBase = nullptr;
-		}
-
-		mySplatTextureR = myEffect->GetVariableByName("mySplatTextureR")->AsShaderResource();
-		if (mySplatTextureR->IsValid() == false)
-		{
-			mySplatTextureR = nullptr;
-		}
-
-		mySplatTextureG = myEffect->GetVariableByName("mySplatTextureG")->AsShaderResource();
-		if (mySplatTextureG->IsValid() == false)
-		{
-			mySplatTextureG = nullptr;
-		}
-
-		mySplatTextureB = myEffect->GetVariableByName("mySplatTextureB")->AsShaderResource();
-		if (mySplatTextureB->IsValid() == false)
-		{
-			mySplatTextureB = nullptr;
-		}
-
-		mySplatTextureA = myEffect->GetVariableByName("mySplatTextureA")->AsShaderResource();
-		if (mySplatTextureA->IsValid() == false)
-		{
-			mySplatTextureA = nullptr;
-		}
-
 		myBonesArray = myEffect->GetVariableByName("Bones")->AsMatrix();
 		if (myBonesArray->IsValid() == false)
 		{
@@ -412,30 +382,4 @@ namespace Prism
 			myCameraPosition->SetFloatVector(static_cast<const float*>(&aCameraPos.x));
 		}
 	}
-
-	void Effect::SetSplatTextureBase(const Texture* aSplatTexture)
-	{
-		mySplatTextureBase->SetResource(aSplatTexture->GetShaderView());
-	}
-
-	void Effect::SetSplatTextureR(const Texture* aSplatTexture)
-	{
-		mySplatTextureR->SetResource(aSplatTexture->GetShaderView());
-	}
-
-	void Effect::SetSplatTextureG(const Texture* aSplatTexture)
-	{
-		mySplatTextureG->SetResource(aSplatTexture->GetShaderView());
-	}
-
-	void Effect::SetSplatTextureB(const Texture* aSplatTexture)
-	{
-		mySplatTextureB->SetResource(aSplatTexture->GetShaderView());
-	}
-
-	void Effect::SetSplatTextureA(const Texture* aSplatTexture)
-	{
-		mySplatTextureA->SetResource(aSplatTexture->GetShaderView());
-	}
-
 }

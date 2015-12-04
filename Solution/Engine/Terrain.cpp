@@ -14,6 +14,7 @@
 #include <MathHelper.h>
 #include "NavMesh.h"
 #include "Surface.h"
+#include "SplatMapContainer.h"
 #include "TextureContainer.h"
 #include "VertexBufferWrapper.h"
 
@@ -36,16 +37,17 @@ namespace Prism
 			->GetTexture("Data/Resource/Texture/Terrain/SplatMap/T_InfluenceToSplatMap.dds");
 		myEffect->SetTexture(influence);
 
-		myEffect->SetSplatTextureBase(Prism::TextureContainer::GetInstance()
-			->GetTexture("Data/Resource/Texture/Terrain/SplatMap/T_SplatBase.dds"));
-		myEffect->SetSplatTextureR(Prism::TextureContainer::GetInstance()
-			->GetTexture("Data/Resource/Texture/Terrain/SplatMap/T_SplatR.dds"));
-		myEffect->SetSplatTextureG(Prism::TextureContainer::GetInstance()
-			->GetTexture("Data/Resource/Texture/Terrain/SplatMap/T_SplatG.dds"));
-		myEffect->SetSplatTextureB(Prism::TextureContainer::GetInstance()
-			->GetTexture("Data/Resource/Texture/Terrain/SplatMap/T_SplatB.dds"));
-		myEffect->SetSplatTextureA(Prism::TextureContainer::GetInstance()
-			->GetTexture("Data/Resource/Texture/Terrain/SplatMap/T_SplatA.dds"));
+		//myEffect->SetSplatTextureBase(Prism::TextureContainer::GetInstance()
+		//	->GetTexture("Data/Resource/Texture/Terrain/SplatMap/T_SplatBase.dds"));
+		//myEffect->SetSplatTextureR(Prism::TextureContainer::GetInstance()
+		//	->GetTexture("Data/Resource/Texture/Terrain/SplatMap/T_SplatR.dds"));
+		//myEffect->SetSplatTextureG(Prism::TextureContainer::GetInstance()
+		//	->GetTexture("Data/Resource/Texture/Terrain/SplatMap/T_SplatG.dds"));
+		//myEffect->SetSplatTextureB(Prism::TextureContainer::GetInstance()
+		//	->GetTexture("Data/Resource/Texture/Terrain/SplatMap/T_SplatB.dds"));
+		//myEffect->SetSplatTextureA(Prism::TextureContainer::GetInstance()
+		//	->GetTexture("Data/Resource/Texture/Terrain/SplatMap/T_SplatA.dds"));
+
 
 
 		D3D11_INPUT_ELEMENT_DESC vertexDesc[] =
@@ -53,15 +55,30 @@ namespace Prism
 			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 			{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 			{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			{ "BINORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 28, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			{ "TANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 40, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		};
 
 
 
 		InitInputLayout(vertexDesc, ARRAYSIZE(vertexDesc), "Terrain::InputLayout");
-		InitVertexBuffer(sizeof(VertexPosNormUV), D3D11_USAGE_IMMUTABLE, 0);
+		InitVertexBuffer(sizeof(VertexPosNormUVBiTang), D3D11_USAGE_IMMUTABLE, 0);
 
 		InitIndexBuffer();
 		InitSurface("AlbedoTexture", myFileName);
+
+		mySplatMapContainer = new SplatMapContainer(myEffect);
+
+		mySplatMapContainer->SetTextures();
+
+		//myEffect->SetSplatAlbedos()
+		
+		//if (mySurfaces[0]->SetTexture("myAlbedoTextures[0]", "Data/Resource/Texture/Terrain/SplatMap/T_SplatBase.dds", false) == false)
+		//{
+		//	DL_ASSERT("Failed to load mySplatTextureBase");
+		//}
+		
+		
 		InitBlendState("Terrain::BlendState");
 
 		ZeroMemory(myInitData, sizeof(myInitData));
@@ -76,14 +93,17 @@ namespace Prism
 		SAFE_DELETE(myHeightMap);
 		SAFE_DELETE(myPathFinder);
 		SAFE_DELETE(myNavMesh);
+		SAFE_DELETE(mySplatMapContainer);
 	}
 
 	void Terrain::Render(const Camera& aCamera)
 	{
+
 		CU::Matrix44<float> world;
 		//world.SetPos(CU::Vector3<float>(0, -110.f, 0));
 		myEffect->SetWorldMatrix(world);
 		myEffect->SetViewProjectionMatrix(aCamera.GetViewProjection());
+		myEffect->SetCameraPosition(aCamera.GetOrientation().GetPos());
 		BaseModel::Render();
 
 		myNavMesh->Render();
@@ -150,17 +170,17 @@ namespace Prism
 
 	void Terrain::CreateVertices()
 	{
-		CU::GrowingArray<VertexPosNormUV> vertices(myHeightMap->myWidth * myHeightMap->myDepth);
+		CU::GrowingArray<VertexPosNormUVBiTang> vertices(myHeightMap->myWidth * myHeightMap->myDepth);
 		CU::GrowingArray<int> indices(myHeightMap->myWidth * myHeightMap->myDepth * 6);
 
 		for (int z = 0; z < myHeightMap->myDepth; ++z)
 		{
 			for (int x = 0; x < myHeightMap->myWidth; ++x)
 			{
-				VertexPosNormUV vertex;
-				vertex.myPos.x = float(x) * mySize.x / float(myHeightMap->myWidth);
-				vertex.myPos.y = myHeightMap->myData[(myHeightMap->myDepth - (1 + z)) * myHeightMap->myWidth + x] * myHeight / 255.f; 
-				vertex.myPos.z = float(z) * mySize.y / float(myHeightMap->myDepth);
+				VertexPosNormUVBiTang vertex;
+				vertex.myPosition.x = float(x) * mySize.x / float(myHeightMap->myWidth);
+				vertex.myPosition.y = myHeightMap->myData[(myHeightMap->myDepth - (1 + z)) * myHeightMap->myWidth + x] * myHeight / 255.f;
+				vertex.myPosition.z = float(z) * mySize.y / float(myHeightMap->myDepth);
 				vertex.myUV.x = float(x) / float(myHeightMap->myWidth);
 				vertex.myUV.y = float(1.f - z) / float(myHeightMap->myDepth);
 				vertices.Add(vertex);
@@ -168,6 +188,16 @@ namespace Prism
 		}
 
 		CalcNormals(vertices);
+
+		CU::Matrix33<float> rotationMatrix;
+		rotationMatrix = rotationMatrix * CU::Matrix33<float>::CreateRotateAroundX(CU_PI / 2.f);
+		rotationMatrix = rotationMatrix * CU::Matrix33<float>::CreateRotateAroundZ(CU_PI / 2.f);
+		
+		for (int i = 0; i < vertices.Size(); ++i)
+		{
+			vertices[i].myTangent = CU::GetNormalized(CU::Cross(vertices[i].myNormal, vertices[i].myNormal * rotationMatrix));
+			vertices[i].myBiNormal = CU::GetNormalized(CU::Cross(vertices[i].myTangent, vertices[i].myNormal));
+		}
 
 		for (int z = 0; z < myHeightMap->myDepth - 1; ++z)
 		{
@@ -192,7 +222,7 @@ namespace Prism
 			}
 		}
 
-		SetupVertexBuffer(vertices.Size(), sizeof(VertexPosNormUV), reinterpret_cast<char*>(&vertices[0])
+		SetupVertexBuffer(vertices.Size(), sizeof(VertexPosNormUVBiTang), reinterpret_cast<char*>(&vertices[0])
 			, "Terrain::VertexBuffer");
 		SetupIndexBuffer(indices.Size(), reinterpret_cast<char*>(&indices[0]), "Terrain::IndexBuffer");
 
@@ -200,7 +230,7 @@ namespace Prism
 		mySurfaces[0]->SetIndexCount(indices.Size());
 	}
 
-	void Terrain::CalcNormals(CU::GrowingArray<VertexPosNormUV>& someVertices) const
+	void Terrain::CalcNormals(CU::GrowingArray<VertexPosNormUVBiTang>& someVertices) const
 	{
 		unsigned int height = myHeightMap->myDepth;
 		unsigned int width = myHeightMap->myWidth;
@@ -224,7 +254,7 @@ namespace Prism
 				CU::Vector3<float> normal(-sx*xzScale, yScale, sy*xzScale);
 				CU::Normalize(normal);
 
-				someVertices[y*width + x].myNorm = normal;
+				someVertices[y*width + x].myNormal = normal;
 			}
 		}
 	}
