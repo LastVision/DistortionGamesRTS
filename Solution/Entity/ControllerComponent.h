@@ -26,6 +26,7 @@ public:
 
 	void MoveTo(const CU::Vector3<float>& aPosition, bool aClearCommandQueue);
 	void Attack(const CU::Vector3<float>& aPosition, bool aClearCommandQueue);
+	void Stop();
 
 	void Spawn(const CU::Vector3f& aPosition);
 
@@ -51,11 +52,9 @@ private:
 		CU::Vector3<float> myPosition;
 	};
 
-	void DoMoveAction();
 	void DoMoveAction(const CU::Vector3<float>& aTargetPosition);
 	void DoAttackAction();
 	void AttackTarget();
-	CU::Vector3<float> GetNextWayPoint();
 	void StartNextAction();
 	void RenderDebugLines() const;
 	eColorDebug GetActionColor(eAction aAction) const;
