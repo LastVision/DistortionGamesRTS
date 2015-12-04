@@ -250,6 +250,9 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 		//	}
 		//}
 	}
+
+
+	SelectOrHoverEntity(myBuilding, hasSelected, hasHovered, line);
 }
 
 void PlayerDirector::SelectOrHoverEntity(Entity* aEntity, bool &aSelected, bool &aHovered
