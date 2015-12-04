@@ -39,6 +39,8 @@ public:
 
 	void ReceiveMessage(const SpawnUnitMessage& aMessage) override;
 
+	const CU::GrowingArray<Entity*>& GetSelectedUnits() const;
+
 private:
 	CU::Vector3<float> CalcCursorWorldPosition(const Prism::Camera& aCamera);
 	void UpdateMouseInteraction(const Prism::Camera& aCamera);
@@ -52,3 +54,7 @@ private:
 	bool myRenderGUI;
 };
 
+inline const CU::GrowingArray<Entity*>& PlayerDirector::GetSelectedUnits() const
+{
+	return mySelectedUnits;
+}
