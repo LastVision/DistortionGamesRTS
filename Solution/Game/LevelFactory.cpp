@@ -161,10 +161,10 @@ void LevelFactory::ReadLevel(const std::string& aLevelPath)
 	effectContainer->GetEffect("Data/Resource/Shader/S_effect_pbl.fx")->SetAmbientHue(myAmbientHue);
 
 	myTerrain->CreateNavMesh();
-	for (int i = 0; i < myCurrentLevel->myEntities.Size(); ++i)
+	/*for (int i = 0; i < myCurrentLevel->myEntities.Size(); ++i)
 	{
 		myTerrain->GetNavMesh()->Cut(myCurrentLevel->myEntities[i]->GetCutMesh());
-	}
+	}*/
 	myTerrain->CreatePathFinder();
 
 	Prism::Engine::GetInstance()->myIsLoading = false;

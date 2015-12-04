@@ -37,6 +37,15 @@ namespace Prism
 		CU::Vector2<float> myUV;
 	};
 
+	struct VertexPosNormUVBiTang
+	{
+		CU::Vector3<float> myPosition;
+		CU::Vector3<float> myNormal;
+		CU::Vector2<float> myUV;
+		CU::Vector3<float> myBiNormal;
+		CU::Vector3<float> myTangent;
+	};
+
 	struct VertexPosNormColor
 	{
 		CU::Vector4<float> myPosition;
