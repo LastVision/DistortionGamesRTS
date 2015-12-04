@@ -43,5 +43,5 @@ private:
 
 inline int Director::GetUnitCount() const
 {
-	return myUnits.Size();
+	return myActiveUnits.Size();
 }
