@@ -2,7 +2,7 @@
 
 #include <D3D11.h>
 
-#define MAXNROFLINES 4096
+#define MAXNROFLINES 32768
 
 namespace Prism
 {

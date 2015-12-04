@@ -5,29 +5,46 @@
 #include "NavMesh.h"
 #include "Triangle.h"
 #include "Vertex.h"
+#include <StaticArray.h>
+
+#define QUADS_PER_SIDE 64
 
 namespace Prism
 {
 	namespace Navigation
 	{
 		NavMesh::NavMesh()
-			: myTriangles(128)
-			, myNewTriangles(128)
+			: myTriangles(4096)
+			, myNewTriangles(1024)
+			, myTotalSize(255.f)
+			, myCellSize(myTotalSize / QUADS_PER_SIDE)
 		{
-			Vertex* topLeft = new Vertex(CU::Vector2<float>(0.0f, 0.0f));
-			Vertex* topRight = new Vertex(CU::Vector2<float>(255.f, 0.0f));
-			Vertex* botLeft = new Vertex(CU::Vector2<float>(0.0f, 255.f));
-			Vertex* botRight = new Vertex(CU::Vector2<float>(255.f, 255.f));
+			Vertex* botLeft = new Vertex(CU::Vector2<float>(0.0f, 0.0f));
 
-			Edge* top = new Edge(topLeft, topRight);
-			Edge* left = new Edge(botLeft, topLeft);
-			Edge* right = new Edge(topRight, botRight);
-			Edge* bot = new Edge(botRight, botLeft);
+			Edge* outRight = nullptr;
+			//Edge* outTop = nullptr;
+			Edge* bot = nullptr;
+			//Edge* left = nullptr;
 
-			Edge* middle = new Edge(topLeft, botRight);
 
-			myTriangles.Add(new Triangle(top, right, middle));
-			myTriangles.Add(new Triangle(left, bot, middle));
+			CU::StaticArray<Edge*, QUADS_PER_SIDE> topEdges;
+
+			for (int i = 0; i < QUADS_PER_SIDE; ++i)
+			{
+				topEdges[i] = nullptr;
+			}
+
+			for (int j = 0; j < QUADS_PER_SIDE; ++j)
+			{
+				for (int i = 0; i < QUADS_PER_SIDE; ++i)
+				{
+					CreateQuad(botLeft, outRight, topEdges[i]);
+					//calc new botLeft Vertex
+				}
+
+				botLeft = topEdges[0]->myVertex1;
+				outRight = nullptr;
+			}
 		}
 
 		NavMesh::~NavMesh()
@@ -37,10 +54,10 @@ namespace Prism
 
 		void NavMesh::Render()
 		{
-			for (int i = 0; i < myTriangles.Size(); ++i)
-			{
-				myTriangles[i]->Render();
-			}
+			//for (int i = 0; i < myTriangles.Size(); ++i)
+			//{
+			//	myTriangles[i]->Render();
+			//}
 			DEBUG_PRINT(myTriangles.Size());
 		}
 
@@ -78,6 +95,48 @@ namespace Prism
 				}
 			}
 			edgesToCut.DeleteAll();
+		}
+
+		void NavMesh::CreateQuad(Vertex*& aBotLeftVertex, Edge*& aLeftEdge, Edge*& aBotEdge)
+		{
+			Vertex* topRight = new Vertex(CU::Vector2<float>(aBotLeftVertex->myPosition.x + myCellSize, aBotLeftVertex->myPosition.y + myCellSize));
+
+			Vertex* botRight;
+			Edge* bot;
+			if (aBotEdge != nullptr)
+			{
+				botRight = aBotEdge->myVertex2; // ensure this is correct
+				bot = aBotEdge;
+			}
+			else
+			{
+				botRight = new Vertex(CU::Vector2<float>(aBotLeftVertex->myPosition.x + myCellSize, aBotLeftVertex->myPosition.y));
+				bot = new Edge(aBotLeftVertex, botRight);
+			}
+
+			Vertex* topLeft;
+			Edge* left;
+			if (aLeftEdge != nullptr)
+			{
+				topLeft = aLeftEdge->myVertex2; // ensure this is correct
+				left = aLeftEdge;
+			}
+			else
+			{
+				topLeft = new Vertex(CU::Vector2<float>(aBotLeftVertex->myPosition.x, aBotLeftVertex->myPosition.y + myCellSize));
+				left = new Edge(aBotLeftVertex, topLeft);
+			}
+			
+			Edge* right = new Edge(botRight, topRight);
+			Edge* top = new Edge(topLeft, topRight);
+			Edge* middle = new Edge(aBotLeftVertex, topRight);
+
+			myTriangles.Add(new Triangle(bot, right, middle));
+			myTriangles.Add(new Triangle(left, top, middle));
+
+			aBotLeftVertex = botRight;
+			aBotEdge = top;
+			aLeftEdge= right;
 		}
 
 		void NavMesh::CutTriangle(Edge* anEdgeToCut, Triangle* aTriangle, Edge* aNewEdge1, Edge* aNewEdge2, Vertex* anIntersectionVertex)
