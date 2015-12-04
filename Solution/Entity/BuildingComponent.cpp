@@ -9,6 +9,9 @@
 BuildingComponent::BuildingComponent(Entity& aEntity, BuildingCompnentData& aData)
 	: Component(aEntity)
 	, myBuildTypes(aData.myBuildUnitTypes)
+	, myEntityToSpawn(eEntityType::EMPTY)
+	, myCurrentBuildTime(0.f)
+	, myMaxBuildTime(1.f)
 {
 }
 
@@ -16,7 +19,26 @@ BuildingComponent::~BuildingComponent()
 {
 }
 
+void BuildingComponent::Update(float aDeltaTime)
+{
+	if (myEntityToSpawn != eEntityType::EMPTY)
+	{
+		myCurrentBuildTime += aDeltaTime;
+
+		if (myCurrentBuildTime >= myMaxBuildTime)
+		{
+			PostMaster::GetInstance()->SendMessage(SpawnUnitMessage(myEntityToSpawn, myEntity.GetOwner(), myEntity.GetScene()));
+			myEntityToSpawn = eEntityType::EMPTY;
+			myCurrentBuildTime = 0.f;
+		}
+	}
+}
+
 void BuildingComponent::BuildUnit(eEntityType aUnitType)
 {
-	PostMaster::GetInstance()->SendMessage(SpawnUnitMessage(aUnitType, myEntity.GetOwner(), myEntity.GetScene()));
+	if (myEntityToSpawn == eEntityType::EMPTY)
+	{
+		myEntityToSpawn = aUnitType;
+		myCurrentBuildTime = 0.f;
+	}
 }

@@ -32,7 +32,7 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 	myBuilding->AddToScene();
 	myBuilding->Reset();
 	Prism::ModelLoader::GetInstance()->Pause();
-	myGUIManager = new GUI::GUIManager(aCursor, "Data/Resource/GUI/GUI_ingame.xml", mySelectedUnits);
+	myGUIManager = new GUI::GUIManager(aCursor, "Data/Resource/GUI/GUI_ingame.xml", this);
 	Prism::ModelLoader::GetInstance()->UnPause();
 
 	myActiveUnits.Add(myUnits[0]);

@@ -6,6 +6,7 @@ namespace CU
 }
 
 class Entity;
+class PlayerDirector;
 
 namespace GUI
 {
@@ -16,7 +17,7 @@ namespace GUI
 	class GUIManager
 	{
 	public:
-		GUIManager(Cursor* aCursor, const std::string& aXMLPath, const CU::GrowingArray<Entity*>& someUnits);
+		GUIManager(Cursor* aCursor, const std::string& aXMLPath, const PlayerDirector* aPlayer);
 		~GUIManager();
 
 		void AddWidget(Widget* aWidget);

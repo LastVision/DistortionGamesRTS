@@ -2,18 +2,20 @@
 #include "ButtonWidget.h"
 #include "Cursor.h"
 #include <Engine.h>
+#include "../Game/PlayerDirector.h"
 #include "GUIManager.h"
 #include "../InputWrapper/InputWrapper.h"
 #include "MiniMapWidget.h"
 #include <Sprite.h>
 #include "UnitActionWidget.h"
 #include "UnitInfoWidget.h"
+#include "ResourceBarWidget.h"
 #include "WidgetContainer.h"
 #include <XMLReader.h>
 
 namespace GUI
 {
-	GUIManager::GUIManager(Cursor* aCursor, const std::string& aXMLPath, const CU::GrowingArray<Entity*>& someUnits)
+	GUIManager::GUIManager(Cursor* aCursor, const std::string& aXMLPath, const PlayerDirector* aPlayer)
 		: myActiveWidget(nullptr)
 		, myCursor(aCursor)
 		, myMousePosition({ 0.f, 0.f })
@@ -66,18 +68,23 @@ namespace GUI
 				}
 				else if (type == "unit_info")
 				{
-					UnitInfoWidget* unitInfo = new UnitInfoWidget(&reader, widgetElement, someUnits);
+					UnitInfoWidget* unitInfo = new UnitInfoWidget(&reader, widgetElement, aPlayer->GetSelectedUnits());
 					container->AddWidget(unitInfo);
 				}
 				else if (type == "unit_action")
 				{
-					UnitActionWidget* unitActions = new UnitActionWidget(&reader, widgetElement, someUnits);
+					UnitActionWidget* unitActions = new UnitActionWidget(&reader, widgetElement, aPlayer->GetSelectedUnits());
 					container->AddWidget(unitActions);
 				}
 				else if (type == "minimap")
 				{
 					MiniMapWidget* minimap = new MiniMapWidget(&reader, widgetElement);
 					container->AddWidget(minimap);
+				}
+				else if (type == "resourcebar")
+				{
+					ResourceBarWidget* resourceBar = new ResourceBarWidget(&reader, widgetElement, 0);
+					container->AddWidget(resourceBar);
 				}
 			}
 			myWidgets->AddWidget(container);
