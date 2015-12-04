@@ -27,9 +27,7 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::PLAYER, eEntityType::DRAGON, Prism::eOctreeType::DYNAMIC,
 			aScene, { 20.f + i, 0.f, 20.f }, aTerrain));
 	}
-	myBuilding = EntityFactory::CreateEntity(eOwnerType::PLAYER, eEntityType::BASE_BUILING, Prism::eOctreeType::STATIC, aScene, { 30, 0, 40 }, aTerrain);
-	myBuilding->AddToScene();
-	myBuilding->Reset();
+	
 	Prism::ModelLoader::GetInstance()->Pause();
 	myGUIManager = new GUI::GUIManager(aCursor, "Data/Resource/GUI/GUI_ingame.xml", this);
 	Prism::ModelLoader::GetInstance()->UnPause();

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+#include "AIDirector.h"
 #include <CommonHelper.h>
 #include <DirectionalLight.h>
 #include "dirent.h"
@@ -12,6 +13,7 @@
 #include <MathHelper.h>
 #include <ModelLoader.h>
 #include <NavMesh.h>
+#include "PlayerDirector.h"
 #include <PointLight.h>
 #include <SpotLight.h>
 #include <Terrain.h>
@@ -149,6 +151,7 @@ void LevelFactory::ReadLevel(const std::string& aLevelPath)
 	effectContainer->SetCubeMap(cubeMap);
 
 	LoadLights(reader, levelElement);
+	LoadBases(reader, levelElement);
 	LoadProps(reader, levelElement);
 	reader.CloseDocument();
 
@@ -359,6 +362,69 @@ void LevelFactory::LoadProps(XMLReader& aReader, tinyxml2::XMLElement* aLevelEle
 	}
 }
 
+void LevelFactory::LoadBases(XMLReader& aReader, tinyxml2::XMLElement* aLevelElement)
+{
+	int enemyBase = 0;
+	int playerBase = 0;
+	for (tinyxml2::XMLElement* baseElement = aReader.FindFirstChild(aLevelElement); baseElement != nullptr;
+		baseElement = aReader.FindNextElement(baseElement))
+	{
+		std::string elementName = CU::ToLower(baseElement->Name());
+		if (elementName == "enemybase" || elementName == "playerbase")
+		{
+			std::string baseType;
+			aReader.ForceReadAttribute(baseElement, "baseType", baseType);
+			baseType = CU::ToLower(baseType);
+
+			tinyxml2::XMLElement* propElement = aReader.ForceFindFirstChild(baseElement, "position");
+			CU::Vector3<float> propPosition;
+			aReader.ForceReadAttribute(propElement, "X", propPosition.x);
+			aReader.ForceReadAttribute(propElement, "Y", propPosition.y);
+			aReader.ForceReadAttribute(propElement, "Z", propPosition.z);
+
+			propElement = aReader.ForceFindFirstChild(baseElement, "rotation");
+			CU::Vector3<float> propRotation;
+			aReader.ForceReadAttribute(propElement, "X", propRotation.x);
+			aReader.ForceReadAttribute(propElement, "Y", propRotation.y);
+			aReader.ForceReadAttribute(propElement, "Z", propRotation.z);
+
+			propElement = aReader.ForceFindFirstChild(baseElement, "scale");
+			CU::Vector3<float> propScale;
+			aReader.ForceReadAttribute(propElement, "X", propScale.x);
+			aReader.ForceReadAttribute(propElement, "Y", propScale.y);
+			aReader.ForceReadAttribute(propElement, "Z", propScale.z);
+
+			propRotation.x = CU::Math::DegreeToRad(propRotation.x);
+			propRotation.y = CU::Math::DegreeToRad(propRotation.y);
+			propRotation.z = CU::Math::DegreeToRad(propRotation.z);
+
+			if (elementName == "enemybase")
+			{
+				myCurrentLevel->myAI->myBuilding = EntityFactory::CreateEntity(eOwnerType::ENEMY, 
+					EntityFactory::ConvertStringToEntityType(baseType), Prism::eOctreeType::STATIC, 
+					*myCurrentLevel->myScene, propPosition, *myCurrentLevel->myTerrain, propRotation, propScale);
+				myCurrentLevel->myAI->myBuilding->AddToScene();
+				myCurrentLevel->myAI->myBuilding->Reset();
+				enemyBase++;
+			}
+			else if (elementName == "playerbase")
+			{
+				myCurrentLevel->myPlayer->myBuilding = EntityFactory::CreateEntity(eOwnerType::PLAYER,
+					EntityFactory::ConvertStringToEntityType(baseType), Prism::eOctreeType::STATIC,
+					*myCurrentLevel->myScene, propPosition, *myCurrentLevel->myTerrain, propRotation, propScale);
+				myCurrentLevel->myPlayer->myBuilding->AddToScene();
+				myCurrentLevel->myPlayer->myBuilding->Reset();
+				playerBase++;
+			}
+		}
+	}
+	DL_ASSERT_EXP(enemyBase <= 1, "Enemy can't have more than one base.");
+	DL_ASSERT_EXP(enemyBase >= 1, "Enemy can't have less than one base.");
+	DL_ASSERT_EXP(playerBase <= 1, "Player can't have more than one base.");
+	DL_ASSERT_EXP(playerBase >= 1, "Player can't have less than one base.");
+
+}
+
 void LevelFactory::LoadTerrain(const std::string& aLevelPath)
 {
 	XMLReader reader;
@@ -375,3 +441,4 @@ void LevelFactory::LoadTerrain(const std::string& aLevelPath)
 	myTerrain = new Prism::Terrain(heightMap, texturePath, { 256.f, 256.f }, 25.5f, CU::Matrix44<float>());
 	reader.CloseDocument();
 }
+

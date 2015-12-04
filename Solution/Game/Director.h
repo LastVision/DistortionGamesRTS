@@ -19,6 +19,7 @@ namespace Prism
 
 class Director : public Subscriber
 {
+	friend class LevelFactory;
 public:
 	Director(eDirectorType aDirectorType, const Prism::Terrain& aTerrain);
 	virtual ~Director();
