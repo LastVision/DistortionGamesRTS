@@ -444,5 +444,61 @@
     <Filter Include="Terrain\HeightMap">
       <UniqueIdentifier>{3e004790-9556-49a3-a41f-68c87da4990a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{dd864b4e-fbb6-41bc-b14c-4cfdc1b16970}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_effect_cube3d.fx">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_effect_debug.fx">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_effect_font.fx">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_effect_line3d.fx">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_effect_no_texture.fx">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_effect_no_texture_animated.fx">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_effect_particle.fx">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_effect_pbl.fx">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_effect_pbl_animated.fx">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_effect_sprite.fx">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_effect_streak.fx">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_effect_terrain.fx">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_light_directional.fx">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_light_point.fx">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_light_spot.fx">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_variables_pbl.fx">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_variables_shader.fx">
+      <Filter>Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
