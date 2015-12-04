@@ -1,13 +1,14 @@
 #include "stdafx.h"
 
 #include "Edge.h"
+#include <fstream>
 #include <Intersection.h>
 #include "NavMesh.h"
 #include "Triangle.h"
 #include "Vertex.h"
 #include <StaticArray.h>
 
-#define QUADS_PER_SIDE 64
+#define QUADS_PER_SIDE 24
 
 namespace Prism
 {
@@ -23,7 +24,7 @@ namespace Prism
 
 			Edge* outRight = nullptr;
 			//Edge* outTop = nullptr;
-			Edge* bot = nullptr;
+			//Edge* bot = nullptr;
 			//Edge* left = nullptr;
 
 
@@ -47,6 +48,13 @@ namespace Prism
 			}
 		}
 
+		NavMesh::NavMesh(const std::string& aBinaryPath)
+			: myTotalSize(255.f)
+			, myCellSize(myTotalSize / QUADS_PER_SIDE)
+		{
+			Load(aBinaryPath);
+		}
+
 		NavMesh::~NavMesh()
 		{
 			myTriangles.DeleteAll();
@@ -54,10 +62,10 @@ namespace Prism
 
 		void NavMesh::Render()
 		{
-			//for (int i = 0; i < myTriangles.Size(); ++i)
-			//{
-			//	myTriangles[i]->Render();
-			//}
+			for (int i = 0; i < myTriangles.Size(); ++i)
+			{
+				myTriangles[i]->Render();
+			}
 			DEBUG_PRINT(myTriangles.Size());
 		}
 
@@ -203,6 +211,121 @@ namespace Prism
 			}
 
 			myNewTriangles.RemoveAll();
+		}
+
+		void NavMesh::Save()
+		{
+			CU::GrowingArray<Vertex*> vertices(8192);
+			CU::GrowingArray<Edge*> edges(8192);
+
+			for (int i = 0; i < myTriangles.Size(); ++i)
+			{
+				UniqueAdd(myTriangles[i]->myEdge1, edges);
+				UniqueAdd(myTriangles[i]->myEdge2, edges);
+				UniqueAdd(myTriangles[i]->myEdge3, edges);
+			}
+
+			for (int i = 0; i < edges.Size(); ++i)
+			{
+				UniqueAdd(edges[i]->myVertex1, vertices);
+				UniqueAdd(edges[i]->myVertex2, vertices);
+			}
+
+			std::fstream file;
+			file.open("Data/Resource/Generated/navMesh.bin", std::ios::out | std::ios::binary);
+
+			int count = vertices.Size();
+			file.write((char*)&count, sizeof(int));
+
+			for (int i = 0; i < vertices.Size(); ++i)
+			{
+				file.write((char*)&vertices[i]->myPosition.x, sizeof(float) * 2);
+			}
+
+
+			count = edges.Size();
+			file.write((char*)&count, sizeof(int));
+
+			for (int i = 0; i < edges.Size(); ++i)
+			{
+				file.write((char*)&edges[i]->myVertex1->myIndex, sizeof(int));
+				file.write((char*)&edges[i]->myVertex2->myIndex, sizeof(int));
+			}
+
+			count = myTriangles.Size();
+			file.write((char*)&count, sizeof(int));
+
+			for (int i = 0; i < myTriangles.Size(); ++i)
+			{
+				file.write((char*)&myTriangles[i]->myEdge1->myIndex, sizeof(int));
+				file.write((char*)&myTriangles[i]->myEdge2->myIndex, sizeof(int));
+				file.write((char*)&myTriangles[i]->myEdge3->myIndex, sizeof(int));
+			}
+
+			file.close();
+		}
+
+		void NavMesh::Load(const std::string& aBinaryPath)
+		{
+			std::fstream file;
+			file.open(aBinaryPath.c_str(), std::ios::in | std::ios::binary);
+
+			int count;
+			file.read((char*)&count, sizeof(int));
+
+			CU::GrowingArray<Vertex*> vertices(count);
+			for (int i = 0; i < count; ++i)
+			{
+				CU::Vector2<float> position;
+				file.read((char*)&position.x, sizeof(float) * 2);
+				vertices.Add(new Vertex(position));
+			}
+
+			file.read((char*)&count, sizeof(int));
+
+			CU::GrowingArray<Edge*> edges(count);
+			for (int i = 0; i < count; ++i)
+			{
+				int index[2];
+
+				file.read((char*)&index, sizeof(int) * 2);
+				edges.Add(new Edge(vertices[index[0]], vertices[index[1]]));
+			}
+
+
+			file.read((char*)&count, sizeof(int));
+
+			myTriangles.Init(count);
+
+			for (int i = 0; i < count; ++i)
+			{
+				int index[3];
+
+				file.read((char*)&index, sizeof(int) * 3);
+				myTriangles.Add(new Triangle(edges[index[0]], edges[index[1]], edges[index[2]]));
+			}
+
+			file.close();
+		}
+
+		void NavMesh::UniqueAdd(Edge* anEdge, CU::GrowingArray<Edge*>& someEdgesOut) const
+		{
+			int index = someEdgesOut.Find(anEdge);
+			if (index < 0)
+			{
+				someEdgesOut.Add(anEdge);
+				anEdge->myIndex = someEdgesOut.Size() - 1;
+			}
+		}
+
+		void NavMesh::UniqueAdd(Vertex* aVertex, CU::GrowingArray<Vertex*>& someVerticesOut) const
+		{
+			int index = someVerticesOut.Find(aVertex);
+			if (index < 0)
+			{
+				someVerticesOut.Add(aVertex);
+				aVertex->myIndex = someVerticesOut.Size() - 1;
+			}
 		}
 	}
 }

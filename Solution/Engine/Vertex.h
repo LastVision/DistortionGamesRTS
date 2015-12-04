@@ -11,6 +11,7 @@ namespace Prism
 			Vertex(const CU::Vector2<float>& aPosition) : myPosition(aPosition), myEdgeCount(0) {}
 			CU::Vector2<float> myPosition;
 			int myEdgeCount;
+			int myIndex;
 		};
 	}
 }

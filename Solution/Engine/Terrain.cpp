@@ -163,6 +163,11 @@ namespace Prism
 		myNavMesh = new Navigation::NavMesh();
 	}
 
+	void Terrain::LoadNavMesh(const std::string& aBinaryPath)
+	{
+		myNavMesh = new Navigation::NavMesh(aBinaryPath);
+	}
+
 	void Terrain::CreatePathFinder()
 	{
 		bool notImpYet = true;

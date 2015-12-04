@@ -36,6 +36,7 @@ namespace Prism
 			, const CU::Vector3<float>& aRayCastToZero) const;
 
 		void CreateNavMesh();
+		void LoadNavMesh(const std::string& aBinaryPath);
 		Navigation::NavMesh* GetNavMesh() const;
 
 		void CreatePathFinder();

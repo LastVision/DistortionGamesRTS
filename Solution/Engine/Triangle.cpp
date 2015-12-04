@@ -227,11 +227,7 @@ namespace Prism
 			}
 			else
 			{
-				if (anEdge->myTriangle2 != this)
-				{
-					int apa = 5;
-				}
-				//DL_ASSERT_EXP(anEdge->myTriangle2 == this, "edge not part of triangle");
+				DL_ASSERT_EXP(anEdge->myTriangle2 == this, "edge not part of triangle");
 				anEdge->myTriangle2 = nullptr;
 			}
 		}
