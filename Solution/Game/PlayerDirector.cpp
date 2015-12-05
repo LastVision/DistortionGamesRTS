@@ -8,6 +8,7 @@
 #include <GUIManager.h>
 #include <Intersection.h>
 #include <InputWrapper.h>
+#include <PathFinder.h>
 #include "PlayerDirector.h"
 #include <PollingStation.h>
 #include <Terrain.h>
@@ -57,6 +58,24 @@ void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 
 	Director::Update(aDeltaTime);
 	UpdateMouseInteraction(aCamera);
+
+
+	////Debug only --- (LinusL)
+	//CU::Vector3<float> goal = CalcCursorWorldPosition(aCamera);
+	//CU::GrowingArray<Prism::Navigation::Triangle*> path(16);
+	//if (myTerrain.GetPathFinder()->FindPath({ 1.f, 30.f, 2.f }, goal, path) == true)
+	//{
+	//	if (path.Size() > 0)
+	//	{
+	//		Prism::RenderLine3D({ 1.f, 30.f, 2.f }, path.GetLast()->GetCenter(), eColorDebug::WHITE);
+	//		Prism::RenderLine3D(goal, path[0]->GetCenter(), eColorDebug::WHITE);
+	//	}
+	//	for (int i = 0; i < path.Size() - 1; ++i)
+	//	{
+	//		Prism::RenderLine3D(path[i]->GetCenter(), path[i + 1]->GetCenter(), eColorDebug::WHITE);
+	//	}
+	//}
+	//// --- debug end
 
 	myBuilding->Update(aDeltaTime);
 

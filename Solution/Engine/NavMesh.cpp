@@ -8,7 +8,7 @@
 #include "Vertex.h"
 #include <StaticArray.h>
 
-#define QUADS_PER_SIDE 24
+#define QUADS_PER_SIDE 16
 
 namespace Prism
 {
@@ -62,11 +62,12 @@ namespace Prism
 
 		void NavMesh::Render()
 		{
-			for (int i = 0; i < myTriangles.Size(); ++i)
-			{
-				myTriangles[i]->Render();
-			}
-			DEBUG_PRINT(myTriangles.Size());
+			//for (int i = 0; i < myTriangles.Size(); ++i)
+			//{
+			//	myTriangles[i]->Render();
+			//}
+			int navMeshTriCount = myTriangles.Size();
+			DEBUG_PRINT(navMeshTriCount);
 		}
 
 		void NavMesh::Cut(Edge* anEdge)
@@ -201,7 +202,7 @@ namespace Prism
 			
 			for (int i = myNewTriangles.Size() - 1; i >= 0; --i)
 			{
-				if (CU::Intersection::PointVsRect(myNewTriangles[i]->GetCenter(), topLeft, botRight) == true)
+				if (CU::Intersection::PointVsRect(myNewTriangles[i]->GetCenter2D(), topLeft, botRight) == true)
 				{
 					if (myTriangles.Find(myNewTriangles[i]) >= 0)
 					{
