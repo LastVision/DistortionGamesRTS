@@ -244,7 +244,18 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 			}
 			else if (myRightClicked)
 			{
-				controller->MoveTo(targetPos, !myShiftPressed);
+				//controller->MoveTo(targetPos, !myShiftPressed);
+				controller->Stop();
+				CU::GrowingArray<Prism::Navigation::Triangle*> path(16);
+				if (myTerrain.GetPathFinder()->FindPath(myUnits[i]->GetOrientation().GetPos(), targetPos, path) == true)
+				{
+					for (int i = path.Size() - 1; i >= 0; --i)
+					{
+						CU::Vector3<float> target = path[i]->GetCenter();
+						target.y = 0.f;
+						controller->MoveTo(target, false);
+					}
+				}
 			}
 			else if (mySPressed)
 			{

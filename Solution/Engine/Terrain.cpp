@@ -109,7 +109,7 @@ namespace Prism
 		myEffect->SetCameraPosition(aCamera.GetOrientation().GetPos());
 		BaseModel::Render();
 
-		//myNavMesh->Render();
+		myNavMesh->Render();
 	}
 
 	void Terrain::CalcEntityHeight(CU::Matrix44<float>& anOrientation) const
