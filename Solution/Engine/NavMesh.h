@@ -20,7 +20,7 @@ namespace Prism
 			void Render();
 			void Cut(Edge* anEdge);
 
-			const CU::GrowingArray<Triangle*> GetTriangles() const;
+			const CU::GrowingArray<Triangle*>& GetTriangles() const;
 			void Cut(const CU::GrowingArray<CU::Vector2<float>>& someVertices); // needs to be clock wise convex hull
 
 			void Save();
@@ -39,7 +39,7 @@ namespace Prism
 
 		};
 
-		inline const CU::GrowingArray<Triangle*> NavMesh::GetTriangles() const
+		inline const CU::GrowingArray<Triangle*>& NavMesh::GetTriangles() const
 		{
 			return myTriangles;
 		}

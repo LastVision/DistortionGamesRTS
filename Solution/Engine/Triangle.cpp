@@ -21,8 +21,11 @@ namespace Prism
 			myVertex2 = myEdge1->myVertex2;
 			myVertex3 = GetOpposite(myEdge1);
 
-			myCenter = (myVertex1->myPosition + myVertex2->myPosition + myVertex3->myPosition) / 3.f;
+			myCenter2D = (myVertex1->myPosition + myVertex2->myPosition + myVertex3->myPosition) / 3.f;
 
+			myCenter.x = myCenter2D.x;
+			myCenter.y = 25.7f;
+			myCenter.z = myCenter2D.y;
 		}
 
 

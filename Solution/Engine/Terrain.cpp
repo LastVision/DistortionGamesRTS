@@ -13,6 +13,7 @@
 #include "IndexBufferWrapper.h"
 #include <MathHelper.h>
 #include "NavMesh.h"
+#include "PathFinder.h"
 #include "Surface.h"
 #include "SplatMapContainer.h"
 #include "TextureContainer.h"
@@ -27,6 +28,8 @@ namespace Prism
 		, myHeight(aHeight)
 		, myOrientation(aOrientation)
 		, myVertexFormat(4)
+		, myPathFinder(nullptr)
+		, myNavMesh(nullptr)
 	{
 		DL_ASSERT_EXP(mySize.x == mySize.y, "Can't create non-quad terrain.");
 
@@ -170,7 +173,7 @@ namespace Prism
 
 	void Terrain::CreatePathFinder()
 	{
-		bool notImpYet = true;
+		myPathFinder = new Navigation::PathFinder(myNavMesh);
 	}
 
 	void Terrain::CreateVertices()
