@@ -54,5 +54,17 @@
     <ClInclude Include="SpawnUnitMessage.h">
       <Filter>Message\EntityMessage</Filter>
     </ClInclude>
+    <ClInclude Include="LUAMoveCameraMessage.h">
+      <Filter>Message</Filter>
+    </ClInclude>
+    <ClInclude Include="LUACinematicMessage.h">
+      <Filter>Message</Filter>
+    </ClInclude>
+    <ClInclude Include="FadeMessage.h">
+      <Filter>Message</Filter>
+    </ClInclude>
+    <ClInclude Include="ToggleGUIMessage.h">
+      <Filter>Message</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -38,6 +38,7 @@ public:
 	void SelectUnit(Entity* anEntity);
 
 	void ReceiveMessage(const SpawnUnitMessage& aMessage) override;
+	void ReceiveMessage(const ToggleGUIMessage& aMessage) override;
 
 	const CU::GrowingArray<Entity*>& GetSelectedUnits() const;
 

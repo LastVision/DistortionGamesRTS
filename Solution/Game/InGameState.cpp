@@ -2,6 +2,7 @@
 
 #include <Camera.h>
 #include <MoveCameraMessage.h>
+#include <LUAMoveCameraMessage.h>
 #include <ColoursForBG.h>
 #include <Engine.h>
 #include <GameStateMessage.h>
@@ -19,9 +20,13 @@
 #include <VTuneApi.h>
 #include <Vector.h>
 
+#include <ScriptSystem.h>
+#include <LUACinematicMessage.h>
+
 InGameState::InGameState()
 {
 	myIsActiveState = false;
+	myIsPlayerCinematic = false;
 	myCamera = new Prism::Camera(myCameraOrientation);
 
 	//SetLevel();
@@ -37,6 +42,7 @@ InGameState::~InGameState()
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::GAME_STATE, this);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::ON_CLICK, this);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::MOVE_CAMERA, this);
+	PostMaster::GetInstance()->UnSubscribe(eMessageType::LUA_MOVE_CAMERA, this);
 	SAFE_DELETE(myCamera);
 	SAFE_DELETE(myLevelFactory);
 }
@@ -58,6 +64,7 @@ void InGameState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCur
 	PostMaster::GetInstance()->Subscribe(eMessageType::GAME_STATE, this);
 	PostMaster::GetInstance()->Subscribe(eMessageType::ON_CLICK, this);
 	PostMaster::GetInstance()->Subscribe(eMessageType::MOVE_CAMERA, this);
+	PostMaster::GetInstance()->Subscribe(eMessageType::LUA_MOVE_CAMERA, this);
 
 	myIsActiveState = true;
 }
@@ -79,29 +86,35 @@ const eStateStatus InGameState::Update(const float& aDeltaTime)
 	}
 
 	
+	if (myIsPlayerCinematic == false)
+	{
+		if (CU::InputWrapper::GetInstance()->KeyDown(DIK_M) == true)
+		{
+			CompleteGame();
+		}
 
-	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_M) == true)
-	{
-		CompleteGame();
-	}
+		if (CU::InputWrapper::GetInstance()->KeyDown(DIK_B) == true)
+		{
+			RestartLevel();
+		}
 
-	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_B) == true)
-	{
-		RestartLevel();
-	}
+		if (myLevel->Update(aDeltaTime, *myCamera) == true)
+		{
+			//return myStateStatus;
+		}
 
-	if (myLevel->Update(aDeltaTime, *myCamera) == true)
-	{
-		//return myStateStatus;
+		if (myLevel->HasPlayerWon())
+		{
+			CompleteGame();
+		}
+		else if (myLevel->HasAIWon())
+		{
+			RestartLevel();
+		}
 	}
-
-	if (myLevel->HasPlayerWon())
+	else
 	{
-		CompleteGame();
-	}
-	else if (myLevel->HasAIWon())
-	{
-		RestartLevel();
+		LUA::ScriptSystem::GetInstance()->CallFunction("UpdateCinematic", { { aDeltaTime }, {myCinematicIndex }});
 	}
 
 	return myStateStatus;
@@ -189,6 +202,28 @@ void InGameState::ReceiveMessage(const MoveCameraMessage& aMessage)
 	CU::Vector2<float> position = aMessage.myPosition * 255.f;
 
 	myCamera->SetPosition({ position.x, myCamera->GetOrientation().GetPos().y, position.y });
+}
+
+void InGameState::ReceiveMessage(const LUAMoveCameraMessage& aMessage)
+{
+	CU::Vector3<float> position = myCamera->GetOrientation().GetPos();
+	position.x += aMessage.myMoveAmount.x;
+	position.z += aMessage.myMoveAmount.y;
+
+	myCamera->SetPosition(position);
+}
+
+void InGameState::ReceiveMessage(const LUACinematicMessage& aMessage)
+{
+	if (aMessage.myAction == eCinematicAction::START)
+	{
+		myIsPlayerCinematic = true;
+		myCinematicIndex = aMessage.myCinematicIndex;
+	}
+	else
+	{
+		myIsPlayerCinematic = false;
+	}
 }
 
 void InGameState::SetLevel()

@@ -11,9 +11,12 @@
 #include "PlayerDirector.h"
 #include <PollingStation.h>
 #include <Terrain.h>
+#include <ToggleGUIMessage.h>
 #include <ModelLoader.h>
 #include <SpawnUnitMessage.h>
 
+#include <FadeMessage.h>
+#include <PostMaster.h>
 
 PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aScene, GUI::Cursor* aCursor)
 	: Director(eDirectorType::PLAYER, aTerrain)
@@ -39,18 +42,22 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 		myActiveUnits[i]->Spawn({ 65.f, 0.f, 25.f });
 		PollingStation::GetInstance()->RegisterEntity(myActiveUnits[i]);
 	}
+
+	PostMaster::GetInstance()->Subscribe(eMessageType::TOGGLE_GUI, this);
+
 }
 
 PlayerDirector::~PlayerDirector()
 {
 	SAFE_DELETE(myGUIManager);
+	PostMaster::GetInstance()->UnSubscribe(eMessageType::TOGGLE_GUI, this);
 }
 
 void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 {
 	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_G) == true)
 	{
-		myRenderGUI = !myRenderGUI;
+		PostMaster::GetInstance()->SendMessage(ToggleGUIMessage(!myRenderGUI, 1.f/3.f));
 	}
 
 	UpdateInputs();
@@ -100,6 +107,12 @@ void PlayerDirector::ReceiveMessage(const SpawnUnitMessage& aMessage)
 		}
 		PollingStation::GetInstance()->RegisterEntity(myActiveUnits.GetLast());
 	}
+}
+
+void PlayerDirector::ReceiveMessage(const ToggleGUIMessage& aMessage)
+{
+	myRenderGUI = aMessage.myShowGUI;
+	PostMaster::GetInstance()->SendMessage(FadeMessage(aMessage.myFadeTime));
 }
 
 void PlayerDirector::SelectUnit(Entity* anEntity)

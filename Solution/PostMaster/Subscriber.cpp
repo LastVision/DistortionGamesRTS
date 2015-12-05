@@ -31,6 +31,23 @@ void Subscriber::ReceiveMessage(const MoveCameraMessage&)
 {
 }
 
-void Subscriber::ReceiveMessage(const SpawnUnitMessage& aMessage)
+void Subscriber::ReceiveMessage(const LUAMoveCameraMessage&)
 {
 }
+
+void Subscriber::ReceiveMessage(const SpawnUnitMessage&)
+{
+}
+
+void Subscriber::ReceiveMessage(const LUACinematicMessage&)
+{
+}
+
+void Subscriber::ReceiveMessage(const FadeMessage&)
+{
+}
+
+void Subscriber::ReceiveMessage(const ToggleGUIMessage&)
+{
+}
+
