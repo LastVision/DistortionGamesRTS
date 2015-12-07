@@ -273,19 +273,19 @@ void InGameState::UpdateCamera(float aDeltaTime, const CU::Vector3<float>& aCame
 
 	float cameraSpeed = 40.f * aDeltaTime;
 
-	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_S) == true)
+	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_DOWNARROW) == true)
 	{
 		cameraPos.z -= cameraSpeed;
 	}
-	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_W) == true)
+	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_UPARROW) == true)
 	{
 		cameraPos.z += cameraSpeed;
 	}
-	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_A) == true)
+	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_LEFTARROW) == true)
 	{
 		cameraPos.x -= cameraSpeed;
 	}
-	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_D) == true)
+	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_RIGHTARROW) == true)
 	{
 		cameraPos.x += cameraSpeed;
 	}
@@ -302,7 +302,7 @@ void InGameState::UpdateCamera(float aDeltaTime, const CU::Vector3<float>& aCame
 
 	myCameraOrientation.SetPos(cameraPos);
 
-	float rotationSpeed = 1.f * aDeltaTime;
+	/*float rotationSpeed = 1.f * aDeltaTime;
 
 	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_UPARROW) == true)
 	{
@@ -319,7 +319,7 @@ void InGameState::UpdateCamera(float aDeltaTime, const CU::Vector3<float>& aCame
 	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_RIGHTARROW) == true)
 	{
 		myCameraOrientation = CU::Matrix44<float>::CreateRotateAroundY(rotationSpeed) * myCameraOrientation;
-	}
+	}*/
 }
 
 void InGameState::ShowMessage(const std::string& aBackgroundPath,
