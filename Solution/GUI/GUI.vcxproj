@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BarWidget.h" />
     <ClInclude Include="ButtonWidget.h" />
     <ClInclude Include="Cursor.h" />
     <ClInclude Include="GUIManager.h" />
@@ -23,6 +24,7 @@
     <ClInclude Include="WidgetContainer.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BarWidget.cpp" />
     <ClCompile Include="ButtonWidget.cpp" />
     <ClCompile Include="Cursor.cpp" />
     <ClCompile Include="GUIManager.cpp" />

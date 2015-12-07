@@ -44,7 +44,7 @@ public:
 
 	const CU::GrowingArray<Entity*>& GetSelectedUnits() const;
 	const BuildingComponent& GetBuildingComponent() const;
-
+	CU::Vector3<float> GetCameraMoveVector() const;
 private:
 	void UpdateInputs();
 	CU::Vector3<float> CalcCursorWorldPosition(const Prism::Camera& aCamera);

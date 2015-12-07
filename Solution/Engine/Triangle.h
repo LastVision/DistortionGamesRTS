@@ -25,6 +25,7 @@ namespace Prism
 			void GetEdges(Edge* aCutEdge, CU::GrowingArray<Edge*>& someEdgesOut) const;
 			Vertex* GetOpposite(Edge* anEdge) const;
 			Edge* GetOther(Vertex* aSharedVertex, Edge* anEdge) const;
+			Triangle* GetOther(Edge* anEdge, bool anAllowNotPartOfTriangle = false) const;
 			const CU::Vector3<float>& GetCenter() const;
 			const CU::Vector2<float>& GetCenter2D() const;
 

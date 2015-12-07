@@ -141,6 +141,11 @@ const BuildingComponent& PlayerDirector::GetBuildingComponent() const
 	return *myBuilding->GetComponent<BuildingComponent>();
 }
 
+CU::Vector3<float> PlayerDirector::GetCameraMoveVector() const
+{
+	return myGUIManager->CalcCameraMovement();
+}
+
 void PlayerDirector::SelectUnit(Entity* anEntity)
 {
 	if (mySelectedUnits.Size() > 0 && mySelectedUnits[0]->GetType() != anEntity->GetType())
@@ -283,18 +288,7 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 			}
 			else if (myRightClicked)
 			{
-				//controller->MoveTo(targetPos, !myShiftPressed);
-				controller->Stop();
-				CU::GrowingArray<Prism::Navigation::Triangle*> path(16);
-				if (myTerrain.GetPathFinder()->FindPath(myUnits[i]->GetOrientation().GetPos(), targetPos, path) == true)
-				{
-					for (int i = path.Size() - 1; i >= 0; --i)
-					{
-						CU::Vector3<float> target = path[i]->GetCenter();
-						target.y = 0.f;
-						controller->MoveTo(target, false);
-					}
-				}
+				controller->MoveTo(targetPos, !myShiftPressed);
 			}
 			else if (mySPressed)
 			{

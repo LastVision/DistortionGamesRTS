@@ -52,6 +52,7 @@ private:
 		CU::Vector3<float> myPosition;
 	};
 
+	void FillCommandList(const CU::Vector3<float>& aTargetPosition, eAction aAction, bool aClearCommandQueue);
 	void DoMoveAction(const CU::Vector3<float>& aTargetPosition);
 	void DoAttackAction();
 	void AttackTarget();
@@ -59,13 +60,9 @@ private:
 	void RenderDebugLines() const;
 	eColorDebug GetActionColor(eAction aAction) const;
 	
-	eAction myCurrentAction;
 	Entity* myAttackTarget;
 	ControllerData myData;
-	CU::GrowingArray<CU::Vector3<float>> myWayPoints;
-	CU::Vector3<float> myCurrentWayPoint;
 
-	CU::Vector3<float> myMoveTarget;
 	CU::Vector3<float> myReturnPosition;
 
 	const Prism::Terrain& myTerrain;
@@ -78,7 +75,7 @@ private:
 
 
 	CU::GrowingArray<ActionData> myActions;
-	CU::Vector3<float> myCurrentActionPosition;
+	ActionData myCurrentAction;
 };
 
 inline const ControllerComponent::ControllerData& ControllerComponent::GetControllerData() const

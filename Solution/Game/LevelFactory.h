@@ -26,10 +26,11 @@ namespace tinyxml2
 
 struct NavmeshCutBox
 {
-	NavmeshCutBox(const CU::Vector3f& aPosition, const CU::Vector3f& aExtend) : myPosition(aPosition), myExtend(aExtend){};
+	NavmeshCutBox(const CU::Vector3f& aPosition, const CU::Vector3f& aExtend, const CU::Vector3f& aRotation);
 	CU::GrowingArray<CU::Vector2<float>> GetCutMesh() const;
 	CU::Vector3f myPosition;
 	CU::Vector3f myExtend;
+	CU::Vector3f myRotation;
 };
 
 class LevelFactory
