@@ -139,6 +139,11 @@ const BuildingComponent& PlayerDirector::GetBuildingComponent() const
 	return *myBuilding->GetComponent<BuildingComponent>();
 }
 
+CU::Vector3<float> PlayerDirector::GetCameraMoveVector() const
+{
+	return myGUIManager->CalcCameraMovement();
+}
+
 void PlayerDirector::SelectUnit(Entity* anEntity)
 {
 	if (mySelectedUnits.Size() > 0 && mySelectedUnits[0]->GetType() != anEntity->GetType())

@@ -76,7 +76,7 @@ void InGameState::EndState()
 
 const eStateStatus InGameState::Update(const float& aDeltaTime)
 {
-	UpdateCamera(aDeltaTime, { 0, 0, 0 });
+	UpdateCamera(aDeltaTime, myLevel->GetCameraMoveVector());
 
 	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_ESCAPE) || myIsShuttingDown == true || myIsComplete == true)
 	{
