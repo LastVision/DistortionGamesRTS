@@ -140,7 +140,7 @@ bool Prism::Texture::LoadTexture(const std::string& aFilePath)
 		delete texture2DDEsc;
 
 		std::string errorMessage = "Texturesize not power of 2: [" + aFilePath + "].";
-		DL_ASSERT_EXP(IsValid(height) && IsValid(width), errorMessage.c_str());
+		DL_ASSERT_EXP(CU::IsValidTextureSize(height) && CU::IsValidTextureSize(width), errorMessage.c_str());
 	}
 	myFileName = aFilePath;
 	if (FAILED(hr) != S_OK)
@@ -314,12 +314,4 @@ void Prism::Texture::CreateDepthStencilView(float aWidth, float aHeight)
 		assert(0);
 
 	Engine::GetInstance()->SetDebugName(myDepthStencilShaderView, "Texture::myDepthStencilShaderView");
-}
-
-bool Prism::Texture::IsValid(UINT aValue)
-{
-
-	return aValue == 2 || aValue == 4 || aValue == 8 || aValue == 16 || aValue == 32 || aValue == 64 || aValue == 128
-		|| aValue == 256 || aValue == 512 || aValue == 1024 || aValue == 2048 || aValue == 4096 || aValue == 8192 
-		|| aValue == 1024 * 6;
 }
