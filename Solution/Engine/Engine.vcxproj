@@ -368,6 +368,7 @@
     <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_effect_cube3d.fx" />
     <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_effect_debug.fx" />
     <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_effect_font.fx" />
+    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_effect_ice.fx" />
     <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_effect_line3d.fx" />
     <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_effect_no_texture.fx" />
     <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_effect_no_texture_animated.fx" />
