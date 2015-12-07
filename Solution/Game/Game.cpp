@@ -62,8 +62,7 @@ Game::~Game()
 	Prism::DebugDrawer::Destroy();
 	PollingStation::Destroy();
 
-	int UnCommentForLUA = 5;
-	//LUA::ScriptSystem::Destroy();
+	LUA::ScriptSystem::Destroy();
 }
 
 bool Game::Init(HWND& aHwnd)
@@ -81,9 +80,8 @@ bool Game::Init(HWND& aHwnd)
 	PostMaster::GetInstance()->SendMessage(GameStateMessage(eGameState::LOAD_GAME, 1));
 
 
-	int UnCommentForLUA = 5;
-	//LUA::ScriptSystem::Create();
-	//LUA::ScriptSystem::GetInstance()->Init(ScriptInterface::RegisterFunctions);
+	LUA::ScriptSystem::Create();
+	LUA::ScriptSystem::GetInstance()->Init(ScriptInterface::RegisterFunctions);
 
 	//myMainMenu = new MainMenuState();
 	//myStateStack.PushMainGameState(myMainMenu);
@@ -135,8 +133,7 @@ bool Game::Update()
 	myCursor->Update();
 	myCursor->Render();
 
-	int UnCommentForLUA = 5;
-	//LUA::ScriptSystem::GetInstance()->Update();
+	LUA::ScriptSystem::GetInstance()->Update();
 
 	return true;
 }

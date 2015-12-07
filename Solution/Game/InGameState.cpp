@@ -114,8 +114,7 @@ const eStateStatus InGameState::Update(const float& aDeltaTime)
 	}
 	else
 	{
-		int UnCommentForLUA = 5;
-		//LUA::ScriptSystem::GetInstance()->CallFunction("UpdateCinematic", { { aDeltaTime }, {myCinematicIndex }});
+		LUA::ScriptSystem::GetInstance()->CallFunction("UpdateCinematic", { { aDeltaTime }, {myCinematicIndex }});
 	}
 
 	return myStateStatus;
