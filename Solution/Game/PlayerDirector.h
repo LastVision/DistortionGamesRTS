@@ -63,6 +63,9 @@ private:
 	bool myRightClicked;
 
 	bool myRenderGUI;
+
+	float myTweakValueX;
+	float myTweakValueY;
 };
 
 inline const CU::GrowingArray<Entity*>& PlayerDirector::GetSelectedUnits() const
