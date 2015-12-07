@@ -34,7 +34,7 @@ InGameState::InGameState()
 	//myCameraOrientation.SetPos(CU::Vector3<float>(10.f, 25.f, 0));
 	myCameraOrientation = CU::Matrix44<float>::CreateRotateAroundX(0.0174532925f * 56.f) * myCameraOrientation;
 
-	myCameraOrientation.SetPos(CU::Vector3<float>(30.f, 55.f, 0));
+	myCameraOrientation.SetPos(CU::Vector3<float>(30.f, 75.f, 0));
 }
 
 InGameState::~InGameState()
@@ -123,7 +123,7 @@ const eStateStatus InGameState::Update(const float& aDeltaTime)
 void InGameState::Render()
 {
 	VTUNE_EVENT_BEGIN(VTUNE::GAME_RENDER);
-	myLevel->Render();
+	myLevel->Render(*myCamera);
 
 	if (myIsActiveState == true)
 	{

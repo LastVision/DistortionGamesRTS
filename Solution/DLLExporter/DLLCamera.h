@@ -21,6 +21,8 @@ public:
 	void Pan(float aDeltaTime, float aMouseSens);
 	void Rotate(float aDeltaTime, float aMouseSens);
 
+	void ResetCamera();
+
 	void SetZoomSpeed(float aValue);
 	float GetZoomSpeed() const;
 
@@ -42,6 +44,7 @@ private:
 	float myZoomSpeed;
 
 	CU::Matrix44<float> myOrientation;
+	CU::Matrix44<float> myOriginalOrientation;
 };
 
 inline void DLLCamera::SetZoomSpeed(float aValue)

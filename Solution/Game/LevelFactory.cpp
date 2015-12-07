@@ -34,10 +34,10 @@ CU::GrowingArray<CU::Vector2<float>> NavmeshCutBox::GetCutMesh() const
 
 	CU::Vector2<float> pos(myPosition.x, myPosition.z);
 
-	points.Add({ - myExtend.x, - myExtend.z });
-	points.Add({ - myExtend.x, + myExtend.z });
-	points.Add({ + myExtend.x, + myExtend.z });
-	points.Add({ + myExtend.x, - myExtend.z });
+	points.Add({ -myExtend.x, -myExtend.z });
+	points.Add({ -myExtend.x, +myExtend.z });
+	points.Add({ +myExtend.x, +myExtend.z });
+	points.Add({ +myExtend.x, -myExtend.z });
 
 	CU::Matrix33<float> rotationMatrix(CU::Matrix33<float>::CreateRotateAroundZ(myRotation.z));
 

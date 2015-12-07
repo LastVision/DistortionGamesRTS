@@ -1,7 +1,7 @@
 #include <string>
 #include <Camera.h>
 #include <DirectionalLight.h>
-
+#include <DebugDrawer.h>
 #include <DL_Debug.h>
 #include "DLLApp.h"
 #include "DLLCamera.h"
@@ -39,6 +39,8 @@ DLLApp::DLLApp(int* aHwnd, Prism::SetupInfo& aWindowSetup, WNDPROC aWindowProc)
 	myCamera = new DLLCamera(windowSize, 1.0f, 1.0f, 1.0f);
 	myModel = new DLLModel();
 	myParticle = new DLLParticle();
+
+	
 }
 
 DLLApp::~DLLApp()
@@ -66,7 +68,9 @@ void DLLApp::Render()
 		myModel->GetInstance()->UpdateDirectionalLights(myDirectionalLightData);
 		myModel->GetInstance()->Render(*myCamera->GetCamera());
 	}
-	//myParticle->Render();
+	myParticle->Render(myCamera->GetCamera());
+
+	Prism::DebugDrawer::GetInstance()->Render(*myCamera->GetCamera());
 }
 
 void DLLApp::Update()
@@ -116,6 +120,10 @@ void DLLApp::LogicUpdate(float aDeltaTime)
 		if (InputInstance->KeyIsPressed(DIK_LALT) && InputInstance->MouseIsPressed(1))
 		{
 			myCamera->Rotate(aDeltaTime, myMouseSensitivty);
+		}
+		if (InputInstance->KeyDown(DIK_SPACE))
+		{
+			myCamera->ResetCamera();
 		}
 	}
 	myModel->Update(aDeltaTime);

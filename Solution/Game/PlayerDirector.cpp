@@ -6,6 +6,7 @@
 #include <ControllerComponent.h>
 #include <EntityFactory.h>
 #include <GUIManager.h>
+#include <HealthComponent.h>
 #include <Intersection.h>
 #include <InputWrapper.h>
 #include <PathFinder.h>
@@ -25,8 +26,8 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 	, myCursor(aCursor)
 	, myGUIManager(nullptr)
 	, mySelectedUnits(56)
-	, myTweakValueX(3.284f)
-	, myTweakValueY(10.42f)
+	, myTweakValueX(3.273f)
+	, myTweakValueY(10.79f)
 {
 	for (int i = 0; i < 64; ++i)
 	{
@@ -63,6 +64,14 @@ void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 		PostMaster::GetInstance()->SendMessage(ToggleGUIMessage(!myRenderGUI, 1.f/3.f));
 	}
 
+	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_H) == true)
+	{
+		for (int i = 0; i < mySelectedUnits.Size(); i++)
+		{
+			mySelectedUnits[i]->GetComponent<HealthComponent>()->TakeDamage(1);
+		}
+	}
+
 	UpdateInputs();
 
 	Director::Update(aDeltaTime);
@@ -76,11 +85,16 @@ void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 	}
 }
 
-void PlayerDirector::Render()
+void PlayerDirector::Render(const Prism::Camera& aCamera)
 {
 	if (myRenderGUI == true)
 	{
 		myGUIManager->Render();
+
+		for (int i = 0; i < mySelectedUnits.Size(); i++)
+		{
+			mySelectedUnits[i]->GetComponent<HealthComponent>()->RenderHealthBar(aCamera);
+		}
 	}
 }
 
@@ -89,7 +103,7 @@ void PlayerDirector::OnResize(int aWidth, int aHeight)
 	myGUIManager->OnResize(aWidth, aHeight);
 }
 
-void PlayerDirector::SpawnUnit(Prism::Scene& aScene)
+void PlayerDirector::SpawnUnit(Prism::Scene&)
 {
 	myBuilding->GetComponent<BuildingComponent>()->BuildUnit(eEntityType::DRAGON);
 }
@@ -158,8 +172,8 @@ CU::Vector3<float> PlayerDirector::CalcCursorWorldPosition(const Prism::Camera& 
 	float aspect = window.x / window.y;
 	if (aspect <= 5.f / 4.f + epsilon)
 	{
-		myTweakValueX = 1.255f;
-		myTweakValueY = 1.255f;
+		myTweakValueX = 4.667f;
+		myTweakValueY = 7.313f;
 	}
 	else if (aspect <= 16.f / 10.f + epsilon)
 	{
@@ -208,12 +222,11 @@ CU::Vector3<float> PlayerDirector::CalcCursorWorldPosition(const Prism::Camera& 
 	DEBUG_PRINT(cursorPos);
 	
 
-	Prism::Engine::GetInstance()->PrintText(cursorPos.x, { 450.f, 50.f }, Prism::eTextType::DEBUG_TEXT);
-	Prism::Engine::GetInstance()->PrintText(cursorPos.y, { 530.f, 50.f }, Prism::eTextType::DEBUG_TEXT);
-
 	CU::Vector3<float> worldPos(myTerrain.CalcIntersection(aCamera.GetOrientation().GetPos()
 		, aCamera.RayCast(cursorPos)));
+
 	DEBUG_PRINT(worldPos);
+
 	//Debug:
 	Prism::RenderBox(worldPos);
 	Prism::RenderLine3D(worldPos, { 100.f, 100.f, 100.f });
