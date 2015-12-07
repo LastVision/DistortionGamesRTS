@@ -24,6 +24,14 @@ namespace tinyxml2
 	class XMLElement;
 }
 
+struct NavmeshCutBox
+{
+	NavmeshCutBox(const CU::Vector3f& aPosition, const CU::Vector3f& aExtend) : myPosition(aPosition), myExtend(aExtend){};
+	CU::GrowingArray<CU::Vector2<float>> GetCutMesh() const;
+	CU::Vector3f myPosition;
+	CU::Vector3f myExtend;
+};
+
 class LevelFactory
 {
 public:
@@ -54,6 +62,7 @@ private:
 	void LoadDirectionalLights(XMLReader& aReader, tinyxml2::XMLElement* aLevelElement);
 	void LoadProps(XMLReader& aReader, tinyxml2::XMLElement* aLevelElement);
 	void LoadBases(XMLReader& aReader, tinyxml2::XMLElement* aLevelElement);
+	void LoadCutBoxes(XMLReader& aReader, tinyxml2::XMLElement* aLevelElement);
 	void LoadTerrain(const std::string& aLevelPath);
 	Level* myCurrentLevel;
 	Level* myOldLevel;
@@ -65,6 +74,8 @@ private:
 	CU::GrowingArray<Prism::DirectionalLight*> myDirectionalLights;
 	CU::GrowingArray<Prism::PointLight*> myPointLights;
 	CU::GrowingArray<Prism::SpotLight*> mySpotLights;
+
+	CU::GrowingArray<NavmeshCutBox*> myCutBoxes;
 
 	std::unordered_map<int, std::string> myLevelPaths;
 

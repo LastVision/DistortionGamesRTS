@@ -62,12 +62,11 @@ namespace Prism
 
 		void NavMesh::Render()
 		{
-			//for (int i = 0; i < myTriangles.Size(); ++i)
-			//{
-			//	myTriangles[i]->Render();
-			//}
-			int navMeshTriCount = myTriangles.Size();
-			DEBUG_PRINT(navMeshTriCount);
+			for (int i = 0; i < myTriangles.Size(); ++i)
+			{
+				myTriangles[i]->Render();
+			}
+			DEBUG_PRINT(myTriangles.Size());
 		}
 
 		void NavMesh::Cut(Edge* anEdge)
@@ -200,13 +199,17 @@ namespace Prism
 				botRight.y = fmaxf(botRight.y, someVertices[i].y);
 			}
 			
-			for (int i = myNewTriangles.Size() - 1; i >= 0; --i)
+			for (int i = 0; i < myNewTriangles.Size(); ++i)
 			{
-				if (CU::Intersection::PointVsRect(myNewTriangles[i]->GetCenter2D(), topLeft, botRight) == true)
+				Triangle* current = myNewTriangles[i];
+				if (CU::Intersection::PointVsRect(current->GetCenter2D(), topLeft, botRight) == true)
 				{
-					if (myTriangles.Find(myNewTriangles[i]) >= 0)
+					UniqueAddIfExist(current->GetOther(current->myEdge1), myNewTriangles);
+					UniqueAddIfExist(current->GetOther(current->myEdge2), myNewTriangles);
+					UniqueAddIfExist(current->GetOther(current->myEdge3), myNewTriangles);
+					if (myTriangles.Find(current) >= 0)
 					{
-						myTriangles.DeleteCyclic(myNewTriangles[i]);
+						myTriangles.DeleteCyclic(current);
 					}
 				}
 			}
@@ -326,6 +329,19 @@ namespace Prism
 			{
 				someVerticesOut.Add(aVertex);
 				aVertex->myIndex = someVerticesOut.Size() - 1;
+			}
+		}
+
+		void NavMesh::UniqueAddIfExist(Triangle* aTriangle, CU::GrowingArray<Triangle*>& someTrianglesOut) const
+		{
+			if (aTriangle == nullptr)
+			{
+				return;
+			}
+			int index = someTrianglesOut.Find(aTriangle);
+			if (index < 0)
+			{
+				someTrianglesOut.Add(aTriangle);
 			}
 		}
 	}

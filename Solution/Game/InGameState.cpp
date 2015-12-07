@@ -32,7 +32,7 @@ InGameState::InGameState()
 	//SetLevel();
 
 	//myCameraOrientation.SetPos(CU::Vector3<float>(10.f, 25.f, 0));
-	myCameraOrientation = CU::Matrix44<float>::CreateRotateAroundX(0.0174532925f * 60.f) * myCameraOrientation;
+	myCameraOrientation = CU::Matrix44<float>::CreateRotateAroundX(0.0174532925f * 56.f) * myCameraOrientation;
 
 	myCameraOrientation.SetPos(CU::Vector3<float>(30.f, 35.f, 0));
 }
