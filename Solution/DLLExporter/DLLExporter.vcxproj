@@ -84,7 +84,7 @@
     <OutDir>$(SolutionDir)..\Workbed\bin\</OutDir>
     <IntDir>$(SolutionDir)..\temp\$(ProjectName)\</IntDir>
     <TargetName>$(ProjectName)_Release</TargetName>
-    <IncludePath>$(SolutionDir)..\FBX\;$(SolutionDir)Engine;$(SolutionDir)\DL_Debug;$(SolutionDir)\CommonUtilities;$(SolutionDir)\Timer;$(SolutionDir)\InputWrapper;$(SolutionDir)\..\DirectX\Include;$(VTUNE_DIR)\include\;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)..\FBX\;$(SolutionDir)Engine;$(SolutionDir)\DL_Debug;$(SolutionDir)\CommonUtilities;$(SolutionDir)\Timer;$(SolutionDir)\InputWrapper;$(SolutionDir)\..\DirectX\Include;$(VTUNE_DIR)\include\;$(SolutionDir)ParticleSystem;$(IncludePath)</IncludePath>
     <LibraryPath>$(LibraryPath);$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Internal|Win32'">
@@ -183,6 +183,9 @@
     </ProjectReference>
     <ProjectReference Include="..\InputWrapper\InputWrapper.vcxproj">
       <Project>{e6bd4153-64be-4109-8d3c-724baadab8af}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\ParticleSystem\ParticleSystem.vcxproj">
+      <Project>{f9457655-c0bd-4c0f-a7f9-1197da5c5c6a}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

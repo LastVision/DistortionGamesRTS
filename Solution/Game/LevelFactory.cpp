@@ -34,10 +34,10 @@ CU::GrowingArray<CU::Vector2<float>> NavmeshCutBox::GetCutMesh() const
 
 	CU::Vector2<float> pos(myPosition.x, myPosition.z);
 
-	points.Add({ - myExtend.x, - myExtend.z });
-	points.Add({ - myExtend.x, + myExtend.z });
-	points.Add({ + myExtend.x, + myExtend.z });
-	points.Add({ + myExtend.x, - myExtend.z });
+	points.Add({ -myExtend.x, -myExtend.z });
+	points.Add({ -myExtend.x, +myExtend.z });
+	points.Add({ +myExtend.x, +myExtend.z });
+	points.Add({ +myExtend.x, -myExtend.z });
 
 	CU::Matrix33<float> rotationMatrix(CU::Matrix33<float>::CreateRotateAroundZ(myRotation.z));
 
@@ -158,7 +158,7 @@ void LevelFactory::ReadLevel(const std::string& aLevelPath)
 {
 	Prism::ModelLoader* modelLoader = Prism::ModelLoader::GetInstance();
 	Prism::EffectContainer* effectContainer = Prism::EffectContainer::GetInstance();
-	modelLoader->Pause();
+	//modelLoader->Pause();
 	Prism::Engine::GetInstance()->myIsLoading = true;
 
 	//FindTextures("Data/Resource/Texture/Particle/");
@@ -169,7 +169,6 @@ void LevelFactory::ReadLevel(const std::string& aLevelPath)
 
 	ReadLevelSetting(aLevelPath);
 
-	Sleep(10);
 	XMLReader reader;
 	reader.OpenDocument(aLevelPath);
 	tinyxml2::XMLElement* levelElement = reader.ForceFindFirstChild("root");
@@ -510,7 +509,7 @@ void LevelFactory::LoadTerrain(const std::string& aLevelPath)
 	reader.ForceReadAttribute(terrainElement, "heightmap", heightMap);
 	reader.ForceReadAttribute(terrainElement, "texture", texturePath);
 
-	myTerrain = new Prism::Terrain(heightMap, texturePath, { 256.f, 256.f }, 10.f, CU::Matrix44<float>());
+	myTerrain = new Prism::Terrain(heightMap, texturePath, { 256.f, 256.f }, 25.5f, CU::Matrix44<float>());
 	reader.CloseDocument();
 }
 

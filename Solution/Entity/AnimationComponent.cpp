@@ -13,14 +13,19 @@
 #include <ModelLoader.h>
 #include <ModelProxy.h>
 #include <Scene.h>
+#include <Terrain.h>
 #include <Texture.h>
 #include <XMLReader.h>
 
-AnimationComponent::AnimationComponent(Entity& aEntity, AnimationComponentData& aComponentData)
+//#define BOX_MODE
+
+AnimationComponent::AnimationComponent(Entity& aEntity, AnimationComponentData& aComponentData, const Prism::Terrain& aTerrain)
 	: Component(aEntity)
 	, myInstance(nullptr)
 	, myCullingRadius(10.f)
+	, myTerrain(aTerrain)
 {
+#ifndef BOX_MODE
 	Prism::ModelProxy* model = Prism::ModelLoader::GetInstance()->LoadModelAnimated(aComponentData.myModelPath
 		, aComponentData.myEffectPath);
 
@@ -31,21 +36,25 @@ AnimationComponent::AnimationComponent(Entity& aEntity, AnimationComponentData& 
 		AnimationLoadData loadAnimation = aComponentData.myAnimations[i];
 		AddAnimation(loadAnimation.myEntityState, loadAnimation.myAnimationPath, loadAnimation.myLoopFlag, loadAnimation.myResetTimeOnRestart);
 	}
+#endif
 }
 
 AnimationComponent::~AnimationComponent()
 {
+#ifndef BOX_MODE
 	if (myEntity.GetOctreeType() != Prism::eOctreeType::NOT_IN_OCTREE && myEntity.GetOwner() != eOwnerType::PLAYER)
 	{
 		myEntity.GetScene().RemoveInstance(myInstance);
 	}
 	delete myInstance;
 	myInstance = nullptr;
+#endif
 }
 
 void AnimationComponent::AddAnimation(eEntityState aState, const std::string& aAnimationPath
 	, bool aLoopFlag, bool aResetTimeOnRestart)
 {
+#ifndef BOX_MODE
 	Prism::AnimationSystem::GetInstance()->GetAnimation(aAnimationPath.c_str());
 	AnimationData newData;
 	newData.myElapsedTime = 0.f;
@@ -53,10 +62,12 @@ void AnimationComponent::AddAnimation(eEntityState aState, const std::string& aA
 	newData.myShouldLoop = aLoopFlag;
 	newData.myResetTimeOnRestart = aResetTimeOnRestart;
 	myAnimations[int(aState)] = newData;
+#endif
 }
 
 void AnimationComponent::Update(float aDeltaTime)
 {
+#ifndef BOX_MODE
 	AnimationData& data = myAnimations[int(myEntity.GetState())];
 	if (myPrevEntityState != myEntity.GetState())
 	{
@@ -79,11 +90,19 @@ void AnimationComponent::Update(float aDeltaTime)
 	
 	data.myElapsedTime += aDeltaTime;
 	myPrevEntityState = myEntity.GetState();
+#else
+	CU::Vector3<float> pos = myTerrain.GetHeight(myEntity.GetOrientation().GetPos(), 2.f);
+	Prism::RenderBox(pos, eColorDebug::BLUE, 0.5f);
+#endif
 }
 
 bool AnimationComponent::IsCurrentAnimationDone() const
 {
+#ifndef BOX_MODE
 	return myInstance->IsAnimationDone();
+#else
+	return true;
+#endif
 }
 
 void AnimationComponent::RestartCurrentAnimation()

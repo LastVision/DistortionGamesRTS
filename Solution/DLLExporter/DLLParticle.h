@@ -2,6 +2,13 @@
 #include <string>
 #include <Matrix.h>
 
+namespace Prism
+{
+	class Camera;
+	class ParticleEmitterData;
+	class ParticleEmitterInstance;
+}
+
 class DLLParticle
 {
 public:
@@ -10,7 +17,7 @@ public:
 
 	void LoadParticle(std::string& aParticleFile);
 	void Update(float aDeltaTime);
-	void Render();
+	void Render(Prism::Camera* aCamera);
 private:
 	void ReLoadParticle();
 	void WatchFile(std::string& aParticleFile);
@@ -18,6 +25,9 @@ private:
 	bool myIsLoaded;
 
 	CU::Matrix44<float> myOrientation;
+
+	Prism::ParticleEmitterData* myParticleData;
+	Prism::ParticleEmitterInstance* myCurrentParticle;
 
 	std::string myParticleFile;
 };
