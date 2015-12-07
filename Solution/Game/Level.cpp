@@ -107,3 +107,9 @@ bool Level::HasAIWon() const
 {
 	return myPlayer->GetUnitCount() <= 0;
 }
+
+CU::Vector3<float> Level::GetCameraMoveVector() const
+{
+	return myPlayer->GetCameraMoveVector();
+}
+
