@@ -26,6 +26,8 @@ namespace GUI
 		void Render(const CU::Vector2<float>& aParentPosition) override;
 
 	private:
+		void operator=(ResourceBarWidget&) = delete;
+
 		const int& myPlayerGold;
 
 		Prism::Sprite* myGoldSprite;
