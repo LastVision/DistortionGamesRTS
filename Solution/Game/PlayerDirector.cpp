@@ -97,12 +97,12 @@ void PlayerDirector::Render(const Prism::Camera& aCamera)
 {
 	if (myRenderGUI == true)
 	{
-		myGUIManager->Render();
-
 		for (int i = 0; i < mySelectedUnits.Size(); i++)
 		{
 			mySelectedUnits[i]->GetComponent<HealthComponent>()->RenderHealthBar(aCamera);
 		}
+
+		myGUIManager->Render();
 	}
 }
 
