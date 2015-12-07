@@ -22,6 +22,8 @@ namespace CU
 	}
 }
 
+class BuildingComponent;
+
 class PlayerDirector : public Director
 {
 public:
@@ -40,6 +42,7 @@ public:
 	void ReceiveMessage(const SpawnUnitMessage& aMessage) override;
 
 	const CU::GrowingArray<Entity*>& GetSelectedUnits() const;
+	const BuildingComponent& GetBuildingComponent() const;
 
 private:
 	void UpdateInputs();

@@ -102,6 +102,11 @@ void PlayerDirector::ReceiveMessage(const SpawnUnitMessage& aMessage)
 	}
 }
 
+const BuildingComponent& PlayerDirector::GetBuildingComponent() const
+{
+	return *myBuilding->GetComponent<BuildingComponent>();
+}
+
 void PlayerDirector::SelectUnit(Entity* anEntity)
 {
 	if (mySelectedUnits.Size() > 0 && mySelectedUnits[0]->GetType() != anEntity->GetType())
