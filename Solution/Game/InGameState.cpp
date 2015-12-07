@@ -123,7 +123,7 @@ const eStateStatus InGameState::Update(const float& aDeltaTime)
 void InGameState::Render()
 {
 	VTUNE_EVENT_BEGIN(VTUNE::GAME_RENDER);
-	myLevel->Render();
+	myLevel->Render(*myCamera);
 
 	if (myIsActiveState == true)
 	{

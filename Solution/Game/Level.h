@@ -25,7 +25,7 @@ public:
 	~Level();
 
 	bool Update(float aDeltaTime, Prism::Camera& aCamera);
-	void Render();
+	void Render(Prism::Camera& aCamera);
 
 	void OnResize(int aWidth, int aHeigth);
 

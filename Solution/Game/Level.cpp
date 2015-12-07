@@ -79,13 +79,13 @@ bool Level::Update(float aDeltaTime, Prism::Camera& aCamera)
 	return true;
 }
 
-void Level::Render()
+void Level::Render(Prism::Camera& aCamera)
 {
 	Prism::Engine::GetInstance()->SetClearColor({ 0.2f, 0.2f, 0.2f, 1.f });
 
 	myScene->Render();
 
-	myPlayer->Render();
+	myPlayer->Render(aCamera);
 }
 
 void Level::OnResize(int aWidth, int aHeigth)

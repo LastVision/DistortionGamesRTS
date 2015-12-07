@@ -31,7 +31,7 @@ public:
 	~PlayerDirector();
 
 	void Update(float aDeltaTime, const Prism::Camera& aCamera);
-	void Render();
+	void Render(const Prism::Camera& aCamera);
 
 	void OnResize(int aWidth, int aHeight);
 

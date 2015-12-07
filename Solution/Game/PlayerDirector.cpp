@@ -6,6 +6,7 @@
 #include <ControllerComponent.h>
 #include <EntityFactory.h>
 #include <GUIManager.h>
+#include <HealthComponent.h>
 #include <Intersection.h>
 #include <InputWrapper.h>
 #include <PathFinder.h>
@@ -61,6 +62,14 @@ void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 		PostMaster::GetInstance()->SendMessage(ToggleGUIMessage(!myRenderGUI, 1.f/3.f));
 	}
 
+	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_H) == true)
+	{
+		for (int i = 0; i < mySelectedUnits.Size(); i++)
+		{
+			mySelectedUnits[i]->GetComponent<HealthComponent>()->TakeDamage(1.f);
+		}
+	}
+
 	UpdateInputs();
 
 	Director::Update(aDeltaTime);
@@ -92,11 +101,16 @@ void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 	}
 }
 
-void PlayerDirector::Render()
+void PlayerDirector::Render(const Prism::Camera& aCamera)
 {
 	if (myRenderGUI == true)
 	{
 		myGUIManager->Render();
+
+		for (int i = 0; i < mySelectedUnits.Size(); i++)
+		{
+			mySelectedUnits[i]->GetComponent<HealthComponent>()->RenderHealthBar(aCamera);
+		}
 	}
 }
 
