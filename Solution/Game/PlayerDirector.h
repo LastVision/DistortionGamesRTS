@@ -44,7 +44,7 @@ public:
 
 	const CU::GrowingArray<Entity*>& GetSelectedUnits() const;
 	const BuildingComponent& GetBuildingComponent() const;
-
+	CU::Vector3<float> GetCameraMoveVector() const;
 private:
 	void UpdateInputs();
 	CU::Vector3<float> CalcCursorWorldPosition(const Prism::Camera& aCamera);
@@ -63,6 +63,9 @@ private:
 	bool myRightClicked;
 
 	bool myRenderGUI;
+
+	float myTweakValueX;
+	float myTweakValueY;
 };
 
 inline const CU::GrowingArray<Entity*>& PlayerDirector::GetSelectedUnits() const

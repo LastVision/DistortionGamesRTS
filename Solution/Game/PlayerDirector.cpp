@@ -26,6 +26,8 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 	, myCursor(aCursor)
 	, myGUIManager(nullptr)
 	, mySelectedUnits(56)
+	, myTweakValueX(3.284f)
+	, myTweakValueY(10.42f)
 {
 	for (int i = 0; i < 64; ++i)
 	{
@@ -74,24 +76,6 @@ void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 
 	Director::Update(aDeltaTime);
 	UpdateMouseInteraction(aCamera);
-
-
-	////Debug only --- (LinusL)
-	//CU::Vector3<float> goal = CalcCursorWorldPosition(aCamera);
-	//CU::GrowingArray<Prism::Navigation::Triangle*> path(16);
-	//if (myTerrain.GetPathFinder()->FindPath({ 1.f, 30.f, 2.f }, goal, path) == true)
-	//{
-	//	if (path.Size() > 0)
-	//	{
-	//		Prism::RenderLine3D({ 1.f, 30.f, 2.f }, path.GetLast()->GetCenter(), eColorDebug::WHITE);
-	//		Prism::RenderLine3D(goal, path[0]->GetCenter(), eColorDebug::WHITE);
-	//	}
-	//	for (int i = 0; i < path.Size() - 1; ++i)
-	//	{
-	//		Prism::RenderLine3D(path[i]->GetCenter(), path[i + 1]->GetCenter(), eColorDebug::WHITE);
-	//	}
-	//}
-	//// --- debug end
 
 	myBuilding->Update(aDeltaTime);
 
@@ -153,6 +137,11 @@ const BuildingComponent& PlayerDirector::GetBuildingComponent() const
 	return *myBuilding->GetComponent<BuildingComponent>();
 }
 
+CU::Vector3<float> PlayerDirector::GetCameraMoveVector() const
+{
+	return myGUIManager->CalcCameraMovement();
+}
+
 void PlayerDirector::SelectUnit(Entity* anEntity)
 {
 	if (mySelectedUnits.Size() > 0 && mySelectedUnits[0]->GetType() != anEntity->GetType())
@@ -177,36 +166,68 @@ CU::Vector3<float> PlayerDirector::CalcCursorWorldPosition(const Prism::Camera& 
 	CU::Vector2<float> inputPos(CU::InputWrapper::GetInstance()->GetMousePosition());
 	CU::Vector2<float> cursorPos;
 	CU::Vector2<float> window = Prism::Engine::GetInstance()->GetWindowSize();
-
-	float tweakValue = 1.85f; // for 16:9
+	//myTweakValueX = 3.284f;
+	//myTweakValueY = 3.5f;
 	float epsilon = 0.1f;
 	float aspect = window.x / window.y;
 	if (aspect <= 5.f / 4.f + epsilon)
 	{
-		tweakValue = 1.255f;
+		myTweakValueX = 1.255f;
+		myTweakValueY = 1.255f;
 	}
 	else if (aspect <= 16.f / 10.f + epsilon)
 	{
-		tweakValue = 1.605f;
+		//tweakValue = 1.605f; // FOV90
+		myTweakValueX = 3.646f;
+		myTweakValueY = 9.315f;
 	}
 
 	float mult = window.y / window.x;
 	cursorPos = inputPos;
 
+
 	cursorPos.y = window.y - cursorPos.y;
 	cursorPos.y /= window.y;
-	cursorPos.y *= mult / tweakValue;
-	cursorPos.y += (1.f - mult / tweakValue) / 2.f;
+	cursorPos.y *= mult / myTweakValueY;
+	cursorPos.y += (1.f - mult / myTweakValueY) / 2.f;
+
 
 	cursorPos.x /= window.x;
+	cursorPos.x *= mult / myTweakValueX;
+	cursorPos.x += (1.f - mult / myTweakValueX) / 2.f;
 
-	Prism::Engine::GetInstance()->PrintText(cursorPos.x, { 50.f, 50.f }, Prism::eTextType::DEBUG_TEXT);
-	Prism::Engine::GetInstance()->PrintText(cursorPos.y, { 280.f, 50.f }, Prism::eTextType::DEBUG_TEXT);
-	Prism::Engine::GetInstance()->PrintText(tweakValue, { 480.f, 50.f }, Prism::eTextType::DEBUG_TEXT);
+	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_L) == true)
+	{
+		myTweakValueX += 0.001f;
+		myTweakValueY += 0.001f;
+		if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_LSHIFT) == true)
+		{
+			myTweakValueX += 0.1f;
+			myTweakValueY += 0.1f;
+		}
+	}
+	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_K) == true)
+	{
+		myTweakValueX -= 0.001f;
+		myTweakValueY -= 0.001f;
+		if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_LSHIFT) == true)
+		{
+			myTweakValueX -= 0.1f;
+			myTweakValueY -= 0.1f;
+		}
+	}
+
+	DEBUG_PRINT(myTweakValueX);
+	DEBUG_PRINT(myTweakValueY);
+	DEBUG_PRINT(cursorPos);
+	
+
+	Prism::Engine::GetInstance()->PrintText(cursorPos.x, { 450.f, 50.f }, Prism::eTextType::DEBUG_TEXT);
+	Prism::Engine::GetInstance()->PrintText(cursorPos.y, { 530.f, 50.f }, Prism::eTextType::DEBUG_TEXT);
 
 	CU::Vector3<float> worldPos(myTerrain.CalcIntersection(aCamera.GetOrientation().GetPos()
 		, aCamera.RayCast(cursorPos)));
-
+	DEBUG_PRINT(worldPos);
 	//Debug:
 	Prism::RenderBox(worldPos);
 	Prism::RenderLine3D(worldPos, { 100.f, 100.f, 100.f });
@@ -263,18 +284,7 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 			}
 			else if (myRightClicked)
 			{
-				//controller->MoveTo(targetPos, !myShiftPressed);
-				controller->Stop();
-				CU::GrowingArray<Prism::Navigation::Triangle*> path(16);
-				if (myTerrain.GetPathFinder()->FindPath(myUnits[i]->GetOrientation().GetPos(), targetPos, path) == true)
-				{
-					for (int i = path.Size() - 1; i >= 0; --i)
-					{
-						CU::Vector3<float> target = path[i]->GetCenter();
-						target.y = 0.f;
-						controller->MoveTo(target, false);
-					}
-				}
+				controller->MoveTo(targetPos, !myShiftPressed);
 			}
 			else if (mySPressed)
 			{

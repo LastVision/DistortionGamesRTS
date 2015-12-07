@@ -34,7 +34,7 @@ InGameState::InGameState()
 	//myCameraOrientation.SetPos(CU::Vector3<float>(10.f, 25.f, 0));
 	myCameraOrientation = CU::Matrix44<float>::CreateRotateAroundX(0.0174532925f * 56.f) * myCameraOrientation;
 
-	myCameraOrientation.SetPos(CU::Vector3<float>(30.f, 35.f, 0));
+	myCameraOrientation.SetPos(CU::Vector3<float>(30.f, 75.f, 0));
 }
 
 InGameState::~InGameState()
@@ -76,7 +76,7 @@ void InGameState::EndState()
 
 const eStateStatus InGameState::Update(const float& aDeltaTime)
 {
-	UpdateCamera(aDeltaTime, { 0, 0, 0 });
+	UpdateCamera(aDeltaTime, myLevel->GetCameraMoveVector());
 
 	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_ESCAPE) || myIsShuttingDown == true || myIsComplete == true)
 	{
@@ -273,19 +273,19 @@ void InGameState::UpdateCamera(float aDeltaTime, const CU::Vector3<float>& aCame
 
 	float cameraSpeed = 40.f * aDeltaTime;
 
-	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_S) == true)
+	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_DOWNARROW) == true)
 	{
 		cameraPos.z -= cameraSpeed;
 	}
-	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_W) == true)
+	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_UPARROW) == true)
 	{
 		cameraPos.z += cameraSpeed;
 	}
-	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_A) == true)
+	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_LEFTARROW) == true)
 	{
 		cameraPos.x -= cameraSpeed;
 	}
-	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_D) == true)
+	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_RIGHTARROW) == true)
 	{
 		cameraPos.x += cameraSpeed;
 	}
@@ -302,7 +302,7 @@ void InGameState::UpdateCamera(float aDeltaTime, const CU::Vector3<float>& aCame
 
 	myCameraOrientation.SetPos(cameraPos);
 
-	float rotationSpeed = 1.f * aDeltaTime;
+	/*float rotationSpeed = 1.f * aDeltaTime;
 
 	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_UPARROW) == true)
 	{
@@ -319,7 +319,7 @@ void InGameState::UpdateCamera(float aDeltaTime, const CU::Vector3<float>& aCame
 	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_RIGHTARROW) == true)
 	{
 		myCameraOrientation = CU::Matrix44<float>::CreateRotateAroundY(rotationSpeed) * myCameraOrientation;
-	}
+	}*/
 }
 
 void InGameState::ShowMessage(const std::string& aBackgroundPath,

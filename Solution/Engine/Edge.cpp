@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Edge.h"
 #include "Vertex.h"
+#include "Triangle.h"
 
 //#include "tga2d\engine.h"
 //#include "tga2d\drawers\debug_drawer.h"

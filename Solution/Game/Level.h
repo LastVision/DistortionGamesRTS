@@ -34,6 +34,7 @@ public:
 	bool HasPlayerWon() const;
 	bool HasAIWon() const;
 
+	CU::Vector3<float> GetCameraMoveVector() const;
 private:
 	Prism::Terrain* myTerrain;
 	Prism::DirectionalLight* myLight;
