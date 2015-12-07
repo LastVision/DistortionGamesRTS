@@ -35,6 +35,9 @@
     <ClInclude Include="ResourceBarWidget.h">
       <Filter>Widget</Filter>
     </ClInclude>
+    <ClInclude Include="BarWidget.h">
+      <Filter>Widget</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -61,6 +64,9 @@
       <Filter>Widget</Filter>
     </ClCompile>
     <ClCompile Include="ResourceBarWidget.cpp">
+      <Filter>Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="BarWidget.cpp">
       <Filter>Widget</Filter>
     </ClCompile>
   </ItemGroup>
