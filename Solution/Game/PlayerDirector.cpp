@@ -25,8 +25,8 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 	, myCursor(aCursor)
 	, myGUIManager(nullptr)
 	, mySelectedUnits(56)
-	, myTweakValueX(3.284f)
-	, myTweakValueY(10.42f)
+	, myTweakValueX(3.273f)
+	, myTweakValueY(10.79f)
 {
 	for (int i = 0; i < 64; ++i)
 	{
@@ -176,8 +176,8 @@ CU::Vector3<float> PlayerDirector::CalcCursorWorldPosition(const Prism::Camera& 
 	float aspect = window.x / window.y;
 	if (aspect <= 5.f / 4.f + epsilon)
 	{
-		myTweakValueX = 1.255f;
-		myTweakValueY = 1.255f;
+		myTweakValueX = 4.667f;
+		myTweakValueY = 7.313f;
 	}
 	else if (aspect <= 16.f / 10.f + epsilon)
 	{
@@ -226,12 +226,11 @@ CU::Vector3<float> PlayerDirector::CalcCursorWorldPosition(const Prism::Camera& 
 	DEBUG_PRINT(cursorPos);
 	
 
-	Prism::Engine::GetInstance()->PrintText(cursorPos.x, { 450.f, 50.f }, Prism::eTextType::DEBUG_TEXT);
-	Prism::Engine::GetInstance()->PrintText(cursorPos.y, { 530.f, 50.f }, Prism::eTextType::DEBUG_TEXT);
-
 	CU::Vector3<float> worldPos(myTerrain.CalcIntersection(aCamera.GetOrientation().GetPos()
 		, aCamera.RayCast(cursorPos)));
+
 	DEBUG_PRINT(worldPos);
+
 	//Debug:
 	Prism::RenderBox(worldPos);
 	Prism::RenderLine3D(worldPos, { 100.f, 100.f, 100.f });
