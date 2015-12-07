@@ -85,7 +85,7 @@ void Level::Render(Prism::Camera& aCamera)
 
 	myScene->Render();
 
-	myPlayer->Render();
+	myPlayer->Render(aCamera);
 
 	CU::Vector3f point1(106, 27, 78);
 	CU::Vector3f point2(78, 27, 106);
