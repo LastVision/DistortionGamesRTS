@@ -147,15 +147,22 @@ namespace Prism
 			return myEdge1;
 		}
 
-		Triangle* Triangle::GetOther(Edge* anEdge) const
+		Triangle* Triangle::GetOther(Edge* anEdge, bool anAllowNotPartOfTriangle) const
 		{
 			if (anEdge->myTriangle1 == this)
 			{
 				return anEdge->myTriangle2;
 			}
-			
-			DL_ASSERT_EXP(anEdge->myTriangle2 == this, "Edge not part of triangle");
-			return anEdge->myTriangle1;
+			else if (anEdge->myTriangle2 == this)
+			{
+				return anEdge->myTriangle1;
+			}
+
+			if (anAllowNotPartOfTriangle == false)
+			{
+				DL_ASSERT_EXP(anEdge->myTriangle2 == this, "Edge not part of triangle");
+			}
+			return nullptr;
 		}
 
 		Edge* Triangle::GetEdgeWithVertex(Vertex* aVertex, Edge* anEdge1, Edge* anEdge2) const
@@ -239,10 +246,13 @@ namespace Prism
 			{
 				anEdge->myTriangle1 = nullptr;
 			}
+			else if (anEdge->myTriangle2 == this)
+			{
+				anEdge->myTriangle2 = nullptr;
+			}
 			else
 			{
-				DL_ASSERT_EXP(anEdge->myTriangle2 == this, "edge not part of triangle");
-				anEdge->myTriangle2 = nullptr;
+				// this happens when a triangle has been cut in two and edges disconnected and connected to new triangles
 			}
 		}
 	}
