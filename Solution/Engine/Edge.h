@@ -34,6 +34,8 @@ namespace Prism
 
 			CU::Vector3<float> myPosition3D1;
 			CU::Vector3<float> myPosition3D2;
+
+			int myIndex;
 		};
 	}
 }

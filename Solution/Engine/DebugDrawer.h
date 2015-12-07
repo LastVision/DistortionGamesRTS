@@ -4,6 +4,7 @@
 #include <GrowingArray.h>
 
 #define DEBUG_PRINT(aVariable) Prism::DebugDrawer::GetInstance()->RenderText(#aVariable, aVariable)
+#define DEBUG_PRINT_LUA(aVariable) Prism::DebugDrawer::GetInstance()->RenderText("LUA", aVariable)
 
 enum class eColorDebug
 {

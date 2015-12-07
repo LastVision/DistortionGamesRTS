@@ -61,7 +61,7 @@ void AnimationComponent::Update(float aDeltaTime)
 	if (myPrevEntityState != myEntity.GetState())
 	{
 		myInstance->SetAnimation(Prism::AnimationSystem::GetInstance()->GetAnimation(data.myFile.c_str()));
-
+	
 		if (data.myResetTimeOnRestart == true)
 		{
 			myInstance->ResetAnimationTime(0.f);
@@ -71,12 +71,12 @@ void AnimationComponent::Update(float aDeltaTime)
 			myInstance->ResetAnimationTime(data.myElapsedTime);
 		}
 	}
-
+	
 	if (myInstance->IsAnimationDone() == false || data.myShouldLoop == true)
 	{
 		myInstance->Update(aDeltaTime);
 	}
-
+	
 	data.myElapsedTime += aDeltaTime;
 	myPrevEntityState = myEntity.GetState();
 }

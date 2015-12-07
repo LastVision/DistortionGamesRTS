@@ -14,12 +14,15 @@
 #include <InputWrapper.h>
 #include <Intersection.h>
 #include "Level.h"
+#include <LUAMoveCameraMessage.h>
 #include <ModelLoader.h>
 #include "PlayerDirector.h"
 #include "PollingStation.h"
 #include <Scene.h>
 #include <Terrain.h>
 
+
+#include <ScriptSystem.h>
 
 Level::Level(const Prism::Camera& aCamera, Prism::Terrain* aTerrain, GUI::Cursor* aCursor)
 	: myEntities(64)
@@ -64,9 +67,12 @@ bool Level::Update(float aDeltaTime, Prism::Camera& aCamera)
 	myPlayer->CleanUp();
 	myAI->CleanUp();
 
+	int UnCommentForLUA = 5;
+	//LUA::ScriptSystem::GetInstance()->CallFunction("Update", { aDeltaTime });
+
 	/*Prism::RenderLine3D({ 0.f, 0.f, 0.f }, { 100.f, 100.f, 100.f }, eColorDebug::BLACK, eColorDebug::GREEN);
 	Prism::RenderBox({ 128.f, 129.f, 128.f }, eColorDebug::BLUE, false);*/
-	DEBUG_PRINT(myEntities[0]->GetOrientation().GetPos());
+	//DEBUG_PRINT(myEntities[0]->GetOrientation().GetPos());
 
 	myPlayer->Update(aDeltaTime, aCamera);
 	myAI->Update(aDeltaTime);

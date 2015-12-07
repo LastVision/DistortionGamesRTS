@@ -43,8 +43,8 @@ namespace LUA
 		myOutputFile.open("luaOutput.txt", std::ios::out);
 		myCppRegisterFunction = aRegisterFunction;
 		myLuaState = nullptr;
-		myActiveFiles.push_back("Data/main.lua");
-		myFileWatcher.WatchFileChange("Data/main.lua", std::bind(&ScriptSystem::ReInit, this, std::placeholders::_1));
+		myActiveFiles.push_back("Data\\Script\\main.lua");
+		myFileWatcher.WatchFileChange("Data\\Script\\main.lua", std::bind(&ScriptSystem::ReInit, this, std::placeholders::_1));
 		ReInit("123");
 	}
 
@@ -120,13 +120,15 @@ namespace LUA
 		}
 
 		myArgumentsCount.clear();
+		myDocumentation.clear();
 
 		myLuaState = luaL_newstate();
 		luaL_openlibs(myLuaState);
 		myCppRegisterFunction();
-		RegisterFunction("Print", PrintFromLua, "aString", "Prints message into file");
+		RegisterFunction("PrintToFile", PrintFromLua, "aString", "Prints message into file");
 
 		AddLuaFunction("Update", 1);
+		AddLuaFunction("UpdateCinematic", 2);
 
 		for (unsigned int i = 0; i < myActiveFiles.size(); ++i)
 		{
@@ -195,12 +197,17 @@ namespace LUA
 	void ScriptSystem::PrintDocumentation()
 	{
 		std::fstream file;
-		file.open("exposedScriptFunctions.txt", std::ios::out);
+		file.open("exposedScriptFunctions.lua", std::ios::out);
+
+		file << "function Documentation()";
 		for (unsigned int i = 0; i < myDocumentation.size(); ++i)
 		{
-			file << myDocumentation[i].myFunction << "(" << myDocumentation[i].myArguments << ") --" << myDocumentation[i].myHelpText << std::endl;
+			file << "\n\t" << myDocumentation[i].myFunction << "(" << myDocumentation[i].myArguments << ")\n";
+			file << "\t--[[\n";
+			file << "\t" << myDocumentation[i].myHelpText << "\n";
+			file << "\t--]]\n";
 		}
-
+		file << "end";
 		file.flush();
 		file.close();
 	}

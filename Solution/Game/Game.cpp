@@ -7,6 +7,7 @@
 #include <Cursor.h>
 #include <DebugFont.h>
 #include <Engine.h>
+#include <FadeMessage.h>
 #include <FileWatcher.h>
 #include "Game.h"
 #include <GameStateMessage.h>
@@ -24,6 +25,9 @@
 #include <VTuneApi.h>
 #include <Vector.h>
 #include <XMLReader.h>
+
+#include "ScriptInterface.h"
+#include <ScriptSystem.h>
 
 Game::Game()
 	: myLockMouse(true)
@@ -46,6 +50,7 @@ Game::Game()
 Game::~Game()
 {
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::GAME_STATE, this);
+	PostMaster::GetInstance()->UnSubscribe(eMessageType::FADE, this);
 	SAFE_DELETE(myCursor);
 	Prism::Audio::AudioInterface::GetInstance()->PostEvent("Stop_MenuMusic", 0);
 	Prism::Audio::AudioInterface::Destroy();
@@ -56,6 +61,9 @@ Game::~Game()
 	myStateStack.Clear();
 	Prism::DebugDrawer::Destroy();
 	PollingStation::Destroy();
+
+	int UnCommentForLUA = 5;
+	//LUA::ScriptSystem::Destroy();
 }
 
 bool Game::Init(HWND& aHwnd)
@@ -64,12 +72,18 @@ bool Game::Init(HWND& aHwnd)
 	myIsComplete = false;
 
 	PostMaster::GetInstance()->Subscribe(eMessageType::GAME_STATE, this);
+	PostMaster::GetInstance()->Subscribe(eMessageType::FADE, this);
 
 	Prism::Engine::GetInstance()->SetClearColor({ MAGENTA });
 	CU::InputWrapper::Create(aHwnd, GetModuleHandle(NULL), DISCL_NONEXCLUSIVE 
 		| DISCL_FOREGROUND, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND);
 	
 	PostMaster::GetInstance()->SendMessage(GameStateMessage(eGameState::LOAD_GAME, 1));
+
+
+	int UnCommentForLUA = 5;
+	//LUA::ScriptSystem::Create();
+	//LUA::ScriptSystem::GetInstance()->Init(ScriptInterface::RegisterFunctions);
 
 	//myMainMenu = new MainMenuState();
 	//myStateStack.PushMainGameState(myMainMenu);
@@ -93,7 +107,8 @@ bool Game::Update()
 	{
 		deltaTime = 1.0f / 10.0f;
 	}
-	
+
+
 	if (myLockMouse == true)
 	{
 		//SetCursorPos(Prism::Engine::GetInstance()->GetWindowSize().x / 2, Prism::Engine::GetInstance()->GetWindowSize().y / 2);
@@ -119,6 +134,9 @@ bool Game::Update()
 	CU::TimerManager::GetInstance()->CapFrameRate(100.f);
 	myCursor->Update();
 	myCursor->Render();
+
+	int UnCommentForLUA = 5;
+	//LUA::ScriptSystem::GetInstance()->Update();
 
 	return true;
 }
@@ -156,4 +174,9 @@ void Game::ReceiveMessage(const GameStateMessage& aMessage)
 	default:
 		break;
 	}
+}
+
+void Game::ReceiveMessage(const FadeMessage& aMessage)
+{
+	Prism::Engine::GetInstance()->StartFade(aMessage.myDuration);
 }

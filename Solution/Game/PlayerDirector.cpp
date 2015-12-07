@@ -8,12 +8,16 @@
 #include <GUIManager.h>
 #include <Intersection.h>
 #include <InputWrapper.h>
+#include <PathFinder.h>
 #include "PlayerDirector.h"
 #include <PollingStation.h>
 #include <Terrain.h>
+#include <ToggleGUIMessage.h>
 #include <ModelLoader.h>
 #include <SpawnUnitMessage.h>
 
+#include <FadeMessage.h>
+#include <PostMaster.h>
 
 PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aScene, GUI::Cursor* aCursor)
 	: Director(eDirectorType::PLAYER, aTerrain)
@@ -39,24 +43,46 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 		myActiveUnits[i]->Spawn({ 65.f, 0.f, 25.f });
 		PollingStation::GetInstance()->RegisterEntity(myActiveUnits[i]);
 	}
+
+	PostMaster::GetInstance()->Subscribe(eMessageType::TOGGLE_GUI, this);
+
 }
 
 PlayerDirector::~PlayerDirector()
 {
 	SAFE_DELETE(myGUIManager);
+	PostMaster::GetInstance()->UnSubscribe(eMessageType::TOGGLE_GUI, this);
 }
 
 void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 {
 	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_G) == true)
 	{
-		myRenderGUI = !myRenderGUI;
+		PostMaster::GetInstance()->SendMessage(ToggleGUIMessage(!myRenderGUI, 1.f/3.f));
 	}
 
 	UpdateInputs();
 
 	Director::Update(aDeltaTime);
 	UpdateMouseInteraction(aCamera);
+
+
+	////Debug only --- (LinusL)
+	//CU::Vector3<float> goal = CalcCursorWorldPosition(aCamera);
+	//CU::GrowingArray<Prism::Navigation::Triangle*> path(16);
+	//if (myTerrain.GetPathFinder()->FindPath({ 1.f, 30.f, 2.f }, goal, path) == true)
+	//{
+	//	if (path.Size() > 0)
+	//	{
+	//		Prism::RenderLine3D({ 1.f, 30.f, 2.f }, path.GetLast()->GetCenter(), eColorDebug::WHITE);
+	//		Prism::RenderLine3D(goal, path[0]->GetCenter(), eColorDebug::WHITE);
+	//	}
+	//	for (int i = 0; i < path.Size() - 1; ++i)
+	//	{
+	//		Prism::RenderLine3D(path[i]->GetCenter(), path[i + 1]->GetCenter(), eColorDebug::WHITE);
+	//	}
+	//}
+	//// --- debug end
 
 	myBuilding->Update(aDeltaTime);
 
@@ -100,6 +126,12 @@ void PlayerDirector::ReceiveMessage(const SpawnUnitMessage& aMessage)
 		}
 		PollingStation::GetInstance()->RegisterEntity(myActiveUnits.GetLast());
 	}
+}
+
+void PlayerDirector::ReceiveMessage(const ToggleGUIMessage& aMessage)
+{
+	myRenderGUI = aMessage.myShowGUI;
+	PostMaster::GetInstance()->SendMessage(FadeMessage(aMessage.myFadeTime));
 }
 
 const BuildingComponent& PlayerDirector::GetBuildingComponent() const
@@ -217,7 +249,18 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 			}
 			else if (myRightClicked)
 			{
-				controller->MoveTo(targetPos, !myShiftPressed);
+				//controller->MoveTo(targetPos, !myShiftPressed);
+				controller->Stop();
+				CU::GrowingArray<Prism::Navigation::Triangle*> path(16);
+				if (myTerrain.GetPathFinder()->FindPath(myUnits[i]->GetOrientation().GetPos(), targetPos, path) == true)
+				{
+					for (int i = path.Size() - 1; i >= 0; --i)
+					{
+						CU::Vector3<float> target = path[i]->GetCenter();
+						target.y = 0.f;
+						controller->MoveTo(target, false);
+					}
+				}
 			}
 			else if (mySPressed)
 			{
