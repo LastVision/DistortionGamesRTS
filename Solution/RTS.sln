@@ -25,6 +25,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Audio", "Audio\Audio.vcxproj", "{B5915C8F-2AEF-4137-BCBE-152F819860CD}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DLLExporter", "DLLExporter\DLLExporter.vcxproj", "{4A98CE31-948D-48D1-8DD8-F6828590FC65}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F9457655-C0BD-4C0F-A7F9-1197DA5C5C6A} = {F9457655-C0BD-4C0F-A7F9-1197DA5C5C6A}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CollisionRadiusCalc", "CollisionRadiusCalc\CollisionRadiusCalc.vcxproj", "{A99EBB70-B6F2-4EC5-9F5E-9C111920A73A}"
 EndProject
@@ -358,6 +361,7 @@ Global
 		{F9457655-C0BD-4C0F-A7F9-1197DA5C5C6A}.Debug|Win32.Build.0 = Debug|Win32
 		{F9457655-C0BD-4C0F-A7F9-1197DA5C5C6A}.DLL_Release|Any CPU.ActiveCfg = Release|Win32
 		{F9457655-C0BD-4C0F-A7F9-1197DA5C5C6A}.DLL_Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{F9457655-C0BD-4C0F-A7F9-1197DA5C5C6A}.DLL_Release|Mixed Platforms.Build.0 = Release|Win32
 		{F9457655-C0BD-4C0F-A7F9-1197DA5C5C6A}.DLL_Release|Win32.ActiveCfg = Release|Win32
 		{F9457655-C0BD-4C0F-A7F9-1197DA5C5C6A}.DLL_Release|Win32.Build.0 = Release|Win32
 		{F9457655-C0BD-4C0F-A7F9-1197DA5C5C6A}.Internal|Any CPU.ActiveCfg = Release|Win32
@@ -396,7 +400,6 @@ Global
 		{BEDE80BE-C4C8-4F8C-8632-51C0908BFA5E}.Debug|Win32.Build.0 = Debug|Win32
 		{BEDE80BE-C4C8-4F8C-8632-51C0908BFA5E}.DLL_Release|Any CPU.ActiveCfg = Release|Win32
 		{BEDE80BE-C4C8-4F8C-8632-51C0908BFA5E}.DLL_Release|Mixed Platforms.ActiveCfg = Release|Win32
-		{BEDE80BE-C4C8-4F8C-8632-51C0908BFA5E}.DLL_Release|Mixed Platforms.Build.0 = Release|Win32
 		{BEDE80BE-C4C8-4F8C-8632-51C0908BFA5E}.DLL_Release|Win32.ActiveCfg = Release|Win32
 		{BEDE80BE-C4C8-4F8C-8632-51C0908BFA5E}.DLL_Release|Win32.Build.0 = Release|Win32
 		{BEDE80BE-C4C8-4F8C-8632-51C0908BFA5E}.Internal|Any CPU.ActiveCfg = Release|Win32
