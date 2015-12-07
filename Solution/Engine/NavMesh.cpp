@@ -102,7 +102,12 @@ namespace Prism
 					CutTriangle(edgesToCut[i], edgesToCut[i]->myTriangle2, newEdge1, newEdge2, intersectionVertex);
 				}
 			}
-			edgesToCut.DeleteAll();
+			
+			for (int i = 0; i < edgesToCut.Size(); ++i)
+			{
+				delete edgesToCut[i]->myTriangle1;
+				delete edgesToCut[i]->myTriangle2;
+			}
 		}
 
 		void NavMesh::CreateQuad(Vertex*& aBotLeftVertex, Edge*& aLeftEdge, Edge*& aBotEdge)
@@ -204,9 +209,9 @@ namespace Prism
 				Triangle* current = myNewTriangles[i];
 				if (CU::Intersection::PointVsRect(current->GetCenter2D(), topLeft, botRight) == true)
 				{
-					//UniqueAddIfExist(current->GetOther(current->myEdge1), myNewTriangles);
-					//UniqueAddIfExist(current->GetOther(current->myEdge2), myNewTriangles);
-					//UniqueAddIfExist(current->GetOther(current->myEdge3), myNewTriangles);
+					UniqueAddIfExist(current->GetOther(current->myEdge1, true), myNewTriangles);
+					UniqueAddIfExist(current->GetOther(current->myEdge2, true), myNewTriangles);
+					UniqueAddIfExist(current->GetOther(current->myEdge3, true), myNewTriangles);
 					if (myTriangles.Find(current) >= 0)
 					{
 						myTriangles.DeleteCyclic(current);
