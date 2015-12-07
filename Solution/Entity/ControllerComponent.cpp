@@ -54,11 +54,12 @@ void ControllerComponent::Update(float)
 		{
 			myAttackTarget = closeTarget;
 			myReturnPosition = myEntity.GetOrientation().GetPos();
-
+			myReturnPosition.y = 0.f;
 
 			ActionData action;
 			action.myAction = eAction::ATTACK;
 			action.myPosition = myAttackTarget->GetOrientation().GetPos();
+			action.myPosition.y = 0.f;
 			myActions.Add(action);
 		}
 	}
@@ -91,13 +92,14 @@ void ControllerComponent::Update(float)
 		}
 		else
 		{
-			if (myReturnPosition.x != FLT_MAX && myReturnPosition.y != FLT_MAX)
+			if (myReturnPosition.x != FLT_MAX && myReturnPosition.z != FLT_MAX)
 			{
 				DoMoveAction(myReturnPosition);
 			}
 			else
 			{
 				myReturnPosition = myEntity.myOrientation.GetPos();
+				myReturnPosition.y = 0.f;
 			}
 		}
 	}
@@ -263,7 +265,9 @@ void ControllerComponent::DoAttackAction()
 	}
 	else
 	{
-		DoMoveAction(myAttackTarget->GetOrientation().GetPos());
+		CU::Vector3<float> pos = myAttackTarget->GetOrientation().GetPos();
+		pos.y = 0.f;
+		DoMoveAction(pos);
 	}
 }
 
