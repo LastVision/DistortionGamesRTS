@@ -118,4 +118,11 @@ namespace CU
 
 		return aMatrixToRotate;
 	}
+
+	inline bool IsValidTextureSize(UINT aValue)
+	{
+		return aValue == 2 || aValue == 4 || aValue == 8 || aValue == 16 || aValue == 32 || aValue == 64 || aValue == 128
+			|| aValue == 256 || aValue == 512 || aValue == 1024 || aValue == 2048 || aValue == 4096 || aValue == 8192
+			|| aValue == 1024 * 6;
+	}
 }

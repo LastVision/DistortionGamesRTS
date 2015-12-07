@@ -38,31 +38,32 @@ namespace Prism
 
 	void Line3DRenderer::Render(const CU::GrowingArray<Line3D>& someLines, const Camera& aCamera)
 	{ 
-		UpdateVertexBuffer(someLines);
-
-		myEffect->SetWorldMatrix(CU::Matrix44<float>());
-		myEffect->SetViewMatrix(CU::InverseSimple(aCamera.GetOrientation()));
-		myEffect->SetProjectionMatrix(aCamera.GetProjection());
-
-		Engine::GetInstance()->GetContex()->IASetInputLayout(myInputLayout);
-		Engine::GetInstance()->GetContex()->IASetPrimitiveTopology(myPrimitiveTopology);
-		Engine::GetInstance()->GetContex()->IASetVertexBuffers(
-			myVertexBuffer->myStartSlot
-			, myVertexBuffer->myNumberOfBuffers
-			, &myVertexBuffer->myVertexBuffer
-			, &myVertexBuffer->myStride
-			, &myVertexBuffer->myByteOffset);
-
-		D3DX11_TECHNIQUE_DESC techDesc;
-		myEffect->GetTechnique()->GetDesc(&techDesc);
-
-		for (UINT i = 0; i < techDesc.Passes; ++i)
+		if (someLines.Size() > 0)
 		{
-			myEffect->GetTechnique()->GetPassByIndex(i)->Apply(0, Engine::GetInstance()->GetContex());
-			Engine::GetInstance()->GetContex()->Draw(someLines.Size() * 2, 0);
+			UpdateVertexBuffer(someLines);
+
+			myEffect->SetWorldMatrix(CU::Matrix44<float>());
+			myEffect->SetViewMatrix(CU::InverseSimple(aCamera.GetOrientation()));
+			myEffect->SetProjectionMatrix(aCamera.GetProjection());
+
+			Engine::GetInstance()->GetContex()->IASetInputLayout(myInputLayout);
+			Engine::GetInstance()->GetContex()->IASetPrimitiveTopology(myPrimitiveTopology);
+			Engine::GetInstance()->GetContex()->IASetVertexBuffers(
+				myVertexBuffer->myStartSlot
+				, myVertexBuffer->myNumberOfBuffers
+				, &myVertexBuffer->myVertexBuffer
+				, &myVertexBuffer->myStride
+				, &myVertexBuffer->myByteOffset);
+
+			D3DX11_TECHNIQUE_DESC techDesc;
+			myEffect->GetTechnique()->GetDesc(&techDesc);
+
+			for (UINT i = 0; i < techDesc.Passes; ++i)
+			{
+				myEffect->GetTechnique()->GetPassByIndex(i)->Apply(0, Engine::GetInstance()->GetContex());
+				Engine::GetInstance()->GetContex()->Draw(someLines.Size() * 2, 0);
+			}
 		}
-
-
 	}
 
 	void Line3DRenderer::UpdateVertexBuffer(const CU::GrowingArray<Line3D>& someLines)

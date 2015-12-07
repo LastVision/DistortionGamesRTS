@@ -44,6 +44,8 @@ public:
 	void ReceiveMessage(const GameStateMessage& aMessage) override;
 	void ReceiveMessage(const OnClickMessage& aMessage) override;
 	void ReceiveMessage(const MoveCameraMessage& aMessage) override;
+	void ReceiveMessage(const LUAMoveCameraMessage& aMessage) override;
+	void ReceiveMessage(const LUACinematicMessage& aMessage) override;
 
 	void SetLevel();
 
@@ -71,6 +73,9 @@ private:
 
 	bool myIsComplete;
 	bool myIsShuttingDown;
+
+	bool myIsPlayerCinematic;
+	int myCinematicIndex;
 };
 
 inline bool InGameState::IsComplete() const

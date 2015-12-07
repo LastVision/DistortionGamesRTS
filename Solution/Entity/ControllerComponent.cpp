@@ -55,6 +55,7 @@ void ControllerComponent::Update(float aDelta)
 			myAttackTarget = closeTarget;
 			myReturnPosition = myEntity.GetOrientation().GetPos();
 
+
 			ActionData action;
 			action.myAction = eAction::ATTACK;
 			action.myPosition = myAttackTarget->GetOrientation().GetPos();
@@ -196,6 +197,7 @@ void ControllerComponent::DoMoveAction(const CU::Vector3<float>& aTargetPosition
 	if (myEntity.GetState() != eEntityState::WALKING)
 	{
 		CU::Vector3<float> pos = myEntity.myOrientation.GetPos();
+		pos.y = 0.f;
 		myData.myDirection = aTargetPosition - pos;
 		myEntity.SetState(eEntityState::WALKING);
 	}
@@ -241,6 +243,7 @@ void ControllerComponent::DoAttackAction()
 				myCurrentAction = eAction::RETURN;
 				myEntity.GetComponent<ActorComponent>()->LookAtPoint(myReturnPosition);
 				CU::Vector3<float> pos = myEntity.myOrientation.GetPos();
+				pos.y = 0.f;
 				myData.myDirection = myReturnPosition - pos;
 			}
 			else
@@ -254,6 +257,7 @@ void ControllerComponent::DoAttackAction()
 		myCurrentAction = eAction::RETURN;
 		myEntity.GetComponent<ActorComponent>()->LookAtPoint(myReturnPosition);
 		CU::Vector3<float> pos = myEntity.myOrientation.GetPos();
+		pos.y = 0.f;
 		myData.myDirection = myReturnPosition - pos;
 	}
 	else

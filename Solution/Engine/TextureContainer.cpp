@@ -55,7 +55,7 @@ namespace Prism
 			std::string stringEnding(fileEnding);
 			CU::ToLower(stringEnding);
 			std::string errorMessage = "Texture file-format not .DDS/.dds in [" + aFileName + "].";
-			//DL_ASSERT_EXP(stringEnding == "dds", errorMessage.c_str());
+			DL_ASSERT_EXP(stringEnding == "dds", errorMessage.c_str());
 		}
 		newTex->LoadTexture(aFileName);
 

@@ -21,8 +21,11 @@ namespace Prism
 			myVertex2 = myEdge1->myVertex2;
 			myVertex3 = GetOpposite(myEdge1);
 
-			myCenter = (myVertex1->myPosition + myVertex2->myPosition + myVertex3->myPosition) / 3.f;
+			myCenter2D = (myVertex1->myPosition + myVertex2->myPosition + myVertex3->myPosition) / 3.f;
 
+			myCenter.x = myCenter2D.x;
+			myCenter.y = 25.7f;
+			myCenter.z = myCenter2D.y;
 		}
 
 
@@ -227,11 +230,7 @@ namespace Prism
 			}
 			else
 			{
-				if (anEdge->myTriangle2 != this)
-				{
-					int apa = 5;
-				}
-				//DL_ASSERT_EXP(anEdge->myTriangle2 == this, "edge not part of triangle");
+				DL_ASSERT_EXP(anEdge->myTriangle2 == this, "edge not part of triangle");
 				anEdge->myTriangle2 = nullptr;
 			}
 		}

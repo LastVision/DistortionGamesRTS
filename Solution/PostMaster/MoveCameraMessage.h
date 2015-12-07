@@ -6,7 +6,7 @@ struct MoveCameraMessage : public Message
 {
 	MoveCameraMessage(CU::Vector2<float> aPosition);
 
-	CU::Vector2<float> myPosition;
+	const CU::Vector2<float> myPosition;
 	
 };
 
