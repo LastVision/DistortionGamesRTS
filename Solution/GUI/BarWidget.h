@@ -14,6 +14,7 @@ namespace GUI
 		void Render(const CU::Vector2<float>& aParentPosition) override;
 
 	private:
+		void operator=(BarWidget&) = delete;
 
 		Prism::Sprite* myBackgroundSprite;
 		Prism::Sprite* myValueSprite;

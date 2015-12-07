@@ -68,7 +68,7 @@ void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 	{
 		for (int i = 0; i < mySelectedUnits.Size(); i++)
 		{
-			mySelectedUnits[i]->GetComponent<HealthComponent>()->TakeDamage(1.f);
+			mySelectedUnits[i]->GetComponent<HealthComponent>()->TakeDamage(1);
 		}
 	}
 
@@ -103,7 +103,7 @@ void PlayerDirector::OnResize(int aWidth, int aHeight)
 	myGUIManager->OnResize(aWidth, aHeight);
 }
 
-void PlayerDirector::SpawnUnit(Prism::Scene& aScene)
+void PlayerDirector::SpawnUnit(Prism::Scene&)
 {
 	myBuilding->GetComponent<BuildingComponent>()->BuildUnit(eEntityType::DRAGON);
 }
