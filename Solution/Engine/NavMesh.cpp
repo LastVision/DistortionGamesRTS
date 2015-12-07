@@ -204,9 +204,9 @@ namespace Prism
 				Triangle* current = myNewTriangles[i];
 				if (CU::Intersection::PointVsRect(current->GetCenter2D(), topLeft, botRight) == true)
 				{
-					UniqueAddIfExist(current->GetOther(current->myEdge1), myNewTriangles);
-					UniqueAddIfExist(current->GetOther(current->myEdge2), myNewTriangles);
-					UniqueAddIfExist(current->GetOther(current->myEdge3), myNewTriangles);
+					//UniqueAddIfExist(current->GetOther(current->myEdge1), myNewTriangles);
+					//UniqueAddIfExist(current->GetOther(current->myEdge2), myNewTriangles);
+					//UniqueAddIfExist(current->GetOther(current->myEdge3), myNewTriangles);
 					if (myTriangles.Find(current) >= 0)
 					{
 						myTriangles.DeleteCyclic(current);
