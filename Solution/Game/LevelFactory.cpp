@@ -21,6 +21,19 @@
 #include <Scene.h>
 #include <XMLReader.h>
 
+CU::GrowingArray<CU::Vector2<float>> NavmeshCutBox::GetCutMesh() const
+{
+	CU::GrowingArray<CU::Vector2<float>> points(4);
+
+	CU::Vector2<float> pos(myPosition.x, myPosition.z);
+
+	points.Add({ pos.x - myExtend.x, pos.y - myExtend.z });
+	points.Add({ pos.x - myExtend.x, pos.y + myExtend.z });
+	points.Add({ pos.x + myExtend.x, pos.y + myExtend.z });
+	points.Add({ pos.x + myExtend.x, pos.y - myExtend.z });
+	return points;
+}
+
 LevelFactory::LevelFactory(const std::string& aLevelListPath, Prism::Camera& aCamera, GUI::Cursor* aCursor)
 	: myCurrentLevel(nullptr)
 	, myCurrentID(0)
@@ -33,6 +46,7 @@ LevelFactory::LevelFactory(const std::string& aLevelListPath, Prism::Camera& aCa
 	, myLevelPaths(2)
 	, myCamera(aCamera)
 	, myCursor(aCursor)
+	, myCutBoxes(128)
 {
 	ReadLevelList(aLevelListPath);
 }
@@ -153,6 +167,7 @@ void LevelFactory::ReadLevel(const std::string& aLevelPath)
 	LoadLights(reader, levelElement);
 	LoadBases(reader, levelElement);
 	LoadProps(reader, levelElement);
+	LoadCutBoxes(reader, levelElement);
 	reader.CloseDocument();
 
 	modelLoader->UnPause();
@@ -161,11 +176,17 @@ void LevelFactory::ReadLevel(const std::string& aLevelPath)
 	effectContainer->GetEffect("Data/Resource/Shader/S_effect_pbl.fx")->SetAmbientHue(myAmbientHue);
 
 	myTerrain->CreateNavMesh();
-	//for (int i = 0; i < myCurrentLevel->myEntities.Size(); ++i)
-	//{
-	//	myTerrain->GetNavMesh()->Cut(myCurrentLevel->myEntities[i]->GetCutMesh());
-	//}
+	for (int i = 0; i < myCutBoxes.Size(); ++i)
+	{
+		myTerrain->GetNavMesh()->Cut(myCutBoxes[i]->GetCutMesh());
+	}
+	for (int i = 0; i < myCurrentLevel->myEntities.Size(); ++i)
+	{
+		myTerrain->GetNavMesh()->Cut(myCurrentLevel->myEntities[i]->GetCutMesh());
+	}
 	myTerrain->CreatePathFinder();
+
+	myCutBoxes.DeleteAll();
 
 	Prism::Engine::GetInstance()->myIsLoading = false;
 
@@ -423,6 +444,32 @@ void LevelFactory::LoadBases(XMLReader& aReader, tinyxml2::XMLElement* aLevelEle
 	DL_ASSERT_EXP(playerBase <= 1, "Player can't have more than one base.");
 	DL_ASSERT_EXP(playerBase >= 1, "Player can't have less than one base.");
 
+}
+
+void LevelFactory::LoadCutBoxes(XMLReader& aReader, tinyxml2::XMLElement* aLevelElement)
+{
+	for (tinyxml2::XMLElement* e = aReader.FindFirstChild(aLevelElement); e != nullptr;
+		e = aReader.FindNextElement(e))
+	{
+		std::string elementName = CU::ToLower(e->Name());
+		if (elementName == "navmeshcutbox")
+		{
+			tinyxml2::XMLElement* boxElement = aReader.ForceFindFirstChild(e, "position");
+			CU::Vector3<float> boxPosition;
+			aReader.ForceReadAttribute(boxElement, "X", boxPosition.x);
+			aReader.ForceReadAttribute(boxElement, "Y", boxPosition.y);
+			aReader.ForceReadAttribute(boxElement, "Z", boxPosition.z);
+
+			boxElement = aReader.ForceFindFirstChild(e, "extend");
+			CU::Vector3<float> boxScale;
+			aReader.ForceReadAttribute(boxElement, "X", boxScale.x);
+			aReader.ForceReadAttribute(boxElement, "Y", boxScale.y);
+			aReader.ForceReadAttribute(boxElement, "Z", boxScale.z);
+
+			NavmeshCutBox* newCutBox = new NavmeshCutBox(boxPosition, boxScale);
+			myCutBoxes.Add(newCutBox);
+		}
+	}
 }
 
 void LevelFactory::LoadTerrain(const std::string& aLevelPath)
