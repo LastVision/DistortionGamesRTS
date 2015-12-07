@@ -131,6 +131,15 @@ namespace Prism
 
 			std::string errorMessage = "Texturesize not power of 2: [" + aFilePath + "].";
 			DL_ASSERT_EXP(CU::IsValidTextureSize(height) && CU::IsValidTextureSize(width), errorMessage.c_str());
+
+			if (aFilePath.empty() == false)
+			{
+				const char* fileEnding = &aFilePath[aFilePath.size() - 3];
+				std::string stringEnding(fileEnding);
+				CU::ToLower(stringEnding);
+				std::string errorMessage = "Texture file-format not .DDS/.dds in [" + aFilePath + "].";
+				DL_ASSERT_EXP(stringEnding == "dds", errorMessage.c_str());
+			}
 		}
 		Engine::GetInstance()->SetDebugName((*aResourceToBind), "SplatMapContainer::aResourceToBind");
 		DL_ASSERT_EXP(hr == S_OK, "Failed to CreateTextureFromFile in splatcontainer. [" + aFilePath + "]");
