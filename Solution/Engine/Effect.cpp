@@ -1,7 +1,9 @@
 #include "stdafx.h"
 
 #include <d3dx11effect.h>
+#include <D3D10effect.h>
 #include <D3DX11async.h>
+#include <D3Dcompiler.h>
 #include <DL_Debug.h>
 #include "EffectContainer.h"
 #include "EffectListener.h"
@@ -11,7 +13,7 @@
 
 namespace Prism
 {
-
+	
 	Effect::Effect()
 	{
 		myEffectListeners.Init(512);
@@ -196,6 +198,9 @@ namespace Prism
 
 		hr = D3DX11CompileFromFile(myFileName.c_str(), 0, 0, 0, "fx_5_0", shaderFlags, 0, 0, &compiledShader
 			, &compilationMsgs, 0);
+
+	
+
 		if (hr != S_OK)
 		{
 			if (compilationMsgs != nullptr)

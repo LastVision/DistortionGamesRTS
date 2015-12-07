@@ -158,7 +158,7 @@ void LevelFactory::ReadLevel(const std::string& aLevelPath)
 {
 	Prism::ModelLoader* modelLoader = Prism::ModelLoader::GetInstance();
 	Prism::EffectContainer* effectContainer = Prism::EffectContainer::GetInstance();
-	modelLoader->Pause();
+	//modelLoader->Pause();
 	Prism::Engine::GetInstance()->myIsLoading = true;
 
 	//FindTextures("Data/Resource/Texture/Particle/");
@@ -169,7 +169,6 @@ void LevelFactory::ReadLevel(const std::string& aLevelPath)
 
 	ReadLevelSetting(aLevelPath);
 
-	Sleep(10);
 	XMLReader reader;
 	reader.OpenDocument(aLevelPath);
 	tinyxml2::XMLElement* levelElement = reader.ForceFindFirstChild("root");
