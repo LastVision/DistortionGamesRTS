@@ -39,20 +39,7 @@ namespace Prism
 		Texture * influence = Prism::TextureContainer::GetInstance()
 			->GetTexture("Data/Resource/Texture/Terrain/SplatMap/T_InfluenceToSplatMap.dds");
 		myEffect->SetTexture(influence);
-
-		//myEffect->SetSplatTextureBase(Prism::TextureContainer::GetInstance()
-		//	->GetTexture("Data/Resource/Texture/Terrain/SplatMap/T_SplatBase.dds"));
-		//myEffect->SetSplatTextureR(Prism::TextureContainer::GetInstance()
-		//	->GetTexture("Data/Resource/Texture/Terrain/SplatMap/T_SplatR.dds"));
-		//myEffect->SetSplatTextureG(Prism::TextureContainer::GetInstance()
-		//	->GetTexture("Data/Resource/Texture/Terrain/SplatMap/T_SplatG.dds"));
-		//myEffect->SetSplatTextureB(Prism::TextureContainer::GetInstance()
-		//	->GetTexture("Data/Resource/Texture/Terrain/SplatMap/T_SplatB.dds"));
-		//myEffect->SetSplatTextureA(Prism::TextureContainer::GetInstance()
-		//	->GetTexture("Data/Resource/Texture/Terrain/SplatMap/T_SplatA.dds"));
-
-
-
+		
 		D3D11_INPUT_ELEMENT_DESC vertexDesc[] =
 		{
 			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
@@ -73,14 +60,6 @@ namespace Prism
 		mySplatMapContainer = new SplatMapContainer(myEffect);
 
 		mySplatMapContainer->SetTextures();
-
-		//myEffect->SetSplatAlbedos()
-		
-		//if (mySurfaces[0]->SetTexture("myAlbedoTextures[0]", "Data/Resource/Texture/Terrain/SplatMap/T_SplatBase.dds", false) == false)
-		//{
-		//	DL_ASSERT("Failed to load mySplatTextureBase");
-		//}
-		
 		
 		InitBlendState("Terrain::BlendState");
 

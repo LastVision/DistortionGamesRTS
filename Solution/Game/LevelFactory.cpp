@@ -21,31 +21,16 @@
 #include <Scene.h>
 #include <XMLReader.h>
 
-NavmeshCutBox::NavmeshCutBox(const CU::Vector3f& aPosition, const CU::Vector3f& aExtend, const CU::Vector3f& aRotation)
-	: myPosition(aPosition)
-	, myExtend(aExtend)
-	, myRotation(aRotation)
-{
-}
-
 CU::GrowingArray<CU::Vector2<float>> NavmeshCutBox::GetCutMesh() const
 {
 	CU::GrowingArray<CU::Vector2<float>> points(4);
 
 	CU::Vector2<float> pos(myPosition.x, myPosition.z);
 
-	points.Add({ - myExtend.x, - myExtend.z });
-	points.Add({ - myExtend.x, + myExtend.z });
-	points.Add({ + myExtend.x, + myExtend.z });
-	points.Add({ + myExtend.x, - myExtend.z });
-
-	CU::Matrix33<float> rotationMatrix(CU::Matrix33<float>::CreateRotateAroundZ(myRotation.z));
-
-	for (int i = 0; i < points.Size(); ++i)
-	{
-		points[i] = points[i] * rotationMatrix;
-		points[i] += pos;
-	}
+	points.Add({ pos.x - myExtend.x, pos.y - myExtend.z });
+	points.Add({ pos.x - myExtend.x, pos.y + myExtend.z });
+	points.Add({ pos.x + myExtend.x, pos.y + myExtend.z });
+	points.Add({ pos.x + myExtend.x, pos.y - myExtend.z });
 	return points;
 }
 
@@ -475,23 +460,13 @@ void LevelFactory::LoadCutBoxes(XMLReader& aReader, tinyxml2::XMLElement* aLevel
 			aReader.ForceReadAttribute(boxElement, "Y", boxPosition.y);
 			aReader.ForceReadAttribute(boxElement, "Z", boxPosition.z);
 
-			boxElement = aReader.ForceFindFirstChild(e, "rotation");
-			CU::Vector3<float> boxRotation;
-			aReader.ForceReadAttribute(boxElement, "X", boxRotation.x);
-			aReader.ForceReadAttribute(boxElement, "Y", boxRotation.y);
-			aReader.ForceReadAttribute(boxElement, "Z", boxRotation.z);
-
-			boxElement = aReader.ForceFindFirstChild(e, "scale");
+			boxElement = aReader.ForceFindFirstChild(e, "extend");
 			CU::Vector3<float> boxScale;
 			aReader.ForceReadAttribute(boxElement, "X", boxScale.x);
 			aReader.ForceReadAttribute(boxElement, "Y", boxScale.y);
 			aReader.ForceReadAttribute(boxElement, "Z", boxScale.z);
 
-			boxRotation.x = CU::Math::DegreeToRad(boxRotation.x);
-			boxRotation.y = CU::Math::DegreeToRad(boxRotation.y);
-			boxRotation.z = CU::Math::DegreeToRad(boxRotation.z);
-
-			NavmeshCutBox* newCutBox = new NavmeshCutBox(boxPosition, boxScale, boxRotation);
+			NavmeshCutBox* newCutBox = new NavmeshCutBox(boxPosition, boxScale);
 			myCutBoxes.Add(newCutBox);
 		}
 	}
