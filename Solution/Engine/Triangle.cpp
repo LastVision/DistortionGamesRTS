@@ -147,6 +147,17 @@ namespace Prism
 			return myEdge1;
 		}
 
+		Triangle* Triangle::GetOther(Edge* anEdge) const
+		{
+			if (anEdge->myTriangle1 == this)
+			{
+				return anEdge->myTriangle2;
+			}
+			
+			DL_ASSERT_EXP(anEdge->myTriangle2 == this, "Edge not part of triangle");
+			return anEdge->myTriangle1;
+		}
+
 		Edge* Triangle::GetEdgeWithVertex(Vertex* aVertex, Edge* anEdge1, Edge* anEdge2) const
 		{
 			if (anEdge1->myVertex1 == aVertex

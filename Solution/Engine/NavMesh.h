@@ -32,6 +32,7 @@ namespace Prism
 			void CutTriangle(Edge* anEdgeToCut, Triangle* aTriangle, Edge* aNewEdge1, Edge* aNewEdge2, Vertex* anIntersectionVertex);
 			void UniqueAdd(Edge* anEdge, CU::GrowingArray<Edge*>& someEdgesOut) const;
 			void UniqueAdd(Vertex* aVertex, CU::GrowingArray<Vertex*>& someVerticesOut) const;
+			void UniqueAddIfExist(Triangle* aTriangle, CU::GrowingArray<Triangle*>& someTrianglesOut) const;
 			CU::GrowingArray<Triangle*> myTriangles;
 			CU::GrowingArray<Triangle*> myNewTriangles;
 			const float myTotalSize;
