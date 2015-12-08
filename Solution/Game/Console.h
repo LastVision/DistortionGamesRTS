@@ -1,4 +1,7 @@
 #pragma once
+
+class ConsoleHistoryManager;
+
 class Console
 {
 public:
@@ -15,5 +18,6 @@ private:
 	std::string myInput;
 
 	static Console* myInstance;
+	ConsoleHistoryManager* myHistory;
 };
 

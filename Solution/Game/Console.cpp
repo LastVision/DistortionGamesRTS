@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Console.h"
+#include "ConsoleHistoryManager.h"
 #include <InputWrapper.h>
 
 Console* Console::myInstance = nullptr;
@@ -21,11 +22,13 @@ void Console::Destroy()
 
 Console::Console()
 {
+	myHistory = new ConsoleHistoryManager();
 }
 
 
 Console::~Console()
 {
+	SAFE_DELETE(myHistory);
 }
 
 void Console::Update()
