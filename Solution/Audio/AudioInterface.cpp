@@ -1,5 +1,10 @@
+#include "stdafx.h"
+
+
 #include "AudioInterface.h"
 #include "WwiseManager.h"
+
+#include <MemoryMacros.h> //Needs to be after WwiseManager to not Override their new
 
 
 namespace Prism

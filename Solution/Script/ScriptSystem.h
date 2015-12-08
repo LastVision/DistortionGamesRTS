@@ -7,6 +7,7 @@
 #include "LuaArgs.h"
 #include "FileWatcher.h"
 #include <fstream>
+
 namespace LUA
 {
 	enum class eFunctionStatus
@@ -52,9 +53,14 @@ namespace LUA
 		void AddLuaFunction(const std::string& aNameInLua, int aNumberOfArgs);
 
 		void PrintDocumentation();
-		int levenshtein_distance(const std::string &s1, const std::string &s2);
 
-		std::string FindClosestFunction(const std::string& aFailedFunction);
+		int GetLevenshteinDistance(const std::string &s1, const std::string &s2);
+		float GetLevenshteinRatio(const std::string& aString, int aLevenshtienDistance);
+		int GetSubstringBonus(const std::string& aInput, const std::string& aCorrectString, int aScore);
+		std::string FindClosestFunction(const std::string& aInput);
+
+		//int levenshtein_distance(const std::string &s1, const std::string &s2);
+		//std::string FindClosestFunction(const std::string& aFailedFunction);
 
 		std::unordered_map<std::string, int> myArgumentsCount;
 		std::function<void()> myCppRegisterFunction;

@@ -30,6 +30,8 @@ namespace GUI
 
 		bool MouseOverGUI();
 
+		void ReadXML(const std::string& aXMLPath);
+
 	private:
 
 		void CheckMousePressed();
@@ -39,8 +41,9 @@ namespace GUI
 		void CheckMouseEntered();
 		void CheckMouseExited();
 
-		Widget* myActiveWidget;
+		const PlayerDirector* myPlayer;
 		WidgetContainer* myWidgets;
+		Widget* myActiveWidget;
 		Cursor* myCursor;
 
 		CU::Vector2<float> myMousePosition;

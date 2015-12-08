@@ -1,4 +1,8 @@
+#include "stdafx.h"
+
 #include "WwiseManager.h"
+
+#include <MemoryMacros.h> //Needs to be after WwiseManager to not Override their new
 
 #define GAME_OBJECT_POSTEST 100
 #define DEMO_DEFAULT_POOL_SIZE 2*1024*1024

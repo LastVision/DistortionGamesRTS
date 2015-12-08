@@ -6,10 +6,10 @@
 #include "GUIManager.h"
 #include "../InputWrapper/InputWrapper.h"
 #include "MiniMapWidget.h"
+#include "ResourceBarWidget.h"
 #include <Sprite.h>
 #include "UnitActionWidget.h"
 #include "UnitInfoWidget.h"
-#include "ResourceBarWidget.h"
 #include "WidgetContainer.h"
 #include <XMLReader.h>
 
@@ -18,79 +18,12 @@ namespace GUI
 	GUIManager::GUIManager(Cursor* aCursor, const std::string& aXMLPath, const PlayerDirector* aPlayer)
 		: myActiveWidget(nullptr)
 		, myCursor(aCursor)
+		, myPlayer(aPlayer)
 		, myMousePosition({ 0.f, 0.f })
 	{
 		myWindowSize = { 1920.f, 1080.f }; // XML coordinates respond to this resolution, will be resized
 
-		std::string path = "";
-		CU::Vector2<float> size;
-		CU::Vector2<float> position;
-
-		XMLReader reader;
-		reader.OpenDocument(aXMLPath);
-
-		tinyxml2::XMLElement* rootElement = reader.FindFirstChild("root");
-
-		myWidgets = new WidgetContainer(nullptr, myWindowSize);
-		myWidgets->SetPosition({ 0.f, 0.f });
-
-		tinyxml2::XMLElement* containerElement = reader.ForceFindFirstChild(rootElement, "container");
-		for (; containerElement != nullptr; containerElement = reader.FindNextElement(containerElement))
-		{
-			Prism::Sprite* backgroundSprite = nullptr;
-
-			reader.ForceReadAttribute(reader.ForceFindFirstChild(containerElement, "size"), "x", size.x);
-			reader.ForceReadAttribute(reader.ForceFindFirstChild(containerElement, "size"), "y", size.y);
-			reader.ForceReadAttribute(reader.ForceFindFirstChild(containerElement, "position"), "x", position.x);
-			reader.ForceReadAttribute(reader.ForceFindFirstChild(containerElement, "position"), "y", position.y);
-
-			tinyxml2::XMLElement* spriteElement = reader.FindFirstChild(containerElement, "backgroundsprite");
-			if (spriteElement != nullptr)
-			{
-				reader.ForceReadAttribute(spriteElement, "path", path);
-				backgroundSprite = new Prism::Sprite(path, size);
-			}
-
-			GUI::WidgetContainer* container = new WidgetContainer(backgroundSprite, size);
-			container->SetPosition(position);
-
-			tinyxml2::XMLElement* widgetElement = reader.FindFirstChild(containerElement, "widget");
-			for (; widgetElement != nullptr; widgetElement = reader.FindNextElement(widgetElement))
-			{
-				std::string type = "";
-
-				reader.ForceReadAttribute(widgetElement, "type", type);
-
-				if (type == "button")
-				{
-					ButtonWidget* button = new ButtonWidget(&reader, widgetElement);
-					container->AddWidget(button);
-				}
-				else if (type == "unit_info")
-				{
-					UnitInfoWidget* unitInfo = new UnitInfoWidget(&reader, widgetElement, aPlayer->GetSelectedUnits());
-					container->AddWidget(unitInfo);
-				}
-				else if (type == "unit_action")
-				{
-					UnitActionWidget* unitActions = new UnitActionWidget(&reader, widgetElement, aPlayer->GetSelectedUnits());
-					container->AddWidget(unitActions);
-				}
-				else if (type == "minimap")
-				{
-					MiniMapWidget* minimap = new MiniMapWidget(&reader, widgetElement);
-					container->AddWidget(minimap);
-				}
-				else if (type == "resourcebar")
-				{
-					ResourceBarWidget* resourceBar = new ResourceBarWidget(&reader, widgetElement, 0);
-					container->AddWidget(resourceBar);
-				}
-			}
-			myWidgets->AddWidget(container);
-		}
-
-		reader.CloseDocument();
+		ReadXML(aXMLPath);
 	}
 
 	GUIManager::~GUIManager()
@@ -161,6 +94,79 @@ namespace GUI
 	bool GUIManager::MouseOverGUI()
 	{
 		return myActiveWidget != nullptr && myActiveWidget != myWidgets;
+	}
+
+	void GUIManager::ReadXML(const std::string& aXMLPath)
+	{
+		std::string path = "";
+		CU::Vector2<float> size;
+		CU::Vector2<float> position;
+
+		XMLReader reader;
+		reader.OpenDocument(aXMLPath);
+
+		tinyxml2::XMLElement* rootElement = reader.FindFirstChild("root");
+
+		myWidgets = new WidgetContainer(nullptr, myWindowSize);
+		myWidgets->SetPosition({ 0.f, 0.f });
+
+		tinyxml2::XMLElement* containerElement = reader.ForceFindFirstChild(rootElement, "container");
+		for (; containerElement != nullptr; containerElement = reader.FindNextElement(containerElement))
+		{
+			Prism::Sprite* backgroundSprite = nullptr;
+
+			reader.ForceReadAttribute(reader.ForceFindFirstChild(containerElement, "size"), "x", size.x);
+			reader.ForceReadAttribute(reader.ForceFindFirstChild(containerElement, "size"), "y", size.y);
+			reader.ForceReadAttribute(reader.ForceFindFirstChild(containerElement, "position"), "x", position.x);
+			reader.ForceReadAttribute(reader.ForceFindFirstChild(containerElement, "position"), "y", position.y);
+
+			tinyxml2::XMLElement* spriteElement = reader.FindFirstChild(containerElement, "backgroundsprite");
+			if (spriteElement != nullptr)
+			{
+				reader.ForceReadAttribute(spriteElement, "path", path);
+				backgroundSprite = new Prism::Sprite(path, size);
+			}
+
+			GUI::WidgetContainer* container = new WidgetContainer(backgroundSprite, size);
+			container->SetPosition(position);
+
+			tinyxml2::XMLElement* widgetElement = reader.FindFirstChild(containerElement, "widget");
+			for (; widgetElement != nullptr; widgetElement = reader.FindNextElement(widgetElement))
+			{
+				std::string type = "";
+
+				reader.ForceReadAttribute(widgetElement, "type", type);
+
+				if (type == "button")
+				{
+					ButtonWidget* button = new ButtonWidget(&reader, widgetElement);
+					container->AddWidget(button);
+				}
+				else if (type == "unit_info")
+				{
+					UnitInfoWidget* unitInfo = new UnitInfoWidget(&reader, widgetElement, myPlayer->GetSelectedUnits());
+					container->AddWidget(unitInfo);
+				}
+				else if (type == "unit_action")
+				{
+					UnitActionWidget* unitActions = new UnitActionWidget(&reader, widgetElement, myPlayer->GetSelectedUnits());
+					container->AddWidget(unitActions);
+				}
+				else if (type == "minimap")
+				{
+					MiniMapWidget* minimap = new MiniMapWidget(&reader, widgetElement);
+					container->AddWidget(minimap);
+				}
+				else if (type == "resourcebar")
+				{
+					ResourceBarWidget* resourceBar = new ResourceBarWidget(&reader, widgetElement, 0);
+					container->AddWidget(resourceBar);
+				}
+			}
+			myWidgets->AddWidget(container);
+		}
+
+		reader.CloseDocument();
 	}
 
 	void GUIManager::CheckMousePressed()

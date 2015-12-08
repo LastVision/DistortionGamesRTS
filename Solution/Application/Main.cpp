@@ -24,6 +24,8 @@ Prism::SetupInfo globalSetup;
 
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPTSTR, int aNumberCommands)
 {
+	Prism::MemoryTracker::GetInstance()->SetRunTime(false);
+
 	ShowCursor(false);
 	DL_Debug::Debug::Create();
 	CU::TimerManager::Create();

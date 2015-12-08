@@ -1464,17 +1464,17 @@ void LoadNodeRecursive(FbxModelData* aModel, AnimationData& aAnimation, FbxNode*
 
 FbxModelData* FBXLoader::loadModel(const char* aFile)
 {
-	DL_PRINT("FBXLoader Creating ModelData...");
+	//DL_PRINT("FBXLoader Creating ModelData...");
 	myLoadingModel = new FbxModelData;
-	DL_PRINT("Success!");
-	DL_PRINT("FBXLoader Creating TextureData...");
+	//DL_PRINT("Success!");
+	//DL_PRINT("FBXLoader Creating TextureData...");
 	myLoadingModel->myTextureData = new TextureData();
-	DL_PRINT("Success!");
-	DL_PRINT("FBXLoader Loading Scene...");
+	//DL_PRINT("Success!");
+	//DL_PRINT("FBXLoader Loading Scene...");
 	auto scene = LoadScene(aFile);
-	DL_PRINT("Successfully loaded scene!");
+	//DL_PRINT("Successfully loaded scene!");
 
-	DL_PRINT("FBXLoader Loading Textures...");
+	//DL_PRINT("FBXLoader Loading Textures...");
 	//TextureData
 	const int lTextureCount = scene->GetTextureCount();
 	for (int lTextureIndex = 0; lTextureIndex < lTextureCount; ++lTextureIndex)
@@ -1499,8 +1499,8 @@ FbxModelData* FBXLoader::loadModel(const char* aFile)
 			lFileTexture->SetFileName(str.c_str());
 		}
 	}
-	DL_PRINT("Success!");
-	DL_PRINT("FBXLoader Loading Animations...");
+	//DL_PRINT("Success!");
+	//DL_PRINT("FBXLoader Loading Animations...");
 
 	FbxArray<FbxString*> animationNames;
 	FbxArray<FbxPose*> poses;
@@ -1526,7 +1526,8 @@ FbxModelData* FBXLoader::loadModel(const char* aFile)
 
 	LoadAnimation(*myLoadingModel->myAnimation, scene->GetRootNode(), FbxAMatrix(), pose, lCurrentAnimLayer, -1);
 	LoadNodeRecursive(myLoadingModel, *myLoadingModel->myAnimation, scene->GetRootNode(), FbxAMatrix(), pose, lCurrentAnimLayer, -1);
-	DL_PRINT("Success!");
+
+	//DL_PRINT("Success!");
 
 	return myLoadingModel;
 }

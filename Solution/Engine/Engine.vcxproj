@@ -211,6 +211,7 @@
     <ClCompile Include="Cube3D.cpp" />
     <ClCompile Include="Cube3DRenderer.cpp" />
     <ClCompile Include="DebugDrawer.cpp" />
+    <ClCompile Include="DGFXLoader.cpp" />
     <ClCompile Include="DirectX.cpp" />
     <ClCompile Include="Edge.cpp" />
     <ClCompile Include="Effect.cpp" />
@@ -284,6 +285,7 @@
     <ClInclude Include="Cube3DRenderer.h" />
     <ClInclude Include="DebugDrawer.h" />
     <ClInclude Include="Defines.h" />
+    <ClInclude Include="DGFXLoader.h" />
     <ClInclude Include="DirectX.h" />
     <ClInclude Include="Edge.h" />
     <ClInclude Include="Effect.h" />

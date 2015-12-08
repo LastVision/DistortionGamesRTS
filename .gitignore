@@ -88,3 +88,4 @@ Tools/CSharpUtilities/CSharpUtilities/obj/
 /From LD to PROG/Level_01_Heightmap.tga
 *.cso
 *.fx
+/Documentation/CreateProject.txt

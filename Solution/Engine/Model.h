@@ -22,6 +22,7 @@ namespace Prism
 	
 	class Model : public BaseModel
 	{
+		friend class DGFXLoader;
 		friend class FBXFactory;
 	public:
 		Model();

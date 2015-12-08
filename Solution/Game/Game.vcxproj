@@ -153,7 +153,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="ConsoleHistoryManager.h" />
+    <ClInclude Include="ConsoleState.h" />
     <ClInclude Include="Director.h" />
     <ClInclude Include="AIDirector.h" />
     <ClInclude Include="Console.h" />
@@ -173,7 +173,7 @@
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ConsoleHistoryManager.cpp" />
+    <ClCompile Include="ConsoleState.cpp" />
     <ClCompile Include="Director.cpp" />
     <ClCompile Include="AIDirector.cpp" />
     <ClCompile Include="Console.cpp" />

@@ -16,6 +16,9 @@
     <Filter Include="Source Files\External">
       <UniqueIdentifier>{152868d3-1a26-48a3-85d1-06573648495c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="PreCompile">
+      <UniqueIdentifier>{19313f20-f7ae-4608-87d4-1bd3ce480310}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SoundEngine\Win32\AkDefaultIOHookBlocking.cpp">
@@ -36,6 +39,9 @@
     <ClCompile Include="AudioInterface.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>PreCompile</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SoundEngine\Win32\AkDefaultIOHookBlocking.h">
@@ -55,6 +61,9 @@
     </ClInclude>
     <ClInclude Include="WwiseManager.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>PreCompile</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

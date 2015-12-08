@@ -9,6 +9,7 @@ namespace Prism
 	class Model;
 	class ModelProxy;
 	class FBXFactory;
+	class DGFXLoader;
 
 	class ModelLoader
 	{
@@ -71,6 +72,7 @@ namespace Prism
 		volatile bool myHasPrefetched;
 
 		FBXFactory* myModelFactory;
+		DGFXLoader* myDGFXLoader;
 		CU::GrowingArray<Model*> myNonFXBModels;
 		std::unordered_map<std::string, ModelProxy*> myProxies;
 
