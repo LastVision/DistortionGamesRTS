@@ -73,6 +73,7 @@ private:
 
 	bool myIsComplete;
 	bool myIsShuttingDown;
+	bool myShouldReOpenConsole;
 
 	bool myIsPlayerCinematic;
 	int myCinematicIndex;

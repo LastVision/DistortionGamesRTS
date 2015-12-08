@@ -9,6 +9,7 @@ public:
 	static void Destroy();
 
 	void Update();
+	const std::string& GetInput() const;
 
 private:
 	Console();
@@ -21,3 +22,7 @@ private:
 	ConsoleHistoryManager* myHistory;
 };
 
+inline const std::string& Console::GetInput() const
+{
+	return myInput;
+}
