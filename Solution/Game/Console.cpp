@@ -36,11 +36,11 @@ void Console::Update()
 {
 	ReadInput();
 
-	if (CU::InputWrapper::GetInstance()->KeyUp(DIK_RETURN))
-	{
-		LUA::ScriptSystem::GetInstance()->RunLuaFromString(myInput);
-		myInput = "";
-	}
+	//if (CU::InputWrapper::GetInstance()->KeyUp(DIK_RETURN))
+	//{
+	//	LUA::ScriptSystem::GetInstance()->RunLuaFromString(myInput);
+	//	myInput = "";
+	//}
 
 	//Use to find keycodes
 	/*for (int i  = 0; i < 255; ++i)

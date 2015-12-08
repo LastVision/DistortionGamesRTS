@@ -34,6 +34,7 @@ void ConsoleHistoryManager::Save()
 
 void ConsoleHistoryManager::Load()
 {
+	myHistory.RemoveAll();
 	std::fstream output;
 	output.open(myHistoryFile, std::ios::in);
 	std::string line;
