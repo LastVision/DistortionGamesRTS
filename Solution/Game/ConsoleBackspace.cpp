@@ -5,7 +5,7 @@
 ConsoleBackspace::ConsoleBackspace(std::string& aString)
 	: myString(aString)
 	, myFirstWait(0.5f)
-	, myRepeatWait(0.1f)
+	, myRepeatWait(0.15f)
 	, myCurrentTime(0)
 {
 }
