@@ -10,6 +10,8 @@
 #include <TimerManager.h>
 #include <XMLReader.h>
 
+#include "DGFXLoader.h"
+
 namespace Prism
 {
 	ModelLoader* ModelLoader::myInstance = nullptr;
@@ -49,6 +51,8 @@ namespace Prism
 
 	ModelLoader::~ModelLoader()
 	{
+		delete myDGFXLoader;
+
 		delete myModelFactory;
 		myModelFactory = nullptr;
 		myNonFXBModels.DeleteAll();
@@ -143,7 +147,13 @@ namespace Prism
 				{
 					Model* model = myModelFactory->LoadModel(myLoadArray[i].myModelPath.c_str(),
 						EffectContainer::GetInstance()->GetEffect(myLoadArray[i].myEffectPath));
+
+					/*myModelFactory->ConvertToDGFX(myLoadArray[i].myModelPath.c_str());
+					Model* model = myDGFXLoader->LoadFromDGFX(myLoadArray[i].myModelPath.c_str()
+					, EffectContainer::GetInstance()->GetEffect(myLoadArray[i].myEffectPath));*/
+
 					myLoadArray[i].myProxy->SetModel(model);
+
 
 					break;
 				}

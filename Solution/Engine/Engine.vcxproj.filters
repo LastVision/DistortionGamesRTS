@@ -171,6 +171,9 @@
     <ClCompile Include="SplatMapContainer.cpp">
       <Filter>Terrain</Filter>
     </ClCompile>
+    <ClCompile Include="DGFXLoader.cpp">
+      <Filter>FBX</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h" />
@@ -384,6 +387,9 @@
     </ClInclude>
     <ClInclude Include="SplatMapContainer.h">
       <Filter>Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="DGFXLoader.h">
+      <Filter>FBX</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
