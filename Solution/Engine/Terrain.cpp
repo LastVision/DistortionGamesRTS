@@ -72,7 +72,7 @@ namespace Prism
 		myCellSize = mySize.x / myHeightMap->myWidth;
 
 		myIce = new Ice(EffectContainer::GetInstance()->GetEffect("Data/Resource/Shader/S_effect_ice.fx")
-			, { 256.f, 256.f }, 3.f);
+			, { 256.f, 256.f }, 1.25f);
 		myIce->SetTextures();
 	}
 
@@ -229,6 +229,7 @@ namespace Prism
 		unsigned int height = myHeightMap->myDepth;
 		unsigned int width = myHeightMap->myWidth;
 		float yScale = myHeight / 255.f;
+		yScale *= 0.2f;
 		//float xScale = mySize.x / myHeightMap->myDepth;
 		float xzScale = mySize.y / myHeightMap->myDepth;
 
@@ -247,6 +248,7 @@ namespace Prism
 
 				CU::Vector3<float> normal(-sx*xzScale, yScale, sy*xzScale);
 				CU::Normalize(normal);
+				normal.z = -normal.z;
 
 				someVertices[y*width + x].myNormal = normal;
 			}

@@ -18,8 +18,8 @@ public:
 	void BuildUnit(eEntityType aUnitType);
 
 	eEntityType GetEntityToSpawn() const;
-	float GetCurrentBuildTime() const;
-	float GetMaxBuildTime() const;
+	const float& GetCurrentBuildTime() const;
+	const float& GetMaxBuildTime() const;
 
 private:
 
@@ -46,12 +46,12 @@ inline eEntityType BuildingComponent::GetEntityToSpawn() const
 	return myEntityToSpawn;
 }
 
-inline float BuildingComponent::GetCurrentBuildTime() const
+inline const float& BuildingComponent::GetCurrentBuildTime() const
 {
 	return myCurrentBuildTime;
 }
 
-inline float BuildingComponent::GetMaxBuildTime() const
+inline const float& BuildingComponent::GetMaxBuildTime() const
 {
 	return myMaxBuildTime;
 }

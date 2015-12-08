@@ -42,6 +42,7 @@ namespace Prism
 		Navigation::PathFinder* GetPathFinder() const;
 
 		void CreatePathFinder();
+		Ice* GetIce();
 
 	private:
 		void operator=(Terrain&) = delete;
@@ -78,5 +79,10 @@ namespace Prism
 	inline Navigation::PathFinder* Terrain::GetPathFinder() const
 	{
 		return myPathFinder;
+	}
+	
+	inline Ice* Terrain::GetIce()
+	{
+		return myIce;
 	}
 }

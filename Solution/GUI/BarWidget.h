@@ -8,6 +8,7 @@ namespace GUI
 	{
 	public:
 		BarWidget(const int& aMaxValue, const int& aCurrentValue, CU::Vector2<float> aSize);
+		BarWidget(const float& aMaxValue, const float& aCurrentValue, CU::Vector2<float> aSize);
 		~BarWidget();
 
 		void Update() override;
@@ -20,7 +21,18 @@ namespace GUI
 		Prism::Sprite* myBackgroundSprite;
 		Prism::Sprite* myValueSprite;
 
-		const int& myMaxValue;
-		const int& myCurrentValue;
+		bool myIsFloat;
+		
+		union
+		{
+			const float* myCurrentValueFloat;
+			const int* myCurrentValueInt;
+		};
+
+		union
+		{
+			const float* myMaxValueFloat;
+			const int* myMaxValueInt;
+		};
 	};			   
 }

@@ -36,10 +36,10 @@ Level::Level(const Prism::Camera& aCamera, Prism::Terrain* aTerrain, GUI::Cursor
 	Prism::ModelLoader::GetInstance()->Pause();
 	Prism::EffectContainer::GetInstance()->SetCubeMap("Data/Resource/Texture/CubeMap/T_cubemap_level01.dds");
 	Prism::ModelLoader::GetInstance()->UnPause();
-	myLight = new Prism::DirectionalLight();
-	myLight->SetColor({ 0.5f, 0.5f, 0.9f, 1.f });
-	myLight->SetDir(CU::Vector3<float>(0, 1, 0) * CU::Matrix44<float>::CreateRotateAroundZ(-3.14f / 3.f));
-	myScene->AddLight(myLight);
+	//myLight = new Prism::DirectionalLight();
+	//myLight->SetColor({ 0.5f, 0.5f, 0.9f, 1.f });
+	//myLight->SetDir(CU::Vector3<float>(0, 1, 0) * CU::Matrix44<float>::CreateRotateAroundZ(-3.14f / 3.f));
+	//myScene->AddLight(myLight);
 
 	myPlayer = new PlayerDirector(*myTerrain, *myScene, aCursor);
 	myAI = new AIDirector(*myTerrain, *myScene);

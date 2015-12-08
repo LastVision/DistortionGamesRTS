@@ -163,7 +163,7 @@ void ConsoleHistoryManager::AddHistory(const std::string& aCommand, eHistoryType
 		break;
 	}
 
-	if (myHistory.Size() >= myHistory.GetCapacity())
+	if (myInsertIndex >= myHistory.GetCapacity())
 	{
 		myInsertIndex = 1;
 		myHasWrapped = true;
