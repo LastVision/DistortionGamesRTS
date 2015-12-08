@@ -72,7 +72,7 @@ void InGameState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCur
 
 void InGameState::EndState()
 {
-
+	SAFE_DELETE(myLevel); // need for exit from consol state
 }
 
 const eStateStatus InGameState::Update(const float& aDeltaTime)

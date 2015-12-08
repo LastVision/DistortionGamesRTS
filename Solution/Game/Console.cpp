@@ -41,7 +41,7 @@ void Console::Update()
 		}
 	}*/
 
-	DEBUG_PRINT(myInput);
+	//DEBUG_PRINT(myInput);
 }
 
 void Console::ReadInput()

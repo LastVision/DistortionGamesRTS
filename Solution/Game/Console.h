@@ -6,6 +6,7 @@ public:
 	static void Destroy();
 
 	void Update();
+	const std::string& GetInput() const;
 
 private:
 	Console();
@@ -17,3 +18,7 @@ private:
 	static Console* myInstance;
 };
 
+inline const std::string& Console::GetInput() const
+{
+	return myInput;
+}

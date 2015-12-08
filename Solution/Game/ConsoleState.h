@@ -1,6 +1,11 @@
 #pragma once
 #include "GameState.h"
 
+namespace Prism
+{
+	class Sprite;
+}
+
 class ConsoleState : public GameState
 {
 public:
@@ -17,6 +22,6 @@ public:
 
 
 private:
-
+	Prism::Sprite* myBackground;
 };
 
