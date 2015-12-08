@@ -8,7 +8,7 @@ namespace Prism
 	namespace TextureHelper
 	{
 
-		HRESULT CreateShaderResourceViewFromFile(const std::string& aFilePath, ID3D11ShaderResourceView** aResourceToBind)
+		static HRESULT CreateShaderResourceViewFromFile(const std::string& aFilePath, ID3D11ShaderResourceView** aResourceToBind)
 		{
 			HRESULT hr = D3DX11CreateShaderResourceViewFromFile(Engine::GetInstance()->GetDevice(), aFilePath.c_str()
 				, NULL, NULL, aResourceToBind, NULL);

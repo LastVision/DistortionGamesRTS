@@ -1,3 +1,4 @@
+#pragma once
 #include "stdafx.h"
 #include <CommonHelper.h>
 #include <d3dx11effect.h>
