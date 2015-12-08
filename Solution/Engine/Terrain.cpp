@@ -10,6 +10,7 @@
 #include "Effect.h"
 #include "EffectContainer.h"
 #include "Engine.h"
+#include "Ice.h"
 #include "IndexBufferWrapper.h"
 #include <MathHelper.h>
 #include "NavMesh.h"
@@ -60,6 +61,7 @@ namespace Prism
 		mySplatMapContainer = new SplatMapContainer(myEffect);
 
 		mySplatMapContainer->SetTextures();
+
 		
 		InitBlendState("Terrain::BlendState");
 
@@ -68,6 +70,10 @@ namespace Prism
 		CreateVertices();
 
 		myCellSize = mySize.x / myHeightMap->myWidth;
+
+		myIce = new Ice(EffectContainer::GetInstance()->GetEffect("Data/Resource/Shader/S_effect_ice.fx")
+			, { 256.f, 256.f }, 3.f);
+		myIce->SetTextures();
 	}
 
 	Terrain::~Terrain()
@@ -76,6 +82,7 @@ namespace Prism
 		SAFE_DELETE(myPathFinder);
 		SAFE_DELETE(myNavMesh);
 		SAFE_DELETE(mySplatMapContainer);
+		SAFE_DELETE(myIce);
 	}
 
 	void Terrain::Render(const Camera& aCamera)
@@ -87,7 +94,7 @@ namespace Prism
 		myEffect->SetViewProjectionMatrix(aCamera.GetViewProjection());
 		myEffect->SetCameraPosition(aCamera.GetOrientation().GetPos());
 		BaseModel::Render();
-
+		myIce->Render(aCamera);
 		myNavMesh->Render();
 	}
 
