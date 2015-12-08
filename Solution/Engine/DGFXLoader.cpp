@@ -17,18 +17,28 @@ namespace Prism
 
 	DGFXLoader::~DGFXLoader()
 	{
+		for (auto it = myModels.begin(); it != myModels.end(); ++it)
+		{
+			SAFE_DELETE(it->second);
+		}
+		myModels.clear();
 	}
 
-	Model* DGFXLoader::LoadFromDGFX(const char* aFilePath, Effect* aEffect)
+	Model* DGFXLoader::LoadFromDGFX(const std::string& aFilePath, Effect* aEffect)
 	{
-		DL_DEBUG("Load DGFX %s", aFilePath);
-		CU::TimerManager::GetInstance()->StartTimer("LoadDGFX");
+		if (myModels.find(aFilePath) != myModels.end())
+		{
+			return myModels[aFilePath];
+		}
 
 		std::string dgfxFile(aFilePath);
 		dgfxFile[dgfxFile.length() - 3] = 'd';
 		dgfxFile[dgfxFile.length() - 2] = 'g';
 		dgfxFile[dgfxFile.length() - 1] = 'f';
 		dgfxFile += 'x';
+		DL_DEBUG("Load DGFX %s", dgfxFile.c_str());
+		CU::TimerManager::GetInstance()->StartTimer("LoadDGFX");
+
 
 		std::fstream file;
 		file.open(dgfxFile.c_str(), std::ios::in | std::ios::binary);
@@ -39,8 +49,9 @@ namespace Prism
 		newModel->Init();
 		int elapsed = static_cast<int>(
 			CU::TimerManager::GetInstance()->StopTimer("LoadDGFX").GetMilliseconds());
-		RESOURCE_LOG("DGFX \"%s\" took %d ms to load", aFilePath, elapsed);
+		RESOURCE_LOG("DGFX \"%s\" took %d ms to load", dgfxFile.c_str(), elapsed);
 
+		myModels[aFilePath] = newModel;
 
 		return newModel;
 	}

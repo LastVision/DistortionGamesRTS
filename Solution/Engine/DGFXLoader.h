@@ -1,6 +1,8 @@
 #pragma once
 
 #include <fstream>
+#include <string>
+#include <unordered_map>
 
 namespace Prism
 {
@@ -13,7 +15,7 @@ namespace Prism
 		DGFXLoader();
 		~DGFXLoader();
 
-		Model* LoadFromDGFX(const char* aFilePath, Effect* aEffect);
+		Model* LoadFromDGFX(const std::string& aFilePath, Effect* aEffect);
 		
 
 	private:
@@ -41,6 +43,8 @@ namespace Prism
 
 		Model* LoadModelFromDGFX(Effect* aEffect, std::fstream& aStream);
 		void LoadModelDataFromDGFX(Model* aOutData, Effect* aEffect, std::fstream& aStream);
+
+		std::unordered_map<std::string, Model*> myModels;
 	};
 
 }

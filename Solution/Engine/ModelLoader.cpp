@@ -37,6 +37,7 @@ namespace Prism
 		, myCanAddToLoadArray(true)
 		, myCanCopyArray(true)
 		, myModelFactory(new FBXFactory())
+		, myDGFXLoader(new DGFXLoader())
 		, myIsLoading(false)
 		, myClearLoadJobs(true)
 		, myIsPaused(false)
@@ -148,8 +149,8 @@ namespace Prism
 					Model* model = myModelFactory->LoadModel(myLoadArray[i].myModelPath.c_str(),
 						EffectContainer::GetInstance()->GetEffect(myLoadArray[i].myEffectPath));
 
-					/*myModelFactory->ConvertToDGFX(myLoadArray[i].myModelPath.c_str());
-					Model* model = myDGFXLoader->LoadFromDGFX(myLoadArray[i].myModelPath.c_str()
+					//myModelFactory->ConvertToDGFX(myLoadArray[i].myModelPath.c_str());
+					/*Model* model = myDGFXLoader->LoadFromDGFX(myLoadArray[i].myModelPath.c_str()
 					, EffectContainer::GetInstance()->GetEffect(myLoadArray[i].myEffectPath));*/
 
 					myLoadArray[i].myProxy->SetModel(model);
