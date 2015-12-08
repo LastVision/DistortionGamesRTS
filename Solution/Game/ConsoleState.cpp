@@ -3,6 +3,7 @@
 #include "Console.h"
 #include "ConsoleHistoryManager.h"
 #include <InputWrapper.h>
+#include <ScriptSystem.h>
 #include <Sprite.h>
 
 ConsoleState::ConsoleState(bool& aShouldReOpenConsole)
@@ -49,7 +50,6 @@ const eStateStatus ConsoleState::Update(const float& aDeltaTime)
 	if (CU::InputWrapper::GetInstance()->KeyUp(DIK_ESCAPE) == true)
 	{
 		myStateStatus = ePopMainState;
-		Console::GetInstance()->GetConsoleHistory()->Save();
 		return eStateStatus::eKeepState;
 	}
 
@@ -57,6 +57,11 @@ const eStateStatus ConsoleState::Update(const float& aDeltaTime)
 	{
 		myShouldReOpenConsole = true;
 		Console::GetInstance()->GetConsoleHistory()->AddHistory(Console::GetInstance()->GetInput());
+
+		LUA::ScriptSystem::GetInstance()->RunLuaFromString(Console::GetInstance()->GetInput());
+		Console::GetInstance()->ClearInput();
+
+		Console::GetInstance()->GetConsoleHistory()->Save();
 		myStateStatus = ePopSubState;
 	}
 
@@ -84,6 +89,16 @@ void ConsoleState::Render()
 	if (myMarkerBlinker == true)
 	{
 		myMarker->Render({ (windowSize.x * 1.1f) + length * 15.f, windowSize.y * 1.1f});
+	}
+
+	const CU::GrowingArray<std::string>& history = Console::GetInstance()->GetConsoleHistory()->GetHistoryArray();
+	CU::Vector2<float> position = windowSize * 1.1f;
+	position.y += 30.f;
+
+	for (int i = history.Size() - 1; i >= 0; --i)
+	{
+		position.y += 30.f;
+		Prism::Engine::GetInstance()->PrintText(history[i], position, Prism::eTextType::RELEASE_TEXT, 0.9f);
 	}
 
 }

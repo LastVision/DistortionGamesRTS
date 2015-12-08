@@ -12,6 +12,8 @@ public:
 	const std::string& GetInput() const;
 	ConsoleHistoryManager* GetConsoleHistory();
 
+	void ClearInput();
+
 private:
 	Console();
 	~Console();
@@ -31,4 +33,9 @@ inline const std::string& Console::GetInput() const
 inline ConsoleHistoryManager* Console::GetConsoleHistory()
 {
 	return myHistory;
+}
+
+inline void Console::ClearInput()
+{
+	myInput = "";
 }
