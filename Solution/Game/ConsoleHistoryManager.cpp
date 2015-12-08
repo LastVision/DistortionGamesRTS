@@ -7,12 +7,13 @@
 ConsoleHistoryManager::ConsoleHistoryManager()
 	: myCurrentIndex(0)
 	, myInsertIndex(0)
+	, myHasWrapped(false)
 {
 	std::string tempPath = CU::GetMyDocumentFolderPath() + "ICE";
 	CreateDirectory(tempPath.c_str(), NULL);
 	std::string temp = tempPath + "\\CommandHistory.txt";
 	myHistoryFile = temp.c_str();
-	myHistory.Reserve(1024);
+	myHistory.Init(128);
 }
 
 ConsoleHistoryManager::~ConsoleHistoryManager()
@@ -73,7 +74,15 @@ void ConsoleHistoryManager::AddHistory(const std::string& aCommand)
 	if (myHistory.Size() >= myHistory.GetCapacity())
 	{
 		myInsertIndex = 0;
+		myHasWrapped = true;
 	}
-	myHistory[myInsertIndex] = aCommand;
+	if (myHasWrapped == false)
+	{
+		myHistory.Add(aCommand);
+	}
+	else if (myHasWrapped == true)
+	{
+		myHistory[myInsertIndex] = aCommand;
+	}
 	myInsertIndex++;
 }

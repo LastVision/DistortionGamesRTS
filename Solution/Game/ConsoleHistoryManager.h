@@ -17,10 +17,10 @@ public:
 private:
 
 	CU::GrowingArray<std::string> myHistory;
-	int myCurrentIndex;
-
 	const char* myHistoryFile;
+	int myCurrentIndex;
 	int myInsertIndex;
+	bool myHasWrapped;
 
 };
 
