@@ -74,6 +74,16 @@ const eStateStatus ConsoleState::Update(const float& aDeltaTime)
 		myStateStatus = ePopSubState;
 	}
 
+	if (CU::InputWrapper::GetInstance()->KeyUp(DIK_UPARROW) == true)
+	{
+		Console::GetInstance()->GetConsoleHistory()->GetPrevious();
+	}
+
+	if (CU::InputWrapper::GetInstance()->KeyUp(DIK_DOWNARROW) == true)
+	{
+		Console::GetInstance()->GetConsoleHistory()->GetNext();
+	}
+
 	myRenderTime += aDeltaTime;
 	if (myRenderTime > 0.5f)
 	{
