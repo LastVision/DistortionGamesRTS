@@ -24,7 +24,7 @@ void ConsoleHistoryManager::Save()
 {
 	std::fstream output;
 	output.open(myHistoryFile, std::ios::out);
-	for (int i = 0; i < myHistory.Size(); ++i)
+	for (int i = 1; i < myHistory.Size(); ++i)
 	{
 		output << myHistory[i] << std::endl;
 	}
@@ -37,9 +37,11 @@ void ConsoleHistoryManager::Load()
 	std::fstream output;
 	output.open(myHistoryFile, std::ios::in);
 	std::string line;
+	myHistory.Insert(0, "");
 	while (std::getline(output, line))
 	{
-		myHistory.Add(line);
+		myCurrentIndex++;
+		myHistory.Insert(myCurrentIndex, line);
 	}
 	output.close();
 }
@@ -73,12 +75,12 @@ void ConsoleHistoryManager::AddHistory(const std::string& aCommand)
 {
 	if (myHistory.Size() >= myHistory.GetCapacity())
 	{
-		myInsertIndex = 0;
+		myInsertIndex = 1;
 		myHasWrapped = true;
 	}
 	if (myHasWrapped == false)
 	{
-		myHistory.Add(aCommand);
+		myHistory.Insert(myInsertIndex, aCommand);
 	}
 	else if (myHasWrapped == true)
 	{
