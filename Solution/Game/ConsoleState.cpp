@@ -25,12 +25,15 @@ void ConsoleState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCu
 	windowSize *= 0.75f;
 
 	myBackground = new Prism::Sprite("Data/Resource/Texture/Console/T_console_window.dds", windowSize);
+	myMarker = new Prism::Sprite("Data/Resource/Texture/UI/T_healthbar_background.dds", { 2.f, 20.f }, { 0.f, 0.f });
 	Console::GetInstance()->GetConsoleHistory()->Load();
+	myMarkerBlinker = true;
 }
 
 void ConsoleState::EndState()
 {
 	SAFE_DELETE(myBackground);
+	SAFE_DELETE(myMarker);
 }
 
 const eStateStatus ConsoleState::Update(const float& aDeltaTime)
@@ -55,8 +58,12 @@ const eStateStatus ConsoleState::Update(const float& aDeltaTime)
 		myStateStatus = ePopSubState;
 	}
 
-	
-
+	myRenderTime += aDeltaTime;
+	if (myRenderTime > 0.5f)
+	{
+		myMarkerBlinker = !myMarkerBlinker;
+		myRenderTime = 0.f;
+	}
 	//	Console::GetInstance()->Update();
 
 	return myStateStatus;
@@ -70,6 +77,13 @@ void ConsoleState::Render()
 
 
 	Prism::Engine::GetInstance()->PrintText(Console::GetInstance()->GetInput(), windowSize * 1.1f, Prism::eTextType::RELEASE_TEXT, 0.9f);
+
+	int length = Console::GetInstance()->GetInput().length();
+
+	if (myMarkerBlinker == true)
+	{
+		myMarker->Render({ (windowSize.x * 1.1f) + length * 15.f, windowSize.y * 1.1f});
+	}
 
 }
 

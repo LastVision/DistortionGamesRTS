@@ -24,5 +24,8 @@ public:
 private:
 	Prism::Sprite* myBackground;
 	bool& myShouldReOpenConsole;
+	Prism::Sprite* myMarker;
+	float myRenderTime;
+	bool myMarkerBlinker;
 };
 
