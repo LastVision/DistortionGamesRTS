@@ -509,7 +509,7 @@ void LevelFactory::LoadTerrain(const std::string& aLevelPath)
 	reader.ForceReadAttribute(terrainElement, "heightmap", heightMap);
 	reader.ForceReadAttribute(terrainElement, "texture", texturePath);
 
-	myTerrain = new Prism::Terrain(heightMap, texturePath, { 256.f, 256.f }, 25.5f, CU::Matrix44<float>());
+	myTerrain = new Prism::Terrain(heightMap, texturePath, { 256.f, 256.f }, 10.f, CU::Matrix44<float>());
 	reader.CloseDocument();
 }
 
