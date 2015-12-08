@@ -72,7 +72,7 @@ namespace Prism
 		myCellSize = mySize.x / myHeightMap->myWidth;
 
 		myIce = new Ice(EffectContainer::GetInstance()->GetEffect("Data/Resource/Shader/S_effect_ice.fx")
-			, { 256.f, 256.f }, 3.f);
+			, { 256.f, 256.f }, 1.25f);
 		myIce->SetTextures();
 	}
 
