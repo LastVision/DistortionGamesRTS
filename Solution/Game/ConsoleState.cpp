@@ -58,8 +58,17 @@ const eStateStatus ConsoleState::Update(const float& aDeltaTime)
 		myShouldReOpenConsole = true;
 		Console::GetInstance()->GetConsoleHistory()->AddHistory(Console::GetInstance()->GetInput());
 
-		LUA::ScriptSystem::GetInstance()->RunLuaFromString(Console::GetInstance()->GetInput());
-		Console::GetInstance()->ClearInput();
+		std::string errorString;
+		if (LUA::ScriptSystem::GetInstance()->ValidateLuaString(Console::GetInstance()->GetInput(), errorString))
+		{
+			LUA::ScriptSystem::GetInstance()->RunLuaFromString(Console::GetInstance()->GetInput());
+			Console::GetInstance()->ClearInput();
+		}
+		else
+		{
+			Console::GetInstance()->GetConsoleHistory()->AddHistory(errorString);
+		}
+		
 
 		Console::GetInstance()->GetConsoleHistory()->Save();
 		myStateStatus = ePopSubState;
