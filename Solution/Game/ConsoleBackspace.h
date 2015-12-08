@@ -5,7 +5,6 @@ class ConsoleBackspace
 {
 public:
 	ConsoleBackspace(std::string& aString);
-	~ConsoleBackspace();
 
 	void Update(bool aButtonIsPressed);
 

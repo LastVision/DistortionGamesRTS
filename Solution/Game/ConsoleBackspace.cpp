@@ -10,11 +10,6 @@ ConsoleBackspace::ConsoleBackspace(std::string& aString)
 {
 }
 
-
-ConsoleBackspace::~ConsoleBackspace()
-{
-}
-
 void ConsoleBackspace::Update(bool aButtonIsPressed)
 {
 	if (aButtonIsPressed == false || myString.size() == 0)
