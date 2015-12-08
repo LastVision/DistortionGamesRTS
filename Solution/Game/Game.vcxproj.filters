@@ -37,6 +37,7 @@
       <Filter>Director</Filter>
     </ClCompile>
     <ClCompile Include="ScriptInterface.cpp" />
+    <ClCompile Include="ConsoleHistoryManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -84,6 +85,7 @@
       <Filter>Level\Factory</Filter>
     </ClInclude>
     <ClInclude Include="ScriptInterface.h" />
+    <ClInclude Include="ConsoleHistoryManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="PreCompile">
