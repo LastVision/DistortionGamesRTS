@@ -2,6 +2,7 @@
 #include <CommonHelper.h>
 #include "ConsoleHistoryManager.h"
 #include <fstream>
+#include <Text.h>
 
 
 ConsoleHistoryManager::ConsoleHistoryManager()
@@ -18,6 +19,10 @@ ConsoleHistoryManager::ConsoleHistoryManager()
 
 ConsoleHistoryManager::~ConsoleHistoryManager()
 {
+	for (int i = 0; i < myHistory.Size(); ++i)
+	{
+		SAFE_DELETE(myHistory[i].myRenderText);
+	}
 }
 
 void ConsoleHistoryManager::Save()
@@ -26,7 +31,7 @@ void ConsoleHistoryManager::Save()
 	output.open(myHistoryFile, std::ios::out);
 	for (int i = 1; i < myHistory.Size(); ++i)
 	{
-		output << myHistory[i] << std::endl;
+		output << int(myHistory[i].myType) << " " << myHistory[i].myMessage << std::endl;
 	}
 	output.flush();
 	output.close();
@@ -34,45 +39,130 @@ void ConsoleHistoryManager::Save()
 
 void ConsoleHistoryManager::Load()
 {
-	myHistory.RemoveAll();
-	myHistory.Add("");
+	AddHistory(" ", eHistoryType::HISTORY);
+
 	std::fstream output;
 	output.open(myHistoryFile, std::ios::in);
+
 	std::string line;
 	while (std::getline(output, line))
 	{
-		myHistory.Add(line);
+		std::string message = CU::GetSubString(line, ' ', true);
+
+		std::string identifier = CU::GetSubString(line, ' ', false);
+		std::stringstream error;
+		error << int(eHistoryType::ERROR);
+
+		eHistoryType type;
+		if (identifier == error.str().c_str())
+		{
+			type = eHistoryType::ERROR;
+		}
+		else
+		{
+			type = eHistoryType::HISTORY;
+		}
+
+		AddHistory(message, type);
 	}
 	output.close();
 }
 
-const std::string& ConsoleHistoryManager::GetCurrent()
+const std::string& ConsoleHistoryManager::GetCurrent(eHistoryType aType)
 {
-	return myHistory[myCurrentIndex];
+	return myHistory[myCurrentIndex].myMessage;
 }
 
 
-void ConsoleHistoryManager::GetNext()
+const std::string& ConsoleHistoryManager::GetNext(eHistoryType aType)
 {
 	myCurrentIndex++;
 	if (myCurrentIndex >= myHistory.Size())
 	{
 		myCurrentIndex = 0;
 	}
+	CheckType(aType, false);
+	return myHistory[myCurrentIndex].myMessage;
 }
 
-
-void ConsoleHistoryManager::GetPrevious()
+const std::string& ConsoleHistoryManager::GetPrevious(eHistoryType aType)
 {
 	myCurrentIndex--;
 	if (myCurrentIndex < 0)
 	{
 		myCurrentIndex = myHistory.Size() - 1;
 	}
+	CheckType(aType, true);
+	return myHistory[myCurrentIndex].myMessage;
 }
 
-void ConsoleHistoryManager::AddHistory(const std::string& aCommand)
+void ConsoleHistoryManager::CheckType(eHistoryType aType, bool aShouldGoBackwards)
 {
+	bool currentlyWrong = true;
+	bool hasLooped = false;
+	while (currentlyWrong == true)
+	{
+		if (myHistory[myCurrentIndex].myType != aType)
+		{
+			if (aShouldGoBackwards == false)
+			{
+				myCurrentIndex++;
+				if (myCurrentIndex >= myHistory.Size() && hasLooped == false)
+				{
+					myCurrentIndex = 0;
+					hasLooped = true;
+				}
+				else if (myCurrentIndex >= myHistory.Size() && hasLooped == true)
+				{
+					break;
+				}
+			}
+			else if (aShouldGoBackwards == true)
+			{
+				myCurrentIndex--;
+				if (myCurrentIndex < 0 && hasLooped == false)
+				{
+					myCurrentIndex = myHistory.Size() - 1;
+					hasLooped = true;
+				}
+				else if (myCurrentIndex < 0 && hasLooped == true)
+				{
+					break;
+				}
+			}
+		}
+		else
+		{
+			break;
+		}
+	}
+}
+
+
+void ConsoleHistoryManager::AddHistory(const std::string& aCommand, eHistoryType anEnum)
+{
+	History tempHistory;
+	tempHistory.myMessage = aCommand;
+	tempHistory.myType = anEnum;
+
+	bool prevRuntime = Prism::MemoryTracker::GetInstance()->GetRunTime();
+	Prism::MemoryTracker::GetInstance()->SetRunTime(false);
+	tempHistory.myRenderText = new Prism::Text(*Prism::Engine::GetInstance()->GetFont(Prism::eFont::CONSOLE));
+	Prism::MemoryTracker::GetInstance()->SetRunTime(prevRuntime);
+	tempHistory.myRenderText->SetText(tempHistory.myMessage);
+
+	switch (anEnum)
+	{
+	case eHistoryType::ERROR:
+		tempHistory.myRenderText->SetColor({ 1.f, 0.f, 0.f, 1.f });
+		break;
+	case eHistoryType::HISTORY:
+		tempHistory.myRenderText->SetColor({ 1.f, 1.f, 1.f, 1.f });
+		break;
+	default:
+		break;
+	}
+
 	if (myHistory.Size() >= myHistory.GetCapacity())
 	{
 		myInsertIndex = 1;
@@ -80,11 +170,12 @@ void ConsoleHistoryManager::AddHistory(const std::string& aCommand)
 	}
 	if (myHasWrapped == false)
 	{
-		myHistory.Add(aCommand);
+		myHistory.Add(tempHistory);
 	}
 	else if (myHasWrapped == true)
 	{
-		myHistory[myInsertIndex] = aCommand;
+		SAFE_DELETE(myHistory[myInsertIndex].myRenderText);
+		myHistory[myInsertIndex] = tempHistory;
 	}
 	myInsertIndex++;
 }

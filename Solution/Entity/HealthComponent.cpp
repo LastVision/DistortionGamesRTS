@@ -14,7 +14,7 @@ HealthComponent::HealthComponent(Entity& aEntity, HealthComponentData& aData)
 	, myCurrentHealth(aData.myHealth)
 {
 	Prism::ModelLoader::GetInstance()->Pause();
-	myHealthBar = new GUI::BarWidget(myMaxHealth, myCurrentHealth);
+	myHealthBar = new GUI::BarWidget(myMaxHealth, myCurrentHealth, { 50.f, 10.f });
 	Prism::ModelLoader::GetInstance()->UnPause();
 }
 

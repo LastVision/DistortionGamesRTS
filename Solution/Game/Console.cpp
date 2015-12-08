@@ -24,6 +24,7 @@ void Console::Destroy()
 Console::Console()
 {
 	myHistory = new ConsoleHistoryManager();
+	myHistory->Load();
 }
 
 

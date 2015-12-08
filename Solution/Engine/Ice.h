@@ -18,6 +18,7 @@ namespace Prism
 		void Render(const Camera& aCamera);
 
 		void SetTextures();
+		const float GetHeight() const;
 
 	private:
 		void CreateTextureFromFile(const std::string& aFilePath, ID3D11ShaderResourceView** aResourceToBind);
@@ -43,5 +44,10 @@ namespace Prism
 		VertexIndexWrapper* myIndexBaseData;
 		VertexDataWrapper* myVertexBaseData;
 	};
+
+	inline const float Ice::GetHeight() const
+	{
+		return myHeight;
+	}
 
 }

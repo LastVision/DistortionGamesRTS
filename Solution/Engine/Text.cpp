@@ -31,6 +31,8 @@ Prism::Text::Text(const Font& aFont)
 
 	myVertices.Init(1024);
 	myIndices.Init(1024);
+
+	SetText(" ");
 }
 
 

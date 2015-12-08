@@ -28,7 +28,6 @@ void ConsoleState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCu
 
 	myBackground = new Prism::Sprite("Data/Resource/Texture/Console/T_console_window.dds", windowSize);
 	myMarker = new Prism::Sprite("Data/Resource/Texture/UI/T_healthbar_background.dds", { 2.f, 20.f }, { 0.f, 0.f });
-	Console::GetInstance()->GetConsoleHistory()->Load();
 	myMarkerBlinker = true;
 
 	myText = new Prism::Text(*Prism::Engine::GetInstance()->GetFont(Prism::eFont::CONSOLE));
@@ -73,7 +72,7 @@ const eStateStatus ConsoleState::Update(const float& aDeltaTime)
 		}
 		else
 		{
-			Console::GetInstance()->GetConsoleHistory()->AddHistory(errorString);
+			Console::GetInstance()->GetConsoleHistory()->AddHistory(errorString, eHistoryType::ERROR);
 		}
 		
 
@@ -107,7 +106,7 @@ const eStateStatus ConsoleState::Update(const float& aDeltaTime)
 
 void ConsoleState::Render()
 {
-	
+
 	myBackground->Render(myLowerLeftCorner);
 
 	myText->SetPosition(myLowerLeftCorner * 1.1f);
@@ -125,17 +124,15 @@ void ConsoleState::Render()
 		//myMarker->Render({ (myLowerLeftCorner.x * 1.1f) + length * 15.f, myLowerLeftCorner.y * 1.1f });
 	}
 
-	const CU::GrowingArray<std::string>& history = Console::GetInstance()->GetConsoleHistory()->GetHistoryArray();
+	const CU::GrowingArray<History>& history = Console::GetInstance()->GetConsoleHistory()->GetHistoryArray();
 	CU::Vector2<float> position = myLowerLeftCorner * 1.1f;
 	position.y += 30.f;
 
 	for (int i = history.Size() - 1; i >= 0; --i)
 	{
 		position.y += 30.f;
-		//Prism::Engine::GetInstance()->PrintText(history[i], position, Prism::eTextType::RELEASE_TEXT, 0.9f);
-		myText->SetText(history[i]);
-		myText->SetPosition(position);
-		myText->Render();
+		history[i].myRenderText->SetPosition(position);
+		history[i].myRenderText->Render();
 	}
 
 }

@@ -96,6 +96,8 @@ Level* LevelFactory::LoadCurrentLevel()
 	//myLoadLevelThread = new std::thread(&LevelFactory::ReadLevel, this, myLevelPaths[myCurrentID]);
 	ReadLevel(myLevelPaths[myCurrentID]);
 
+	myCurrentLevel->myPlayer->InitGUI();
+
 	return myCurrentLevel;
 }
 

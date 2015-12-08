@@ -30,6 +30,8 @@ public:
 	PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aScene, GUI::Cursor* aCursor);
 	~PlayerDirector();
 
+	void InitGUI();
+
 	void Update(float aDeltaTime, const Prism::Camera& aCamera);
 	void Render(const Prism::Camera& aCamera);
 

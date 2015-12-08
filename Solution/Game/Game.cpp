@@ -4,6 +4,7 @@
 #include <Camera.h>
 #include <ColoursForBG.h>
 #include <CommonHelper.h>
+#include "Console.h"
 #include <Cursor.h>
 #include <DebugFont.h>
 #include <Engine.h>
@@ -30,7 +31,7 @@
 #include <ScriptSystem.h>
 
 
-#include "Console.h"
+
 Game::Game()
 	: myLockMouse(true)
 #ifdef RELEASE_BUILD
