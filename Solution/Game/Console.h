@@ -1,4 +1,7 @@
 #pragma once
+
+class ConsoleHistoryManager;
+
 class Console
 {
 public:
@@ -6,6 +9,8 @@ public:
 	static void Destroy();
 
 	void Update();
+	const std::string& GetInput() const;
+	ConsoleHistoryManager* GetConsoleHistory();
 
 private:
 	Console();
@@ -15,5 +20,15 @@ private:
 	std::string myInput;
 
 	static Console* myInstance;
+	ConsoleHistoryManager* myHistory;
 };
 
+inline const std::string& Console::GetInput() const
+{
+	return myInput;
+}
+
+inline ConsoleHistoryManager* Console::GetConsoleHistory()
+{
+	return myHistory;
+}

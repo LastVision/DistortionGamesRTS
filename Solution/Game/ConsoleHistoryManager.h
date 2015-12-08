@@ -13,7 +13,7 @@ public:
 	void AddHistory(const std::string& aCommand);
 	void Save();
 	void Load();
-
+	const CU::GrowingArray<std::string>& GetHistoryArray();
 private:
 
 	CU::GrowingArray<std::string> myHistory;
@@ -24,3 +24,7 @@ private:
 
 };
 
+inline const CU::GrowingArray<std::string>& ConsoleHistoryManager::GetHistoryArray()
+{
+	return myHistory;
+}

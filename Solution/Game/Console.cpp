@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Console.h"
+#include "ConsoleHistoryManager.h"
 #include <InputWrapper.h>
 #include <ScriptSystem.h>
 
@@ -22,11 +23,13 @@ void Console::Destroy()
 
 Console::Console()
 {
+	myHistory = new ConsoleHistoryManager();
 }
 
 
 Console::~Console()
 {
+	SAFE_DELETE(myHistory);
 }
 
 void Console::Update()
@@ -48,7 +51,7 @@ void Console::Update()
 		}
 	}*/
 
-	DEBUG_PRINT(myInput);
+	//DEBUG_PRINT(myInput);
 }
 
 void Console::ReadInput()
