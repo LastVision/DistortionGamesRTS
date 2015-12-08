@@ -25,6 +25,7 @@
 #include <LUACinematicMessage.h>
 
 InGameState::InGameState()
+	: myShouldReOpenConsole(false)
 {
 	myIsActiveState = false;
 	myIsPlayerCinematic = false;
@@ -86,11 +87,12 @@ const eStateStatus InGameState::Update(const float& aDeltaTime)
 		return eStateStatus::ePopMainState;
 	}
 
-	if (CU::InputWrapper::GetInstance()->KeyUp(DIK_GRAVE) == true)
+	if (CU::InputWrapper::GetInstance()->KeyUp(DIK_GRAVE) == true || myShouldReOpenConsole == true)
 	{
 		bool runtime = Prism::MemoryTracker::GetInstance()->GetRunTime();
 		Prism::MemoryTracker::GetInstance()->SetRunTime(false);
-		ConsoleState* newState = new ConsoleState;
+		myShouldReOpenConsole = false;
+		ConsoleState* newState = new ConsoleState(myShouldReOpenConsole);
 		myStateStack->PushSubGameState(newState);
 		Prism::MemoryTracker::GetInstance()->SetRunTime(runtime);
 	}

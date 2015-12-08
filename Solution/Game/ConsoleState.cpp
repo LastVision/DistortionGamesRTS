@@ -4,7 +4,8 @@
 #include <InputWrapper.h>
 #include <Sprite.h>
 
-ConsoleState::ConsoleState()
+ConsoleState::ConsoleState(bool& aShouldReOpenConsole)
+	: myShouldReOpenConsole(aShouldReOpenConsole)
 {
 }
 
@@ -43,6 +44,14 @@ const eStateStatus ConsoleState::Update(const float& aDeltaTime)
 		myStateStatus = ePopMainState;
 		return eStateStatus::eKeepState;
 	}
+
+	if (CU::InputWrapper::GetInstance()->KeyUp(DIK_RETURN) == true)
+	{
+		myShouldReOpenConsole = true;
+		myStateStatus = ePopSubState;
+	}
+
+	
 
 	//	Console::GetInstance()->Update();
 

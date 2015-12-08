@@ -9,7 +9,7 @@ namespace Prism
 class ConsoleState : public GameState
 {
 public:
-	ConsoleState();
+	ConsoleState(bool& aShouldReOpenConsole);
 	~ConsoleState();
 
 	void InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCursor) override;
@@ -23,5 +23,6 @@ public:
 
 private:
 	Prism::Sprite* myBackground;
+	bool& myShouldReOpenConsole;
 };
 
