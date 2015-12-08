@@ -1,5 +1,17 @@
 #pragma once
 #include <GrowingArray.h>
+#undef ERROR
+enum class eHistoryType
+{
+	ERROR,
+	HISTORY,
+};
+
+struct History
+{
+	eHistoryType myType;
+	std::string myHistory;
+};
 
 class ConsoleHistoryManager
 {
@@ -7,16 +19,19 @@ public:
 	ConsoleHistoryManager();
 	~ConsoleHistoryManager();
 
-	void GetNext();
-	void GetPrevious();
-	const std::string& GetCurrent();
-	void AddHistory(const std::string& aCommand);
+	const std::string& GetNext(eHistoryType aType = eHistoryType::HISTORY);
+	const std::string& GetPrevious(eHistoryType aType = eHistoryType::HISTORY);
+	const std::string& GetCurrent(eHistoryType aType = eHistoryType::HISTORY);
+
+	void AddHistory(const std::string& aCommand, eHistoryType anEnum = eHistoryType::HISTORY);
 	void Save();
 	void Load();
-	const CU::GrowingArray<std::string>& GetHistoryArray();
+	const CU::GrowingArray<History>& GetHistoryArray();
 private:
+	void CheckType(eHistoryType aType, bool aShouldGoBackwards);
 
-	CU::GrowingArray<std::string> myHistory;
+
+	CU::GrowingArray<History> myHistory;
 	const char* myHistoryFile;
 	int myCurrentIndex;
 	int myInsertIndex;
@@ -24,7 +39,7 @@ private:
 
 };
 
-inline const CU::GrowingArray<std::string>& ConsoleHistoryManager::GetHistoryArray()
+inline const CU::GrowingArray<History>& ConsoleHistoryManager::GetHistoryArray()
 {
 	return myHistory;
 }

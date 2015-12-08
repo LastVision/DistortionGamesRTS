@@ -101,14 +101,14 @@ void ConsoleState::Render()
 		myMarker->Render({ (windowSize.x * 1.1f) + length * 15.f, windowSize.y * 1.1f});
 	}
 
-	const CU::GrowingArray<std::string>& history = Console::GetInstance()->GetConsoleHistory()->GetHistoryArray();
+	const CU::GrowingArray<History>& history = Console::GetInstance()->GetConsoleHistory()->GetHistoryArray();
 	CU::Vector2<float> position = windowSize * 1.1f;
 	position.y += 30.f;
 
 	for (int i = history.Size() - 1; i >= 0; --i)
 	{
 		position.y += 30.f;
-		Prism::Engine::GetInstance()->PrintText(history[i], position, Prism::eTextType::RELEASE_TEXT, 0.9f);
+		Prism::Engine::GetInstance()->PrintText(history[i].myHistory, position, Prism::eTextType::RELEASE_TEXT, 0.9f);
 	}
 
 }
