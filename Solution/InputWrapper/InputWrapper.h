@@ -11,6 +11,7 @@ namespace CU
 	class InputWrapper
 	{
 	public:
+		UCHAR myKeyState[256];
 
 
 		static void Create(HWND aHwnd, HINSTANCE aHInstance, DWORD aKeyCoopFlags, DWORD aMouseCoopFlags);
@@ -47,7 +48,7 @@ namespace CU
 
 		LPDIRECTINPUT8 myDirectInput;
 		LPDIRECTINPUTDEVICE8 myKeyboardDevice;
-		UCHAR myKeyState[256];
+//		UCHAR myKeyState[256];
 		UCHAR myPreviousKeyState[256];
 
 		LPDIRECTINPUTDEVICE8 myMouseDevice;
