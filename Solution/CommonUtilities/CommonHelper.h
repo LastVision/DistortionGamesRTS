@@ -105,6 +105,33 @@ namespace CU
 		return intValue;
 	}
 
+	inline void TrimWhiteSpacesAtBeginAndEnd(std::string& aString)
+	{
+		if (aString.length() <= 0)
+		{
+			return;
+		}
+
+		unsigned int begin = 0;
+		while (aString[begin] == ' ')
+		{
+			++begin;
+		}
+
+		unsigned int end = aString.length();
+		if (end > begin)
+		{
+			while (aString[end-1] == ' ')
+			{
+				--end;
+			}
+		}
+		if (begin != 0 || end != aString.length())
+		{
+			aString = std::string(aString.begin() + begin, aString.begin() + end);
+		}
+	}
+
 
 	inline Matrix44<float> GetOrientation(Matrix44<float>& aMatrixToRotate, const Vector3<float>& aRotationInDegrees)
 	{

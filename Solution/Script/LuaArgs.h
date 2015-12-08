@@ -10,15 +10,12 @@ namespace LUA
 		{
 			NOT_USED,
 			STRING,
-			INT,
 			FLOAT,
 			BOOL,
 		};
 
 		Arg()
 			: myType(eType::NOT_USED){}
-		Arg(int aInt)
-			: myType(eType::INT), myInt(aInt){}
 		Arg(float aFloat)
 			: myType(eType::FLOAT), myFloat(aFloat){}
 		Arg(const char* aString)
@@ -35,7 +32,6 @@ namespace LUA
 
 		union
 		{
-			int myInt;
 			float myFloat;
 			const char* myString;
 			bool myBool;

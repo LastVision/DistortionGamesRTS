@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Console.h"
 #include <InputWrapper.h>
+#include <ScriptSystem.h>
 
 Console* Console::myInstance = nullptr;
 
@@ -31,6 +32,12 @@ Console::~Console()
 void Console::Update()
 {
 	ReadInput();
+
+	if (CU::InputWrapper::GetInstance()->KeyUp(DIK_RETURN))
+	{
+		LUA::ScriptSystem::GetInstance()->RunLuaFromString(myInput);
+		myInput = "";
+	}
 
 	//Use to find keycodes
 	/*for (int i  = 0; i < 255; ++i)

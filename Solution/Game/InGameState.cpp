@@ -1,6 +1,7 @@
 #include "stdafx.h"
 
 #include <Camera.h>
+#include "Console.h"
 #include <MoveCameraMessage.h>
 #include <LUAMoveCameraMessage.h>
 #include <ColoursForBG.h>
@@ -99,7 +100,7 @@ const eStateStatus InGameState::Update(const float& aDeltaTime)
 	{
 		if (CU::InputWrapper::GetInstance()->KeyDown(DIK_M) == true)
 		{
-			CompleteGame();
+			//CompleteGame();
 		}
 
 		if (CU::InputWrapper::GetInstance()->KeyDown(DIK_B) == true)
@@ -120,11 +121,17 @@ const eStateStatus InGameState::Update(const float& aDeltaTime)
 		{
 			RestartLevel();
 		}
+
+		
+		LUA::ScriptSystem::GetInstance()->CallFunction("Update", { aDeltaTime });
 	}
 	else
 	{
-		LUA::ScriptSystem::GetInstance()->CallFunction("UpdateCinematic", { { aDeltaTime }, {myCinematicIndex }});
+		LUA::ScriptSystem::GetInstance()->CallFunction("UpdateCinematic", { { aDeltaTime }, {float(myCinematicIndex) }});
 	}
+
+	LUA::ScriptSystem::GetInstance()->Update();
+	Console::GetInstance()->Update();
 
 	return myStateStatus;
 }
