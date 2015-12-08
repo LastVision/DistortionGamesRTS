@@ -233,6 +233,7 @@
     <ClCompile Include="Frustum.cpp" />
     <ClCompile Include="FullScreenHelper.cpp" />
     <ClCompile Include="HierarchyBone.cpp" />
+    <ClCompile Include="Ice.cpp" />
     <ClCompile Include="Instance.cpp" />
     <ClCompile Include="Line3D.cpp" />
     <ClCompile Include="Line3DRenderer.cpp" />
@@ -305,6 +306,7 @@
     <ClInclude Include="Frustum.h" />
     <ClInclude Include="FullScreenHelper.h" />
     <ClInclude Include="HierarchyBone.h" />
+    <ClInclude Include="Ice.h" />
     <ClInclude Include="IndexBufferWrapper.h" />
     <ClInclude Include="Instance.h" />
     <ClInclude Include="DirectionalLight.h" />
