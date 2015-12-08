@@ -1,8 +1,5 @@
 #include "stdafx.h"
-#include <CommonHelper.h>
 #include <d3dx11effect.h>
-//#include <D3DX11async.h>
-#include "Effect.h"
 #include "SplatMapContainer.h"
 #include "TextureHelper.h"
 
