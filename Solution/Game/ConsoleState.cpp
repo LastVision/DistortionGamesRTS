@@ -14,6 +14,7 @@ void ConsoleState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCu
 	myStateStack = aStateStackProxy;
 	myCursor = aCursor;
 	myStateStatus = eStateStatus::eKeepState;
+	myIsLetThrough = true;
 }
 
 void ConsoleState::EndState()
