@@ -4,6 +4,7 @@
 #include <MoveCameraMessage.h>
 #include <LUAMoveCameraMessage.h>
 #include <ColoursForBG.h>
+#include "ConsoleState.h"
 #include <Engine.h>
 #include <GameStateMessage.h>
 #include <GUIManager.h>
@@ -85,6 +86,14 @@ const eStateStatus InGameState::Update(const float& aDeltaTime)
 		return eStateStatus::ePopMainState;
 	}
 
+	if (CU::InputWrapper::GetInstance()->KeyUp(DIK_GRAVE) == true)
+	{
+		bool runtime = Prism::MemoryTracker::GetInstance()->GetRunTime();
+		Prism::MemoryTracker::GetInstance()->SetRunTime(false);
+		ConsoleState* newState = new ConsoleState;
+		myStateStack->PushSubGameState(newState);
+		Prism::MemoryTracker::GetInstance()->SetRunTime(runtime);
+	}
 	
 	if (myIsPlayerCinematic == false)
 	{

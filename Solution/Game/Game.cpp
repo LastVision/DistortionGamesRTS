@@ -97,6 +97,8 @@ bool Game::Destroy()
 
 bool Game::Update()
 {
+
+
 	CU::InputWrapper::GetInstance()->Update();
 	CU::TimerManager::GetInstance()->Update();
 	float deltaTime = CU::TimerManager::GetInstance()->GetMasterTimer().GetTime().GetFrameTime();
@@ -120,7 +122,7 @@ bool Game::Update()
 			windowRect.bottom -= 10;
 		}
 		ClipCursor(&windowRect);
-	}
+	}	
 
 	if (myStateStack.UpdateCurrentState(deltaTime) == false)
 	{
@@ -134,6 +136,7 @@ bool Game::Update()
 	myCursor->Render();
 
 	LUA::ScriptSystem::GetInstance()->Update();
+
 
 	return true;
 }
