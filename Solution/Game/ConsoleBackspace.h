@@ -1,8 +1,20 @@
 #pragma once
+#include <string>
+
 class ConsoleBackspace
 {
 public:
-	ConsoleBackspace();
+	ConsoleBackspace(std::string& aString);
 	~ConsoleBackspace();
+
+	void Update(bool aButtonIsPressed);
+
+private:
+	void operator=(ConsoleBackspace&) = delete;
+	std::string& myString;
+	const float myFirstWait;
+	const float myRepeatWait;
+	float myCurrentTime;
+	bool myHasReachedFirstWait;
 };
 

@@ -1,6 +1,7 @@
 #pragma once
 
 class ConsoleHistoryManager;
+class ConsoleBackspace;
 
 class Console
 {
@@ -23,6 +24,7 @@ private:
 
 	static Console* myInstance;
 	ConsoleHistoryManager* myHistory;
+	ConsoleBackspace* myBackspace;
 };
 
 inline const std::string& Console::GetInput() const

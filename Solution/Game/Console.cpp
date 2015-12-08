@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Console.h"
+#include "ConsoleBackspace.h"
 #include "ConsoleHistoryManager.h"
 #include <InputWrapper.h>
 #include <ScriptSystem.h>
@@ -25,17 +26,21 @@ Console::Console()
 {
 	myHistory = new ConsoleHistoryManager();
 	myHistory->Load();
+	myBackspace = new ConsoleBackspace(myInput);
 }
 
 
 Console::~Console()
 {
 	SAFE_DELETE(myHistory);
+	SAFE_DELETE(myBackspace);
 }
 
 void Console::Update()
 {
 	ReadInput();
+	myBackspace->Update(CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_BACKSPACE));
+	
 
 	//if (CU::InputWrapper::GetInstance()->KeyUp(DIK_RETURN))
 	//{
@@ -120,14 +125,6 @@ void Console::ReadInput()
 	myInput += input->KeyDown(DIK_COMMA) ? shift ? ";" : "," : "";
 	myInput += input->KeyDown(DIK_PERIOD) ? shift ? ":" : "." : "";
 	myInput += input->KeyDown(53) ? shift ? "_" : "-" : "";
-
-
-
-
-	if (input->KeyDown(DIK_BACKSPACE) && myInput.size() > 0)
-	{
-		myInput.erase(myInput.end() - 1, myInput.end());
-	}
 
 	if (input->KeyDown(DIK_SPACE))
 	{
