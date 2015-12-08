@@ -14,9 +14,6 @@ namespace Prism
 		, myHeight(aHeight)
 	{
 		myEffect = aEffect;
-		//Texture * influence = Prism::TextureContainer::GetInstance()
-		//	->GetTexture("Data/Resource/Texture/Terrain/SplatMap/T_InfluenceToSplatMap.dds");
-		//myEffect->SetTexture(influence);
 
 		mySplatAlbedo = myEffect->GetEffect()->GetVariableByName("myAlbedoTextures")->AsShaderResource();
 		if (mySplatAlbedo->IsValid() == false)
