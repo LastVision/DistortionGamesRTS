@@ -39,4 +39,10 @@ namespace GUI
 		position /= mySize;
 		PostMaster::GetInstance()->SendMessage(MoveCameraMessage(position));
 	}
+
+	void MiniMapWidget::OnResize(const CU::Vector2<float>& aNewWindowSize, const CU::Vector2<float>& anOldWindowSize)
+	{
+		Widget::OnResize(aNewWindowSize, anOldWindowSize);
+		myPlaceholderSprite->SetSize(mySize, { 0.f, 0.f });
+	}
 }
