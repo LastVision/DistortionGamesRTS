@@ -1,3 +1,4 @@
+#include "stdafx.h"
 
 #include <assert.h>
 #include "ScriptSystem.h"
@@ -6,8 +7,9 @@
 
 #include <Windows.h>
 #include <numeric>
-#include <algorithm>
+#include <MemoryMacros.h> //Must be after ScriptSystem
 
+#include <algorithm>
 #include <fstream>
 
 int PrintFromLua(lua_State* aState)

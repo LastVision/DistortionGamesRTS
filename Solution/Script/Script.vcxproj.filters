@@ -4,10 +4,16 @@
     <Filter Include="LuaFiles">
       <UniqueIdentifier>{9fae9bdd-d989-42ae-8c11-4f2aae0c3d72}</UniqueIdentifier>
     </Filter>
+    <Filter Include="PreCompile">
+      <UniqueIdentifier>{a78de44f-1c88-42e7-8897-2a058ddd9136}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ScriptSystem.cpp" />
     <ClCompile Include="FileWatcher.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <Filter>PreCompile</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ScriptSystem.h" />
@@ -28,5 +34,8 @@
     </ClInclude>
     <ClInclude Include="LuaArgs.h" />
     <ClInclude Include="FileWatcher.h" />
+    <ClInclude Include="stdafx.h">
+      <Filter>PreCompile</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

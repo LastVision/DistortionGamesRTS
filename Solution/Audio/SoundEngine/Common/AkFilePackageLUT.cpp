@@ -20,6 +20,7 @@
 //
 //////////////////////////////////////////////////////////////////////
 
+#include "stdafx.h"
 
 #include "AkFilePackageLUT.h"
 #include <AK/SoundEngine/Common/AkMemoryMgr.h>
