@@ -106,7 +106,11 @@ bool Game::Update()
 	CU::TimerManager::GetInstance()->Update();
 
 	float deltaTime = CU::TimerManager::GetInstance()->GetMasterTimer().GetTime().GetFrameTime();
-	//float realDeltaTime = deltaTime;
+	float fps = 1.f / deltaTime;
+	DEBUG_PRINT(fps);
+	float frameTime = deltaTime * 1000;
+	DEBUG_PRINT(frameTime);
+
 	if (deltaTime > 1.0f / 10.0f)
 	{
 		deltaTime = 1.0f / 10.0f;
