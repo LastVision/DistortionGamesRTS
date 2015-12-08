@@ -20,6 +20,7 @@ namespace Prism
 	struct VertexDataWrapper;
 	struct VertexPosNormUVBiTang;
 	class SplatMapContainer;
+	class Ice;
 
 	class Terrain : public BaseModel
 	{
@@ -66,6 +67,7 @@ namespace Prism
 		Navigation::PathFinder* myPathFinder;
 
 		SplatMapContainer* mySplatMapContainer;
+		Ice* myIce;
 	};
 
 	inline Navigation::NavMesh* Terrain::GetNavMesh() const

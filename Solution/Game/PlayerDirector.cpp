@@ -36,10 +36,6 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 		
 	}
 	
-	Prism::ModelLoader::GetInstance()->Pause();
-	myGUIManager = new GUI::GUIManager(aCursor, "Data/Resource/GUI/GUI_ingame.xml", this);
-	Prism::ModelLoader::GetInstance()->UnPause();
-
 	myActiveUnits.Add(myUnits[0]);
 	for (int i = 0; i < myActiveUnits.Size(); ++i)
 	{
@@ -55,6 +51,13 @@ PlayerDirector::~PlayerDirector()
 {
 	SAFE_DELETE(myGUIManager);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::TOGGLE_GUI, this);
+}
+
+void PlayerDirector::InitGUI()
+{
+	Prism::ModelLoader::GetInstance()->Pause();
+	myGUIManager = new GUI::GUIManager(myCursor, "Data/Resource/GUI/GUI_ingame.xml", this);
+	Prism::ModelLoader::GetInstance()->UnPause();
 }
 
 void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)

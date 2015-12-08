@@ -31,6 +31,7 @@ namespace LUA
 
 		eFunctionStatus CallFunction(const std::string& aFunctionName, const LuaArguments& someArgs);
 		void RunLuaFromString(const std::string& aString);
+		bool ValidateLuaString(const std::string& aString, std::string& aErrorOut) const;
 		void UseFile(const std::string& aFileName);
 
 		void Update();
@@ -47,6 +48,7 @@ namespace LUA
 		struct Documentation
 		{
 			std::string myFunction;
+			std::string myFunctionLowerCase;
 			std::string myArguments;
 			std::string myHelpText;
 		};
@@ -61,10 +63,10 @@ namespace LUA
 
 		void PrintDocumentation();
 
-		int GetLevenshteinDistance(const std::string &s1, const std::string &s2);
-		float GetLevenshteinRatio(const std::string& aString, int aLevenshtienDistance);
-		int GetSubstringBonus(const std::string& aInput, const std::string& aCorrectString, int aScore);
-		std::string FindClosestFunction(const std::string& aInput);
+		int GetLevenshteinDistance(const std::string &s1, const std::string &s2) const;
+		float GetLevenshteinRatio(const std::string& aString, int aLevenshtienDistance) const;
+		int GetSubstringBonus(const std::string& aInput, const std::string& aCorrectString, int aScore) const;
+		std::string FindClosestFunction(const std::string& aInput) const;
 
 		//int levenshtein_distance(const std::string &s1, const std::string &s2);
 		//std::string FindClosestFunction(const std::string& aFailedFunction);

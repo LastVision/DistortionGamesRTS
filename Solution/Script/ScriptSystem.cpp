@@ -56,6 +56,7 @@ namespace LUA
 	{
 		Documentation doc;
 		doc.myFunction = aNameInLua;
+		doc.myFunctionLowerCase = CU::ToLower(aNameInLua);
 		doc.myArguments = aArguments;
 		doc.myHelpText = aHelpText;
 		myDocumentation.push_back(doc);
@@ -110,7 +111,7 @@ namespace LUA
 		while (args.length() > 0)
 		{
 			std::string arg;
-			int commaIndex = args.find_first_of(',');
+			unsigned int commaIndex = args.find_first_of(',');
 			if (commaIndex != std::string::npos)
 			{
 				arg = std::string(args.begin(), args.begin() + commaIndex);
@@ -131,6 +132,34 @@ namespace LUA
 		myLuaFunctions[functionName].myFunction(myLuaState);
 	}
 
+	bool ScriptSystem::ValidateLuaString(const std::string& aString, std::string& aErrorOut) const
+	{
+		unsigned int firstIndex = aString.find_first_of('(');
+		if (firstIndex == -1)
+		{
+			aErrorOut = "LUAError: Invalid function-call, missing '('";
+			return false;
+		}
+
+		unsigned int secondIndex = aString.find_first_of(')');
+		if (secondIndex == -1)
+		{
+			aErrorOut = "LUAError: Invalid function-call, missing ')'";
+			return false;
+		}
+
+		std::string functionName(aString.begin(), aString.begin() + firstIndex);
+		if (myLuaFunctions.find(functionName) == myLuaFunctions.end())
+		{
+			std::string suggestion = FindClosestFunction(functionName);
+			aErrorOut = "LUAError: Invalid function-call, no function named " + aString + ", did you mean '" + suggestion + "'";
+			//aErrorOut = "LUAError: Invalid function-call, no function named " + aString + ", did you mean '<INSERT SUGGESTION>'";
+			return false;
+		}
+
+
+		return true;
+	}
 
 	void ScriptSystem::UseFile(const std::string& aFileName)
 	{
@@ -275,7 +304,7 @@ namespace LUA
 
 #undef min
 #undef max
-	int ScriptSystem::GetLevenshteinDistance(const std::string &s1, const std::string &s2)
+	int ScriptSystem::GetLevenshteinDistance(const std::string &s1, const std::string &s2) const
 	{
 		// To change the type this function manipulates and returns, change
 		// the return type and the types of the two variables below.
@@ -284,7 +313,11 @@ namespace LUA
 
 		auto column_start = (decltype(s1len))1;
 
+		bool prevRunTime = Prism::MemoryTracker::GetInstance()->GetRunTime();
+		Prism::MemoryTracker::GetInstance()->SetRunTime(false);
 		auto column = new decltype(s1len)[s1len + 1];
+		Prism::MemoryTracker::GetInstance()->SetRunTime(prevRunTime);
+
 		std::iota(column + column_start, column + s1len + 1, column_start);
 
 		for (auto x = column_start; x <= s2len; x++) {
@@ -306,7 +339,7 @@ namespace LUA
 		return result;
 	}
 
-	float ScriptSystem::GetLevenshteinRatio(const std::string& aString, int aLevenshtienDistance)
+	float ScriptSystem::GetLevenshteinRatio(const std::string& aString, int aLevenshtienDistance) const
 	{
 		if (aLevenshtienDistance == 0)
 		{
@@ -316,7 +349,7 @@ namespace LUA
 		return 1.f - float(aString.size()) / aLevenshtienDistance;
 	}
 
-	int ScriptSystem::GetSubstringBonus(const std::string& aInput, const std::string& aCorrectString, int aScore)
+	int ScriptSystem::GetSubstringBonus(const std::string& aInput, const std::string& aCorrectString, int aScore) const
 	{
 		if (aInput.size() <= 1)
 		{
@@ -338,38 +371,36 @@ namespace LUA
 		return std::max(subScoreOne, subScoreTwo);
 	}
 
-	std::string ScriptSystem::FindClosestFunction(const std::string& aInput)
+	std::string ScriptSystem::FindClosestFunction(const std::string& aInput) const
 	{
 		int maxLevenshteinScore = 30;
 
 		float closest = -1;
-		std::string bestString;
+		int bestStringIndex = 0;
+
+		std::string lowerInput = CU::ToLower(aInput);
 
 		for (unsigned int i = 0; i < myDocumentation.size(); ++i)
 		{
-			const std::string& correctString = myDocumentation[i].myFunction;
+			const std::string& correctString = myDocumentation[i].myFunctionLowerCase;
 
 			float score = 0.f;
 
 			//If the current string contains the input-string, then we should bump up the score
 			//to make it more likley to find a relevant string
-			score += float(GetSubstringBonus(aInput, correctString, 5));
-			/*if (correctString.find(aInput) != std::string::npos)
-			{
-			score += 5.f;
-			}*/
+			score += float(GetSubstringBonus(lowerInput, correctString, 5));
 
 
 			//If the LevensteinDistance is short, we should give the string a better score
 			//If levDist is 0  we get full levenScore, else we get a percentage of it
-			float levDist = float(GetLevenshteinDistance(aInput, correctString));
+			float levDist = float(GetLevenshteinDistance(lowerInput, correctString));
 			if (levDist == 0)
 			{
 				score += maxLevenshteinScore;
 			}
 			else
 			{
-				float levRatio = GetLevenshteinRatio(aInput, levDist);
+				float levRatio = GetLevenshteinRatio(lowerInput, levDist);
 				levRatio = 1.f + (1.f - levRatio);
 				levDist *= levRatio;
 				score += (1.f / levDist) * maxLevenshteinScore;
@@ -378,11 +409,11 @@ namespace LUA
 			if (score > closest)
 			{
 				closest = score;
-				bestString = myDocumentation[i].myFunction;
+				bestStringIndex = i;
 			}
 		}
 
-		return bestString;
+		return myDocumentation[bestStringIndex].myFunction;
 	}
 
 

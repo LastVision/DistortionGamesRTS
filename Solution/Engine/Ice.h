@@ -1,31 +1,53 @@
 #pragma once
 
+#include "BaseModel.h"
+
 namespace Prism
 {
-	class Ice
+	class Camera;
+	struct VertexIndexWrapper;
+	struct VertexDataWrapper;
+	struct VertexPosNormUVBiTang;
+
+	class Ice : public BaseModel
 	{
 	public:
-		Ice(Effect* aEffect);
+		Ice(Effect* aEffect, const CU::Vector2<float>& aSize, float aHeight);
 		~Ice();
 
+		void Render(const Camera& aCamera);
+
 		void SetTextures();
+		const float GetHeight() const;
 
 	private:
 		void CreateTextureFromFile(const std::string& aFilePath, ID3D11ShaderResourceView** aResourceToBind);
+		void CreateVertices();
+		void CreateTextures();
 
-		Effect* myEffect;
 		ID3DX11EffectShaderResourceVariable* mySplatAlbedo;
 		ID3DX11EffectShaderResourceVariable* mySplatMetalness;
 		ID3DX11EffectShaderResourceVariable* mySplatRoughness;
 		ID3DX11EffectShaderResourceVariable* mySplatNormal;
 		ID3DX11EffectShaderResourceVariable* mySplatAmbientOcclusion;
-
-
+		
 		ID3D11ShaderResourceView* myAlbedoTextures[2];
 		ID3D11ShaderResourceView* myMetalnessTextures[2];
 		ID3D11ShaderResourceView* myRoughnessTextures[2];
 		ID3D11ShaderResourceView* myNormalTextures[2];
 		ID3D11ShaderResourceView* myAmbientOcclusionTextures[2];
+
+		const CU::Vector2<float> mySize;
+		const float myHeight;
+
+		CU::GrowingArray<D3D11_INPUT_ELEMENT_DESC*> myVertexFormat;
+		VertexIndexWrapper* myIndexBaseData;
+		VertexDataWrapper* myVertexBaseData;
 	};
+
+	inline const float Ice::GetHeight() const
+	{
+		return myHeight;
+	}
 
 }

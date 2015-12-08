@@ -23,8 +23,8 @@ namespace GUI
 		~MiniMapWidget();
 
 		void Render(const CU::Vector2<float>& aParentPosition) override;
-
 		void OnMousePressed(const CU::Vector2<float>& aPosition) override;
+		void OnResize(const CU::Vector2<float>& aNewWindowSize, const CU::Vector2<float>& anOldWindowSize) override;
 
 	private:
 		Prism::Sprite* myPlaceholderSprite;
