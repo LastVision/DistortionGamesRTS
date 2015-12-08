@@ -4,8 +4,19 @@
 namespace GUI
 {
 	BarWidget::BarWidget(const int& aMaxValue, const int& aCurrentValue, CU::Vector2<float> aSize)
-		: myMaxValue(aMaxValue)
-		, myCurrentValue(aCurrentValue)
+		: myMaxValueInt(&aMaxValue)
+		, myCurrentValueInt(&aCurrentValue)
+		, myIsFloat(false)
+	{
+		mySize = aSize;
+		myBackgroundSprite = new Prism::Sprite("Data/Resource/Texture/UI/T_healthbar_background.dds", mySize, mySize / 2.f);
+		myValueSprite = new Prism::Sprite("Data/Resource/Texture/UI/T_healthbar_value.dds", mySize, mySize / 2.f);
+	}
+
+	BarWidget::BarWidget(const float& aMaxValue, const float& aCurrentValue, CU::Vector2<float> aSize)
+		: myMaxValueFloat(&aMaxValue)
+		, myCurrentValueFloat(&aCurrentValue)
+		, myIsFloat(true)
 	{
 		mySize = aSize;
 		myBackgroundSprite = new Prism::Sprite("Data/Resource/Texture/UI/T_healthbar_background.dds", mySize, mySize / 2.f);
@@ -20,10 +31,21 @@ namespace GUI
 
 	void BarWidget::Update()
 	{
-		if (myCurrentValue * mySize.x != myValueSprite->GetSize().x)
+		if (myIsFloat == false)
 		{
-			float newSize = float(myCurrentValue) / float(myMaxValue);
-			myValueSprite->SetSize({ mySize.x * newSize, mySize.y }, mySize / 2.f);
+			if (*myCurrentValueInt * mySize.x != myValueSprite->GetSize().x)
+			{
+				float newSize = float(*myCurrentValueInt) / float(*myMaxValueInt);
+				myValueSprite->SetSize({ mySize.x * newSize, mySize.y }, mySize / 2.f);
+			}
+		}
+		else
+		{
+			if (*myCurrentValueFloat * mySize.x != myValueSprite->GetSize().x)
+			{
+				float newSize = *myCurrentValueFloat / *myMaxValueFloat;
+				myValueSprite->SetSize({ mySize.x * newSize, mySize.y }, mySize / 2.f);
+			}
 		}
 	}
 
@@ -36,7 +58,16 @@ namespace GUI
 	void BarWidget::OnResize(const CU::Vector2<float>& aNewWindowSize, const CU::Vector2<float>& anOldWindowSize)
 	{
 		Widget::OnResize(aNewWindowSize, anOldWindowSize);
-		float newSize = float(myCurrentValue) / float(myMaxValue);
+		float newSize;
+
+		if (myIsFloat == false)
+		{
+			newSize = float(*myCurrentValueInt) / float(*myMaxValueInt);
+		}
+		else
+		{
+			newSize = *myCurrentValueFloat / *myMaxValueFloat;
+		}
 
 		myBackgroundSprite->SetSize(mySize, mySize / 2.f);
 		myValueSprite->SetSize({ mySize.x * newSize, mySize.y }, mySize / 2.f);

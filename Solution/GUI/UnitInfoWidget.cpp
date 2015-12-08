@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "BarWidget.h"
 #include <Engine.h>
 #include "../Entity/BuildingComponent.h"
 #include "../Entity/Entity.h"
@@ -14,6 +15,7 @@ namespace GUI
 		: myUnits(aPlayer->GetSelectedUnits())
 		, mySelectedType(eEntityType::_COUNT)
 		, myBuilding(aPlayer->GetBuildingComponent())
+		, myBuildingTimer(nullptr)
 	{
 		std::string unitPath = "";
 		std::string buildingPath = "";
@@ -37,12 +39,14 @@ namespace GUI
 		myPosition = position;
 		myUnitPortrait = new Prism::Sprite(unitPath, unitSize);
 		myBuildingPortrait = new Prism::Sprite(buildingPath, portraitSize);
+		myBuildingTimer = new BarWidget(myBuilding.GetMaxBuildTime(), myBuilding.GetCurrentBuildTime(), { unitSize.x * 4.f, unitSize.y / 2.f });
 	}
 
 	UnitInfoWidget::~UnitInfoWidget()
 	{
 		SAFE_DELETE(myUnitPortrait);
 		SAFE_DELETE(myBuildingPortrait);
+		SAFE_DELETE(myBuildingTimer);
 	}
 
 	void UnitInfoWidget::Update()
@@ -74,11 +78,11 @@ namespace GUI
 
 				if (myBuilding.GetEntityToSpawn() != eEntityType::EMPTY)
 				{
-					float timeLeft = myBuilding.GetMaxBuildTime() - myBuilding.GetCurrentBuildTime();
+					myBuildingTimer->Update();
 					CU::Vector2<float> position = myPosition + aParentPosition;
-					position.x += myBuildingPortrait->GetSize().x;
+					position.x += myBuildingPortrait->GetSize().x * 2.f;
 					position.y += myBuildingPortrait->GetSize().y / 2.f;
-					Prism::Engine::GetInstance()->PrintText(timeLeft, position, Prism::eTextType::RELEASE_TEXT);
+					myBuildingTimer->Render(position);
 				}
 			}
 		}
@@ -87,6 +91,7 @@ namespace GUI
 	void UnitInfoWidget::OnResize(const CU::Vector2<float>& aNewWindowSize, const CU::Vector2<float>& anOldWindowSize)
 	{
 		Widget::OnResize(aNewWindowSize, anOldWindowSize);
+		myBuildingTimer->OnResize(aNewWindowSize, anOldWindowSize);
 
 		CU::Vector2<float> unitRatioSize = myUnitPortrait->GetSize() / anOldWindowSize;
 		CU::Vector2<float> unitNewSize = unitRatioSize * aNewWindowSize;

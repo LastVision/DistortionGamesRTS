@@ -19,6 +19,8 @@ class PlayerDirector;
 
 namespace GUI
 {
+	class BarWidget;
+
 	class UnitInfoWidget : public Widget
 	{
 
@@ -35,12 +37,12 @@ namespace GUI
 		void operator=(UnitInfoWidget&) = delete;
 
 		const CU::GrowingArray<Entity*>& myUnits;
+		const BuildingComponent& myBuilding;
 		Prism::Sprite* myUnitPortrait;
 		Prism::Sprite* myBuildingPortrait;
+		BarWidget* myBuildingTimer;
 
-		const BuildingComponent& myBuilding;
-
-		bool myIsUnitSelected;
 		eEntityType mySelectedType;
+		bool myIsUnitSelected;
 	};
 }
