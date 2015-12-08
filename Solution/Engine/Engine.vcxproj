@@ -385,6 +385,7 @@
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='DLL_Release|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
     </FxCompile>
+    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_effect_ice.fx" />
     <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_effect_line3d.fx">
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Internal|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>

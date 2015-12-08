@@ -506,5 +506,8 @@
     <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_variables_shader.fx">
       <Filter>Shaders</Filter>
     </FxCompile>
+    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_effect_ice.fx">
+      <Filter>Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
