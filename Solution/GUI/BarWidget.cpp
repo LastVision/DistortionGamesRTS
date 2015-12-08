@@ -3,12 +3,13 @@
 
 namespace GUI
 {
-	BarWidget::BarWidget(const int& aMaxValue, const int& aCurrentValue)
+	BarWidget::BarWidget(const int& aMaxValue, const int& aCurrentValue, CU::Vector2<float> aSize)
 		: myMaxValue(aMaxValue)
 		, myCurrentValue(aCurrentValue)
 	{
-		myBackgroundSprite = new Prism::Sprite("Data/Resource/Texture/UI/T_healthbar_background.dds", { aMaxValue * 10.f, 20.f });
-		myValueSprite = new Prism::Sprite("Data/Resource/Texture/UI/T_healthbar_value.dds", { aMaxValue * 10.f, 20.f });
+		mySize = aSize;
+		myBackgroundSprite = new Prism::Sprite("Data/Resource/Texture/UI/T_healthbar_background.dds", mySize, mySize / 2.f);
+		myValueSprite = new Prism::Sprite("Data/Resource/Texture/UI/T_healthbar_value.dds", mySize, mySize / 2.f);
 	}
 
 	BarWidget::~BarWidget()
@@ -19,11 +20,10 @@ namespace GUI
 
 	void BarWidget::Update()
 	{
-		if (myCurrentValue * 10.f != myValueSprite->GetSize().x)
+		if (myCurrentValue * mySize.x != myValueSprite->GetSize().x)
 		{
 			float newSize = float(myCurrentValue) / float(myMaxValue);
-			newSize *= myMaxValue;
-			myValueSprite->SetSize({ newSize * 10.f, myValueSprite->GetSize().y }, { 0.f, 0.f });
+			myValueSprite->SetSize({ mySize.x * newSize, mySize.y }, mySize / 2.f);
 		}
 	}
 
@@ -31,5 +31,14 @@ namespace GUI
 	{
 		myBackgroundSprite->Render(myPosition + aParentPosition);
 		myValueSprite->Render(myPosition + aParentPosition);
+	}
+
+	void BarWidget::OnResize(const CU::Vector2<float>& aNewWindowSize, const CU::Vector2<float>& anOldWindowSize)
+	{
+		Widget::OnResize(aNewWindowSize, anOldWindowSize);
+		float newSize = float(myCurrentValue) / float(myMaxValue);
+
+		myBackgroundSprite->SetSize(mySize, mySize / 2.f);
+		myValueSprite->SetSize({ mySize.x * newSize, mySize.y }, mySize / 2.f);
 	}
 }
