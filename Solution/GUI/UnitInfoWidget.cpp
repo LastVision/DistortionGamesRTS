@@ -1,15 +1,19 @@
 #include "stdafx.h"
+#include <Engine.h>
+#include "../Entity/BuildingComponent.h"
+#include "../Entity/Entity.h"
+#include "../Game/PlayerDirector.h"
 #include "UnitInfoWidget.h"
 #include "WidgetContainer.h"
 #include <Sprite.h>
 #include <XMLReader.h>
-#include "../Entity/Entity.h"
 
 namespace GUI
 {
-	UnitInfoWidget::UnitInfoWidget(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement, const CU::GrowingArray<Entity*>& someUnits)
-		: myUnits(someUnits)
+	UnitInfoWidget::UnitInfoWidget(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement, const PlayerDirector* aPlayer)
+		: myUnits(aPlayer->GetSelectedUnits())
 		, mySelectedType(eEntityType::_COUNT)
+		, myBuilding(aPlayer->GetBuildingComponent())
 	{
 		std::string unitPath = "";
 		std::string buildingPath = "";
@@ -17,7 +21,7 @@ namespace GUI
 		CU::Vector2<float> unitSize;
 		CU::Vector2<float> portraitSize;
 		CU::Vector2<float> position;
-
+		
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "size"), "x", size.x);
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "size"), "y", size.y);
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "unitsize"), "x", unitSize.x);
@@ -67,6 +71,15 @@ namespace GUI
 			else if (mySelectedType == eEntityType::BASE_BUILING)
 			{
 				myBuildingPortrait->Render(myPosition + aParentPosition);
+
+				if (myBuilding.GetEntityToSpawn() != eEntityType::EMPTY)
+				{
+					float timeLeft = myBuilding.GetMaxBuildTime() - myBuilding.GetCurrentBuildTime();
+					CU::Vector2<float> position = myPosition + aParentPosition;
+					position.x += myBuildingPortrait->GetSize().x;
+					position.y += myBuildingPortrait->GetSize().y / 2.f;
+					Prism::Engine::GetInstance()->PrintText(timeLeft, position, Prism::eTextType::RELEASE_TEXT);
+				}
 			}
 		}
 	}
@@ -75,9 +88,12 @@ namespace GUI
 	{
 		Widget::OnResize(aNewWindowSize, anOldWindowSize);
 
-		CU::Vector2<float> ratioSize = myUnitPortrait->GetSize() / anOldWindowSize;
-		CU::Vector2<float> newSize = ratioSize * aNewWindowSize;
+		CU::Vector2<float> unitRatioSize = myUnitPortrait->GetSize() / anOldWindowSize;
+		CU::Vector2<float> unitNewSize = unitRatioSize * aNewWindowSize;
+		CU::Vector2<float> buildingRatioSize = myBuildingPortrait->GetSize() / anOldWindowSize;
+		CU::Vector2<float> buildingNewSize = buildingRatioSize * aNewWindowSize;
 
-		myUnitPortrait->SetSize(newSize, newSize / 2.f);
+		myUnitPortrait->SetSize(unitNewSize, { 0.f, 0.f });
+		myBuildingPortrait->SetSize(buildingNewSize, { 0.f, 0.f });
 	}
 }

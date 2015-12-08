@@ -21,8 +21,6 @@ namespace GUI
 		, myPlayer(aPlayer)
 		, myMousePosition({ 0.f, 0.f })
 	{
-		myWindowSize = { 1920.f, 1080.f }; // XML coordinates respond to this resolution, will be resized
-
 		ReadXML(aXMLPath);
 	}
 
@@ -50,7 +48,6 @@ namespace GUI
 		CheckMouseReleased();
 
 		CheckMouseEntered();
-
 	}
 
 	void GUIManager::Render()
@@ -98,6 +95,8 @@ namespace GUI
 
 	void GUIManager::ReadXML(const std::string& aXMLPath)
 	{
+		myWindowSize = { 1920.f, 1080.f }; // XML coordinates respond to this resolution, will be resized
+
 		std::string path = "";
 		CU::Vector2<float> size;
 		CU::Vector2<float> position;
@@ -144,7 +143,7 @@ namespace GUI
 				}
 				else if (type == "unit_info")
 				{
-					UnitInfoWidget* unitInfo = new UnitInfoWidget(&reader, widgetElement, myPlayer->GetSelectedUnits());
+					UnitInfoWidget* unitInfo = new UnitInfoWidget(&reader, widgetElement, myPlayer);
 					container->AddWidget(unitInfo);
 				}
 				else if (type == "unit_action")

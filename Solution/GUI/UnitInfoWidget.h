@@ -14,6 +14,8 @@ namespace Prism
 
 class XMLReader;
 class Entity;
+class BuildingComponent;
+class PlayerDirector;
 
 namespace GUI
 {
@@ -21,7 +23,7 @@ namespace GUI
 	{
 
 	public:
-		UnitInfoWidget(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement, const CU::GrowingArray<Entity*>& someUnits);
+		UnitInfoWidget(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement, const PlayerDirector* aPlayer);
 		~UnitInfoWidget();
 
 		void Update() override;
@@ -35,6 +37,8 @@ namespace GUI
 		const CU::GrowingArray<Entity*>& myUnits;
 		Prism::Sprite* myUnitPortrait;
 		Prism::Sprite* myBuildingPortrait;
+
+		const BuildingComponent& myBuilding;
 
 		bool myIsUnitSelected;
 		eEntityType mySelectedType;
