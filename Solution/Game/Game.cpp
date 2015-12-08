@@ -102,11 +102,9 @@ bool Game::Destroy()
 
 bool Game::Update()
 {
-
-
 	CU::InputWrapper::GetInstance()->Update();
 	CU::TimerManager::GetInstance()->Update();
-	Console::GetInstance()->Update();
+	
 	float deltaTime = CU::TimerManager::GetInstance()->GetMasterTimer().GetTime().GetFrameTime();
 	//float realDeltaTime = deltaTime;
 	if (deltaTime > 1.0f / 10.0f)
@@ -140,9 +138,12 @@ bool Game::Update()
 	myCursor->Update();
 	myCursor->Render();
 
-	LUA::ScriptSystem::GetInstance()->Update();
-
-
+	static bool run = true;
+	if (run == false)
+	{
+		//LUA::ScriptSystem::GetInstance()->RunLuaFromString("Print(\"apa\")");
+	}
+		run = false;
 	return true;
 }
 

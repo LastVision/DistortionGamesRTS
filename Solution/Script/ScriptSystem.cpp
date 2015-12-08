@@ -1,6 +1,7 @@
 #include "stdafx.h"
 
 #include <assert.h>
+#include <CommonHelper.h>
 #include "ScriptSystem.h"
 #include "LuaFiles\lualib.h"
 #include "LuaFiles\lauxlib.h"
@@ -60,6 +61,10 @@ namespace LUA
 		myDocumentation.push_back(doc);
 
 		lua_register(myLuaState, aNameInLua.c_str(), aFunction);
+
+		LuaFunction luaFunc;
+		luaFunc.myFunction = aFunction;
+		myLuaFunctions[aNameInLua] = luaFunc;
 	}
 
 	eFunctionStatus ScriptSystem::CallFunction(const std::string& aFunctionName, const LuaArguments& someArgs)
@@ -93,6 +98,37 @@ namespace LUA
 		}
 
 		return eFunctionStatus::OK;
+	}
+
+	void ScriptSystem::RunLuaFromString(const std::string& aString)
+	{
+		std::string functionName(aString.begin(), aString.begin() + aString.find_first_of('('));
+
+		std::string args(aString.begin() + aString.find_first_of('(') + 1, aString.begin() + aString.find_last_of(')'));
+		CU::TrimWhiteSpacesAtBeginAndEnd(args);
+
+		while (args.length() > 0)
+		{
+			std::string arg;
+			int commaIndex = args.find_first_of(',');
+			if (commaIndex != std::string::npos)
+			{
+				arg = std::string(args.begin(), args.begin() + commaIndex);
+				args = std::string(args.begin() + commaIndex + 1, args.end());
+				CU::TrimWhiteSpacesAtBeginAndEnd(args);
+			}
+			else
+			{
+				arg = args;
+				args = "";
+			}
+
+			CU::TrimWhiteSpacesAtBeginAndEnd(arg);
+			PushStringArg(arg);
+		}
+
+
+		myLuaFunctions[functionName].myFunction(myLuaState);
 	}
 
 
@@ -173,9 +209,6 @@ namespace LUA
 	{
 		switch (aArg.myType)
 		{
-		case Arg::eType::INT:
-			lua_pushnumber(myLuaState, aArg.myInt);
-			break;
 		case Arg::eType::FLOAT:
 			lua_pushnumber(myLuaState, aArg.myFloat);
 			break;
@@ -188,6 +221,32 @@ namespace LUA
 		default:
 			assert(false && "Invalid LuaArg-Type");
 			break;
+		}
+	}
+
+	void ScriptSystem::PushStringArg(const std::string& anArgAsString)
+	{
+		if (anArgAsString.length() == 0)
+		{
+			return;
+		}
+
+		if (anArgAsString[0] >= '0' && anArgAsString[0] <= '9')
+		{
+			float arg = static_cast<float>(atof(anArgAsString.c_str()));
+			PushArg({ arg });
+		}
+		else if (anArgAsString == "true")
+		{
+			PushArg({ true });
+		}
+		else if (anArgAsString == "false")
+		{
+			PushArg({ false });
+		}
+		else
+		{
+			PushArg({ anArgAsString });
 		}
 	}
 

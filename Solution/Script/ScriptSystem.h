@@ -30,6 +30,7 @@ namespace LUA
 			, const std::string& aArguments, const std::string& aHelpText);
 
 		eFunctionStatus CallFunction(const std::string& aFunctionName, const LuaArguments& someArgs);
+		void RunLuaFromString(const std::string& aString);
 		void UseFile(const std::string& aFileName);
 
 		void Update();
@@ -37,6 +38,11 @@ namespace LUA
 	private:
 		ScriptSystem();
 		~ScriptSystem();
+
+		struct LuaFunction
+		{
+			lua_CFunction myFunction;
+		};
 
 		struct Documentation
 		{
@@ -50,6 +56,7 @@ namespace LUA
 		void CheckFunctionError(int aCode);
 
 		void PushArg(const Arg& aArg);
+		void PushStringArg(const std::string& anArgAsString);
 		void AddLuaFunction(const std::string& aNameInLua, int aNumberOfArgs);
 
 		void PrintDocumentation();
@@ -63,6 +70,7 @@ namespace LUA
 		//std::string FindClosestFunction(const std::string& aFailedFunction);
 
 		std::unordered_map<std::string, int> myArgumentsCount;
+		std::unordered_map<std::string, LuaFunction> myLuaFunctions;
 		std::function<void()> myCppRegisterFunction;
 		std::vector<std::string> myActiveFiles;
 		std::vector<Documentation> myDocumentation;

@@ -3,6 +3,7 @@
 #include "Edge.h"
 #include <fstream>
 #include <Intersection.h>
+#include <MathHelper.h>
 #include "NavMesh.h"
 #include "Triangle.h"
 #include "Vertex.h"
@@ -189,25 +190,26 @@ namespace Prism
 				SAFE_DELETE(edge);
 			}
 
-			CU::Vector2<float> topLeft(someVertices[0]);
+			//CU::Vector2<float> topLeft(someVertices[0]);
 
-			for (int i = 1; i < someVertices.Size(); ++i)
-			{
-				topLeft.x = fminf(topLeft.x, someVertices[i].x);
-				topLeft.y = fminf(topLeft.y, someVertices[i].y);
-			}
-			CU::Vector2<float> botRight(someVertices[0]);
+			//for (int i = 1; i < someVertices.Size(); ++i)
+			//{
+			//	topLeft.x = fminf(topLeft.x, someVertices[i].x);
+			//	topLeft.y = fminf(topLeft.y, someVertices[i].y);
+			//}
+			//CU::Vector2<float> botRight(someVertices[0]);
 
-			for (int i = 1; i < someVertices.Size(); ++i)
-			{
-				botRight.x = fmaxf(botRight.x, someVertices[i].x);
-				botRight.y = fmaxf(botRight.y, someVertices[i].y);
-			}
+			//for (int i = 1; i < someVertices.Size(); ++i)
+			//{
+			//	botRight.x = fmaxf(botRight.x, someVertices[i].x);
+			//	botRight.y = fmaxf(botRight.y, someVertices[i].y);
+			//}
 			
 			for (int i = 0; i < myNewTriangles.Size(); ++i)
 			{
 				Triangle* current = myNewTriangles[i];
-				if (CU::Intersection::PointVsRect(current->GetCenter2D(), topLeft, botRight) == true)
+				//if (CU::Intersection::PointVsRect(current->GetCenter2D(), topLeft, botRight) == true)
+				if (Inside(someVertices, current->GetCenter2D()) == true)
 				{
 					UniqueAddIfExist(current->GetOther(current->myEdge1, true), myNewTriangles);
 					UniqueAddIfExist(current->GetOther(current->myEdge2, true), myNewTriangles);
@@ -348,6 +350,42 @@ namespace Prism
 			{
 				someTrianglesOut.Add(aTriangle);
 			}
+		}
+
+		bool NavMesh::Inside(const CU::GrowingArray<CU::Vector2<float>>& someVertices, const CU::Vector2<float>& aPosition) const
+		{
+			for (int i = 0; i < someVertices.Size(); ++i)
+			{
+				CU::Vector3<float> planeNormal(0, 1.f, 0);
+				CU::Vector2<float> forward2D;
+				if (i < someVertices.Size() - 1)
+				{
+					forward2D = someVertices[i + 1] - someVertices[i];
+
+				}
+				else
+				{
+					forward2D = someVertices[0] - someVertices[i];
+				}
+				CU::Normalize(forward2D);
+				CU::Vector3<float> forward(forward2D.x, 0, forward2D.y);
+
+				CU::Vector2<float> toTarget2D(aPosition - someVertices[i]);
+				CU::Normalize(toTarget2D);
+				CU::Vector3<float> toTarget(toTarget2D.x, 0, toTarget2D.y);
+
+				float dot = CU::Dot(forward, toTarget);
+				float det = CU::Dot(planeNormal, CU::Cross(forward, toTarget));
+
+				float angle = atan2(det, dot);
+
+				if (angle < 0)// && angle < CU_PI * 2.f)
+				{
+					return false;
+				}
+			}
+
+			return true;
 		}
 	}
 }
