@@ -10,6 +10,7 @@ namespace Prism
 	struct MeshData;
 	class Camera;
 	class Texture;
+	class Terrain;
 };
 
 struct AnimationComponentData;
@@ -17,7 +18,7 @@ struct AnimationComponentData;
 class AnimationComponent : public Component
 {
 public:
-	AnimationComponent(Entity& aEntity, AnimationComponentData& aComponentData);
+	AnimationComponent(Entity& aEntity, AnimationComponentData& aComponentData, const Prism::Terrain& aTerrain);
 	~AnimationComponent();
 
 	void AddAnimation(eEntityState aState, const std::string& aAnimationPath, bool aLoopFlag, bool aResetTimeOnRestart);
@@ -43,6 +44,8 @@ private:
 	float myCullingRadius;
 	CU::StaticArray<AnimationData, int(eEntityState::_COUNT)> myAnimations;
 	eEntityState myPrevEntityState;
+
+	const Prism::Terrain& myTerrain;
 };
 
 inline Prism::Instance* AnimationComponent::GetInstance()

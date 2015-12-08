@@ -87,3 +87,5 @@ Tools/CSharpUtilities/CSharpUtilities/obj/
 /From LD to PROG/funktioner i LUA.txt
 /From LD to PROG/Level_01_Heightmap.tga
 *.cso
+*.fx
+/Documentation/CreateProject.txt

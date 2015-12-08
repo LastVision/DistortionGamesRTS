@@ -35,7 +35,7 @@ Entity::Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& a
 
 	if (aEntityData.myAnimationData.myExistsInEntity == true)
 	{
-		myComponents[static_cast<int>(eComponentType::ANIMATION)] = new AnimationComponent(*this, aEntityData.myAnimationData);
+		myComponents[static_cast<int>(eComponentType::ANIMATION)] = new AnimationComponent(*this, aEntityData.myAnimationData, aTerrain);
 	}
 	else if (aEntityData.myGraphicsData.myExistsInEntity == true)
 	{
@@ -43,6 +43,7 @@ Entity::Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& a
 		GetComponent<GraphicsComponent>()->SetRotation(aRotation);
 		GetComponent<GraphicsComponent>()->SetScale(aScale);
 	}
+	AddToScene();
 
 	if (aEntityData.myBuildingData.myExistsInEntity == true)
 	{
@@ -74,11 +75,11 @@ Entity::Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& a
 	{
 		myComponents[static_cast<int>(eComponentType::HEALTH)] = new HealthComponent(*this, aEntityData.myHealthData);
 	}
+	
 }
 
 Entity::~Entity()
 {
-	AddToScene();
 	for (int i = 0; i < static_cast<int>(eComponentType::_COUNT); ++i)
 	{
 		delete myComponents[i];
@@ -122,11 +123,11 @@ void Entity::RemoveComponent(eComponentType aComponent)
 
 void Entity::AddToScene()
 {
-	if (GetComponent<GraphicsComponent>() != nullptr)
+	if (GetComponent<GraphicsComponent>() != nullptr && GetComponent<GraphicsComponent>()->GetInstance() != nullptr)
 	{
 		myScene.AddInstance(GetComponent<GraphicsComponent>()->GetInstance());
 	}
-	else if (GetComponent<AnimationComponent>() != nullptr)
+	else if (GetComponent<AnimationComponent>() != nullptr && GetComponent<AnimationComponent>()->GetInstance() != nullptr)
 	{
 		myScene.AddInstance(GetComponent<AnimationComponent>()->GetInstance());
 	}

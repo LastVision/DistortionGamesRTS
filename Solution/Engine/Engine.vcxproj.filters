@@ -171,6 +171,12 @@
     <ClCompile Include="SplatMapContainer.cpp">
       <Filter>Terrain</Filter>
     </ClCompile>
+    <ClCompile Include="DGFXLoader.cpp">
+      <Filter>FBX</Filter>
+    </ClCompile>
+    <ClCompile Include="Ice.cpp">
+      <Filter>Terrain</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h" />
@@ -385,6 +391,15 @@
     <ClInclude Include="SplatMapContainer.h">
       <Filter>Terrain</Filter>
     </ClInclude>
+    <ClInclude Include="DGFXLoader.h">
+      <Filter>FBX</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureHelper.h">
+      <Filter>Rendering\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Ice.h">
+      <Filter>Terrain</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Precompile">
@@ -498,6 +513,9 @@
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_variables_shader.fx">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_effect_ice.fx">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>

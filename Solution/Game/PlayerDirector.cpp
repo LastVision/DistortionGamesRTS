@@ -76,8 +76,16 @@ void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 
 	Director::Update(aDeltaTime);
 	UpdateMouseInteraction(aCamera);
-
 	myBuilding->Update(aDeltaTime);
+
+	for (int i = mySelectedUnits.Size() - 1; i >= 0; --i) // remove dead units
+	{
+		if (mySelectedUnits[i]->GetAlive() == false)
+		{
+			mySelectedUnits[i]->SetSelect(false);
+			mySelectedUnits.RemoveCyclicAtIndex(i);
+		}
+	}
 
 	if (myRenderGUI == true)
 	{
@@ -89,12 +97,12 @@ void PlayerDirector::Render(const Prism::Camera& aCamera)
 {
 	if (myRenderGUI == true)
 	{
-		myGUIManager->Render();
-
 		for (int i = 0; i < mySelectedUnits.Size(); i++)
 		{
 			mySelectedUnits[i]->GetComponent<HealthComponent>()->RenderHealthBar(aCamera);
 		}
+
+		myGUIManager->Render();
 	}
 }
 

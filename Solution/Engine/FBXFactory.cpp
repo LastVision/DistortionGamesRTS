@@ -670,6 +670,97 @@ void Prism::FBXFactory::LoadModelForRadiusCalc(const char* aFilePath
 	delete fbxModelData;
 }
 
+void Prism::FBXFactory::ConvertToDGFX(const char* aFilePath)
+{
+	DL_DEBUG("Convert To DGFX %s", aFilePath);
+	CU::TimerManager::GetInstance()->StartTimer("ConvertDGFX");
+
+	FBXData* data = new FBXData();
+	FbxModelData* fbxModelData = myLoader->loadModel(aFilePath);
+	data->myData = fbxModelData;
+	data->myPath = aFilePath;
+
+	std::string dgfxFile(aFilePath);
+	dgfxFile[dgfxFile.length() - 3] = 'd';
+	dgfxFile[dgfxFile.length() - 2] = 'g';
+	dgfxFile[dgfxFile.length() - 1] = 'f';
+	dgfxFile += 'x';
+
+	std::fstream file;
+	file.open(dgfxFile.c_str(), std::ios::out | std::ios::binary);
+	SaveModelToFile(fbxModelData, file);
+	file.close();
+
+	int elapsed = static_cast<int>(
+		CU::TimerManager::GetInstance()->StopTimer("ConvertDGFX").GetMilliseconds());
+	RESOURCE_LOG("Converting FBX->DGFX \"%s\" took %d ms to load", aFilePath, elapsed);
+
+	delete fbxModelData;
+}
+
+void Prism::FBXFactory::SaveModelToFile(FbxModelData* aModelData, std::fstream& aStream)
+{
+	int nullObject = 0;
+	if (aModelData->myData)
+	{
+		nullObject = 1;
+	}
+	aStream.write((char*)&nullObject, sizeof(int)); //nullObject
+
+
+	if (aModelData->myData)
+	{
+		SaveModelDataToFile(aModelData->myData, aStream);
+		aStream.write((char*)&aModelData->myOrientation.myMatrix[0], sizeof(float) * 16);
+	}
+
+	int childCount = aModelData->myChildren.Size();
+	aStream.write((char*)&childCount, sizeof(int)); //childCount
+	for (int i = 0; i < aModelData->myChildren.Size(); ++i)
+	{
+		auto currentChild = aModelData->myChildren[i];
+		SaveModelToFile(currentChild, aStream);
+	}
+}
+
+void Prism::FBXFactory::SaveModelDataToFile(ModelData* aData, std::fstream& aStream)
+{
+	aStream.write((char*)(&aData->myIndexCount), sizeof(int)); //Index count
+	aStream.write((char*)(aData->myIndicies), sizeof(int) * aData->myIndexCount); //All index data
+
+
+	aStream.write((char*)(&aData->myVertexCount), sizeof(int)); //Vertex count
+	aStream.write((char*)(&aData->myVertexStride), sizeof(int)); //Stride size
+	aStream.write((char*)(aData->myVertexBuffer), sizeof(float) * aData->myVertexCount * aData->myVertexStride); //All vertex data
+
+
+	int layoutCount = aData->myLayout.Size();
+	aStream.write((char*)(&layoutCount), sizeof(int)); //Inputlayout element count
+
+	for (int i = 0; i < aData->myLayout.Size(); ++i)
+	{
+		auto currentLayout = aData->myLayout[i];
+		aStream.write((char*)&currentLayout.myOffset, sizeof(int)); //desc->AlignedByteOffset
+		aStream.write((char*)&currentLayout.myType, sizeof(int)); // ModelData::Layout (as an INT)
+	}
+
+	int textureCount = aData->myTextures.size();
+	aStream.write((char*)&textureCount, sizeof(int)); //numberOfTextures
+
+	for (unsigned int i = 0; i < aData->myTextures.size(); ++i)
+	{
+		auto& currentTexture = aData->myTextures[i];
+
+		aStream.write((char*)&currentTexture.myType, sizeof(int)); //textureType
+
+		int textureLenght = currentTexture.myFileName.length();
+		aStream.write((char*)&textureLenght, sizeof(int)); //currentTexture.myFileName lenght
+		const char* texture = currentTexture.myFileName.c_str();
+		aStream.write(texture, sizeof(char) * textureLenght); //currentTexture.myFileName
+	}
+}
+
+
 void Prism::FBXFactory::CreateModelForRadiusCalc(FbxModelData* someModelData, CU::GrowingArray<CU::Vector3<float>>& someVerticesOut
 	, const CU::Matrix44<float>& aParentOrientation)
 {

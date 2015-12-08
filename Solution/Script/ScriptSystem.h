@@ -7,6 +7,7 @@
 #include "LuaArgs.h"
 #include "FileWatcher.h"
 #include <fstream>
+
 namespace LUA
 {
 	enum class eFunctionStatus
@@ -29,6 +30,7 @@ namespace LUA
 			, const std::string& aArguments, const std::string& aHelpText);
 
 		eFunctionStatus CallFunction(const std::string& aFunctionName, const LuaArguments& someArgs);
+		void RunLuaFromString(const std::string& aString);
 		void UseFile(const std::string& aFileName);
 
 		void Update();
@@ -36,6 +38,11 @@ namespace LUA
 	private:
 		ScriptSystem();
 		~ScriptSystem();
+
+		struct LuaFunction
+		{
+			lua_CFunction myFunction;
+		};
 
 		struct Documentation
 		{
@@ -49,14 +56,21 @@ namespace LUA
 		void CheckFunctionError(int aCode);
 
 		void PushArg(const Arg& aArg);
+		void PushStringArg(const std::string& anArgAsString);
 		void AddLuaFunction(const std::string& aNameInLua, int aNumberOfArgs);
 
 		void PrintDocumentation();
-		int levenshtein_distance(const std::string &s1, const std::string &s2);
 
-		std::string FindClosestFunction(const std::string& aFailedFunction);
+		int GetLevenshteinDistance(const std::string &s1, const std::string &s2);
+		float GetLevenshteinRatio(const std::string& aString, int aLevenshtienDistance);
+		int GetSubstringBonus(const std::string& aInput, const std::string& aCorrectString, int aScore);
+		std::string FindClosestFunction(const std::string& aInput);
+
+		//int levenshtein_distance(const std::string &s1, const std::string &s2);
+		//std::string FindClosestFunction(const std::string& aFailedFunction);
 
 		std::unordered_map<std::string, int> myArgumentsCount;
+		std::unordered_map<std::string, LuaFunction> myLuaFunctions;
 		std::function<void()> myCppRegisterFunction;
 		std::vector<std::string> myActiveFiles;
 		std::vector<Documentation> myDocumentation;

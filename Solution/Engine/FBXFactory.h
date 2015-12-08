@@ -30,6 +30,10 @@ namespace Prism
 		ModelAnimated* LoadModelAnimated(const char* aFilePath, Effect* aEffect);
 		Animation* LoadAnimation(const char* aFilePath);
 		void LoadModelForRadiusCalc(const char* aFilePath, CU::GrowingArray<CU::Vector3<float>>& someVerticesOut);
+
+		void ConvertToDGFX(const char* aFilePath);
+		void SaveModelToFile(FbxModelData* aModelData, std::fstream& aStream);
+		void SaveModelDataToFile(ModelData* aData, std::fstream& aStream);
 	private:
 		void FillData(ModelData* someData, Model* outData, Effect* aEffect);
 		void FillData(ModelData* someData, ModelAnimated* outData, Effect* aEffect);

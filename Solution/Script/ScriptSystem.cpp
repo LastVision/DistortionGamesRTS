@@ -1,13 +1,16 @@
+#include "stdafx.h"
 
 #include <assert.h>
+#include <CommonHelper.h>
 #include "ScriptSystem.h"
 #include "LuaFiles\lualib.h"
 #include "LuaFiles\lauxlib.h"
 
 #include <Windows.h>
 #include <numeric>
-#include <algorithm>
+#include <MemoryMacros.h> //Must be after ScriptSystem
 
+#include <algorithm>
 #include <fstream>
 
 int PrintFromLua(lua_State* aState)
@@ -58,6 +61,10 @@ namespace LUA
 		myDocumentation.push_back(doc);
 
 		lua_register(myLuaState, aNameInLua.c_str(), aFunction);
+
+		LuaFunction luaFunc;
+		luaFunc.myFunction = aFunction;
+		myLuaFunctions[aNameInLua] = luaFunc;
 	}
 
 	eFunctionStatus ScriptSystem::CallFunction(const std::string& aFunctionName, const LuaArguments& someArgs)
@@ -91,6 +98,37 @@ namespace LUA
 		}
 
 		return eFunctionStatus::OK;
+	}
+
+	void ScriptSystem::RunLuaFromString(const std::string& aString)
+	{
+		std::string functionName(aString.begin(), aString.begin() + aString.find_first_of('('));
+
+		std::string args(aString.begin() + aString.find_first_of('(') + 1, aString.begin() + aString.find_last_of(')'));
+		CU::TrimWhiteSpacesAtBeginAndEnd(args);
+
+		while (args.length() > 0)
+		{
+			std::string arg;
+			int commaIndex = args.find_first_of(',');
+			if (commaIndex != std::string::npos)
+			{
+				arg = std::string(args.begin(), args.begin() + commaIndex);
+				args = std::string(args.begin() + commaIndex + 1, args.end());
+				CU::TrimWhiteSpacesAtBeginAndEnd(args);
+			}
+			else
+			{
+				arg = args;
+				args = "";
+			}
+
+			CU::TrimWhiteSpacesAtBeginAndEnd(arg);
+			PushStringArg(arg);
+		}
+
+
+		myLuaFunctions[functionName].myFunction(myLuaState);
 	}
 
 
@@ -171,9 +209,6 @@ namespace LUA
 	{
 		switch (aArg.myType)
 		{
-		case Arg::eType::INT:
-			lua_pushnumber(myLuaState, aArg.myInt);
-			break;
 		case Arg::eType::FLOAT:
 			lua_pushnumber(myLuaState, aArg.myFloat);
 			break;
@@ -186,6 +221,32 @@ namespace LUA
 		default:
 			assert(false && "Invalid LuaArg-Type");
 			break;
+		}
+	}
+
+	void ScriptSystem::PushStringArg(const std::string& anArgAsString)
+	{
+		if (anArgAsString.length() == 0)
+		{
+			return;
+		}
+
+		if (anArgAsString[0] >= '0' && anArgAsString[0] <= '9')
+		{
+			float arg = static_cast<float>(atof(anArgAsString.c_str()));
+			PushArg({ arg });
+		}
+		else if (anArgAsString == "true")
+		{
+			PushArg({ true });
+		}
+		else if (anArgAsString == "false")
+		{
+			PushArg({ false });
+		}
+		else
+		{
+			PushArg({ anArgAsString });
 		}
 	}
 
@@ -212,26 +273,9 @@ namespace LUA
 		file.close();
 	}
 
-	std::string ScriptSystem::FindClosestFunction(const std::string& aFailedFunction)
-	{
-		int closest = INT_MAX;
-		std::string bestString;
-
-		for (unsigned int i = 0; i < myDocumentation.size(); ++i)
-		{
-			int dist = levenshtein_distance(aFailedFunction, myDocumentation[i].myFunction);
-
-			if (dist < closest)
-			{
-				closest = dist;
-				bestString = myDocumentation[i].myFunction;
-			}
-		}
-
-		return bestString;
-	}
 #undef min
-	int ScriptSystem::levenshtein_distance(const std::string &s1, const std::string &s2)
+#undef max
+	int ScriptSystem::GetLevenshteinDistance(const std::string &s1, const std::string &s2)
 	{
 		// To change the type this function manipulates and returns, change
 		// the return type and the types of the two variables below.
@@ -261,6 +305,86 @@ namespace LUA
 		delete[] column;
 		return result;
 	}
+
+	float ScriptSystem::GetLevenshteinRatio(const std::string& aString, int aLevenshtienDistance)
+	{
+		if (aLevenshtienDistance == 0)
+		{
+			return 1.f;
+		}
+
+		return 1.f - float(aString.size()) / aLevenshtienDistance;
+	}
+
+	int ScriptSystem::GetSubstringBonus(const std::string& aInput, const std::string& aCorrectString, int aScore)
+	{
+		if (aInput.size() <= 1)
+		{
+			return 0;
+		}
+
+		if (aCorrectString.find(aInput) != std::string::npos)
+		{
+			return aScore;
+		}
+
+
+		std::string input(aInput);
+		int middle = input.size() / 2;
+
+		int subScoreOne = GetSubstringBonus(std::string(input.begin(), input.begin() + middle), aCorrectString, aScore / 2);
+		int subScoreTwo = GetSubstringBonus(std::string(input.begin() + middle, input.end()), aCorrectString, aScore / 2);
+
+		return std::max(subScoreOne, subScoreTwo);
+	}
+
+	std::string ScriptSystem::FindClosestFunction(const std::string& aInput)
+	{
+		int maxLevenshteinScore = 30;
+
+		float closest = -1;
+		std::string bestString;
+
+		for (unsigned int i = 0; i < myDocumentation.size(); ++i)
+		{
+			const std::string& correctString = myDocumentation[i].myFunction;
+
+			float score = 0.f;
+
+			//If the current string contains the input-string, then we should bump up the score
+			//to make it more likley to find a relevant string
+			score += float(GetSubstringBonus(aInput, correctString, 5));
+			/*if (correctString.find(aInput) != std::string::npos)
+			{
+			score += 5.f;
+			}*/
+
+
+			//If the LevensteinDistance is short, we should give the string a better score
+			//If levDist is 0  we get full levenScore, else we get a percentage of it
+			float levDist = float(GetLevenshteinDistance(aInput, correctString));
+			if (levDist == 0)
+			{
+				score += maxLevenshteinScore;
+			}
+			else
+			{
+				float levRatio = GetLevenshteinRatio(aInput, levDist);
+				levRatio = 1.f + (1.f - levRatio);
+				levDist *= levRatio;
+				score += (1.f / levDist) * maxLevenshteinScore;
+			}
+
+			if (score > closest)
+			{
+				closest = score;
+				bestString = myDocumentation[i].myFunction;
+			}
+		}
+
+		return bestString;
+	}
+
 
 	ScriptSystem::ScriptSystem()
 	{

@@ -1,9 +1,10 @@
 #include "stdafx.h"
 
-#include <CommonHelper.h>
+//#include <CommonHelper.h>
 #include <D3DX11tex.h>
 #include <DL_Debug.h>
 #include "Texture.h"
+#include "TextureHelper.h"
 
 
 Prism::Texture::~Texture()
@@ -124,24 +125,28 @@ void Prism::Texture::CopyDepthBuffer(ID3D11Texture2D* aSource)
 
 bool Prism::Texture::LoadTexture(const std::string& aFilePath)
 {
-	HRESULT hr = D3DX11CreateShaderResourceViewFromFile(Engine::GetInstance()->GetDevice(), aFilePath.c_str()
-		, NULL, NULL, &myShaderView, NULL);
-	
-	if (FAILED(hr) == S_OK)
-	{
-		ID3D11Resource* resource = nullptr;
-		myShaderView->GetResource(&resource);
-		ID3D11Texture2D* texture2D = reinterpret_cast<ID3D11Texture2D*>(resource);
-		D3D11_TEXTURE2D_DESC* texture2DDEsc = new D3D11_TEXTURE2D_DESC;
-		texture2D->GetDesc(texture2DDEsc);
-		UINT width = texture2DDEsc->Width;
-		UINT height = texture2DDEsc->Height;
-		texture2D->Release();
-		delete texture2DDEsc;
+	//HRESULT hr = D3DX11CreateShaderResourceViewFromFile(Engine::GetInstance()->GetDevice(), aFilePath.c_str()
+	//	, NULL, NULL, &myShaderView, NULL);
+	//
+	//if (FAILED(hr) == S_OK)
+	//{
+	//	ID3D11Resource* resource = nullptr;
+	//	myShaderView->GetResource(&resource);
+	//	ID3D11Texture2D* texture2D = reinterpret_cast<ID3D11Texture2D*>(resource);
+	//	D3D11_TEXTURE2D_DESC* texture2DDEsc = new D3D11_TEXTURE2D_DESC;
+	//	texture2D->GetDesc(texture2DDEsc);
+	//	UINT width = texture2DDEsc->Width;
+	//	UINT height = texture2DDEsc->Height;
+	//	texture2D->Release();
+	//	delete texture2DDEsc;
+	//
+	//	std::string errorMessage = "Texturesize not power of 2: [" + aFilePath + "].";
+	//	DL_ASSERT_EXP(CU::IsValidTextureSize(height) && CU::IsValidTextureSize(width), errorMessage.c_str());
+	//}
 
-		std::string errorMessage = "Texturesize not power of 2: [" + aFilePath + "].";
-		DL_ASSERT_EXP(CU::IsValidTextureSize(height) && CU::IsValidTextureSize(width), errorMessage.c_str());
-	}
+	HRESULT hr = TextureHelper::CreateShaderResourceViewFromFile(aFilePath, &myShaderView);
+
+
 	myFileName = aFilePath;
 	if (FAILED(hr) != S_OK)
 	{

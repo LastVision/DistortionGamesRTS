@@ -54,7 +54,7 @@ namespace Prism
 	void EffectContainer::LoadEffect(const std::string& aFilePath)
 	{
 		VerifyShader(aFilePath);
-
+		GetCSOPath(aFilePath);
 		Effect* newEffect = new Effect();
 
 		if (newEffect->Init(aFilePath) == false)
@@ -116,6 +116,18 @@ namespace Prism
 			|| aFilePath == "Data/Resource/Shader/S_effect_line3d.fx"
 			|| aFilePath == "Data/Resource/Shader/S_effect_cube3d.fx"
 			, CU::Concatenate("Found invalid Shader: %s", aFilePath.c_str()));
+	}
+
+	std::string EffectContainer::GetCSOPath(const std::string& aFXPath)
+	{
+		int startIndex = aFXPath.find_last_of('/');
+		int endIndex = aFXPath.find_last_of('.');
+
+		std::string path(aFXPath.begin() + startIndex + 1, aFXPath.begin() + endIndex);
+
+		path = "Data/Generated/" + path + ".cso";
+
+		return path;
 	}
 
 	void EffectContainer::Update(const float aDeltaTime)

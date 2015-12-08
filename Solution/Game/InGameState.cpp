@@ -1,9 +1,11 @@
 #include "stdafx.h"
 
 #include <Camera.h>
+#include "Console.h"
 #include <MoveCameraMessage.h>
 #include <LUAMoveCameraMessage.h>
 #include <ColoursForBG.h>
+#include "ConsoleState.h"
 #include <Engine.h>
 #include <GameStateMessage.h>
 #include <GUIManager.h>
@@ -24,6 +26,7 @@
 #include <LUACinematicMessage.h>
 
 InGameState::InGameState()
+	: myShouldReOpenConsole(false)
 {
 	myIsActiveState = false;
 	myIsPlayerCinematic = false;
@@ -71,7 +74,7 @@ void InGameState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCur
 
 void InGameState::EndState()
 {
-
+	SAFE_DELETE(myLevel); // need for exit from consol state
 }
 
 const eStateStatus InGameState::Update(const float& aDeltaTime)
@@ -85,12 +88,21 @@ const eStateStatus InGameState::Update(const float& aDeltaTime)
 		return eStateStatus::ePopMainState;
 	}
 
+	if (CU::InputWrapper::GetInstance()->KeyUp(DIK_GRAVE) == true || myShouldReOpenConsole == true)
+	{
+		bool runtime = Prism::MemoryTracker::GetInstance()->GetRunTime();
+		Prism::MemoryTracker::GetInstance()->SetRunTime(false);
+		myShouldReOpenConsole = false;
+		ConsoleState* newState = new ConsoleState(myShouldReOpenConsole);
+		myStateStack->PushSubGameState(newState);
+		Prism::MemoryTracker::GetInstance()->SetRunTime(runtime);
+	}
 	
 	if (myIsPlayerCinematic == false)
 	{
 		if (CU::InputWrapper::GetInstance()->KeyDown(DIK_M) == true)
 		{
-			CompleteGame();
+			//CompleteGame();
 		}
 
 		if (CU::InputWrapper::GetInstance()->KeyDown(DIK_B) == true)
@@ -111,11 +123,17 @@ const eStateStatus InGameState::Update(const float& aDeltaTime)
 		{
 			RestartLevel();
 		}
+
+		
+		LUA::ScriptSystem::GetInstance()->CallFunction("Update", { aDeltaTime });
 	}
 	else
 	{
-		LUA::ScriptSystem::GetInstance()->CallFunction("UpdateCinematic", { { aDeltaTime }, {myCinematicIndex }});
+		LUA::ScriptSystem::GetInstance()->CallFunction("UpdateCinematic", { { aDeltaTime }, {float(myCinematicIndex) }});
 	}
+
+	LUA::ScriptSystem::GetInstance()->Update();
+	Console::GetInstance()->Update();
 
 	return myStateStatus;
 }

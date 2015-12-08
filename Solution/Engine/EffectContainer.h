@@ -24,6 +24,8 @@ namespace Prism
 		void ReloadEffect(const std::string& aFilePath);
 		void VerifyShader(const std::string& aFilePath);
 
+		std::string GetCSOPath(const std::string& aFXPath);
+
 		std::unordered_map<std::string, Effect*> myEffects;
 		std::string myCubeMap;
 

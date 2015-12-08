@@ -211,6 +211,7 @@
     <ClCompile Include="Cube3D.cpp" />
     <ClCompile Include="Cube3DRenderer.cpp" />
     <ClCompile Include="DebugDrawer.cpp" />
+    <ClCompile Include="DGFXLoader.cpp" />
     <ClCompile Include="DirectX.cpp" />
     <ClCompile Include="Edge.cpp" />
     <ClCompile Include="Effect.cpp" />
@@ -232,6 +233,7 @@
     <ClCompile Include="Frustum.cpp" />
     <ClCompile Include="FullScreenHelper.cpp" />
     <ClCompile Include="HierarchyBone.cpp" />
+    <ClCompile Include="Ice.cpp" />
     <ClCompile Include="Instance.cpp" />
     <ClCompile Include="Line3D.cpp" />
     <ClCompile Include="Line3DRenderer.cpp" />
@@ -284,6 +286,7 @@
     <ClInclude Include="Cube3DRenderer.h" />
     <ClInclude Include="DebugDrawer.h" />
     <ClInclude Include="Defines.h" />
+    <ClInclude Include="DGFXLoader.h" />
     <ClInclude Include="DirectX.h" />
     <ClInclude Include="Edge.h" />
     <ClInclude Include="Effect.h" />
@@ -303,6 +306,7 @@
     <ClInclude Include="Frustum.h" />
     <ClInclude Include="FullScreenHelper.h" />
     <ClInclude Include="HierarchyBone.h" />
+    <ClInclude Include="Ice.h" />
     <ClInclude Include="IndexBufferWrapper.h" />
     <ClInclude Include="Instance.h" />
     <ClInclude Include="DirectionalLight.h" />
@@ -335,6 +339,7 @@
     <ClInclude Include="TextParser.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TextureContainer.h" />
+    <ClInclude Include="TextureHelper.h" />
     <ClInclude Include="Tga32.h" />
     <ClInclude Include="Token.h" />
     <ClInclude Include="TransformationNode.h" />
@@ -365,23 +370,109 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_effect_cube3d.fx" />
-    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_effect_debug.fx" />
-    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_effect_font.fx" />
-    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_effect_line3d.fx" />
-    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_effect_no_texture.fx" />
-    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_effect_no_texture_animated.fx" />
-    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_effect_particle.fx" />
-    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_effect_pbl.fx" />
-    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_effect_pbl_animated.fx" />
-    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_effect_sprite.fx" />
-    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_effect_streak.fx" />
-    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_effect_terrain.fx" />
-    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_light_directional.fx" />
-    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_light_point.fx" />
-    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_light_spot.fx" />
-    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_variables_pbl.fx" />
-    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_variables_shader.fx" />
+    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_effect_cube3d.fx">
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Internal|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='DLL_Release|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_effect_debug.fx">
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Internal|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='DLL_Release|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_effect_font.fx">
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Internal|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='DLL_Release|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_effect_ice.fx" />
+    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_effect_line3d.fx">
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Internal|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='DLL_Release|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_effect_no_texture.fx">
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Internal|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='DLL_Release|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_effect_no_texture_animated.fx">
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Internal|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='DLL_Release|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_effect_particle.fx">
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Internal|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='DLL_Release|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_effect_pbl.fx">
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Internal|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='DLL_Release|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_effect_pbl_animated.fx">
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Internal|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='DLL_Release|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_effect_sprite.fx">
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Internal|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='DLL_Release|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_effect_streak.fx">
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Internal|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='DLL_Release|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_effect_terrain.fx">
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Internal|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='DLL_Release|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_light_directional.fx">
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Internal|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='DLL_Release|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_light_point.fx">
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Internal|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='DLL_Release|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_light_spot.fx">
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Internal|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='DLL_Release|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_variables_pbl.fx">
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Internal|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='DLL_Release|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="..\..\Workbed\bin\Data\Resource\Shader\S_variables_shader.fx">
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Internal|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='DLL_Release|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)..\Workbed\bin\Data\Generated\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
