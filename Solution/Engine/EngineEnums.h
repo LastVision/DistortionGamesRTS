@@ -15,4 +15,10 @@ namespace Prism
 		NONE = 0,
 		BLOOM = 1,
 	};
+
+	enum class eFont
+	{
+		DIALOGUE,
+		CONSOLE
+	};
 }

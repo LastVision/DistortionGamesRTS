@@ -5,6 +5,7 @@
 #include <InputWrapper.h>
 #include <ScriptSystem.h>
 #include <Sprite.h>
+#include <Text.h>
 
 ConsoleState::ConsoleState(bool& aShouldReOpenConsole)
 	: myShouldReOpenConsole(aShouldReOpenConsole)
@@ -29,12 +30,18 @@ void ConsoleState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCu
 	myMarker = new Prism::Sprite("Data/Resource/Texture/UI/T_healthbar_background.dds", { 2.f, 20.f }, { 0.f, 0.f });
 	Console::GetInstance()->GetConsoleHistory()->Load();
 	myMarkerBlinker = true;
+
+	myText = new Prism::Text(*Prism::Engine::GetInstance()->GetFont(Prism::eFont::CONSOLE));
+
+	myLowerLeftCorner = Prism::Engine::GetInstance()->GetWindowSize();
+	myLowerLeftCorner *= 0.25f;
 }
 
 void ConsoleState::EndState()
 {
 	SAFE_DELETE(myBackground);
 	SAFE_DELETE(myMarker);
+	SAFE_DELETE(myText);
 }
 
 const eStateStatus ConsoleState::Update(const float& aDeltaTime)
@@ -84,6 +91,10 @@ const eStateStatus ConsoleState::Update(const float& aDeltaTime)
 		Console::GetInstance()->GetConsoleHistory()->GetNext();
 	}
 
+	myText->SetText(Console::GetInstance()->GetInput());
+	myMarkerPosition.x = (myLowerLeftCorner.x * 1.1f) + myText->GetWidth() + 3;
+	myMarkerPosition.y = myLowerLeftCorner.y * 1.1f - 3;
+
 	myRenderTime += aDeltaTime;
 	if (myRenderTime > 0.5f)
 	{
@@ -96,28 +107,35 @@ const eStateStatus ConsoleState::Update(const float& aDeltaTime)
 
 void ConsoleState::Render()
 {
-	CU::Vector2<float> windowSize = Prism::Engine::GetInstance()->GetWindowSize();
-	windowSize *= 0.25f;
-	myBackground->Render(windowSize);
+	
+	myBackground->Render(myLowerLeftCorner);
 
+	myText->SetPosition(myLowerLeftCorner * 1.1f);
+	myText->SetScale({ 0.9f, 0.9f });
+	myText->SetColor({ 1.f, 1.f, 1.f, 1.f });
+	myText->Render();
+	//Prism::Engine::GetInstance()->RenderText(myText);
+	//Prism::Engine::GetInstance()->PrintText(myText->myText , myLowerLeftCorner * 1.1f, Prism::eTextType::RELEASE_TEXT, 0.9f);
 
-	Prism::Engine::GetInstance()->PrintText(Console::GetInstance()->GetInput(), windowSize * 1.1f, Prism::eTextType::RELEASE_TEXT, 0.9f);
-
-	int length = Console::GetInstance()->GetInput().length();
+	//int length = Console::GetInstance()->GetInput().length();
 
 	if (myMarkerBlinker == true)
 	{
-		myMarker->Render({ (windowSize.x * 1.1f) + length * 15.f, windowSize.y * 1.1f});
+		myMarker->Render(myMarkerPosition);
+		//myMarker->Render({ (myLowerLeftCorner.x * 1.1f) + length * 15.f, myLowerLeftCorner.y * 1.1f });
 	}
 
 	const CU::GrowingArray<std::string>& history = Console::GetInstance()->GetConsoleHistory()->GetHistoryArray();
-	CU::Vector2<float> position = windowSize * 1.1f;
+	CU::Vector2<float> position = myLowerLeftCorner * 1.1f;
 	position.y += 30.f;
 
 	for (int i = history.Size() - 1; i >= 0; --i)
 	{
 		position.y += 30.f;
-		Prism::Engine::GetInstance()->PrintText(history[i], position, Prism::eTextType::RELEASE_TEXT, 0.9f);
+		//Prism::Engine::GetInstance()->PrintText(history[i], position, Prism::eTextType::RELEASE_TEXT, 0.9f);
+		myText->SetText(history[i]);
+		myText->SetPosition(position);
+		myText->Render();
 	}
 
 }

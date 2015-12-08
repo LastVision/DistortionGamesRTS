@@ -82,6 +82,17 @@ void Prism::Text::Render()
 	}
 }
 
+float Prism::Text::GetWidth() const
+{
+	float width = 0.f;
+	for (unsigned int i = 0; i < myText.length(); ++i)
+	{
+		width += myFont.GetCharData(myText[i]).myAdvanceX * myScale.x;
+	}
+
+	return width;
+}
+
 void Prism::Text::ConstructBuffers()
 {
 	//debug:

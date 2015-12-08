@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include "BaseModel.h"
+#include "Vertices.h"
 
 namespace Prism
 {
@@ -15,12 +16,13 @@ namespace Prism
 		void SetColor(const CU::Vector4<float>& aColor);
 		void Render();
 		void SetScale(const CU::Vector2<float>& aScale);
+		float GetWidth() const;
 
+		std::string myText;
 	private:
 		void operator=(Text&) = delete;
 		void ConstructBuffers();
 		const Font& myFont;
-		std::string myText;
 
 		CU::GrowingArray<VertexPosUV> myVertices;
 		CU::GrowingArray<int> myIndices;
@@ -33,6 +35,7 @@ inline void Prism::Text::SetPosition(const CU::Vector2<float>& aPosition)
 {
 	myPosition.x = static_cast<float>(static_cast<int>(aPosition.x + 0.5f));
 	myPosition.y = static_cast<float>(static_cast<int>(aPosition.y + 0.5f));
+	myPosition.y -= Engine::GetInstance()->GetWindowSize().y;
 }
 
 inline void Prism::Text::SetScale(const CU::Vector2<float>& aScale)

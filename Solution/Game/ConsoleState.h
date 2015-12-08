@@ -4,6 +4,7 @@
 namespace Prism
 {
 	class Sprite;
+	class Text;
 }
 
 class ConsoleState : public GameState
@@ -25,6 +26,9 @@ private:
 	Prism::Sprite* myBackground;
 	bool& myShouldReOpenConsole;
 	Prism::Sprite* myMarker;
+	CU::Vector2<float> myMarkerPosition;
+	CU::Vector2<float> myLowerLeftCorner;
+	Prism::Text* myText;
 	float myRenderTime;
 	bool myMarkerBlinker;
 };

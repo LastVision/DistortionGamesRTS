@@ -1,4 +1,6 @@
 #pragma once
+
+#include "EngineEnums.h"
 #include <Matrix.h>
 #include <GrowingArray.h>
 #include <Vector.h>
@@ -60,6 +62,7 @@ namespace Prism
 		ID3D11RenderTargetView* GetDepthBuffer();
 		ID3D11ShaderResourceView* GetBackbufferView();
 		ID3D11Texture2D* GetDepthBufferTexture();
+		Font* GetFont(eFont aFont);
 		void SetDebugName(ID3D11DeviceChild* aChild, const std::string& aName);
 
 		Model* DLLLoadModel(const std::string& aModelPath, Effect* aEffect);
@@ -71,6 +74,8 @@ namespace Prism
 		void PrintText(const std::string& aText, const CU::Vector2<float>& aPosition, eTextType aTextType, float aScale = 1.f, CU::Vector4<float> aColor = { 1.f, 1.f, 1.f, 1.f });
 		void PrintText(float aNumber, const CU::Vector2<float>& aPosition, eTextType aTextType, float aScale = 1.f, CU::Vector4<float> aColor = { 1.f, 1.f, 1.f, 1.f });
 		void PrintText(int aNumber, const CU::Vector2<float>& aPosition, eTextType aTextType, float aScale = 1.f, CU::Vector4<float> aColor = { 1.f, 1.f, 1.f, 1.f });
+
+		void RenderText(Text* aText);
 
 		void RestoreViewPort();
 		void SetBackBufferAsTarget();
@@ -118,7 +123,8 @@ namespace Prism
 		DirectX* myDirectX;
 		SetupInfo* mySetupInfo;
 		FBXFactory* myModelFactory;
-		Font* myFont;
+		Font* myDialogueFont;
+		Font* myConsoleFont;
 		Text* myText;
 		Text* myDebugText;
 		FadeData myFadeData;
@@ -138,6 +144,7 @@ namespace Prism
 		CU::GrowingArray<TextCommand> myTexts;
 		CU::GrowingArray<TextCommand> myDebugTexts;
 		bool myShowDebugText;
+		CU::GrowingArray<Text*> myTextsNew;
 	};
 }
 

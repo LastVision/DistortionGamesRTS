@@ -27,6 +27,7 @@ namespace Prism
 		: myClearColor({ 0.8f, 0.125f, 0.8f, 1.0f })
 		, myTexts(16)
 		, myDebugTexts(16)
+		, myTextsNew(256)
 		, myShowDebugText(false)
 	{
 		myModelFactory = new FBXFactory();
@@ -45,9 +46,10 @@ namespace Prism
 		myFadeData.mySprite = nullptr;
 		delete myModelFactory;
 
-		delete myText;
-		delete myDebugText;
-		delete myFont;
+		SAFE_DELETE(myText);
+		SAFE_DELETE(myDebugText);
+		SAFE_DELETE(myDialogueFont);
+		SAFE_DELETE(myConsoleFont);
 
 		TextureContainer::Destroy();
 		EffectContainer::Destroy();
@@ -121,6 +123,11 @@ namespace Prism
 		}
 
 		myDebugTexts.RemoveAll();
+		for (int i = 0; i < myTextsNew.Size(); ++i)
+		{
+			myTextsNew[i]->Render();
+		}
+		myTextsNew.RemoveAll();
 
 		if (myFadeData.myIsFading == true)
 		{
@@ -238,6 +245,24 @@ namespace Prism
 		return myDirectX->GetDepthbufferTexture();
 	}
 
+	Font* Engine::GetFont(eFont aFont)
+	{
+		switch (aFont)
+		{
+		case Prism::eFont::DIALOGUE:
+			return myDialogueFont;
+			break;
+		case Prism::eFont::CONSOLE:
+			return myConsoleFont;
+			break;
+		default:
+			DL_ASSERT("Tried to get invalid font");
+			break;
+		}
+
+		return myDialogueFont;
+	}
+
 	void Engine::SetDebugName(ID3D11DeviceChild* aChild, const std::string& aName)
 	{
 		myDirectX->SetDebugName(aChild, aName);
@@ -274,16 +299,16 @@ namespace Prism
 			, static_cast<float>(myWindowSize.y), 0.1f, 1000.f);
 
 		//myFont = new Font("Data/Resource/Font/arial.ttf_sdf_512.txt", { 512, 512 });
-		myFont = new Font("Data/Resource/Font/consola.ttf_sdf.txt", { 256, 256 });
-		//myFont = new Font("Data/Resource/Font/consolab.ttf_sdf.txt", { 256, 256 });
+		myDialogueFont = new Font("Data/Resource/Font/consola.ttf_sdf.txt", { 256, 256 });
+		myConsoleFont = new Font("Data/Resource/Font/consolab.ttf_sdf.txt", { 256, 256 });
 		//myFont = new Font("Data/Resource/Font/consolab.ttf_sdf_512.txt", { 512, 512 });
 		//myFont = new Font("Data/Resource/Font/consola.ttf_sdf_512.txt", { 512, 512 });
-		myText = new Text(*myFont);
+		myText = new Text(*myDialogueFont);
 		myText->SetPosition({ 800.f, -300.f });
 		myText->SetText("едц");
 		myText->SetScale({ 1.f, 1.f });
 
-		myDebugText = new Text(*myFont);
+		myDebugText = new Text(*myDialogueFont);
 		myDebugText->SetPosition({ 800.f, -300.f });
 		myDebugText->SetText("едц");
 		myDebugText->SetScale({ 1.f, 1.f });
@@ -307,7 +332,6 @@ namespace Prism
 		TextCommand toAdd;
 		toAdd.myText = aText;
 		toAdd.myPosition = aPosition;
-		toAdd.myPosition.y -= myWindowSize.y;
 		toAdd.myScale = aScale;
 		toAdd.myColor = aColor;
 		if (aTextType == eTextType::RELEASE_TEXT)
@@ -334,6 +358,11 @@ namespace Prism
 		ss.precision(3);
 		ss << aNumber;
 		PrintText(ss.str(), aPosition, aTextType, aScale, aColor);
+	}
+
+	void Engine::RenderText(Text* aText)
+	{
+		myTextsNew.Add(aText);
 	}
 	
 	void Engine::RestoreViewPort()
