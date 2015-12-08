@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "ConsoleState.h"
 #include "Console.h"
+#include "ConsoleHistoryManager.h"
 #include <InputWrapper.h>
 #include <Sprite.h>
 
@@ -24,6 +25,7 @@ void ConsoleState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCu
 	windowSize *= 0.75f;
 
 	myBackground = new Prism::Sprite("Data/Resource/Texture/Console/T_console_window.dds", windowSize);
+	Console::GetInstance()->GetConsoleHistory()->Load();
 }
 
 void ConsoleState::EndState()
@@ -42,12 +44,14 @@ const eStateStatus ConsoleState::Update(const float& aDeltaTime)
 	if (CU::InputWrapper::GetInstance()->KeyUp(DIK_ESCAPE) == true)
 	{
 		myStateStatus = ePopMainState;
+		Console::GetInstance()->GetConsoleHistory()->Save();
 		return eStateStatus::eKeepState;
 	}
 
 	if (CU::InputWrapper::GetInstance()->KeyUp(DIK_RETURN) == true)
 	{
 		myShouldReOpenConsole = true;
+		Console::GetInstance()->GetConsoleHistory()->AddHistory(Console::GetInstance()->GetInput());
 		myStateStatus = ePopSubState;
 	}
 

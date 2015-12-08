@@ -10,6 +10,7 @@ public:
 
 	void Update();
 	const std::string& GetInput() const;
+	ConsoleHistoryManager* GetConsoleHistory();
 
 private:
 	Console();
@@ -25,4 +26,9 @@ private:
 inline const std::string& Console::GetInput() const
 {
 	return myInput;
+}
+
+inline ConsoleHistoryManager* Console::GetConsoleHistory()
+{
+	return myHistory;
 }
