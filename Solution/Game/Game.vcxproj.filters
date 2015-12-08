@@ -37,6 +37,9 @@
       <Filter>Director</Filter>
     </ClCompile>
     <ClCompile Include="ScriptInterface.cpp" />
+    <ClCompile Include="ConsoleState.cpp">
+      <Filter>StateStack</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -84,6 +87,9 @@
       <Filter>Level\Factory</Filter>
     </ClInclude>
     <ClInclude Include="ScriptInterface.h" />
+    <ClInclude Include="ConsoleState.h">
+      <Filter>StateStack</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="PreCompile">
