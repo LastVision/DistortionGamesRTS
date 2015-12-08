@@ -57,7 +57,7 @@ namespace Prism
 		InitVertexBuffer(sizeof(VertexPosNormUVBiTang), D3D11_USAGE_IMMUTABLE, 0);
 
 		InitIndexBuffer();
-		InitSurface("AlbedoTexture", "Data/Resource/Texture/Terrain/SplatMap/T_InfluenceToSplatMap.dds");
+		InitSurface("AlbedoTexture", "Data/Resource/Texture/Terrain/Ice/T_ice_influence_to_splat_map.dds");
 
 		InitBlendState("Ice::BlendState");
 
@@ -135,24 +135,24 @@ namespace Prism
 		
 		
 		VertexPosNormUVBiTang vertex;
-		vertex.myPosition = { -halfWidth, myHeight, -halfDepth };
+		vertex.myPosition = { 0, myHeight, 0 };
 		vertex.myNormal = { 0, 1, 0 };
-		vertex.myUV = { 0, 0 };
+		vertex.myUV = { 0, 1 };
 		vertices.Add(vertex);
 
-		vertex.myPosition = { halfWidth, myHeight, -halfDepth };
-		vertex.myNormal = { 0, 1, 0 };
-		vertex.myUV = { 1, 0 };
-		vertices.Add(vertex);
-
-		vertex.myPosition = { halfWidth, myHeight, halfDepth };
+		vertex.myPosition = { mySize.x, myHeight, 0 };
 		vertex.myNormal = { 0, 1, 0 };
 		vertex.myUV = { 1, 1 };
 		vertices.Add(vertex);
 
-		vertex.myPosition = { -halfWidth, myHeight, halfDepth };
+		vertex.myPosition = { mySize.x, myHeight, mySize.y };
 		vertex.myNormal = { 0, 1, 0 };
-		vertex.myUV = { 0, 1 };
+		vertex.myUV = { 1, 0 };
+		vertices.Add(vertex);
+
+		vertex.myPosition = { 0, myHeight, mySize.y };
+		vertex.myNormal = { 0, 1, 0 };
+		vertex.myUV = { 0, 0 };
 		vertices.Add(vertex);
 
 
@@ -185,32 +185,32 @@ namespace Prism
 
 	void Ice::CreateTextures()
 	{
-		CreateTextureFromFile("Data/Resource/Texture/Terrain/SplatMap/splat_base/T_splat_base_albedo.dds", &myAlbedoTextures[0]);
-		CreateTextureFromFile("Data/Resource/Texture/Terrain/SplatMap/splat_r/T_splat_r_albedo.dds", &myAlbedoTextures[1]);
+		CreateTextureFromFile("Data/Resource/Texture/Terrain/Ice/Ice_splat_base/T_ice_splat_base_albedo.dds", &myAlbedoTextures[0]);
+		CreateTextureFromFile("Data/Resource/Texture/Terrain/Ice/Ice_splat_r/T_ice_splat_r_albedo.dds", &myAlbedoTextures[1]);
 		//CreateTextureFromFile("Data/Resource/Texture/Terrain/SplatMap/splat_g/T_splat_g_albedo.dds", &myAlbedoTextures[2]);
 		//CreateTextureFromFile("Data/Resource/Texture/Terrain/SplatMap/splat_b/T_splat_b_albedo.dds", &myAlbedoTextures[3]);
 		//CreateTextureFromFile("Data/Resource/Texture/Terrain/SplatMap/splat_a/T_splat_a_albedo.dds", &myAlbedoTextures[4]);
 
-		CreateTextureFromFile("Data/Resource/Texture/Terrain/SplatMap/splat_base/T_splat_base_metalness.dds", &myMetalnessTextures[0]);
-		CreateTextureFromFile("Data/Resource/Texture/Terrain/SplatMap/splat_r/T_splat_r_metalness.dds", &myMetalnessTextures[1]);
+		CreateTextureFromFile("Data/Resource/Texture/Terrain/Ice/Ice_splat_base/T_ice_splat_base_metalness.dds", &myMetalnessTextures[0]);
+		CreateTextureFromFile("Data/Resource/Texture/Terrain/Ice/Ice_splat_r/T_ice_splat_r_metalness.dds", &myMetalnessTextures[1]);
 		//CreateTextureFromFile("Data/Resource/Texture/Terrain/SplatMap/splat_g/T_splat_g_metalness.dds", &myMetalnessTextures[2]);
 		//CreateTextureFromFile("Data/Resource/Texture/Terrain/SplatMap/splat_b/T_splat_b_metalness.dds", &myMetalnessTextures[3]);
 		//CreateTextureFromFile("Data/Resource/Texture/Terrain/SplatMap/splat_a/T_splat_a_metalness.dds", &myMetalnessTextures[4]);
 
-		CreateTextureFromFile("Data/Resource/Texture/Terrain/SplatMap/splat_base/T_splat_base_roughness.dds", &myRoughnessTextures[0]);
-		CreateTextureFromFile("Data/Resource/Texture/Terrain/SplatMap/splat_r/T_splat_r_roughness.dds", &myRoughnessTextures[1]);
+		CreateTextureFromFile("Data/Resource/Texture/Terrain/Ice/Ice_splat_base/T_ice_splat_base_roughness.dds", &myRoughnessTextures[0]);
+		CreateTextureFromFile("Data/Resource/Texture/Terrain/Ice/Ice_splat_r/T_ice_splat_r_roughness.dds", &myRoughnessTextures[1]);
 		//CreateTextureFromFile("Data/Resource/Texture/Terrain/SplatMap/splat_g/T_splat_g_roughness.dds", &myRoughnessTextures[2]);
 		//CreateTextureFromFile("Data/Resource/Texture/Terrain/SplatMap/splat_b/T_splat_b_roughness.dds", &myRoughnessTextures[3]);
 		//CreateTextureFromFile("Data/Resource/Texture/Terrain/SplatMap/splat_a/T_splat_a_roughness.dds", &myRoughnessTextures[4]);
 
-		CreateTextureFromFile("Data/Resource/Texture/Terrain/SplatMap/splat_base/T_splat_base_normal.dds", &myNormalTextures[0]);
-		CreateTextureFromFile("Data/Resource/Texture/Terrain/SplatMap/splat_r/T_splat_r_normal.dds", &myNormalTextures[1]);
+		CreateTextureFromFile("Data/Resource/Texture/Terrain/Ice/Ice_splat_base/T_ice_splat_base_normal.dds", &myNormalTextures[0]);
+		CreateTextureFromFile("Data/Resource/Texture/Terrain/Ice/Ice_splat_r/T_ice_splat_r_normal.dds", &myNormalTextures[1]);
 		//CreateTextureFromFile("Data/Resource/Texture/Terrain/SplatMap/splat_g/T_splat_g_normal.dds", &myNormalTextures[2]);
 		//CreateTextureFromFile("Data/Resource/Texture/Terrain/SplatMap/splat_b/T_splat_b_normal.dds", &myNormalTextures[3]);
 		//CreateTextureFromFile("Data/Resource/Texture/Terrain/SplatMap/splat_a/T_splat_a_normal.dds", &myNormalTextures[4]);
 
-		CreateTextureFromFile("Data/Resource/Texture/Terrain/SplatMap/splat_base/T_splat_base_ao.dds", &myAmbientOcclusionTextures[0]);
-		CreateTextureFromFile("Data/Resource/Texture/Terrain/SplatMap/splat_r/T_splat_r_ao.dds", &myAmbientOcclusionTextures[1]);
+		CreateTextureFromFile("Data/Resource/Texture/Terrain/Ice/Ice_splat_base/T_ice_splat_base_ao.dds", &myAmbientOcclusionTextures[0]);
+		CreateTextureFromFile("Data/Resource/Texture/Terrain/Ice/Ice_splat_r/T_ice_splat_r_ao.dds", &myAmbientOcclusionTextures[1]);
 		//CreateTextureFromFile("Data/Resource/Texture/Terrain/SplatMap/splat_g/T_splat_g_ao.dds", &myAmbientOcclusionTextures[2]);
 		//CreateTextureFromFile("Data/Resource/Texture/Terrain/SplatMap/splat_b/T_splat_b_ao.dds", &myAmbientOcclusionTextures[3]);
 		//CreateTextureFromFile("Data/Resource/Texture/Terrain/SplatMap/splat_a/T_splat_a_ao.dds", &myAmbientOcclusionTextures[4]);
