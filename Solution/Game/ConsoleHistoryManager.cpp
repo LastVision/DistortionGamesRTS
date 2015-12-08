@@ -8,9 +8,10 @@ ConsoleHistoryManager::ConsoleHistoryManager()
 	: myCurrentIndex(0)
 	, myInsertIndex(0)
 {
-	std::string temp = CU::GetMyDocumentFolderPath() + "/ICE/CommandHistory.txt";
+	std::string tempPath = CU::GetMyDocumentFolderPath() + "ICE";
+	CreateDirectory(tempPath.c_str(), NULL);
+	std::string temp = tempPath + "\\CommandHistory.txt";
 	myHistoryFile = temp.c_str();
-
 	myHistory.Init(1024);
 }
 
