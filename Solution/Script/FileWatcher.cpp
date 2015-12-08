@@ -1,3 +1,5 @@
+#include "stdafx.h"
+
 #include "FileWatcher.h"
 #include <fstream>
 

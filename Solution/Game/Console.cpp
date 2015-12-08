@@ -2,6 +2,23 @@
 #include "Console.h"
 #include <InputWrapper.h>
 
+Console* Console::myInstance = nullptr;
+
+Console* Console::GetInstance()
+{
+	if (myInstance == nullptr)
+	{
+		myInstance = new Console();
+	}
+
+	return myInstance;
+}
+
+void Console::Destroy()
+{
+	delete myInstance;
+}
+
 Console::Console()
 {
 }

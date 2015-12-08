@@ -13,6 +13,8 @@
 //
 //////////////////////////////////////////////////////////////////////
 
+#include "stdafx.h"
+
 #include "AkFilePackage.h"
 
 // Destroy file package and free memory / destroy pool.

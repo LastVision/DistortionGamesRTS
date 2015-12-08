@@ -29,6 +29,8 @@
 #include "ScriptInterface.h"
 #include <ScriptSystem.h>
 
+
+#include "Console.h"
 Game::Game()
 	: myLockMouse(true)
 #ifdef RELEASE_BUILD
@@ -57,6 +59,8 @@ Game::~Game()
 	Prism::StreakDataContainer::Destroy();
 	Prism::ParticleDataContainer::Destroy();
 	CU::InputWrapper::Destroy();
+	CU::TimerManager::Destroy();
+	Console::Destroy();
 	PostMaster::Destroy();
 	myStateStack.Clear();
 	Prism::DebugDrawer::Destroy();
@@ -77,8 +81,8 @@ bool Game::Init(HWND& aHwnd)
 	CU::InputWrapper::Create(aHwnd, GetModuleHandle(NULL), DISCL_NONEXCLUSIVE 
 		| DISCL_FOREGROUND, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND);
 	
-	PostMaster::GetInstance()->SendMessage(GameStateMessage(eGameState::LOAD_GAME, 1));
 
+	Console::GetInstance();
 
 	LUA::ScriptSystem::Create();
 	LUA::ScriptSystem::GetInstance()->Init(ScriptInterface::RegisterFunctions);
@@ -86,6 +90,7 @@ bool Game::Init(HWND& aHwnd)
 	//myMainMenu = new MainMenuState();
 	//myStateStack.PushMainGameState(myMainMenu);
 
+	PostMaster::GetInstance()->SendMessage(GameStateMessage(eGameState::LOAD_GAME, 1));
 	GAME_LOG("Init Successful");
 	return true;
 }
@@ -101,13 +106,13 @@ bool Game::Update()
 
 	CU::InputWrapper::GetInstance()->Update();
 	CU::TimerManager::GetInstance()->Update();
+	Console::GetInstance()->Update();
 	float deltaTime = CU::TimerManager::GetInstance()->GetMasterTimer().GetTime().GetFrameTime();
 	//float realDeltaTime = deltaTime;
 	if (deltaTime > 1.0f / 10.0f)
 	{
 		deltaTime = 1.0f / 10.0f;
 	}
-
 
 	if (myLockMouse == true)
 	{
