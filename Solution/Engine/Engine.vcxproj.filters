@@ -391,6 +391,9 @@
     <ClInclude Include="DGFXLoader.h">
       <Filter>FBX</Filter>
     </ClInclude>
+    <ClInclude Include="TextureHelper.h">
+      <Filter>Rendering\Texture</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Precompile">

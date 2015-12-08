@@ -337,6 +337,7 @@
     <ClInclude Include="TextParser.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TextureContainer.h" />
+    <ClInclude Include="TextureHelper.h" />
     <ClInclude Include="Tga32.h" />
     <ClInclude Include="Token.h" />
     <ClInclude Include="TransformationNode.h" />
