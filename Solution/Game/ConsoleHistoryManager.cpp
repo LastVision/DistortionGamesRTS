@@ -12,7 +12,7 @@ ConsoleHistoryManager::ConsoleHistoryManager()
 	CreateDirectory(tempPath.c_str(), NULL);
 	std::string temp = tempPath + "\\CommandHistory.txt";
 	myHistoryFile = temp.c_str();
-	myHistory.Init(1024);
+	myHistory.Reserve(1024);
 }
 
 ConsoleHistoryManager::~ConsoleHistoryManager()

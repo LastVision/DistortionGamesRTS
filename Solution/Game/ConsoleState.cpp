@@ -38,6 +38,8 @@ void ConsoleState::EndState()
 
 const eStateStatus ConsoleState::Update(const float& aDeltaTime)
 {
+	Console::GetInstance()->Update();
+	
 	if (CU::InputWrapper::GetInstance()->KeyUp(DIK_GRAVE) == true)
 	{
 		myStateStatus = ePopSubState;
@@ -64,7 +66,6 @@ const eStateStatus ConsoleState::Update(const float& aDeltaTime)
 		myMarkerBlinker = !myMarkerBlinker;
 		myRenderTime = 0.f;
 	}
-	//	Console::GetInstance()->Update();
 
 	return myStateStatus;
 }

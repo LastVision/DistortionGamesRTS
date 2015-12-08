@@ -132,8 +132,7 @@ const eStateStatus InGameState::Update(const float& aDeltaTime)
 		LUA::ScriptSystem::GetInstance()->CallFunction("UpdateCinematic", { { aDeltaTime }, {float(myCinematicIndex) }});
 	}
 
-	LUA::ScriptSystem::GetInstance()->Update();
-	Console::GetInstance()->Update();
+	
 
 	return myStateStatus;
 }

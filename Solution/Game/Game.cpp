@@ -78,9 +78,9 @@ bool Game::Init(HWND& aHwnd)
 	PostMaster::GetInstance()->Subscribe(eMessageType::FADE, this);
 
 	Prism::Engine::GetInstance()->SetClearColor({ MAGENTA });
-	CU::InputWrapper::Create(aHwnd, GetModuleHandle(NULL), DISCL_NONEXCLUSIVE 
+	CU::InputWrapper::Create(aHwnd, GetModuleHandle(NULL), DISCL_NONEXCLUSIVE
 		| DISCL_FOREGROUND, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND);
-	
+
 
 	Console::GetInstance();
 
@@ -104,7 +104,7 @@ bool Game::Update()
 {
 	CU::InputWrapper::GetInstance()->Update();
 	CU::TimerManager::GetInstance()->Update();
-	
+
 	float deltaTime = CU::TimerManager::GetInstance()->GetMasterTimer().GetTime().GetFrameTime();
 	//float realDeltaTime = deltaTime;
 	if (deltaTime > 1.0f / 10.0f)
@@ -125,7 +125,7 @@ bool Game::Update()
 			windowRect.bottom -= 10;
 		}
 		ClipCursor(&windowRect);
-	}	
+	}
 
 	if (myStateStack.UpdateCurrentState(deltaTime) == false)
 	{
@@ -143,7 +143,11 @@ bool Game::Update()
 	{
 		//LUA::ScriptSystem::GetInstance()->RunLuaFromString("Print(\"apa\")");
 	}
-		run = false;
+	run = false;
+
+	LUA::ScriptSystem::GetInstance()->Update();
+	//Console::GetInstance()->Update();
+
 	return true;
 }
 
@@ -156,7 +160,7 @@ void Game::Pause()
 void Game::UnPause()
 {
 	myLockMouse = true;
-	ShowCursor(false);	
+	ShowCursor(false);
 }
 
 void Game::OnResize(int aWidth, int aHeight)
