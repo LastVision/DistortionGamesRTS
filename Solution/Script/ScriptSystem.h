@@ -48,6 +48,7 @@ namespace LUA
 		struct Documentation
 		{
 			std::string myFunction;
+			std::string myFunctionLowerCase;
 			std::string myArguments;
 			std::string myHelpText;
 		};
