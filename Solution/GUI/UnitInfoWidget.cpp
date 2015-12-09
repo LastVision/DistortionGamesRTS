@@ -83,6 +83,8 @@ namespace GUI
 					position.x += myBuildingPortrait->GetSize().x * 2.f;
 					position.y += myBuildingPortrait->GetSize().y / 2.f;
 					myBuildingTimer->Render(position);
+					position.y += myBuildingTimer->GetSize().y + 10.f;
+					Prism::Engine::GetInstance()->PrintText(myBuilding.GetSpawnQueueSize(), position, Prism::eTextType::RELEASE_TEXT);
 				}
 			}
 		}

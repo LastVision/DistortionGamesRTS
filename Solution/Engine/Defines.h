@@ -5,6 +5,7 @@
 #define NUMBER_OF_SPOT_LIGHTS 3
 #define MAX_NR_OF_BONES 64
 #define OCTREE_WIDTH 10000.f
+//#define USE_DGFX
 
 //#define ENABLE_DEBUG_TEXT
 #ifndef DLL_EXPORT

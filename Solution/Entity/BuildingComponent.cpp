@@ -8,11 +8,14 @@
 
 BuildingComponent::BuildingComponent(Entity& aEntity, BuildingCompnentData& aData)
 	: Component(aEntity)
-	, myBuildTypes(aData.myBuildUnitTypes)
-	, myEntityToSpawn(eEntityType::EMPTY)
 	, myCurrentBuildTime(0.f)
 	, myMaxBuildTime(1.f)
+	, mySpawnQueueIndex(-1)
 {
+	for (int i = 0; i <= 4; i++)
+	{
+		mySpawnQueue[i] = eEntityType::EMPTY;
+	}
 }
 
 BuildingComponent::~BuildingComponent()
@@ -21,24 +24,31 @@ BuildingComponent::~BuildingComponent()
 
 void BuildingComponent::Update(float aDeltaTime)
 {
-	if (myEntityToSpawn != eEntityType::EMPTY)
+	if (mySpawnQueue[0] != eEntityType::EMPTY)
 	{
 		myCurrentBuildTime += aDeltaTime;
 
 		if (myCurrentBuildTime >= myMaxBuildTime)
 		{
-			PostMaster::GetInstance()->SendMessage(SpawnUnitMessage(myEntityToSpawn, myEntity.GetOwner(), myEntity.GetScene()));
-			myEntityToSpawn = eEntityType::EMPTY;
+			PostMaster::GetInstance()->SendMessage(SpawnUnitMessage(mySpawnQueue[0], myEntity.GetOwner(), myEntity.GetScene()));
+
+			for (int i = 0; i < mySpawnQueueIndex && i <= 3; i++)
+			{
+				mySpawnQueue[i] = mySpawnQueue[i + 1];
+			}
+
+			mySpawnQueue[mySpawnQueueIndex] = eEntityType::EMPTY;
 			myCurrentBuildTime = 0.f;
+			mySpawnQueueIndex--;
 		}
 	}
 }
 
 void BuildingComponent::BuildUnit(eEntityType aUnitType)
 {
-	if (myEntityToSpawn == eEntityType::EMPTY)
+	if (mySpawnQueueIndex < 4)
 	{
-		myEntityToSpawn = aUnitType;
-		myCurrentBuildTime = 0.f;
+		mySpawnQueueIndex++;
+		mySpawnQueue[mySpawnQueueIndex] = aUnitType;
 	}
 }
