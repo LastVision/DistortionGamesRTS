@@ -26,7 +26,8 @@ namespace Prism
 	{
 	public:
 		Terrain(const std::string& aHeightMapPath, const std::string& aTexturePath
-			, const CU::Vector2<float>& aSize, float aHeight, const CU::Matrix44<float>& aOrientation);
+			, const CU::Vector2<float>& aSize, float aHeight, const CU::Matrix44<float>& aOrientation
+			, const std::string& aIceInfluence);
 		~Terrain();
 
 		void Render(const Camera& aCamera);
