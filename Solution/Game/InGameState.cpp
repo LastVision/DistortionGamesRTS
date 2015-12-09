@@ -176,11 +176,14 @@ void InGameState::ReceiveMessage(const GameStateMessage& aMessage)
 		break;
 
 	case eGameState::COMPLETE_LEVEL:
-
+		CompleteLevel();
 		break;
 
 	case eGameState::LOAD_NEXT_LEVEL:
-
+		runtime = Prism::MemoryTracker::GetInstance()->GetRunTime();
+		Prism::MemoryTracker::GetInstance()->SetRunTime(false);
+		myLevel = myLevelFactory->LoadNextLevel();
+		Prism::MemoryTracker::GetInstance()->SetRunTime(runtime);
 		break;
 	}
 }
