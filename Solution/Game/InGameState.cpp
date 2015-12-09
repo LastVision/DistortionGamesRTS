@@ -97,7 +97,7 @@ const eStateStatus InGameState::Update(const float& aDeltaTime)
 		myStateStack->PushSubGameState(newState);
 		Prism::MemoryTracker::GetInstance()->SetRunTime(runtime);
 	}
-	
+
 	if (myIsPlayerCinematic == false)
 	{
 		if (CU::InputWrapper::GetInstance()->KeyDown(DIK_M) == true)
@@ -124,15 +124,15 @@ const eStateStatus InGameState::Update(const float& aDeltaTime)
 			RestartLevel();
 		}
 
-		
+
 		LUA::ScriptSystem::GetInstance()->CallFunction("Update", { aDeltaTime });
 	}
 	else
 	{
-		LUA::ScriptSystem::GetInstance()->CallFunction("UpdateCinematic", { { aDeltaTime }, {float(myCinematicIndex) }});
+		LUA::ScriptSystem::GetInstance()->CallFunction("UpdateCinematic", { { aDeltaTime }, { float(myCinematicIndex) } });
 	}
 
-	
+
 
 	return myStateStatus;
 }
@@ -176,7 +176,14 @@ void InGameState::ReceiveMessage(const GameStateMessage& aMessage)
 		break;
 
 	case eGameState::COMPLETE_LEVEL:
-		CompleteLevel();
+		if (myLevelFactory->IsLastLevel() == true)
+		{
+			PostMaster::GetInstance()->SendMessage(OnClickMessage(eOnClickEvent::GAME_WIN));
+		}
+		else 
+		{
+			CompleteLevel();
+		}
 		break;
 
 	case eGameState::LOAD_NEXT_LEVEL:
@@ -326,19 +333,19 @@ void InGameState::UpdateCamera(float aDeltaTime, const CU::Vector3<float>& aCame
 
 	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_UPARROW) == true)
 	{
-		myCameraOrientation = CU::Matrix44<float>::CreateRotateAroundX(-rotationSpeed) * myCameraOrientation;
+	myCameraOrientation = CU::Matrix44<float>::CreateRotateAroundX(-rotationSpeed) * myCameraOrientation;
 	}
 	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_DOWNARROW) == true)
 	{
-		myCameraOrientation = CU::Matrix44<float>::CreateRotateAroundX(rotationSpeed) * myCameraOrientation;
+	myCameraOrientation = CU::Matrix44<float>::CreateRotateAroundX(rotationSpeed) * myCameraOrientation;
 	}
 	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_LEFTARROW) == true)
 	{
-		myCameraOrientation = CU::Matrix44<float>::CreateRotateAroundY(-rotationSpeed) * myCameraOrientation;
+	myCameraOrientation = CU::Matrix44<float>::CreateRotateAroundY(-rotationSpeed) * myCameraOrientation;
 	}
 	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_RIGHTARROW) == true)
 	{
-		myCameraOrientation = CU::Matrix44<float>::CreateRotateAroundY(rotationSpeed) * myCameraOrientation;
+	myCameraOrientation = CU::Matrix44<float>::CreateRotateAroundY(rotationSpeed) * myCameraOrientation;
 	}*/
 }
 
