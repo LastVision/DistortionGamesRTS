@@ -9,6 +9,7 @@
 #include "ControllerComponentData.h"
 #include "GraphicsComponentData.h"
 #include "HealthComponentData.h"
+#include "TriggerComponentData.h"
 #include <XMLReader.h>
 
 void ComponentLoader::LoadActorComponent(XMLReader& aDocument, tinyxml2::XMLElement* aSourceElement, ActorComponentData& aOutputData)
@@ -177,10 +178,45 @@ void ComponentLoader::LoadHealthComponent(XMLReader& aDocument, tinyxml2::XMLEle
 	}
 }
 
+void ComponentLoader::LoadTriggerComponent(XMLReader& aDocument, tinyxml2::XMLElement* aSourceElement, TriggerComponentData& aOutputData)
+{
+	aOutputData.myExistsInEntity = true;
+
+	for (tinyxml2::XMLElement* e = aDocument.FindFirstChild(aSourceElement); e != nullptr; e = aDocument.FindNextElement(e))
+	{
+		std::string elementName = CU::ToLower(e->Name());
+		if (elementName == CU::ToLower("Radius"))
+		{
+			aDocument.ForceReadAttribute(e, "value", aOutputData.myRadius);
+		}
+		else if (elementName == "type")
+		{
+			std::string typeString;
+			aDocument.ForceReadAttribute(e, "value", typeString);
+			typeString = CU::ToLower(typeString);
+			if (typeString == "resource")
+			{
+				aOutputData.myType = eTriggerType::RESOURCE;
+			}
+			else
+			{
+				DL_ASSERT("Unknown trigger type.");
+			}
+		}
+		else
+		{
+			FailedToReadChildElementMessage(e->Name(), aSourceElement->Name());
+		}
+	}
+}
 
 const eEntityType ComponentLoader::ConvertStringToEntityType(const std::string& entityType)
 {
-	if (entityType == "dragon")
+	if (entityType == "basebuilding")
+	{
+		return eEntityType::BASE_BUILING;
+	}
+	else if (entityType == "dragon")
 	{
 		return eEntityType::DRAGON;
 	}
@@ -192,9 +228,9 @@ const eEntityType ComponentLoader::ConvertStringToEntityType(const std::string& 
 	{
 		return eEntityType::PINE_TREE;
 	}
-	else if (entityType == "basebuilding")
+	else if (entityType == "resourcepoint")
 	{
-		return eEntityType::BASE_BUILING;
+		return eEntityType::RESOURCE_POINT;
 	}
 	DL_ASSERT("This type is not supported, please tell Daniel about it.");
 	return eEntityType::_COUNT;
