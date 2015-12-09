@@ -63,20 +63,37 @@ const eStateStatus ConsoleState::Update(const float& aDeltaTime)
 	if (CU::InputWrapper::GetInstance()->KeyUp(DIK_RETURN) == true)
 	{
 		myShouldReOpenConsole = true;
-		Console::GetInstance()->GetConsoleHistory()->AddHistory(Console::GetInstance()->GetInput());
-
+		const std::string& consoleInput = Console::GetInstance()->GetInput();
+		Console::GetInstance()->GetConsoleHistory()->AddHistory(consoleInput);
 		std::string errorString;
-		if (Console::GetInstance()->GetInput().find("help") == 0)
+		if (consoleInput.find("help") == 0)
 		{
-			const CU::GrowingArray<std::string>& allFunctions = Console::GetInstance()->GetConsoleHelp()->GetAllFunction();
-			for (int i = 0; i < allFunctions.Size(); ++i)
+			if (consoleInput == "help")
 			{
-				Console::GetInstance()->GetConsoleHistory()->AddHistory(allFunctions[i], eHistoryType::HELP);
+				const CU::GrowingArray<std::string>& allFunctions = Console::GetInstance()->GetConsoleHelp()->GetAllFunction();
+				for (int i = 0; i < allFunctions.Size(); ++i)
+				{
+					Console::GetInstance()->GetConsoleHistory()->AddHistory(allFunctions[i], eHistoryType::HELP);
+				}
+			}
+			else 
+			{
+				std::string helpFunctionName = CU::GetSubString(consoleInput, " ", true, 2);
+				const ConsoleLuaHelp& helpDoc = Console::GetInstance()->GetConsoleHelp()->GetHelpText(helpFunctionName);
+				if (helpDoc.myFunctionName != "")
+				{
+					Console::GetInstance()->GetConsoleHistory()->AddHistory(helpDoc.myFunctionName + "(" + helpDoc.myArguments + ")", eHistoryType::HELP);
+					Console::GetInstance()->GetConsoleHistory()->AddHistory(helpDoc.myHelpText, eHistoryType::HELP);
+				}
+				else 
+				{
+					Console::GetInstance()->GetConsoleHistory()->AddHistory("There is no such command. Did you mean <insert command>?", eHistoryType::ERROR);
+				}
 			}
 		}
-		else if (LUA::ScriptSystem::GetInstance()->ValidateLuaString(Console::GetInstance()->GetInput(), errorString))
+		else if (LUA::ScriptSystem::GetInstance()->ValidateLuaString(consoleInput, errorString))
 		{
-			LUA::ScriptSystem::GetInstance()->RunLuaFromString(Console::GetInstance()->GetInput());
+			LUA::ScriptSystem::GetInstance()->RunLuaFromString(consoleInput);
 			Console::GetInstance()->ClearInput();
 		}
 		else
