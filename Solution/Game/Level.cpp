@@ -10,6 +10,7 @@
 #include <EngineEnums.h>
 #include <Entity.h>
 #include <EntityFactory.h>
+#include <GameStateMessage.h>
 #include <GraphicsComponent.h>
 #include <InputWrapper.h>
 #include <Intersection.h>
@@ -18,6 +19,7 @@
 #include <ModelLoader.h>
 #include "PlayerDirector.h"
 #include "PollingStation.h"
+#include <PostMaster.h>
 #include <Scene.h>
 #include <Terrain.h>
 
@@ -70,6 +72,11 @@ bool Level::Update(float aDeltaTime, Prism::Camera& aCamera)
 	/*Prism::RenderLine3D({ 0.f, 0.f, 0.f }, { 100.f, 100.f, 100.f }, eColorDebug::BLACK, eColorDebug::GREEN);
 	Prism::RenderBox({ 128.f, 129.f, 128.f }, eColorDebug::BLUE, false);*/
 	//DEBUG_PRINT(myEntities[0]->GetOrientation().GetPos());
+
+	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_F2))
+	{
+		PostMaster::GetInstance()->SendMessage(GameStateMessage(eGameState::COMPLETE_LEVEL));
+	}
 
 	myPlayer->Update(aDeltaTime, aCamera);
 	myAI->Update(aDeltaTime);

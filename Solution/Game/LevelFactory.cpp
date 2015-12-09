@@ -506,12 +506,16 @@ void LevelFactory::LoadTerrain(const std::string& aLevelPath)
 	levelElement = reader.ForceFindFirstChild(levelElement, "scene");
 	std::string heightMap;
 	std::string texturePath;
+	std::string icePath;
 
 	tinyxml2::XMLElement* terrainElement = reader.FindFirstChild(levelElement, "terrain");
 	reader.ForceReadAttribute(terrainElement, "heightmap", heightMap);
 	reader.ForceReadAttribute(terrainElement, "texture", texturePath);
 
-	myTerrain = new Prism::Terrain(heightMap, texturePath, { 256.f, 256.f }, 10.f, CU::Matrix44<float>());
+	tinyxml2::XMLElement* iceElement = reader.FindFirstChild(levelElement, "ice");
+	reader.ForceReadAttribute(iceElement, "texture", icePath);
+
+	myTerrain = new Prism::Terrain(heightMap, texturePath, { 256.f, 256.f }, 10.f, CU::Matrix44<float>(), icePath);
 	reader.CloseDocument();
 }
 
