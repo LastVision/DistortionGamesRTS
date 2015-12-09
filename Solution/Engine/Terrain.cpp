@@ -125,6 +125,10 @@ namespace Prism
 
 		returnPosition.y = CU::Math::Lerp<float>(lowerY, upperY, alphaZ);
 
+		if (returnPosition.y < myIce->GetHeight())
+		{
+			returnPosition.y = myIce->GetHeight();
+		}
 		returnPosition.y += aHeightOffset;
 		return returnPosition;
 	}
