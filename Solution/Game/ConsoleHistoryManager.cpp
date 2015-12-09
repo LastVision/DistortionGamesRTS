@@ -52,11 +52,17 @@ void ConsoleHistoryManager::Load()
 		std::string identifier = CU::GetSubString(line, ' ', false);
 		std::stringstream error;
 		error << int(eHistoryType::ERROR);
+		std::stringstream help;
+		help << int(eHistoryType::HELP);
 
 		eHistoryType type;
 		if (identifier == error.str().c_str())
 		{
 			type = eHistoryType::ERROR;
+		}
+		else if (identifier == help.str().c_str())
+		{
+			type = eHistoryType::HELP;
 		}
 		else
 		{
