@@ -23,7 +23,8 @@
 namespace Prism
 {
 	Terrain::Terrain(const std::string& aHeightMapPath, const std::string& aTexturePath
-			, const CU::Vector2<float>& aSize, float aHeight, const CU::Matrix44<float>& aOrientation)
+			, const CU::Vector2<float>& aSize, float aHeight, const CU::Matrix44<float>& aOrientation
+			, const std::string& aIceInfluence)
 		: myHeightMap(HeightMapFactory::Create(aHeightMapPath.c_str()))
 		, mySize(aSize)
 		, myHeight(aHeight)
@@ -72,7 +73,7 @@ namespace Prism
 		myCellSize = mySize.x / myHeightMap->myWidth;
 
 		myIce = new Ice(EffectContainer::GetInstance()->GetEffect("Data/Resource/Shader/S_effect_ice.fx")
-			, { 256.f, 256.f }, 1.25f);
+			, { 256.f, 256.f }, 1.25f, aIceInfluence);
 		myIce->SetTextures();
 	}
 

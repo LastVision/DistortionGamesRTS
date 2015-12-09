@@ -9,7 +9,7 @@
 
 namespace Prism
 {
-	Ice::Ice(Effect* aEffect, const CU::Vector2<float>& aSize, float aHeight)
+	Ice::Ice(Effect* aEffect, const CU::Vector2<float>& aSize, float aHeight, const std::string& aFilePath)
 		: mySize(aSize)
 		, myHeight(aHeight)
 	{
@@ -57,7 +57,7 @@ namespace Prism
 		InitVertexBuffer(sizeof(VertexPosNormUVBiTang), D3D11_USAGE_IMMUTABLE, 0);
 
 		InitIndexBuffer();
-		InitSurface("AlbedoTexture", "Data/Resource/Texture/Terrain/Ice/T_ice_influence_to_splat_map.dds");
+		InitSurface("AlbedoTexture", aFilePath);
 
 		InitBlendState("Ice::BlendState");
 
