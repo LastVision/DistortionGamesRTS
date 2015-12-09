@@ -147,12 +147,12 @@ namespace Prism
 				case Prism::ModelLoader::eLoadType::MODEL:
 				{
 #ifdef USE_DGFX
-					Model* model = myModelFactory->LoadModel(myLoadArray[i].myModelPath.c_str(),
-						EffectContainer::GetInstance()->GetEffect(myLoadArray[i].myEffectPath));
-#else
-					myModelFactory->ConvertToDGFX(myLoadArray[i].myModelPath.c_str());
+					//myModelFactory->ConvertToDGFX(myLoadArray[i].myModelPath.c_str());
 					Model* model = myDGFXLoader->LoadModel(myLoadArray[i].myModelPath.c_str()
 						, EffectContainer::GetInstance()->GetEffect(myLoadArray[i].myEffectPath));
+#else
+					Model* model = myModelFactory->LoadModel(myLoadArray[i].myModelPath.c_str(),
+						EffectContainer::GetInstance()->GetEffect(myLoadArray[i].myEffectPath));
 #endif
 					
 					myLoadArray[i].myProxy->SetModel(model);
@@ -162,7 +162,7 @@ namespace Prism
 				case Prism::ModelLoader::eLoadType::MODEL_ANIMATED:
 				{
 #ifdef USE_DGFX
-					myModelFactory->ConvertToDGFX(myLoadArray[i].myModelPath.c_str());
+					//myModelFactory->ConvertToDGFX(myLoadArray[i].myModelPath.c_str());
 					ModelAnimated* model = myDGFXLoader->LoadAnimatedModel(myLoadArray[i].myModelPath.c_str()
 					, EffectContainer::GetInstance()->GetEffect(myLoadArray[i].myEffectPath));
 					
@@ -177,7 +177,7 @@ namespace Prism
 				case Prism::ModelLoader::eLoadType::ANIMATION:
 				{
 #ifdef USE_DGFX
-					myModelFactory->ConvertToDGFX(myLoadArray[i].myModelPath.c_str());
+					//myModelFactory->ConvertToDGFX(myLoadArray[i].myModelPath.c_str());
 					myLoadArray[i].myAnimationProxy->myAnimation = myDGFXLoader->LoadAnimation(myLoadArray[i].myModelPath.c_str());
 #else
 					myLoadArray[i].myAnimationProxy->myAnimation 

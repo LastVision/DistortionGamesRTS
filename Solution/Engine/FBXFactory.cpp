@@ -490,7 +490,6 @@ Prism::Model* Prism::FBXFactory::LoadModel(const char* aFilePath, Effect* aEffec
 		return myModels[aFilePath];
 	}
 #endif
-	DL_DEBUG("Load Model %s", aFilePath);
 	CU::TimerManager::GetInstance()->StartTimer("LoadModel");
 	FBXData* found = 0;
 	for (FBXData* data : myFBXData)
@@ -538,11 +537,11 @@ Prism::Model* Prism::FBXFactory::LoadModel(const char* aFilePath, Effect* aEffec
 
 	if (elapsed > 700)
 	{
-		RESOURCE_LOG("Model \"%s\" took %d ms to load!!!", aFilePath, elapsed);
+		RESOURCE_LOG("FBX-Model \"%s\" took %d ms to load!!!", aFilePath, elapsed);
 	}
 	else
 	{
-		RESOURCE_LOG("Model \"%s\" took %d ms to load", aFilePath, elapsed);
+		RESOURCE_LOG("FBX-Model \"%s\" took %d ms to load", aFilePath, elapsed);
 	}
 	
 	return returnModel;
@@ -557,7 +556,6 @@ Prism::ModelAnimated* Prism::FBXFactory::LoadModelAnimated(const char* aFilePath
 	}
 #endif
 
-	DL_DEBUG("Load Animated Model %s", aFilePath);
 	CU::TimerManager::GetInstance()->StartTimer("LoadModelAnimated");
 	FBXData* found = 0;
 	for (FBXData* data : myFBXData)
@@ -605,11 +603,11 @@ Prism::ModelAnimated* Prism::FBXFactory::LoadModelAnimated(const char* aFilePath
 
 	if (elapsed > 700)
 	{
-		RESOURCE_LOG("Animated Model \"%s\" took %d ms to load!!!", aFilePath, elapsed);
+		RESOURCE_LOG("Animated FBX-Model \"%s\" took %d ms to load!!!", aFilePath, elapsed);
 	}
 	else
 	{
-		RESOURCE_LOG("Animated Model \"%s\" took %d ms to load", aFilePath, elapsed);
+		RESOURCE_LOG("Animated FBX-Model \"%s\" took %d ms to load", aFilePath, elapsed);
 	}
 
 	return returnModel;
@@ -617,6 +615,7 @@ Prism::ModelAnimated* Prism::FBXFactory::LoadModelAnimated(const char* aFilePath
 
 Prism::Animation* Prism::FBXFactory::LoadAnimation(const char* aFilePath)
 {
+	CU::TimerManager::GetInstance()->StartTimer("LoadAnimationFBX");
 	FBXData* found = 0;
 	for (FBXData* data : myFBXData)
 	{
@@ -643,22 +642,19 @@ Prism::Animation* Prism::FBXFactory::LoadAnimation(const char* aFilePath)
 		modelData = data->myData;
 	}
 
+	Animation* animation = nullptr;
 	if (modelData->myAnimation != nullptr && modelData->myAnimation->myRootBone != -1
 		&& modelData->myAnimation->myBones.size() > 0)
 	{
-		return FillBoneAnimationData(modelData, nullptr);
+		animation = FillBoneAnimationData(modelData, nullptr);
 	}
-	//else
-	//{
-	//	for (int i = 0; i < modelData->myChildren.Size(); ++i)
-	//	{
-	//		auto currentChild = modelData->myChildren[i];
-	//		return FillBoneAnimationData(modelData->myChildren[i], nullptr);
-	//	}
-	//}
 
-	DL_ASSERT("Failed to load animation, please tell Niklas or Daniel");
-	return nullptr;
+	DL_ASSERT_EXP(animation != nullptr, "Failed to load animation, please tell Niklas or Daniel");
+
+	int elapsed = static_cast<int>(
+		CU::TimerManager::GetInstance()->StopTimer("LoadAnimationFBX").GetMilliseconds());
+	RESOURCE_LOG("FBX-Animation \"%s\" took %d ms to load", aFilePath, elapsed);
+	return animation;
 }
 
 void Prism::FBXFactory::LoadModelForRadiusCalc(const char* aFilePath
@@ -672,7 +668,6 @@ void Prism::FBXFactory::LoadModelForRadiusCalc(const char* aFilePath
 
 void Prism::FBXFactory::ConvertToDGFX(const char* aFilePath)
 {
-	DL_DEBUG("Convert To DGFX %s", aFilePath);
 	CU::TimerManager::GetInstance()->StartTimer("ConvertDGFX");
 
 	FBXData* data = new FBXData();
@@ -693,7 +688,7 @@ void Prism::FBXFactory::ConvertToDGFX(const char* aFilePath)
 
 	int elapsed = static_cast<int>(
 		CU::TimerManager::GetInstance()->StopTimer("ConvertDGFX").GetMilliseconds());
-	RESOURCE_LOG("Converting FBX->DGFX \"%s\" took %d ms to load", aFilePath, elapsed);
+	RESOURCE_LOG("Converting FBX->DGFX \"%s\" took %d ms", aFilePath, elapsed);
 
 	delete data;
 }

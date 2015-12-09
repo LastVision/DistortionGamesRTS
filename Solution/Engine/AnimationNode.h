@@ -19,6 +19,7 @@ namespace Prism
 
 		void AddValue(const AnimationNodeValue& aFrame);
 		bool HasValues() const;
+		void CalculateEndTime();
 
 		CU::Matrix44<float> GetCurrentMatrix(float aTime);
 		float GetAnimationLenght();

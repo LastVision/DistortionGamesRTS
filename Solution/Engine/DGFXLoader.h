@@ -11,6 +11,22 @@
 	FILEFORMAT / FILELAYOUT
 -------------------------------
 
+
+
+	------------------------------------------------------
+		TYPE	|	INFO
+	------------------------------------------------------
+		int		|	isNullObject, is 0 if the model is NOT a nullObject
+				|	and is 1 if the model IS a nullObject
+	------------------------------------------------------
+		int		|	isLodgroup, is 0 if the model is NOT a lodGroup
+				|	and is 1 if the model IS a lodGroup
+	-----------------------------------------------------
+		int		|	isAnimated, is 0 if the model is NOT animated
+				|	and is 1 if the model IS animated
+
+
+
 isNullObject - int, either 0 or 1 (false/true)
 isLodGroup - int, either 0 or 1 (false/true)
 isAnimated - int, either 0 or 1 (false/true)
@@ -129,6 +145,7 @@ namespace Prism
 
 		std::unordered_map<std::string, Model*> myModels;
 		std::unordered_map<std::string, ModelAnimated*> myModelsAnimated;
+		std::unordered_map<std::string, Animation*> myAnimations;
 	};
 
 }

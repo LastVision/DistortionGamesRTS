@@ -46,7 +46,6 @@ namespace Prism
 		dgfxFile[dgfxFile.length() - 2] = 'g';
 		dgfxFile[dgfxFile.length() - 1] = 'f';
 		dgfxFile += 'x';
-		DL_DEBUG("Load DGFX %s", dgfxFile.c_str());
 		CU::TimerManager::GetInstance()->StartTimer("LoadDGFX");
 
 
@@ -59,7 +58,7 @@ namespace Prism
 		newModel->Init();
 		int elapsed = static_cast<int>(
 			CU::TimerManager::GetInstance()->StopTimer("LoadDGFX").GetMilliseconds());
-		RESOURCE_LOG("DGFX \"%s\" took %d ms to load", dgfxFile.c_str(), elapsed);
+		RESOURCE_LOG("DGFX-Model \"%s\" took %d ms to load", dgfxFile.c_str(), elapsed);
 
 		myModels[aFilePath] = newModel;
 
@@ -78,20 +77,21 @@ namespace Prism
 		dgfxFile[dgfxFile.length() - 2] = 'g';
 		dgfxFile[dgfxFile.length() - 1] = 'f';
 		dgfxFile += 'x';
-		DL_DEBUG("Load Animated DGFX %s", dgfxFile.c_str());
-		CU::TimerManager::GetInstance()->StartTimer("LoadDGFX");
+		CU::TimerManager::GetInstance()->StartTimer("LoadDGFXAnimated");
 
 
 		std::fstream file;
 		file.open(dgfxFile.c_str(), std::ios::in | std::ios::binary);
 
 		ModelAnimated* newModel = CreateModelAnimated(aEffect, file);
+
 		file.close();
 
 		newModel->Init();
+
 		int elapsed = static_cast<int>(
-			CU::TimerManager::GetInstance()->StopTimer("LoadDGFX").GetMilliseconds());
-		RESOURCE_LOG("Animated DGFX \"%s\" took %d ms to load", dgfxFile.c_str(), elapsed);
+			CU::TimerManager::GetInstance()->StopTimer("LoadDGFXAnimated").GetMilliseconds());
+		RESOURCE_LOG("Animated DGFX-Model \"%s\" took %d ms to load", dgfxFile.c_str(), elapsed);
 
 		myModelsAnimated[aFilePath] = newModel;
 
@@ -100,12 +100,16 @@ namespace Prism
 
 	Animation* DGFXLoader::LoadAnimation(const std::string& aFilePath)
 	{
+		if (myAnimations.find(aFilePath) != myAnimations.end())
+		{
+			return myAnimations[aFilePath];
+		}
+
 		std::string dgfxFile(aFilePath);
 		dgfxFile[dgfxFile.length() - 3] = 'd';
 		dgfxFile[dgfxFile.length() - 2] = 'g';
 		dgfxFile[dgfxFile.length() - 1] = 'f';
 		dgfxFile += 'x';
-		DL_DEBUG("Load Animation DGFX %s", dgfxFile.c_str());
 		CU::TimerManager::GetInstance()->StartTimer("LoadAnimationDGFX");
 
 		std::fstream stream;
@@ -128,7 +132,9 @@ namespace Prism
 
 		int elapsed = static_cast<int>(
 			CU::TimerManager::GetInstance()->StopTimer("LoadAnimationDGFX").GetMilliseconds());
-		RESOURCE_LOG("Animation DGFX \"%s\" took %d ms to load", dgfxFile.c_str(), elapsed);
+		RESOURCE_LOG("DGFX-Animation \"%s\" took %d ms to load", dgfxFile.c_str(), elapsed);
+
+		myAnimations[aFilePath] = animation;
 
 		return animation;
 	}
@@ -554,7 +560,7 @@ namespace Prism
 			newNode->myValues.Reserve(nrOfFrames);
 
 			aStream.read((char*)&newNode->myValues[0], sizeof(AnimationNodeValue) * nrOfFrames);
-
+			newNode->CalculateEndTime();
 
 			newNode->myBoneName = boneName;
 			newAnimation->AddAnimation(newNode);
