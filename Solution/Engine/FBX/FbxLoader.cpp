@@ -1314,12 +1314,12 @@ void SetLodGroup(FbxModelData* aModel, FbxNode* aNode)
 	int displayLevels = lLodGroupAttr->GetNumDisplayLevels();
 	for (int i = 0; i < displayLevels; i++)
 	{
-		Prism::Lod* lod = group->CreateLod();
+		Prism::Lod& lod = group->CreateLod();
 		FbxLODGroup::EDisplayLevel lLevel;
 		if (lLodGroupAttr->GetDisplayLevel(i, lLevel))
 		{
-			lod->myLevel = i;
-			lod->myUseLod = lLevel == FbxLODGroup::eUseLOD;
+			lod.myLevel = i;
+			lod.myUseLod = lLevel == FbxLODGroup::eUseLOD;
 		}
 
 	}

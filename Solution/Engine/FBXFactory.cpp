@@ -695,23 +695,83 @@ void Prism::FBXFactory::ConvertToDGFX(const char* aFilePath)
 		CU::TimerManager::GetInstance()->StopTimer("ConvertDGFX").GetMilliseconds());
 	RESOURCE_LOG("Converting FBX->DGFX \"%s\" took %d ms to load", aFilePath, elapsed);
 
-	delete fbxModelData;
+	delete data;
 }
+
+void Prism::FBXFactory::CreateModelForRadiusCalc(FbxModelData* someModelData, CU::GrowingArray<CU::Vector3<float>>& someVerticesOut
+	, const CU::Matrix44<float>& aParentOrientation)
+{
+	CU::Matrix44<float> orientation = someModelData->myOrientation * aParentOrientation;
+	orientation.NormalizeRotationVectors();
+	if (someModelData->myData)
+	{
+		FillDataForRadiusCalc(someModelData->myData, someVerticesOut, orientation);
+	}
+	for (int i = 0; i < someModelData->myChildren.Size(); ++i)
+	{
+		auto currentChild = someModelData->myChildren[i];
+		CreateModelForRadiusCalc(currentChild, someVerticesOut, orientation);
+	}
+}
+
+void Prism::FBXFactory::FillDataForRadiusCalc(ModelData* aModelData, CU::GrowingArray<CU::Vector3<float>>& someVerticesOut
+	, const CU::Matrix44<float>& aOrientation)
+{
+	int sizeOfBuffer = aModelData->myVertexCount*aModelData->myVertexStride*sizeof(float);
+	char* vertexRawData = new char[sizeOfBuffer];
+	memcpy(vertexRawData, aModelData->myVertexBuffer, sizeOfBuffer);
+
+	for (int i = 0; i < sizeOfBuffer - 3 * 4; i += aModelData->myVertexStride*sizeof(float))
+	{
+		CU::Vector3<float> position;
+		memcpy(&position, vertexRawData + i, 3 * 4);
+		position = position * aOrientation;
+		someVerticesOut.Add(position);
+	}
+	delete vertexRawData;
+}
+
 
 void Prism::FBXFactory::SaveModelToFile(FbxModelData* aModelData, std::fstream& aStream)
 {
-	int nullObject = 0;
+	int isNullObject = 1;
 	if (aModelData->myData)
 	{
-		nullObject = 1;
+		isNullObject = 0;
 	}
-	aStream.write((char*)&nullObject, sizeof(int)); //nullObject
+	aStream.write((char*)&isNullObject, sizeof(int)); //isNullObject
 
 
-	if (aModelData->myData)
+	int isLodGroup = 0;
+	if (aModelData->myLodGroup)
+	{
+		isLodGroup = 1;
+	}
+	aStream.write((char*)&isLodGroup, sizeof(int)); //isLodGroup
+
+	int isAnimated = 0;
+	if (aModelData->myAnimation != nullptr && aModelData->myAnimation->myRootBone != -1
+		&& aModelData->myAnimation->myBones.size() > 0)
+	{
+		isAnimated = 1;
+	}
+	aStream.write((char*)&isAnimated, sizeof(int)); //isAnimated
+
+
+	if (isNullObject == 0)
 	{
 		SaveModelDataToFile(aModelData->myData, aStream);
 		aStream.write((char*)&aModelData->myOrientation.myMatrix[0], sizeof(float) * 16);
+	}
+
+	if (isLodGroup == 1)
+	{
+		SaveLodGroupToFile(aModelData->myLodGroup, aStream);
+	}
+
+	if (isAnimated == 1)
+	{
+		SaveAnimationToFile(aModelData, aStream);
 	}
 
 	int childCount = aModelData->myChildren.Size();
@@ -760,36 +820,94 @@ void Prism::FBXFactory::SaveModelDataToFile(ModelData* aData, std::fstream& aStr
 	}
 }
 
-
-void Prism::FBXFactory::CreateModelForRadiusCalc(FbxModelData* someModelData, CU::GrowingArray<CU::Vector3<float>>& someVerticesOut
-	, const CU::Matrix44<float>& aParentOrientation)
+void Prism::FBXFactory::SaveLodGroupToFile(Prism::LodGroup* aGroup, std::fstream& aStream)
 {
-	CU::Matrix44<float> orientation = someModelData->myOrientation * aParentOrientation;
-	orientation.NormalizeRotationVectors();
-	if (someModelData->myData)
+	const int lodCount = aGroup->myLods.Size();
+	Prism::Lod* lods = new Prism::Lod[lodCount];
+
+	for (int i = 0; i < lodCount; ++i)
 	{
-		FillDataForRadiusCalc(someModelData->myData, someVerticesOut, orientation);
+		lods[i].myLevel = aGroup->myLods[i].myLevel;
+		lods[i].myUseLod = aGroup->myLods[i].myUseLod;
 	}
-	for (int i = 0; i < someModelData->myChildren.Size(); ++i)
-	{
-		auto currentChild = someModelData->myChildren[i];
-		CreateModelForRadiusCalc(currentChild, someVerticesOut, orientation);
-	}
+
+	aStream.write((char*)&lodCount, sizeof(int)); //Number of lods
+	aStream.write((char*)lods, sizeof(Prism::Lod) * lodCount);
+
+
+	const int threshHoldCount = aGroup->myThreshHolds.Size();
+	aStream.write((char*)&threshHoldCount, sizeof(int));
+	aStream.write((char*)&aGroup->myThreshHolds[0], sizeof(double) * threshHoldCount);
+
+	delete[] lods;
 }
 
-void Prism::FBXFactory::FillDataForRadiusCalc(ModelData* aModelData, CU::GrowingArray<CU::Vector3<float>>& someVerticesOut
-	, const CU::Matrix44<float>& aOrientation)
+void Prism::FBXFactory::SaveAnimationToFile(FbxModelData* aModelData, std::fstream& aStream)
 {
-	int sizeOfBuffer = aModelData->myVertexCount*aModelData->myVertexStride*sizeof(float);
-	char* vertexRawData = new char[sizeOfBuffer];
-	memcpy(vertexRawData, aModelData->myVertexBuffer, sizeOfBuffer);
+	auto loadedAnimation = aModelData->myAnimation;
 
-	for (int i = 0; i < sizeOfBuffer - 3 * 4; i += aModelData->myVertexStride*sizeof(float))
+	aStream.write((char*)&loadedAnimation->myBindMatrix.myMatrix[0], sizeof(float) * 16);
+
+	SaveBoneHierarchyToFile(loadedAnimation->myBones[loadedAnimation->myRootBone], loadedAnimation, aStream);
+
+
+	int nrOfbones = static_cast<int>(aModelData->myAnimation->myBones.size());
+	aStream.write((char*)&nrOfbones, sizeof(int));
+	for (int i = 0; i < nrOfbones; ++i)
 	{
-		CU::Vector3<float> position;
-		memcpy(&position, vertexRawData + i, 3 * 4);
-		position = position * aOrientation;
-		someVerticesOut.Add(position);
+		Bone& currentBone = aModelData->myAnimation->myBones[i];
+
+		int boneNameLenght = currentBone.myName.length();
+		aStream.write((char*)&boneNameLenght, sizeof(int));
+		const char* boneName = currentBone.myName.c_str();
+		aStream.write(boneName, sizeof(char) * boneNameLenght);
+
+
+		aStream.write((char*)&currentBone.myBaseOrientation.myMatrix[0], sizeof(float) * 16);
+		aStream.write((char*)&currentBone.myBindMatrix.myMatrix[0], sizeof(float) * 16);
+
+
+
+		int nrOfFrames = currentBone.myFrames.size();
+		aStream.write((char*)&nrOfFrames, sizeof(int));
+
+		AnimationNodeValue* nodeValues = new AnimationNodeValue[nrOfFrames];
+		for (int j = 0; j < nrOfFrames; ++j)
+		{
+			auto currentFrame = currentBone.myFrames[j];
+
+
+			nodeValues[j].myTime = currentFrame.myTime;
+			nodeValues[j].myMatrix = currentFrame.myMatrix;
+		}
+
+		aStream.write((char*)nodeValues, sizeof(AnimationNodeValue) * nrOfFrames);
+		delete[] nodeValues;
 	}
-	delete vertexRawData;
+
+
+	float animationLenght = aModelData->myAnimation->myBones[0].myAnimationTime;
+	aStream.write((char*)&animationLenght, sizeof(float));
+}
+
+void Prism::FBXFactory::SaveBoneHierarchyToFile(Bone& aBone, AnimationData* aAnimationData, std::fstream& aStream)
+{
+	aStream.write((char*)&aBone.myId, sizeof(int)); //BoneID
+
+	int boneNameLenght = aBone.myName.length();
+	aStream.write((char*)&boneNameLenght, sizeof(int)); //BoneNameLenght
+	const char* boneName = aBone.myName.c_str();
+	aStream.write(boneName, sizeof(char) * boneNameLenght); //BoneName
+
+
+	const int nrOfChildren = static_cast<int>(aBone.myChilds.size());
+	aStream.write((char*)&nrOfChildren, sizeof(int)); //nrOfChildren
+
+	if (nrOfChildren > 0)
+	{
+		for (int i = 0; i < nrOfChildren; ++i)
+		{
+			SaveBoneHierarchyToFile(aAnimationData->myBones[aBone.myChilds[i]], aAnimationData, aStream);
+		}
+	}
 }
