@@ -52,11 +52,17 @@ void ConsoleHistoryManager::Load()
 		std::string identifier = CU::GetSubString(line, ' ', false);
 		std::stringstream error;
 		error << int(eHistoryType::ERROR);
+		std::stringstream help;
+		help << int(eHistoryType::HELP);
 
 		eHistoryType type;
 		if (identifier == error.str().c_str())
 		{
 			type = eHistoryType::ERROR;
+		}
+		else if (identifier == help.str().c_str())
+		{
+			type = eHistoryType::HELP;
 		}
 		else
 		{
@@ -158,6 +164,9 @@ void ConsoleHistoryManager::AddHistory(const std::string& aCommand, eHistoryType
 		break;
 	case eHistoryType::HISTORY:
 		tempHistory.myRenderText->SetColor({ 1.f, 1.f, 1.f, 1.f });
+		break;
+	case eHistoryType::HELP:
+		tempHistory.myRenderText->SetColor({ 0.f, 1.f, 0.f, 1.f });
 		break;
 	default:
 		break;

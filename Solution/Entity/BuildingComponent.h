@@ -20,12 +20,12 @@ public:
 	eEntityType GetEntityToSpawn() const;
 	const float& GetCurrentBuildTime() const;
 	const float& GetMaxBuildTime() const;
+	int GetSpawnQueueSize() const;
 
 private:
 
-	CU::StaticArray<eEntityType, 3> myBuildTypes;
-
-	eEntityType myEntityToSpawn;
+	CU::StaticArray<eEntityType, 5> mySpawnQueue;
+	int mySpawnQueueIndex;
 
 	float myCurrentBuildTime;
 	float myMaxBuildTime;
@@ -43,7 +43,7 @@ inline eComponentType BuildingComponent::GetType()
 
 inline eEntityType BuildingComponent::GetEntityToSpawn() const
 {
-	return myEntityToSpawn;
+	return mySpawnQueue[0];
 }
 
 inline const float& BuildingComponent::GetCurrentBuildTime() const
@@ -54,4 +54,9 @@ inline const float& BuildingComponent::GetCurrentBuildTime() const
 inline const float& BuildingComponent::GetMaxBuildTime() const
 {
 	return myMaxBuildTime;
+}
+
+inline int BuildingComponent::GetSpawnQueueSize() const
+{
+	return mySpawnQueueIndex + 1;
 }

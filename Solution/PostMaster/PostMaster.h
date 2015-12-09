@@ -1,12 +1,13 @@
 #pragma once
 
-#include "MessageEnum.h"
 #include <GrowingArray.h>
+#include "Message.h"
+#include "MessageEnum.h"
+#include <StaticArray.h>
 #include "Subscriber.h"
 #include <unordered_map>
-#include <VectorOnStack.h>
 #include <Vector.h>
-#include <StaticArray.h>
+#include <VectorOnStack.h>
 
 #undef SendMessage
 

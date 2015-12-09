@@ -17,6 +17,14 @@ namespace LUA
 		OK,
 	};
 
+	struct Documentation
+	{
+		std::string myFunction;
+		std::string myFunctionLowerCase;
+		std::string myArguments;
+		std::string myHelpText;
+	};
+
 	class ScriptSystem
 	{
 	public:
@@ -36,6 +44,7 @@ namespace LUA
 
 		void Update();
 		void PrintToFile(const std::string& aString);
+		const std::vector<Documentation>& GetDocumentation() const;
 	private:
 		ScriptSystem();
 		~ScriptSystem();
@@ -43,14 +52,6 @@ namespace LUA
 		struct LuaFunction
 		{
 			lua_CFunction myFunction;
-		};
-
-		struct Documentation
-		{
-			std::string myFunction;
-			std::string myFunctionLowerCase;
-			std::string myArguments;
-			std::string myHelpText;
 		};
 
 		void ReInit(const std::string& aString);
@@ -82,4 +83,9 @@ namespace LUA
 		std::fstream myOutputFile;
 		static ScriptSystem* myInstance;
 	};
+
+	inline const std::vector<Documentation>& ScriptSystem::GetDocumentation() const
+	{
+		return myDocumentation;
+	}
 }

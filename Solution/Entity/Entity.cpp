@@ -3,15 +3,16 @@
 #include "ActorComponent.h"
 #include "AnimationComponent.h"
 #include "BuildingComponent.h"
+#include "CollisionComponent.h"
 #include "Component.h"
 #include "ControllerComponent.h"
-#include "CollisionComponent.h"
 #include "GraphicsComponent.h"
 #include "HealthComponent.h"
 #include "Entity.h"
 #include "EntityData.h"
 #include <Scene.h>
 #include <Terrain.h>
+#include "TriggerComponent.h"
 
 Entity::Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& aEntityData
 	, Prism::Scene& aScene, const CU::Vector3<float> aStartPosition, const Prism::Terrain& aTerrain
@@ -53,6 +54,11 @@ Entity::Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& a
 	if (aEntityData.myCollisionData.myExistsInEntity == true)
 	{
 		myComponents[static_cast<int>(eComponentType::COLLISION)] = new CollisionComponent(*this, aEntityData.myCollisionData);
+	}
+
+	if (aEntityData.myTriggerData.myExistsInEntity == true)
+	{
+		myComponents[static_cast<int>(eComponentType::TRIGGER)] = new TriggerComponent(*this, aEntityData.myTriggerData);
 	}
 
 	if (aEntityData.myActorData.myExistsInEntity == true)

@@ -1,5 +1,6 @@
 #pragma once
 
+class ConsoleHelp;
 class ConsoleHistoryManager;
 class ConsoleBackspace;
 
@@ -12,6 +13,7 @@ public:
 	void Update();
 	const std::string& GetInput() const;
 	ConsoleHistoryManager* GetConsoleHistory();
+	ConsoleHelp* GetConsoleHelp();
 
 	void ClearInput();
 
@@ -23,6 +25,7 @@ private:
 	std::string myInput;
 
 	static Console* myInstance;
+	ConsoleHelp* myHelp;
 	ConsoleHistoryManager* myHistory;
 	ConsoleBackspace* myBackspace;
 };
@@ -35,6 +38,11 @@ inline const std::string& Console::GetInput() const
 inline ConsoleHistoryManager* Console::GetConsoleHistory()
 {
 	return myHistory;
+}
+
+inline ConsoleHelp* Console::GetConsoleHelp() 
+{
+	return myHelp;
 }
 
 inline void Console::ClearInput()

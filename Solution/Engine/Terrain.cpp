@@ -23,7 +23,8 @@
 namespace Prism
 {
 	Terrain::Terrain(const std::string& aHeightMapPath, const std::string& aTexturePath
-			, const CU::Vector2<float>& aSize, float aHeight, const CU::Matrix44<float>& aOrientation)
+			, const CU::Vector2<float>& aSize, float aHeight, const CU::Matrix44<float>& aOrientation
+			, const std::string& aIceInfluence)
 		: myHeightMap(HeightMapFactory::Create(aHeightMapPath.c_str()))
 		, mySize(aSize)
 		, myHeight(aHeight)
@@ -37,9 +38,9 @@ namespace Prism
 		myFileName = aTexturePath;
 
 		myEffect = EffectContainer::GetInstance()->GetEffect("Data/Resource/Shader/S_effect_terrain.fx");
-		Texture * influence = Prism::TextureContainer::GetInstance()
-			->GetTexture("Data/Resource/Texture/Terrain/SplatMap/T_InfluenceToSplatMap.dds");
-		myEffect->SetTexture(influence);
+		//Texture * influence = Prism::TextureContainer::GetInstance()
+			//->GetTexture("Data/Resource/Texture/Terrain/SplatMap/T_InfluenceToSplatMap.dds");
+		//myEffect->SetTexture(influence);
 		
 		D3D11_INPUT_ELEMENT_DESC vertexDesc[] =
 		{
@@ -72,7 +73,7 @@ namespace Prism
 		myCellSize = mySize.x / myHeightMap->myWidth;
 
 		myIce = new Ice(EffectContainer::GetInstance()->GetEffect("Data/Resource/Shader/S_effect_ice.fx")
-			, { 256.f, 256.f }, 1.25f);
+			, { 256.f, 256.f }, 1.25f, aIceInfluence);
 		myIce->SetTextures();
 	}
 
@@ -125,6 +126,10 @@ namespace Prism
 
 		returnPosition.y = CU::Math::Lerp<float>(lowerY, upperY, alphaZ);
 
+		if (returnPosition.y < myIce->GetHeight())
+		{
+			returnPosition.y = myIce->GetHeight();
+		}
 		returnPosition.y += aHeightOffset;
 		return returnPosition;
 	}

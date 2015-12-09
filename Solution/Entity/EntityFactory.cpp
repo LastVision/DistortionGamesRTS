@@ -92,6 +92,12 @@ void EntityFactory::LoadEntity(const char* aEntityPath)
 
 			myComponentLoader->LoadBuidlingComponent(entityDocument, e, newData.myBuildingData);
 		}
+		else if (elementName == CU::ToLower("TriggerComponent"))
+		{
+			if (newData.myTriggerData.myExistsInEntity == true) DL_ASSERT("You already have a TriggerComponent");
+
+			myComponentLoader->LoadTriggerComponent(entityDocument, e, newData.myTriggerData);
+		}
 		else if (elementName == CU::ToLower("CollisionComponent"))
 		{
 			if (newData.myCollisionData.myExistsInEntity == true) DL_ASSERT("You already have a CollisionComponent");

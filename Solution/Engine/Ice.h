@@ -12,7 +12,7 @@ namespace Prism
 	class Ice : public BaseModel
 	{
 	public:
-		Ice(Effect* aEffect, const CU::Vector2<float>& aSize, float aHeight);
+		Ice(Effect* aEffect, const CU::Vector2<float>& aSize, float aHeight, const std::string& aFilePath);
 		~Ice();
 
 		void Render(const Camera& aCamera);

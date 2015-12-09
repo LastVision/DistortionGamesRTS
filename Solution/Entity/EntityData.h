@@ -8,6 +8,7 @@
 #include "EntityEnum.h"
 #include "GraphicsComponentData.h"
 #include "HealthComponentData.h"
+#include "TriggerComponentData.h"
 
 struct EntityData
 {
@@ -19,4 +20,5 @@ struct EntityData
 	ControllerComponentData myControllerData;
 	GraphicsComponentData myGraphicsData;
 	HealthComponentData myHealthData;
+	TriggerComponentData myTriggerData;
 };

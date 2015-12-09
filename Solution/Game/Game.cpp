@@ -83,11 +83,11 @@ bool Game::Init(HWND& aHwnd)
 		| DISCL_FOREGROUND, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND);
 
 
-	Console::GetInstance();
 
 	LUA::ScriptSystem::Create();
 	LUA::ScriptSystem::GetInstance()->Init(ScriptInterface::RegisterFunctions);
 
+	Console::GetInstance();
 	//myMainMenu = new MainMenuState();
 	//myStateStack.PushMainGameState(myMainMenu);
 

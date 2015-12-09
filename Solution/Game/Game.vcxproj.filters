@@ -48,6 +48,10 @@
     <ClCompile Include="ConsoleHistoryManager.cpp">
       <Filter>Console</Filter>
     </ClCompile>
+    <ClCompile Include="ConsoleHelp.cpp">
+      <Filter>Console</Filter>
+    </ClCompile>
+    <ClCompile Include="TriggerManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -106,6 +110,10 @@
     <ClInclude Include="ConsoleHistoryManager.h">
       <Filter>Console</Filter>
     </ClInclude>
+    <ClInclude Include="ConsoleHelp.h">
+      <Filter>Console</Filter>
+    </ClInclude>
+    <ClInclude Include="TriggerManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="PreCompile">
