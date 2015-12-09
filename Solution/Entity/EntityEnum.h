@@ -16,6 +16,7 @@ enum eEntityType
 	DRAGON_STATIC,
 	PINE_TREE,
 	BASE_BUILING,
+	RESOURCE_POINT,
 	_COUNT,
 };
 
@@ -34,10 +35,16 @@ enum class eComponentType
 	CONTROLLER, //Controller HAS to be above Actor in this list!!!
 	ACTOR,
 	ANIMATION,
+	TRIGGER,
 	COLLISION,
 	GRAPHICS,
 	MOVEMENT,
 	HEALTH,
 	BUILDING,
 	_COUNT,
+};
+
+enum class eTriggerType
+{
+	RESOURCE,
 };
