@@ -154,6 +154,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="ConsoleBackspace.h" />
+    <ClInclude Include="ConsoleHelp.h" />
     <ClInclude Include="ConsoleHistoryManager.h" />
     <ClInclude Include="ConsoleState.h" />
     <ClInclude Include="Director.h" />
@@ -176,6 +177,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ConsoleBackspace.cpp" />
+    <ClCompile Include="ConsoleHelp.cpp" />
     <ClCompile Include="ConsoleHistoryManager.cpp" />
     <ClCompile Include="ConsoleState.cpp" />
     <ClCompile Include="Director.cpp" />

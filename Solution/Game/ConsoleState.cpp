@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "ConsoleState.h"
 #include "Console.h"
+#include "ConsoleHelp.h"
 #include "ConsoleHistoryManager.h"
 #include <InputWrapper.h>
 #include <ScriptSystem.h>
@@ -65,7 +66,15 @@ const eStateStatus ConsoleState::Update(const float& aDeltaTime)
 		Console::GetInstance()->GetConsoleHistory()->AddHistory(Console::GetInstance()->GetInput());
 
 		std::string errorString;
-		if (LUA::ScriptSystem::GetInstance()->ValidateLuaString(Console::GetInstance()->GetInput(), errorString))
+		if (Console::GetInstance()->GetInput().find("help") == 0)
+		{
+			const CU::GrowingArray<std::string>& allFunctions = Console::GetInstance()->GetConsoleHelp()->GetAllFunction();
+			for (int i = 0; i < allFunctions.Size(); ++i)
+			{
+				Console::GetInstance()->GetConsoleHistory()->AddHistory(allFunctions[i], eHistoryType::HELP);
+			}
+		}
+		else if (LUA::ScriptSystem::GetInstance()->ValidateLuaString(Console::GetInstance()->GetInput(), errorString))
 		{
 			LUA::ScriptSystem::GetInstance()->RunLuaFromString(Console::GetInstance()->GetInput());
 			Console::GetInstance()->ClearInput();
