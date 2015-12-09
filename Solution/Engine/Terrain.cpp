@@ -37,9 +37,9 @@ namespace Prism
 		myFileName = aTexturePath;
 
 		myEffect = EffectContainer::GetInstance()->GetEffect("Data/Resource/Shader/S_effect_terrain.fx");
-		Texture * influence = Prism::TextureContainer::GetInstance()
-			->GetTexture("Data/Resource/Texture/Terrain/SplatMap/T_InfluenceToSplatMap.dds");
-		myEffect->SetTexture(influence);
+		//Texture * influence = Prism::TextureContainer::GetInstance()
+			//->GetTexture("Data/Resource/Texture/Terrain/SplatMap/T_InfluenceToSplatMap.dds");
+		//myEffect->SetTexture(influence);
 		
 		D3D11_INPUT_ELEMENT_DESC vertexDesc[] =
 		{
@@ -125,6 +125,10 @@ namespace Prism
 
 		returnPosition.y = CU::Math::Lerp<float>(lowerY, upperY, alphaZ);
 
+		if (returnPosition.y < myIce->GetHeight())
+		{
+			returnPosition.y = myIce->GetHeight();
+		}
 		returnPosition.y += aHeightOffset;
 		return returnPosition;
 	}
