@@ -1,4 +1,5 @@
 #pragma once
+#include <Subscriber.h>
 
 namespace Prism
 {
@@ -17,7 +18,7 @@ class AIDirector;
 class Entity;
 class PlayerDirector;
 
-class Level
+class Level : public Subscriber
 {
 	friend class LevelFactory;
 public:
@@ -28,6 +29,8 @@ public:
 	void Render(Prism::Camera& aCamera);
 
 	void OnResize(int aWidth, int aHeigth);
+
+	void ReceiveMessage(const LUAToggleRenderLinesMessage& aMessage) override;
 
 	void SpawnUnit();
 
@@ -43,4 +46,6 @@ private:
 	CU::GrowingArray<Entity*> myEntities;
 	PlayerDirector* myPlayer;
 	AIDirector* myAI;
+
+	bool myRenderNavMeshLines;
 };

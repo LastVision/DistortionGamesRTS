@@ -22,7 +22,7 @@ namespace Prism
 		Scene(const Camera& aCamera, Terrain& aTerrain);
 		~Scene();
 
-		void Render();
+		void Render(bool aRenderNavMeshLines);
 
 		void AddInstance(Instance* aInstance);
 		void AddLight(DirectionalLight* aLight);

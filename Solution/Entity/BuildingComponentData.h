@@ -5,5 +5,5 @@
 struct BuildingCompnentData
 {
 	bool myExistsInEntity = false;
-	CU::StaticArray<eEntityType, 3> myBuildUnitTypes;
+	CU::StaticArray<eUnitType, 3> myBuildUnitTypes;
 };

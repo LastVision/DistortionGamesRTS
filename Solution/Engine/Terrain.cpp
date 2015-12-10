@@ -86,7 +86,7 @@ namespace Prism
 		SAFE_DELETE(myIce);
 	}
 
-	void Terrain::Render(const Camera& aCamera)
+	void Terrain::Render(const Camera& aCamera, bool aRenderNavMeshLines)
 	{
 
 		CU::Matrix44<float> world;
@@ -96,7 +96,7 @@ namespace Prism
 		myEffect->SetCameraPosition(aCamera.GetOrientation().GetPos());
 		BaseModel::Render();
 		myIce->Render(aCamera);
-		myNavMesh->Render();
+		myNavMesh->Render(aRenderNavMeshLines);
 	}
 
 	void Terrain::CalcEntityHeight(CU::Matrix44<float>& anOrientation) const

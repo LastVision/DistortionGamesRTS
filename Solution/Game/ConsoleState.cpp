@@ -55,7 +55,7 @@ void ConsoleState::EndState()
 const eStateStatus ConsoleState::Update(const float& aDeltaTime)
 {
 	Console::GetInstance()->Update();
-
+	
 	if (CU::InputWrapper::GetInstance()->KeyUp(DIK_GRAVE) == true)
 	{
 		myStateStatus = ePopSubState;
@@ -92,61 +92,63 @@ const eStateStatus ConsoleState::Update(const float& aDeltaTime)
 		HandleSuggestionMode();
 
 
-		if (CU::InputWrapper::GetInstance()->KeyUp(DIK_RETURN) == true)
+	if (CU::InputWrapper::GetInstance()->KeyUp(DIK_RETURN) == true)
+	{
+		myShouldReOpenConsole = true;
+		const std::string& consoleInput = Console::GetInstance()->GetInput();
+		Console::GetInstance()->GetConsoleHistory()->AddHistory(consoleInput);
+		std::string errorString;
+		std::string temp = CU::ToLower(consoleInput);
+		if (temp.find("help") == 0 || temp.find("halp") == 0)
 		{
-			myShouldReOpenConsole = true;
-			const std::string& consoleInput = Console::GetInstance()->GetInput();
-			Console::GetInstance()->GetConsoleHistory()->AddHistory(consoleInput);
-			std::string errorString;
-			std::string temp = CU::ToLower(consoleInput);
-			if (temp.find("help") == 0 || temp.find("halp") == 0)
+			if (temp == "help" || temp == "halp")
 			{
-				if (temp == "help" || temp == "halp")
+				const CU::GrowingArray<std::string>& allFunctions = Console::GetInstance()->GetConsoleHelp()->GetAllFunction();
+				for (int i = 0; i < allFunctions.Size(); ++i)
 				{
-					const CU::GrowingArray<std::string>& allFunctions = Console::GetInstance()->GetConsoleHelp()->GetAllFunction();
-					for (int i = 0; i < allFunctions.Size(); ++i)
-					{
-						Console::GetInstance()->GetConsoleHistory()->AddHistory(allFunctions[i], eHistoryType::HELP);
-					}
+					Console::GetInstance()->GetConsoleHistory()->AddHistory(allFunctions[i], eHistoryType::HELP);
 				}
-				else
+			}
+			else 
+			{
+				std::string helpFunctionName = CU::GetSubString(consoleInput, " ", true, 2);
+				const ConsoleLuaHelp& helpDoc = Console::GetInstance()->GetConsoleHelp()->GetHelpText(helpFunctionName);
+				if (helpDoc.myFunctionName != "")
 				{
-					std::string helpFunctionName = CU::GetSubString(temp, " ", true, 2);
-					const ConsoleLuaHelp& helpDoc = Console::GetInstance()->GetConsoleHelp()->GetHelpText(helpFunctionName);
-					if (helpDoc.myFunctionName != "")
-					{
-						Console::GetInstance()->GetConsoleHistory()->AddHistory(helpDoc.myFunctionName + "(" + helpDoc.myArguments + ")", eHistoryType::HELP);
-						Console::GetInstance()->GetConsoleHistory()->AddHistory(helpDoc.myHelpText, eHistoryType::HELP);
-					}
-					else
-					{
-						Console::GetInstance()->GetConsoleHistory()->AddHistory("There is no such command. Did you mean <insert command>?", eHistoryType::ERROR);
-					}
+					Console::GetInstance()->GetConsoleHistory()->AddHistory(helpDoc.myFunctionName + "(" + helpDoc.myArguments + ")", eHistoryType::HELP);
+					Console::GetInstance()->GetConsoleHistory()->AddHistory(helpDoc.myHelpText, eHistoryType::HELP);
 				}
-				Console::GetInstance()->ClearInput();
+				else 
+				{
+					Console::GetInstance()->GetConsoleHistory()->AddHistory("There is no " + helpFunctionName + 
+						" command. Did you mean " + LUA::ScriptSystem::GetInstance()->FindClosestFunction(helpFunctionName) 
+						+ "?", eHistoryType::ERROR);
+				}
 			}
-			else if (LUA::ScriptSystem::GetInstance()->ValidateLuaString(consoleInput, errorString))
-			{
-				LUA::ScriptSystem::GetInstance()->RunLuaFromString(consoleInput);
-				Console::GetInstance()->ClearInput();
-			}
-			else
-			{
-				Console::GetInstance()->GetConsoleHistory()->AddHistory(errorString, eHistoryType::ERROR);
-			}
-
-
-			Console::GetInstance()->GetConsoleHistory()->Save();
-			myStateStatus = ePopSubState;
+			Console::GetInstance()->ClearInput();
 		}
+		else if (LUA::ScriptSystem::GetInstance()->ValidateLuaString(consoleInput, errorString))
+		{
+			LUA::ScriptSystem::GetInstance()->RunLuaFromString(consoleInput);
+			Console::GetInstance()->ClearInput();
+		}
+		else
+		{
+			Console::GetInstance()->GetConsoleHistory()->AddHistory(errorString, eHistoryType::ERROR);
+		}
+		
+
+		Console::GetInstance()->GetConsoleHistory()->Save();
+		myStateStatus = ePopSubState;
+	}
 	}
 
 
 	if (Console::GetInstance()->GetInput().length() <= 0 && myHistoryMode == false)
 	{
 		mySuggestionString = "";
-	}
-	
+		}
+
 
 	myText->SetText(Console::GetInstance()->GetInput());
 	myMarkerPosition.x = (myLowerLeftCorner.x * 1.1f) + myText->GetWidth() + 3;

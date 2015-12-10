@@ -1,9 +1,13 @@
 #include "stdafx.h"
-#include "ScriptInterface.h"
 
+#include <Entity.h>
+#include <EntityId.h>
 #include <LUACinematicMessage.h>
 #include <LUAMoveCameraMessage.h>
+#include <LUARunScriptMessage.h>
+#include <LUAToggleRenderLinesMessage.h>
 #include <PostMaster.h>
+#include "ScriptInterface.h"
 #include <ScriptSystem.h>
 #include <ToggleGUIMessage.h>
 
@@ -42,7 +46,7 @@ namespace Script_Interface
 
 		float size = float(lua_tonumber(aState, 4));
 		int color = int(lua_tonumber(aState, 5));
-		bool wireframe = lua_toboolean(aState, 6);
+		bool wireframe = lua_toboolean(aState, 6) == 0 ? false : true;
 
 		Prism::RenderBox({ x, y, z }, static_cast<eColorDebug>(color), size, wireframe);
 
@@ -93,6 +97,34 @@ namespace Script_Interface
 		PostMaster::GetInstance()->SendMessage(ToggleGUIMessage(false, fadeTime));
 		return 0;
 	}
+
+	int ScriptRun(lua_State* aState)//string aScriptFile
+	{
+		std::string filePath = lua_tostring(aState, 1);
+		PostMaster::GetInstance()->SendMessage(LUARunScriptMessage(filePath));
+		return 0;
+	}
+
+	int HideNavMesh(lua_State* aState)//void
+	{
+		PostMaster::GetInstance()->SendMessage(LUAToggleRenderLinesMessage(false));
+		return 0;
+	}
+
+	int ShowNavMesh(lua_State* aState)//void
+	{
+		PostMaster::GetInstance()->SendMessage(LUAToggleRenderLinesMessage(true));
+		return 0;
+	}
+
+	int GetOwner(lua_State* aState)//void
+	{
+		int id = int(lua_tonumber(aState, 1));
+		Entity* entity = EntityId::GetInstance()->GetEntity(id);
+
+		lua_pushinteger(aState, static_cast<int>(entity->GetOwner()));
+		return 1;
+	}
 }
 
 void ScriptInterface::RegisterFunctions()
@@ -109,4 +141,8 @@ void ScriptInterface::RegisterFunctions()
 	system->RegisterFunction("EndCinematic", Script_Interface::EndCinematic, "void", "Stops any running Cinematic and returns to normal game-mode");
 	system->RegisterFunction("ShowGUI", Script_Interface::ShowGUI, "aFadeTime", "Shows the GUI with a fade-in");
 	system->RegisterFunction("HideGUI", Script_Interface::HideGUI, "aFadeTime", "Hides the GUI with a fade-out");
+	system->RegisterFunction("ScriptRun", Script_Interface::ScriptRun, "aScriptFile", "Run the script file.");
+	system->RegisterFunction("ShowNavMesh", Script_Interface::ShowNavMesh, "", "Shows the lines for the navigation mesh.");
+	system->RegisterFunction("HideNavMesh", Script_Interface::HideNavMesh, "", "Hides the lines for the navigation mesh.");
+	system->RegisterFunction("GetOwner", Script_Interface::GetOwner, "aUnit", "Returns ownerID of unit.");
 }

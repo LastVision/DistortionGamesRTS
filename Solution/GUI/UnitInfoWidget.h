@@ -38,11 +38,15 @@ namespace GUI
 
 		const CU::GrowingArray<Entity*>& myUnits;
 		const BuildingComponent& myBuilding;
-		Prism::Sprite* myUnitPortrait;
+		Prism::Sprite* myGruntPortrait;
 		Prism::Sprite* myBuildingPortrait;
+		Prism::Sprite* myGruntUnit;
 		BarWidget* myBuildingTimer;
 
 		eEntityType mySelectedType;
 		bool myIsUnitSelected;
+
+		CU::Vector2<float> myUnitPosition;
+		CU::Vector2<float> myPortraitPosition;
 	};
 }

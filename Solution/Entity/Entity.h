@@ -24,6 +24,7 @@ class Entity
 	friend class AnimationComponent;
 	friend class ControllerComponent;
 	friend class GraphicsComponent;
+	friend class EntityFactory;
 
 public:
 	Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& aEntityData,
@@ -51,6 +52,8 @@ public:
 	Prism::Scene& GetScene();
 	eOwnerType GetOwner() const;
 	eEntityType GetType() const;
+	ePropType GetPropType() const;
+	eUnitType GetUnitType() const;
 	eEntityState GetState() const;
 	void SetState(eEntityState aState){ myState = aState; };
 	Prism::eOctreeType GetOctreeType() const;
@@ -67,12 +70,17 @@ public:
 
 	CU::GrowingArray<CU::Vector2<float>> GetCutMesh() const;
 
+	int GetId() const;
+
 private:
 	void operator=(Entity&) = delete;
 	CU::StaticArray<Component*, static_cast<int>(eComponentType::_COUNT)> myComponents;
+	const int myId;
 	
 	bool myAlive;
 	const eEntityType myType;
+	ePropType myPropType;
+	eUnitType myUnitType;
 	const eOwnerType myOwner;
 	eEntityState myState;
 	const Prism::eOctreeType myOctreeType;
@@ -128,6 +136,16 @@ inline eEntityType Entity::GetType() const
 	return myType;
 }
 
+inline ePropType Entity::GetPropType() const
+{
+	return myPropType;
+}
+
+inline eUnitType Entity::GetUnitType() const
+{
+	return myUnitType;
+}
+
 inline eEntityState Entity::GetState() const
 {
 	return myState;
@@ -141,4 +159,9 @@ inline Prism::eOctreeType Entity::GetOctreeType() const
 inline bool Entity::GetAlive() const
 {
 	return myAlive;
+}
+
+inline int Entity::GetId() const
+{
+	return myId;
 }
