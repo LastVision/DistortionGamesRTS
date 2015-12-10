@@ -25,6 +25,9 @@ public:
 private:
 	void operator=(ConsoleState&) = delete;
 
+	void HandleHistoryMode();
+	void HandleSuggestionMode();
+
 	Prism::Sprite* myBackground;
 	bool& myShouldReOpenConsole;
 	Prism::Sprite* myMarker;
@@ -38,5 +41,6 @@ private:
 	Prism::Text* myText;
 	float myRenderTime;
 	bool myMarkerBlinker;
+	bool myHistoryMode;
 };
 

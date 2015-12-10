@@ -118,6 +118,7 @@ namespace Prism
 				myDebugText->SetText(myDebugTexts[i].myText);
 				myDebugText->SetPosition(myDebugTexts[i].myPosition);
 				//myText->SetScale({ myDebugTexts[i].myScale / 2.f, myDebugTexts[i].myScale / 2.f });
+				myDebugText->SetColor(myDebugTexts[i].myColor);
 				myDebugText->Render();
 			}
 		}
@@ -299,7 +300,7 @@ namespace Prism
 			, static_cast<float>(myWindowSize.y), 0.1f, 1000.f);
 
 		//myFont = new Font("Data/Resource/Font/arial.ttf_sdf_512.txt", { 512, 512 });
-		myDialogueFont = new Font("Data/Resource/Font/consola.ttf_sdf.txt", { 256, 256 });
+		myDialogueFont = new Font("Data/Resource/Font/debugText.txt", { 256, 256 });
 		myConsoleFont = new Font("Data/Resource/Font/consolab.ttf_sdf.txt", { 256, 256 });
 		//myFont = new Font("Data/Resource/Font/consolab.ttf_sdf_512.txt", { 512, 512 });
 		//myFont = new Font("Data/Resource/Font/consola.ttf_sdf_512.txt", { 512, 512 });
