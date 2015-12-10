@@ -67,9 +67,12 @@ public:
 
 	CU::GrowingArray<CU::Vector2<float>> GetCutMesh() const;
 
+	int GetId() const;
+
 private:
 	void operator=(Entity&) = delete;
 	CU::StaticArray<Component*, static_cast<int>(eComponentType::_COUNT)> myComponents;
+	const int myId;
 	
 	bool myAlive;
 	const eEntityType myType;
@@ -141,4 +144,9 @@ inline Prism::eOctreeType Entity::GetOctreeType() const
 inline bool Entity::GetAlive() const
 {
 	return myAlive;
+}
+
+inline int Entity::GetId() const
+{
+	return myId;
 }

@@ -38,8 +38,8 @@ void TriggerComponent::CheckUnitsForRemove(CU::GrowingArray<Entity*>& someUnits)
 		if (CU::Intersection::CircleVsCircle(myEntity.GetPosition(), myRadius
 			, current->GetPosition(), current->GetComponent<CollisionComponent>()->GetRadius()) == false)
 		{
-			//PostMaster::GetInstance()->SendMessage(
-			//	TriggerMessage(&myEntity, current, TriggerMessage::eTriggerType::EXIT));
+			PostMaster::GetInstance()->SendMessage(
+				TriggerMessage(&myEntity, current, TriggerMessage::eTriggerType::EXIT));
 
 			someUnits.RemoveCyclicAtIndex(i);
 		}
@@ -57,8 +57,8 @@ void TriggerComponent::CheckUnitsForAdd(const CU::GrowingArray<Entity*>& someUni
 		{
 			if (someUnitsOut.Find(current) < 0)
 			{
-				//PostMaster::GetInstance()->SendMessage(
-				//	TriggerMessage(&myEntity, current, TriggerMessage::eTriggerType::ENTER));
+				PostMaster::GetInstance()->SendMessage(
+					TriggerMessage(&myEntity, current, TriggerMessage::eTriggerType::ENTER));
 
 				someUnitsOut.Add(current);
 			}

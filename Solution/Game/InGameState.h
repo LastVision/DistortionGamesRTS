@@ -46,6 +46,7 @@ public:
 	void ReceiveMessage(const MoveCameraMessage& aMessage) override;
 	void ReceiveMessage(const LUAMoveCameraMessage& aMessage) override;
 	void ReceiveMessage(const LUACinematicMessage& aMessage) override;
+	void ReceiveMessage(const TriggerMessage& aMessage) override;
 
 	void SetLevel();
 
