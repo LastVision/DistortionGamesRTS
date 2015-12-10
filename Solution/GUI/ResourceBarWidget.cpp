@@ -2,41 +2,63 @@
 #include <Engine.h>
 #include <Sprite.h>
 #include "ResourceBarWidget.h"
+#include "../Game/PlayerDirector.h"
 #include <XMLReader.h>
 
 namespace GUI
 {
-	ResourceBarWidget::ResourceBarWidget(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement, const int& someGold)
-		: myPlayerGold(someGold)
-		, myGoldSprite(nullptr)
+	ResourceBarWidget::ResourceBarWidget(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement, const PlayerDirector* aPlayer)
+		: myValueSprite(nullptr)
 	{
-		std::string goldSpritePath = "";
-		CU::Vector2<float> goldSpriteSize;
-		CU::Vector2<float> goldSpritePosition;
+		std::string valueSpritePath = "";
+		std::string value = "";
+		CU::Vector2<float> size;
+		CU::Vector2<float> position;
+		CU::Vector2<float> textposition;
+		CU::Vector2<float> valueSpriteSize;
+		CU::Vector2<float> valueSpritePosition;
 
-		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "goldsprite"), "path", goldSpritePath);
-		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "goldsprite"), "sizex", goldSpriteSize.x);
-		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "goldsprite"), "sizey", goldSpriteSize.y);
-		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "goldsprite"), "positionx", goldSpritePosition.x);
-		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "goldsprite"), "positiony", goldSpritePosition.y);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "size"), "x", size.x);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "size"), "y", size.y);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "position"), "x", position.x);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "position"), "y", position.y);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "value"), "type", value);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "value"), "positionx", textposition.x);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "value"), "positiony", textposition.y);
 
-		mySize = goldSpriteSize;
-		myPosition = goldSpritePosition;
-		myGoldSprite = new Prism::Sprite(goldSpritePath, goldSpriteSize);
+		tinyxml2::XMLElement* spriteElement = aReader->FindFirstChild(anXMLElement, "valuesprite");
+		if (spriteElement != nullptr)
+		{
+			aReader->ForceReadAttribute(spriteElement, "path", valueSpritePath);
+			aReader->ForceReadAttribute(spriteElement, "sizex", valueSpriteSize.x);
+			aReader->ForceReadAttribute(spriteElement, "sizey", valueSpriteSize.y);
+			aReader->ForceReadAttribute(spriteElement, "positionx", valueSpritePosition.x);
+			aReader->ForceReadAttribute(spriteElement, "positiony", valueSpritePosition.y);
+			myValueSprite = new Prism::Sprite(valueSpritePath, valueSpriteSize);
+		}
+
+		if (value == "player_gold")
+		{
+			myValue = &aPlayer->GetTestGold();
+		}
+
+		mySize = size;
+		myPosition = position;
+		myTextPosition = textposition;
 	}
 
 	ResourceBarWidget::~ResourceBarWidget()
 	{
-		SAFE_DELETE(myGoldSprite);
+		SAFE_DELETE(myValueSprite);
 	}
 
 	void ResourceBarWidget::Render(const CU::Vector2<float>& aParentPosition)
 	{
-		myGoldSprite->Render(myPosition + aParentPosition);
+		if (myValueSprite != nullptr)
+		{
+			myValueSprite->Render(myPosition + aParentPosition);
+		}
 
-		CU::Vector2<float> position = myPosition + aParentPosition;
-		position.x += myGoldSprite->GetSize().x;
-		position.y += myGoldSprite->GetSize().y / 2.f;
-		Prism::Engine::GetInstance()->PrintText(myPlayerGold, position, Prism::eTextType::RELEASE_TEXT);
+		Prism::Engine::GetInstance()->PrintText(*myValue, myPosition + aParentPosition + myTextPosition, Prism::eTextType::RELEASE_TEXT);
 	}
 }

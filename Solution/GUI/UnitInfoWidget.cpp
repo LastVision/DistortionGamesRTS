@@ -77,10 +77,9 @@ namespace GUI
 				{
 					for (int i = 0; i < myUnits.Size(); i++)
 					{
-						CU::Vector2<float> position = { myPosition.x + myGruntUnit->GetSize().x * i, mySize.y / 2.f };
+						CU::Vector2<float> position = { myPosition.x + myGruntUnit->GetSize().x * i, myPosition.y };
 						position += aParentPosition + myUnitPosition;
 						myGruntUnit->Render(position);
-						// render health
 					}
 				}
 				else
@@ -95,11 +94,9 @@ namespace GUI
 				if (myBuilding.GetEntityToSpawn() != eEntityType::EMPTY)
 				{
 					myBuildingTimer->Update();
-					CU::Vector2<float> position = myPosition + aParentPosition;
-					position.x += myBuildingPortrait->GetSize().x * 2.f;
-					position.y += myBuildingPortrait->GetSize().y / 2.f;
+					CU::Vector2<float> position = myPosition + aParentPosition + myUnitPosition + (myBuildingTimer->GetSize() / 2.f);
 					myBuildingTimer->Render(position);
-					position.y += myBuildingTimer->GetSize().y + 10.f;
+					position.x += myBuildingTimer->GetSize().x + 10.f;
 					Prism::Engine::GetInstance()->PrintText(myBuilding.GetSpawnQueueSize(), position, Prism::eTextType::RELEASE_TEXT);
 				}
 			}
@@ -112,18 +109,14 @@ namespace GUI
 		myBuildingTimer->OnResize(aNewWindowSize, anOldWindowSize);
 
 		CU::Vector2<float> unitRatioSize = myGruntUnit->GetSize() / anOldWindowSize;
-		CU::Vector2<float> unitNewSize = unitRatioSize * aNewWindowSize;
 		CU::Vector2<float> portraitRatioSize = myBuildingPortrait->GetSize() / anOldWindowSize;
-		CU::Vector2<float> portraitNewSize = portraitRatioSize * aNewWindowSize;
-
 		CU::Vector2<float> ratioUnitPostion = myUnitPosition / anOldWindowSize;
 		CU::Vector2<float> ratioPortraitPostion = myPortraitPosition / anOldWindowSize;
 
 		myUnitPosition = ratioUnitPostion * aNewWindowSize;
 		myPortraitPosition = ratioPortraitPostion * aNewWindowSize;
-
-		myGruntUnit->SetSize(unitNewSize, { 0.f, 0.f });
-		myGruntPortrait->SetSize(portraitNewSize, { 0.f, 0.f });
-		myBuildingPortrait->SetSize(portraitNewSize, { 0.f, 0.f });
+		myGruntUnit->SetSize(unitRatioSize * aNewWindowSize, { 0.f, 0.f });
+		myGruntPortrait->SetSize(portraitRatioSize * aNewWindowSize, { 0.f, 0.f });
+		myBuildingPortrait->SetSize(portraitRatioSize * aNewWindowSize, { 0.f, 0.f });
 	}
 }
