@@ -47,6 +47,7 @@ public:
 
 	const CU::Matrix44<float>& GetOrientation() const;
 	void SetPosition(const CU::Vector3f& aPosition);
+	const CU::Vector2<float>& GetPosition() const;
 	Prism::Scene& GetScene();
 	eOwnerType GetOwner() const;
 	eEntityType GetType() const;
@@ -78,6 +79,7 @@ private:
 	Prism::Scene& myScene;
 
 	CU::Matrix44<float> myOrientation;
+	CU::Vector2<float> myPosition;
 
 	bool mySelected;
 	bool myHovered;
@@ -104,6 +106,11 @@ void Entity::SendNote(const T& aMessage)
 inline const CU::Matrix44<float>& Entity::GetOrientation() const
 {
 	return myOrientation;
+}
+
+inline const CU::Vector2<float>& Entity::GetPosition() const
+{
+	return myPosition;
 }
 
 inline Prism::Scene& Entity::GetScene()

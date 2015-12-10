@@ -13,16 +13,19 @@ public:
 	~TriggerComponent();
 
 	void Update(float aDelta) override;
-	bool Collide(const CU::Intersection::LineSegment3D& aLine) const;
-	bool Collide(const CU::Vector3<float>& aPosition) const;
 
 	static eComponentType GetTypeStatic();
 	virtual eComponentType GetType();
 
 private:
 	void operator=(TriggerComponent&) = delete;
-	float myRadius;
-	CU::Intersection::Sphere mySphere;
+
+	void CheckUnitsForRemove(CU::GrowingArray<Entity*>& someUnits) const;
+	void CheckUnitsForAdd(const CU::GrowingArray<Entity*>& someUnits, CU::GrowingArray<Entity*>& someUnitsOut) const;
+
+	const float myRadius;
+	const float myRadiusSquared;
+	
 	const eTriggerType myType;
 	CU::GrowingArray<Entity*> myPlayerUnits;
 	CU::GrowingArray<Entity*> myEnemyUnits;
