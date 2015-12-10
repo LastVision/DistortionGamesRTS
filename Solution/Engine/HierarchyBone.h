@@ -8,6 +8,7 @@ namespace Prism
 	{
 		friend class Animation;
 		friend class FBXFactory;
+		friend class DGFXLoader;
 	public:
 		HierarchyBone();
 		~HierarchyBone();

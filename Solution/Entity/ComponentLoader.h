@@ -4,10 +4,11 @@
 struct ActorComponentData;
 struct AnimationComponentData;
 struct BuildingCompnentData;
-struct ControllerComponentData;
 struct CollisionComponentData;
+struct ControllerComponentData;
 struct GraphicsComponentData;
 struct HealthComponentData;
+struct TriggerComponentData;
 
 class XMLReader;
 
@@ -26,6 +27,7 @@ public:
 	void LoadControllerComponent(XMLReader& aDocument, tinyxml2::XMLElement* aSourceElement, ControllerComponentData& aOutputData);
 	void LoadGraphicsComponent(XMLReader& aDocument, tinyxml2::XMLElement* aSourceElement, GraphicsComponentData& aOutputData);
 	void LoadHealthComponent(XMLReader& aDocument, tinyxml2::XMLElement* aSourceElement, HealthComponentData& aOutputData);
+	void LoadTriggerComponent(XMLReader& aDocument, tinyxml2::XMLElement* aSourceElement, TriggerComponentData& aOutputData);
 
 	static const eEntityType ConvertStringToEntityType(const std::string& entityType);
 private:

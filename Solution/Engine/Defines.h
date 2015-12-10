@@ -6,6 +6,11 @@
 #define MAX_NR_OF_BONES 64
 #define OCTREE_WIDTH 10000.f
 
+//#define USE_DGFX
+#ifdef USE_DGFX
+//#define CONVERT_TO_DGFX_IN_RUNTIME
+#endif
+
 //#define ENABLE_DEBUG_TEXT
 #ifndef DLL_EXPORT
 #define THREADED_LOADING
