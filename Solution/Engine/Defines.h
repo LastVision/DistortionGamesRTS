@@ -11,7 +11,7 @@
 //#define CONVERT_TO_DGFX_IN_RUNTIME
 
 //DO NOT CHANGE
-#define DGFX_VERSION 1
+#define DGFX_VERSION 2
 
 #endif
 
@@ -20,4 +20,6 @@
 #define THREADED_LOADING
 //#define SCENE_USE_OCTREE
 #endif
+
+#define USE_BINARY_TERRAIN
 

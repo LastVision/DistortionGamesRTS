@@ -20,6 +20,8 @@
 #include "TextureContainer.h"
 #include "VertexBufferWrapper.h"
 
+#include <TimerManager.h>
+
 namespace Prism
 {
 	Terrain::Terrain(const std::string& aHeightMapPath, const std::string& aTexturePath
@@ -37,11 +39,76 @@ namespace Prism
 
 		myFileName = aTexturePath;
 
+		CreateVertices();
+
+		SetupDirectXData(aIceInfluence);
+	}
+
+	Terrain::Terrain(const std::string& aHeightMapPath, const CU::Vector2<float>& aSize, float aHeight)
+		: mySize(aSize)
+		, myHeight(aHeight)
+	{
+		myHeightMap = HeightMapFactory::Create(aHeightMapPath.c_str());
+
+		CreateVertices();
+	}
+
+	Terrain::Terrain(const std::string& aBinaryPath, const std::string& aTexturePath, const std::string& aIceInfluence)
+	{
+		myFileName = aTexturePath;
+
+		std::fstream file;
+		file.open(aBinaryPath, std::ios::in | std::ios::binary);
+
+		if (file.fail())
+		{
+			DL_ASSERT("Failed to open Terrain-binary-path, did you forget to run the tool?");
+			return;
+		}
+
+		myHeightMap = new HeightMap(file);
+
+
+		file.read((char*)&mySize.x, sizeof(float) * 2);
+		file.read((char*)&myHeight, sizeof(float));
+
+
+		int vertexCount;
+		file.read((char*)&vertexCount, sizeof(int));
+		myVertices.Reserve(vertexCount);
+		file.read((char*)&myVertices[0], sizeof(myVertices[0]) * vertexCount);
+
+
+		int indexCount;
+		file.read((char*)&indexCount, sizeof(int));
+		myIndices.Reserve(indexCount);
+		file.read((char*)&myIndices[0], sizeof(int) * indexCount);
+
+		myNavMesh = new Navigation::NavMesh(file);
+
+
+		SetupDirectXData(aIceInfluence);
+	}
+
+	Terrain::~Terrain()
+	{
+		SAFE_DELETE(myHeightMap);
+		SAFE_DELETE(myPathFinder);
+		SAFE_DELETE(myNavMesh);
+		SAFE_DELETE(mySplatMapContainer);
+		SAFE_DELETE(myIce);
+	}
+
+	void Terrain::SetupDirectXData(const std::string& aIceInfluence)
+	{
+		CU::TimerManager::GetInstance()->StartTimer("SetupDirectXData");
+
+
 		myEffect = EffectContainer::GetInstance()->GetEffect("Data/Resource/Shader/S_effect_terrain.fx");
 		//Texture * influence = Prism::TextureContainer::GetInstance()
-			//->GetTexture("Data/Resource/Texture/Terrain/SplatMap/T_InfluenceToSplatMap.dds");
+		//->GetTexture("Data/Resource/Texture/Terrain/SplatMap/T_InfluenceToSplatMap.dds");
 		//myEffect->SetTexture(influence);
-		
+
 		D3D11_INPUT_ELEMENT_DESC vertexDesc[] =
 		{
 			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
@@ -63,27 +130,28 @@ namespace Prism
 
 		mySplatMapContainer->SetTextures();
 
-		
+
 		InitBlendState("Terrain::BlendState");
 
 		ZeroMemory(myInitData, sizeof(myInitData));
-
-		CreateVertices();
 
 		myCellSize = mySize.x / myHeightMap->myWidth;
 
 		myIce = new Ice(EffectContainer::GetInstance()->GetEffect("Data/Resource/Shader/S_effect_ice.fx")
 			, { 256.f, 256.f }, 1.25f, aIceInfluence);
 		myIce->SetTextures();
-	}
 
-	Terrain::~Terrain()
-	{
-		SAFE_DELETE(myHeightMap);
-		SAFE_DELETE(myPathFinder);
-		SAFE_DELETE(myNavMesh);
-		SAFE_DELETE(mySplatMapContainer);
-		SAFE_DELETE(myIce);
+
+		SetupVertexBuffer(myVertices.Size(), sizeof(VertexPosNormUVBiTang), reinterpret_cast<char*>(&myVertices[0])
+			, "Terrain::VertexBuffer");
+		SetupIndexBuffer(myIndices.Size(), reinterpret_cast<char*>(&myIndices[0]), "Terrain::IndexBuffer");
+
+		mySurfaces[0]->SetVertexCount(myVertices.Size());
+		mySurfaces[0]->SetIndexCount(myIndices.Size());
+
+		int elapsed = static_cast<int>(
+			CU::TimerManager::GetInstance()->StopTimer("SetupDirectXData").GetMilliseconds());
+		RESOURCE_LOG("SetupDirectXData took %d ms", elapsed);
 	}
 
 	void Terrain::Render(const Camera& aCamera, bool aRenderNavMeshLines)
@@ -169,8 +237,8 @@ namespace Prism
 
 	void Terrain::CreateVertices()
 	{
-		CU::GrowingArray<VertexPosNormUVBiTang> vertices(myHeightMap->myWidth * myHeightMap->myDepth);
-		CU::GrowingArray<int> indices(myHeightMap->myWidth * myHeightMap->myDepth * 6);
+		myVertices.Init(myHeightMap->myWidth * myHeightMap->myDepth);
+		myIndices.Init(myHeightMap->myWidth * myHeightMap->myDepth * 6);
 
 		for (int z = 0; z < myHeightMap->myDepth; ++z)
 		{
@@ -182,20 +250,20 @@ namespace Prism
 				vertex.myPosition.z = float(z) * mySize.y / float(myHeightMap->myDepth);
 				vertex.myUV.x = float(x) / float(myHeightMap->myWidth);
 				vertex.myUV.y = float(1.f - z) / float(myHeightMap->myDepth);
-				vertices.Add(vertex);
+				myVertices.Add(vertex);
 			}
 		}
 
-		CalcNormals(vertices);
+		CalcNormals(myVertices);
 
 		CU::Matrix33<float> rotationMatrix;
 		rotationMatrix = rotationMatrix * CU::Matrix33<float>::CreateRotateAroundX(CU_PI / 2.f);
 		rotationMatrix = rotationMatrix * CU::Matrix33<float>::CreateRotateAroundZ(CU_PI / 2.f);
 		
-		for (int i = 0; i < vertices.Size(); ++i)
+		for (int i = 0; i < myVertices.Size(); ++i)
 		{
-			vertices[i].myTangent = CU::GetNormalized(CU::Cross(vertices[i].myNormal, vertices[i].myNormal * rotationMatrix));
-			vertices[i].myBiNormal = CU::GetNormalized(CU::Cross(vertices[i].myTangent, vertices[i].myNormal));
+			myVertices[i].myTangent = CU::GetNormalized(CU::Cross(myVertices[i].myNormal, myVertices[i].myNormal * rotationMatrix));
+			myVertices[i].myBiNormal = CU::GetNormalized(CU::Cross(myVertices[i].myTangent, myVertices[i].myNormal));
 		}
 
 		for (int z = 0; z < myHeightMap->myDepth - 1; ++z)
@@ -211,22 +279,15 @@ namespace Prism
 				//indices.Add(z * myHeightMap->myWidth + x + 1);
 				//indices.Add((z + 1) * myHeightMap->myWidth + x + 1);
 
-				indices.Add(z * myHeightMap->myWidth + x);
-				indices.Add((z + 1) * myHeightMap->myWidth + x);
-				indices.Add(z * myHeightMap->myWidth + x + 1);
+				myIndices.Add(z * myHeightMap->myWidth + x);
+				myIndices.Add((z + 1) * myHeightMap->myWidth + x);
+				myIndices.Add(z * myHeightMap->myWidth + x + 1);
 
-				indices.Add((z + 1) * myHeightMap->myWidth + x);
-				indices.Add((z + 1) * myHeightMap->myWidth + x + 1);
-				indices.Add(z * myHeightMap->myWidth + x + 1);
+				myIndices.Add((z + 1) * myHeightMap->myWidth + x);
+				myIndices.Add((z + 1) * myHeightMap->myWidth + x + 1);
+				myIndices.Add(z * myHeightMap->myWidth + x + 1);
 			}
 		}
-
-		SetupVertexBuffer(vertices.Size(), sizeof(VertexPosNormUVBiTang), reinterpret_cast<char*>(&vertices[0])
-			, "Terrain::VertexBuffer");
-		SetupIndexBuffer(indices.Size(), reinterpret_cast<char*>(&indices[0]), "Terrain::IndexBuffer");
-
-		mySurfaces[0]->SetVertexCount(vertices.Size());
-		mySurfaces[0]->SetIndexCount(indices.Size());
 	}
 
 	void Terrain::CalcNormals(CU::GrowingArray<VertexPosNormUVBiTang>& someVertices) const
