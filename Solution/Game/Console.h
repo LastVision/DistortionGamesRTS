@@ -17,6 +17,8 @@ public:
 
 	void ClearInput();
 
+	void SetInput(const std::string& aString);
+
 private:
 	Console();
 	~Console();
@@ -48,4 +50,9 @@ inline ConsoleHelp* Console::GetConsoleHelp()
 inline void Console::ClearInput()
 {
 	myInput = "";
+}
+
+inline void Console::SetInput(const std::string& aString)
+{
+	myInput = aString;
 }
