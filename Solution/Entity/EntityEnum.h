@@ -5,19 +5,31 @@ enum eOwnerType
 	NOT_USED = -1,
 	PLAYER = 1,
 	ENEMY = 2,
-	TRIGGER = 4,
-	NEUTRAL = 8
+	NEUTRAL = 4
 };
 
 enum eEntityType
 {
 	EMPTY = -1,
-	DRAGON,
-	DRAGON_STATIC,
-	PINE_TREE,
-	BASE_BUILING,
-	RESOURCE_POINT,
+	UNIT = 1,
+	PROP = 2,
+	BASE_BUILING = 4,
+	RESOURCE_POINT = 8,
+	VICTORY_POINT = 16,
+	DRAGON = 32, // to be moved to UnitType
+	DRAGON_STATIC = 64, // to be deleted
+	PINE_TREE = 128, // to be moved to propType
 	_COUNT,
+};
+
+enum class eUnitType
+{
+	DRAGON,
+};
+
+enum class ePropType
+{
+	PINE_TREE,
 };
 
 enum class eEntityState : int
