@@ -58,3 +58,7 @@ void Subscriber::ReceiveMessage(const SpawnUnitMessage&)
 void Subscriber::ReceiveMessage(const ToggleGUIMessage&)
 {
 }
+
+void Subscriber::ReceiveMessage(const TriggerMessage&)
+{
+}

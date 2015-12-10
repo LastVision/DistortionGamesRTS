@@ -131,6 +131,7 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Subscriber.h" />
     <ClInclude Include="ToggleGUIMessage.h" />
+    <ClInclude Include="TriggerMessage.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameStateMessage.cpp" />
