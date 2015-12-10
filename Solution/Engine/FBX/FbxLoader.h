@@ -86,6 +86,7 @@ struct ModelData
 		int mySize;
 		int myOffset;
 		LayoutType myType;
+		int mySemanticIndex;
 	};
 
 	// For every material, record the offsets in every VBO and triangle counts
