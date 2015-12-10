@@ -61,14 +61,16 @@ namespace Prism
 			myTriangles.DeleteAll();
 		}
 
-		void NavMesh::Render()
+		void NavMesh::Render(bool aRenderNavmeshLines)
 		{
-#ifndef RELEASE_BUILD
-			for (int i = 0; i < myTriangles.Size(); ++i)
+			if (aRenderNavmeshLines == true)
 			{
-				myTriangles[i]->Render();
+				for (int i = 0; i < myTriangles.Size(); ++i)
+				{
+					myTriangles[i]->Render();
+				}
 			}
-#endif
+
 			DEBUG_PRINT(myTriangles.Size());
 		}
 
