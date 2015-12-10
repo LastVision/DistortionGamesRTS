@@ -9,15 +9,16 @@
 #define USE_DGFX
 #ifdef USE_DGFX
 //#define CONVERT_TO_DGFX_IN_RUNTIME
+#endif
 
 //DO NOT CHANGE
-#define DGFX_VERSION 1
-
-#endif
+#define DGFX_VERSION 2
 
 //#define ENABLE_DEBUG_TEXT
 #ifndef DLL_EXPORT
 #define THREADED_LOADING
 //#define SCENE_USE_OCTREE
 #endif
+
+#define USE_BINARY_TERRAIN
 

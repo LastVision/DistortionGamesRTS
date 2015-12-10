@@ -4,6 +4,7 @@
 #include <CommonHelper.h>
 #include <DirectionalLight.h>
 #include "dirent.h"
+#include <Defines.h>
 #include <Effect.h>
 #include <EffectContainer.h>
 #include <EngineEnums.h>
@@ -190,7 +191,9 @@ void LevelFactory::ReadLevel(const std::string& aLevelPath)
 	LoadBases(reader, levelElement);
 	LoadProps(reader, levelElement);
 	LoadControlPoints(reader, levelElement);
+#ifndef USE_BINARY_TERRAIN
 	LoadCutBoxes(reader, levelElement);
+#endif
 	reader.CloseDocument();
 
 	modelLoader->UnPause();
@@ -198,6 +201,7 @@ void LevelFactory::ReadLevel(const std::string& aLevelPath)
 
 	effectContainer->GetEffect("Data/Resource/Shader/S_effect_pbl.fx")->SetAmbientHue(myAmbientHue);
 
+#ifndef USE_BINARY_TERRAIN
 	CU::TimerManager::GetInstance()->StartTimer("CreateNavMesh");
 	myTerrain->CreateNavMesh();
 	for (int i = 0; i < myCutBoxes.Size(); ++i)
@@ -211,18 +215,11 @@ void LevelFactory::ReadLevel(const std::string& aLevelPath)
 	int elapsed = static_cast<int>(
 		CU::TimerManager::GetInstance()->StopTimer("CreateNavMesh").GetMilliseconds());
 	RESOURCE_LOG("Creating NavMesh took %d ms", elapsed);
-
-	/*CU::TimerManager::GetInstance()->StartTimer("LoadNavMesh");
-
-	myTerrain->LoadNavMesh("Data/Resource/Generated/navMesh.bin");
-
-	int elapsed = static_cast<int>(
-		CU::TimerManager::GetInstance()->StopTimer("LoadNavMesh").GetMilliseconds());
-	RESOURCE_LOG("Loading NavMesh took %d ms", elapsed);*/
+	myCutBoxes.DeleteAll();
+#endif
 
 	myTerrain->CreatePathFinder();
 
-	myCutBoxes.DeleteAll();
 
 	Prism::Engine::GetInstance()->myIsLoading = false;
 
@@ -576,8 +573,13 @@ void LevelFactory::LoadTerrain(const std::string& aLevelPath)
 	tinyxml2::XMLElement* iceElement = reader.FindFirstChild(levelElement, "ice");
 	reader.ForceReadAttribute(iceElement, "texture", icePath);
 
-	myTerrain = new Prism::Terrain(heightMap, texturePath, { 256.f, 256.f }, 10.f, CU::Matrix44<float>(), icePath);
 	reader.CloseDocument();
+
+#ifdef USE_BINARY_TERRAIN
+	myTerrain = new Prism::Terrain(CU::GetGeneratedDataFolderFilePath(aLevelPath, "nav"), texturePath, icePath);
+#else
+	myTerrain = new Prism::Terrain(heightMap, texturePath, { 256.f, 256.f }, 10.f, CU::Matrix44<float>(), icePath);
+#endif
 
 	int elapsed = static_cast<int>(
 		CU::TimerManager::GetInstance()->StopTimer("LoadTerrain").GetMilliseconds());

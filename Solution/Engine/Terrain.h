@@ -24,11 +24,16 @@ namespace Prism
 
 	class Terrain : public BaseModel
 	{
+		friend class NavMeshReader;
 	public:
 		Terrain(const std::string& aHeightMapPath, const std::string& aTexturePath
 			, const CU::Vector2<float>& aSize, float aHeight, const CU::Matrix44<float>& aOrientation
 			, const std::string& aIceInfluence);
+		Terrain(const std::string& aHeightMapPath, const CU::Vector2<float>& aSize, float aHeight);
+		Terrain(const std::string& aBinaryPath, const std::string& aTexturePath, const std::string& aIceInfluence);
 		~Terrain();
+
+		void SetupDirectXData(const std::string& aIceInfluence);
 
 		void Render(const Camera& aCamera, bool aRenderNavMeshLines);
 		void CalcEntityHeight(CU::Matrix44<float>& anOrientation) const;
@@ -47,6 +52,7 @@ namespace Prism
 
 	private:
 		void operator=(Terrain&) = delete;
+
 		void CreateVertices();
 		void CalcNormals(CU::GrowingArray<VertexPosNormUVBiTang>& someVertices) const;
 		float GetHeight(unsigned int aX, unsigned int aY) const;
@@ -55,8 +61,8 @@ namespace Prism
 		int GetIndex(const CU::Vector3<float>& aPosition) const;
 		bool GetAbove(const CU::Vector3<float>& aPosition) const;
 		const HeightMap* myHeightMap;
-		const CU::Vector2<float> mySize;
-		const float myHeight;
+		CU::Vector2<float> mySize;
+		float myHeight;
 		const CU::Matrix44<float> myOrientation;
 
 		CU::GrowingArray<D3D11_INPUT_ELEMENT_DESC*> myVertexFormat;
@@ -64,6 +70,9 @@ namespace Prism
 		VertexDataWrapper* myVertexBaseData;
 		float myCellSize;
 		int myVertexCount;
+
+		CU::GrowingArray<VertexPosNormUVBiTang> myVertices;
+		CU::GrowingArray<int> myIndices;
 
 		Navigation::NavMesh* myNavMesh;
 		Navigation::PathFinder* myPathFinder;

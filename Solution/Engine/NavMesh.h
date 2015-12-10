@@ -1,6 +1,7 @@
 #pragma once
 #include <GrowingArray.h>
 #include <Vector.h>
+#include <fstream>
 
 namespace Prism
 {
@@ -15,6 +16,7 @@ namespace Prism
 		public:
 			NavMesh();
 			NavMesh(const std::string& aBinaryPath);
+			NavMesh(std::fstream& aStream);
 			~NavMesh();
 
 			void Render(bool aRenderNavmeshLines);
@@ -23,10 +25,12 @@ namespace Prism
 			const CU::GrowingArray<Triangle*>& GetTriangles() const;
 			void Cut(const CU::GrowingArray<CU::Vector2<float>>& someVertices); // needs to be clock wise convex hull
 
-			void Save();
+			void Save(const std::string& aFilePath);
+			void Save(std::fstream& aStream);
 
 		private:
 			void Load(const std::string& aBinaryPath);
+			void Load(std::fstream& aStream);
 			void operator=(NavMesh&) = delete;
 			void CreateQuad(Vertex*& aBotLeftVertex, Edge*& aLeftEdge, Edge*& aBotEdge);
 			void CutTriangle(Edge* anEdgeToCut, Triangle* aTriangle, Edge* aNewEdge1, Edge* aNewEdge2, Vertex* anIntersectionVertex);
