@@ -9,6 +9,7 @@ ConsoleHistoryManager::ConsoleHistoryManager()
 	: myCurrentIndex(0)
 	, myInsertIndex(0)
 	, myHasWrapped(false)
+	, myEmptyString("")
 {
 	std::string tempPath = CU::GetMyDocumentFolderPath() + "ICE";
 	CreateDirectory(tempPath.c_str(), NULL);
@@ -39,7 +40,7 @@ void ConsoleHistoryManager::Save()
 
 void ConsoleHistoryManager::Load()
 {
-	AddHistory(" ", eHistoryType::HISTORY);
+	//AddHistory(" ", eHistoryType::HISTORY);
 
 	std::fstream output;
 	output.open(myHistoryFile, std::ios::in);
@@ -76,77 +77,166 @@ void ConsoleHistoryManager::Load()
 
 const std::string& ConsoleHistoryManager::GetCurrent(eHistoryType)
 {
+	if (myHistory.Size() == 0)
+	{
+		return myEmptyString;
+	}
 	return myHistory[myCurrentIndex]->myMessage;
 }
 
 
 const std::string& ConsoleHistoryManager::GetNext(eHistoryType aType)
 {
+	if (myHistory.Size() == 0)
+	{
+			return myEmptyString;
+	}
 	myCurrentIndex++;
 	if (myCurrentIndex >= myHistory.Size())
 	{
 		myCurrentIndex = 0;
 	}
-	CheckType(aType, false);
+	if (CheckType(aType, false) == false)
+	{
+		return myEmptyString;
+	}
 	return myHistory[myCurrentIndex]->myMessage;
 }
 
 const std::string& ConsoleHistoryManager::GetPrevious(eHistoryType aType)
 {
+	if (myHistory.Size() == 0)
+	{
+		return myEmptyString;
+	}
 	myCurrentIndex--;
 	if (myCurrentIndex < 0)
 	{
 		myCurrentIndex = myHistory.Size() - 1;
 	}
-	CheckType(aType, true);
+	if (CheckType(aType, true) == false)
+	{
+		return myEmptyString;
+	}
 	return myHistory[myCurrentIndex]->myMessage;
 }
 
-void ConsoleHistoryManager::CheckType(eHistoryType aType, bool aShouldGoBackwards)
+bool ConsoleHistoryManager::IsInHistory(const std::string& aString) const
 {
-	bool currentlyWrong = true;
-	bool hasLooped = false;
-	while (currentlyWrong == true)
+	if (aString == " " || aString == "")
 	{
-		if (myHistory[myCurrentIndex]->myType != aType)
+		return true;
+	}
+	int index = aString.find_first_of("(");
+	for (int i = 0; i < myHistory.Size(); ++i)
+	{
+		if (myHistory[i]->myMessage.length() < aString.length())
 		{
-			if (aShouldGoBackwards == false)
+			continue;
+		}
+		for (int j = 0; j < aString.length(); ++j)
+		{
+			if (myHistory[i]->myMessage[j] != aString[j])
 			{
-				myCurrentIndex++;
-				if (myCurrentIndex >= myHistory.Size() && hasLooped == false)
-				{
-					myCurrentIndex = 0;
-					hasLooped = true;
-				}
-				else if (myCurrentIndex >= myHistory.Size() && hasLooped == true)
-				{
-					break;
-				}
+				break;
 			}
-			else if (aShouldGoBackwards == true)
+		}
+		return true;
+	}
+	return false;
+}
+
+bool ConsoleHistoryManager::CheckType(eHistoryType aType, bool aShouldGoBackwards)
+{
+	if (myHistory[myCurrentIndex]->myType == aType)
+	{
+		return true;
+	}
+	else
+	{
+		int aStartIndex = myCurrentIndex;
+		while (myHistory[myCurrentIndex]->myType != aType)
+		{
+			if (aShouldGoBackwards == true)
 			{
 				myCurrentIndex--;
-				if (myCurrentIndex < 0 && hasLooped == false)
+				if (myCurrentIndex < 0)
 				{
 					myCurrentIndex = myHistory.Size() - 1;
-					hasLooped = true;
 				}
-				else if (myCurrentIndex < 0 && hasLooped == true)
+				if (myCurrentIndex == aStartIndex)
 				{
-					break;
+					return false;
+				}
+			}
+			else
+			{
+				++myCurrentIndex;
+				if (myCurrentIndex > myHistory.Size() - 1)
+				{
+					myCurrentIndex = 0;
+				}
+				if (myCurrentIndex == aStartIndex)
+				{
+					return false;
 				}
 			}
 		}
-		else
-		{
-			break;
-		}
 	}
+
+	return true;
+
+
+
+
+
+
+
+
+	//bool currentlyWrong = true;
+	//bool hasLooped = false;
+	//while (currentlyWrong == true)
+	//{
+	//	if (myHistory[myCurrentIndex]->myType != aType)
+	//	{
+	//		if (aShouldGoBackwards == false)
+	//		{
+	//			myCurrentIndex++;
+	//			if (myCurrentIndex >= myHistory.Size() && hasLooped == false)
+	//			{
+	//				myCurrentIndex = 0;
+	//				hasLooped = true;
+	//			}
+	//			else if (myCurrentIndex >= myHistory.Size() && hasLooped == true)
+	//			{
+	//				break;
+	//			}
+	//		}
+	//		else if (aShouldGoBackwards == true)
+	//		{
+	//			myCurrentIndex--;
+	//			if (myCurrentIndex < 0 && hasLooped == false)
+	//			{
+	//				myCurrentIndex = myHistory.Size() - 1;
+	//				hasLooped = true;
+	//			}
+	//			else if (myCurrentIndex < 0 && hasLooped == true)
+	//			{
+	//				break;
+	//			}
+	//		}
+	//	}
+	//	else
+	//	{
+	//		break;
+	//	}
+	//}
 }
 
 
 void ConsoleHistoryManager::AddHistory(const std::string& aCommand, eHistoryType anEnum)
 {
+	DL_ASSERT_EXP(aCommand.length() > 0, "Should not be able to save empty commands in history");
 	History* tempHistory;
 	
 	bool prevRuntime = Prism::MemoryTracker::GetInstance()->GetRunTime();

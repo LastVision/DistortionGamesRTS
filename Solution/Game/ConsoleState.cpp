@@ -13,6 +13,7 @@ ConsoleState::ConsoleState(bool& aShouldReOpenConsole)
 	, myLuaSuggestions(8)
 	, myCurrentSuggestion(0)
 	, mySuggestionString("")
+	, myHistoryMode(false)
 {
 }
 
@@ -67,6 +68,30 @@ const eStateStatus ConsoleState::Update(const float& aDeltaTime)
 		return eStateStatus::eKeepState;
 	}
 
+	std::string input = Console::GetInstance()->GetInput();
+	if (input == " " || input == "")
+	{
+		if (CU::InputWrapper::GetInstance()->KeyUp(DIK_UPARROW) == true)
+		{
+			myHistoryMode = true;
+			//mySuggestionString = Console::GetInstance()->GetConsoleHistory()->GetPrevious();
+		}
+		if (CU::InputWrapper::GetInstance()->KeyUp(DIK_DOWNARROW) == true)
+		{
+			myHistoryMode = true;
+			//mySuggestionString = Console::GetInstance()->GetConsoleHistory()->GetNext();
+		}
+	}
+
+	if (myHistoryMode == true)
+	{
+		HandleHistoryMode();
+	}
+	else
+	{
+		HandleSuggestionMode();
+
+
 	if (CU::InputWrapper::GetInstance()->KeyUp(DIK_RETURN) == true)
 	{
 		myShouldReOpenConsole = true;
@@ -116,83 +141,14 @@ const eStateStatus ConsoleState::Update(const float& aDeltaTime)
 		Console::GetInstance()->GetConsoleHistory()->Save();
 		myStateStatus = ePopSubState;
 	}
-
-	const CU::GrowingArray<std::string> allFunctions = Console::GetInstance()->GetConsoleHelp()->GetAllFunction();
-	const std::string input = Console::GetInstance()->GetInput();
-	if (input != " " && input != "")
-	{
-		int index = input.find_first_of("(");
-		for (int i = 0; i < allFunctions.Size(); ++i)
-		{
-			if (index != std::string::npos)
-			{
-				if (CU::ToLower(allFunctions[i]).find(CU::ToLower(std::string(mySuggestionString.begin(), mySuggestionString.begin() + index))) != -1)
-				{
-					myLuaSuggestions.Add(allFunctions[i]);
-				}
-			}
-			else
-			{
-				if (CU::ToLower(allFunctions[i]).find(CU::ToLower(input)) != -1)
-				{
-					myLuaSuggestions.Add(allFunctions[i]);
-				}
-			}
-		}
 	}
-	else
+
+
+	if (Console::GetInstance()->GetInput().length() <= 0 && myHistoryMode == false)
 	{
-		myCurrentSuggestion = 0;
 		mySuggestionString = "";
-	}
+		}
 
-	if (myLuaSuggestions.Size() - 1 > myCurrentSuggestion)
-	{
-		mySuggestionString = myLuaSuggestions[myCurrentSuggestion];
-	}
-
-	if (CU::InputWrapper::GetInstance()->KeyUp(DIK_UPARROW) == true)
-	{
-		if (input == "")
-		{
-			Console::GetInstance()->GetConsoleHistory()->GetPrevious();
-		}
-		else
-		{
-			--myCurrentSuggestion;
-			myCurrentSuggestion = CU::ClipInt(myCurrentSuggestion, 0, myLuaSuggestions.Size() - 1);
-			if (myLuaSuggestions.Size() > 0)
-			{
-				mySuggestionString = myLuaSuggestions[myCurrentSuggestion];
-			}
-		}
-	}
-
-	if (CU::InputWrapper::GetInstance()->KeyUp(DIK_DOWNARROW) == true)
-	{
-		if (input == "")
-		{
-			Console::GetInstance()->GetConsoleHistory()->GetNext();
-		}
-		else
-		{
-			++myCurrentSuggestion;
-			myCurrentSuggestion = CU::ClipInt(myCurrentSuggestion, 0, myLuaSuggestions.Size() - 1);
-			if (myLuaSuggestions.Size() > 0)
-			{
-				mySuggestionString = myLuaSuggestions[myCurrentSuggestion];
-			}
-		}
-	}
-
-	if (CU::InputWrapper::GetInstance()->KeyUp(DIK_TAB) == true)
-	{
-		if (mySuggestionString != "")
-		{
-			int index = mySuggestionString.find_first_of("(");
-			Console::GetInstance()->SetInput(std::string(mySuggestionString.begin(), mySuggestionString.begin() + index));
-		}
-	}
 
 	myText->SetText(Console::GetInstance()->GetInput());
 	myMarkerPosition.x = (myLowerLeftCorner.x * 1.1f) + myText->GetWidth() + 3;
@@ -225,24 +181,22 @@ void ConsoleState::Render()
 	myText->SetText(Console::GetInstance()->GetInput());
 	myText->SetColor({ 1.f, 1.f, 1.f, 1.f });
 	myText->Render();
-	//Prism::Engine::GetInstance()->RenderText(myText);
-	//Prism::Engine::GetInstance()->PrintText(myText->myText , myLowerLeftCorner * 1.1f, Prism::eTextType::RELEASE_TEXT, 0.9f);
 
-	//int length = Console::GetInstance()->GetInput().length();
+
 
 	if (myMarkerBlinker == true)
 	{
 		myMarker->Render(myMarkerPosition);
-		//myMarker->Render({ (myLowerLeftCorner.x * 1.1f) + length * 15.f, myLowerLeftCorner.y * 1.1f });
 	}
+
 	std::string consoleInput = Console::GetInstance()->GetInput();
-	if (consoleInput != "" && consoleInput != " ")
+	if (myHistoryMode == false)
 	{
 		CU::Vector2<float> windowSize = Prism::Engine::GetInstance()->GetWindowSize();
 		windowSize *= 0.75f;
 		mySuggestionBox->SetSize({ windowSize.x - 50.f, 30.f + (myLuaSuggestions.Size() * 30.f) }, { 0.f, myLuaSuggestions.Size() * 30.f });
 		mySuggestionBox->Render({ myLowerLeftCorner.x + 25.f, myLowerLeftCorner.y - 20.f });
-		//Check versus existing functions, return those that exist, render them and scale window properly
+
 		for (int i = 0; i < myLuaSuggestions.Size(); ++i)
 		{
 			mySuggestionText->SetText(myLuaSuggestions[i]);
@@ -273,4 +227,86 @@ void ConsoleState::ResumeState()
 void ConsoleState::OnResize(int aWidth, int aHeight)
 {
 
+}
+
+
+void ConsoleState::HandleHistoryMode()
+{
+	if (CU::InputWrapper::GetInstance()->KeyUp(DIK_UPARROW) == true)
+	{
+		myHistoryMode = true;
+		mySuggestionString = Console::GetInstance()->GetConsoleHistory()->GetPrevious();
+	}
+	else if (CU::InputWrapper::GetInstance()->KeyUp(DIK_DOWNARROW) == true)
+	{
+		myHistoryMode = true;
+		mySuggestionString = Console::GetInstance()->GetConsoleHistory()->GetNext();
+	}
+	else if (CU::InputWrapper::GetInstance()->KeyUp(DIK_TAB) == true)
+	{
+		Console::GetInstance()->SetInput(mySuggestionString);
+		mySuggestionString = "";
+	}
+	if (mySuggestionString.length() == 0)
+	{
+		myHistoryMode = false;
+		mySuggestionString = "";
+		myCurrentSuggestion = 0;
+	}
+}
+
+void ConsoleState::HandleSuggestionMode()
+{
+	const CU::GrowingArray<std::string> allFunctions = Console::GetInstance()->GetConsoleHelp()->GetAllFunction();
+	std::string input = Console::GetInstance()->GetInput();
+
+	if (input.length() > 0)
+	{
+		std::string inputFunctionName(input);
+		inputFunctionName = CU::ToLower(inputFunctionName);
+		int index = inputFunctionName.find_first_of("(");
+		if (index != std::string::npos)
+		{
+			inputFunctionName = std::string(inputFunctionName.begin(), inputFunctionName.begin() + index);
+		}
+		for (int i = 0; i < allFunctions.Size(); ++i)
+		{
+			std::string	functionToTest = CU::ToLower(allFunctions[i]);
+			if (functionToTest.find(inputFunctionName) != std::string::npos)
+			{
+				myLuaSuggestions.Add(allFunctions[i]);
+			}
+		}
+
+		if (CU::InputWrapper::GetInstance()->KeyUp(DIK_UPARROW) == true)
+		{
+			--myCurrentSuggestion;
+		}
+
+		if (CU::InputWrapper::GetInstance()->KeyUp(DIK_DOWNARROW) == true)
+		{
+			++myCurrentSuggestion;
+		}
+		myCurrentSuggestion = CU::ClipInt(myCurrentSuggestion, 0, myLuaSuggestions.Size() - 1);
+		if (myLuaSuggestions.Size() > 0 && index == std::string::npos)
+		{
+			mySuggestionString = myLuaSuggestions[myCurrentSuggestion];
+		}
+		else
+		{
+			mySuggestionString = "";
+		}
+	}
+
+
+	if (CU::InputWrapper::GetInstance()->KeyUp(DIK_TAB) == true)
+	{
+		if (mySuggestionString != "")
+		{
+			int index = mySuggestionString.find_first_of("(");
+			Console::GetInstance()->SetInput(std::string(mySuggestionString.begin(), mySuggestionString.begin() + index + 1));
+			mySuggestionString = "";
+			myCurrentSuggestion = 0;
+		}
+	}
 }

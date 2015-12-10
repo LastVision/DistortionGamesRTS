@@ -38,10 +38,12 @@ public:
 	void Save();
 	void Load();
 	const CU::GrowingArray<History*>& GetHistoryArray();
+
+	bool IsInHistory(const std::string& aString) const;
 private:
-	void CheckType(eHistoryType aType, bool aShouldGoBackwards);
+	bool CheckType(eHistoryType aType, bool aShouldGoBackwards);
 
-
+	std::string myEmptyString;
 	CU::GrowingArray<History*> myHistory;
 	const char* myHistoryFile;
 	int myCurrentIndex;
