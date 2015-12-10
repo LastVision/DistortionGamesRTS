@@ -194,6 +194,7 @@ namespace LUA
 		myCppRegisterFunction();
 		RegisterFunction("PrintToFile", PrintFromLua, "aString", "Prints message into file");
 
+		AddLuaFunction("Init", 0);
 		AddLuaFunction("Update", 1);
 		AddLuaFunction("UpdateCinematic", 2);
 		AddLuaFunction("TriggerEvent", 3);

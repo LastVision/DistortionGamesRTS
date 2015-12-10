@@ -17,6 +17,7 @@
 #include <NavMesh.h>
 #include "PlayerDirector.h"
 #include <PointLight.h>
+#include <ScriptSystem.h>
 #include <SpotLight.h>
 #include <Terrain.h>
 #include <TextureContainer.h>
@@ -101,6 +102,8 @@ Level* LevelFactory::LoadCurrentLevel()
 	ReadLevel(myLevelPaths[myCurrentID]);
 
 	myCurrentLevel->myPlayer->InitGUI();
+
+	LUA::ScriptSystem::GetInstance()->CallFunction("Init", {});
 
 	return myCurrentLevel;
 }

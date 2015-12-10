@@ -75,7 +75,7 @@ public:
 private:
 	void operator=(Entity&) = delete;
 	CU::StaticArray<Component*, static_cast<int>(eComponentType::_COUNT)> myComponents;
-	const int myId;
+	int myId;
 	
 	bool myAlive;
 	const eEntityType myType;
