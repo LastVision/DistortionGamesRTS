@@ -11,8 +11,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{A99EBB70-B6F2-4EC5-9F5E-9C111920A73A}</ProjectGuid>
-    <RootNamespace>CollisionRadiusCalc</RootNamespace>
+    <ProjectGuid>{70428136-2CBA-440D-BC14-1E5EFC7C52FE}</ProjectGuid>
+    <RootNamespace>DataExporter</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -39,15 +39,15 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IntDir>$(SolutionDir)..\temp\</IntDir>
     <OutDir>$(SolutionDir)..\Workbed\bin\</OutDir>
+    <IntDir>$(SolutionDir)..\temp\$(ProjectName)\</IntDir>
     <TargetName>$(ProjectName)_$(Configuration)</TargetName>
     <IncludePath>$(FBX_SDK_ROOT)\include\;$(SolutionDir)..\FBX\;$(SolutionDir)CommonUtilities\;$(SolutionDir)Engine\;$(SolutionDir)Timer\;$(SolutionDir)DL_Debug\;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)..\Libs3rdParty\;$(SolutionDir)..\Libs3rdParty\DirectXLibs\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IntDir>$(SolutionDir)..\temp\</IntDir>
     <OutDir>$(SolutionDir)..\Workbed\bin\</OutDir>
+    <IntDir>$(SolutionDir)..\temp\$(ProjectName)\</IntDir>
     <TargetName>$(ProjectName)_$(Configuration)</TargetName>
     <IncludePath>$(FBX_SDK_ROOT)\include\;$(SolutionDir)..\FBX\;$(SolutionDir)CommonUtilities\;$(SolutionDir)Engine\;$(SolutionDir)Timer\;$(SolutionDir)DL_Debug\;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)..\Libs3rdParty\;$(SolutionDir)..\Libs3rdParty\DirectXLibs\;$(LibraryPath)</LibraryPath>
@@ -79,13 +79,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CalcRadiusReader.cpp" />
+    <ClCompile Include="DGFXReader.cpp" />
+    <ClCompile Include="IReader.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Reader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CalcRadiusReader.h" />
+    <ClInclude Include="DGFXReader.h" />
     <ClInclude Include="dirent.h" />
-    <ClInclude Include="Reader.h" />
-    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="IReader.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CommonUtilities\CommonUtilities.vcxproj">
@@ -97,11 +100,8 @@
     <ProjectReference Include="..\Engine\Engine.vcxproj">
       <Project>{56e2c751-a07c-49d7-9073-839a5d0a71d2}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\InputWrapper\InputWrapper.vcxproj">
-      <Project>{e6bd4153-64be-4109-8d3c-724baadab8af}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\Timer\Timer.vcxproj">
-      <Project>{62c9b6f1-e90e-49c7-b0c6-3809fca2065d}</Project>
+    <ProjectReference Include="..\Memory\Memory.vcxproj">
+      <Project>{25945336-03d1-42a6-8764-7ef11dbc42e6}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
