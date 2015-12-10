@@ -28,6 +28,11 @@ namespace CU
 		return fmax(aLower, fmin(aNumber, aUpper));
 	}
 
+	inline int ClipInt(int aNumber, int aLower, int aUpper)
+	{
+		return max(aLower, min(aNumber, aUpper));
+	}
+
 	inline std::string GetSubString(std::string aStringToReadFrom, char aCharToFind, bool aReadAfterChar)
 	{
 		std::string toReturn;

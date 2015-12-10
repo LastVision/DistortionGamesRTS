@@ -130,8 +130,6 @@ namespace Prism
 	{
 		CU::GrowingArray<VertexPosNormUVBiTang> vertices(4);
 		CU::GrowingArray<int> indices(6);
-		float halfWidth = mySize.x * 0.5f;
-		float halfDepth = mySize.y * 0.5f;
 		
 		
 		VertexPosNormUVBiTang vertex;
