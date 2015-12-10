@@ -315,7 +315,7 @@ namespace Prism
 
 		int textureCount;
 		aStream.read((char*)&textureCount, sizeof(int)); //numberOfTextures
-		for (unsigned int i = 0; i < textureCount; ++i)
+		for (int i = 0; i < textureCount; ++i)
 		{
 			int textureType;
 			aStream.read((char*)&textureType, sizeof(int)); //textureType
@@ -460,7 +460,7 @@ namespace Prism
 
 		int textureCount;
 		aStream.read((char*)&textureCount, sizeof(int)); //numberOfTextures
-		for (unsigned int i = 0; i < textureCount; ++i)
+		for (int i = 0; i < textureCount; ++i)
 		{
 			int textureType;
 			aStream.read((char*)&textureType, sizeof(int)); //textureType
@@ -521,6 +521,8 @@ namespace Prism
 
 		lodGroup->myThreshHolds.Reserve(threshHoldCount);
 		aStream.read((char*)&lodGroup->myThreshHolds[0], sizeof(double) * threshHoldCount);
+
+		aOutData->SetLodGroup(lodGroup);
 	}
 
 	Animation* DGFXLoader::LoadAnimation(ModelAnimated* aOutData, std::fstream& aStream)
