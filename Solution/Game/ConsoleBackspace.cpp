@@ -37,8 +37,11 @@ void ConsoleBackspace::Update(bool aButtonIsPressed)
 	}
 	if (myHasReachedFirstWait == true && myCurrentTime > myRepeatWait + myFirstWait)
 	{
-		myString.erase(myString.end() - 1, myString.end());
-		myCurrentTime -= myRepeatWait;
+		if (myString != "")
+		{
+			myString.erase(myString.end() - 1, myString.end());
+			myCurrentTime -= myRepeatWait;
+		}
 	}
 
 }
