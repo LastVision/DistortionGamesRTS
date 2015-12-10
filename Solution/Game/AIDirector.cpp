@@ -10,12 +10,12 @@ AIDirector::AIDirector(const Prism::Terrain& aTerrain, Prism::Scene& aScene)
 {
 	for (int i = 0; i < 1; ++i)
 	{
-		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::ENEMY, eEntityType::DRAGON, Prism::eOctreeType::DYNAMIC,
+		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::ENEMY, eEntityType::UNIT, eUnitType::DRAGON, Prism::eOctreeType::DYNAMIC,
 			aScene, { 20.f + i, 0.f, 40.f }, aTerrain));
 		myUnits[i]->Spawn({ 20.f + i, 0.f, 40.f });
 	}
 
-	myUnits.Add(EntityFactory::CreateEntity(eOwnerType::ENEMY, eEntityType::DRAGON, Prism::eOctreeType::DYNAMIC,
+	myUnits.Add(EntityFactory::CreateEntity(eOwnerType::ENEMY, eEntityType::UNIT, eUnitType::DRAGON, Prism::eOctreeType::DYNAMIC,
 		aScene, { 200.f, 0.f, 200.f }, aTerrain));
 	myUnits.GetLast()->Spawn({ 100.f, 0.f, 40.f });
 

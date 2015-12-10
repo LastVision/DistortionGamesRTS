@@ -24,6 +24,7 @@ class Entity
 	friend class AnimationComponent;
 	friend class ControllerComponent;
 	friend class GraphicsComponent;
+	friend class EntityFactory;
 
 public:
 	Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& aEntityData,
@@ -51,6 +52,8 @@ public:
 	Prism::Scene& GetScene();
 	eOwnerType GetOwner() const;
 	eEntityType GetType() const;
+	ePropType GetPropType() const;
+	eUnitType GetUnitType() const;
 	eEntityState GetState() const;
 	void SetState(eEntityState aState){ myState = aState; };
 	Prism::eOctreeType GetOctreeType() const;
@@ -76,6 +79,8 @@ private:
 	
 	bool myAlive;
 	const eEntityType myType;
+	ePropType myPropType;
+	eUnitType myUnitType;
 	const eOwnerType myOwner;
 	eEntityState myState;
 	const Prism::eOctreeType myOctreeType;
@@ -129,6 +134,16 @@ inline eOwnerType Entity::GetOwner() const
 inline eEntityType Entity::GetType() const
 {
 	return myType;
+}
+
+inline ePropType Entity::GetPropType() const
+{
+	return myPropType;
+}
+
+inline eUnitType Entity::GetUnitType() const
+{
+	return myUnitType;
 }
 
 inline eEntityState Entity::GetState() const

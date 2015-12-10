@@ -33,7 +33,7 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 {
 	for (int i = 0; i < 64; ++i)
 	{
-		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::PLAYER, eEntityType::DRAGON, Prism::eOctreeType::DYNAMIC,
+		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::PLAYER, eEntityType::UNIT, eUnitType::DRAGON, Prism::eOctreeType::DYNAMIC,
 			aScene, { 65, 0, 40 }, aTerrain));
 		
 	}
@@ -124,7 +124,7 @@ void PlayerDirector::OnResize(int aWidth, int aHeight)
 
 void PlayerDirector::SpawnUnit(Prism::Scene&)
 {
-	myBuilding->GetComponent<BuildingComponent>()->BuildUnit(eEntityType::DRAGON);
+	myBuilding->GetComponent<BuildingComponent>()->BuildUnit(eUnitType::DRAGON);
 }
 
 void PlayerDirector::ReceiveMessage(const SpawnUnitMessage& aMessage)
@@ -134,7 +134,7 @@ void PlayerDirector::ReceiveMessage(const SpawnUnitMessage& aMessage)
 	{
 		for (int i = 0; i < myUnits.Size(); ++i)
 		{
-			if (myUnits[i]->GetType() == static_cast<eEntityType>(aMessage.myUnitType) && myUnits[i]->GetAlive() == false)
+			if (myUnits[i]->GetUnitType() == static_cast<eUnitType>(aMessage.myUnitType) && myUnits[i]->GetAlive() == false)
 			{
 				myUnits[i]->Spawn(myBuilding->GetOrientation().GetPos() + CU::Vector3f(0.f, 0.f, -15.f));
 				myActiveUnits.Add(myUnits[i]);

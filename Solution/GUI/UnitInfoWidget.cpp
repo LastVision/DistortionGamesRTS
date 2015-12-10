@@ -62,7 +62,7 @@ namespace GUI
 	{
 		if (myIsUnitSelected == true)
 		{
-			if (mySelectedType == eEntityType::DRAGON)
+			if (mySelectedType == eEntityType::UNIT)
 			{
 				for (int i = 0; i < myUnits.Size(); i++)
 				{

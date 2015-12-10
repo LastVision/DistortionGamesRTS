@@ -86,6 +86,9 @@
     <ClCompile Include="CollisionComponent.cpp">
       <Filter>Component\Collision</Filter>
     </ClCompile>
+    <ClCompile Include="EntityEnumConverter.cpp">
+      <Filter>EntityEnum</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -158,6 +161,9 @@
     </ClInclude>
     <ClInclude Include="CollisionComponentData.h">
       <Filter>EntityFactory\EntityData\ComponentData</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityEnumConverter.h">
+      <Filter>EntityEnum</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
