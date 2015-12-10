@@ -4,6 +4,7 @@
 #include "AnimationCurve.h"
 #include "AnimationNode.h"
 #include "AnimationSystem.h"
+#include <CommonHelper.h>
 #include "FBXFactory.h"
 #include "FBX/FbxLoader.h"
 #include "HierarchyBone.h"
@@ -666,29 +667,24 @@ void Prism::FBXFactory::LoadModelForRadiusCalc(const char* aFilePath
 	delete fbxModelData;
 }
 
-void Prism::FBXFactory::ConvertToDGFX(const char* aFilePath)
+void Prism::FBXFactory::ConvertToDGFX(const char* aInputPath, const char* aOutputPath)
 {
 	CU::TimerManager::GetInstance()->StartTimer("ConvertDGFX");
 
 	FBXData* data = new FBXData();
-	FbxModelData* fbxModelData = myLoader->loadModel(aFilePath);
+	FbxModelData* fbxModelData = myLoader->loadModel(aInputPath);
 	data->myData = fbxModelData;
-	data->myPath = aFilePath;
+	data->myPath = aInputPath;
 
-	std::string dgfxFile(aFilePath);
-	dgfxFile[dgfxFile.length() - 3] = 'd';
-	dgfxFile[dgfxFile.length() - 2] = 'g';
-	dgfxFile[dgfxFile.length() - 1] = 'f';
-	dgfxFile += 'x';
-
+	CU::BuildFoldersInPath(aOutputPath);
 	std::fstream file;
-	file.open(dgfxFile.c_str(), std::ios::out | std::ios::binary);
+	file.open(aOutputPath, std::ios::out | std::ios::binary);
 	SaveModelToFile(fbxModelData, file);
 	file.close();
 
 	int elapsed = static_cast<int>(
 		CU::TimerManager::GetInstance()->StopTimer("ConvertDGFX").GetMilliseconds());
-	RESOURCE_LOG("Converting FBX->DGFX \"%s\" took %d ms", aFilePath, elapsed);
+	RESOURCE_LOG("Converting FBX->DGFX \"%s\" took %d ms", aOutputPath, elapsed);
 
 	delete data;
 }

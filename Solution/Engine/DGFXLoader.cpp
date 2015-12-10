@@ -3,6 +3,7 @@
 #include "Animation.h"
 #include "AnimationNode.h"
 #include "BaseModel.h"
+#include <CommonHelper.h>
 #include "DGFXLoader.h"
 #include "Model.h"
 #include "ModelAnimated.h"
@@ -41,16 +42,15 @@ namespace Prism
 			return myModels[aFilePath];
 		}
 
-		std::string dgfxFile(aFilePath);
-		dgfxFile[dgfxFile.length() - 3] = 'd';
-		dgfxFile[dgfxFile.length() - 2] = 'g';
-		dgfxFile[dgfxFile.length() - 1] = 'f';
-		dgfxFile += 'x';
+		std::string dgfxFile = CU::GetGeneratedDataFolderFilePath(aFilePath, "dgfx");
+
 		CU::TimerManager::GetInstance()->StartTimer("LoadDGFX");
 
 
 		std::fstream file;
 		file.open(dgfxFile.c_str(), std::ios::in | std::ios::binary);
+		DL_ASSERT_EXP(file.fail() == false, CU::Concatenate("Failed to open %s, did you forget to run the tool?", dgfxFile.c_str()));
+
 
 		Model* newModel = CreateModel(aEffect, file);
 		file.close();
@@ -72,16 +72,14 @@ namespace Prism
 			return myModelsAnimated[aFilePath];
 		}
 
-		std::string dgfxFile(aFilePath);
-		dgfxFile[dgfxFile.length() - 3] = 'd';
-		dgfxFile[dgfxFile.length() - 2] = 'g';
-		dgfxFile[dgfxFile.length() - 1] = 'f';
-		dgfxFile += 'x';
+		std::string dgfxFile = CU::GetGeneratedDataFolderFilePath(aFilePath, "dgfx");
+
 		CU::TimerManager::GetInstance()->StartTimer("LoadDGFXAnimated");
 
 
 		std::fstream file;
 		file.open(dgfxFile.c_str(), std::ios::in | std::ios::binary);
+		DL_ASSERT_EXP(file.fail() == false, CU::Concatenate("Failed to open %s, did you forget to run the tool?", dgfxFile.c_str()));
 
 		ModelAnimated* newModel = CreateModelAnimated(aEffect, file);
 
@@ -105,15 +103,14 @@ namespace Prism
 			return myAnimations[aFilePath];
 		}
 
-		std::string dgfxFile(aFilePath);
-		dgfxFile[dgfxFile.length() - 3] = 'd';
-		dgfxFile[dgfxFile.length() - 2] = 'g';
-		dgfxFile[dgfxFile.length() - 1] = 'f';
-		dgfxFile += 'x';
+		std::string dgfxFile = CU::GetGeneratedDataFolderFilePath(aFilePath, "dgfx");
+
 		CU::TimerManager::GetInstance()->StartTimer("LoadAnimationDGFX");
 
 		std::fstream stream;
 		stream.open(dgfxFile.c_str(), std::ios::in | std::ios::binary);
+		DL_ASSERT_EXP(stream.fail() == false, CU::Concatenate("Failed to open %s, did you forget to run the tool?", dgfxFile.c_str()));
+
 
 		int isNullObject;
 		stream.read((char*)&isNullObject, sizeof(int));
