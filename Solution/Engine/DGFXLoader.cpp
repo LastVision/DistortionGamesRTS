@@ -111,6 +111,9 @@ namespace Prism
 		stream.open(dgfxFile.c_str(), std::ios::in | std::ios::binary);
 		DL_ASSERT_EXP(stream.fail() == false, CU::Concatenate("Failed to open %s, did you forget to run the tool?", dgfxFile.c_str()));
 
+		int fileVersion;
+		stream.read((char*)&fileVersion, sizeof(int));
+		DL_ASSERT_EXP(fileVersion == DGFX_VERSION, "Found a old DGFX-Animation, try running the Converter again");
 
 		int isNullObject;
 		stream.read((char*)&isNullObject, sizeof(int));
@@ -140,6 +143,10 @@ namespace Prism
 	{
 		Model* tempModel = new Model();
 		tempModel->SetEffect(aEffect);
+
+		int fileVersion;
+		aStream.read((char*)&fileVersion, sizeof(int));
+		DL_ASSERT_EXP(fileVersion == DGFX_VERSION, "Found a old DGFX-Model, try running the Converter again");
 
 		int isNullObject;
 		aStream.read((char*)&isNullObject, sizeof(int));
@@ -178,6 +185,10 @@ namespace Prism
 	{
 		ModelAnimated* tempModel = new ModelAnimated();
 		tempModel->SetEffect(aEffect);
+
+		int fileVersion;
+		aStream.read((char*)&fileVersion, sizeof(int));
+		DL_ASSERT_EXP(fileVersion == DGFX_VERSION, "Found a old Animated DGFX-Model, try running the Converter again");
 
 		int isNullObject;
 		aStream.read((char*)&isNullObject, sizeof(int));

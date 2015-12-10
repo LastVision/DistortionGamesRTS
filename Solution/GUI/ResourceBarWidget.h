@@ -12,6 +12,7 @@ namespace tinyxml2
 }
 
 class XMLReader;
+class PlayerDirector;
 
 namespace GUI
 {
@@ -20,7 +21,7 @@ namespace GUI
 	{
 
 	public:
-		ResourceBarWidget(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement, const int& someGold);
+		ResourceBarWidget(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement, const PlayerDirector* aPlayer);
 		~ResourceBarWidget();
 
 		void Render(const CU::Vector2<float>& aParentPosition) override;
@@ -28,9 +29,11 @@ namespace GUI
 	private:
 		void operator=(ResourceBarWidget&) = delete;
 
-		const int& myPlayerGold;
+		const int* myValue;
 
-		Prism::Sprite* myGoldSprite;
+		Prism::Sprite* myValueSprite;
+
+		CU::Vector2<float> myTextPosition;
 
 	};
 }

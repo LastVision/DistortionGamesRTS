@@ -119,12 +119,14 @@
     <ClCompile Include="DGFXReader.cpp" />
     <ClCompile Include="IReader.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="NavMeshReader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CalcRadiusReader.h" />
     <ClInclude Include="DGFXReader.h" />
     <ClInclude Include="dirent.h" />
     <ClInclude Include="IReader.h" />
+    <ClInclude Include="NavMeshReader.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CommonUtilities\CommonUtilities.vcxproj">

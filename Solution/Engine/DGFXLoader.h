@@ -4,7 +4,6 @@
 #include <string>
 #include <unordered_map>
 
-
 /*
 
 -------------------------------
@@ -27,6 +26,7 @@
 
 
 
+DGFXVersion - int, the DGFXVersion that the model was exported in
 isNullObject - int, either 0 or 1 (false/true)
 isLodGroup - int, either 0 or 1 (false/true)
 isAnimated - int, either 0 or 1 (false/true)
@@ -87,7 +87,6 @@ childCount, int (number of children
 
 
 */
-
 
 
 
