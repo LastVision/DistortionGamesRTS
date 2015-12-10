@@ -28,20 +28,14 @@ void ConsoleBackspace::Update(bool aButtonIsPressed)
 		return;
 	}
 
-	
-
 	if (myCurrentTime > myFirstWait)
 	{
 		myString.erase(myString.end() - 1, myString.end());
 		myHasReachedFirstWait = true;
 	}
-	if (myHasReachedFirstWait == true && myCurrentTime > myRepeatWait + myFirstWait)
+	if (myHasReachedFirstWait == true && myCurrentTime > myRepeatWait + myFirstWait && myString.size() > 0)
 	{
-		if (myString != "")
-		{
-			myString.erase(myString.end() - 1, myString.end());
-			myCurrentTime -= myRepeatWait;
-		}
+		myString.erase(myString.end() - 1, myString.end());
+		myCurrentTime -= myRepeatWait;
 	}
-
 }

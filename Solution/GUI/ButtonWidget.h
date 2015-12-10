@@ -34,6 +34,8 @@ namespace GUI
 		bool IsInside(const CU::Vector2<float>& aPosition) const override;
 		void SetPosition(const CU::Vector2<float>& aPosition) override;
 
+		void ReadEvent(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement);
+
 	private:
 		void Click();
 		
