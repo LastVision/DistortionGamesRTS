@@ -11,12 +11,14 @@ public:
 
 	int GetId(Entity* anEntity);
 	Entity* GetEntity(int aId) const;
+	Entity* GetTrigger(int aId) const;
 
 private:
 	EntityId();
 	~EntityId();
 
 	CU::GrowingArray<Entity*> myEntities;
+	CU::GrowingArray<Entity*> myTriggers;
 
 	static EntityId* myInstance;
 };

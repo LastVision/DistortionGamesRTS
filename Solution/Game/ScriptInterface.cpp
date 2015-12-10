@@ -125,6 +125,16 @@ namespace Script_Interface
 		lua_pushinteger(aState, static_cast<int>(entity->GetOwner()));
 		return 1;
 	}
+
+	int GetTrigger(lua_State* aState)//void
+	{
+		int id = int(lua_tonumber(aState, 1));
+		Entity* entity = EntityId::GetInstance()->GetTrigger(id);
+		int entityId = entity->GetId();
+
+		lua_pushinteger(aState, static_cast<int>(entityId));
+		return 1;
+	}
 }
 
 void ScriptInterface::RegisterFunctions()
@@ -144,5 +154,6 @@ void ScriptInterface::RegisterFunctions()
 	system->RegisterFunction("ScriptRun", Script_Interface::ScriptRun, "aScriptFile", "Run the script file.");
 	system->RegisterFunction("ShowNavMesh", Script_Interface::ShowNavMesh, "", "Shows the lines for the navigation mesh.");
 	system->RegisterFunction("HideNavMesh", Script_Interface::HideNavMesh, "", "Hides the lines for the navigation mesh.");
-	system->RegisterFunction("GetOwner", Script_Interface::GetOwner, "aUnit", "Returns ownerID of unit.");
+	system->RegisterFunction("GetOwner", Script_Interface::GetOwner, "aUnit", "Returns ownerID of unit, ex: owner = GetOwner(aUnit)");
+	system->RegisterFunction("GetTrigger", Script_Interface::GetTrigger, "aTrigger", "Returns the Entity id for trigger of the supplied input, ex: trigger0 = GetTrigger(0)");
 }

@@ -9,4 +9,6 @@ namespace GC
 	const int enemyGruntCount = 10;
 	const int enemyDragonCount = 10;
 	const int enemyUnitCount = enemyGruntCount + enemyDragonCount;
+
+	const int triggerCount = 16;
 }

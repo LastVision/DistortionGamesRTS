@@ -75,7 +75,7 @@ void InGameState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCur
 	PostMaster::GetInstance()->Subscribe(eMessageType::TRIGGER, this);
 
 	PostMaster::GetInstance()->SendMessage(LUARunScriptMessage("Data/Script/Autorun.script"));
-
+	
 	myIsActiveState = true;
 }
 

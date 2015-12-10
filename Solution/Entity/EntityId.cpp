@@ -1,5 +1,7 @@
 #include "stdafx.h"
 
+#include "Entity.h"
+#include "EntityEnum.h"
 #include "EntityId.h"
 #include <MemoryTracker.h>
 
@@ -29,6 +31,11 @@ int EntityId::GetId(Entity* anEntity)
 	{
 		myEntities.Add(anEntity);
 		index = myEntities.Size() - 1;
+
+		if (anEntity->GetType() == eEntityType::RESOURCE_POINT)
+		{
+			myTriggers.Add(anEntity);
+		}
 	}
 	return index;
 }
@@ -38,8 +45,14 @@ Entity* EntityId::GetEntity(int aId) const
 	return myEntities[aId];
 }
 
+Entity* EntityId::GetTrigger(int aId) const
+{
+	return myTriggers[aId];
+}
+
 EntityId::EntityId()
 	: myEntities(4096)
+	, myTriggers(GC::triggerCount)
 {
 }
 
