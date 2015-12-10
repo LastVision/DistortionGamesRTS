@@ -12,12 +12,14 @@ namespace Prism
 	{
 		friend class Animation;
 		friend class FBXFactory;
+		friend class DGFXLoader;
 	public:
 		AnimationNode(int aNumOfValues);
 		~AnimationNode();
 
 		void AddValue(const AnimationNodeValue& aFrame);
 		bool HasValues() const;
+		void CalculateEndTime();
 
 		CU::Matrix44<float> GetCurrentMatrix(float aTime);
 		float GetAnimationLenght();

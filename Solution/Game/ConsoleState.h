@@ -23,6 +23,8 @@ public:
 
 
 private:
+	void operator=(ConsoleState&) = delete;
+
 	Prism::Sprite* myBackground;
 	bool& myShouldReOpenConsole;
 	Prism::Sprite* myMarker;

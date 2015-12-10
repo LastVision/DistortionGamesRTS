@@ -18,9 +18,9 @@ namespace Prism
 			, myMax(1000.f)
 		{}
 
-		Lod* CreateLod(){ myLods.Add(new Lod()); return myLods.GetLast(); }
+		Lod& CreateLod(){ myLods.Add(Lod()); return myLods.GetLast(); }
 
-		CU::GrowingArray<Lod*> myLods;
+		CU::GrowingArray<Lod> myLods;
 		CU::GrowingArray<double> myThreshHolds;
 		float myMin;
 		float myMax;

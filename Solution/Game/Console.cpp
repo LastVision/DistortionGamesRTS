@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Console.h"
 #include "ConsoleBackspace.h"
+#include "ConsoleHelp.h"
 #include "ConsoleHistoryManager.h"
 #include <InputWrapper.h>
 #include <ScriptSystem.h>
@@ -27,6 +28,7 @@ Console::Console()
 	myHistory = new ConsoleHistoryManager();
 	myHistory->Load();
 	myBackspace = new ConsoleBackspace(myInput);
+	myHelp = new ConsoleHelp();
 }
 
 
@@ -34,6 +36,7 @@ Console::~Console()
 {
 	SAFE_DELETE(myHistory);
 	SAFE_DELETE(myBackspace);
+	SAFE_DELETE(myHelp);
 }
 
 void Console::Update()

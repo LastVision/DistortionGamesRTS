@@ -97,16 +97,6 @@ void Level::Render(Prism::Camera& aCamera)
 
 	myPlayer->Render(aCamera);
 
-	CU::Vector3f point1(106, 27, 78);
-	CU::Vector3f point2(78, 27, 106);
-	CU::Vector3f point3(149, 27, 177);
-	CU::Vector3f point4(177, 27, 149);
-
-	Prism::RenderLine3D(point1, point2, eColorDebug::BLUE);
-	Prism::RenderLine3D(point2, point3, eColorDebug::BLUE);
-	Prism::RenderLine3D(point3, point4, eColorDebug::BLUE);
-	Prism::RenderLine3D(point4, point1, eColorDebug::BLUE);
-
 }
 
 void Level::OnResize(int aWidth, int aHeigth)

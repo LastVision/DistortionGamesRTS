@@ -26,6 +26,14 @@ namespace Prism
 		return myValues.Size() > 0;
 	}
 
+	void AnimationNode::CalculateEndTime()
+	{
+		for (int i = 0; i < myValues.Size(); ++i)
+		{
+			myEndTime = max(myEndTime, myValues[i].myTime);
+		}
+	}
+
 
 	CU::Matrix44<float> AnimationNode::GetCurrentMatrix(float aTime)
 	{

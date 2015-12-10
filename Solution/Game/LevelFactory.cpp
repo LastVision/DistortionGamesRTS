@@ -21,9 +21,11 @@
 #include <Scene.h>
 #include <XMLReader.h>
 
+#include <TimerManager.h>
+
 NavmeshCutBox::NavmeshCutBox(const CU::Vector3f& aPosition, const CU::Vector3f& aExtend, const CU::Vector3f& aRotation)
 	: myPosition(aPosition)
-	, myExtend(aExtend)
+	, myExtend(aExtend/2.f)
 	, myRotation(aRotation)
 {
 }
@@ -39,7 +41,7 @@ CU::GrowingArray<CU::Vector2<float>> NavmeshCutBox::GetCutMesh() const
 	points.Add({ +myExtend.x, +myExtend.z });
 	points.Add({ +myExtend.x, -myExtend.z });
 
-	CU::Matrix33<float> rotationMatrix(CU::Matrix33<float>::CreateRotateAroundZ(myRotation.z));
+	CU::Matrix33<float> rotationMatrix(CU::Matrix33<float>::CreateRotateAroundZ(-myRotation.y));
 
 	for (int i = 0; i < points.Size(); ++i)
 	{
@@ -191,6 +193,7 @@ void LevelFactory::ReadLevel(const std::string& aLevelPath)
 
 	effectContainer->GetEffect("Data/Resource/Shader/S_effect_pbl.fx")->SetAmbientHue(myAmbientHue);
 
+	CU::TimerManager::GetInstance()->StartTimer("CreateNavMesh");
 	myTerrain->CreateNavMesh();
 	for (int i = 0; i < myCutBoxes.Size(); ++i)
 	{
@@ -200,6 +203,18 @@ void LevelFactory::ReadLevel(const std::string& aLevelPath)
 	{
 		myTerrain->GetNavMesh()->Cut(myCurrentLevel->myEntities[i]->GetCutMesh());
 	}
+	int elapsed = static_cast<int>(
+		CU::TimerManager::GetInstance()->StopTimer("CreateNavMesh").GetMilliseconds());
+	RESOURCE_LOG("Creating NavMesh took %d ms", elapsed);
+
+	/*CU::TimerManager::GetInstance()->StartTimer("LoadNavMesh");
+
+	myTerrain->LoadNavMesh("Data/Resource/Generated/navMesh.bin");
+
+	int elapsed = static_cast<int>(
+		CU::TimerManager::GetInstance()->StopTimer("LoadNavMesh").GetMilliseconds());
+	RESOURCE_LOG("Loading NavMesh took %d ms", elapsed);*/
+
 	myTerrain->CreatePathFinder();
 
 	myCutBoxes.DeleteAll();
@@ -500,6 +515,8 @@ void LevelFactory::LoadCutBoxes(XMLReader& aReader, tinyxml2::XMLElement* aLevel
 
 void LevelFactory::LoadTerrain(const std::string& aLevelPath)
 {
+	CU::TimerManager::GetInstance()->StartTimer("LoadTerrain");
+
 	XMLReader reader;
 	reader.OpenDocument(aLevelPath);
 	tinyxml2::XMLElement* levelElement = reader.ForceFindFirstChild("root");
@@ -517,5 +534,9 @@ void LevelFactory::LoadTerrain(const std::string& aLevelPath)
 
 	myTerrain = new Prism::Terrain(heightMap, texturePath, { 256.f, 256.f }, 10.f, CU::Matrix44<float>(), icePath);
 	reader.CloseDocument();
+
+	int elapsed = static_cast<int>(
+		CU::TimerManager::GetInstance()->StopTimer("LoadTerrain").GetMilliseconds());
+	RESOURCE_LOG("Loading Terrain took %d ms", elapsed);
 }
 

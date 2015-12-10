@@ -19,6 +19,7 @@ namespace Prism
 	class ModelAnimated;
 	class Effect;
 	class HierarchyBone;
+	struct LodGroup;
 
 	class FBXFactory
 	{
@@ -32,8 +33,7 @@ namespace Prism
 		void LoadModelForRadiusCalc(const char* aFilePath, CU::GrowingArray<CU::Vector3<float>>& someVerticesOut);
 
 		void ConvertToDGFX(const char* aFilePath);
-		void SaveModelToFile(FbxModelData* aModelData, std::fstream& aStream);
-		void SaveModelDataToFile(ModelData* aData, std::fstream& aStream);
+		
 	private:
 		void FillData(ModelData* someData, Model* outData, Effect* aEffect);
 		void FillData(ModelData* someData, ModelAnimated* outData, Effect* aEffect);
@@ -48,6 +48,13 @@ namespace Prism
 			, const CU::Matrix44<float>& aParentOrientation = CU::Matrix44<float>());
 		void FillDataForRadiusCalc(ModelData* aModelData, CU::GrowingArray<CU::Vector3<float>>& someVerticesOut
 			, const CU::Matrix44<float>& aOrientation);
+
+
+		void SaveModelToFile(FbxModelData* aModelData, std::fstream& aStream);
+		void SaveModelDataToFile(ModelData* aData, std::fstream& aStream);
+		void SaveLodGroupToFile(Prism::LodGroup* aGroup, std::fstream& aStream);
+		void SaveAnimationToFile(FbxModelData* aModeldata, std::fstream& aStream);
+		void SaveBoneHierarchyToFile(Bone& aBone, AnimationData* aAnimationData, std::fstream& aStream);
 
 		FBXLoader *myLoader;
 
