@@ -71,6 +71,7 @@ namespace Prism
 		return;
 #else
 		MemoryTracker::GetInstance()->AllowNewDuringRunTime(std::this_thread::get_id());
+		LoadModel("Data/SM_aotest.fbx", "Data/Resource/Shader/S_effect_pbl.fx");
 		while (myIsRunning == true)
 		{
 			if (myHasPrefetched == false)

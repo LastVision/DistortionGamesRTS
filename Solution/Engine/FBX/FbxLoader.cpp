@@ -602,6 +602,7 @@ bool FillData(ModelData* someData, FbxNode* aNode, AnimationData* aAnimation)
 		newLayout.myType = ModelData::VERTEX_POS;
 		newLayout.mySize = VERTEX_STRIDE;
 		newLayout.myOffset = 0;
+		newLayout.mySemanticIndex = 0;
 		someData->myLayout.Add(newLayout);
 		lPolygonVertexCount = lPolygonCount * TRIANGLE_VERTEX_COUNT;
 	}
@@ -617,6 +618,7 @@ bool FillData(ModelData* someData, FbxNode* aNode, AnimationData* aAnimation)
 		newLayout.myType = ModelData::VERTEX_NORMAL;
 		newLayout.mySize = NORMAL_STRIDE;
 		newLayout.myOffset = stride * 4;
+		newLayout.mySemanticIndex = 0;
 		someData->myLayout.Add(newLayout);
 
 		stride += NORMAL_STRIDE;
@@ -634,6 +636,7 @@ bool FillData(ModelData* someData, FbxNode* aNode, AnimationData* aAnimation)
 		newLayout.myType = ModelData::VERTEX_UV;
 		newLayout.mySize = UV_STRIDE;
 		newLayout.myOffset = stride * 4;
+		newLayout.mySemanticIndex = 0;
 		someData->myLayout.Add(newLayout);
 
 		stride += UV_STRIDE;
@@ -647,6 +650,7 @@ bool FillData(ModelData* someData, FbxNode* aNode, AnimationData* aAnimation)
 		newLayout.myType = ModelData::VERTEX_UV;
 		newLayout.mySize = UV_STRIDE;
 		newLayout.myOffset = stride * 4;
+		newLayout.mySemanticIndex = 1;
 		someData->myLayout.Add(newLayout);
 
 		stride += UV_STRIDE;
@@ -661,6 +665,7 @@ bool FillData(ModelData* someData, FbxNode* aNode, AnimationData* aAnimation)
 		newLayout.myType = ModelData::VERTEX_BINORMAL;
 		newLayout.mySize = BINORMAL_STRIDE;
 		newLayout.myOffset = stride * 4;
+		newLayout.mySemanticIndex = 0;
 		someData->myLayout.Add(newLayout);
 
 		stride += BINORMAL_STRIDE;
@@ -674,6 +679,7 @@ bool FillData(ModelData* someData, FbxNode* aNode, AnimationData* aAnimation)
 		newLayout.myType = ModelData::VERTEX_TANGENT;
 		newLayout.mySize = TANGENT_STRIDE;
 		newLayout.myOffset = stride * 4;
+		newLayout.mySemanticIndex = 0;
 		someData->myLayout.Add(newLayout);
 
 		stride += TANGENT_STRIDE;
@@ -687,6 +693,7 @@ bool FillData(ModelData* someData, FbxNode* aNode, AnimationData* aAnimation)
 		newLayout.myType = ModelData::VERTEX_SKINWEIGHTS;
 		newLayout.mySize = SKINWEIGHT_STRIDE;
 		newLayout.myOffset = stride * 4;
+		newLayout.mySemanticIndex = 0;
 		someData->myLayout.Add(newLayout);
 
 		stride += SKINWEIGHT_STRIDE;
@@ -695,6 +702,7 @@ bool FillData(ModelData* someData, FbxNode* aNode, AnimationData* aAnimation)
 		newLayout.myType = ModelData::VERTEX_BONEID;
 		newLayout.mySize = BONEID_STRIDE;
 		newLayout.myOffset = stride * 4;
+		newLayout.mySemanticIndex = 0;
 		someData->myLayout.Add(newLayout);
 
 		stride += BONEID_STRIDE;
