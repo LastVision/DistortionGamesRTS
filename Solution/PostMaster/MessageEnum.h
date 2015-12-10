@@ -11,5 +11,7 @@ enum class eMessageType
 	CINEMATIC,
 	FADE,
 	TOGGLE_GUI,
+	LUA_RUN_SCRIPT,
+	TOGGLE_LINES,
 	COUNT,
 };

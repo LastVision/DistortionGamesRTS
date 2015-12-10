@@ -15,6 +15,7 @@
 #include <InputWrapper.h>
 #include <Intersection.h>
 #include "Level.h"
+#include <LUAToggleRenderLinesMessage.h>
 #include <LUAMoveCameraMessage.h>
 #include <ModelLoader.h>
 #include "PlayerDirector.h"
@@ -28,6 +29,7 @@
 
 Level::Level(const Prism::Camera& aCamera, Prism::Terrain* aTerrain, GUI::Cursor* aCursor)
 	: myEntities(64)
+	, myRenderNavMeshLines(false)
 {
 	EntityFactory::GetInstance()->LoadEntities("Data/Resource/Entity/LI_entity.xml");
 	myTerrain = aTerrain;
@@ -42,6 +44,7 @@ Level::Level(const Prism::Camera& aCamera, Prism::Terrain* aTerrain, GUI::Cursor
 	//myLight->SetColor({ 0.5f, 0.5f, 0.9f, 1.f });
 	//myLight->SetDir(CU::Vector3<float>(0, 1, 0) * CU::Matrix44<float>::CreateRotateAroundZ(-3.14f / 3.f));
 	//myScene->AddLight(myLight);
+	PostMaster::GetInstance()->Subscribe(eMessageType::TOGGLE_LINES, this);
 
 	myPlayer = new PlayerDirector(*myTerrain, *myScene, aCursor);
 	myAI = new AIDirector(*myTerrain, *myScene);
@@ -55,7 +58,7 @@ Level::~Level()
 	SAFE_DELETE(myPlayer);
 	SAFE_DELETE(myAI);
 	SAFE_DELETE(myScene);
-
+	PostMaster::GetInstance()->UnSubscribe(eMessageType::TOGGLE_LINES, this);
 	EntityFactory::Destroy();
 }
 
@@ -93,7 +96,7 @@ void Level::Render(Prism::Camera& aCamera)
 {
 	Prism::Engine::GetInstance()->SetClearColor({ 0.2f, 0.2f, 0.2f, 1.f });
 
-	myScene->Render();
+	myScene->Render(myRenderNavMeshLines);
 
 	myPlayer->Render(aCamera);
 
@@ -102,6 +105,14 @@ void Level::Render(Prism::Camera& aCamera)
 void Level::OnResize(int aWidth, int aHeigth)
 {
 	myPlayer->OnResize(aWidth, aHeigth);
+}
+
+void Level::ReceiveMessage(const LUAToggleRenderLinesMessage& aMessage)
+{
+	if (aMessage.myMessageType == eMessageType::TOGGLE_LINES)
+	{
+		myRenderNavMeshLines = aMessage.myToggleFlag;
+	}
 }
 
 void Level::SpawnUnit()

@@ -16,6 +16,9 @@
     <Filter Include="Message\EntityMessage">
       <UniqueIdentifier>{eacc85d7-2561-408f-bede-6bd45eda86f2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Message\ScriptMessage">
+      <UniqueIdentifier>{4737b0c2-cf0b-401a-bc99-dd36b0c3a89e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -54,17 +57,23 @@
     <ClInclude Include="SpawnUnitMessage.h">
       <Filter>Message\EntityMessage</Filter>
     </ClInclude>
-    <ClInclude Include="LUAMoveCameraMessage.h">
-      <Filter>Message</Filter>
-    </ClInclude>
-    <ClInclude Include="LUACinematicMessage.h">
-      <Filter>Message</Filter>
-    </ClInclude>
     <ClInclude Include="FadeMessage.h">
       <Filter>Message</Filter>
     </ClInclude>
     <ClInclude Include="ToggleGUIMessage.h">
       <Filter>Message</Filter>
+    </ClInclude>
+    <ClInclude Include="LUARunScriptMessage.h">
+      <Filter>Message\ScriptMessage</Filter>
+    </ClInclude>
+    <ClInclude Include="LUACinematicMessage.h">
+      <Filter>Message\ScriptMessage</Filter>
+    </ClInclude>
+    <ClInclude Include="LUAMoveCameraMessage.h">
+      <Filter>Message\ScriptMessage</Filter>
+    </ClInclude>
+    <ClInclude Include="LUAToggleRenderLinesMessage.h">
+      <Filter>Message\ScriptMessage</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -17,7 +17,7 @@ namespace Prism
 			NavMesh(const std::string& aBinaryPath);
 			~NavMesh();
 
-			void Render();
+			void Render(bool aRenderNavmeshLines);
 			void Cut(Edge* anEdge);
 
 			const CU::GrowingArray<Triangle*>& GetTriangles() const;

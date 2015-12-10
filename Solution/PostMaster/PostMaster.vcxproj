@@ -81,7 +81,9 @@
   <ItemGroup>
     <ClInclude Include="FadeMessage.h" />
     <ClInclude Include="GameStateMessage.h" />
+    <ClInclude Include="LUAToggleRenderLinesMessage.h" />
     <ClInclude Include="LUAMoveCameraMessage.h" />
+    <ClInclude Include="LUARunScriptMessage.h" />
     <ClInclude Include="Message.h" />
     <ClInclude Include="MessageEnum.h" />
     <ClInclude Include="MoveCameraMessage.h" />

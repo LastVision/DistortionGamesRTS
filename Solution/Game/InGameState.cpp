@@ -24,6 +24,7 @@
 
 #include <ScriptSystem.h>
 #include <LUACinematicMessage.h>
+#include <LUARunScriptMessage.h>
 
 InGameState::InGameState()
 	: myShouldReOpenConsole(false)
@@ -68,6 +69,8 @@ void InGameState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCur
 	PostMaster::GetInstance()->Subscribe(eMessageType::ON_CLICK, this);
 	PostMaster::GetInstance()->Subscribe(eMessageType::MOVE_CAMERA, this);
 	PostMaster::GetInstance()->Subscribe(eMessageType::LUA_MOVE_CAMERA, this);
+
+	PostMaster::GetInstance()->SendMessage(LUARunScriptMessage("Data/Script/Autorun.script"));
 
 	myIsActiveState = true;
 }

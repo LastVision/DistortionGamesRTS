@@ -4,7 +4,9 @@
 #include "ConsoleHelp.h"
 #include "ConsoleHistoryManager.h"
 #include <InputWrapper.h>
+#include <LUARunScriptMessage.h>
 #include <ScriptSystem.h>
+#include <PostMaster.h>
 
 Console* Console::myInstance = nullptr;
 
@@ -29,11 +31,12 @@ Console::Console()
 	myHistory->Load();
 	myBackspace = new ConsoleBackspace(myInput);
 	myHelp = new ConsoleHelp();
+	PostMaster::GetInstance()->Subscribe(eMessageType::LUA_RUN_SCRIPT, this);
 }
-
 
 Console::~Console()
 {
+	PostMaster::GetInstance()->UnSubscribe(eMessageType::LUA_RUN_SCRIPT, this);
 	SAFE_DELETE(myHistory);
 	SAFE_DELETE(myBackspace);
 	SAFE_DELETE(myHelp);
@@ -44,8 +47,8 @@ void Console::Update()
 	ReadInput();
 	myBackspace->Update(CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_BACKSPACE));
 	
-	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_UPARROW) || 
-		CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_DOWNARROW))
+	if (myInput == "" && (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_UPARROW) || 
+		CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_DOWNARROW)))
 	{
 		myInput = myHistory->GetCurrent();
 	}
@@ -65,6 +68,22 @@ void Console::Update()
 	}*/
 
 	//DEBUG_PRINT(myInput);
+}
+
+void Console::ReceiveMessage(const LUARunScriptMessage& aMessage)
+{
+	if (aMessage.myMessageType == eMessageType::LUA_RUN_SCRIPT)
+	{
+		std::fstream output;
+		output.open(aMessage.myFilePath, std::ios::in);
+
+		std::string line;
+		while (std::getline(output, line))
+		{
+			LUA::ScriptSystem::GetInstance()->RunLuaFromString(line);
+		}
+		output.close();
+	}
 }
 
 void Console::ReadInput()

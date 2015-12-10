@@ -9,6 +9,7 @@
 #include <HealthComponent.h>
 #include <Intersection.h>
 #include <InputWrapper.h>
+#include <OnClickMessage.h>
 #include <PathFinder.h>
 #include "PlayerDirector.h"
 #include <PollingStation.h>
@@ -28,6 +29,7 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 	, mySelectedUnits(56)
 	, myTweakValueX(3.273f)
 	, myTweakValueY(10.79f)
+	, mySelectedAction(eSelectedAction::NONE)
 {
 	for (int i = 0; i < 64; ++i)
 	{
@@ -44,13 +46,14 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 	}
 
 	PostMaster::GetInstance()->Subscribe(eMessageType::TOGGLE_GUI, this);
-
+	PostMaster::GetInstance()->Subscribe(eMessageType::ON_CLICK, this);
 }
 
 PlayerDirector::~PlayerDirector()
 {
 	SAFE_DELETE(myGUIManager);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::TOGGLE_GUI, this);
+	PostMaster::GetInstance()->UnSubscribe(eMessageType::ON_CLICK, this);
 }
 
 void PlayerDirector::InitGUI()
@@ -93,6 +96,11 @@ void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 	if (myRenderGUI == true)
 	{
 		myGUIManager->Update();
+	}
+
+	if (myLeftMouseClicked == true || myRightClicked == true)
+	{
+		mySelectedAction = eSelectedAction::NONE;
 	}
 }
 
@@ -141,6 +149,39 @@ void PlayerDirector::ReceiveMessage(const ToggleGUIMessage& aMessage)
 {
 	myRenderGUI = aMessage.myShowGUI;
 	PostMaster::GetInstance()->SendMessage(FadeMessage(aMessage.myFadeTime));
+}
+
+void PlayerDirector::ReceiveMessage(const OnClickMessage& aMessage)
+{
+	switch (aMessage.myEvent)
+	{
+	case eOnClickEvent::UNIT_ACTION_ATTACK:
+		mySelectedAction = eSelectedAction::ATTACK;
+		break;
+
+	case eOnClickEvent::UNIT_ACTION_ATTACK_MOVE:
+		mySelectedAction = eSelectedAction::MOVE_ATTACK;
+		break;
+
+	case eOnClickEvent::UNIT_ACTION_MOVE:
+		mySelectedAction = eSelectedAction::MOVE;
+		break;
+
+	case eOnClickEvent::UNIT_ACTION_PATROL:
+		mySelectedAction = eSelectedAction::PATROL;
+		break;
+
+	case eOnClickEvent::UNIT_ACTION_STAND_GROUND:
+		mySelectedAction = eSelectedAction::STAND_GROUND;
+		break;
+
+	case eOnClickEvent::UNIT_ACTION_STOP:
+		mySelectedAction = eSelectedAction::STOP;
+		break;
+	
+	default:
+		break;
+	}
 }
 
 const BuildingComponent& PlayerDirector::GetBuildingComponent() const
@@ -249,8 +290,22 @@ void PlayerDirector::UpdateInputs()
 {
 	myShiftPressed = CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_LSHIFT)
 		|| CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_RSHIFT);
-	myAPressed = CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_A);
-	mySPressed = CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_S);
+
+	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_A) == true)
+	{
+		mySelectedAction = eSelectedAction::ATTACK;
+	}
+
+	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_S) == true)
+	{
+		mySelectedAction = eSelectedAction::STOP;
+	}
+
+	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_M) == true)
+	{
+		mySelectedAction = eSelectedAction::MOVE;
+	}
+
 	if (myRenderGUI == true) // no inworld clicking when mouse is over gui:
 	{
 		myLeftMouseClicked = CU::InputWrapper::GetInstance()->MouseDown(0) && !(myGUIManager->MouseOverGUI());
@@ -262,8 +317,8 @@ void PlayerDirector::UpdateInputs()
 		myRightClicked = CU::InputWrapper::GetInstance()->MouseDown(1);
 	}
 
-
-	if (myLeftMouseClicked == true && myShiftPressed == false && myAPressed == false)
+	if (myLeftMouseClicked == true && myShiftPressed == false && 
+		(mySelectedAction == eSelectedAction::NONE || mySelectedAction == eSelectedAction::STOP))
 	{
 		mySelectedUnits.RemoveAll();
 	}
@@ -288,21 +343,20 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 
 		if (myUnits[i]->IsSelected())
 		{
-			if (myAPressed && myLeftMouseClicked)
+			if (mySelectedAction == eSelectedAction::ATTACK && myLeftMouseClicked == true)
 			{
 				controller->Attack(targetPos, !myShiftPressed);
 			}
-			else if (myRightClicked)
+			else if ((mySelectedAction == eSelectedAction::MOVE && myLeftMouseClicked) || myRightClicked)
 			{
 				controller->MoveTo(targetPos, !myShiftPressed);
 			}
-			else if (mySPressed)
+			else if (mySelectedAction == eSelectedAction::STOP)
 			{
 				controller->Stop();
 			}
 		}
 	}
-
 
 	SelectOrHoverEntity(myBuilding, hasSelected, hasHovered, line);
 }
@@ -310,7 +364,7 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 void PlayerDirector::SelectOrHoverEntity(Entity* aEntity, bool &aSelected, bool &aHovered
 	, const CU::Intersection::LineSegment3D& aMouseRay)
 {
-	if (myLeftMouseClicked == true && myShiftPressed == false && myAPressed == false)
+	if (myLeftMouseClicked == true && myShiftPressed == false && mySelectedAction == eSelectedAction::NONE)
 	{
 		aEntity->SetSelect(false);
 	}

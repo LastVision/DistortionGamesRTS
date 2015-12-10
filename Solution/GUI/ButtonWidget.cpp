@@ -19,7 +19,6 @@ namespace GUI
 		std::string spritePathHover = "";
 		std::string spritePathPressed = "";
 		std::string hoverText = "";
-		std::string clickEvent = "";
 
 		CU::Vector2<float> size;
 		CU::Vector2<float> position;
@@ -38,43 +37,7 @@ namespace GUI
 			aReader->ReadAttribute(aReader->FindFirstChild(anXMLElement, "hover"), "text", hoverText);
 		}
 
-		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "onclick"), "event", clickEvent);
-
-		if (clickEvent == "game_lose")
-		{
-			myClickEvent = new OnClickMessage(eOnClickEvent::GAME_LOSE);
-		}
-		else if (clickEvent == "game_win")
-		{
-			myClickEvent = new OnClickMessage(eOnClickEvent::GAME_WIN);
-		}
-		else if (clickEvent == "game_start")
-		{
-			myClickEvent = new OnClickMessage(eOnClickEvent::GAME_START);
-		}
-		else if (clickEvent == "game_restart")
-		{
-			myClickEvent = new OnClickMessage(eOnClickEvent::GAME_RESTART);
-		}
-		else if (clickEvent == "game_quit")
-		{
-			myClickEvent = new OnClickMessage(eOnClickEvent::GAME_QUIT);
-		}
-		else if (clickEvent == "action_move")
-		{
-			myClickEvent = new OnClickMessage(eOnClickEvent::UNIT_ACTION_MOVE);
-		}
-		else if (clickEvent == "spawn_unit")
-		{
-			int ID = -1;
-			aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "onclick"), "id", ID);
-			myClickEvent = new OnClickMessage(eOnClickEvent::SPAWN_UNIT, ID);
-		}
-		else
-		{
-			std::string message = "[GUI]: No onclick event named " + clickEvent;
-			DL_ASSERT(message);
-		}
+		ReadEvent(aReader, anXMLElement);
 
 		mySize = size;
 		myPosition = position;
@@ -161,6 +124,67 @@ namespace GUI
 		myPosition = { aPosition.x + myImageCurrent->GetHotspot().x, aPosition.y - myImageCurrent->GetHotspot().y };
 	}
 
+	void ButtonWidget::ReadEvent(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement)
+	{
+		std::string clickEvent = "";
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "onclick"), "event", clickEvent);
+
+		if (clickEvent == "game_lose")
+		{
+			myClickEvent = new OnClickMessage(eOnClickEvent::GAME_LOSE);
+		}
+		else if (clickEvent == "game_win")
+		{
+			myClickEvent = new OnClickMessage(eOnClickEvent::GAME_WIN);
+		}
+		else if (clickEvent == "game_start")
+		{
+			myClickEvent = new OnClickMessage(eOnClickEvent::GAME_START);
+		}
+		else if (clickEvent == "game_restart")
+		{
+			myClickEvent = new OnClickMessage(eOnClickEvent::GAME_RESTART);
+		}
+		else if (clickEvent == "game_quit")
+		{
+			myClickEvent = new OnClickMessage(eOnClickEvent::GAME_QUIT);
+		}
+		else if (clickEvent == "action_move")
+		{
+			myClickEvent = new OnClickMessage(eOnClickEvent::UNIT_ACTION_MOVE);
+		}
+		else if (clickEvent == "action_attack")
+		{
+			myClickEvent = new OnClickMessage(eOnClickEvent::UNIT_ACTION_ATTACK);
+		}
+		else if (clickEvent == "action_stop")
+		{
+			myClickEvent = new OnClickMessage(eOnClickEvent::UNIT_ACTION_STOP);
+		}
+		else if (clickEvent == "action_patrol")
+		{
+			myClickEvent = new OnClickMessage(eOnClickEvent::UNIT_ACTION_PATROL);
+		}
+		else if (clickEvent == "action_move_attack")
+		{
+			myClickEvent = new OnClickMessage(eOnClickEvent::UNIT_ACTION_ATTACK_MOVE);
+		}
+		else if (clickEvent == "action_stand_ground")
+		{
+			myClickEvent = new OnClickMessage(eOnClickEvent::UNIT_ACTION_STAND_GROUND);
+		}
+		else if (clickEvent == "spawn_unit")
+		{
+			int ID = -1;
+			aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "onclick"), "id", ID);
+			myClickEvent = new OnClickMessage(eOnClickEvent::SPAWN_UNIT, ID);
+		}
+		else
+		{
+			std::string message = "[GUI]: No onclick event named " + clickEvent;
+			DL_ASSERT(message);
+		}
+	}
 
 	void ButtonWidget::Click()
 	{

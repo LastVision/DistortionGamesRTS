@@ -28,6 +28,11 @@ namespace CU
 		return fmax(aLower, fmin(aNumber, aUpper));
 	}
 
+	inline int ClipInt(int aNumber, int aLower, int aUpper)
+	{
+		return max(aLower, min(aNumber, aUpper));
+	}
+
 	inline std::string GetSubString(std::string aStringToReadFrom, char aCharToFind, bool aReadAfterChar)
 	{
 		std::string toReturn;
@@ -95,7 +100,7 @@ namespace CU
 
 	inline void BuildFoldersInPath(const std::string& aPath)
 	{
-		int slashIndex = aPath.find_first_of("/");
+		unsigned int slashIndex = aPath.find_first_of("/");
 
 		while (slashIndex != std::string::npos)
 		{
