@@ -17,12 +17,14 @@ namespace GUI
 		, myBuilding(aPlayer->GetBuildingComponent())
 		, myBuildingTimer(nullptr)
 	{
-		std::string unitPath = "";
-		std::string buildingPath = "";
+		std::string gruntUnitPath = "";
+		std::string gruntPortraitPath = "";
+		std::string buildingPortraitPath = "";
 		CU::Vector2<float> size;
 		CU::Vector2<float> unitSize;
 		CU::Vector2<float> portraitSize;
-		CU::Vector2<float> position;
+		CU::Vector2<float> portraitPosition;
+		CU::Vector2<float> unitPosition;
 		
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "size"), "x", size.x);
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "size"), "y", size.y);
@@ -30,21 +32,28 @@ namespace GUI
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "unitsize"), "y", unitSize.y);
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "portraitsize"), "x", portraitSize.x);
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "portraitsize"), "y", portraitSize.y);
-		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "position"), "x", position.x);
-		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "position"), "y", position.y);
-		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "testunitsprite"), "path", unitPath);
-		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "testbuildingsprite"), "path", buildingPath);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "unitposition"), "x", unitPosition.x);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "unitposition"), "y", unitPosition.y);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "portraitposition"), "x", portraitPosition.x);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "portraitposition"), "y", portraitPosition.y);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "gruntunit"), "path", gruntUnitPath);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "gruntportrait"), "path", gruntPortraitPath);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "buildingportrait"), "path", buildingPortraitPath);
 
 		mySize = size;
-		myPosition = position;
-		myUnitPortrait = new Prism::Sprite(unitPath, unitSize);
-		myBuildingPortrait = new Prism::Sprite(buildingPath, portraitSize);
+		myPosition = { 0.f, 0.f };
+		myUnitPosition = unitPosition;
+		myPortraitPosition = portraitPosition;
+		myGruntUnit = new Prism::Sprite(gruntUnitPath, unitSize);
+		myGruntPortrait = new Prism::Sprite(gruntPortraitPath, portraitSize);
+		myBuildingPortrait = new Prism::Sprite(buildingPortraitPath, portraitSize);
 		myBuildingTimer = new BarWidget(myBuilding.GetMaxBuildTime(), myBuilding.GetCurrentBuildTime(), { unitSize.x * 4.f, unitSize.y / 2.f });
 	}
 
 	UnitInfoWidget::~UnitInfoWidget()
 	{
-		SAFE_DELETE(myUnitPortrait);
+		SAFE_DELETE(myGruntPortrait);
+		SAFE_DELETE(myGruntUnit);
 		SAFE_DELETE(myBuildingPortrait);
 		SAFE_DELETE(myBuildingTimer);
 	}
@@ -64,17 +73,24 @@ namespace GUI
 		{
 			if (mySelectedType == eEntityType::DRAGON)
 			{
-				for (int i = 0; i < myUnits.Size(); i++)
+				if (myUnits.Size() > 1)
 				{
-					CU::Vector2<float> position = { myPosition.x + myUnitPortrait->GetSize().x * i, mySize.y / 2.f };
-					position += aParentPosition;
-					myUnitPortrait->Render(position);
-					// render health
+					for (int i = 0; i < myUnits.Size(); i++)
+					{
+						CU::Vector2<float> position = { myPosition.x + myGruntUnit->GetSize().x * i, mySize.y / 2.f };
+						position += aParentPosition + myUnitPosition;
+						myGruntUnit->Render(position);
+						// render health
+					}
+				}
+				else
+				{
+					myGruntPortrait->Render(myPosition + aParentPosition + myPortraitPosition);
 				}
 			}
 			else if (mySelectedType == eEntityType::BASE_BUILING)
 			{
-				myBuildingPortrait->Render(myPosition + aParentPosition);
+				myBuildingPortrait->Render(myPosition + aParentPosition + myPortraitPosition);
 
 				if (myBuilding.GetEntityToSpawn() != eEntityType::EMPTY)
 				{
@@ -95,12 +111,19 @@ namespace GUI
 		Widget::OnResize(aNewWindowSize, anOldWindowSize);
 		myBuildingTimer->OnResize(aNewWindowSize, anOldWindowSize);
 
-		CU::Vector2<float> unitRatioSize = myUnitPortrait->GetSize() / anOldWindowSize;
+		CU::Vector2<float> unitRatioSize = myGruntUnit->GetSize() / anOldWindowSize;
 		CU::Vector2<float> unitNewSize = unitRatioSize * aNewWindowSize;
-		CU::Vector2<float> buildingRatioSize = myBuildingPortrait->GetSize() / anOldWindowSize;
-		CU::Vector2<float> buildingNewSize = buildingRatioSize * aNewWindowSize;
+		CU::Vector2<float> portraitRatioSize = myBuildingPortrait->GetSize() / anOldWindowSize;
+		CU::Vector2<float> portraitNewSize = portraitRatioSize * aNewWindowSize;
 
-		myUnitPortrait->SetSize(unitNewSize, { 0.f, 0.f });
-		myBuildingPortrait->SetSize(buildingNewSize, { 0.f, 0.f });
+		CU::Vector2<float> ratioUnitPostion = myUnitPosition / anOldWindowSize;
+		CU::Vector2<float> ratioPortraitPostion = myPortraitPosition / anOldWindowSize;
+
+		myUnitPosition = ratioUnitPostion * aNewWindowSize;
+		myPortraitPosition = ratioPortraitPostion * aNewWindowSize;
+
+		myGruntUnit->SetSize(unitNewSize, { 0.f, 0.f });
+		myGruntPortrait->SetSize(portraitNewSize, { 0.f, 0.f });
+		myBuildingPortrait->SetSize(portraitNewSize, { 0.f, 0.f });
 	}
 }
