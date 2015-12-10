@@ -14,14 +14,14 @@ ConsoleHistoryManager::ConsoleHistoryManager()
 	CreateDirectory(tempPath.c_str(), NULL);
 	std::string temp = tempPath + "\\CommandHistory.txt";
 	myHistoryFile = temp.c_str();
-	myHistory.Init(128);
+	myHistory.Init(256);
 }
 
 ConsoleHistoryManager::~ConsoleHistoryManager()
 {
 	for (int i = 0; i < myHistory.Size(); ++i)
 	{
-		SAFE_DELETE(myHistory[i].myRenderText);
+		SAFE_DELETE(myHistory[i]);
 	}
 }
 
@@ -31,7 +31,7 @@ void ConsoleHistoryManager::Save()
 	output.open(myHistoryFile, std::ios::out);
 	for (int i = 1; i < myHistory.Size(); ++i)
 	{
-		output << int(myHistory[i].myType) << " " << myHistory[i].myMessage << std::endl;
+		output << int(myHistory[i]->myType) << " " << myHistory[i]->myMessage << std::endl;
 	}
 	output.flush();
 	output.close();
@@ -76,7 +76,7 @@ void ConsoleHistoryManager::Load()
 
 const std::string& ConsoleHistoryManager::GetCurrent(eHistoryType)
 {
-	return myHistory[myCurrentIndex].myMessage;
+	return myHistory[myCurrentIndex]->myMessage;
 }
 
 
@@ -88,7 +88,7 @@ const std::string& ConsoleHistoryManager::GetNext(eHistoryType aType)
 		myCurrentIndex = 0;
 	}
 	CheckType(aType, false);
-	return myHistory[myCurrentIndex].myMessage;
+	return myHistory[myCurrentIndex]->myMessage;
 }
 
 const std::string& ConsoleHistoryManager::GetPrevious(eHistoryType aType)
@@ -99,7 +99,7 @@ const std::string& ConsoleHistoryManager::GetPrevious(eHistoryType aType)
 		myCurrentIndex = myHistory.Size() - 1;
 	}
 	CheckType(aType, true);
-	return myHistory[myCurrentIndex].myMessage;
+	return myHistory[myCurrentIndex]->myMessage;
 }
 
 void ConsoleHistoryManager::CheckType(eHistoryType aType, bool aShouldGoBackwards)
@@ -108,7 +108,7 @@ void ConsoleHistoryManager::CheckType(eHistoryType aType, bool aShouldGoBackward
 	bool hasLooped = false;
 	while (currentlyWrong == true)
 	{
-		if (myHistory[myCurrentIndex].myType != aType)
+		if (myHistory[myCurrentIndex]->myType != aType)
 		{
 			if (aShouldGoBackwards == false)
 			{
@@ -147,44 +147,49 @@ void ConsoleHistoryManager::CheckType(eHistoryType aType, bool aShouldGoBackward
 
 void ConsoleHistoryManager::AddHistory(const std::string& aCommand, eHistoryType anEnum)
 {
-	History tempHistory;
-	tempHistory.myMessage = aCommand;
-	tempHistory.myType = anEnum;
-
+	History* tempHistory;
+	
 	bool prevRuntime = Prism::MemoryTracker::GetInstance()->GetRunTime();
 	Prism::MemoryTracker::GetInstance()->SetRunTime(false);
-	tempHistory.myRenderText = new Prism::Text(*Prism::Engine::GetInstance()->GetFont(Prism::eFont::CONSOLE));
+	tempHistory = new History();
+	tempHistory->myRenderText = new Prism::Text(*Prism::Engine::GetInstance()->GetFont(Prism::eFont::CONSOLE));
 	Prism::MemoryTracker::GetInstance()->SetRunTime(prevRuntime);
-	tempHistory.myRenderText->SetText(tempHistory.myMessage);
+
+	tempHistory->myMessage = aCommand;
+	tempHistory->myRenderText->SetText(aCommand);
+	tempHistory->myType = anEnum;
 
 	switch (anEnum)
 	{
 	case eHistoryType::ERROR:
-		tempHistory.myRenderText->SetColor({ 1.f, 0.f, 0.f, 1.f });
+		tempHistory->myRenderText->SetColor({ 1.f, 0.f, 0.f, 1.f });
 		break;
 	case eHistoryType::HISTORY:
-		tempHistory.myRenderText->SetColor({ 1.f, 1.f, 1.f, 1.f });
+		tempHistory->myRenderText->SetColor({ 1.f, 1.f, 1.f, 1.f });
 		break;
 	case eHistoryType::HELP:
-		tempHistory.myRenderText->SetColor({ 0.f, 1.f, 0.f, 1.f });
+		tempHistory->myRenderText->SetColor({ 0.f, 1.f, 0.f, 1.f });
 		break;
 	default:
 		break;
 	}
 
-	if (myInsertIndex >= myHistory.GetCapacity())
+	if (myHistory.Size() >= myHistory.GetCapacity())
 	{
-		myInsertIndex = 1;
-		myHasWrapped = true;
+	//	SAFE_DELETE(myHistory[myInsertIndex]->myRenderText);
+		myHistory.DeleteNonCyclicAtIndex(0);
 	}
-	if (myHasWrapped == false)
-	{
-		myHistory.Add(tempHistory);
-	}
-	else if (myHasWrapped == true)
-	{
-		SAFE_DELETE(myHistory[myInsertIndex].myRenderText);
-		myHistory[myInsertIndex] = tempHistory;
-	}
+	myHistory.Add(tempHistory);
+
 	myInsertIndex++;
+}
+
+
+History::History()
+{
+}
+
+History::~History()
+{
+	SAFE_DELETE(myRenderText);
 }

@@ -25,6 +25,7 @@ Entity::Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& a
 	, myType(aEntityData.myType)
 	, mySelected(false)
 	, myHovered(false)
+	, myPosition({aStartPosition.x, aStartPosition.z})
 {
 	for (int i = 0; i < static_cast<int>(eComponentType::_COUNT); ++i)
 	{
@@ -96,6 +97,7 @@ Entity::~Entity()
 
 void Entity::Update(float aDeltaTime)
 {
+	myPosition = { myOrientation.GetPos().x, myOrientation.GetPos().z };
 	for (int i = 0; i < static_cast<int>(eComponentType::_COUNT); ++i)
 	{
 		if (myComponents[i] != nullptr)

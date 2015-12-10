@@ -78,6 +78,11 @@ bool Level::Update(float aDeltaTime, Prism::Camera& aCamera)
 		PostMaster::GetInstance()->SendMessage(GameStateMessage(eGameState::COMPLETE_LEVEL));
 	}
 
+	for (int i = 0; i < myEntities.Size(); ++i)
+	{
+		myEntities[i]->Update(aDeltaTime);
+	}
+
 	myPlayer->Update(aDeltaTime, aCamera);
 	myAI->Update(aDeltaTime);
 

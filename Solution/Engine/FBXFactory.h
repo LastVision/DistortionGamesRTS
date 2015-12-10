@@ -32,7 +32,7 @@ namespace Prism
 		Animation* LoadAnimation(const char* aFilePath);
 		void LoadModelForRadiusCalc(const char* aFilePath, CU::GrowingArray<CU::Vector3<float>>& someVerticesOut);
 
-		void ConvertToDGFX(const char* aFilePath);
+		void ConvertToDGFX(const char* aInputPath, const char* aOutputPath);
 		
 	private:
 		void FillData(ModelData* someData, Model* outData, Effect* aEffect);

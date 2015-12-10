@@ -12,3 +12,4 @@
 #include <vector>
 #include "Vector.h"
 #include <MemoryMacros.h>
+#include "GameConstants.h"

@@ -32,6 +32,7 @@ namespace CU
 		inline void Insert(SizeType aIndex, const ObjectType& aObject);
 		inline void DeleteCyclic(ObjectType& aObject);
 		inline void DeleteCyclicAtIndex(SizeType aItemNumber);
+		inline void DeleteNonCyclicAtIndex(SizeType aItemNumber);
 		inline void RemoveCyclic(const ObjectType& aObject);
 		inline void RemoveCyclicAtIndex(SizeType aItemNumber);
 		inline void RemoveNonCyclic(const ObjectType& aObject);
@@ -248,6 +249,23 @@ namespace CU
 		myData[aItemNumber] = nullptr;
 		myData[aItemNumber] = myData[--myCurrentSize];
 	}
+
+	GA_TEMPLATE
+	inline void GA_TYPE::DeleteNonCyclicAtIndex(SizeType aItemNumber)
+	{
+		DL_ASSERT_EXP(myIsInit == true, "Not initialized, run Init first.");
+		DL_ASSERT_EXP(aItemNumber >= 0, "Index has to be 0 or more.");
+		DL_ASSERT_EXP(aItemNumber < myCurrentSize, "a index out of bounds!");
+		delete myData[aItemNumber];
+		myData[aItemNumber] = nullptr;
+
+		for (SizeType i = aItemNumber; i < myCurrentSize - 1; ++i)
+		{
+			myData[i] = myData[i + 1];
+		}
+		--myCurrentSize;
+	}
+
 
 	GA_TEMPLATE
 	inline void GA_TYPE::RemoveCyclic(const ObjectType& aObject)

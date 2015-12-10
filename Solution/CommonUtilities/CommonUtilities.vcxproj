@@ -169,6 +169,7 @@
     <ClInclude Include="Camera2D.h" />
     <ClInclude Include="CommonHelper.h" />
     <ClInclude Include="Fov90Frustum.h" />
+    <ClInclude Include="GameConstants.h" />
     <ClInclude Include="Greater.h" />
     <ClInclude Include="GrowingArray.h" />
     <ClInclude Include="Heap.h" />
