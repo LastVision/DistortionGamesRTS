@@ -86,7 +86,7 @@ const eStateStatus ConsoleState::Update(const float& aDeltaTime)
 			}
 			else 
 			{
-				std::string helpFunctionName = CU::GetSubString(temp, " ", true, 2);
+				std::string helpFunctionName = CU::GetSubString(consoleInput, " ", true, 2);
 				const ConsoleLuaHelp& helpDoc = Console::GetInstance()->GetConsoleHelp()->GetHelpText(helpFunctionName);
 				if (helpDoc.myFunctionName != "")
 				{
@@ -95,7 +95,9 @@ const eStateStatus ConsoleState::Update(const float& aDeltaTime)
 				}
 				else 
 				{
-					Console::GetInstance()->GetConsoleHistory()->AddHistory("There is no such command. Did you mean <insert command>?", eHistoryType::ERROR);
+					Console::GetInstance()->GetConsoleHistory()->AddHistory("There is no " + helpFunctionName + 
+						" command. Did you mean " + LUA::ScriptSystem::GetInstance()->FindClosestFunction(helpFunctionName) 
+						+ "?", eHistoryType::ERROR);
 				}
 			}
 			Console::GetInstance()->ClearInput();

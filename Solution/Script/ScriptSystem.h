@@ -45,6 +45,8 @@ namespace LUA
 		void Update();
 		void PrintToFile(const std::string& aString);
 		const std::vector<Documentation>& GetDocumentation() const;
+
+		std::string FindClosestFunction(const std::string& aInput) const;
 	private:
 		ScriptSystem();
 		~ScriptSystem();
@@ -67,7 +69,7 @@ namespace LUA
 		int GetLevenshteinDistance(const std::string &s1, const std::string &s2) const;
 		float GetLevenshteinRatio(const std::string& aString, int aLevenshtienDistance) const;
 		int GetSubstringBonus(const std::string& aInput, const std::string& aCorrectString, int aScore) const;
-		std::string FindClosestFunction(const std::string& aInput) const;
+		
 
 		//int levenshtein_distance(const std::string &s1, const std::string &s2);
 		//std::string FindClosestFunction(const std::string& aFailedFunction);
