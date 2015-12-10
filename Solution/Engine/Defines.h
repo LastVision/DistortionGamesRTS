@@ -9,6 +9,10 @@
 #define USE_DGFX
 #ifdef USE_DGFX
 //#define CONVERT_TO_DGFX_IN_RUNTIME
+
+//DO NOT CHANGE
+#define DGFX_VERSION 1
+
 #endif
 
 //#define ENABLE_DEBUG_TEXT

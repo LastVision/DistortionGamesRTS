@@ -726,6 +726,9 @@ void Prism::FBXFactory::FillDataForRadiusCalc(ModelData* aModelData, CU::Growing
 
 void Prism::FBXFactory::SaveModelToFile(FbxModelData* aModelData, std::fstream& aStream)
 {
+	int version = DGFX_VERSION;
+	aStream.write((char*)&version, sizeof(int)); //DGFX-Version
+
 	int isNullObject = 1;
 	if (aModelData->myData)
 	{
