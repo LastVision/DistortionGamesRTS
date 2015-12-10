@@ -100,7 +100,7 @@ namespace CU
 
 	inline void BuildFoldersInPath(const std::string& aPath)
 	{
-		int slashIndex = aPath.find_first_of("/");
+		unsigned int slashIndex = aPath.find_first_of("/");
 
 		while (slashIndex != std::string::npos)
 		{
