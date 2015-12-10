@@ -7,6 +7,7 @@
 #include <ColoursForBG.h>
 #include "ConsoleState.h"
 #include <Engine.h>
+#include <Entity.h>
 #include <GameStateMessage.h>
 #include <GUIManager.h>
 #include "InGameState.h"
@@ -19,6 +20,7 @@
 #include <OnClickMessage.h>
 #include <PostMaster.h>
 #include <TimerManager.h>
+#include <TriggerMessage.h>
 #include <VTuneApi.h>
 #include <Vector.h>
 
@@ -47,6 +49,7 @@ InGameState::~InGameState()
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::ON_CLICK, this);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::MOVE_CAMERA, this);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::LUA_MOVE_CAMERA, this);
+	PostMaster::GetInstance()->UnSubscribe(eMessageType::TRIGGER, this);
 	SAFE_DELETE(myCamera);
 	SAFE_DELETE(myLevelFactory);
 }
@@ -69,6 +72,7 @@ void InGameState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCur
 	PostMaster::GetInstance()->Subscribe(eMessageType::ON_CLICK, this);
 	PostMaster::GetInstance()->Subscribe(eMessageType::MOVE_CAMERA, this);
 	PostMaster::GetInstance()->Subscribe(eMessageType::LUA_MOVE_CAMERA, this);
+	PostMaster::GetInstance()->Subscribe(eMessageType::TRIGGER, this);
 
 	PostMaster::GetInstance()->SendMessage(LUARunScriptMessage("Data/Script/Autorun.script"));
 
@@ -254,6 +258,12 @@ void InGameState::ReceiveMessage(const LUACinematicMessage& aMessage)
 	{
 		myIsPlayerCinematic = false;
 	}
+}
+
+void InGameState::ReceiveMessage(const TriggerMessage& aMessage)
+{
+	LUA::ScriptSystem::GetInstance()->CallFunction("TriggerEvent", {static_cast<float>(aMessage.myTrigger->GetId())
+		, static_cast<float>(aMessage.myUnit->GetId()), static_cast<float>(aMessage.myType) });
 }
 
 void InGameState::SetLevel()

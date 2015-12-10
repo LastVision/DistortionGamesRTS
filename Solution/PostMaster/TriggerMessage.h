@@ -9,13 +9,12 @@ struct TriggerMessage : public Message
 {
 	enum class eTriggerType
 	{
-		ENTER,
 		EXIT,
+		ENTER,
 	};
 	TriggerMessage(Entity* aTrigger, Entity* aUnit, eTriggerType aType);
 
 	const eTriggerType myType;
-	const CU::Vector2<float> myPosition;
 	const Entity* myTrigger;
 	const Entity* myUnit;
 };
