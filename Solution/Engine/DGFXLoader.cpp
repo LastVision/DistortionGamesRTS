@@ -253,15 +253,19 @@ namespace Prism
 			int byteOffset;
 			aStream.read((char*)&byteOffset, sizeof(int)); //Inputlayout element count
 
+			int semanticIndex;
+			aStream.read((char*)&semanticIndex, sizeof(int)); //Inputlayout semantic index
+
+
 			D3D11_INPUT_ELEMENT_DESC* desc = new D3D11_INPUT_ELEMENT_DESC();
-			desc->SemanticIndex = 0;
+			desc->SemanticIndex = semanticIndex;
 			desc->AlignedByteOffset = byteOffset;
 			desc->InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 			desc->InputSlot = 0;
 			desc->InstanceDataStepRate = 0;
 
 			int type;
-			aStream.read((char*)&type, sizeof(int)); //semanticName lenght
+			aStream.read((char*)&type, sizeof(int)); //element type
 
 			if (type == eVertexLayout::VERTEX_POS)
 			{

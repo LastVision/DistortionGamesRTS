@@ -82,13 +82,12 @@ void Prism::FBXFactory::FillData(ModelData* someData, Model* outData, Effect* aE
 
 	outData->myVertexBaseData = vertexData;
 
-	bool myHasFoundFirstUVSet = false;
-
 	for (int i = 0; i < someData->myLayout.Size(); ++i)
 	{
 		auto currentLayout = someData->myLayout[i];
+		
 		D3D11_INPUT_ELEMENT_DESC* desc = new D3D11_INPUT_ELEMENT_DESC();
-		desc->SemanticIndex = 0;
+		desc->SemanticIndex = currentLayout.mySemanticIndex;
 		desc->AlignedByteOffset = currentLayout.myOffset;
 		desc->InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 		desc->InputSlot = 0;
@@ -106,18 +105,8 @@ void Prism::FBXFactory::FillData(ModelData* someData, Model* outData, Effect* aE
 		}
 		else if (currentLayout.myType == ModelData::VERTEX_UV)
 		{
-			if (myHasFoundFirstUVSet == false)
-			{
-				desc->SemanticName = "TEXCOORD";
-				desc->Format = DXGI_FORMAT_R32G32_FLOAT;
-				myHasFoundFirstUVSet = true;
-			}
-			else
-			{
-				desc->SemanticIndex += 1;
-				desc->SemanticName = "TEXCOORD";
-				desc->Format = DXGI_FORMAT_R32G32_FLOAT;
-			}
+			desc->SemanticName = "TEXCOORD";
+			desc->Format = DXGI_FORMAT_R32G32_FLOAT;
 		}
 		else if (currentLayout.myType == ModelData::VERTEX_BINORMAL)
 		{
@@ -220,7 +209,7 @@ void Prism::FBXFactory::FillData(ModelData* someData, ModelAnimated* outData, Ef
 	{
 		auto currentLayout = someData->myLayout[i];
 		D3D11_INPUT_ELEMENT_DESC* desc = new D3D11_INPUT_ELEMENT_DESC();
-		desc->SemanticIndex = 0;
+		desc->SemanticIndex = currentLayout.mySemanticIndex;
 		desc->AlignedByteOffset = currentLayout.myOffset;
 		desc->InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 		desc->InputSlot = 0;
@@ -803,8 +792,10 @@ void Prism::FBXFactory::SaveModelDataToFile(ModelData* aData, std::fstream& aStr
 	for (int i = 0; i < aData->myLayout.Size(); ++i)
 	{
 		auto currentLayout = aData->myLayout[i];
+		
 		aStream.write((char*)&currentLayout.myOffset, sizeof(int)); //desc->AlignedByteOffset
-		aStream.write((char*)&currentLayout.myType, sizeof(int)); // ModelData::Layout (as an INT)
+		aStream.write((char*)&currentLayout.mySemanticIndex, sizeof(int)); //desc->mySemanticIndex
+		aStream.write((char*)&currentLayout.myType, sizeof(int)); // ModelData::Layout::LayoutType (as an INT)
 	}
 
 	int textureCount = aData->myTextures.size();
