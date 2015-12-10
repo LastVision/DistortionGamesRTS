@@ -89,6 +89,7 @@
     <ClCompile Include="EntityEnumConverter.cpp">
       <Filter>EntityEnum</Filter>
     </ClCompile>
+    <ClCompile Include="EntityId.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -165,5 +166,6 @@
     <ClInclude Include="EntityEnumConverter.h">
       <Filter>EntityEnum</Filter>
     </ClInclude>
+    <ClInclude Include="EntityId.h" />
   </ItemGroup>
 </Project>

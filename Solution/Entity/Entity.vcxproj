@@ -124,6 +124,7 @@
     <ClInclude Include="CollisionComponent.h" />
     <ClInclude Include="CollisionComponentData.h" />
     <ClInclude Include="EntityEnumConverter.h" />
+    <ClInclude Include="EntityId.h" />
     <ClInclude Include="TriggerComponent.h" />
     <ClInclude Include="TriggerComponentData.h" />
     <ClInclude Include="Component.h" />
@@ -148,6 +149,7 @@
     <ClCompile Include="BuildingComponent.cpp" />
     <ClCompile Include="CollisionComponent.cpp" />
     <ClCompile Include="EntityEnumConverter.cpp" />
+    <ClCompile Include="EntityId.cpp" />
     <ClCompile Include="TriggerComponent.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="ComponentLoader.cpp" />
