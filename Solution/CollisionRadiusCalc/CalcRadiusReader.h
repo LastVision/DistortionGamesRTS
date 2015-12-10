@@ -2,7 +2,7 @@
 #include <string>
 #include <FBXFactory.h>
 
-class Reader
+class CalcRadiusReader
 {
 public:
 	void ReadFile(const std::string& aFilePath);

@@ -30,11 +30,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include "dirent.h"
-#include "Reader.h"
+#include "CalcRadiusReader.h"
 #include <TimerManager.h>
 #include <DL_Debug.h>
 
-static int find_directory(const char *dirname, Reader& aReader);
+static int find_directory(const char *dirname, CalcRadiusReader& aReader);
 
 
 int main()
@@ -42,7 +42,7 @@ int main()
 	DL_Debug::Debug::Create();
 	CU::TimerManager::Create();
 	
-	Reader reader;
+	CalcRadiusReader reader;
 	find_directory("Data", reader);
 
 	CU::TimerManager::Destroy();
@@ -51,7 +51,7 @@ int main()
 }
 
 /* Find files and subdirectories recursively */
-static int find_directory(const char *dirname, Reader& aReader)
+static int find_directory(const char *dirname, CalcRadiusReader& aReader)
 {
 	DIR *dir;
 	char buffer[PATH_MAX + 2];
