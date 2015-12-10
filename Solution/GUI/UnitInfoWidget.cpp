@@ -71,7 +71,7 @@ namespace GUI
 	{
 		if (myIsUnitSelected == true)
 		{
-			if (mySelectedType == eEntityType::DRAGON)
+			if (mySelectedType == eEntityType::UNIT)
 			{
 				if (myUnits.Size() > 1)
 				{

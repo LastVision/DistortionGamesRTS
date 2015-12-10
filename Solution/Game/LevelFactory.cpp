@@ -8,6 +8,7 @@
 #include <EffectContainer.h>
 #include <EngineEnums.h>
 #include <EntityFactory.h>
+#include <EntityEnumConverter.h>
 #include "Level.h"
 #include "LevelFactory.h"
 #include <MathHelper.h>
@@ -185,6 +186,7 @@ void LevelFactory::ReadLevel(const std::string& aLevelPath)
 	LoadLights(reader, levelElement);
 	LoadBases(reader, levelElement);
 	LoadProps(reader, levelElement);
+	LoadControlPoints(reader, levelElement);
 	LoadCutBoxes(reader, levelElement);
 	reader.CloseDocument();
 
@@ -407,8 +409,47 @@ void LevelFactory::LoadProps(XMLReader& aReader, tinyxml2::XMLElement* aLevelEle
 		propRotation.y = CU::Math::DegreeToRad(propRotation.y);
 		propRotation.z = CU::Math::DegreeToRad(propRotation.z);
 
-		myCurrentLevel->myEntities.Add(EntityFactory::CreateEntity(eOwnerType::NEUTRAL, EntityFactory::ConvertStringToEntityType(propType),
-			Prism::eOctreeType::STATIC, *myCurrentLevel->myScene, propPosition, *myCurrentLevel->myTerrain, propRotation, propScale));
+		myCurrentLevel->myEntities.Add(EntityFactory::CreateEntity(eOwnerType::NEUTRAL, eEntityType::PROP, 
+			EntityEnumConverter::ConvertStringToPropType(propType), Prism::eOctreeType::STATIC, *myCurrentLevel->myScene, 
+			propPosition, *myCurrentLevel->myTerrain, propRotation, propScale));
+		myCurrentLevel->myEntities.GetLast()->AddToScene();
+		myCurrentLevel->myEntities.GetLast()->Reset();
+	}
+}
+
+void LevelFactory::LoadControlPoints(XMLReader& aReader, tinyxml2::XMLElement* aLevelElement)
+{
+	for (tinyxml2::XMLElement* entityElement = aReader.FindFirstChild(aLevelElement, "controlPoint"); entityElement != nullptr;
+		entityElement = aReader.FindNextElement(entityElement, "controlPoint"))
+	{
+		std::string controlPointType;
+		aReader.ForceReadAttribute(entityElement, "type", controlPointType);
+		controlPointType = CU::ToLower(controlPointType);
+		tinyxml2::XMLElement* controlPointElement = aReader.ForceFindFirstChild(entityElement, "position");
+		CU::Vector3<float> propPosition;
+		aReader.ForceReadAttribute(controlPointElement, "X", propPosition.x);
+		aReader.ForceReadAttribute(controlPointElement, "Y", propPosition.y);
+		aReader.ForceReadAttribute(controlPointElement, "Z", propPosition.z);
+
+		controlPointElement = aReader.ForceFindFirstChild(entityElement, "rotation");
+		CU::Vector3<float> propRotation;
+		aReader.ForceReadAttribute(controlPointElement, "X", propRotation.x);
+		aReader.ForceReadAttribute(controlPointElement, "Y", propRotation.y);
+		aReader.ForceReadAttribute(controlPointElement, "Z", propRotation.z);
+
+		controlPointElement = aReader.ForceFindFirstChild(entityElement, "scale");
+		CU::Vector3<float> propScale;
+		aReader.ForceReadAttribute(controlPointElement, "X", propScale.x);
+		aReader.ForceReadAttribute(controlPointElement, "Y", propScale.y);
+		aReader.ForceReadAttribute(controlPointElement, "Z", propScale.z);
+
+		propRotation.x = CU::Math::DegreeToRad(propRotation.x);
+		propRotation.y = CU::Math::DegreeToRad(propRotation.y);
+		propRotation.z = CU::Math::DegreeToRad(propRotation.z);
+
+		myCurrentLevel->myEntities.Add(EntityFactory::CreateEntity(eOwnerType::NEUTRAL, 
+			EntityEnumConverter::ConvertStringToEntityType(controlPointType), Prism::eOctreeType::STATIC, 
+			*myCurrentLevel->myScene, propPosition, *myCurrentLevel->myTerrain, propRotation, propScale));
 		myCurrentLevel->myEntities.GetLast()->AddToScene();
 		myCurrentLevel->myEntities.GetLast()->Reset();
 	}
@@ -453,7 +494,7 @@ void LevelFactory::LoadBases(XMLReader& aReader, tinyxml2::XMLElement* aLevelEle
 			if (elementName == "enemybase")
 			{
 				myCurrentLevel->myAI->myBuilding = EntityFactory::CreateEntity(eOwnerType::ENEMY, 
-					EntityFactory::ConvertStringToEntityType(baseType), Prism::eOctreeType::STATIC, 
+					EntityEnumConverter::ConvertStringToEntityType(baseType), Prism::eOctreeType::STATIC, 
 					*myCurrentLevel->myScene, propPosition, *myCurrentLevel->myTerrain, propRotation, propScale);
 				myCurrentLevel->myAI->myBuilding->AddToScene();
 				myCurrentLevel->myAI->myBuilding->Reset();
@@ -462,7 +503,7 @@ void LevelFactory::LoadBases(XMLReader& aReader, tinyxml2::XMLElement* aLevelEle
 			else if (elementName == "playerbase")
 			{
 				myCurrentLevel->myPlayer->myBuilding = EntityFactory::CreateEntity(eOwnerType::PLAYER,
-					EntityFactory::ConvertStringToEntityType(baseType), Prism::eOctreeType::STATIC,
+					EntityEnumConverter::ConvertStringToEntityType(baseType), Prism::eOctreeType::STATIC,
 					*myCurrentLevel->myScene, propPosition, *myCurrentLevel->myTerrain, propRotation, propScale);
 				myCurrentLevel->myPlayer->myBuilding->AddToScene();
 				myCurrentLevel->myPlayer->myBuilding->Reset();

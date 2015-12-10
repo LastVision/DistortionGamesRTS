@@ -15,16 +15,16 @@ public:
 
 	static eComponentType GetTypeStatic();
 	eComponentType GetType() override;
-	void BuildUnit(eEntityType aUnitType);
+	void BuildUnit(eUnitType aUnitType);
 
-	eEntityType GetEntityToSpawn() const;
+	eUnitType GetEntityToSpawn() const;
 	const float& GetCurrentBuildTime() const;
 	const float& GetMaxBuildTime() const;
 	int GetSpawnQueueSize() const;
 
 private:
 
-	CU::StaticArray<eEntityType, 5> mySpawnQueue;
+	CU::StaticArray<eUnitType, 5> mySpawnQueue;
 	int mySpawnQueueIndex;
 
 	float myCurrentBuildTime;
@@ -41,7 +41,7 @@ inline eComponentType BuildingComponent::GetType()
 	return GetTypeStatic();
 }
 
-inline eEntityType BuildingComponent::GetEntityToSpawn() const
+inline eUnitType BuildingComponent::GetEntityToSpawn() const
 {
 	return mySpawnQueue[0];
 }

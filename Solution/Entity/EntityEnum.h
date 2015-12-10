@@ -16,19 +16,18 @@ enum eEntityType
 	BASE_BUILING = 4,
 	RESOURCE_POINT = 8,
 	VICTORY_POINT = 16,
-	DRAGON = 32, // to be moved to UnitType
-	DRAGON_STATIC = 64, // to be deleted
-	PINE_TREE = 128, // to be moved to propType
 	_COUNT,
 };
 
-enum class eUnitType
+enum eUnitType
 {
+	NOT_A_UNIT = -1,
 	DRAGON,
 };
 
 enum class ePropType
 {
+	NOT_A_PROP,
 	PINE_TREE,
 };
 

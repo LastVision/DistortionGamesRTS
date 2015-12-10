@@ -4,6 +4,7 @@
 #include "ComponentLoader.h"
 #include "Entity.h"
 #include "EntityFactory.h"
+#include "EntityEnumConverter.h"
 #include <string>
 #include <XMLReader.h>
 
@@ -55,6 +56,42 @@ Entity* EntityFactory::CreateEntity(eOwnerType aOwner, eEntityType aType, Prism:
 	return nullptr;
 }
 
+Entity* EntityFactory::CreateEntity(eOwnerType aOwner, eEntityType aType, ePropType aPropType, Prism::eOctreeType aOctreeType,
+	Prism::Scene& aScene, CU::Vector3f aPostion, const Prism::Terrain& aTerrian,
+	const CU::Vector3f& aRotation, const CU::Vector3f& aScale)
+{
+	if (aType == eEntityType::PROP)
+	{
+		if (myInstance->myLoadedPropData.find(aPropType) != myInstance->myLoadedPropData.end())
+		{
+			EntityData loadedEntityData = myInstance->myLoadedPropData.find(aPropType)->second;
+			Entity* newEntity = new Entity(aOwner, aOctreeType, loadedEntityData, aScene, aPostion, aTerrian, aRotation, aScale);
+			newEntity->myPropType = aPropType;
+			return newEntity;
+		}
+	}
+	DL_ASSERT("Prop not found.");
+	return nullptr;
+}
+
+Entity* EntityFactory::CreateEntity(eOwnerType aOwner, eEntityType aType, eUnitType aUnitType, Prism::eOctreeType aOctreeType,
+	Prism::Scene& aScene, CU::Vector3f aPostion, const Prism::Terrain& aTerrian,
+	const CU::Vector3f& aRotation, const CU::Vector3f& aScale)
+{
+	if (aType == eEntityType::UNIT)
+	{
+		if (myInstance->myLoadedUnitData.find(aUnitType) != myInstance->myLoadedUnitData.end())
+		{
+			EntityData loadedEntityData = myInstance->myLoadedUnitData.find(aUnitType)->second;
+			Entity* newEntity = new Entity(aOwner, aOctreeType, loadedEntityData, aScene, aPostion, aTerrian, aRotation, aScale);
+			newEntity->myUnitType = aUnitType;
+			return newEntity;
+		}
+	}
+	DL_ASSERT("Prop not found.");
+	return nullptr;
+}
+
 void EntityFactory::LoadEntity(const char* aEntityPath)
 {
 	XMLReader entityDocument;
@@ -65,8 +102,20 @@ void EntityFactory::LoadEntity(const char* aEntityPath)
 
 	EntityData newData;
 	std::string entityType;
+	std::string entitySubType;
 	entityDocument.ForceReadAttribute(entityElement, "type", entityType);
-	newData.myType = ConvertStringToEntityType(CU::ToLower(entityType));
+	newData.myType = EntityEnumConverter::ConvertStringToEntityType(CU::ToLower(entityType));
+	if (newData.myType == eEntityType::PROP)
+	{
+		entityDocument.ForceReadAttribute(entityElement, "subType", entitySubType);
+		newData.myPropType = EntityEnumConverter::ConvertStringToPropType(CU::ToLower(entitySubType));
+	}
+	else if (newData.myType == eEntityType::UNIT)
+	{
+		entityDocument.ForceReadAttribute(entityElement, "subType", entitySubType);
+		newData.myUnitType = EntityEnumConverter::ConvertStringToUnitType(CU::ToLower(entitySubType));
+	}
+
 
 	for (tinyxml2::XMLElement* e = entityDocument.FindFirstChild(entityElement); e != nullptr; 
 		e = entityDocument.FindNextElement(e))
@@ -129,7 +178,18 @@ void EntityFactory::LoadEntity(const char* aEntityPath)
 			DL_ASSERT(errorMessage.c_str());
 		}
 	}
-	myLoadedEntityData[newData.myType] = newData;
+	if (newData.myType == eEntityType::PROP)
+	{
+		myLoadedPropData[newData.myPropType] = newData;
+	}
+	else if (newData.myType == eEntityType::UNIT)
+	{
+		myLoadedUnitData[newData.myUnitType] = newData;
+	}
+	else 
+	{
+		myLoadedEntityData[newData.myType] = newData;
+	}
 
 	entityDocument.CloseDocument();
 }
@@ -143,9 +203,4 @@ EntityFactory::EntityFactory()
 EntityFactory::~EntityFactory()
 {
 	SAFE_DELETE(myComponentLoader);
-}
-
-const eEntityType EntityFactory::ConvertStringToEntityType(const std::string& entityType)
-{
-	return ComponentLoader::ConvertStringToEntityType(entityType);
 }

@@ -7,6 +7,7 @@
 #include <CommonHelper.h>
 #include "ComponentLoader.h"
 #include "ControllerComponentData.h"
+#include "EntityEnumConverter.h"
 #include "GraphicsComponentData.h"
 #include "HealthComponentData.h"
 #include "TriggerComponentData.h"
@@ -72,9 +73,9 @@ void ComponentLoader::LoadBuidlingComponent(XMLReader& aDocument, tinyxml2::XMLE
 {
 	aOutputData.myExistsInEntity = true;
 
-	aOutputData.myBuildUnitTypes[0] = eEntityType::EMPTY;
-	aOutputData.myBuildUnitTypes[1] = eEntityType::EMPTY;
-	aOutputData.myBuildUnitTypes[2] = eEntityType::EMPTY;
+	aOutputData.myBuildUnitTypes[0] = eUnitType::NOT_A_UNIT;
+	aOutputData.myBuildUnitTypes[1] = eUnitType::NOT_A_UNIT;
+	aOutputData.myBuildUnitTypes[2] = eUnitType::NOT_A_UNIT;
 
 	int numberOfUnitType = 0;
 	for (tinyxml2::XMLElement* e = aDocument.FindFirstChild(aSourceElement); e != nullptr; e = aDocument.FindNextElement(e))
@@ -86,7 +87,7 @@ void ComponentLoader::LoadBuidlingComponent(XMLReader& aDocument, tinyxml2::XMLE
 			std::string unitType;
 			aDocument.ForceReadAttribute(e, "type", unitType);
 
-			eEntityType buildUnitType = ComponentLoader::ConvertStringToEntityType(CU::ToLower(unitType));
+			eUnitType buildUnitType = EntityEnumConverter::ConvertStringToUnitType(CU::ToLower(unitType));
 			aOutputData.myBuildUnitTypes.Insert(numberOfUnitType, buildUnitType);
 			numberOfUnitType++;
 		}
@@ -208,32 +209,6 @@ void ComponentLoader::LoadTriggerComponent(XMLReader& aDocument, tinyxml2::XMLEl
 			FailedToReadChildElementMessage(e->Name(), aSourceElement->Name());
 		}
 	}
-}
-
-const eEntityType ComponentLoader::ConvertStringToEntityType(const std::string& entityType)
-{
-	if (entityType == "basebuilding")
-	{
-		return eEntityType::BASE_BUILING;
-	}
-	else if (entityType == "dragon")
-	{
-		return eEntityType::DRAGON;
-	}
-	else if (entityType == "dragonstatic")
-	{
-		return eEntityType::DRAGON_STATIC;
-	}
-	else if (entityType == "pinetree")
-	{
-		return eEntityType::PINE_TREE;
-	}
-	else if (entityType == "resourcepoint")
-	{
-		return eEntityType::RESOURCE_POINT;
-	}
-	DL_ASSERT("This type is not supported, please tell Daniel about it.");
-	return eEntityType::_COUNT;
 }
 
 void ComponentLoader::FailedToReadChildElementMessage(const std::string& aElement, const std::string& aParent)

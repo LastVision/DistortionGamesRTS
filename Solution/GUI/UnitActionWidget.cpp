@@ -72,7 +72,7 @@ namespace GUI
 	{
 		if (myIsUnitSelected == true)
 		{
-			if (mySelectedType == eEntityType::DRAGON)
+			if (mySelectedType == eEntityType::UNIT)
 			{
 				myUnitActionButtons->Render(myPosition + aParentPosition);
 			}
@@ -98,7 +98,7 @@ namespace GUI
 	{
 		if (myIsUnitSelected == true)
 		{
-			if (mySelectedType == eEntityType::DRAGON)
+			if (mySelectedType == eEntityType::UNIT)
 			{
 				return myUnitActionButtons->MouseIsOver(aPosition - myPosition);
 			}
