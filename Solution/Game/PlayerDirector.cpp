@@ -290,15 +290,14 @@ void PlayerDirector::UpdateInputs()
 {
 	myShiftPressed = CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_LSHIFT)
 		|| CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_RSHIFT);
+
 	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_A) == true)
 	{
-		myAPressed = true;
 		mySelectedAction = eSelectedAction::ATTACK;
 	}
 
 	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_S) == true)
 	{
-		mySPressed = true;
 		mySelectedAction = eSelectedAction::STOP;
 	}
 
@@ -313,8 +312,8 @@ void PlayerDirector::UpdateInputs()
 		myRightClicked = CU::InputWrapper::GetInstance()->MouseDown(1);
 	}
 
-
-	if (myLeftMouseClicked == true && myShiftPressed == false && myAPressed == false)
+	if (myLeftMouseClicked == true && myShiftPressed == false && 
+		(mySelectedAction == eSelectedAction::NONE || mySelectedAction == eSelectedAction::STOP))
 	{
 		mySelectedUnits.RemoveAll();
 	}
@@ -353,7 +352,6 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 			}
 		}
 	}
-
 
 	SelectOrHoverEntity(myBuilding, hasSelected, hasHovered, line);
 }

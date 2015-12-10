@@ -71,8 +71,6 @@ private:
 	GUI::Cursor* myCursor;
 
 	bool myShiftPressed;
-	bool myAPressed;
-	bool mySPressed;
 	bool myLeftMouseClicked;
 	bool myRightClicked;
 	eSelectedAction mySelectedAction;
