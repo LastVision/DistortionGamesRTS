@@ -28,6 +28,11 @@ namespace CU
 		return fmax(aLower, fmin(aNumber, aUpper));
 	}
 
+	inline int ClipInt(int aNumber, int aLower, int aUpper)
+	{
+		return max(aLower, min(aNumber, aUpper));
+	}
+
 	inline std::string GetSubString(std::string aStringToReadFrom, char aCharToFind, bool aReadAfterChar)
 	{
 		std::string toReturn;
@@ -73,6 +78,38 @@ namespace CU
 		ss << "\\Distortion Games\\";
 		return ss.str();
 	}
+
+	//If OptionalExtension is blank, the outputstring will have the same extension as the input string
+	//OptionalExtension needs to be entered without a period, "xml", NOT ".xml"
+	inline std::string GetGeneratedDataFolderFilePath(const std::string& aFilePath, const std::string& anOptionalNewExtension = "")
+	{
+		std::string pathWithoutData(aFilePath.begin() + 5, aFilePath.end());
+
+		if (anOptionalNewExtension != "")
+		{
+			int extensionIndex = pathWithoutData.find_last_of(".");
+			pathWithoutData = std::string(pathWithoutData.begin(), pathWithoutData.begin() + extensionIndex + 1);
+			pathWithoutData += anOptionalNewExtension;
+		}
+
+		std::string generatedDataFilePath = "GeneratedData/";
+		generatedDataFilePath += pathWithoutData;
+
+		return generatedDataFilePath;
+	}
+
+	inline void BuildFoldersInPath(const std::string& aPath)
+	{
+		int slashIndex = aPath.find_first_of("/");
+
+		while (slashIndex != std::string::npos)
+		{
+			std::string folder(aPath.begin(), aPath.begin() + slashIndex);
+			CreateDirectory(folder.c_str(), NULL);
+			slashIndex = aPath.find_first_of("/", slashIndex + 1);
+		}
+	}
+
 	inline std::string Concatenate(const char* aFormattedString, ...)
 	{
 		char buffer[1024];

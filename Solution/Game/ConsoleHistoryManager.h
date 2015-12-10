@@ -16,6 +16,9 @@ enum class eHistoryType
 
 struct History
 {
+	History();
+	~History();
+	
 	eHistoryType myType;
 	std::string myMessage;
 	Prism::Text* myRenderText;
@@ -34,12 +37,12 @@ public:
 	void AddHistory(const std::string& aCommand, eHistoryType anEnum = eHistoryType::HISTORY);
 	void Save();
 	void Load();
-	const CU::GrowingArray<History>& GetHistoryArray();
+	const CU::GrowingArray<History*>& GetHistoryArray();
 private:
 	void CheckType(eHistoryType aType, bool aShouldGoBackwards);
 
 
-	CU::GrowingArray<History> myHistory;
+	CU::GrowingArray<History*> myHistory;
 	const char* myHistoryFile;
 	int myCurrentIndex;
 	int myInsertIndex;
@@ -47,7 +50,7 @@ private:
 
 };
 
-inline const CU::GrowingArray<History>& ConsoleHistoryManager::GetHistoryArray()
+inline const CU::GrowingArray<History*>& ConsoleHistoryManager::GetHistoryArray()
 {
 	return myHistory;
 }

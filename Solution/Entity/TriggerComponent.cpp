@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "CollisionComponent.h"
 #include "TriggerComponent.h"
 #include "TriggerComponentData.h"
 #include "Entity.h"
@@ -8,12 +9,11 @@
 TriggerComponent::TriggerComponent(Entity& aEntity, TriggerComponentData& aData)
 	: Component(aEntity)
 	, myType(aData.myType)
-	, myPlayerUnits(8)
-	, myEnemyUnits(8)
+	, myPlayerUnits(GC::playerUnitCount)
+	, myEnemyUnits(GC::enemyUnitCount)
+	, myRadius(aData.myRadius)
+	, myRadiusSquared(aData.myRadius * aData.myRadius)
 {
-	mySphere.myRadius = aData.myRadius;
-	mySphere.myRadiusSquared = aData.myRadius * aData.myRadius;
-	mySphere.myCenterPosition = myEntity.GetOrientation().GetPos();
 }
 
 TriggerComponent::~TriggerComponent()
@@ -22,18 +22,41 @@ TriggerComponent::~TriggerComponent()
 
 void TriggerComponent::Update(float)
 {
-	const CU::GrowingArray<Entity*> allPlayerUnits = PollingStation::GetInstance()->GetUnits(eOwnerType::PLAYER);
-	const CU::GrowingArray<Entity*> allEnemyUnits = PollingStation::GetInstance()->GetUnits(eOwnerType::PLAYER);
-	mySphere.myCenterPosition = myEntity.GetOrientation().GetPos();
+	CheckUnitsForRemove(myPlayerUnits);
+	//CheckUnitsForRemove(myEnemyUnits);
+	CheckUnitsForAdd(PollingStation::GetInstance()->GetUnits(eOwnerType::PLAYER), myPlayerUnits);
+	//CheckUnitsForAdd(PollingStation::GetInstance()->GetUnits(eOwnerType::ENEMY), myEnemyUnits);
 }
 
-bool TriggerComponent::Collide(const CU::Intersection::LineSegment3D& aLine) const
+void TriggerComponent::CheckUnitsForRemove(CU::GrowingArray<Entity*>& someUnits) const
 {
-	CU::Vector3<float> notUsed;
-	return CU::Intersection::LineVsSphere(aLine, mySphere, notUsed);
+	for (int i = someUnits.Size() - 1; i >= 0; --i)
+	{
+		Entity* current = someUnits[i];
+		if (CU::Intersection::CircleVsCircle(myEntity.GetPosition(), myRadius
+			, current->GetPosition(), current->GetComponent<CollisionComponent>()->GetRadius()) == false)
+		{
+			//send OnExitMessage here
+
+			someUnits.RemoveCyclicAtIndex(i);
+		}
+	}
 }
 
-bool TriggerComponent::Collide(const CU::Vector3<float>& aPosition) const
+void TriggerComponent::CheckUnitsForAdd(const CU::GrowingArray<Entity*>& someUnits
+	, CU::GrowingArray<Entity*>& someUnitsOut) const
 {
-	return CU::Intersection::PointInsideSphere(mySphere, aPosition);
+	for (int i = 0; i < someUnits.Size(); ++i)
+	{
+		Entity* current = someUnits[i];
+		if (CU::Intersection::CircleVsCircle(myEntity.GetPosition(), myRadius
+			, current->GetPosition(), current->GetComponent<CollisionComponent>()->GetRadius()))
+		{
+			if (someUnitsOut.Find(current) < 0)
+			{
+				//send OnEnterMessage here
+				someUnitsOut.Add(current);
+			}
+		}
+	}
 }

@@ -28,6 +28,11 @@ private:
 	Prism::Sprite* myBackground;
 	bool& myShouldReOpenConsole;
 	Prism::Sprite* myMarker;
+	Prism::Sprite* mySuggestionBox;
+	CU::GrowingArray<std::string> myLuaSuggestions;
+	Prism::Text* mySuggestionText;
+	std::string mySuggestionString;
+	int myCurrentSuggestion;
 	CU::Vector2<float> myMarkerPosition;
 	CU::Vector2<float> myLowerLeftCorner;
 	Prism::Text* myText;

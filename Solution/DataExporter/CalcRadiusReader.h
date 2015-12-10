@@ -1,11 +1,12 @@
 #pragma once
 #include <string>
 #include <FBXFactory.h>
+#include "IReader.h"
 
-class Reader
+class CalcRadiusReader : public IReader
 {
 public:
-	void ReadFile(const std::string& aFilePath);
+	void ReadFile(const std::string& aFilePath) override;
 
 private:
 	float CalcMaxDistance(const CU::GrowingArray<CU::Vector3<float>>& someVertices) const;

@@ -1,10 +1,10 @@
-#include "Reader.h"
+#include "CalcRadiusReader.h"
 #include <GrowingArray.h>
 #include <DL_Debug.h>
 #include <fstream>
 #include <iostream>
 
-void Reader::ReadFile(const std::string& aFilePath)
+void CalcRadiusReader::ReadFile(const std::string& aFilePath)
 {
 	if (aFilePath.compare(aFilePath.size() - 4, 4, ".fbx") == 0
 		|| aFilePath.compare(aFilePath.size() - 4, 4, ".FBX") == 0)
@@ -24,7 +24,7 @@ void Reader::ReadFile(const std::string& aFilePath)
 	}
 }
 
-float Reader::CalcMaxDistance(const CU::GrowingArray<CU::Vector3<float>>& someVertices) const
+float CalcRadiusReader::CalcMaxDistance(const CU::GrowingArray<CU::Vector3<float>>& someVertices) const
 {
 	float max = 0;
 	int index = 0;
@@ -41,7 +41,7 @@ float Reader::CalcMaxDistance(const CU::GrowingArray<CU::Vector3<float>>& someVe
 	return CU::Length(someVertices[index]);
 }
 
-void Reader::WriteXml(const std::string& aFbxPath, float aRadius) const
+void CalcRadiusReader::WriteXml(const std::string& aFbxPath, float aRadius) const
 {
 	std::ofstream file;
 	std::string xmlPath(aFbxPath.begin(), aFbxPath.end() - 4);

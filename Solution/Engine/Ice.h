@@ -21,6 +21,7 @@ namespace Prism
 		const float GetHeight() const;
 
 	private:
+		void operator=(Ice&) = delete;
 		void CreateTextureFromFile(const std::string& aFilePath, ID3D11ShaderResourceView** aResourceToBind);
 		void CreateVertices();
 		void CreateTextures();

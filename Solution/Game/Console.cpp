@@ -47,8 +47,8 @@ void Console::Update()
 	ReadInput();
 	myBackspace->Update(CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_BACKSPACE));
 	
-	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_UPARROW) || 
-		CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_DOWNARROW))
+	if (myInput == "" && (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_UPARROW) || 
+		CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_DOWNARROW)))
 	{
 		myInput = myHistory->GetCurrent();
 	}
