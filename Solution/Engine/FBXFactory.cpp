@@ -436,7 +436,7 @@ void Prism::FBXFactory::BuildBoneHierarchy(Bone& aBone, AnimationData* aAnimatio
 Prism::Model* Prism::FBXFactory::CreateModel(FbxModelData* someModelData, Effect* aEffect)
 {
 	Model* tempModel = new Model();
-	//tempModel->SetEffect(aEffect);
+	tempModel->SetEffect(aEffect);
 	tempModel->SetLodGroup(someModelData->myLodGroup);
 		
 	if (someModelData->myData)
