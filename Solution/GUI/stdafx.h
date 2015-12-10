@@ -1,6 +1,7 @@
 #pragma once
 
 #include <DebugDrawer.h>
-#include <Vector.h>
-#include <string>
+#include <GameConstants.h>
 #include <MemoryMacros.h>
+#include <string>
+#include <Vector.h>

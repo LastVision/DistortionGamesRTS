@@ -63,10 +63,12 @@ namespace Prism
 
 		void NavMesh::Render()
 		{
-			//for (int i = 0; i < myTriangles.Size(); ++i)
-			//{
-			//	myTriangles[i]->Render();
-			//}
+#ifndef RELEASE_BUILD
+			for (int i = 0; i < myTriangles.Size(); ++i)
+			{
+				myTriangles[i]->Render();
+			}
+#endif
 			DEBUG_PRINT(myTriangles.Size());
 		}
 

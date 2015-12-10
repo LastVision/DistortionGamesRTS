@@ -6,6 +6,7 @@ ConsoleHelp::ConsoleHelp()
 	: myHelpDocumentation(128)
 {
 	UpdateDocumentation();
+	myEmptyHelpDoc = { "", "", "" };
 }
 
 ConsoleHelp::~ConsoleHelp()
@@ -15,7 +16,7 @@ ConsoleHelp::~ConsoleHelp()
 void ConsoleHelp::UpdateDocumentation()
 {
 	const std::vector<LUA::Documentation>& luaDocumentation = LUA::ScriptSystem::GetInstance()->GetDocumentation();
-	for (int i = 0; i < luaDocumentation.size(); ++i)
+	for (unsigned int i = 0; i < luaDocumentation.size(); ++i)
 	{
 		ConsoleLuaHelp newFunction;
 		newFunction.myFunctionName = luaDocumentation[i].myFunction;
@@ -47,5 +48,5 @@ const ConsoleLuaHelp& ConsoleHelp::GetHelpText(const std::string& aFuncitonName)
 		}
 	}
 	
-	return{"", "", ""};
+	return myEmptyHelpDoc;
 }

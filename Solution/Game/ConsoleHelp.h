@@ -20,5 +20,6 @@ private:
 	void UpdateDocumentation();
 
 	CU::GrowingArray<ConsoleLuaHelp> myHelpDocumentation;
+	ConsoleLuaHelp myEmptyHelpDoc;
 };
 

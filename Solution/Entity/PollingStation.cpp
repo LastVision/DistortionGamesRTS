@@ -112,6 +112,30 @@ Entity* PollingStation::FindEntityAtPosition(const CU::Vector3<float>& aPosition
 	return entity;
 }
 
+const CU::GrowingArray<Entity*>& PollingStation::GetUnits(eOwnerType anOwner) const
+{
+	switch (anOwner)
+	{
+	case NOT_USED:
+		DL_ASSERT("Can't get units for NOT USED enum.");
+		break;
+	case PLAYER:
+		return myPlayerUnits;
+		break;
+	case ENEMY:
+		return myAIUnits;
+		break;
+	case NEUTRAL:
+		DL_ASSERT("Not implemented yet.");
+		break;
+	default:
+		break;
+	}
+
+	DL_ASSERT("Owner type not found.");
+	return myPlayerUnits;
+}
+
 void PollingStation::CleanUp()
 {
 	for (int i = myPlayerUnits.Size() - 1; i >= 0; --i)

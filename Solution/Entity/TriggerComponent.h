@@ -20,8 +20,12 @@ public:
 	virtual eComponentType GetType();
 
 private:
+	void operator=(TriggerComponent&) = delete;
 	float myRadius;
 	CU::Intersection::Sphere mySphere;
+	const eTriggerType myType;
+	CU::GrowingArray<Entity*> myPlayerUnits;
+	CU::GrowingArray<Entity*> myEnemyUnits;
 };
 
 inline eComponentType TriggerComponent::GetTypeStatic()

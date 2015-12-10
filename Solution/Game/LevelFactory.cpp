@@ -25,7 +25,7 @@
 
 NavmeshCutBox::NavmeshCutBox(const CU::Vector3f& aPosition, const CU::Vector3f& aExtend, const CU::Vector3f& aRotation)
 	: myPosition(aPosition)
-	, myExtend(aExtend)
+	, myExtend(aExtend/2.f)
 	, myRotation(aRotation)
 {
 }
@@ -41,7 +41,7 @@ CU::GrowingArray<CU::Vector2<float>> NavmeshCutBox::GetCutMesh() const
 	points.Add({ +myExtend.x, +myExtend.z });
 	points.Add({ +myExtend.x, -myExtend.z });
 
-	CU::Matrix33<float> rotationMatrix(CU::Matrix33<float>::CreateRotateAroundZ(myRotation.z));
+	CU::Matrix33<float> rotationMatrix(CU::Matrix33<float>::CreateRotateAroundZ(-myRotation.y));
 
 	for (int i = 0; i < points.Size(); ++i)
 	{

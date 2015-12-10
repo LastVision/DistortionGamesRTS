@@ -74,7 +74,7 @@ void ConsoleHistoryManager::Load()
 	output.close();
 }
 
-const std::string& ConsoleHistoryManager::GetCurrent(eHistoryType aType)
+const std::string& ConsoleHistoryManager::GetCurrent(eHistoryType)
 {
 	return myHistory[myCurrentIndex].myMessage;
 }

@@ -400,7 +400,7 @@ namespace LUA
 			}
 			else
 			{
-				float levRatio = GetLevenshteinRatio(lowerInput, levDist);
+				float levRatio = GetLevenshteinRatio(lowerInput, static_cast<int>(levDist));
 				levRatio = 1.f + (1.f - levRatio);
 				levDist *= levRatio;
 				score += (1.f / levDist) * maxLevenshteinScore;

@@ -78,6 +78,11 @@ bool Level::Update(float aDeltaTime, Prism::Camera& aCamera)
 		PostMaster::GetInstance()->SendMessage(GameStateMessage(eGameState::COMPLETE_LEVEL));
 	}
 
+	for (int i = 0; i < myEntities.Size(); ++i)
+	{
+		myEntities[i]->Update(aDeltaTime);
+	}
+
 	myPlayer->Update(aDeltaTime, aCamera);
 	myAI->Update(aDeltaTime);
 
@@ -91,16 +96,6 @@ void Level::Render(Prism::Camera& aCamera)
 	myScene->Render();
 
 	myPlayer->Render(aCamera);
-
-	CU::Vector3f point1(106, 27, 78);
-	CU::Vector3f point2(78, 27, 106);
-	CU::Vector3f point3(149, 27, 177);
-	CU::Vector3f point4(177, 27, 149);
-
-	Prism::RenderLine3D(point1, point2, eColorDebug::BLUE);
-	Prism::RenderLine3D(point2, point3, eColorDebug::BLUE);
-	Prism::RenderLine3D(point3, point4, eColorDebug::BLUE);
-	Prism::RenderLine3D(point4, point1, eColorDebug::BLUE);
 
 }
 

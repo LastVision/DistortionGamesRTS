@@ -82,6 +82,8 @@ void Prism::FBXFactory::FillData(ModelData* someData, Model* outData, Effect* aE
 
 	outData->myVertexBaseData = vertexData;
 
+	bool myHasFoundFirstUVSet = false;
+
 	for (int i = 0; i < someData->myLayout.Size(); ++i)
 	{
 		auto currentLayout = someData->myLayout[i];
@@ -104,8 +106,18 @@ void Prism::FBXFactory::FillData(ModelData* someData, Model* outData, Effect* aE
 		}
 		else if (currentLayout.myType == ModelData::VERTEX_UV)
 		{
-			desc->SemanticName = "TEXCOORD";
-			desc->Format = DXGI_FORMAT_R32G32_FLOAT;
+			if (myHasFoundFirstUVSet == false)
+			{
+				desc->SemanticName = "TEXCOORD";
+				desc->Format = DXGI_FORMAT_R32G32_FLOAT;
+				myHasFoundFirstUVSet = true;
+			}
+			else
+			{
+				desc->SemanticIndex += 1;
+				desc->SemanticName = "TEXCOORD";
+				desc->Format = DXGI_FORMAT_R32G32_FLOAT;
+			}
 		}
 		else if (currentLayout.myType == ModelData::VERTEX_BINORMAL)
 		{

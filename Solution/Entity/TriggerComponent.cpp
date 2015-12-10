@@ -3,15 +3,18 @@
 #include "TriggerComponentData.h"
 #include "Entity.h"
 #include <Intersection.h>
+#include "PollingStation.h"
 
 TriggerComponent::TriggerComponent(Entity& aEntity, TriggerComponentData& aData)
 	: Component(aEntity)
+	, myType(aData.myType)
+	, myPlayerUnits(8)
+	, myEnemyUnits(8)
 {
 	mySphere.myRadius = aData.myRadius;
 	mySphere.myRadiusSquared = aData.myRadius * aData.myRadius;
 	mySphere.myCenterPosition = myEntity.GetOrientation().GetPos();
 }
-
 
 TriggerComponent::~TriggerComponent()
 {
@@ -19,6 +22,8 @@ TriggerComponent::~TriggerComponent()
 
 void TriggerComponent::Update(float)
 {
+	const CU::GrowingArray<Entity*> allPlayerUnits = PollingStation::GetInstance()->GetUnits(eOwnerType::PLAYER);
+	const CU::GrowingArray<Entity*> allEnemyUnits = PollingStation::GetInstance()->GetUnits(eOwnerType::PLAYER);
 	mySphere.myCenterPosition = myEntity.GetOrientation().GetPos();
 }
 
