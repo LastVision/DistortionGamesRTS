@@ -109,18 +109,14 @@ namespace GUI
 		myBuildingTimer->OnResize(aNewWindowSize, anOldWindowSize);
 
 		CU::Vector2<float> unitRatioSize = myGruntUnit->GetSize() / anOldWindowSize;
-		CU::Vector2<float> unitNewSize = unitRatioSize * aNewWindowSize;
 		CU::Vector2<float> portraitRatioSize = myBuildingPortrait->GetSize() / anOldWindowSize;
-		CU::Vector2<float> portraitNewSize = portraitRatioSize * aNewWindowSize;
-
 		CU::Vector2<float> ratioUnitPostion = myUnitPosition / anOldWindowSize;
 		CU::Vector2<float> ratioPortraitPostion = myPortraitPosition / anOldWindowSize;
 
 		myUnitPosition = ratioUnitPostion * aNewWindowSize;
 		myPortraitPosition = ratioPortraitPostion * aNewWindowSize;
-
-		myGruntUnit->SetSize(unitNewSize, { 0.f, 0.f });
-		myGruntPortrait->SetSize(portraitNewSize, { 0.f, 0.f });
-		myBuildingPortrait->SetSize(portraitNewSize, { 0.f, 0.f });
+		myGruntUnit->SetSize(unitRatioSize * aNewWindowSize, { 0.f, 0.f });
+		myGruntPortrait->SetSize(portraitRatioSize * aNewWindowSize, { 0.f, 0.f });
+		myBuildingPortrait->SetSize(portraitRatioSize * aNewWindowSize, { 0.f, 0.f });
 	}
 }

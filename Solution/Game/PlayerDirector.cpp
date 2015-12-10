@@ -30,6 +30,7 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 	, myTweakValueX(3.273f)
 	, myTweakValueY(10.79f)
 	, mySelectedAction(eSelectedAction::NONE)
+	, myTestGold(60)
 {
 	for (int i = 0; i < 64; ++i)
 	{
@@ -124,6 +125,7 @@ void PlayerDirector::OnResize(int aWidth, int aHeight)
 
 void PlayerDirector::SpawnUnit(Prism::Scene&)
 {
+	myTestGold--;
 	myBuilding->GetComponent<BuildingComponent>()->BuildUnit(eUnitType::DRAGON);
 }
 

@@ -171,7 +171,7 @@ namespace GUI
 				}
 				else if (type == "resourcebar")
 				{
-					ResourceBarWidget* resourceBar = new ResourceBarWidget(&reader, widgetElement, 0);
+					ResourceBarWidget* resourceBar = new ResourceBarWidget(&reader, widgetElement, myPlayer);
 					container->AddWidget(resourceBar);
 				}
 			}
