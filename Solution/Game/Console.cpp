@@ -44,11 +44,12 @@ void Console::Update()
 	ReadInput();
 	myBackspace->Update(CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_BACKSPACE));
 	
-	if (myInput == "" && (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_UPARROW) || 
-		CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_DOWNARROW)))
-	{
-		myInput = myHistory->GetCurrent();
-	}
+	//if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_UPARROW) || 
+	//	CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_DOWNARROW))
+	//{
+	//	myInput = myHistory->GetCurrent();
+	//}
+
 	//if (CU::InputWrapper::GetInstance()->KeyUp(DIK_RETURN))
 	//{
 	//	LUA::ScriptSystem::GetInstance()->RunLuaFromString(myInput);
