@@ -8,6 +8,7 @@
 #include <Cursor.h>
 #include <DebugFont.h>
 #include <Engine.h>
+#include <EntityId.h>
 #include <FadeMessage.h>
 #include <FileWatcher.h>
 #include "Game.h"
@@ -61,6 +62,7 @@ Game::~Game()
 	Prism::ParticleDataContainer::Destroy();
 	CU::InputWrapper::Destroy();
 	CU::TimerManager::Destroy();
+	EntityId::Destroy();
 	Console::Destroy();
 	PostMaster::Destroy();
 	myStateStack.Clear();
