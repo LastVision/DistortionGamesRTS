@@ -21,7 +21,6 @@ public:
 	virtual eComponentType GetType();
 
 private:
-	float myRadius;
 	CU::Intersection::Sphere mySphere;
 };
 
@@ -37,5 +36,5 @@ inline eComponentType CollisionComponent::GetType()
 
 inline float CollisionComponent::GetRadius() const
 {
-	return myRadius;
+	return mySphere.myRadius;
 }
