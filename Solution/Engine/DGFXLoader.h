@@ -42,6 +42,7 @@ Model-Data (only if nullObject is 0)
 	layOutCount, int (number of elements in the InputLayout)
 		(for each layOutCount)
 			layoutOffset, int (byteOffset for the element in InputLayout)
+			semanticIndex, int (semanticIndex for the element in InputLayout)
 			layoutType, int (vertexType for the element in InputLayout)
 
 	textureCount, int (number of Textures in)

@@ -44,7 +44,7 @@ namespace Script_Interface
 
 		float size = float(lua_tonumber(aState, 4));
 		int color = int(lua_tonumber(aState, 5));
-		bool wireframe = lua_toboolean(aState, 6);
+		bool wireframe = lua_toboolean(aState, 6) == 0 ? false : true;
 
 		Prism::RenderBox({ x, y, z }, static_cast<eColorDebug>(color), size, wireframe);
 

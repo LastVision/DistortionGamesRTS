@@ -12,6 +12,7 @@ struct OnClickMessage;
 struct ResizeMessage;
 struct SpawnUnitMessage;
 struct ToggleGUIMessage;
+struct TriggerMessage;
 
 class Subscriber
 {
@@ -31,5 +32,6 @@ public:
 	virtual void ReceiveMessage(const ResizeMessage& aMessage);
 	virtual void ReceiveMessage(const SpawnUnitMessage& aMessage);
 	virtual void ReceiveMessage(const ToggleGUIMessage& aMessage);
+	virtual void ReceiveMessage(const TriggerMessage& aMessage);
 };
 

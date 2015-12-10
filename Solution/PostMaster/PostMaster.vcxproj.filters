@@ -75,5 +75,8 @@
     <ClInclude Include="LUAToggleRenderLinesMessage.h">
       <Filter>Message\ScriptMessage</Filter>
     </ClInclude>
+    <ClInclude Include="TriggerMessage.h">
+      <Filter>Message</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

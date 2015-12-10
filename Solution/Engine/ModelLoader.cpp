@@ -125,8 +125,6 @@ namespace Prism
 
 			for (int i = myLoadArray.Size() - 1; i >= 0; --i)
 			{
-				//check in here aswell to allow early outs so we dont have to wait for 2-3 seconds to quit if
-				//we got a big load-array
 				if (myIsPaused == true)
 				{
 					break;
