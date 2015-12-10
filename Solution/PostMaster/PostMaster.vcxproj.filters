@@ -72,5 +72,8 @@
     <ClInclude Include="LUAMoveCameraMessage.h">
       <Filter>Message\ScriptMessage</Filter>
     </ClInclude>
+    <ClInclude Include="LUAToggleRenderLinesMessage.h">
+      <Filter>Message\ScriptMessage</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

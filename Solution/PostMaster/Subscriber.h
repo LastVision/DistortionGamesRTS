@@ -3,6 +3,7 @@
 struct FadeMessage;
 struct GameStateMessage;
 struct LUACinematicMessage;
+struct LUAToggleRenderLinesMessage;
 struct LUAMoveCameraMessage;
 struct LUARunScriptMessage;
 struct Message;
@@ -21,6 +22,7 @@ public:
 	virtual void ReceiveMessage(const FadeMessage& aMessage);
 	virtual void ReceiveMessage(const GameStateMessage& aMessage);
 	virtual void ReceiveMessage(const LUACinematicMessage& aMessage);
+	virtual void ReceiveMessage(const LUAToggleRenderLinesMessage& aMessage);
 	virtual void ReceiveMessage(const LUAMoveCameraMessage& aMessage);
 	virtual void ReceiveMessage(const LUARunScriptMessage& aMessage);
 	virtual void ReceiveMessage(const Message& aMessage);

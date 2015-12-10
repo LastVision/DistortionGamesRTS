@@ -23,6 +23,10 @@ void Subscriber::ReceiveMessage(const LUACinematicMessage&)
 {
 }
 
+void Subscriber::ReceiveMessage(const LUAToggleRenderLinesMessage& aMessage)
+{
+}
+
 void Subscriber::ReceiveMessage(const LUAMoveCameraMessage&)
 {
 }

@@ -4,6 +4,7 @@
 #include <LUACinematicMessage.h>
 #include <LUAMoveCameraMessage.h>
 #include <LUARunScriptMessage.h>
+#include <LUAToggleRenderLinesMessage.h>
 #include <PostMaster.h>
 #include <ScriptSystem.h>
 #include <ToggleGUIMessage.h>
@@ -101,6 +102,18 @@ namespace Script_Interface
 		PostMaster::GetInstance()->SendMessage(LUARunScriptMessage(filePath));
 		return 0;
 	}
+
+	int HideNavMesh(lua_State* aState)//void
+	{
+		PostMaster::GetInstance()->SendMessage(LUAToggleRenderLinesMessage(false));
+		return 0;
+	}
+
+	int ShowNavMesh(lua_State* aState)//void
+	{
+		PostMaster::GetInstance()->SendMessage(LUAToggleRenderLinesMessage(true));
+		return 0;
+	}
 }
 
 void ScriptInterface::RegisterFunctions()
@@ -118,4 +131,6 @@ void ScriptInterface::RegisterFunctions()
 	system->RegisterFunction("ShowGUI", Script_Interface::ShowGUI, "aFadeTime", "Shows the GUI with a fade-in");
 	system->RegisterFunction("HideGUI", Script_Interface::HideGUI, "aFadeTime", "Hides the GUI with a fade-out");
 	system->RegisterFunction("ScriptRun", Script_Interface::ScriptRun, "aScriptFile", "Run the script file.");
+	system->RegisterFunction("ShowNavMesh", Script_Interface::ShowNavMesh, "", "Shows the lines for the navigation mesh.");
+	system->RegisterFunction("HideNavMesh", Script_Interface::HideNavMesh, "", "Hides the lines for the navigation mesh.");
 }

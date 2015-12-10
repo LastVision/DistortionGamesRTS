@@ -30,7 +30,7 @@ namespace Prism
 			, const std::string& aIceInfluence);
 		~Terrain();
 
-		void Render(const Camera& aCamera);
+		void Render(const Camera& aCamera, bool aRenderNavMeshLines);
 		void CalcEntityHeight(CU::Matrix44<float>& anOrientation) const;
 		CU::Vector3<float> GetHeight(const CU::Vector3<float>& aPosition, float aHeightOffset = 0.f) const;
 
