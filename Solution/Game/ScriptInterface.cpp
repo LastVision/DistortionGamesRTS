@@ -3,6 +3,7 @@
 
 #include <LUACinematicMessage.h>
 #include <LUAMoveCameraMessage.h>
+#include <LUARunScriptMessage.h>
 #include <PostMaster.h>
 #include <ScriptSystem.h>
 #include <ToggleGUIMessage.h>
@@ -93,6 +94,13 @@ namespace Script_Interface
 		PostMaster::GetInstance()->SendMessage(ToggleGUIMessage(false, fadeTime));
 		return 0;
 	}
+
+	int ScriptRun(lua_State* aState)//string aScriptFile
+	{
+		std::string filePath = lua_tostring(aState, 1);
+		PostMaster::GetInstance()->SendMessage(LUARunScriptMessage(filePath));
+		return 0;
+	}
 }
 
 void ScriptInterface::RegisterFunctions()
@@ -109,4 +117,5 @@ void ScriptInterface::RegisterFunctions()
 	system->RegisterFunction("EndCinematic", Script_Interface::EndCinematic, "void", "Stops any running Cinematic and returns to normal game-mode");
 	system->RegisterFunction("ShowGUI", Script_Interface::ShowGUI, "aFadeTime", "Shows the GUI with a fade-in");
 	system->RegisterFunction("HideGUI", Script_Interface::HideGUI, "aFadeTime", "Hides the GUI with a fade-out");
+	system->RegisterFunction("ScriptRun", Script_Interface::ScriptRun, "aScriptFile", "Run the script file.");
 }

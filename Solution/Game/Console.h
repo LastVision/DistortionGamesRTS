@@ -1,10 +1,11 @@
 #pragma once
+#include <Subscriber.h>
 
 class ConsoleHelp;
 class ConsoleHistoryManager;
 class ConsoleBackspace;
 
-class Console
+class Console : Subscriber
 {
 public:
 	static Console* GetInstance();
@@ -14,6 +15,8 @@ public:
 	const std::string& GetInput() const;
 	ConsoleHistoryManager* GetConsoleHistory();
 	ConsoleHelp* GetConsoleHelp();
+
+	void ReceiveMessage(const LUARunScriptMessage& aMessage) override;
 
 	void ClearInput();
 
