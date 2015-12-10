@@ -64,6 +64,26 @@ namespace GUI
 		{
 			myClickEvent = new OnClickMessage(eOnClickEvent::UNIT_ACTION_MOVE);
 		}
+		else if (clickEvent == "action_attack")
+		{
+			myClickEvent = new OnClickMessage(eOnClickEvent::UNIT_ACTION_ATTACK);
+		}
+		else if (clickEvent == "action_stop")
+		{
+			myClickEvent = new OnClickMessage(eOnClickEvent::UNIT_ACTION_STOP);
+		}
+		else if (clickEvent == "action_patrol")
+		{
+			myClickEvent = new OnClickMessage(eOnClickEvent::UNIT_ACTION_PATROL);
+		}
+		else if (clickEvent == "action_move_attack")
+		{
+			myClickEvent = new OnClickMessage(eOnClickEvent::UNIT_ACTION_ATTACK_MOVE);
+		}
+		else if (clickEvent == "action_stand_ground")
+		{
+			myClickEvent = new OnClickMessage(eOnClickEvent::UNIT_ACTION_STAND_GROUND);
+		}
 		else if (clickEvent == "spawn_unit")
 		{
 			int ID = -1;

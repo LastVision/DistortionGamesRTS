@@ -22,6 +22,17 @@ namespace CU
 	}
 }
 
+enum class eSelectedAction
+{
+	NONE,
+	MOVE,
+	ATTACK,
+	STOP,
+	MOVE_ATTACK,
+	STAND_GROUND,
+	PATROL
+};
+
 class BuildingComponent;
 
 class PlayerDirector : public Director
@@ -43,6 +54,7 @@ public:
 
 	void ReceiveMessage(const SpawnUnitMessage& aMessage) override;
 	void ReceiveMessage(const ToggleGUIMessage& aMessage) override;
+	void ReceiveMessage(const OnClickMessage& aMessage) override;
 
 	const CU::GrowingArray<Entity*>& GetSelectedUnits() const;
 	const BuildingComponent& GetBuildingComponent() const;
@@ -63,6 +75,7 @@ private:
 	bool mySPressed;
 	bool myLeftMouseClicked;
 	bool myRightClicked;
+	eSelectedAction mySelectedAction;
 
 	bool myRenderGUI;
 

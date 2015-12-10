@@ -21,6 +21,8 @@ public:
 	bool TakeDamage(int aDamage);
 	void Heal(int aHealing);
 
+	void Reset() override;
+
 private:
 	int myMaxHealth;
 	int myCurrentHealth;
