@@ -262,9 +262,8 @@ void InGameState::ReceiveMessage(const LUACinematicMessage& aMessage)
 
 void InGameState::ReceiveMessage(const TriggerMessage& aMessage)
 {
-	int apa = aMessage.myTrigger->GetId();
-	int apa2 = aMessage.myUnit->GetId();
-	//LUA::ScriptSystem::GetInstance()->CallFunction("TriggerEvent", { , aMessage.myUnit, aMessage.myType });
+	LUA::ScriptSystem::GetInstance()->CallFunction("TriggerEvent", {static_cast<float>(aMessage.myTrigger->GetId())
+		, static_cast<float>(aMessage.myUnit->GetId()), static_cast<float>(aMessage.myType) });
 }
 
 void InGameState::SetLevel()

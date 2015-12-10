@@ -9,8 +9,8 @@ struct TriggerMessage : public Message
 {
 	enum class eTriggerType
 	{
-		ENTER,
 		EXIT,
+		ENTER,
 	};
 	TriggerMessage(Entity* aTrigger, Entity* aUnit, eTriggerType aType);
 
