@@ -627,6 +627,7 @@ bool FillData(ModelData* someData, FbxNode* aNode, AnimationData* aAnimation)
 	FbxStringList lUVNames;
 	mesh->GetUVSetNames(lUVNames);
 	const char * lUVName = NULL;
+	const char * lUV2Name = NULL;
 	if (someData->mHasUV && lUVNames.GetCount())
 	{
 		ModelData::Layout newLayout;
@@ -639,6 +640,19 @@ bool FillData(ModelData* someData, FbxNode* aNode, AnimationData* aAnimation)
 		size += lPolygonVertexCount * UV_STRIDE;
 		//lUVs = new float[lPolygonVertexCount * UV_STRIDE];
 		lUVName = lUVNames[0];
+	}
+	if (lUVNames.GetCount() > 1)
+	{
+		ModelData::Layout newLayout;
+		newLayout.myType = ModelData::VERTEX_UV;
+		newLayout.mySize = UV_STRIDE;
+		newLayout.myOffset = stride * 4;
+		someData->myLayout.Add(newLayout);
+
+		stride += UV_STRIDE;
+		size += lPolygonVertexCount * UV_STRIDE;
+		//lUVs = new float[lPolygonVertexCount * UV_STRIDE];
+		lUV2Name = lUVNames[1];
 	}
 
 	if (someData->myHasBiNormal)
@@ -653,7 +667,7 @@ bool FillData(ModelData* someData, FbxNode* aNode, AnimationData* aAnimation)
 		size += lPolygonVertexCount * BINORMAL_STRIDE;
 		//lUVs = new float[lPolygonVertexCount * UV_STRIDE];
 	}
-
+				
 	if (someData->myHasTangents)
 	{
 		ModelData::Layout newLayout;
@@ -918,6 +932,14 @@ bool FillData(ModelData* someData, FbxNode* aNode, AnimationData* aAnimation)
 				{
 					bool lUnmappedUV;
 					mesh->GetPolygonVertexUV(lPolygonIndex, lVerticeIndex, lUVName, lCurrentUV, lUnmappedUV);
+					lVertices[currentIndex + addedSize] = static_cast<float>(lCurrentUV[0]);
+					lVertices[currentIndex + addedSize + 1] = static_cast<float>(lCurrentUV[1])*-1.0f;
+					addedSize += UV_STRIDE;
+				}
+				if (lUV2Name != nullptr)
+				{
+					bool lUnmappedUV;
+					mesh->GetPolygonVertexUV(lPolygonIndex, lVerticeIndex, lUV2Name, lCurrentUV, lUnmappedUV);
 					lVertices[currentIndex + addedSize] = static_cast<float>(lCurrentUV[0]);
 					lVertices[currentIndex + addedSize + 1] = static_cast<float>(lCurrentUV[1])*-1.0f;
 					addedSize += UV_STRIDE;
