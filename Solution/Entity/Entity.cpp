@@ -26,6 +26,8 @@ Entity::Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& a
 	, mySelected(false)
 	, myHovered(false)
 	, myPosition({aStartPosition.x, aStartPosition.z})
+	, myPropType(ePropType::NOT_A_PROP)
+	, myUnitType(eUnitType::NOT_A_UNIT)
 {
 	for (int i = 0; i < static_cast<int>(eComponentType::_COUNT); ++i)
 	{

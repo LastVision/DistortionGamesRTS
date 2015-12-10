@@ -14,7 +14,7 @@ BuildingComponent::BuildingComponent(Entity& aEntity, BuildingCompnentData& aDat
 {
 	for (int i = 0; i <= 4; i++)
 	{
-		mySpawnQueue[i] = eEntityType::EMPTY;
+		mySpawnQueue[i] = eUnitType::NOT_A_UNIT;
 	}
 }
 
@@ -24,7 +24,7 @@ BuildingComponent::~BuildingComponent()
 
 void BuildingComponent::Update(float aDeltaTime)
 {
-	if (mySpawnQueue[0] != eEntityType::EMPTY)
+	if (mySpawnQueue[0] != eUnitType::NOT_A_UNIT)
 	{
 		myCurrentBuildTime += aDeltaTime;
 
@@ -37,14 +37,14 @@ void BuildingComponent::Update(float aDeltaTime)
 				mySpawnQueue[i] = mySpawnQueue[i + 1];
 			}
 
-			mySpawnQueue[mySpawnQueueIndex] = eEntityType::EMPTY;
+			mySpawnQueue[mySpawnQueueIndex] = eUnitType::NOT_A_UNIT;
 			myCurrentBuildTime = 0.f;
 			mySpawnQueueIndex--;
 		}
 	}
 }
 
-void BuildingComponent::BuildUnit(eEntityType aUnitType)
+void BuildingComponent::BuildUnit(eUnitType aUnitType)
 {
 	if (mySpawnQueueIndex < 4)
 	{

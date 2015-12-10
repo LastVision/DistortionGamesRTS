@@ -21,4 +21,10 @@ struct EntityData
 	GraphicsComponentData myGraphicsData;
 	HealthComponentData myHealthData;
 	TriggerComponentData myTriggerData;
+
+	union 
+	{
+		ePropType myPropType;
+		eUnitType myUnitType;
+	};
 };
