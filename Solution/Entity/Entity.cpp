@@ -10,6 +10,7 @@
 #include "HealthComponent.h"
 #include "Entity.h"
 #include "EntityData.h"
+#include "EntityId.h"
 #include <Scene.h>
 #include <Terrain.h>
 #include "TriggerComponent.h"
@@ -28,6 +29,7 @@ Entity::Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& a
 	, myPosition({aStartPosition.x, aStartPosition.z})
 	, myPropType(ePropType::NOT_A_PROP)
 	, myUnitType(eUnitType::NOT_A_UNIT)
+	, myId(EntityId::GetInstance()->GetId(this))
 {
 	for (int i = 0; i < static_cast<int>(eComponentType::_COUNT); ++i)
 	{

@@ -196,6 +196,7 @@ namespace LUA
 
 		AddLuaFunction("Update", 1);
 		AddLuaFunction("UpdateCinematic", 2);
+		AddLuaFunction("TriggerEvent", 3);
 
 		for (unsigned int i = 0; i < myActiveFiles.size(); ++i)
 		{

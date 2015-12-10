@@ -15,7 +15,6 @@ struct TriggerMessage : public Message
 	TriggerMessage(Entity* aTrigger, Entity* aUnit, eTriggerType aType);
 
 	const eTriggerType myType;
-	const CU::Vector2<float> myPosition;
 	const Entity* myTrigger;
 	const Entity* myUnit;
 };
