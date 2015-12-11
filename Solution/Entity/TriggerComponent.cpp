@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "CollisionComponent.h"
 #include "CommonHelper.h"
+#include "MathHelper.h"
 #include "TriggerComponent.h"
 #include "TriggerComponentData.h"
 #include <TriggerMessage.h>
@@ -17,6 +18,7 @@ TriggerComponent::TriggerComponent(Entity& aEntity, TriggerComponentData& aData)
 	, myRadiusSquared(aData.myRadius * aData.myRadius)
 	, myOwnershipRatio(0)
 {
+	myOriginalPosition = myEntity.GetOrientation().GetPos();
 }
 
 TriggerComponent::~TriggerComponent()
@@ -29,6 +31,9 @@ void TriggerComponent::Update(float)
 	CheckUnitsForRemove(myEnemyUnits);
 	CheckUnitsForAdd(PollingStation::GetInstance()->GetUnits(eOwnerType::PLAYER), myPlayerUnits);
 	CheckUnitsForAdd(PollingStation::GetInstance()->GetUnits(eOwnerType::ENEMY), myEnemyUnits);
+
+	float height = CU::Math::Remap(myOwnershipRatio, 0.f, 100.f, -5.f, 0.f);
+	myEntity.SetPosition({ myOriginalPosition.x, myOriginalPosition.y + height, myOriginalPosition.z });
 }
 
 void TriggerComponent::CheckUnitsForRemove(CU::GrowingArray<Entity*>& someUnits) const

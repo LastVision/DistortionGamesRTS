@@ -27,7 +27,8 @@ private:
 	const float myRadiusSquared;
 
 	float myOwnershipRatio;
-	
+	CU::Vector3f myOriginalPosition;
+
 	const eTriggerType myType;
 	CU::GrowingArray<Entity*> myPlayerUnits;
 	CU::GrowingArray<Entity*> myEnemyUnits;

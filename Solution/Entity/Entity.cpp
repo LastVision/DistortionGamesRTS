@@ -218,3 +218,10 @@ CU::GrowingArray<CU::Vector2<float>> Entity::GetCutMesh() const
 	points.Add({ pos.x + halfWidth, pos.y - halfWidth });
 	return points;
 }
+
+void Entity::SetPosition(const CU::Vector3f& aPosition)
+{
+	myOrientation.SetPos(aPosition);
+	myPosition.x = aPosition.x;
+	myPosition.y = aPosition.z;
+}
