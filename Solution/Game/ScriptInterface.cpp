@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-#include <TimeMultiplierMessage.h>
+#include "Console.h"
 #include <Entity.h>
 #include <EntityId.h>
 #include <GameStateMessage.h>
@@ -12,6 +12,7 @@
 #include <ResourceMessage.h>
 #include "ScriptInterface.h"
 #include <ScriptSystem.h>
+#include <TimeMultiplierMessage.h>
 #include <ToggleGUIMessage.h>
 
 namespace Script_Interface
@@ -22,6 +23,14 @@ namespace Script_Interface
 
 		DEBUG_PRINT_LUA(stringArg);
 
+		return 0;
+	}
+
+	int PrintConsole(lua_State* aState) //std::string aString
+	{
+		std::string stringArg = lua_tostring(aState, 1);
+
+		Console::GetInstance()->AddHistory(stringArg, eHistoryType::WARNING);
 		return 0;
 	}
 
@@ -201,12 +210,14 @@ namespace Script_Interface
 		PostMaster::GetInstance()->SendMessage(TimeMultiplierMessage(eOwnerType::PLAYER, speed));
 		return 0;
 	}
+
 }
 
 void ScriptInterface::RegisterFunctions()
 {
 	LUA::ScriptSystem* system = LUA::ScriptSystem::GetInstance();
 	system->RegisterFunction("Print", Script_Interface::Print, "aString", "Prints stuff to the screen");
+	system->RegisterFunction("PrintConsole", Script_Interface::PrintConsole, "aString", "Prints a single message to the console.");
 	system->RegisterFunction("MoveCamera", Script_Interface::MoveCamera, "aXDir, aZDir, aDistance"
 		, "Moves the Camera InGame\n\taXDir and aZDir will get normalized in the function\n\taDistance needs to be muliplied with DeltaTime on the LUA-Side");
 	system->RegisterFunction("RenderBox", Script_Interface::RenderBox, "aX, aY, aZ, aSize, aColor, aWireframe"
