@@ -35,6 +35,7 @@ namespace GUI
 			aReader->ForceReadAttribute(spriteElement, "positionx", valueSpritePosition.x);
 			aReader->ForceReadAttribute(spriteElement, "positiony", valueSpritePosition.y);
 			myValueSprite = new Prism::Sprite(valueSpritePath, valueSpriteSize);
+			mySpritePosition = valueSpritePosition;
 		}
 
 		if (value == "player_gold")
@@ -56,9 +57,20 @@ namespace GUI
 	{
 		if (myValueSprite != nullptr)
 		{
-			myValueSprite->Render(myPosition + aParentPosition);
+			myValueSprite->Render(myPosition + aParentPosition + mySpritePosition);
 		}
 
 		Prism::Engine::GetInstance()->PrintText(*myValue, myPosition + aParentPosition + myTextPosition, Prism::eTextType::RELEASE_TEXT);
+	}
+
+	void ResourceBarWidget::OnResize(const CU::Vector2<float>& aNewWindowSize, const CU::Vector2<float>& anOldWindowSize)
+	{
+		Widget::OnResize(aNewWindowSize, anOldWindowSize);
+
+		CU::Vector2<float> ratioTextPosition = myTextPosition / anOldWindowSize;
+		myTextPosition = ratioTextPosition * aNewWindowSize;
+
+		CU::Vector2<float> ratioSpritePosition = mySpritePosition / anOldWindowSize;
+		mySpritePosition = ratioSpritePosition * aNewWindowSize;
 	}
 }
