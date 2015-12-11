@@ -69,6 +69,7 @@ private:
 	void UpdateMouseInteraction(const Prism::Camera& aCamera);
 	void SelectOrHoverEntity(Entity* aEntity, bool &aSelected, bool &aHovered
 		, const CU::Intersection::LineSegment3D& aMouseRay);
+	void SelectAllUnits();
 
 	CU::GrowingArray<Entity*> mySelectedUnits;
 	GUI::GUIManager* myGUIManager;

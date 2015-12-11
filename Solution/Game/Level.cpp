@@ -72,10 +72,10 @@ bool Level::Update(float aDeltaTime, Prism::Camera& aCamera)
 	Prism::RenderBox({ 128.f, 129.f, 128.f }, eColorDebug::BLUE, false);*/
 	//DEBUG_PRINT(myEntities[0]->GetOrientation().GetPos());
 
-	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_F2))
-	{
-		PostMaster::GetInstance()->SendMessage(GameStateMessage(eGameState::COMPLETE_LEVEL));
-	}
+	//if (CU::InputWrapper::GetInstance()->KeyDown(DIK_F2))
+	//{
+	//	PostMaster::GetInstance()->SendMessage(GameStateMessage(eGameState::COMPLETE_LEVEL));
+	//}
 
 	for (int i = 0; i < myEntities.Size(); ++i)
 	{
