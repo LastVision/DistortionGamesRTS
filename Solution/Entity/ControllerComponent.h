@@ -24,7 +24,8 @@ public:
 	void Update(float aDelta) override;
 
 	void MoveTo(const CU::Vector3<float>& aPosition, bool aClearCommandQueue);
-	void Attack(const CU::Vector3<float>& aPosition, bool aClearCommandQueue);
+	void AttackTarget(Entity* aEntity, const CU::Vector3<float>& aPosition, bool aClearCommandQueue);
+	void AttackMove(const CU::Vector3<float>& aPosition, bool aClearCommandQueue);
 	void Stop();
 	void HoldPosition();
 
@@ -42,9 +43,10 @@ private:
 	{
 		IDLE,
 		MOVE,
-		ATTACK,
+		ATTACK_TARGET,
 		RETURN,
-		HOLD_POSITION
+		HOLD_POSITION,
+		ATTACK_MOVE
 	};
 
 	struct ActionData

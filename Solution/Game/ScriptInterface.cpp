@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+#include <AITimeMultiplierMessage.h>
 #include <Entity.h>
 #include <EntityId.h>
 #include <GameStateMessage.h>
@@ -147,7 +148,7 @@ namespace Script_Interface
 	int ModifyResource(lua_State* aState)//void
 	{
 		int directorId = int(lua_tonumber(aState, 1));
-		int resourceModifier = int(lua_tonumber(aState, 1));
+		int resourceModifier = int(lua_tonumber(aState, 2));
 
 		eOwnerType owner = eOwnerType::NOT_USED;
 		if (directorId == eOwnerType::PLAYER)
@@ -165,7 +166,21 @@ namespace Script_Interface
 		}
 
 
-		//PostMaster::GetInstance()->SendMessage(ResourceMessage(owner, resourceModifier));
+		PostMaster::GetInstance()->SendMessage(ResourceMessage(owner, resourceModifier));
+		return 0;
+	}
+
+	int DisableAI(lua_State* aState)//void
+	{
+		PostMaster::GetInstance()->SendMessage(AITimeMultiplierMessage(0.f));
+
+		return 0;
+	}
+
+	int EnableAI(lua_State* aState)//void
+	{
+		PostMaster::GetInstance()->SendMessage(AITimeMultiplierMessage(1.f));
+
 		return 0;
 	}
 }
@@ -191,4 +206,6 @@ void ScriptInterface::RegisterFunctions()
 	system->RegisterFunction("GetTrigger", Script_Interface::GetTrigger, "aTrigger", "Returns the Entity id for trigger of the supplied input, ex: trigger0 = GetTrigger(0)");
 	system->RegisterFunction("ReloadLevel", Script_Interface::ReloadLevel, "", "Reloads the current level.");
 	system->RegisterFunction("ModifyResource", Script_Interface::ModifyResource, "aOwnerEnum, aResourceModifier", "Modifies resource of owner, ex: ModifyResource(eOwnerType.PLAYER, resourceGain)");
+	system->RegisterFunction("DisableAI", Script_Interface::DisableAI, "", "Disables AI");
+	system->RegisterFunction("EnableAI", Script_Interface::EnableAI, "", "Enables AI");
 }

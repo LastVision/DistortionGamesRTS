@@ -1,10 +1,12 @@
 #include "stdafx.h"
 #include "AIDirector.h"
+#include <AITimeMultiplierMessage.h>
 #include <BuildingComponent.h>
 #include <ControllerComponent.h>
 #include <Entity.h>
 #include <EntityFactory.h>
 #include <PollingStation.h>
+#include <PostMaster.h>
 #include <SpawnUnitMessage.h>
 
 AIDirector::AIDirector(const Prism::Terrain& aTerrain, Prism::Scene& aScene)
@@ -33,15 +35,20 @@ AIDirector::AIDirector(const Prism::Terrain& aTerrain, Prism::Scene& aScene)
 		myActiveUnits.Add(myUnits[i]);
 		PollingStation::GetInstance()->RegisterEntity(myActiveUnits[i]);
 	}
+
+	PostMaster::GetInstance()->Subscribe(eMessageType::AI_TIME_MULTIPLIER, this);
 }
 
 
 AIDirector::~AIDirector()
 {
+	PostMaster::GetInstance()->UnSubscribe(eMessageType::AI_TIME_MULTIPLIER, this);
 }
 
 void AIDirector::Update(float aDeltaTime)
 {
+	aDeltaTime *= myTimeMultiplier;
+
 	Director::Update(aDeltaTime);
 
 	CleanUpGatherers();
@@ -103,6 +110,11 @@ void AIDirector::ReceiveMessage(const SpawnUnitMessage& aMessage)
 	}
 }
 
+void AIDirector::ReceiveMessage(const AITimeMultiplierMessage& aMessage)
+{
+	myTimeMultiplier = aMessage.myMultiplier;
+}
+
 void AIDirector::CleanUpGatherers()
 {
 	//If we have enough resources, remove some units from gathering and make available
@@ -147,6 +159,6 @@ void AIDirector::ActivateAttacker(Entity* aEntity)
 
 	Entity* closestPlayerUnit = PollingStation::GetInstance()->FindClosestEntity(position, eOwnerType::PLAYER);
 
-	aEntity->GetComponent<ControllerComponent>()->Attack(closestPlayerUnit->GetOrientation().GetPos(), true);
+	aEntity->GetComponent<ControllerComponent>()->AttackMove(closestPlayerUnit->GetOrientation().GetPos(), true);
 	myAttackers.Add(aEntity);
 }

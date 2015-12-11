@@ -115,6 +115,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AITimeMultiplierMessage.h" />
     <ClInclude Include="FadeMessage.h" />
     <ClInclude Include="GameStateMessage.h" />
     <ClInclude Include="LUAToggleRenderLinesMessage.h" />

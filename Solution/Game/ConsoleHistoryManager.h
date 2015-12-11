@@ -11,7 +11,8 @@ enum class eHistoryType
 {
 	ERROR,
 	HISTORY,
-	HELP
+	HELP,
+	GENERATED_COMMAND
 };
 
 struct History
@@ -44,6 +45,8 @@ public:
 	void ResetHistoryCounter();
 private:
 	bool CheckType(eHistoryType aType, bool aShouldGoBackwards);
+	void SplitCommandToMulitpleLines(const std::string& aCommand, eHistoryType anEnum);
+	std::string RemoveTabFromString(const std::string& aCommand);
 
 	std::string myEmptyString;
 	CU::GrowingArray<History*> myHistory;

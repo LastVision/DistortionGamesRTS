@@ -2,6 +2,7 @@
 #include <CommonHelper.h>
 #include "ConsoleHistoryManager.h"
 #include <fstream>
+#include <MathHelper.h>
 #include <Text.h>
 
 
@@ -55,6 +56,8 @@ void ConsoleHistoryManager::Load()
 		error << int(eHistoryType::ERROR);
 		std::stringstream help;
 		help << int(eHistoryType::HELP);
+		std::stringstream genCommand;
+		genCommand << int(eHistoryType::GENERATED_COMMAND);
 
 		eHistoryType type;
 		if (identifier == error.str().c_str())
@@ -64,6 +67,10 @@ void ConsoleHistoryManager::Load()
 		else if (identifier == help.str().c_str())
 		{
 			type = eHistoryType::HELP;
+		}
+		else if (identifier == genCommand.str().c_str())
+		{
+			type = eHistoryType::GENERATED_COMMAND;
 		}
 		else
 		{
@@ -127,14 +134,14 @@ bool ConsoleHistoryManager::IsInHistory(const std::string& aString) const
 	{
 		return true;
 	}
-	int index = aString.find_first_of("(");
+	//int index = aString.find_first_of("(");
 	for (int i = 0; i < myHistory.Size(); ++i)
 	{
 		if (myHistory[i]->myMessage.length() < aString.length())
 		{
 			continue;
 		}
-		for (int j = 0; j < aString.length(); ++j)
+		for (unsigned int j = 0; j < aString.length(); ++j)
 		{
 			if (myHistory[i]->myMessage[j] != aString[j])
 			{
@@ -233,10 +240,39 @@ bool ConsoleHistoryManager::CheckType(eHistoryType aType, bool aShouldGoBackward
 	//}
 }
 
+void ConsoleHistoryManager::SplitCommandToMulitpleLines(const std::string& aCommand, eHistoryType anEnum)
+{
+	std::string splitedCommandA = aCommand;
+	std::string splitedCommandB;
+	int currentEndLineIndex = splitedCommandA.find_first_of("\n");
+	splitedCommandA = aCommand.substr(0, currentEndLineIndex);
+	splitedCommandB = aCommand.substr(currentEndLineIndex + 1, aCommand.length() - 1);
+	splitedCommandA = RemoveTabFromString(splitedCommandA);
+	splitedCommandB = RemoveTabFromString(splitedCommandB);
+	AddHistory(splitedCommandA, anEnum);
+	AddHistory(splitedCommandB, anEnum);
+}
+
+std::string ConsoleHistoryManager::RemoveTabFromString(const std::string& aCommand)
+{
+	std::string noTabCommand = aCommand;
+	int currentTabIndex = noTabCommand.find_first_of("\t");
+	if (currentTabIndex != -1)
+	{
+		noTabCommand = aCommand.substr(currentTabIndex + 1, aCommand.length()-1);
+		RemoveTabFromString(noTabCommand);
+	}
+	return noTabCommand;
+}
 
 void ConsoleHistoryManager::AddHistory(const std::string& aCommand, eHistoryType anEnum)
 {
 	DL_ASSERT_EXP(aCommand.length() > 0, "Should not be able to save empty commands in history");
+	if (aCommand.find_first_of("\n") != -1)
+	{
+		SplitCommandToMulitpleLines(aCommand, anEnum);
+		return;
+	}
 	History* tempHistory;
 	
 	bool prevRuntime = Prism::MemoryTracker::GetInstance()->GetRunTime();
@@ -248,7 +284,6 @@ void ConsoleHistoryManager::AddHistory(const std::string& aCommand, eHistoryType
 	tempHistory->myMessage = aCommand;
 	tempHistory->myRenderText->SetText(aCommand);
 	tempHistory->myType = anEnum;
-
 	switch (anEnum)
 	{
 	case eHistoryType::ERROR:
@@ -258,7 +293,10 @@ void ConsoleHistoryManager::AddHistory(const std::string& aCommand, eHistoryType
 		tempHistory->myRenderText->SetColor({ 1.f, 1.f, 1.f, 1.f });
 		break;
 	case eHistoryType::HELP:
-		tempHistory->myRenderText->SetColor({ 0.f, 1.f, 0.f, 1.f });
+		tempHistory->myRenderText->SetColor({ 0.5f, 1.f, 0.5f, 1.f });
+		break;
+	case eHistoryType::GENERATED_COMMAND:
+		tempHistory->myRenderText->SetColor({ 0.6f, 0.6f, 0.6f, 1.f });
 		break;
 	default:
 		break;

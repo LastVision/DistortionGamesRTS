@@ -13,6 +13,7 @@
 #include <PathFinder.h>
 #include "PlayerDirector.h"
 #include <PollingStation.h>
+#include <ResourceMessage.h>
 #include <Terrain.h>
 #include <ToggleGUIMessage.h>
 #include <ModelLoader.h>
@@ -48,6 +49,7 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 
 	PostMaster::GetInstance()->Subscribe(eMessageType::TOGGLE_GUI, this);
 	PostMaster::GetInstance()->Subscribe(eMessageType::ON_CLICK, this);
+	PostMaster::GetInstance()->Subscribe(eMessageType::RESOURCE, this);
 }
 
 PlayerDirector::~PlayerDirector()
@@ -55,6 +57,7 @@ PlayerDirector::~PlayerDirector()
 	SAFE_DELETE(myGUIManager);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::TOGGLE_GUI, this);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::ON_CLICK, this);
+	PostMaster::GetInstance()->UnSubscribe(eMessageType::RESOURCE, this);
 }
 
 void PlayerDirector::InitGUI()
@@ -160,11 +163,11 @@ void PlayerDirector::ReceiveMessage(const OnClickMessage& aMessage)
 		switch (aMessage.myEvent)
 		{
 		case eOnClickEvent::UNIT_ACTION_ATTACK:
-			mySelectedAction = eSelectedAction::ATTACK;
+			mySelectedAction = eSelectedAction::ATTACK_TAGRET;
 			break;
 
 		case eOnClickEvent::UNIT_ACTION_ATTACK_MOVE:
-			mySelectedAction = eSelectedAction::MOVE_ATTACK;
+			mySelectedAction = eSelectedAction::ATTACK_MOVE;
 			break;
 
 		case eOnClickEvent::UNIT_ACTION_MOVE:
@@ -185,6 +188,18 @@ void PlayerDirector::ReceiveMessage(const OnClickMessage& aMessage)
 		
 		default:
 			break;
+		}
+	}
+}
+
+void PlayerDirector::ReceiveMessage(const ResourceMessage& aMessage)
+{
+	if (aMessage.myOwner == eOwnerType::PLAYER)
+	{
+		myTestGold += aMessage.myResourceModifier;
+		if (myTestGold < 0)
+		{
+			myTestGold = 0;
 		}
 	}
 }
@@ -300,7 +315,7 @@ void PlayerDirector::UpdateInputs()
 	{
 		if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_A) == true)
 		{
-			mySelectedAction = eSelectedAction::ATTACK;
+			mySelectedAction = eSelectedAction::ATTACK_MOVE;
 		}
 
 		if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_S) == true)
@@ -359,14 +374,19 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 
 		if (myUnits[i]->IsSelected())
 		{
-			if (mySelectedAction == eSelectedAction::ATTACK && myLeftMouseClicked == true)
+			if (mySelectedAction == eSelectedAction::ATTACK_MOVE && myLeftMouseClicked == true)
 			{
-				controller->Attack(targetPos, !myShiftPressed);
+				controller->AttackMove(targetPos, !myShiftPressed);
 				hasDoneAction = true;
 			}
 			else if ((mySelectedAction == eSelectedAction::MOVE && myLeftMouseClicked) || myRightClicked)
 			{
 				controller->MoveTo(targetPos, !myShiftPressed);
+				hasDoneAction = true;
+			}
+			else if (mySelectedAction == eSelectedAction::ATTACK_TAGRET || (myLeftMouseClicked == true && hoveredEnemy != nullptr))
+			{
+				controller->AttackTarget(hoveredEnemy, targetPos, !myShiftPressed);
 				hasDoneAction = true;
 			}
 			else if (mySelectedAction == eSelectedAction::STOP)
