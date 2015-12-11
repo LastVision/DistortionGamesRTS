@@ -12,7 +12,7 @@ namespace Prism
 {
 
 	BaseModel::BaseModel()
-		: myTechniqueName("ERROR_TECHNIQUE")
+		: myTechniqueName("Render")
 	{
 		myVertexBufferDesc = new D3D11_BUFFER_DESC();
 		myIndexBufferDesc = new D3D11_BUFFER_DESC();
@@ -75,25 +75,25 @@ namespace Prism
 
 			ID3DX11EffectTechnique* tech = nullptr;
 			
-			if (usePixelShader == false)
-			{
-				tech = myEffect->GetEffect()->GetTechniqueByName("Render_No_Pixel_Shader");
-			}
-			else if (mySurfaces[s]->GetEmissive() == true)
-			{
-				tech = myEffect->GetEffect()->GetTechniqueByName("Render_Emissive");
-			}
-			else
-			{
-				tech = myEffect->GetTechnique();
-			}
+			//if (usePixelShader == false)
+			//{
+			//	tech = myEffect->GetEffect()->GetTechniqueByName("Render_No_Pixel_Shader");
+			//}
+			//else if (mySurfaces[s]->GetEmissive() == true)
+			//{
+			//	tech = myEffect->GetEffect()->GetTechniqueByName("Render_Emissive");
+			//}
+			//else
+			//{
+			//	tech = myEffect->GetTechnique();
+			//}
 
-			//tech = myEffect->GetEffect()->GetTechniqueByName(myTechniqueName.c_str());
+			tech = myEffect->GetTechnique(myTechniqueName.c_str());
 
 			if (tech->IsValid() == false)
 			{
 				tech = myEffect->GetTechnique();
-				//DL_ASSERT("INVALID TECHNIQUE IN BASEMODEL::RENDER: " + myTechniqueName);
+				DL_ASSERT("INVALID TECHNIQUE IN BASEMODEL::RENDER: " + myTechniqueName);
 			}
 
 			DL_ASSERT_EXP(tech != nullptr, "Technique is nullptr");
@@ -113,7 +113,7 @@ namespace Prism
 	void BaseModel::InitInputLayout(D3D11_INPUT_ELEMENT_DESC* aVertexDescArray, int aArraySize, const std::string& aDebugName)
 	{
 		D3DX11_PASS_DESC passDesc;
-		myEffect->GetTechnique()->GetPassByIndex(0)->GetDesc(&passDesc);
+		myEffect->GetTechnique(myTechniqueName)->GetPassByIndex(0)->GetDesc(&passDesc);
 		HRESULT hr = Engine::GetInstance()->GetDevice()->CreateInputLayout(aVertexDescArray
 			, aArraySize, passDesc.pIAInputSignature, passDesc.IAInputSignatureSize, &myVertexLayout);
 		if (FAILED(hr) != S_OK)
