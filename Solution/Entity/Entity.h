@@ -47,6 +47,7 @@ public:
 	const CU::Vector2<float>& GetPosition() const;
 	Prism::Scene& GetScene();
 	eOwnerType GetOwner() const;
+	void SetOwner(eOwnerType anOwner);
 	eEntityType GetType() const;
 	ePropType GetPropType() const;
 	eUnitType GetUnitType() const;
@@ -77,7 +78,7 @@ private:
 	const eEntityType myType;
 	ePropType myPropType;
 	eUnitType myUnitType;
-	const eOwnerType myOwner;
+	eOwnerType myOwner;
 	eEntityState myState;
 	const Prism::eOctreeType myOctreeType;
 	Prism::Scene& myScene;
@@ -161,4 +162,9 @@ inline bool Entity::GetAlive() const
 inline int Entity::GetId() const
 {
 	return myId;
+}
+
+inline void Entity::SetOwner(eOwnerType anOwner)
+{
+	myOwner = anOwner;
 }
