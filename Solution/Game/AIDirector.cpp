@@ -29,12 +29,11 @@ AIDirector::AIDirector(const Prism::Terrain& aTerrain, Prism::Scene& aScene)
 			aScene, { 20.f + i, 0.f, 40.f }, aTerrain));
 	}
 
-	myUnits.GetLast()->Spawn({ 140.f, 0.f, 130.f });
 
-
-	for (int i = 0; i < myUnits.Size(); ++i)
+	for (int i = 0; i < 2; ++i)
 	{
 		myActiveUnits.Add(myUnits[i]);
+		myActiveUnits[i]->Spawn({ 140.f, 0.f, 130.f });
 		PollingStation::GetInstance()->RegisterEntity(myActiveUnits[i]);
 	}
 

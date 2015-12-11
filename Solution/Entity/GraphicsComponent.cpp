@@ -26,8 +26,10 @@ GraphicsComponent::GraphicsComponent(Entity& aEntity, GraphicsComponentData& aCo
 
 GraphicsComponent::~GraphicsComponent()
 {
-	if (myEntity.GetOctreeType() != Prism::eOctreeType::NOT_IN_OCTREE && myEntity.GetOwner() != eOwnerType::PLAYER)
+	if (myEntity.myIsInScene == true && myEntity.GetOctreeType() != Prism::eOctreeType::NOT_IN_OCTREE 
+		&& myEntity.GetOwner() != eOwnerType::PLAYER)
 	{
+
 		myEntity.GetScene().RemoveInstance(myInstance);
 	}
 	delete myInstance;

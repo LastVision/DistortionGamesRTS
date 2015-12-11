@@ -39,7 +39,6 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 			aScene, { 65, 0, 40 }, aTerrain));
 		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::PLAYER, eEntityType::UNIT, eUnitType::RANGER, Prism::eOctreeType::DYNAMIC,
 			aScene, { 65, 0, 40 }, aTerrain));
-		
 	}
 	
 	myActiveUnits.Add(myUnits[0]);

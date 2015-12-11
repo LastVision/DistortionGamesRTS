@@ -40,7 +40,8 @@ AnimationComponent::AnimationComponent(Entity& aEntity, AnimationComponentData& 
 AnimationComponent::~AnimationComponent()
 {
 #ifndef BOX_MODE
-	if (myEntity.GetOctreeType() != Prism::eOctreeType::NOT_IN_OCTREE && myEntity.GetOwner() != eOwnerType::PLAYER)
+	if (myEntity.myIsInScene == true && myEntity.GetOctreeType() != Prism::eOctreeType::NOT_IN_OCTREE
+		&& myEntity.GetOwner() != eOwnerType::PLAYER)
 	{
 		myEntity.GetScene().RemoveInstance(myInstance);
 	}

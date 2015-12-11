@@ -46,7 +46,7 @@ Entity::Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& a
 		GetComponent<GraphicsComponent>()->SetRotation(aRotation);
 		GetComponent<GraphicsComponent>()->SetScale(aScale);
 	}
-	AddToScene();
+	//AddToScene();
 
 	if (aEntityData.myBuildingData.myExistsInEntity == true)
 	{
@@ -140,6 +140,8 @@ void Entity::AddToScene()
 	{
 		myScene.AddInstance(GetComponent<AnimationComponent>()->GetInstance());
 	}
+
+	myIsInScene = true;
 }
 
 void Entity::RemoveFromScene()
@@ -152,6 +154,8 @@ void Entity::RemoveFromScene()
 	{
 		myScene.RemoveInstance(GetComponent<AnimationComponent>()->GetInstance());
 	}
+
+	myIsInScene = false;
 }
 
 void Entity::Kill()
