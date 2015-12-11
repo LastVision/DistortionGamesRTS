@@ -78,6 +78,10 @@ void TriggerComponent::ModifyOwnership(eOwnerType anOwner, float aModifyValue)
 	{
 		myOwnershipRatio += aModifyValue;
 	}
+	else
+	{
+		myOwnershipRatio -= aModifyValue;
+	}
 	myOwnershipRatio = CU::Clip(myOwnershipRatio, 0.f, 100.f);
 
 	if (myOwnershipRatio == 0.f)
