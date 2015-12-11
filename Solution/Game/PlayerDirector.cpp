@@ -487,7 +487,7 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 void PlayerDirector::SelectOrHoverEntity(Entity* aEntity, bool &aSelected, bool &aHovered
 	, const CU::Intersection::LineSegment3D& aMouseRay)
 {
-	if (myLeftMouseUp == true && myShiftPressed == false
+	if (myLeftMouseDown == true && myShiftPressed == false
 		&& (mySelectedAction == eSelectedAction::NONE || mySelectedAction == eSelectedAction::HOLD_POSITION
 		|| mySelectedAction == eSelectedAction::STOP))
 	{
@@ -499,12 +499,13 @@ void PlayerDirector::SelectOrHoverEntity(Entity* aEntity, bool &aSelected, bool 
 	CU::Vector2<float> position1(myTestBoxPositions[0].x, myTestBoxPositions[0].z);
 	CU::Vector2<float> position2(myTestBoxPositions[2].x, myTestBoxPositions[2].z);
 
+
 	if (aEntity->GetComponent<CollisionComponent>()->Collide(position1, position2) == true)
 	{
-		if (myLeftMouseUp == true && aSelected == false)
+		if (myLeftMouseUp == true)
 		{
 			SelectUnit(aEntity);
-			aSelected = true;
+			//aSelected = true;
 		}
 		else if (aHovered == false)
 		{
