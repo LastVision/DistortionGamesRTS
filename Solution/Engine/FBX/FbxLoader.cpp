@@ -91,6 +91,7 @@ FbxAMatrix GetRotaionPivot(FbxNode* pNode)
 #define SKINWEIGHT_STRIDE 4
 #define BONEID_STRIDE 4
 #define UV_STRIDE 2
+#define COLOR_STRIDE 4
 
 FbxDouble3 GetMaterialProperty(const FbxSurfaceMaterial * pMaterial,
 	const char * pPropertyName,
@@ -556,6 +557,7 @@ bool FillData(ModelData* someData, FbxNode* aNode, AnimationData* aAnimation)
 	someData->mHasNormal = mesh->GetElementNormalCount() > 0;
 	someData->mHasUV = mesh->GetElementUVCount() > 0;
 	someData->myHasBiNormal = mesh->GetElementBinormalCount() > 0;
+	someData->myHasVertexColor = mesh->GetElementVertexColorCount() > 0;
 
 	FbxSkin * lSkinDeformer = (FbxSkin *)mesh->GetDeformer(0, FbxDeformer::eSkin);
 	someData->myHasSkinweights = lSkinDeformer != nullptr;
@@ -710,6 +712,19 @@ bool FillData(ModelData* someData, FbxNode* aNode, AnimationData* aAnimation)
 		//lUVs = new float[lPolygonVertexCount * UV_STRIDE];
 	}
 
+	if (someData->myHasVertexColor)
+	{
+		ModelData::Layout newLayout;
+		newLayout.myType = ModelData::VERTEX_COLOR;;
+		newLayout.mySize = COLOR_STRIDE;
+		newLayout.myOffset = stride * 4;
+		newLayout.mySemanticIndex = 0;
+		someData->myLayout.Add(newLayout);
+
+		stride += COLOR_STRIDE;
+		size += lPolygonVertexCount * COLOR_STRIDE;
+	}
+
 	float * lVertices = new float[size];
 
 	FbxAMatrix globalPos;
@@ -725,6 +740,7 @@ bool FillData(ModelData* someData, FbxNode* aNode, AnimationData* aAnimation)
 
 	const FbxGeometryElementBinormal * lBiNormalElement = NULL;
 	const FbxGeometryElementTangent * lTangentElement = NULL;
+	const FbxGeometryElementVertexColor * lColorElement = NULL;
 
 	if (someData->myHasBiNormal)
 	{
@@ -734,6 +750,11 @@ bool FillData(ModelData* someData, FbxNode* aNode, AnimationData* aAnimation)
 	{
 		lTangentElement = mesh->GetElementTangent(0);
 	}
+	if (someData->myHasVertexColor)
+	{
+		lColorElement = mesh->GetElementVertexColor(0);
+	}
+	
 
 	// Populate the array with vertex attribute, if by control point.
 	const FbxVector4 * lControlPoints = mesh->GetControlPoints();
@@ -742,6 +763,7 @@ bool FillData(ModelData* someData, FbxNode* aNode, AnimationData* aAnimation)
 	FbxVector4 lCurrentBiNormal;
 	FbxVector4 lCurrentTangent;
 	FbxVector2 lCurrentUV;
+	FbxColor lCurrentColor;
 	if (someData->mAllByControlPoint)
 	{
 		const FbxGeometryElementNormal * lNormalElement = NULL;
@@ -754,6 +776,7 @@ bool FillData(ModelData* someData, FbxNode* aNode, AnimationData* aAnimation)
 		{
 			lUVElement = mesh->GetElementUV(0);
 		}
+
 
 		for (int lIndex = 0; lIndex < lPolygonVertexCount; ++lIndex)
 		{
@@ -874,6 +897,22 @@ bool FillData(ModelData* someData, FbxNode* aNode, AnimationData* aAnimation)
 				lVertices[currentIndex + addedSize + 2] = currentBones[2];
 				lVertices[currentIndex + addedSize + 3] = currentBones[3];
 				addedSize += BONEID_STRIDE;
+			}
+			
+			if (someData->myHasVertexColor)
+			{
+				int lColorIndex = lIndex;
+				if (lColorElement->GetReferenceMode() == FbxLayerElement::eVertexColor)
+				{
+					lColorIndex = lColorElement->GetIndexArray().GetAt(lIndex);
+				}
+				lCurrentColor = lColorElement->GetDirectArray().GetAt(lColorIndex);
+
+				lVertices[currentIndex + addedSize] = lCurrentColor[0];
+				lVertices[currentIndex + addedSize + 1] = lCurrentColor[1];
+				lVertices[currentIndex + addedSize + 2] = lCurrentColor[2];
+				lVertices[currentIndex + addedSize + 3] = lCurrentColor[3];
+				addedSize += COLOR_STRIDE;
 			}
 		}
 
@@ -1021,6 +1060,21 @@ bool FillData(ModelData* someData, FbxNode* aNode, AnimationData* aAnimation)
 					lVertices[currentIndex + addedSize + 2] = *(float*)&currentBones[2];
 					lVertices[currentIndex + addedSize + 3] = *(float*)&currentBones[3];
 					addedSize += BONEID_STRIDE;
+				}
+				if (someData->myHasVertexColor)
+				{
+					int lColorIndex = lVerticeIndex;
+					if (lColorElement->GetReferenceMode() == FbxLayerElement::eIndexToDirect)
+					{
+						lColorIndex = lColorElement->GetIndexArray().GetAt(lVerticeIndex);
+					}
+					lCurrentColor = lColorElement->GetDirectArray().GetAt(lColorIndex);
+
+					lVertices[currentIndex + addedSize] = lCurrentColor[0];
+					lVertices[currentIndex + addedSize + 1] = lCurrentColor[1];
+					lVertices[currentIndex + addedSize + 2] = lCurrentColor[2];
+					lVertices[currentIndex + addedSize + 3] = lCurrentColor[3];
+					addedSize += COLOR_STRIDE;
 				}
 			}
 			++lVertexCount;
