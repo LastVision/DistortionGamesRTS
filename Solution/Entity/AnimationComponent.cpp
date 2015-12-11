@@ -4,7 +4,6 @@
 #include "AnimationComponentData.h"
 #include "AnimationSystem.h"
 #include <Effect.h>
-#include "Entity.h"
 #include <Engine.h>
 #include <EngineEnums.h>
 #include <EffectContainer.h>
@@ -15,7 +14,6 @@
 #include <Scene.h>
 #include <Terrain.h>
 #include <Texture.h>
-#include <XMLReader.h>
 
 //#define BOX_MODE
 

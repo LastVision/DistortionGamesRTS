@@ -1,7 +1,6 @@
 #include "stdafx.h"
 
 //#include "CollisionComponent.h"
-#include "Entity.h"
 #include "PollingStation.h"
 
 PollingStation* PollingStation::myInstance = nullptr;

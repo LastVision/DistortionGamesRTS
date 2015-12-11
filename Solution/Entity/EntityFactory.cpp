@@ -2,11 +2,9 @@
 
 #include <CommonHelper.h>
 #include "ComponentLoader.h"
-#include "Entity.h"
 #include "EntityFactory.h"
 #include "EntityEnumConverter.h"
-#include <string>
-#include <XMLReader.h>
+
 
 EntityFactory* EntityFactory::myInstance = nullptr;
 

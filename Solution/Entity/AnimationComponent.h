@@ -1,8 +1,5 @@
 #pragma once
 #include "Component.h"
-#include <Matrix.h>
-#include <string>
-#include <StaticArray.h>
 
 namespace Prism
 {

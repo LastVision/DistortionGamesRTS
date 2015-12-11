@@ -1,7 +1,6 @@
 #include "stdafx.h"
 
 #include "Camera.h"
-#include "Entity.h"
 #include "HealthComponent.h"
 #include <Engine.h>
 #include "HealthComponentData.h"

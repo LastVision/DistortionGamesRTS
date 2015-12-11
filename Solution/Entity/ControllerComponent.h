@@ -1,9 +1,5 @@
 #pragma once
 
-#include "Component.h"
-#include <GrowingArray.h>
-#include <Vector.h>
-
 namespace Prism
 {
 	class Terrain;

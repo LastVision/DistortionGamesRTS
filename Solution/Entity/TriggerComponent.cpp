@@ -3,7 +3,6 @@
 #include "TriggerComponent.h"
 #include "TriggerComponentData.h"
 #include <TriggerMessage.h>
-#include "Entity.h"
 #include <Intersection.h>
 #include "PollingStation.h"
 #include <PostMaster.h>

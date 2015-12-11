@@ -1,9 +1,6 @@
 #pragma once
-
-#include <DL_Debug.h>
-#include <unordered_map>
-#include <StaticArray.h>
 #include <Matrix.h>
+#include <StaticArray.h>
 
 namespace Prism
 {
