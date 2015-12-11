@@ -47,6 +47,11 @@ Entity* EntityId::GetEntity(int aId) const
 
 Entity* EntityId::GetTrigger(int aId) const
 {
+	if (aId >= myTriggers.Size() || aId < 0)
+	{
+		return nullptr;
+	}
+
 	return myTriggers[aId];
 }
 

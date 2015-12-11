@@ -21,7 +21,7 @@ public:
 	void ClearInput();
 
 	void SetInput(const std::string& aString);
-
+	void AddHistory(const std::string& aMessage, eHistoryType aType);
 private:
 	Console();
 	~Console();

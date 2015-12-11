@@ -60,3 +60,12 @@ enum class eTriggerType
 {
 	RESOURCE,
 };
+#undef ERROR
+enum class eHistoryType
+{
+	ERROR,
+	HISTORY,
+	HELP,
+	GENERATED_COMMAND,
+	WARNING
+};
