@@ -48,7 +48,7 @@ public:
 
 	void OnResize(int aWidth, int aHeight);
 
-	void SpawnUnit(Prism::Scene& aScene);
+	void SpawnUnit(eUnitType aUnitType);
 
 	void SelectUnit(Entity* anEntity);
 
@@ -65,7 +65,7 @@ public:
 	const int& GetTestGold() const;
 private:
 	void UpdateInputs();
-	CU::Vector3<float> CalcCursorWorldPosition(const Prism::Camera& aCamera);
+	CU::Vector3<float> CalcCursorWorldPosition(const CU::Vector2<float>& aMousePosition, const Prism::Camera& aCamera);
 	void UpdateMouseInteraction(const Prism::Camera& aCamera);
 	void SelectOrHoverEntity(Entity* aEntity, bool &aSelected, bool &aHovered
 		, const CU::Intersection::LineSegment3D& aMouseRay);
@@ -75,7 +75,9 @@ private:
 	GUI::Cursor* myCursor;
 
 	bool myShiftPressed;
-	bool myLeftMouseClicked;
+	bool myLeftMouseUp;
+	bool myLeftMouseDown;
+	bool myLeftMousePressed;
 	bool myRightClicked;
 	eSelectedAction mySelectedAction;
 
@@ -83,6 +85,9 @@ private:
 
 	float myTweakValueX;
 	float myTweakValueY;
+
+	CU::Vector2<float> myFirstMousePosition;
+	CU::Vector3<float> myTestBoxPositions[4];
 
 	int myTestGold;
 };

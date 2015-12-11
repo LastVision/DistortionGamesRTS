@@ -33,6 +33,9 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 	, myTweakValueY(10.79f)
 	, mySelectedAction(eSelectedAction::NONE)
 	, myTestGold(60)
+	, myLeftMouseUp(false)
+	, myLeftMouseDown(false)
+	, myLeftMousePressed(false)
 {
 	for (int i = 0; i < 64; ++i)
 	{
@@ -107,7 +110,7 @@ void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 		myGUIManager->Update();
 	}
 
-	if (myLeftMouseClicked == true || myRightClicked == true)
+	if (myLeftMouseUp == true || myRightClicked == true)
 	{
 		mySelectedAction = eSelectedAction::NONE;
 	}
@@ -131,10 +134,10 @@ void PlayerDirector::OnResize(int aWidth, int aHeight)
 	myGUIManager->OnResize(aWidth, aHeight);
 }
 
-void PlayerDirector::SpawnUnit(Prism::Scene&)
+void PlayerDirector::SpawnUnit(eUnitType aUnitType)
 {
 	myTestGold--;
-	myBuilding->GetComponent<BuildingComponent>()->BuildUnit(eUnitType::GRUNT);
+	myBuilding->GetComponent<BuildingComponent>()->BuildUnit(aUnitType);
 }
 
 void PlayerDirector::ReceiveMessage(const SpawnUnitMessage& aMessage)
@@ -246,9 +249,9 @@ void PlayerDirector::SelectUnit(Entity* anEntity)
 	mySelectedUnits.Add(anEntity);
 }
 
-CU::Vector3<float> PlayerDirector::CalcCursorWorldPosition(const Prism::Camera& aCamera)
+CU::Vector3<float> PlayerDirector::CalcCursorWorldPosition(const CU::Vector2<float>& aMousePosition, const Prism::Camera& aCamera)
 {
-	CU::Vector2<float> inputPos(CU::InputWrapper::GetInstance()->GetMousePosition());
+	CU::Vector2<float> inputPos = aMousePosition;
 	CU::Vector2<float> cursorPos;
 	CU::Vector2<float> window = Prism::Engine::GetInstance()->GetWindowSize();
 	//myTweakValueX = 3.284f;
@@ -349,16 +352,31 @@ void PlayerDirector::UpdateInputs()
 
 	if (myRenderGUI == true) // no inworld clicking when mouse is over gui:
 	{
-		myLeftMouseClicked = CU::InputWrapper::GetInstance()->MouseDown(0) && !(myGUIManager->MouseOverGUI());
-		myRightClicked = CU::InputWrapper::GetInstance()->MouseDown(1) && !(myGUIManager->MouseOverGUI());
+		myLeftMouseDown = CU::InputWrapper::GetInstance()->MouseDown(0) && !(myGUIManager->MouseOverGUI());
+		myLeftMousePressed = CU::InputWrapper::GetInstance()->MouseIsPressed(0) && !(myGUIManager->MouseOverGUI());
+
+		if (myLeftMouseDown == true)
+		{
+			myFirstMousePosition = CU::InputWrapper::GetInstance()->GetMousePosition();
+	}
+
+		myLeftMouseUp = CU::InputWrapper::GetInstance()->MouseUp(0) && !(myGUIManager->MouseOverGUI());
+		myRightClicked = CU::InputWrapper::GetInstance()->MouseUp(1) && !(myGUIManager->MouseOverGUI());
 	}
 	else
 	{
-		myLeftMouseClicked = CU::InputWrapper::GetInstance()->MouseDown(0);
-		myRightClicked = CU::InputWrapper::GetInstance()->MouseDown(1);
+		myLeftMouseDown = CU::InputWrapper::GetInstance()->MouseDown(0);
+
+		if (myLeftMouseDown == true)
+		{
+			myFirstMousePosition = CU::InputWrapper::GetInstance()->GetMousePosition();
 	}
 
-	if (myLeftMouseClicked == true && myShiftPressed == false && 
+		myLeftMouseUp = CU::InputWrapper::GetInstance()->MouseUp(0);
+		myRightClicked = CU::InputWrapper::GetInstance()->MouseUp(1);
+	}
+
+	if (myLeftMouseUp == true && myShiftPressed == false &&
 		(mySelectedAction == eSelectedAction::NONE || mySelectedAction == eSelectedAction::STOP 
 		|| mySelectedAction == eSelectedAction::HOLD_POSITION))
 	{
@@ -368,8 +386,24 @@ void PlayerDirector::UpdateInputs()
 
 void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 {
-	CU::Vector3<float> targetPos = CalcCursorWorldPosition(aCamera);
-	Entity* hoveredEnemy = PollingStation::GetInstance()->FindEntityAtPosition(targetPos, eOwnerType::ENEMY);
+	CU::Vector3<float> firstTargetPos = CalcCursorWorldPosition(CU::InputWrapper::GetInstance()->GetMousePosition(), aCamera);
+	CU::Vector3<float> secondTargetPos;
+
+	if (myLeftMousePressed == true)
+	{
+		secondTargetPos = CalcCursorWorldPosition(myFirstMousePosition, aCamera);
+		myTestBoxPositions[0] = secondTargetPos;
+		myTestBoxPositions[1] = { secondTargetPos.x, secondTargetPos.y, secondTargetPos.z - secondTargetPos.z + firstTargetPos.z };
+		myTestBoxPositions[2] = firstTargetPos;
+		myTestBoxPositions[3] = { secondTargetPos.x - secondTargetPos.x + firstTargetPos.x, secondTargetPos.y, secondTargetPos.z };
+
+		Prism::RenderLine3D(myTestBoxPositions[0], myTestBoxPositions[1]);
+		Prism::RenderLine3D(myTestBoxPositions[1], myTestBoxPositions[2]);
+		Prism::RenderLine3D(myTestBoxPositions[2], myTestBoxPositions[3]);
+		Prism::RenderLine3D(myTestBoxPositions[3], myTestBoxPositions[0]);
+	}
+
+	Entity* hoveredEnemy = PollingStation::GetInstance()->FindEntityAtPosition(firstTargetPos, eOwnerType::ENEMY);
 	if (hoveredEnemy != nullptr)
 	{
 		Prism::RenderBox(hoveredEnemy->GetOrientation().GetPos(), eColorDebug::RED);
@@ -379,7 +413,8 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 	bool hasHovered = false;
 	bool hasDoneAction = false;
 
-	CU::Intersection::LineSegment3D line(aCamera.GetOrientation().GetPos(), targetPos);
+	CU::Intersection::LineSegment3D line(aCamera.GetOrientation().GetPos(), firstTargetPos);
+
 	for (int i = 0; i < myUnits.Size(); ++i)
 	{
 		SelectOrHoverEntity(myUnits[i], hasSelected, hasHovered, line);
@@ -392,14 +427,14 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 				controller->AttackTarget(hoveredEnemy, !myShiftPressed);
 				hasDoneAction = true;
 			}
-			else if (mySelectedAction == eSelectedAction::ATTACK_MOVE && myLeftMouseClicked == true)
+			else if (mySelectedAction == eSelectedAction::ATTACK_MOVE && myLeftMouseUp == true)
 			{
-				controller->AttackMove(targetPos, !myShiftPressed);
+				controller->AttackMove(firstTargetPos, !myShiftPressed);
 				hasDoneAction = true;
 			}
-			else if ((mySelectedAction == eSelectedAction::MOVE && myLeftMouseClicked) || myRightClicked)
+			else if ((mySelectedAction == eSelectedAction::MOVE && myLeftMouseUp) || myRightClicked)
 			{
-				controller->MoveTo(targetPos, !myShiftPressed);
+				controller->MoveTo(firstTargetPos, !myShiftPressed);
 				hasDoneAction = true;
 			}
 			else if (mySelectedAction == eSelectedAction::STOP)
@@ -425,7 +460,7 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 			}
 			else if (mySelectedAction == eSelectedAction::ATTACK_TAGRET || (myLeftMouseClicked == true && hoveredEnemy != nullptr))
 			{
-				controller->AttackTarget(hoveredEnemy, !myShiftPressed);
+				controller->AttackTarget(hoveredEnemy, targetPos, !myShiftPressed);
 				hasDoneAction = true;
 			}
 			else if (mySelectedAction == eSelectedAction::STOP)
@@ -452,7 +487,7 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 void PlayerDirector::SelectOrHoverEntity(Entity* aEntity, bool &aSelected, bool &aHovered
 	, const CU::Intersection::LineSegment3D& aMouseRay)
 {
-	if (myLeftMouseClicked == true && myShiftPressed == false 
+	if (myLeftMouseUp == true && myShiftPressed == false
 		&& (mySelectedAction == eSelectedAction::NONE || mySelectedAction == eSelectedAction::HOLD_POSITION
 		|| mySelectedAction == eSelectedAction::STOP))
 	{
@@ -461,9 +496,12 @@ void PlayerDirector::SelectOrHoverEntity(Entity* aEntity, bool &aSelected, bool 
 
 	aEntity->SetHovered(false);
 
-	if (aEntity->GetComponent<CollisionComponent>()->Collide(aMouseRay))
+	CU::Vector2<float> position1(myTestBoxPositions[0].x, myTestBoxPositions[0].z);
+	CU::Vector2<float> position2(myTestBoxPositions[2].x, myTestBoxPositions[2].z);
+
+	if (aEntity->GetComponent<CollisionComponent>()->Collide(position1, position2) == true)
 	{
-		if (myLeftMouseClicked == true && aSelected == false)
+		if (myLeftMouseUp == true && aSelected == false)
 		{
 			SelectUnit(aEntity);
 			aSelected = true;

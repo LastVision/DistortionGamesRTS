@@ -31,3 +31,10 @@ bool CollisionComponent::Collide(const CU::Vector3<float>& aPosition) const
 {
 	return CU::Intersection::PointInsideSphere(mySphere, aPosition);
 }
+
+bool CollisionComponent::Collide(const CU::Vector2<float>& aFirstPosition, const CU::Vector2<float>& aSecondPosition) const
+{
+	CU::Vector2<float> position(mySphere.myCenterPosition.x, mySphere.myCenterPosition.z);
+
+	return CU::Intersection::CircleVsRect(position, mySphere.myRadius, aFirstPosition, aSecondPosition);
+}

@@ -32,7 +32,7 @@ public:
 
 	void ReceiveMessage(const LUAToggleRenderLinesMessage& aMessage) override;
 
-	void SpawnUnit();
+	void SpawnUnit(eUnitType aUnitType);
 
 	bool HasPlayerWon() const;
 	bool HasAIWon() const;
