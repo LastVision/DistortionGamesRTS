@@ -1,6 +1,7 @@
 #include "stdafx.h"
 
 #include "AnimationProxy.h"
+#include <CommonHelper.h>
 #include "Engine.h"
 #include "EffectContainer.h"
 #include "Model.h"
@@ -146,7 +147,8 @@ namespace Prism
 				{
 #ifdef USE_DGFX
 #ifdef CONVERT_TO_DGFX_IN_RUNTIME
-					myModelFactory->ConvertToDGFX(myLoadArray[i].myModelPath.c_str());
+					std::string animOutput = CU::GetGeneratedDataFolderFilePath(myLoadArray[i].myModelPath.c_str(), "dgfx");
+					myModelFactory->ConvertToDGFX(myLoadArray[i].myModelPath.c_str(), animOutput.c_str());
 #endif
 
 					Model* model = myDGFXLoader->LoadModel(myLoadArray[i].myModelPath.c_str()
@@ -164,7 +166,8 @@ namespace Prism
 				{
 #ifdef USE_DGFX
 #ifdef CONVERT_TO_DGFX_IN_RUNTIME
-					myModelFactory->ConvertToDGFX(myLoadArray[i].myModelPath.c_str());
+					std::string animOutput = CU::GetGeneratedDataFolderFilePath(myLoadArray[i].myModelPath.c_str(), "dgfx");
+					myModelFactory->ConvertToDGFX(myLoadArray[i].myModelPath.c_str(), animOutput.c_str());
 #endif
 
 					ModelAnimated* model = myDGFXLoader->LoadAnimatedModel(myLoadArray[i].myModelPath.c_str()
@@ -181,7 +184,8 @@ namespace Prism
 				{
 #ifdef USE_DGFX
 #ifdef CONVERT_TO_DGFX_IN_RUNTIME
-					myModelFactory->ConvertToDGFX(myLoadArray[i].myModelPath.c_str());
+					std::string animOutput = CU::GetGeneratedDataFolderFilePath(myLoadArray[i].myModelPath.c_str(), "dgfx");
+					myModelFactory->ConvertToDGFX(myLoadArray[i].myModelPath.c_str(), animOutput.c_str());
 #endif
 
 					myLoadArray[i].myAnimationProxy->myAnimation = myDGFXLoader->LoadAnimation(myLoadArray[i].myModelPath.c_str());

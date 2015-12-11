@@ -575,16 +575,18 @@ namespace Prism
 
 			int nrOfFrames;
 			aStream.read((char*)&nrOfFrames, sizeof(int));
+			if (nrOfFrames > 0)
+			{
 
-			
-			AnimationNode* newNode = new AnimationNode(nrOfFrames);
-			newNode->myValues.Reserve(nrOfFrames);
+				AnimationNode* newNode = new AnimationNode(nrOfFrames);
+				newNode->myValues.Reserve(nrOfFrames);
 
-			aStream.read((char*)&newNode->myValues[0], sizeof(AnimationNodeValue) * nrOfFrames);
-			newNode->CalculateEndTime();
+				aStream.read((char*)&newNode->myValues[0], sizeof(AnimationNodeValue) * nrOfFrames);
+				newNode->CalculateEndTime();
 
-			newNode->myBoneName = boneName;
-			newAnimation->AddAnimation(newNode);
+				newNode->myBoneName = boneName;
+				newAnimation->AddAnimation(newNode);
+			}
 
 			newAnimation->SetBoneMatrix(boneMatrix, i);
 			newAnimation->SetBoneBindPose(boneBindMatrix, i);
