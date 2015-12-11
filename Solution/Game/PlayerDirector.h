@@ -48,7 +48,7 @@ public:
 
 	void OnResize(int aWidth, int aHeight);
 
-	void SpawnUnit(Prism::Scene& aScene);
+	void SpawnUnit(eUnitType aUnitType);
 
 	void SelectUnit(Entity* anEntity);
 

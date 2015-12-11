@@ -19,6 +19,7 @@
 #include <ModelLoader.h>
 #include <OnClickMessage.h>
 #include <PostMaster.h>
+#include <SpawnUnitMessage.h>
 #include <TimerManager.h>
 #include <TriggerMessage.h>
 #include <VTuneApi.h>
@@ -220,10 +221,11 @@ void InGameState::ReceiveMessage(const OnClickMessage& aMessage)
 			CompleteGame();
 			break;
 		case eOnClickEvent::SPAWN_UNIT:
-			runtime = Prism::MemoryTracker::GetInstance()->GetRunTime();
+			/*runtime = Prism::MemoryTracker::GetInstance()->GetRunTime();
 			Prism::MemoryTracker::GetInstance()->SetRunTime(false);
-			myLevel->SpawnUnit();
-			Prism::MemoryTracker::GetInstance()->SetRunTime(runtime);
+			myLevel->SpawnUnit(aMessage.);
+			Prism::MemoryTracker::GetInstance()->SetRunTime(runtime);*/
+			myLevel->SpawnUnit(static_cast<eUnitType>(aMessage.myID - 1));
 			break;
 		default:
 			break;

@@ -127,10 +127,10 @@ void PlayerDirector::OnResize(int aWidth, int aHeight)
 	myGUIManager->OnResize(aWidth, aHeight);
 }
 
-void PlayerDirector::SpawnUnit(Prism::Scene&)
+void PlayerDirector::SpawnUnit(eUnitType aUnitType)
 {
 	myTestGold--;
-	myBuilding->GetComponent<BuildingComponent>()->BuildUnit(eUnitType::GRUNT);
+	myBuilding->GetComponent<BuildingComponent>()->BuildUnit(aUnitType);
 }
 
 void PlayerDirector::ReceiveMessage(const SpawnUnitMessage& aMessage)
