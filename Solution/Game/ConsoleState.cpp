@@ -96,52 +96,55 @@ const eStateStatus ConsoleState::Update(const float& aDeltaTime)
 
 	if (CU::InputWrapper::GetInstance()->KeyUp(DIK_RETURN) == true)
 	{
-		myShouldReOpenConsole = true;
 		const std::string& consoleInput = Console::GetInstance()->GetInput();
-		Console::GetInstance()->GetConsoleHistory()->AddHistory(consoleInput);
-		std::string errorString;
-		std::string temp = CU::ToLower(consoleInput);
-		if (temp.find("help") == 0 || temp.find("halp") == 0)
+		if (consoleInput != "")
 		{
-			if (temp == "help" || temp == "halp")
+			myShouldReOpenConsole = true;
+			Console::GetInstance()->GetConsoleHistory()->AddHistory(consoleInput);
+			std::string errorString;
+			std::string temp = CU::ToLower(consoleInput);
+			if (temp.find("help") == 0 || temp.find("halp") == 0)
 			{
-				const CU::GrowingArray<std::string>& allFunctions = Console::GetInstance()->GetConsoleHelp()->GetAllFunction();
-				for (int i = 0; i < allFunctions.Size(); ++i)
+				if (temp == "help" || temp == "halp")
 				{
-					Console::GetInstance()->GetConsoleHistory()->AddHistory(allFunctions[i], eHistoryType::HELP);
-				}
-			}
-			else
-			{
-				std::string helpFunctionName = CU::GetSubString(consoleInput, " ", true, 2);
-				const ConsoleLuaHelp& helpDoc = Console::GetInstance()->GetConsoleHelp()->GetHelpText(helpFunctionName);
-				if (helpDoc.myFunctionName != "")
-				{
-					Console::GetInstance()->GetConsoleHistory()->AddHistory(helpDoc.myFunctionName + "(" + helpDoc.myArguments + ")", eHistoryType::HELP);
-					Console::GetInstance()->GetConsoleHistory()->AddHistory(helpDoc.myHelpText, eHistoryType::HELP);
+					const CU::GrowingArray<std::string>& allFunctions = Console::GetInstance()->GetConsoleHelp()->GetAllFunction();
+					for (int i = 0; i < allFunctions.Size(); ++i)
+					{
+						Console::GetInstance()->GetConsoleHistory()->AddHistory(allFunctions[i], eHistoryType::HELP);
+					}
 				}
 				else
 				{
-					Console::GetInstance()->GetConsoleHistory()->AddHistory("There is no " + helpFunctionName +
-						" command. Did you mean " + LUA::ScriptSystem::GetInstance()->FindClosestFunction(helpFunctionName)
-						+ "?", eHistoryType::ERROR);
+					std::string helpFunctionName = CU::GetSubString(consoleInput, " ", true, 2);
+					const ConsoleLuaHelp& helpDoc = Console::GetInstance()->GetConsoleHelp()->GetHelpText(helpFunctionName);
+					if (helpDoc.myFunctionName != "")
+					{
+						Console::GetInstance()->GetConsoleHistory()->AddHistory(helpDoc.myFunctionName + "(" + helpDoc.myArguments + ")", eHistoryType::HELP);
+						Console::GetInstance()->GetConsoleHistory()->AddHistory(helpDoc.myHelpText, eHistoryType::HELP);
+					}
+					else
+					{
+						Console::GetInstance()->GetConsoleHistory()->AddHistory("There is no " + helpFunctionName +
+							" command. Did you mean " + LUA::ScriptSystem::GetInstance()->FindClosestFunction(helpFunctionName)
+							+ "?", eHistoryType::ERROR);
+					}
 				}
+				Console::GetInstance()->ClearInput();
 			}
-			Console::GetInstance()->ClearInput();
-		}
-		else if (LUA::ScriptSystem::GetInstance()->ValidateLuaString(consoleInput, errorString))
-		{
-			LUA::ScriptSystem::GetInstance()->RunLuaFromString(consoleInput);
-			Console::GetInstance()->ClearInput();
-		}
-		else
-		{
-			Console::GetInstance()->GetConsoleHistory()->AddHistory(errorString, eHistoryType::ERROR);
-		}
+			else if (LUA::ScriptSystem::GetInstance()->ValidateLuaString(consoleInput, errorString))
+			{
+				LUA::ScriptSystem::GetInstance()->RunLuaFromString(consoleInput);
+				Console::GetInstance()->ClearInput();
+			}
+			else
+			{
+				Console::GetInstance()->GetConsoleHistory()->AddHistory(errorString, eHistoryType::ERROR);
+			}
 
 
-		Console::GetInstance()->GetConsoleHistory()->Save();
-		myStateStatus = ePopSubState;
+			Console::GetInstance()->GetConsoleHistory()->Save();
+			myStateStatus = ePopSubState;
+		}
 	}
 
 
