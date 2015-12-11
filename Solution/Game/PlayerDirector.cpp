@@ -99,8 +99,7 @@ void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 		myGUIManager->Update();
 	}
 
-	if (myLeftMouseClicked == true || myRightClicked == true ||
-		mySelectedAction == eSelectedAction::STOP || mySelectedAction == eSelectedAction::HOLD_POSITION)
+	if (myLeftMouseClicked == true || myRightClicked == true)
 	{
 		mySelectedAction = eSelectedAction::NONE;
 	}
@@ -344,6 +343,8 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 
 	bool hasSelected = false;
 	bool hasHovered = false;
+	bool hasStopped = false;
+
 	CU::Intersection::LineSegment3D line(aCamera.GetOrientation().GetPos(), targetPos);
 	for (int i = 0; i < myUnits.Size(); ++i)
 	{
@@ -363,12 +364,19 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 			else if (mySelectedAction == eSelectedAction::STOP)
 			{
 				controller->Stop();
+				hasStopped = true;
 			}
 			else if (mySelectedAction == eSelectedAction::HOLD_POSITION)
 			{
 				controller->HoldPosition();
+				hasStopped = true;
 			}
 		}
+	}
+
+	if (hasStopped == true)
+	{
+		mySelectedAction = eSelectedAction::NONE;
 	}
 
 	SelectOrHoverEntity(myBuilding, hasSelected, hasHovered, line);
