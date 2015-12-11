@@ -1,5 +1,4 @@
 #pragma once
-#include "EntityEnum.h"
 #include <string>
 
 namespace EntityEnumConverter

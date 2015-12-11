@@ -1,5 +1,4 @@
 #pragma once
-#include "EntityEnum.h"
 #include <StaticArray.h>
 
 struct BuildingCompnentData

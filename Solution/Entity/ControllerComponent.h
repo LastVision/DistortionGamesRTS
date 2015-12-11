@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Component.h"
-#include "EntityEnum.h"
 #include <GrowingArray.h>
 #include <Vector.h>
 
