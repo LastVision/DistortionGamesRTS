@@ -1,0 +1,20 @@
+HOWTO
+
+1. Lägg till en funktion i LUA som ska köras från C++ (som Update(aDeltaTime) t ex):
+
+ScriptSystem::ReInit(const std::string&), lägg till:
+AddLuaFunction("Name", #args)
+
+Kalla på funktionen där du vill köra, t ex för update i Ingame::Update:
+LUA::ScriptSystem::GetInstance()->CallFunction("Update", { aDeltaTime });
+
+
+
+2. Lägga till en funktion i C++ som ska köras från LUA, t ex
+i LUA vill jag göra:
+myTrigger = GetTrigger(0)
+
+ScriptInterface.cpp
+Lägg till funktionen, se hur de andra funkar, vill du returnera nåt "ut till LUA", kolla på GetOwner
+
+Lägg till den under RegisterFunctions, se de andra för referens

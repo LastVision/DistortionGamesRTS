@@ -37,6 +37,8 @@
 #include <CommonHelper.h>
 #include "DGFXReader.h"
 #include <DL_Debug.h>
+#include <Engine.h>
+#include "NavMeshReader.h"
 #include "IReader.h"
 #include <TimerManager.h>
 
@@ -53,6 +55,7 @@ int main(int argC,      // Number of strings in array argv
 {
 	bool convertDGFX = false;
 	bool calcCollisionRadius = false;
+	bool createTerrainAndNavMesh = false;
 	for (int i = 0; i < argC; ++i)
 	{
 		std::string command(argV[i]);
@@ -64,6 +67,10 @@ int main(int argC,      // Number of strings in array argv
 		else if (command == "-calccollisionradius")
 		{
 			calcCollisionRadius = true;
+		}
+		else if (command == "-createterrainandnavmesh")
+		{
+			createTerrainAndNavMesh = true;
 		}
 	}
 
@@ -87,8 +94,6 @@ int main(int argC,      // Number of strings in array argv
 
 	if (calcCollisionRadius)
 	{
-		reader = new CalcRadiusReader();
-
 		std::cout << "---| Calculating CollisionRadius |---\n" << std::endl;
 
 		reader = new CalcRadiusReader();
@@ -98,10 +103,24 @@ int main(int argC,      // Number of strings in array argv
 
 		std::cout << "---| CollisionRadius Done |---\n" << std::endl;
 	}
+
+	if (createTerrainAndNavMesh)
+	{
+		std::cout << "---| Creating Terrain and NavMesh|---\n" << std::endl;
+
+		reader = new NavMeshReader();
+
+		reader->ReadFile("Data/Level/LI_level.xml");
+
+		delete reader;
+
+		std::cout << "\n---| Terrain and NavMesh Done |---\n" << std::endl;
+	}
 	
 
 	CU::TimerManager::Destroy();
 	DL_Debug::Debug::Destroy();
+
 	return EXIT_SUCCESS;
 }
 

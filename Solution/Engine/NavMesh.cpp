@@ -56,6 +56,13 @@ namespace Prism
 			Load(aBinaryPath);
 		}
 
+		NavMesh::NavMesh(std::fstream& aStream)
+			: myTotalSize(255.f)
+			, myCellSize(myTotalSize / QUADS_PER_SIDE)
+		{
+			Load(aStream);
+		}
+
 		NavMesh::~NavMesh()
 		{
 			myTriangles.DeleteAll();
@@ -228,7 +235,17 @@ namespace Prism
 			myNewTriangles.RemoveAll();
 		}
 
-		void NavMesh::Save()
+		void NavMesh::Save(const std::string& aFilePath)
+		{
+			std::fstream file;
+			file.open(aFilePath, std::ios::out | std::ios::binary);
+
+			Save(file);
+
+			file.close();
+		}
+
+		void NavMesh::Save(std::fstream& aStream)
 		{
 			CU::GrowingArray<Vertex*> vertices(8192);
 			CU::GrowingArray<Edge*> edges(8192);
@@ -246,38 +263,35 @@ namespace Prism
 				UniqueAdd(edges[i]->myVertex2, vertices);
 			}
 
-			std::fstream file;
-			file.open("Data/Resource/Generated/navMesh.bin", std::ios::out | std::ios::binary);
+
 
 			int count = vertices.Size();
-			file.write((char*)&count, sizeof(int));
+			aStream.write((char*)&count, sizeof(int));
 
 			for (int i = 0; i < vertices.Size(); ++i)
 			{
-				file.write((char*)&vertices[i]->myPosition.x, sizeof(float) * 2);
+				aStream.write((char*)&vertices[i]->myPosition.x, sizeof(float) * 2);
 			}
 
 
 			count = edges.Size();
-			file.write((char*)&count, sizeof(int));
+			aStream.write((char*)&count, sizeof(int));
 
 			for (int i = 0; i < edges.Size(); ++i)
 			{
-				file.write((char*)&edges[i]->myVertex1->myIndex, sizeof(int));
-				file.write((char*)&edges[i]->myVertex2->myIndex, sizeof(int));
+				aStream.write((char*)&edges[i]->myVertex1->myIndex, sizeof(int));
+				aStream.write((char*)&edges[i]->myVertex2->myIndex, sizeof(int));
 			}
 
 			count = myTriangles.Size();
-			file.write((char*)&count, sizeof(int));
+			aStream.write((char*)&count, sizeof(int));
 
 			for (int i = 0; i < myTriangles.Size(); ++i)
 			{
-				file.write((char*)&myTriangles[i]->myEdge1->myIndex, sizeof(int));
-				file.write((char*)&myTriangles[i]->myEdge2->myIndex, sizeof(int));
-				file.write((char*)&myTriangles[i]->myEdge3->myIndex, sizeof(int));
+				aStream.write((char*)&myTriangles[i]->myEdge1->myIndex, sizeof(int));
+				aStream.write((char*)&myTriangles[i]->myEdge2->myIndex, sizeof(int));
+				aStream.write((char*)&myTriangles[i]->myEdge3->myIndex, sizeof(int));
 			}
-
-			file.close();
 		}
 
 		void NavMesh::Load(const std::string& aBinaryPath)
@@ -285,30 +299,37 @@ namespace Prism
 			std::fstream file;
 			file.open(aBinaryPath.c_str(), std::ios::in | std::ios::binary);
 
+			Load(file);
+
+			file.close();
+		}
+
+		void NavMesh::Load(std::fstream& aStream)
+		{
 			int count;
-			file.read((char*)&count, sizeof(int));
+			aStream.read((char*)&count, sizeof(int));
 
 			CU::GrowingArray<Vertex*> vertices(count);
 			for (int i = 0; i < count; ++i)
 			{
 				CU::Vector2<float> position;
-				file.read((char*)&position.x, sizeof(float) * 2);
+				aStream.read((char*)&position.x, sizeof(float) * 2);
 				vertices.Add(new Vertex(position));
 			}
 
-			file.read((char*)&count, sizeof(int));
+			aStream.read((char*)&count, sizeof(int));
 
 			CU::GrowingArray<Edge*> edges(count);
 			for (int i = 0; i < count; ++i)
 			{
 				int index[2];
 
-				file.read((char*)&index, sizeof(int) * 2);
+				aStream.read((char*)&index, sizeof(int) * 2);
 				edges.Add(new Edge(vertices[index[0]], vertices[index[1]]));
 			}
 
 
-			file.read((char*)&count, sizeof(int));
+			aStream.read((char*)&count, sizeof(int));
 
 			myTriangles.Init(count);
 
@@ -316,11 +337,9 @@ namespace Prism
 			{
 				int index[3];
 
-				file.read((char*)&index, sizeof(int) * 3);
+				aStream.read((char*)&index, sizeof(int) * 3);
 				myTriangles.Add(new Triangle(edges[index[0]], edges[index[1]], edges[index[2]]));
 			}
-
-			file.close();
 		}
 
 		void NavMesh::UniqueAdd(Edge* anEdge, CU::GrowingArray<Edge*>& someEdgesOut) const
