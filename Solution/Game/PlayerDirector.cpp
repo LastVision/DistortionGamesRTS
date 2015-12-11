@@ -92,6 +92,11 @@ void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 		}
 	}
 
+	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_F2) == true)
+	{
+		SelectAllUnits();
+	}
+
 	UpdateInputs();
 
 	Director::Update(aDeltaTime);
@@ -424,7 +429,8 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 
 		if (myUnits[i]->IsSelected())
 		{
-			if (hoveredEnemy != nullptr && myRightClicked == true)
+			if ((mySelectedAction == eSelectedAction::ATTACK_TAGRET && hoveredEnemy != nullptr && myLeftMouseUp == true) 
+				|| (hoveredEnemy != nullptr && myRightClicked == true))
 			{
 				controller->AttackTarget(hoveredEnemy, !myShiftPressed);
 				hasDoneAction = true;
@@ -513,6 +519,21 @@ void PlayerDirector::SelectOrHoverEntity(Entity* aEntity, bool &aSelected, bool 
 		{
 			aEntity->SetHovered(true);
 			aHovered = true;
+		}
+	}
+}
+
+void PlayerDirector::SelectAllUnits()
+{
+	mySelectedUnits.RemoveAll();
+	myBuilding->SetSelect(false);
+	myBuilding->SetHovered(false);
+
+	for (int i = 0; i < myUnits.Size(); i++)
+	{
+		if (myUnits[i]->GetAlive() == true)
+		{
+			SelectUnit(myUnits[i]);
 		}
 	}
 }
