@@ -41,6 +41,8 @@ void ConsoleState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCu
 
 	myLowerLeftCorner = Prism::Engine::GetInstance()->GetWindowSize();
 	myLowerLeftCorner *= 0.25f;
+
+	Console::GetInstance()->GetConsoleHistory()->ResetHistoryCounter();
 }
 
 void ConsoleState::EndState()
@@ -190,7 +192,7 @@ void ConsoleState::Render()
 	}
 
 	std::string consoleInput = Console::GetInstance()->GetInput();
-	if (myHistoryMode == false)
+	if (myHistoryMode == false && consoleInput.length() > 0)
 	{
 		CU::Vector2<float> windowSize = Prism::Engine::GetInstance()->GetWindowSize();
 		windowSize *= 0.75f;
@@ -246,6 +248,14 @@ void ConsoleState::HandleHistoryMode()
 	{
 		Console::GetInstance()->SetInput(mySuggestionString);
 		mySuggestionString = "";
+	}
+	else if (CU::InputWrapper::GetInstance()->KeyUp(DIK_BACKSPACE) == true)
+	{
+		if (Console::GetInstance()->GetInput().length() == 0)
+		{
+			myHistoryMode = false;
+			mySuggestionString = "";
+		}
 	}
 	if (mySuggestionString.length() == 0)
 	{
