@@ -42,6 +42,7 @@ AIDirector::~AIDirector()
 
 void AIDirector::Update(float aDeltaTime)
 {
+	return;
 	Director::Update(aDeltaTime);
 
 	CleanUpGatherers();

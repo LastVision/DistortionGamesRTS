@@ -147,7 +147,7 @@ namespace Script_Interface
 	int ModifyResource(lua_State* aState)//void
 	{
 		int directorId = int(lua_tonumber(aState, 1));
-		int resourceModifier = int(lua_tonumber(aState, 1));
+		int resourceModifier = int(lua_tonumber(aState, 2));
 
 		eOwnerType owner = eOwnerType::NOT_USED;
 		if (directorId == eOwnerType::PLAYER)
@@ -165,7 +165,7 @@ namespace Script_Interface
 		}
 
 
-		//PostMaster::GetInstance()->SendMessage(ResourceMessage(owner, resourceModifier));
+		PostMaster::GetInstance()->SendMessage(ResourceMessage(owner, resourceModifier));
 		return 0;
 	}
 }
