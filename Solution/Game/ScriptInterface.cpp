@@ -2,6 +2,7 @@
 
 #include <Entity.h>
 #include <EntityId.h>
+#include <GameStateMessage.h>
 #include <LUACinematicMessage.h>
 #include <LUAMoveCameraMessage.h>
 #include <LUARunScriptMessage.h>
@@ -135,6 +136,12 @@ namespace Script_Interface
 		lua_pushinteger(aState, static_cast<int>(entityId));
 		return 1;
 	}
+
+	int ReloadLevel(lua_State* aState)//void
+	{
+		PostMaster::GetInstance()->SendMessage(GameStateMessage(eGameState::RELOAD_LEVEL));
+		return 0;
+	}
 }
 
 void ScriptInterface::RegisterFunctions()
@@ -156,4 +163,5 @@ void ScriptInterface::RegisterFunctions()
 	system->RegisterFunction("HideNavMesh", Script_Interface::HideNavMesh, "", "Hides the lines for the navigation mesh.");
 	system->RegisterFunction("GetOwner", Script_Interface::GetOwner, "aUnit", "Returns ownerID of unit, ex: owner = GetOwner(aUnit)");
 	system->RegisterFunction("GetTrigger", Script_Interface::GetTrigger, "aTrigger", "Returns the Entity id for trigger of the supplied input, ex: trigger0 = GetTrigger(0)");
+	system->RegisterFunction("ReloadLevel", Script_Interface::ReloadLevel, "", "Reloads the current level.");
 }
