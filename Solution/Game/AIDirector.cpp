@@ -159,6 +159,6 @@ void AIDirector::ActivateAttacker(Entity* aEntity)
 
 	Entity* closestPlayerUnit = PollingStation::GetInstance()->FindClosestEntity(position, eOwnerType::PLAYER);
 
-	aEntity->GetComponent<ControllerComponent>()->AttackMove(closestPlayerUnit->GetOrientation().GetPos(), true);
+	aEntity->GetComponent<ControllerComponent>()->AttackTarget(closestPlayerUnit, true);
 	myAttackers.Add(aEntity);
 }

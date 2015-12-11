@@ -24,7 +24,7 @@ public:
 	void Update(float aDelta) override;
 
 	void MoveTo(const CU::Vector3<float>& aPosition, bool aClearCommandQueue);
-	void AttackTarget(Entity* aEntity, const CU::Vector3<float>& aPosition, bool aClearCommandQueue);
+	void AttackTarget(Entity* aEntity, bool aClearCommandQueue);
 	void AttackMove(const CU::Vector3<float>& aPosition, bool aClearCommandQueue);
 	void Stop();
 	void HoldPosition();
@@ -60,6 +60,7 @@ private:
 	void DoAttackAction();
 	void AttackTarget();
 	void StartNextAction();
+	void RefreshPathToAttackTarget();
 	void RenderDebugLines() const;
 	eColorDebug GetActionColor(eAction aAction) const;
 	
@@ -75,7 +76,8 @@ private:
 	float myVisionRange;
 	float myAttackRange;
 	float myChaseDistance;
-
+	float myAttackTargetPathRefreshTime;
+	float myCurrentAttackTargetPathRefreshTime;
 
 	CU::GrowingArray<ActionData> myActions;
 	ActionData myCurrentAction;

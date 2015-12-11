@@ -374,7 +374,12 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 
 		if (myUnits[i]->IsSelected())
 		{
-			if (mySelectedAction == eSelectedAction::ATTACK_MOVE && myLeftMouseClicked == true)
+			if (hoveredEnemy != nullptr && myRightClicked == true)
+			{
+				controller->AttackTarget(hoveredEnemy, !myShiftPressed);
+				hasDoneAction = true;
+			}
+			else if (mySelectedAction == eSelectedAction::ATTACK_MOVE && myLeftMouseClicked == true)
 			{
 				controller->AttackMove(targetPos, !myShiftPressed);
 				hasDoneAction = true;
@@ -382,11 +387,6 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 			else if ((mySelectedAction == eSelectedAction::MOVE && myLeftMouseClicked) || myRightClicked)
 			{
 				controller->MoveTo(targetPos, !myShiftPressed);
-				hasDoneAction = true;
-			}
-			else if (mySelectedAction == eSelectedAction::ATTACK_TAGRET || (myLeftMouseClicked == true && hoveredEnemy != nullptr))
-			{
-				controller->AttackTarget(hoveredEnemy, targetPos, !myShiftPressed);
 				hasDoneAction = true;
 			}
 			else if (mySelectedAction == eSelectedAction::STOP)
@@ -399,6 +399,32 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 				controller->HoldPosition();
 				hasDoneAction = true;
 			}
+
+			/*if (mySelectedAction == eSelectedAction::ATTACK_MOVE && myLeftMouseClicked == true)
+			{
+				controller->AttackMove(targetPos, !myShiftPressed);
+				hasDoneAction = true;
+			}
+			else if ((mySelectedAction == eSelectedAction::MOVE && myLeftMouseClicked) || myRightClicked)
+			{
+				controller->MoveTo(targetPos, !myShiftPressed);
+				hasDoneAction = true;
+			}
+			else if (mySelectedAction == eSelectedAction::ATTACK_TAGRET || (myLeftMouseClicked == true && hoveredEnemy != nullptr))
+			{
+				controller->AttackTarget(hoveredEnemy, !myShiftPressed);
+				hasDoneAction = true;
+			}
+			else if (mySelectedAction == eSelectedAction::STOP)
+			{
+				controller->Stop();
+				hasDoneAction = true;
+			}
+			else if (mySelectedAction == eSelectedAction::HOLD_POSITION)
+			{
+				controller->HoldPosition();
+				hasDoneAction = true;
+			}*/
 		}
 	}
 

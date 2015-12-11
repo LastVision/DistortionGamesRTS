@@ -88,41 +88,37 @@ Entity* PollingStation::FindClosestEntity(const CU::Vector3<float>& aPosition, e
 
 Entity* PollingStation::FindEntityAtPosition(const CU::Vector3<float>& aPosition, eOwnerType aEntityOwner)
 {
+	float bestDist = FLT_MAX;
+	float dist = 0;
 	Entity* entity = nullptr;
-	//CollisionComponent* collision = nullptr;
+	CU::GrowingArray<Entity*>* list = nullptr;
+	switch (aEntityOwner)
+	{
+	case PLAYER:
+		list = &myPlayerUnits;
+		break;
+	case ENEMY:
+		list = &myAIUnits;
+		break;
+	default:
+		DL_ASSERT("PollingStation tried to FindClosestEntity of an unknown type");
+		break;
+	}
 
-	//if (aEntityOwner == eOwnerType::PLAYER)
-	//{
-	//	for (int i = 0; i < myPlayerUnits.Size(); ++i)
-	//	{
-	//		if (myPlayerUnits[i]->GetAlive() == true)
-	//		{
-	//			collision = myPlayerUnits[i]->GetComponent<CollisionComponent>();
-	//			if (collision != nullptr && collision->Collide(aPosition))
-	//			{
-	//				entity = myPlayerUnits[i];
-	//				break;
-	//			}
-	//		}
-	//	}
-	//}
-	//else if (aEntityOwner == eOwnerType::ENEMY)
-	//{
-	//	for (int i = 0; i < myAIUnits.Size(); ++i)
-	//	{
-	//		if (myAIUnits[i]->GetAlive() == true)
-	//		{
-	//			collision = myAIUnits[i]->GetComponent<CollisionComponent>();
-	//			if (collision != nullptr && collision->Collide(aPosition))
-	//			{
-	//				entity = myAIUnits[i];
-	//				break;
-	//			}
-	//		}
-	//	}
-	//}
+	for (int i = 0; i < (*list).Size(); ++i)
+	{
+		if ((*list)[i]->GetAlive() == true)
+		{
+			dist = CU::Length2((*list)[i]->GetOrientation().GetPos() - aPosition);
 
-	return entity;
+			if (dist < bestDist && dist < 10.f)
+			{
+				return (*list)[i];;
+			}
+		}
+	}
+
+	return nullptr;
 }
 
 const CU::GrowingArray<Entity*>& PollingStation::GetUnits(eOwnerType anOwner) const

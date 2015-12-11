@@ -17,6 +17,8 @@ ControllerComponent::ControllerComponent(Entity& aEntity, ControllerComponentDat
 	, myAttackRange(aData.myAttackRange * aData.myAttackRange)
 	, myAttackTarget(nullptr)
 	, myActions(16)
+	, myAttackTargetPathRefreshTime(0.5f)
+	, myCurrentAttackTargetPathRefreshTime(myAttackTargetPathRefreshTime)
 {
 	DL_ASSERT_EXP(myEntity.GetComponent<ActorComponent>() != nullptr
 		, "ControllerComponent wont work without a ActorComponent");
@@ -41,7 +43,7 @@ ControllerComponent::~ControllerComponent()
 {
 }
 
-void ControllerComponent::Update(float)
+void ControllerComponent::Update(float aDelta)
 {
 	if (myCurrentAction.myAction == eAction::IDLE)
 	{
@@ -116,6 +118,12 @@ void ControllerComponent::Update(float)
 	}
 	else if (myCurrentAction.myAction == eAction::ATTACK_TARGET)
 	{
+		myCurrentAttackTargetPathRefreshTime -= aDelta;
+		if (myCurrentAttackTargetPathRefreshTime <= 0.f)
+		{
+			RefreshPathToAttackTarget();
+		}
+
 		Entity* closeTarget = PollingStation::GetInstance()->FindClosestEntity(myEntity.GetOrientation().GetPos()
 			, myTargetType, myAttackRange);
 
@@ -148,10 +156,10 @@ void ControllerComponent::MoveTo(const CU::Vector3<float>& aPosition, bool aClea
 	FillCommandList(aPosition, eAction::MOVE, aClearCommandQueue);
 }
 
-void ControllerComponent::AttackTarget(Entity* aEntity, const CU::Vector3<float>& aPosition, bool aClearCommandQueue)
+void ControllerComponent::AttackTarget(Entity* aEntity, bool aClearCommandQueue)
 {
 	myAttackTarget = aEntity;
-	FillCommandList(aPosition, eAction::ATTACK_TARGET, aClearCommandQueue);
+	FillCommandList(myAttackTarget->GetOrientation().GetPos(), eAction::ATTACK_TARGET, aClearCommandQueue);
 }
 
 void ControllerComponent::AttackMove(const CU::Vector3<float>& aPosition, bool aClearCommandQueue)
@@ -322,7 +330,7 @@ void ControllerComponent::AttackTarget()
 			bool targetSurvived = false;
 
 			HealthComponent* targetHealth = myAttackTarget->GetComponent<HealthComponent>();
-			if (targetHealth != nullptr)
+			if (targetHealth != nullptr && myAttackTarget->GetAlive())
 			{
 				targetSurvived = targetHealth->TakeDamage(5);
 			}
@@ -358,6 +366,12 @@ void ControllerComponent::StartNextAction()
 		myCurrentAction.myAction = eAction::IDLE;
 		myCurrentAction.myPosition = myEntity.GetOrientation().GetPos();
 	}
+}
+
+void ControllerComponent::RefreshPathToAttackTarget()
+{
+	AttackTarget(myAttackTarget, true);
+	myCurrentAttackTargetPathRefreshTime = myAttackTargetPathRefreshTime;
 }
 
 void ControllerComponent::RenderDebugLines() const
