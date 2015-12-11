@@ -9,6 +9,7 @@
 #include <Engine.h>
 #include <EngineEnums.h>
 #include <Entity.h>
+#include <EntityId.h>
 #include <EntityFactory.h>
 #include <GameStateMessage.h>
 #include <GraphicsComponent.h>
@@ -60,6 +61,9 @@ Level::~Level()
 	SAFE_DELETE(myScene);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::TOGGLE_LINES, this);
 	EntityFactory::Destroy();
+	EntityId::Destroy();
+	PollingStation::Destroy();
+	
 }
 
 bool Level::Update(float aDeltaTime, Prism::Camera& aCamera)
