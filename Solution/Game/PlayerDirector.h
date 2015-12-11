@@ -29,7 +29,7 @@ enum class eSelectedAction
 	ATTACK,
 	STOP,
 	MOVE_ATTACK,
-	STAND_GROUND,
+	HOLD_POSITION,
 	PATROL
 };
 

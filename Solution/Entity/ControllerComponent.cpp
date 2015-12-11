@@ -103,6 +103,17 @@ void ControllerComponent::Update(float)
 			}
 		}
 	}
+	else if (myCurrentAction.myAction == eAction::HOLD_POSITION)
+	{
+		Entity* closeTarget = PollingStation::GetInstance()->FindClosestEntity(myEntity.GetOrientation().GetPos()
+			, myTargetType, myAttackRange);
+
+		if (closeTarget != nullptr)
+		{
+			myAttackTarget = closeTarget;
+			AttackTarget();
+		}
+	}
 	else if (myCurrentAction.myAction == eAction::MOVE)
 	{
 		DoMoveAction(myCurrentAction.myPosition);
@@ -157,6 +168,16 @@ void ControllerComponent::Stop()
 	myCurrentAction.myPosition = myEntity.GetOrientation().GetPos();
 	myData.myDirection = { 0.f, 0.f, 0.f };
 	myAttackTarget = nullptr;
+}
+
+void ControllerComponent::HoldPosition()
+{
+	myActions.RemoveAll();
+	myCurrentAction.myAction = eAction::HOLD_POSITION;
+	myCurrentAction.myPosition = myEntity.GetOrientation().GetPos();
+	myData.myDirection = { 0.f, 0.f, 0.f };
+	myAttackTarget = nullptr;
+	myEntity.SetState(eEntityState::IDLE);
 }
 
 void ControllerComponent::Spawn(const CU::Vector3f& aPosition)
@@ -373,6 +394,9 @@ eColorDebug ControllerComponent::GetActionColor(eAction aAction) const
 		return eColorDebug::RED;
 		break;
 	case ControllerComponent::eAction::RETURN:
+		return eColorDebug::YELLOW;
+		break;
+	case ControllerComponent::eAction::HOLD_POSITION:
 		return eColorDebug::YELLOW;
 		break;
 	default:

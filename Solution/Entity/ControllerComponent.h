@@ -27,6 +27,7 @@ public:
 	void MoveTo(const CU::Vector3<float>& aPosition, bool aClearCommandQueue);
 	void Attack(const CU::Vector3<float>& aPosition, bool aClearCommandQueue);
 	void Stop();
+	void HoldPosition();
 
 	void Spawn(const CU::Vector3f& aPosition);
 
@@ -44,6 +45,7 @@ private:
 		MOVE,
 		ATTACK,
 		RETURN,
+		HOLD_POSITION
 	};
 
 	struct ActionData
