@@ -134,7 +134,6 @@
     <ClInclude Include="DamageNote.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="EntityData.h" />
-    <ClInclude Include="EntityEnum.h" />
     <ClInclude Include="EntityFactory.h" />
     <ClInclude Include="GraphicsComponent.h" />
     <ClInclude Include="GraphicsComponentData.h" />

@@ -1,7 +1,6 @@
 #include "stdafx.h"
 
 #include "Entity.h"
-#include "EntityEnum.h"
 #include "EntityId.h"
 #include <MemoryTracker.h>
 #include "PollingStation.h"

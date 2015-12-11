@@ -5,7 +5,6 @@
 #include "BuildingComponentData.h"
 #include "CollisionComponentData.h"
 #include "ControllerComponentData.h"
-#include "EntityEnum.h"
 #include "GraphicsComponentData.h"
 #include "HealthComponentData.h"
 #include "TriggerComponentData.h"

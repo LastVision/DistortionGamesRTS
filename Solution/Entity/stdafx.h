@@ -5,7 +5,7 @@
 #include <DL_Debug.h>
 #include "Entity.h"
 #include "EntityData.h"
-#include "EntityEnum.h"
+#include <EntityEnum.h>
 #include <GameConstants.h>
 #include <GrowingArray.h>
 #include <Matrix.h>

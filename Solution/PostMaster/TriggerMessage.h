@@ -1,6 +1,5 @@
 #pragma once
 #include "Message.h"
-#include "Vector.h"
 
 class Entity;
 
