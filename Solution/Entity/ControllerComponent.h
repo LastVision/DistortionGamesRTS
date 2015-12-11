@@ -24,8 +24,8 @@ public:
 	void Update(float aDelta) override;
 
 	void MoveTo(const CU::Vector3<float>& aPosition, bool aClearCommandQueue);
-	void Attack(const CU::Vector3<float>& aPosition, bool aClearCommandQueue);
-	void MoveAttack(const CU::Vector3<float>& aPosition, bool aClearCommandQueue);
+	void AttackTarget(const Entity* aEntity, bool aClearCommandQueue);
+	void AttackMove(const CU::Vector3<float>& aPosition, bool aClearCommandQueue);
 	void Stop();
 	void HoldPosition();
 

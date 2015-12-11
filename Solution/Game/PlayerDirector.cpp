@@ -163,11 +163,11 @@ void PlayerDirector::ReceiveMessage(const OnClickMessage& aMessage)
 		switch (aMessage.myEvent)
 		{
 		case eOnClickEvent::UNIT_ACTION_ATTACK:
-			mySelectedAction = eSelectedAction::ATTACK;
+			mySelectedAction = eSelectedAction::ATTACK_TAGRET;
 			break;
 
 		case eOnClickEvent::UNIT_ACTION_ATTACK_MOVE:
-			mySelectedAction = eSelectedAction::MOVE_ATTACK;
+			mySelectedAction = eSelectedAction::ATTACK_MOVE;
 			break;
 
 		case eOnClickEvent::UNIT_ACTION_MOVE:
@@ -315,7 +315,7 @@ void PlayerDirector::UpdateInputs()
 	{
 		if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_A) == true)
 		{
-			mySelectedAction = eSelectedAction::ATTACK;
+			mySelectedAction = eSelectedAction::ATTACK_MOVE;
 		}
 
 		if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_S) == true)
@@ -374,9 +374,9 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 
 		if (myUnits[i]->IsSelected())
 		{
-			if (mySelectedAction == eSelectedAction::ATTACK && myLeftMouseClicked == true)
+			if (mySelectedAction == eSelectedAction::ATTACK_MOVE && myLeftMouseClicked == true)
 			{
-				controller->Attack(targetPos, !myShiftPressed);
+				controller->AttackMove(targetPos, !myShiftPressed);
 				hasDoneAction = true;
 			}
 			else if ((mySelectedAction == eSelectedAction::MOVE && myLeftMouseClicked) || myRightClicked)

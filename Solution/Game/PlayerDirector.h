@@ -26,9 +26,9 @@ enum class eSelectedAction
 {
 	NONE,
 	MOVE,
-	ATTACK,
+	ATTACK_TAGRET,
 	STOP,
-	MOVE_ATTACK,
+	ATTACK_MOVE,
 	HOLD_POSITION,
 	PATROL
 };

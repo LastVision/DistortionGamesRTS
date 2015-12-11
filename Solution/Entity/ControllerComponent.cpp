@@ -63,7 +63,7 @@ void ControllerComponent::Update(float)
 			myActions.Add(action);
 		}
 	}
-	else if (myCurrentAction.myAction == eAction::ATTACK)
+	else if (myCurrentAction.myAction == eAction::MOVE_ATTACK)
 	{
 		if (myAttackTarget != nullptr)
 		{
@@ -114,7 +114,7 @@ void ControllerComponent::Update(float)
 			AttackTarget();
 		}
 	}
-	else if (myCurrentAction.myAction == eAction::MOVE_ATTACK)
+	else if (myCurrentAction.myAction == eAction::ATTACK)
 	{
 		Entity* closeTarget = PollingStation::GetInstance()->FindClosestEntity(myEntity.GetOrientation().GetPos()
 			, myTargetType, myAttackRange);
@@ -149,9 +149,14 @@ void ControllerComponent::MoveTo(const CU::Vector3<float>& aPosition, bool aClea
 	FillCommandList(aPosition, eAction::MOVE, aClearCommandQueue);
 }
 
-void ControllerComponent::Attack(const CU::Vector3<float>& aPosition, bool aClearCommandQueue)
+void ControllerComponent::AttackTarget(const Entity* aEntity, bool aClearCommandQueue)
 {
-	FillCommandList(aPosition, eAction::ATTACK, aClearCommandQueue);
+
+}
+
+void ControllerComponent::AttackMove(const CU::Vector3<float>& aPosition, bool aClearCommandQueue)
+{
+	FillCommandList(aPosition, eAction::MOVE_ATTACK, aClearCommandQueue);
 
 	Entity* target = nullptr;
 	switch (myEntity.GetOwner())
@@ -174,11 +179,6 @@ void ControllerComponent::Attack(const CU::Vector3<float>& aPosition, bool aClea
 	{
 		myAttackTarget = target;
 	}
-}
-
-void ControllerComponent::MoveAttack(const CU::Vector3<float>& aPosition, bool aClearCommandQueue)
-{
-	FillCommandList(aPosition, eAction::MOVE_ATTACK, aClearCommandQueue);
 }
 
 void ControllerComponent::Stop()
