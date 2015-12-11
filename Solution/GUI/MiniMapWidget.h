@@ -28,7 +28,10 @@ namespace GUI
 
 	private:
 		Prism::Sprite* myPlaceholderSprite;
-		Prism::Sprite* myFriendlyUnitSprite;
-		Prism::Sprite* myEnemyUnitSprite;
+
+		Prism::Sprite* myUnitSprite;
+		Prism::Sprite* myBaseSprite;
+		Prism::Sprite* myResourcePointSprite;
+
 	};
 }

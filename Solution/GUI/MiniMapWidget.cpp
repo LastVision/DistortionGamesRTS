@@ -23,16 +23,18 @@ namespace GUI
 		myPosition = position;
 
 		myPlaceholderSprite = new Prism::Sprite("Data/Resource/Texture/UI/Minimap/T_minimap_placeholder.dds", mySize);
-		myFriendlyUnitSprite = new Prism::Sprite("Data/Resource/Texture/UI/Minimap/T_minimap_friendly_unit.dds", { 10.f, 10.f });
-		myEnemyUnitSprite = new Prism::Sprite("Data/Resource/Texture/UI/Minimap/T_minimap_enemy_unit.dds", { 10.f, 10.f });
+		myUnitSprite = new Prism::Sprite("Data/Resource/Texture/UI/Minimap/T_minimap_unit.dds", { 10.f, 10.f });
+		myBaseSprite = new Prism::Sprite("Data/Resource/Texture/UI/Minimap/T_minimap_base.dds", { 20.f, 20.f });
+		myResourcePointSprite = new Prism::Sprite("Data/Resource/Texture/UI/Minimap/T_minimap_resource_point.dds", { 20.f, 20.f });
 
 	}
 
 	MiniMapWidget::~MiniMapWidget()
 	{
 		SAFE_DELETE(myPlaceholderSprite);
-		SAFE_DELETE(myFriendlyUnitSprite);
-		SAFE_DELETE(myEnemyUnitSprite);
+		SAFE_DELETE(myUnitSprite);
+		SAFE_DELETE(myBaseSprite);
+		SAFE_DELETE(myResourcePointSprite);
 	}
 
 	void MiniMapWidget::Render(const CU::Vector2<float>& aParentPosition)
@@ -41,19 +43,35 @@ namespace GUI
 
 		const CU::GrowingArray<Entity*>& playerUnits = PollingStation::GetInstance()->GetUnits(eOwnerType::PLAYER);
 		const CU::GrowingArray<Entity*>& enemyUnits = PollingStation::GetInstance()->GetUnits(eOwnerType::ENEMY);
+		const CU::GrowingArray<Entity*>& resourcePoints = PollingStation::GetInstance()->GetResourcePoints();
 
 		for (int i = 0; i < playerUnits.Size(); i++)
 		{
-			CU::Vector2<float> position = playerUnits[i]->GetPosition() / 255.f;
-			position *= mySize;
-			myFriendlyUnitSprite->Render(aParentPosition + myPosition + position);
+			CU::Vector2<float> position = (playerUnits[i]->GetPosition() / 255.f) * mySize;
+			myUnitSprite->Render(aParentPosition + myPosition + position, { 1.f, 1.f }, { 0.f, 0.f, 1.f, 1.f});
 		}
 
 		for (int i = 0; i < enemyUnits.Size(); i++)
 		{
-			CU::Vector2<float> position = enemyUnits[i]->GetPosition() / 255.f;
-			position *= mySize;
-			myEnemyUnitSprite->Render(aParentPosition + myPosition + position);
+			CU::Vector2<float> position = (enemyUnits[i]->GetPosition() / 255.f) * mySize;
+			myUnitSprite->Render(aParentPosition + myPosition + position, { 1.f, 1.f }, { 1.f, 0.f, 0.f, 1.f });
+		}
+
+		for (int i = 0; i < resourcePoints.Size(); i++)
+		{
+			CU::Vector2<float> position = (resourcePoints[i]->GetPosition() / 255.f) * mySize;
+			CU::Vector4<float> color = { 0.5f, 0.5f, 0.f, 1.f };
+
+			if (resourcePoints[i]->GetOwner() == eOwnerType::PLAYER)
+			{
+				color = { 0.f, 0.f, 1.f, 1.f };
+			}
+			else if (resourcePoints[i]->GetOwner() == eOwnerType::ENEMY)
+			{
+				color = { 1.f, 0.f, 0.f, 1.f };
+			}
+
+			myResourcePointSprite->Render(aParentPosition + myPosition + position, { 1.f, 1.f }, color);
 		}
 	}
 
