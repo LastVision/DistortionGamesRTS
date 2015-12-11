@@ -41,6 +41,7 @@ namespace Prism
 		void Render(const CU::Matrix44<float>& aOrientation, const CU::Vector3<float>& aCameraPosition);
 
 	private:
+		void EvaluateEffectTechnique();
 		bool myIsNULLObject;
 
 		CU::GrowingArray<D3D11_INPUT_ELEMENT_DESC*> myVertexFormat;
