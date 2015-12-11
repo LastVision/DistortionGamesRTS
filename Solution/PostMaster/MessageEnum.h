@@ -14,5 +14,6 @@ enum class eMessageType
 	LUA_RUN_SCRIPT,
 	TOGGLE_LINES,
 	TRIGGER,
+	RESOURCE,
 	COUNT,
 };

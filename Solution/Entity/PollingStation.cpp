@@ -22,16 +22,29 @@ void PollingStation::Destroy()
 
 void PollingStation::RegisterEntity(Entity* aEntity)
 {
-	switch (aEntity->GetOwner())
+	switch (aEntity->GetType())
 	{
-	case eOwnerType::PLAYER:
-		myPlayerUnits.Add(aEntity);
+	case eEntityType::UNIT:
+	{
+		switch (aEntity->GetOwner())
+		{
+		case eOwnerType::PLAYER:
+			myPlayerUnits.Add(aEntity);
+			break;
+		case eOwnerType::ENEMY:
+			myAIUnits.Add(aEntity);
+			break;
+		default:
+			DL_ASSERT("PollingStation tried to Register an Unit with invalid Owner");
+			break;
+		}
 		break;
-	case eOwnerType::ENEMY:
-		myAIUnits.Add(aEntity);
+	}
+	case eEntityType::RESOURCE_POINT:
+		myResourcePoints.Add(aEntity);
 		break;
 	default:
-		DL_ASSERT("PollingStation tried to Register an Entity with unknown Owner");
+		DL_ASSERT("PollingStation tried to Register an Entity with invalid Type");
 		break;
 	}
 }
@@ -136,6 +149,11 @@ const CU::GrowingArray<Entity*>& PollingStation::GetUnits(eOwnerType anOwner) co
 	return myPlayerUnits;
 }
 
+const CU::GrowingArray<Entity*>& PollingStation::GetResourcePoints() const
+{
+	return myResourcePoints;
+}
+
 void PollingStation::CleanUp()
 {
 	for (int i = myPlayerUnits.Size() - 1; i >= 0; --i)
@@ -153,11 +171,20 @@ void PollingStation::CleanUp()
 			myAIUnits.RemoveCyclicAtIndex(i);
 		}
 	}
+
+	for (int i = myResourcePoints.Size() - 1; i >= 0; --i)
+	{
+		if (myResourcePoints[i]->GetAlive() == false)
+		{
+			myResourcePoints.RemoveCyclicAtIndex(i);
+		}
+	}
 }
 
 PollingStation::PollingStation()
 	: myPlayerUnits(64)
 	, myAIUnits(64)
+	, myResourcePoints(8)
 {
 }
 

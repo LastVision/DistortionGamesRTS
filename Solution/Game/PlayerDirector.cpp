@@ -13,6 +13,7 @@
 #include <PathFinder.h>
 #include "PlayerDirector.h"
 #include <PollingStation.h>
+#include <ResourceMessage.h>
 #include <Terrain.h>
 #include <ToggleGUIMessage.h>
 #include <ModelLoader.h>
@@ -48,6 +49,7 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 
 	PostMaster::GetInstance()->Subscribe(eMessageType::TOGGLE_GUI, this);
 	PostMaster::GetInstance()->Subscribe(eMessageType::ON_CLICK, this);
+	PostMaster::GetInstance()->Subscribe(eMessageType::RESOURCE, this);
 }
 
 PlayerDirector::~PlayerDirector()
@@ -55,6 +57,7 @@ PlayerDirector::~PlayerDirector()
 	SAFE_DELETE(myGUIManager);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::TOGGLE_GUI, this);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::ON_CLICK, this);
+	PostMaster::GetInstance()->UnSubscribe(eMessageType::RESOURCE, this);
 }
 
 void PlayerDirector::InitGUI()
@@ -185,6 +188,18 @@ void PlayerDirector::ReceiveMessage(const OnClickMessage& aMessage)
 		
 		default:
 			break;
+		}
+	}
+}
+
+void PlayerDirector::ReceiveMessage(const ResourceMessage& aMessage)
+{
+	if (aMessage.myOwner == eOwnerType::PLAYER)
+	{
+		myTestGold += aMessage.myResourceModifier;
+		if (myTestGold < 0)
+		{
+			myTestGold = 0;
 		}
 	}
 }

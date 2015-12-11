@@ -1,6 +1,5 @@
 #pragma once
 #include "Widget.h"
-#include "../Entity/EntityEnum.h"
 
 namespace tinyxml2
 {

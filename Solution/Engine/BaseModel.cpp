@@ -12,6 +12,7 @@ namespace Prism
 {
 
 	BaseModel::BaseModel()
+		: myTechniqueName("ERROR_TECHNIQUE")
 	{
 		myVertexBufferDesc = new D3D11_BUFFER_DESC();
 		myIndexBufferDesc = new D3D11_BUFFER_DESC();
@@ -87,9 +88,12 @@ namespace Prism
 				tech = myEffect->GetTechnique();
 			}
 
+			//tech = myEffect->GetEffect()->GetTechniqueByName(myTechniqueName.c_str());
+
 			if (tech->IsValid() == false)
 			{
 				tech = myEffect->GetTechnique();
+				//DL_ASSERT("INVALID TECHNIQUE IN BASEMODEL::RENDER: " + myTechniqueName);
 			}
 
 			DL_ASSERT_EXP(tech != nullptr, "Technique is nullptr");
