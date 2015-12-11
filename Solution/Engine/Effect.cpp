@@ -47,6 +47,11 @@ namespace Prism
 
 	}
 
+	ID3DX11EffectTechnique* Effect::GetTechnique(const std::string& aName)
+	{
+		return myEffect->GetTechniqueByName(aName.c_str());
+	}
+
 	void Effect::SetScaleVector(const CU::Vector3<float>& aScaleVector)
 	{
 		myScaleVector->SetFloatVector(&aScaleVector.x);
@@ -239,12 +244,12 @@ namespace Prism
 		}
 
 
-		myTechnique = myEffect->GetTechniqueByName("Render");
-		if (myTechnique->IsValid() == false)
-		{
-			DL_MESSAGE_BOX("Failed to get Technique", "Effect Error", MB_ICONWARNING);
-			return false;
-		}
+		//myTechnique = myEffect->GetTechniqueByName("Render");
+		//if (myTechnique->IsValid() == false)
+		//{
+		//	DL_MESSAGE_BOX("Failed to get Technique", "Effect Error", MB_ICONWARNING);
+		//	return false;
+		//}
 
 		myScaleVector = myEffect->GetVariableByName("Scale")->AsVector();
 		if (myScaleVector->IsValid() == false)

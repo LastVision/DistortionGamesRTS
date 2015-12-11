@@ -56,13 +56,13 @@ void ControllerComponent::Update(float)
 			myReturnPosition.y = 0.f;
 
 			ActionData action;
-			action.myAction = eAction::ATTACK;
+			action.myAction = eAction::ATTACK_TARGET;
 			action.myPosition = myAttackTarget->GetOrientation().GetPos();
 			action.myPosition.y = 0.f;
 			myActions.Add(action);
 		}
 	}
-	else if (myCurrentAction.myAction == eAction::MOVE_ATTACK)
+	else if (myCurrentAction.myAction == eAction::ATTACK_MOVE)
 	{
 		if (myAttackTarget != nullptr)
 		{
@@ -87,7 +87,7 @@ void ControllerComponent::Update(float)
 		if (closeTarget != nullptr)
 		{
 			myAttackTarget = closeTarget;
-			myCurrentAction.myAction = eAction::ATTACK;
+			myCurrentAction.myAction = eAction::ATTACK_TARGET;
 		}
 		else
 		{
@@ -113,14 +113,13 @@ void ControllerComponent::Update(float)
 			AttackTarget();
 		}
 	}
-	else if (myCurrentAction.myAction == eAction::ATTACK)
+	else if (myCurrentAction.myAction == eAction::ATTACK_TARGET)
 	{
 		Entity* closeTarget = PollingStation::GetInstance()->FindClosestEntity(myEntity.GetOrientation().GetPos()
 			, myTargetType, myAttackRange);
 
-		if (closeTarget != nullptr)
+		if (closeTarget != nullptr && closeTarget == myAttackTarget)
 		{
-			myAttackTarget = closeTarget;
 			AttackTarget();
 		}
 		else
@@ -148,14 +147,15 @@ void ControllerComponent::MoveTo(const CU::Vector3<float>& aPosition, bool aClea
 	FillCommandList(aPosition, eAction::MOVE, aClearCommandQueue);
 }
 
-void ControllerComponent::AttackTarget(const Entity* aEntity, bool aClearCommandQueue)
+void ControllerComponent::AttackTarget(Entity* aEntity, const CU::Vector3<float>& aPosition, bool aClearCommandQueue)
 {
-
+	myAttackTarget = aEntity;
+	FillCommandList(aPosition, eAction::ATTACK_TARGET, aClearCommandQueue);
 }
 
 void ControllerComponent::AttackMove(const CU::Vector3<float>& aPosition, bool aClearCommandQueue)
 {
-	FillCommandList(aPosition, eAction::MOVE_ATTACK, aClearCommandQueue);
+	FillCommandList(aPosition, eAction::ATTACK_MOVE, aClearCommandQueue);
 
 	Entity* target = nullptr;
 	switch (myEntity.GetOwner())
@@ -409,10 +409,10 @@ eColorDebug ControllerComponent::GetActionColor(eAction aAction) const
 	case ControllerComponent::eAction::MOVE:
 		return eColorDebug::GREEN;
 		break;
-	case ControllerComponent::eAction::ATTACK:
+	case ControllerComponent::eAction::ATTACK_TARGET:
 		return eColorDebug::RED;
 		break;
-	case ControllerComponent::eAction::MOVE_ATTACK:
+	case ControllerComponent::eAction::ATTACK_MOVE:
 		return eColorDebug::RED;
 		break;
 	case ControllerComponent::eAction::RETURN:

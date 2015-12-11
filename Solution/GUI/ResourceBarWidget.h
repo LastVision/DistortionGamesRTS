@@ -26,6 +26,8 @@ namespace GUI
 
 		void Render(const CU::Vector2<float>& aParentPosition) override;
 
+		void OnResize(const CU::Vector2<float>& aNewWindowSize, const CU::Vector2<float>& anOldWindowSize) override;
+
 	private:
 		void operator=(ResourceBarWidget&) = delete;
 
@@ -33,7 +35,7 @@ namespace GUI
 
 		Prism::Sprite* myValueSprite;
 
+		CU::Vector2<float> mySpritePosition;
 		CU::Vector2<float> myTextPosition;
-
 	};
 }
