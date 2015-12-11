@@ -41,6 +41,8 @@ void ConsoleState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCu
 
 	myLowerLeftCorner = Prism::Engine::GetInstance()->GetWindowSize();
 	myLowerLeftCorner *= 0.25f;
+
+	Console::GetInstance()->GetConsoleHistory()->ResetHistoryCounter();
 }
 
 void ConsoleState::EndState()
@@ -55,7 +57,7 @@ void ConsoleState::EndState()
 const eStateStatus ConsoleState::Update(const float& aDeltaTime)
 {
 	Console::GetInstance()->Update();
-	
+
 	if (CU::InputWrapper::GetInstance()->KeyUp(DIK_GRAVE) == true)
 	{
 		myStateStatus = ePopSubState;
@@ -89,8 +91,8 @@ const eStateStatus ConsoleState::Update(const float& aDeltaTime)
 	}
 	else
 	{
-		HandleSuggestionMode();
-
+		HandleSuggestionMode();	
+	}
 
 	if (CU::InputWrapper::GetInstance()->KeyUp(DIK_RETURN) == true)
 	{
@@ -109,7 +111,7 @@ const eStateStatus ConsoleState::Update(const float& aDeltaTime)
 					Console::GetInstance()->GetConsoleHistory()->AddHistory(allFunctions[i], eHistoryType::HELP);
 				}
 			}
-			else 
+			else
 			{
 				std::string helpFunctionName = CU::GetSubString(consoleInput, " ", true, 2);
 				const ConsoleLuaHelp& helpDoc = Console::GetInstance()->GetConsoleHelp()->GetHelpText(helpFunctionName);
@@ -118,10 +120,10 @@ const eStateStatus ConsoleState::Update(const float& aDeltaTime)
 					Console::GetInstance()->GetConsoleHistory()->AddHistory(helpDoc.myFunctionName + "(" + helpDoc.myArguments + ")", eHistoryType::HELP);
 					Console::GetInstance()->GetConsoleHistory()->AddHistory(helpDoc.myHelpText, eHistoryType::HELP);
 				}
-				else 
+				else
 				{
-					Console::GetInstance()->GetConsoleHistory()->AddHistory("There is no " + helpFunctionName + 
-						" command. Did you mean " + LUA::ScriptSystem::GetInstance()->FindClosestFunction(helpFunctionName) 
+					Console::GetInstance()->GetConsoleHistory()->AddHistory("There is no " + helpFunctionName +
+						" command. Did you mean " + LUA::ScriptSystem::GetInstance()->FindClosestFunction(helpFunctionName)
 						+ "?", eHistoryType::ERROR);
 				}
 			}
@@ -136,18 +138,17 @@ const eStateStatus ConsoleState::Update(const float& aDeltaTime)
 		{
 			Console::GetInstance()->GetConsoleHistory()->AddHistory(errorString, eHistoryType::ERROR);
 		}
-		
+
 
 		Console::GetInstance()->GetConsoleHistory()->Save();
 		myStateStatus = ePopSubState;
-	}
 	}
 
 
 	if (Console::GetInstance()->GetInput().length() <= 0 && myHistoryMode == false)
 	{
 		mySuggestionString = "";
-		}
+	}
 
 
 	myText->SetText(Console::GetInstance()->GetInput());
@@ -174,7 +175,7 @@ void ConsoleState::Render()
 	myText->SetScale({ 0.9f, 0.9f });
 	if (mySuggestionString != "")
 	{
-		myText->SetColor({ 1.f, 0.f, 0.f, 0.5f });
+		myText->SetColor({ 1.f, 1.f, 1.f, 0.2f });
 		myText->SetText(mySuggestionString);
 		myText->Render();
 	}
@@ -190,7 +191,7 @@ void ConsoleState::Render()
 	}
 
 	std::string consoleInput = Console::GetInstance()->GetInput();
-	if (myHistoryMode == false)
+	if (myHistoryMode == false && consoleInput.length() > 0)
 	{
 		CU::Vector2<float> windowSize = Prism::Engine::GetInstance()->GetWindowSize();
 		windowSize *= 0.75f;
@@ -242,10 +243,18 @@ void ConsoleState::HandleHistoryMode()
 		myHistoryMode = true;
 		mySuggestionString = Console::GetInstance()->GetConsoleHistory()->GetNext();
 	}
-	else if (CU::InputWrapper::GetInstance()->KeyUp(DIK_TAB) == true)
+	else if (CU::InputWrapper::GetInstance()->KeyUp(DIK_RETURN) == true)
 	{
 		Console::GetInstance()->SetInput(mySuggestionString);
 		mySuggestionString = "";
+	}
+	else if (CU::InputWrapper::GetInstance()->KeyUp(DIK_BACKSPACE) == true)
+	{
+		if (Console::GetInstance()->GetInput().length() == 0)
+		{
+			myHistoryMode = false;
+			mySuggestionString = "";
+		}
 	}
 	if (mySuggestionString.length() == 0)
 	{

@@ -62,12 +62,10 @@ Game::~Game()
 	Prism::ParticleDataContainer::Destroy();
 	CU::InputWrapper::Destroy();
 	CU::TimerManager::Destroy();
-	EntityId::Destroy();
 	Console::Destroy();
 	PostMaster::Destroy();
 	myStateStack.Clear();
 	Prism::DebugDrawer::Destroy();
-	PollingStation::Destroy();
 
 	LUA::ScriptSystem::Destroy();
 }

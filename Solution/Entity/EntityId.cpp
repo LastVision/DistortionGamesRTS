@@ -20,7 +20,7 @@ EntityId* EntityId::GetInstance()
 
 void EntityId::Destroy()
 {
-	delete myInstance;
+	SAFE_DELETE(myInstance);
 }
 
 int EntityId::GetId(Entity* anEntity)

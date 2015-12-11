@@ -17,7 +17,7 @@ PollingStation* PollingStation::GetInstance()
 
 void PollingStation::Destroy()
 {
-	delete myInstance;
+	SAFE_DELETE(myInstance);
 }
 
 void PollingStation::RegisterEntity(Entity* aEntity)

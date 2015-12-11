@@ -4,7 +4,6 @@
 #include "Entity.h"
 #include <PostMaster.h>
 #include <SpawnUnitMessage.h>
-#include <InputWrapper.h>
 
 BuildingComponent::BuildingComponent(Entity& aEntity, BuildingCompnentData& aData)
 	: Component(aEntity)

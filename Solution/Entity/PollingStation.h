@@ -20,6 +20,8 @@ public:
 
 	void CleanUp();
 
+
+
 private:
 	PollingStation();
 	~PollingStation();
