@@ -1,0 +1,48 @@
+Bör variabler ligga i LUA eller C++, om de ligger i C++ bör man kunna hämta i LUA?
+
+Hantera bara i lua:
+local playerResource
+
+hantera allt i lua
+
+Update()
+	playerResource = playerResource + 4
+	gui.SetResource(playerResource)
+
+BuildGruntButtonEvent()
+	if(playerResource > 100) then
+		build(grunt)
+		playeResource = playerResource - 100
+		gui.SetResource(playerResource)
+	end
+
+
+alt2:
+
+i C++:
+PlayerDirector
+	int myResource
+
+i Lua:
+Update()
+	AddResource(4)
+
+BuildGruntButtonEvent()
+	if(RemoveResource(100))
+		build(grunt)
+
+100 ägd (enum för vem)
+0 neutral
+
+AddOwner(ePlayer, 4)
+if (GetOwner() == ePlayer / eNeutral / eEnemy)
+
+
+	
+
+GetResourcePointOwner(trigger0.myId) + 4
+GetResourcePointOwner(trigger1.myId) + 4
+GetResourcePointOwner(trigger2.myId) + 4
+GetResourcePointOwner(trigger3.myId) + 4
+
+RestartLevel()
