@@ -8,6 +8,7 @@ Director::Director(eDirectorType aDirectorType, const Prism::Terrain& aTerrain)
 	, myTerrain(aTerrain)
 	, myUnits(64)
 	, myActiveUnits(64)
+	, myTimeMultiplier(1.f)
 {
 	PostMaster::GetInstance()->Subscribe(eMessageType::SPAWN_UNIT, this);
 }

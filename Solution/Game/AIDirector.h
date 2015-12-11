@@ -17,6 +17,7 @@ public:
 	void Update(float aDeltaTime) override;
 
 	void ReceiveMessage(const SpawnUnitMessage& aMessage) override;
+	void ReceiveMessage(const AITimeMultiplierMessage& aMessage) override;
 
 private:
 	enum eUnitActionType

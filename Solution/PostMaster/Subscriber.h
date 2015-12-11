@@ -1,5 +1,6 @@
 #pragma once
 
+struct AITimeMultiplierMessage;
 struct FadeMessage;
 struct GameStateMessage;
 struct LUACinematicMessage;
@@ -21,6 +22,7 @@ public:
 	Subscriber();
 	~Subscriber();
 
+	virtual void ReceiveMessage(const AITimeMultiplierMessage& aMessage);
 	virtual void ReceiveMessage(const FadeMessage& aMessage);
 	virtual void ReceiveMessage(const GameStateMessage& aMessage);
 	virtual void ReceiveMessage(const LUACinematicMessage& aMessage);

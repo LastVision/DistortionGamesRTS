@@ -15,5 +15,6 @@ enum class eMessageType
 	TOGGLE_LINES,
 	TRIGGER,
 	RESOURCE,
+	AI_TIME_MULTIPLIER,
 	COUNT,
 };
