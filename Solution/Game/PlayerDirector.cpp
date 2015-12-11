@@ -384,6 +384,11 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 				controller->MoveTo(targetPos, !myShiftPressed);
 				hasDoneAction = true;
 			}
+			else if (mySelectedAction == eSelectedAction::ATTACK_TAGRET || (myLeftMouseClicked == true && hoveredEnemy != nullptr))
+			{
+				controller->AttackTarget(hoveredEnemy, targetPos, !myShiftPressed);
+				hasDoneAction = true;
+			}
 			else if (mySelectedAction == eSelectedAction::STOP)
 			{
 				controller->Stop();
