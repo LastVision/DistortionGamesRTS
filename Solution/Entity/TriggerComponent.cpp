@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "CollisionComponent.h"
+#include "CommonHelper.h"
 #include "TriggerComponent.h"
 #include "TriggerComponentData.h"
 #include <TriggerMessage.h>
@@ -14,6 +15,7 @@ TriggerComponent::TriggerComponent(Entity& aEntity, TriggerComponentData& aData)
 	, myEnemyUnits(GC::enemyUnitCount)
 	, myRadius(aData.myRadius)
 	, myRadiusSquared(aData.myRadius * aData.myRadius)
+	, myOwnershipRatio(0)
 {
 }
 
@@ -62,5 +64,23 @@ void TriggerComponent::CheckUnitsForAdd(const CU::GrowingArray<Entity*>& someUni
 				someUnitsOut.Add(current);
 			}
 		}
+	}
+}
+
+void TriggerComponent::ModifyOwnership(eOwnerType anOwner, float aModifyValue)
+{
+	if (anOwner == myEntity.GetOwner() || myEntity.GetOwner() == eOwnerType::NEUTRAL)
+	{
+		myOwnershipRatio += aModifyValue;
+	}
+	myOwnershipRatio = CU::Clip(myOwnershipRatio, 0.f, 100.f);
+
+	if (myOwnershipRatio == 0.f)
+	{
+		myEntity.SetOwner(eOwnerType::NEUTRAL);
+	}
+	if (myOwnershipRatio == 100.f)
+	{
+		myEntity.SetOwner(anOwner);
 	}
 }

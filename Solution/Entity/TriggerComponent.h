@@ -1,4 +1,5 @@
 #pragma once
+#include "Component.h"
 #include <LineSegment3D.h>
 #include <Sphere.h>
 
@@ -14,6 +15,7 @@ public:
 
 	static eComponentType GetTypeStatic();
 	virtual eComponentType GetType();
+	void ModifyOwnership(eOwnerType anOwner, float aModifyValue);
 
 private:
 	void operator=(TriggerComponent&) = delete;
@@ -23,6 +25,8 @@ private:
 
 	const float myRadius;
 	const float myRadiusSquared;
+
+	float myOwnershipRatio;
 	
 	const eTriggerType myType;
 	CU::GrowingArray<Entity*> myPlayerUnits;

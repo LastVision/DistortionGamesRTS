@@ -42,6 +42,10 @@ int EntityId::GetId(Entity* anEntity)
 
 Entity* EntityId::GetEntity(int aId) const
 {
+	if (aId >= myEntities.Size() || aId < 0)
+	{
+		return nullptr;
+	}
 	return myEntities[aId];
 }
 

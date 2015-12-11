@@ -14,6 +14,7 @@
 #include <ScriptSystem.h>
 #include <TimeMultiplierMessage.h>
 #include <ToggleGUIMessage.h>
+#include <TriggerComponent.h>
 
 namespace Script_Interface
 {
@@ -179,14 +180,53 @@ namespace Script_Interface
 			owner = eOwnerType::ENEMY;
 		}
 
-		if (owner == eOwnerType::NOT_USED)
+		if (owner == eOwnerType::NOT_USED || owner == eOwnerType::NEUTRAL)
 		{
 			return 0;
 		}
 
-
 		PostMaster::GetInstance()->SendMessage(ResourceMessage(owner, resourceModifier));
 		return 0;
+	}
+
+	int ModifyOwnership(lua_State* aState)//void
+	{
+		int resourcePointID = int(lua_tonumber(aState, 1));
+		int directorId = int(lua_tonumber(aState, 2));
+		float ownershipModifier = float(lua_tonumber(aState, 3));
+
+		eOwnerType owner = eOwnerType::NOT_USED;
+		if (directorId == eOwnerType::PLAYER)
+		{
+			owner = eOwnerType::PLAYER;
+		}
+		else if (directorId == eOwnerType::ENEMY)
+		{
+			owner = eOwnerType::ENEMY;
+		}
+
+		if (owner == eOwnerType::NOT_USED || owner == eOwnerType::NEUTRAL)
+		{
+			return 0;
+		}
+
+		Entity* controlPoint = EntityId::GetInstance()->GetEntity(resourcePointID);
+
+		if (controlPoint == nullptr || controlPoint->GetComponent<TriggerComponent>() == nullptr)
+		{
+			std::stringstream ss;
+			ss << "Entity " << resourcePointID << " not found. Check ID.";
+
+			DL_MESSAGE_BOX(ss.str().c_str(), "Entity not Found!", MB_ICONWARNING);
+			lua_pushinteger(aState, -1);
+		}
+		else
+		{
+			controlPoint->GetComponent<TriggerComponent>()->ModifyOwnership(owner, ownershipModifier);
+		}
+
+		lua_pushinteger(aState, static_cast<int>(controlPoint->GetOwner()));
+		return 1;
 	}
 
 	int DisableAI(lua_State*)//void
@@ -235,6 +275,7 @@ void ScriptInterface::RegisterFunctions()
 	system->RegisterFunction("GetTrigger", Script_Interface::GetTrigger, "aTrigger", "Returns the Entity id for trigger of the supplied input, ex: trigger0 = GetTrigger(0)");
 	system->RegisterFunction("ReloadLevel", Script_Interface::ReloadLevel, "", "Reloads the current level.");
 	system->RegisterFunction("ModifyResource", Script_Interface::ModifyResource, "aOwnerEnum, aResourceModifier", "Modifies resource of owner, ex: ModifyResource(eOwnerType.PLAYER, resourceGain)");
+	system->RegisterFunction("ModifyOwnership", Script_Interface::ModifyOwnership, "aTriggerId, aOwnerEnum, aResourceModifier", "Modifies ownership of trigger, ex:\n\t myResourcePoint0.myOwner = ModifyOwnership(myResourcePoint0.myId, eOwnerType.PLAYER, ownershipGain * aDelta)");
 	system->RegisterFunction("DisableAI", Script_Interface::DisableAI, "", "Disables AI");
 	system->RegisterFunction("EnableAI", Script_Interface::EnableAI, "", "Enables AI");
 	system->RegisterFunction("TimeMultiplier", Script_Interface::TimeMultiplier, "aMultiplier", "Modifies the game time. ex: TimeMultiplier(0.1) //this is slow  ");
