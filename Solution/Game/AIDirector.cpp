@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "AIDirector.h"
-#include <AITimeMultiplierMessage.h>
 #include <BuildingComponent.h>
 #include <ControllerComponent.h>
+#include <TimeMultiplierMessage.h>
 #include <Entity.h>
 #include <EntityFactory.h>
 #include <PollingStation.h>
@@ -36,13 +36,13 @@ AIDirector::AIDirector(const Prism::Terrain& aTerrain, Prism::Scene& aScene)
 		PollingStation::GetInstance()->RegisterEntity(myActiveUnits[i]);
 	}
 
-	PostMaster::GetInstance()->Subscribe(eMessageType::AI_TIME_MULTIPLIER, this);
+	PostMaster::GetInstance()->Subscribe(eMessageType::TIME_MULTIPLIER, this);
 }
 
 
 AIDirector::~AIDirector()
 {
-	PostMaster::GetInstance()->UnSubscribe(eMessageType::AI_TIME_MULTIPLIER, this);
+	PostMaster::GetInstance()->UnSubscribe(eMessageType::TIME_MULTIPLIER, this);
 }
 
 void AIDirector::Update(float aDeltaTime)
@@ -110,9 +110,12 @@ void AIDirector::ReceiveMessage(const SpawnUnitMessage& aMessage)
 	}
 }
 
-void AIDirector::ReceiveMessage(const AITimeMultiplierMessage& aMessage)
+void AIDirector::ReceiveMessage(const TimeMultiplierMessage& aMessage)
 {
-	myTimeMultiplier = aMessage.myMultiplier;
+	if (aMessage.myOwner == eOwnerType::ENEMY)
+	{
+		myTimeMultiplier = aMessage.myMultiplier;
+	}
 }
 
 void AIDirector::CleanUpGatherers()

@@ -11,7 +11,7 @@ Subscriber::~Subscriber()
 {
 }
 
-void Subscriber::ReceiveMessage(const AITimeMultiplierMessage&)
+void Subscriber::ReceiveMessage(const TimeMultiplierMessage&)
 {
 }
 
