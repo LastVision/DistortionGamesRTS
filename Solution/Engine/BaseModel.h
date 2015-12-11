@@ -56,5 +56,6 @@ namespace Prism
 		CU::Vector2<float> myScale;
 
 		std::string myFileName;
+		std::string myTechniqueName;
 	};
 }
