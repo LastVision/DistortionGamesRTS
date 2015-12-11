@@ -8,7 +8,7 @@
 BuildingComponent::BuildingComponent(Entity& aEntity, BuildingCompnentData& aData)
 	: Component(aEntity)
 	, myCurrentBuildTime(0.f)
-	, myMaxBuildTime(1.f)
+	, myMaxBuildTime(2.f)
 	, mySpawnQueueIndex(-1)
 {
 	for (int i = 0; i <= 4; i++)
@@ -29,7 +29,7 @@ void BuildingComponent::Update(float aDeltaTime)
 
 		if (myCurrentBuildTime >= myMaxBuildTime)
 		{
-			PostMaster::GetInstance()->SendMessage(SpawnUnitMessage(mySpawnQueue[0], myEntity.GetOwner(), myEntity.GetScene()));
+			PostMaster::GetInstance()->SendMessage(SpawnUnitMessage(mySpawnQueue[0], myEntity.GetOwner()/*, myEntity.GetScene()*/));
 
 			for (int i = 0; i < mySpawnQueueIndex && i <= 3; i++)
 			{

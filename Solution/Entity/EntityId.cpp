@@ -3,6 +3,7 @@
 #include "Entity.h"
 #include "EntityId.h"
 #include <MemoryTracker.h>
+#include "PollingStation.h"
 
 EntityId* EntityId::myInstance = nullptr;
 
@@ -34,6 +35,7 @@ int EntityId::GetId(Entity* anEntity)
 		if (anEntity->GetType() == eEntityType::RESOURCE_POINT)
 		{
 			myTriggers.Add(anEntity);
+			PollingStation::GetInstance()->RegisterEntity(anEntity);
 		}
 	}
 	return index;
