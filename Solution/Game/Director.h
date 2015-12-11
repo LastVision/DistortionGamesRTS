@@ -38,6 +38,8 @@ protected:
 	const eDirectorType myDirectorType;
 	const Prism::Terrain& myTerrain;
 
+	float myTimeMultiplier;
+
 private:
 	void operator=(Director&) = delete;
 };

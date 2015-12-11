@@ -1,10 +1,12 @@
 #include "stdafx.h"
 #include "AIDirector.h"
+#include <AITimeMultiplierMessage.h>
 #include <BuildingComponent.h>
 #include <ControllerComponent.h>
 #include <Entity.h>
 #include <EntityFactory.h>
 #include <PollingStation.h>
+#include <PostMaster.h>
 #include <SpawnUnitMessage.h>
 
 AIDirector::AIDirector(const Prism::Terrain& aTerrain, Prism::Scene& aScene)
@@ -33,16 +35,20 @@ AIDirector::AIDirector(const Prism::Terrain& aTerrain, Prism::Scene& aScene)
 		myActiveUnits.Add(myUnits[i]);
 		PollingStation::GetInstance()->RegisterEntity(myActiveUnits[i]);
 	}
+
+	PostMaster::GetInstance()->Subscribe(eMessageType::AI_TIME_MULTIPLIER, this);
 }
 
 
 AIDirector::~AIDirector()
 {
+	PostMaster::GetInstance()->UnSubscribe(eMessageType::AI_TIME_MULTIPLIER, this);
 }
 
 void AIDirector::Update(float aDeltaTime)
 {
-	return;
+	aDeltaTime *= myTimeMultiplier;
+
 	Director::Update(aDeltaTime);
 
 	CleanUpGatherers();
@@ -102,6 +108,11 @@ void AIDirector::ReceiveMessage(const SpawnUnitMessage& aMessage)
 		
 		myUnitQueue.RemoveNonCyclicAtIndex(0);
 	}
+}
+
+void AIDirector::ReceiveMessage(const AITimeMultiplierMessage& aMessage)
+{
+	myTimeMultiplier = aMessage.myMultiplier;
 }
 
 void AIDirector::CleanUpGatherers()
