@@ -174,7 +174,7 @@ void PlayerDirector::ReceiveMessage(const OnClickMessage& aMessage)
 		break;
 
 	case eOnClickEvent::UNIT_ACTION_STAND_GROUND:
-		mySelectedAction = eSelectedAction::STAND_GROUND;
+		mySelectedAction = eSelectedAction::HOLD_POSITION;
 		break;
 
 	case eOnClickEvent::UNIT_ACTION_STOP:
@@ -308,6 +308,11 @@ void PlayerDirector::UpdateInputs()
 		mySelectedAction = eSelectedAction::MOVE;
 	}
 
+	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_H) == true)
+	{
+		mySelectedAction = eSelectedAction::HOLD_POSITION;
+	}
+
 	if (myRenderGUI == true) // no inworld clicking when mouse is over gui:
 	{
 		myLeftMouseClicked = CU::InputWrapper::GetInstance()->MouseDown(0) && !(myGUIManager->MouseOverGUI());
@@ -320,7 +325,8 @@ void PlayerDirector::UpdateInputs()
 	}
 
 	if (myLeftMouseClicked == true && myShiftPressed == false && 
-		(mySelectedAction == eSelectedAction::NONE || mySelectedAction == eSelectedAction::STOP))
+		(mySelectedAction == eSelectedAction::NONE || mySelectedAction == eSelectedAction::STOP 
+		|| mySelectedAction == eSelectedAction::HOLD_POSITION))
 	{
 		mySelectedUnits.RemoveAll();
 	}
@@ -337,6 +343,8 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 
 	bool hasSelected = false;
 	bool hasHovered = false;
+	bool hasStopped = false;
+
 	CU::Intersection::LineSegment3D line(aCamera.GetOrientation().GetPos(), targetPos);
 	for (int i = 0; i < myUnits.Size(); ++i)
 	{
@@ -356,8 +364,19 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 			else if (mySelectedAction == eSelectedAction::STOP)
 			{
 				controller->Stop();
+				hasStopped = true;
+			}
+			else if (mySelectedAction == eSelectedAction::HOLD_POSITION)
+			{
+				controller->HoldPosition();
+				hasStopped = true;
 			}
 		}
+	}
+
+	if (hasStopped == true)
+	{
+		mySelectedAction = eSelectedAction::NONE;
 	}
 
 	SelectOrHoverEntity(myBuilding, hasSelected, hasHovered, line);
@@ -366,7 +385,9 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 void PlayerDirector::SelectOrHoverEntity(Entity* aEntity, bool &aSelected, bool &aHovered
 	, const CU::Intersection::LineSegment3D& aMouseRay)
 {
-	if (myLeftMouseClicked == true && myShiftPressed == false && mySelectedAction == eSelectedAction::NONE)
+	if (myLeftMouseClicked == true && myShiftPressed == false 
+		&& (mySelectedAction == eSelectedAction::NONE || mySelectedAction == eSelectedAction::HOLD_POSITION
+		|| mySelectedAction == eSelectedAction::STOP))
 	{
 		aEntity->SetSelect(false);
 	}
