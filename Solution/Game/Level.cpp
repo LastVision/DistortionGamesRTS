@@ -34,17 +34,9 @@ Level::Level(const Prism::Camera& aCamera, Prism::Terrain* aTerrain, GUI::Cursor
 {
 	EntityFactory::GetInstance()->LoadEntities("Data/Resource/Entity/LI_entity.xml");
 	myTerrain = aTerrain;
-	/*myTerrain = new Prism::Terrain("Data/Resource/Texture/Terrain/playground.tga"
-		, "Data/Resource/Texture/Terrain/T_rock.dds", { 256.f, 256.f }, 25.5f, CU::Matrix44<float>());*/
 
 	myScene = new Prism::Scene(aCamera, *myTerrain);
-	Prism::ModelLoader::GetInstance()->Pause();
-	Prism::EffectContainer::GetInstance()->SetCubeMap("Data/Resource/Texture/CubeMap/T_cubemap_level01.dds");
-	Prism::ModelLoader::GetInstance()->UnPause();
-	//myLight = new Prism::DirectionalLight();
-	//myLight->SetColor({ 0.5f, 0.5f, 0.9f, 1.f });
-	//myLight->SetDir(CU::Vector3<float>(0, 1, 0) * CU::Matrix44<float>::CreateRotateAroundZ(-3.14f / 3.f));
-	//myScene->AddLight(myLight);
+
 	PostMaster::GetInstance()->Subscribe(eMessageType::TOGGLE_LINES, this);
 
 	myPlayer = new PlayerDirector(*myTerrain, *myScene, aCursor);
@@ -80,10 +72,10 @@ bool Level::Update(float aDeltaTime, Prism::Camera& aCamera)
 	Prism::RenderBox({ 128.f, 129.f, 128.f }, eColorDebug::BLUE, false);*/
 	//DEBUG_PRINT(myEntities[0]->GetOrientation().GetPos());
 
-	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_F2))
-	{
-		PostMaster::GetInstance()->SendMessage(GameStateMessage(eGameState::COMPLETE_LEVEL));
-	}
+	//if (CU::InputWrapper::GetInstance()->KeyDown(DIK_F2))
+	//{
+	//	PostMaster::GetInstance()->SendMessage(GameStateMessage(eGameState::COMPLETE_LEVEL));
+	//}
 
 	for (int i = 0; i < myEntities.Size(); ++i)
 	{

@@ -108,16 +108,6 @@ const eStateStatus InGameState::Update(const float& aDeltaTime)
 
 	if (myIsPlayerCinematic == false)
 	{
-		if (CU::InputWrapper::GetInstance()->KeyDown(DIK_M) == true)
-		{
-			//CompleteGame();
-		}
-
-		if (CU::InputWrapper::GetInstance()->KeyDown(DIK_B) == true)
-		{
-			RestartLevel();
-		}
-
 		if (myLevel->Update(aDeltaTime, *myCamera) == true)
 		{
 			//return myStateStatus;
@@ -125,7 +115,7 @@ const eStateStatus InGameState::Update(const float& aDeltaTime)
 
 		if (myLevel->HasPlayerWon())
 		{
-			CompleteGame();
+			CompleteLevel();
 		}
 		else if (myLevel->HasAIWon())
 		{

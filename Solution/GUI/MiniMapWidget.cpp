@@ -1,4 +1,6 @@
 #include "stdafx.h"
+#include "../Entity/Entity.h"
+#include "../Entity/PollingStation.h"
 #include "MiniMapWidget.h"
 #include <MoveCameraMessage.h>
 #include <Sprite.h>
@@ -20,17 +22,39 @@ namespace GUI
 		mySize = size;
 		myPosition = position;
 
-		myPlaceholderSprite = new Prism::Sprite("Data/Resource/Texture/UI/T_minimap_placeholder.dds", mySize);
+		myPlaceholderSprite = new Prism::Sprite("Data/Resource/Texture/UI/Minimap/T_minimap_placeholder.dds", mySize);
+		myFriendlyUnitSprite = new Prism::Sprite("Data/Resource/Texture/UI/Minimap/T_minimap_friendly_unit.dds", { 10.f, 10.f });
+		myEnemyUnitSprite = new Prism::Sprite("Data/Resource/Texture/UI/Minimap/T_minimap_enemy_unit.dds", { 10.f, 10.f });
+
 	}
 
 	MiniMapWidget::~MiniMapWidget()
 	{
 		SAFE_DELETE(myPlaceholderSprite);
+		SAFE_DELETE(myFriendlyUnitSprite);
+		SAFE_DELETE(myEnemyUnitSprite);
 	}
 
 	void MiniMapWidget::Render(const CU::Vector2<float>& aParentPosition)
 	{
 		myPlaceholderSprite->Render(aParentPosition + myPosition);
+
+		const CU::GrowingArray<Entity*>& playerUnits = PollingStation::GetInstance()->GetUnits(eOwnerType::PLAYER);
+		const CU::GrowingArray<Entity*>& enemyUnits = PollingStation::GetInstance()->GetUnits(eOwnerType::ENEMY);
+
+		for (int i = 0; i < playerUnits.Size(); i++)
+		{
+			CU::Vector2<float> position = playerUnits[i]->GetPosition() / 255.f;
+			position *= mySize;
+			myFriendlyUnitSprite->Render(aParentPosition + myPosition + position);
+		}
+
+		for (int i = 0; i < enemyUnits.Size(); i++)
+		{
+			CU::Vector2<float> position = enemyUnits[i]->GetPosition() / 255.f;
+			position *= mySize;
+			myEnemyUnitSprite->Render(aParentPosition + myPosition + position);
+		}
 	}
 
 	void MiniMapWidget::OnMousePressed(const CU::Vector2<float>& aPosition)

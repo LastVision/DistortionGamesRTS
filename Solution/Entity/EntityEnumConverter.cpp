@@ -48,6 +48,10 @@ namespace EntityEnumConverter
 		{
 			return eUnitType::RANGER;
 		}
+		else if (aUnitType == "scout")
+		{
+			return eUnitType::SCOUT;
+		}
 		DL_ASSERT("This unit type is not supported, please tell Daniel about it.");
 		return eUnitType::NOT_A_UNIT;
 	}
