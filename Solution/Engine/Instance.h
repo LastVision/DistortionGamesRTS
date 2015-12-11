@@ -42,6 +42,8 @@ namespace Prism
 		float GetObjectCullingRadius() const;
 		eOctreeType GetOctreeType() const;
 
+		void ActivateAlbedo(eOwnerType aOwner);
+
 		ModelProxy& GetModel();
 		const CU::Matrix44f& GetOrientation() const;
 	private:

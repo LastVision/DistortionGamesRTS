@@ -10,7 +10,6 @@
 Prism::Surface::Surface()
 {
 	myTextures.Init(8);
-	myShaderResources.Init(8);
 	myShaderResourceViews.Init(8);
 	myFilePaths.Init(8);
 	myShaderResourceNames.Init(8);
@@ -19,7 +18,6 @@ Prism::Surface::Surface()
 
 Prism::Surface::~Surface()
 {
-	myShaderResources.RemoveAll();
 	myShaderResourceViews.RemoveAll();
 	myFilePaths.RemoveAll();
 	myTextures.RemoveAll();
@@ -34,6 +32,38 @@ bool Prism::Surface::SetTexture(const std::string& aResourceName, const std::str
 		, CU::Concatenate("Shader resource ( %s ) tried to use invalid filePath", aResourceName.c_str()));
 
 	Texture* tex = TextureContainer::GetInstance()->GetTexture(aFileName);
+
+	if (aResourceName == "AlbedoTexture")
+	{
+		int index = aFileName.find("_ally.dds");
+		if (index != std::string::npos)
+		{
+			/*std::string playerAlbedo(aFileName.begin(), aFileName.begin() + index);
+			playerAlbedo += "_player.dds";
+
+			std::string enemyAlbedo(aFileName.begin(), aFileName.begin() + index);
+			enemyAlbedo += "_enemy.dds";
+
+			myOwnerAlbedoTextures[0] = tex;
+			myOwnerAlbedoTextures[1] = TextureContainer::GetInstance()->GetTexture(playerAlbedo);
+			myOwnerAlbedoTextures[2] = TextureContainer::GetInstance()->GetTexture(enemyAlbedo);
+			*/
+
+			std::string neutralAlbedo(aFileName.begin(), aFileName.begin() + index);
+			neutralAlbedo += "_neutral.dds";
+
+			std::string enemyAlbedo(aFileName.begin(), aFileName.begin() + index);
+			enemyAlbedo += "_enemy.dds";
+
+			int needsToBeFinishedByNiklasYay = 5;
+
+			myOwnerAlbedoTextures[0] = TextureContainer::GetInstance()->GetTexture(neutralAlbedo);
+			myOwnerAlbedoTextures[1] = tex;
+			myOwnerAlbedoTextures[2] = TextureContainer::GetInstance()->GetTexture(enemyAlbedo);
+		}
+	}
+
+
 	ID3DX11EffectShaderResourceVariable* shaderVar = myEffect->GetEffect()->GetVariableByName(aResourceName.c_str())->AsShaderResource();
 
 	if (shaderVar->IsValid() == false)
@@ -50,35 +80,8 @@ bool Prism::Surface::SetTexture(const std::string& aResourceName, const std::str
 	}
 
 	myTextures.Add(tex);
-	myShaderResources.Add(tex->GetShaderView());
 	myShaderResourceViews.Add(shaderVar);
 	myFilePaths.Add(aFileName);
-	myShaderResourceNames.Add(aResourceName);
-
-	return true;
-}
-
-bool Prism::Surface::SetTexture(const std::string& aResourceName, Texture* aTexture)
-{
-	DL_ASSERT_EXP(aTexture != nullptr
-		, CU::Concatenate("Shader resource ( %s ) tried to use invalid texture", aResourceName.c_str()));
-
-	ID3DX11EffectShaderResourceVariable* shaderVar = myEffect->GetEffect()->GetVariableByName(aResourceName.c_str())->AsShaderResource();
-	if (shaderVar->IsValid() == false)
-	{
-		//DL_MESSAGE_BOX("Failed to get ShaderResource", "Surface Error", MB_ICONWARNING);
-		RESOURCE_LOG("Failed to get ShaderResource");
-		return false;
-	}
-
-	if (aResourceName == "EmissiveTexture")
-	{
-		myEmissive = true;
-	}
-
-	myTextures.Add(aTexture);
-	myShaderResources.Add(aTexture->GetShaderView());
-	myShaderResourceViews.Add(shaderVar);
 	myShaderResourceNames.Add(aResourceName);
 
 	return true;
@@ -94,17 +97,52 @@ bool Prism::Surface::SetTexture(const std::string& aResourceName, ID3D11ShaderRe
 		return false;
 	}
 
-	myShaderResources.Add(aResource);
 	myShaderResourceViews.Add(shaderVar);
 	myShaderResourceNames.Add(aResourceName);
 	return true;
+}
+
+void Prism::Surface::ActivateAlbedo(eOwnerType aOwner)
+{
+	DL_ASSERT_EXP(aOwner != eOwnerType::NOT_USED, "NOT_USED cannot be used to ActivateAlbedo");
+
+	for (int i = 0; i < myShaderResourceNames.Size(); ++i)
+	{
+		if (myShaderResourceNames[i] == "AlbedoTexture")
+		{
+			switch (aOwner)
+			{
+			case NEUTRAL:
+				if (myOwnerAlbedoTextures[0] != nullptr)
+				{
+					myTextures[i] = myOwnerAlbedoTextures[0];
+				}
+				break;
+			case PLAYER:
+				if (myOwnerAlbedoTextures[1] != nullptr)
+				{
+					myTextures[i] = myOwnerAlbedoTextures[1];
+				}
+				break;
+			case ENEMY:
+				if (myOwnerAlbedoTextures[2] != nullptr)
+				{
+					myTextures[i] = myOwnerAlbedoTextures[2];
+				}
+
+				break;
+			default:
+				myTextures[i] = myOwnerAlbedoTextures[0];
+				break;
+			}	
+		}
+	}
 }
 
 void Prism::Surface::ReloadSurface()
 {
 	myTextures.RemoveAll();
 	myShaderResourceViews.RemoveAll();
-	myShaderResources.RemoveAll();
 
 	for (int i = 0; i < myFilePaths.Size(); ++i)
 	{
@@ -119,7 +157,6 @@ void Prism::Surface::ReloadSurface()
 		}
 
 		myTextures.Add(tex);
-		myShaderResources.Add(tex->GetShaderView());
 		myShaderResourceViews.Add(shaderVar);
 	}
 }
@@ -192,6 +229,6 @@ void Prism::Surface::Activate()
 
 	for (int i = 0; i < myShaderResourceViews.Size(); ++i)
 	{
-		myShaderResourceViews[i]->SetResource(myShaderResources[i]);
+		myShaderResourceViews[i]->SetResource(myTextures[i]->GetShaderView());
 	}
 }

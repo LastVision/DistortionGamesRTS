@@ -57,6 +57,10 @@ void GraphicsComponent::InitCube(float aWidth, float aHeight, float aDepth)
 void GraphicsComponent::Update(float aDeltaTime)
 {
 	aDeltaTime;
+	if (myEntity.GetOwner() != eOwnerType::NOT_USED)
+	{
+		myInstance->ActivateAlbedo(myEntity.GetOwner());
+	}
 }
 
 void GraphicsComponent::SetPosition(const CU::Vector3<float>& aPosition)

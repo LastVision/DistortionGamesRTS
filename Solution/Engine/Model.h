@@ -40,6 +40,9 @@ namespace Prism
 
 		void Render(const CU::Matrix44<float>& aOrientation, const CU::Vector3<float>& aCameraPosition);
 
+		void ActivateAlbedo(eOwnerType aOwner);
+		
+
 	private:
 		void EvaluateEffectTechnique();
 		bool myIsNULLObject;

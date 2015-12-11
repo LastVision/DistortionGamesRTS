@@ -152,6 +152,21 @@ void Prism::Instance::ResetAnimationTime(float aTime)
 	myTotalTime = aTime;
 }
 
+void Prism::Instance::ActivateAlbedo(eOwnerType aOwner)
+{
+	if (myProxy.IsLoaded())
+	{
+		if (myProxy.IsAnimated() == true)
+		{
+			myProxy.myModelAnimated->ActivateAlbedo(aOwner);
+		}
+		else
+		{
+			myProxy.myModel->ActivateAlbedo(aOwner);
+		}
+	}
+}
+
 Prism::ModelProxy& Prism::Instance::GetModel()
 {
 	return myProxy;

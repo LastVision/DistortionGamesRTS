@@ -314,6 +314,19 @@ namespace Prism
 		}
 	}
 
+	void Model::ActivateAlbedo(eOwnerType aOwner)
+	{
+		for (int i = 0; i < mySurfaces.Size(); ++i)
+		{
+			mySurfaces[i]->ActivateAlbedo(aOwner);
+		}
+
+		for (int i = 0; i < myChildren.Size(); ++i)
+		{
+			myChildren[i]->ActivateAlbedo(aOwner);
+		}
+	}
+
 	void Model::EvaluateEffectTechnique()
 	{
 		int uvCount = 0;

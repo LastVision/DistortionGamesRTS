@@ -31,8 +31,9 @@ namespace Prism{
 		void SetPrimitiveTopology(const D3D11_PRIMITIVE_TOPOLOGY aTopology);
 
 		bool SetTexture(const std::string& aResourceName, const std::string& aFileName, bool aUseSRGB);
-		bool SetTexture(const std::string& aResourceName, Texture* aTexture);
 		bool SetTexture(const std::string& aResourceName, ID3D11ShaderResourceView* aResource);
+
+		void ActivateAlbedo(eOwnerType aOwner);
 
 		void Activate();
 		void ReloadSurface();
@@ -44,10 +45,11 @@ namespace Prism{
 
 	private:
 		CU::GrowingArray<Texture*> myTextures;
-		CU::GrowingArray<ID3D11ShaderResourceView*> myShaderResources;
 		CU::GrowingArray<ID3DX11EffectShaderResourceVariable*> myShaderResourceViews;
 		CU::GrowingArray<std::string> myShaderResourceNames;
 		CU::GrowingArray<std::string> myFilePaths;
+
+		Texture* myOwnerAlbedoTextures[3];
 
 		D3D11_PRIMITIVE_TOPOLOGY myPrimitiveTopologyType;
 		int myVertexStart;

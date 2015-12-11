@@ -53,7 +53,7 @@ namespace Prism
 		mySurfaces.DeleteAll();
 	}
 
-	Prism::Effect* Prism::BaseModel::GetEffect()
+	Effect* BaseModel::GetEffect()
 	{
 		return myEffect;
 	}

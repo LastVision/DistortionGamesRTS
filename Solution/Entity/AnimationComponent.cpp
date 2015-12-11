@@ -87,6 +87,12 @@ void AnimationComponent::Update(float aDeltaTime)
 		myInstance->Update(aDeltaTime);
 	}
 	
+
+	if (myEntity.GetOwner() != eOwnerType::NOT_USED)
+	{
+		myInstance->ActivateAlbedo(myEntity.GetOwner());
+	}
+
 	data.myElapsedTime += aDeltaTime;
 	myPrevEntityState = myEntity.GetState();
 #else
