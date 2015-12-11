@@ -5,7 +5,6 @@
 #include "ControllerComponent.h"
 #include "ControllerComponentData.h"
 #include "HealthComponent.h"
-#include "Entity.h"
 #include <PathFinder.h>
 #include "PollingStation.h"
 #include <Terrain.h>

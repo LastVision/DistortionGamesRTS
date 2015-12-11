@@ -11,7 +11,6 @@
 #include "GraphicsComponentData.h"
 #include "HealthComponentData.h"
 #include "TriggerComponentData.h"
-#include <XMLReader.h>
 
 void ComponentLoader::LoadActorComponent(XMLReader& aDocument, tinyxml2::XMLElement* aSourceElement, ActorComponentData& aOutputData)
 {

@@ -1,6 +1,4 @@
 #pragma once
-#include <GrowingArray.h>
-#include <Vector.h>
 
 class Entity;
 class PollingStation
