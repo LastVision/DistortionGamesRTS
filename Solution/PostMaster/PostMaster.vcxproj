@@ -115,6 +115,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AITimeMultiplierMessage.h" />
     <ClInclude Include="FadeMessage.h" />
     <ClInclude Include="GameStateMessage.h" />
     <ClInclude Include="LUAToggleRenderLinesMessage.h" />
@@ -126,6 +127,7 @@
     <ClInclude Include="OnClickMessage.h" />
     <ClInclude Include="PostMaster.h" />
     <ClInclude Include="ResizeMessage.h" />
+    <ClInclude Include="ResourceMessage.h" />
     <ClInclude Include="SpawnUnitMessage.h" />
     <ClInclude Include="LUACinematicMessage.h" />
     <ClInclude Include="stdafx.h" />

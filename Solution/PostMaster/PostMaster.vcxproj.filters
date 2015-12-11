@@ -78,5 +78,11 @@
     <ClInclude Include="TriggerMessage.h">
       <Filter>Message</Filter>
     </ClInclude>
+    <ClInclude Include="ResourceMessage.h">
+      <Filter>Message</Filter>
+    </ClInclude>
+    <ClInclude Include="AITimeMultiplierMessage.h">
+      <Filter>Message</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

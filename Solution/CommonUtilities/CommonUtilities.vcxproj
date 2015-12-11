@@ -207,6 +207,7 @@
     <ClInclude Include="AABB.h" />
     <ClInclude Include="Camera2D.h" />
     <ClInclude Include="CommonHelper.h" />
+    <ClInclude Include="EntityEnum.h" />
     <ClInclude Include="Fov90Frustum.h" />
     <ClInclude Include="GameConstants.h" />
     <ClInclude Include="Greater.h" />

@@ -46,6 +46,11 @@ bool HealthComponent::TakeDamage(int aDamage)
 {
 	DL_ASSERT_EXP(aDamage >= 0, "Cant take negative damage, use Heal for healing if that was your intention");
 
+	if (myEntity.GetAlive() == false)
+	{
+		return true; // is this funky?
+	}
+
 	myCurrentHealth -= aDamage;
 	if (myCurrentHealth <= 0)
 	{

@@ -26,9 +26,9 @@ enum class eSelectedAction
 {
 	NONE,
 	MOVE,
-	ATTACK,
+	ATTACK_TAGRET,
 	STOP,
-	MOVE_ATTACK,
+	ATTACK_MOVE,
 	HOLD_POSITION,
 	PATROL
 };
@@ -55,6 +55,7 @@ public:
 	void ReceiveMessage(const SpawnUnitMessage& aMessage) override;
 	void ReceiveMessage(const ToggleGUIMessage& aMessage) override;
 	void ReceiveMessage(const OnClickMessage& aMessage) override;
+	void ReceiveMessage(const ResourceMessage& aMessage) override;
 
 	const CU::GrowingArray<Entity*>& GetSelectedUnits() const;
 	const BuildingComponent& GetBuildingComponent() const;

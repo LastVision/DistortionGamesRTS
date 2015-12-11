@@ -1,5 +1,5 @@
 #pragma once
-#include "EntityEnum.h"
+#include <EntityEnum.h>
 
 class Entity;
 

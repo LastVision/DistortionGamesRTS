@@ -5,6 +5,7 @@
 #include "Engine.h"
 #include "Effect.h"
 #include "EffectContainer.h"
+#include <EntityEnum.h>
 #include <GameConstants.h>
 #include <GrowingArray.h>
 #include <Matrix.h>

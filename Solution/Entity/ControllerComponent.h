@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Component.h"
-#include "EntityEnum.h"
 #include <GrowingArray.h>
 #include <Vector.h>
 
@@ -25,7 +24,8 @@ public:
 	void Update(float aDelta) override;
 
 	void MoveTo(const CU::Vector3<float>& aPosition, bool aClearCommandQueue);
-	void Attack(const CU::Vector3<float>& aPosition, bool aClearCommandQueue);
+	void AttackTarget(const Entity* aEntity, bool aClearCommandQueue);
+	void AttackMove(const CU::Vector3<float>& aPosition, bool aClearCommandQueue);
 	void Stop();
 	void HoldPosition();
 
@@ -45,7 +45,8 @@ private:
 		MOVE,
 		ATTACK,
 		RETURN,
-		HOLD_POSITION
+		HOLD_POSITION,
+		MOVE_ATTACK
 	};
 
 	struct ActionData

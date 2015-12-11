@@ -99,9 +99,6 @@
       <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="Entity.h" />
-    <ClInclude Include="EntityEnum.h">
-      <Filter>EntityEnum</Filter>
-    </ClInclude>
     <ClInclude Include="GraphicsComponent.h">
       <Filter>Component\Graphic</Filter>
     </ClInclude>

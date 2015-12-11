@@ -1,7 +1,6 @@
 #pragma once
 
 #include <DL_Debug.h>
-#include "EntityEnum.h"
 #include <unordered_map>
 #include <StaticArray.h>
 #include <Matrix.h>

@@ -11,6 +11,10 @@ Subscriber::~Subscriber()
 {
 }
 
+void Subscriber::ReceiveMessage(const AITimeMultiplierMessage&)
+{
+}
+
 void Subscriber::ReceiveMessage(const FadeMessage&)
 {
 }
@@ -23,7 +27,7 @@ void Subscriber::ReceiveMessage(const LUACinematicMessage&)
 {
 }
 
-void Subscriber::ReceiveMessage(const LUAToggleRenderLinesMessage& aMessage)
+void Subscriber::ReceiveMessage(const LUAToggleRenderLinesMessage&)
 {
 }
 
@@ -48,6 +52,10 @@ void Subscriber::ReceiveMessage(const OnClickMessage&)
 }
 
 void Subscriber::ReceiveMessage(const ResizeMessage&)
+{
+}
+
+void Subscriber::ReceiveMessage(const ResourceMessage&)
 {
 }
 

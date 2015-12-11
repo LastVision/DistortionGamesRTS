@@ -256,6 +256,10 @@ void ConsoleState::HandleHistoryMode()
 			mySuggestionString = "";
 		}
 	}
+	if (Console::GetInstance()->GetInput().length() > 0)
+	{
+		mySuggestionString = "";
+	}
 	if (mySuggestionString.length() == 0)
 	{
 		myHistoryMode = false;

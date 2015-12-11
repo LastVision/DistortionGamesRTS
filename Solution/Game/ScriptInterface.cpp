@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+#include <AITimeMultiplierMessage.h>
 #include <Entity.h>
 #include <EntityId.h>
 #include <GameStateMessage.h>
@@ -8,6 +9,7 @@
 #include <LUARunScriptMessage.h>
 #include <LUAToggleRenderLinesMessage.h>
 #include <PostMaster.h>
+#include <ResourceMessage.h>
 #include "ScriptInterface.h"
 #include <ScriptSystem.h>
 #include <ToggleGUIMessage.h>
@@ -106,13 +108,13 @@ namespace Script_Interface
 		return 0;
 	}
 
-	int HideNavMesh(lua_State* aState)//void
+	int HideNavMesh(lua_State* )//void
 	{
 		PostMaster::GetInstance()->SendMessage(LUAToggleRenderLinesMessage(false));
 		return 0;
 	}
 
-	int ShowNavMesh(lua_State* aState)//void
+	int ShowNavMesh(lua_State* )//void
 	{
 		PostMaster::GetInstance()->SendMessage(LUAToggleRenderLinesMessage(true));
 		return 0;
@@ -137,9 +139,48 @@ namespace Script_Interface
 		return 1;
 	}
 
-	int ReloadLevel(lua_State* aState)//void
+	int ReloadLevel(lua_State* )//void
 	{
 		PostMaster::GetInstance()->SendMessage(GameStateMessage(eGameState::RELOAD_LEVEL));
+		return 0;
+	}
+
+	int ModifyResource(lua_State* aState)//void
+	{
+		int directorId = int(lua_tonumber(aState, 1));
+		int resourceModifier = int(lua_tonumber(aState, 2));
+
+		eOwnerType owner = eOwnerType::NOT_USED;
+		if (directorId == eOwnerType::PLAYER)
+		{
+			owner = eOwnerType::PLAYER;
+		}
+		else if (directorId == eOwnerType::ENEMY)
+		{
+			owner = eOwnerType::ENEMY;
+		}
+
+		if (owner == eOwnerType::NOT_USED)
+		{
+			return 0;
+		}
+
+
+		PostMaster::GetInstance()->SendMessage(ResourceMessage(owner, resourceModifier));
+		return 0;
+	}
+
+	int DisableAI(lua_State* aState)//void
+	{
+		PostMaster::GetInstance()->SendMessage(AITimeMultiplierMessage(0.f));
+
+		return 0;
+	}
+
+	int EnableAI(lua_State* aState)//void
+	{
+		PostMaster::GetInstance()->SendMessage(AITimeMultiplierMessage(1.f));
+
 		return 0;
 	}
 }
@@ -164,4 +205,7 @@ void ScriptInterface::RegisterFunctions()
 	system->RegisterFunction("GetOwner", Script_Interface::GetOwner, "aUnit", "Returns ownerID of unit, ex: owner = GetOwner(aUnit)");
 	system->RegisterFunction("GetTrigger", Script_Interface::GetTrigger, "aTrigger", "Returns the Entity id for trigger of the supplied input, ex: trigger0 = GetTrigger(0)");
 	system->RegisterFunction("ReloadLevel", Script_Interface::ReloadLevel, "", "Reloads the current level.");
+	system->RegisterFunction("ModifyResource", Script_Interface::ModifyResource, "aOwnerEnum, aResourceModifier", "Modifies resource of owner, ex: ModifyResource(eOwnerType.PLAYER, resourceGain)");
+	system->RegisterFunction("DisableAI", Script_Interface::DisableAI, "", "Disables AI");
+	system->RegisterFunction("EnableAI", Script_Interface::EnableAI, "", "Enables AI");
 }

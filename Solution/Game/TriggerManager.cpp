@@ -1,6 +1,5 @@
 #include "stdafx.h"
 //#include <Entity.h>
-//#include <EntityEnum.h>
 //
 //#include <TriggerComponent.h>
 //#include "TriggerManager.h"
