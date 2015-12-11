@@ -2,6 +2,7 @@
 #include <CommonHelper.h>
 #include "ConsoleHistoryManager.h"
 #include <fstream>
+#include <MathHelper.h>
 #include <Text.h>
 
 
@@ -127,14 +128,14 @@ bool ConsoleHistoryManager::IsInHistory(const std::string& aString) const
 	{
 		return true;
 	}
-	int index = aString.find_first_of("(");
+	//int index = aString.find_first_of("(");
 	for (int i = 0; i < myHistory.Size(); ++i)
 	{
 		if (myHistory[i]->myMessage.length() < aString.length())
 		{
 			continue;
 		}
-		for (int j = 0; j < aString.length(); ++j)
+		for (unsigned int j = 0; j < aString.length(); ++j)
 		{
 			if (myHistory[i]->myMessage[j] != aString[j])
 			{
@@ -248,7 +249,8 @@ void ConsoleHistoryManager::AddHistory(const std::string& aCommand, eHistoryType
 	tempHistory->myMessage = aCommand;
 	tempHistory->myRenderText->SetText(aCommand);
 	tempHistory->myType = anEnum;
-
+	static int numberHelpFunction = 0;
+	float rbColor = 0.5f;
 	switch (anEnum)
 	{
 	case eHistoryType::ERROR:
@@ -258,7 +260,9 @@ void ConsoleHistoryManager::AddHistory(const std::string& aCommand, eHistoryType
 		tempHistory->myRenderText->SetColor({ 1.f, 1.f, 1.f, 1.f });
 		break;
 	case eHistoryType::HELP:
-		tempHistory->myRenderText->SetColor({ 0.f, 1.f, 0.f, 1.f });
+		numberHelpFunction++;
+		if (numberHelpFunction % 2 == 0) rbColor = 0.1f;
+		tempHistory->myRenderText->SetColor({ rbColor, 1.f, rbColor, 1.f });
 		break;
 	default:
 		break;
