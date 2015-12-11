@@ -22,7 +22,9 @@ enum eEntityType
 enum eUnitType
 {
 	NOT_A_UNIT = -1,
-	DRAGON,
+	GRUNT,
+	RANGER,
+	SCOUT,
 };
 
 enum class ePropType
@@ -58,4 +60,13 @@ enum class eComponentType
 enum class eTriggerType
 {
 	RESOURCE,
+};
+#undef ERROR
+enum class eHistoryType
+{
+	ERROR,
+	HISTORY,
+	HELP,
+	GENERATED_COMMAND,
+	WARNING
 };

@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "AIDirector.h"
-#include <AITimeMultiplierMessage.h>
 #include <BuildingComponent.h>
 #include <ControllerComponent.h>
+#include <TimeMultiplierMessage.h>
 #include <Entity.h>
 #include <EntityFactory.h>
 #include <PollingStation.h>
@@ -23,26 +23,29 @@ AIDirector::AIDirector(const Prism::Terrain& aTerrain, Prism::Scene& aScene)
 {
 	for (int i = 0; i < 64; ++i)
 	{
-		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::ENEMY, eEntityType::UNIT, eUnitType::DRAGON, Prism::eOctreeType::DYNAMIC,
+		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::ENEMY, eEntityType::UNIT, eUnitType::GRUNT, Prism::eOctreeType::DYNAMIC,
+			aScene, { 20.f + i, 0.f, 40.f }, aTerrain));
+		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::ENEMY, eEntityType::UNIT, eUnitType::RANGER, Prism::eOctreeType::DYNAMIC,
+			aScene, { 20.f + i, 0.f, 40.f }, aTerrain));
+		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::ENEMY, eEntityType::UNIT, eUnitType::SCOUT, Prism::eOctreeType::DYNAMIC,
 			aScene, { 20.f + i, 0.f, 40.f }, aTerrain));
 	}
 
-	myUnits.GetLast()->Spawn({ 140.f, 0.f, 130.f });
 
-
-	for (int i = 0; i < myUnits.Size(); ++i)
+	for (int i = 0; i < 2; ++i)
 	{
 		myActiveUnits.Add(myUnits[i]);
+		myActiveUnits[i]->Spawn({ 140.f, 0.f, 130.f });
 		PollingStation::GetInstance()->RegisterEntity(myActiveUnits[i]);
 	}
 
-	PostMaster::GetInstance()->Subscribe(eMessageType::AI_TIME_MULTIPLIER, this);
+	PostMaster::GetInstance()->Subscribe(eMessageType::TIME_MULTIPLIER, this);
 }
 
 
 AIDirector::~AIDirector()
 {
-	PostMaster::GetInstance()->UnSubscribe(eMessageType::AI_TIME_MULTIPLIER, this);
+	PostMaster::GetInstance()->UnSubscribe(eMessageType::TIME_MULTIPLIER, this);
 }
 
 void AIDirector::Update(float aDeltaTime)
@@ -64,14 +67,14 @@ void AIDirector::Update(float aDeltaTime)
 
 	if (myCurrentAttackerCount < myOptimalAttackerCount)
 	{
-		myBuilding->GetComponent<BuildingComponent>()->BuildUnit(eUnitType::DRAGON);
+		myBuilding->GetComponent<BuildingComponent>()->BuildUnit(eUnitType::RANGER);
 		myUnitQueue.Add(eUnitActionType::ATTACKER);
 		++myCurrentAttackerCount;
 	}
 
 	if (myCurrentGathererCount < myOptimalGathererCount)
 	{
-		myBuilding->GetComponent<BuildingComponent>()->BuildUnit(eUnitType::DRAGON);
+		myBuilding->GetComponent<BuildingComponent>()->BuildUnit(eUnitType::GRUNT);
 		myUnitQueue.Add(eUnitActionType::GATHERER);
 		++myCurrentGathererCount;
 	}
@@ -110,9 +113,12 @@ void AIDirector::ReceiveMessage(const SpawnUnitMessage& aMessage)
 	}
 }
 
-void AIDirector::ReceiveMessage(const AITimeMultiplierMessage& aMessage)
+void AIDirector::ReceiveMessage(const TimeMultiplierMessage& aMessage)
 {
-	myTimeMultiplier = aMessage.myMultiplier;
+	if (aMessage.myOwner == eOwnerType::ENEMY)
+	{
+		myTimeMultiplier = aMessage.myMultiplier;
+	}
 }
 
 void AIDirector::CleanUpGatherers()
@@ -159,6 +165,6 @@ void AIDirector::ActivateAttacker(Entity* aEntity)
 
 	Entity* closestPlayerUnit = PollingStation::GetInstance()->FindClosestEntity(position, eOwnerType::PLAYER);
 
-	aEntity->GetComponent<ControllerComponent>()->AttackMove(closestPlayerUnit->GetOrientation().GetPos(), true);
+	aEntity->GetComponent<ControllerComponent>()->AttackTarget(closestPlayerUnit, true);
 	myAttackers.Add(aEntity);
 }

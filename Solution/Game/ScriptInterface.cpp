@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-#include <AITimeMultiplierMessage.h>
+#include "Console.h"
 #include <Entity.h>
 #include <EntityId.h>
 #include <GameStateMessage.h>
@@ -12,6 +12,7 @@
 #include <ResourceMessage.h>
 #include "ScriptInterface.h"
 #include <ScriptSystem.h>
+#include <TimeMultiplierMessage.h>
 #include <ToggleGUIMessage.h>
 
 namespace Script_Interface
@@ -22,6 +23,14 @@ namespace Script_Interface
 
 		DEBUG_PRINT_LUA(stringArg);
 
+		return 0;
+	}
+
+	int PrintConsole(lua_State* aState) //std::string aString
+	{
+		std::string stringArg = lua_tostring(aState, 1);
+
+		Console::GetInstance()->AddHistory(stringArg, eHistoryType::WARNING);
 		return 0;
 	}
 
@@ -55,7 +64,7 @@ namespace Script_Interface
 
 		return 0;
 	}
-	
+
 	int RenderLine(lua_State* aState) //int aStartX, int aStartY, int aStartZ, int aEndX, int aEndY, int aEndZ, int aColor
 	{
 		float x1 = float(lua_tonumber(aState, 1));
@@ -108,13 +117,13 @@ namespace Script_Interface
 		return 0;
 	}
 
-	int HideNavMesh(lua_State* )//void
+	int HideNavMesh(lua_State*)//void
 	{
 		PostMaster::GetInstance()->SendMessage(LUAToggleRenderLinesMessage(false));
 		return 0;
 	}
 
-	int ShowNavMesh(lua_State* )//void
+	int ShowNavMesh(lua_State*)//void
 	{
 		PostMaster::GetInstance()->SendMessage(LUAToggleRenderLinesMessage(true));
 		return 0;
@@ -133,15 +142,31 @@ namespace Script_Interface
 	{
 		int id = int(lua_tonumber(aState, 1));
 		Entity* entity = EntityId::GetInstance()->GetTrigger(id);
-		int entityId = entity->GetId();
+		if (entity == nullptr)
+		{
+			std::stringstream ss;
+			ss << "Trigger " << id << " not found. Check ID.";
 
-		lua_pushinteger(aState, static_cast<int>(entityId));
+			DL_MESSAGE_BOX(ss.str().c_str(), "Trigger not Found!", MB_ICONWARNING);
+			lua_pushinteger(aState, -1);
+		}
+		else
+		{
+			int entityId = entity->GetId();
+			lua_pushinteger(aState, static_cast<int>(entityId));
+		}
 		return 1;
 	}
 
-	int ReloadLevel(lua_State* )//void
+	int ReloadLevel(lua_State*)//void
 	{
 		PostMaster::GetInstance()->SendMessage(GameStateMessage(eGameState::RELOAD_LEVEL));
+		return 0;
+	}
+
+	int SkipLevel(lua_State*)//void
+	{
+		PostMaster::GetInstance()->SendMessage(GameStateMessage(eGameState::LOAD_NEXT_LEVEL));
 		return 0;
 	}
 
@@ -170,25 +195,35 @@ namespace Script_Interface
 		return 0;
 	}
 
-	int DisableAI(lua_State* aState)//void
+	int DisableAI(lua_State*)//void
 	{
-		PostMaster::GetInstance()->SendMessage(AITimeMultiplierMessage(0.f));
+		PostMaster::GetInstance()->SendMessage(TimeMultiplierMessage(eOwnerType::ENEMY, 0.f));
 
 		return 0;
 	}
 
-	int EnableAI(lua_State* aState)//void
+	int EnableAI(lua_State*)//void
 	{
-		PostMaster::GetInstance()->SendMessage(AITimeMultiplierMessage(1.f));
+		PostMaster::GetInstance()->SendMessage(TimeMultiplierMessage(eOwnerType::ENEMY, 1.f));
 
 		return 0;
 	}
+
+	int TimeMultiplier(lua_State* aState)//void
+	{
+		float speed = float(lua_tonumber(aState, 1));
+		PostMaster::GetInstance()->SendMessage(TimeMultiplierMessage(eOwnerType::ENEMY, speed));
+		PostMaster::GetInstance()->SendMessage(TimeMultiplierMessage(eOwnerType::PLAYER, speed));
+		return 0;
+	}
+
 }
 
 void ScriptInterface::RegisterFunctions()
 {
 	LUA::ScriptSystem* system = LUA::ScriptSystem::GetInstance();
 	system->RegisterFunction("Print", Script_Interface::Print, "aString", "Prints stuff to the screen");
+	system->RegisterFunction("PrintConsole", Script_Interface::PrintConsole, "aString", "Prints a single message to the console.");
 	system->RegisterFunction("MoveCamera", Script_Interface::MoveCamera, "aXDir, aZDir, aDistance"
 		, "Moves the Camera InGame\n\taXDir and aZDir will get normalized in the function\n\taDistance needs to be muliplied with DeltaTime on the LUA-Side");
 	system->RegisterFunction("RenderBox", Script_Interface::RenderBox, "aX, aY, aZ, aSize, aColor, aWireframe"
@@ -208,4 +243,6 @@ void ScriptInterface::RegisterFunctions()
 	system->RegisterFunction("ModifyResource", Script_Interface::ModifyResource, "aOwnerEnum, aResourceModifier", "Modifies resource of owner, ex: ModifyResource(eOwnerType.PLAYER, resourceGain)");
 	system->RegisterFunction("DisableAI", Script_Interface::DisableAI, "", "Disables AI");
 	system->RegisterFunction("EnableAI", Script_Interface::EnableAI, "", "Enables AI");
+	system->RegisterFunction("TimeMultiplier", Script_Interface::TimeMultiplier, "aMultiplier", "Modifies the game time. ex: TimeMultiplier(0.1) //this is slow  ");
+	system->RegisterFunction("SkipLevel", Script_Interface::SkipLevel, "", "You skip the current level, and goes to the next in the list. \nIf you are on the last level it will reload that level.");
 }

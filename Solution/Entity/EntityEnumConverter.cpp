@@ -40,9 +40,17 @@ namespace EntityEnumConverter
 	}
 	const eUnitType ConvertStringToUnitType(const std::string& aUnitType)
 	{
-		if (aUnitType == "dragon")
+		if (aUnitType == "grunt")
 		{
-			return eUnitType::DRAGON;
+			return eUnitType::GRUNT;
+		}
+		else if (aUnitType == "ranger")
+		{
+			return eUnitType::RANGER;
+		}
+		else if (aUnitType == "scout")
+		{
+			return eUnitType::SCOUT;
 		}
 		DL_ASSERT("This unit type is not supported, please tell Daniel about it.");
 		return eUnitType::NOT_A_UNIT;

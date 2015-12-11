@@ -7,13 +7,7 @@ namespace Prism
 	class Text;
 }
 
-enum class eHistoryType
-{
-	ERROR,
-	HISTORY,
-	HELP,
-	GENERATED_COMMAND
-};
+
 
 struct History
 {

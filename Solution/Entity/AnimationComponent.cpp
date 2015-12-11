@@ -4,7 +4,6 @@
 #include "AnimationComponentData.h"
 #include "AnimationSystem.h"
 #include <Effect.h>
-#include "Entity.h"
 #include <Engine.h>
 #include <EngineEnums.h>
 #include <EffectContainer.h>
@@ -15,7 +14,6 @@
 #include <Scene.h>
 #include <Terrain.h>
 #include <Texture.h>
-#include <XMLReader.h>
 
 //#define BOX_MODE
 
@@ -42,7 +40,8 @@ AnimationComponent::AnimationComponent(Entity& aEntity, AnimationComponentData& 
 AnimationComponent::~AnimationComponent()
 {
 #ifndef BOX_MODE
-	if (myEntity.GetOctreeType() != Prism::eOctreeType::NOT_IN_OCTREE && myEntity.GetOwner() != eOwnerType::PLAYER)
+	if (myEntity.myIsInScene == true && myEntity.GetOctreeType() != Prism::eOctreeType::NOT_IN_OCTREE
+		&& myEntity.GetOwner() != eOwnerType::PLAYER)
 	{
 		myEntity.GetScene().RemoveInstance(myInstance);
 	}

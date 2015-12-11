@@ -298,6 +298,9 @@ void ConsoleHistoryManager::AddHistory(const std::string& aCommand, eHistoryType
 	case eHistoryType::GENERATED_COMMAND:
 		tempHistory->myRenderText->SetColor({ 0.6f, 0.6f, 0.6f, 1.f });
 		break;
+	case eHistoryType::WARNING:
+		tempHistory->myRenderText->SetColor({ 1.0f, 1.0f, 0.5f, 1.f });
+		break;
 	default:
 		break;
 	}

@@ -1,6 +1,4 @@
 #pragma once
-
-#include "Component.h"
 #include <LineSegment3D.h>
 #include <Sphere.h>
 
@@ -15,6 +13,7 @@ public:
 	void Update(float aDelta) override;
 	bool Collide(const CU::Intersection::LineSegment3D& aLine) const;
 	bool Collide(const CU::Vector3<float>& aPosition) const;
+	bool Collide(const CU::Vector2<float>& aFirstPosition, const CU::Vector2<float>& aSecondPosition) const;
 	float GetRadius() const;
 
 	static eComponentType GetTypeStatic();

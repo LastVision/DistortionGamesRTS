@@ -19,6 +19,7 @@
 #include <ModelLoader.h>
 #include <OnClickMessage.h>
 #include <PostMaster.h>
+#include <SpawnUnitMessage.h>
 #include <TimerManager.h>
 #include <TriggerMessage.h>
 #include <VTuneApi.h>
@@ -107,16 +108,6 @@ const eStateStatus InGameState::Update(const float& aDeltaTime)
 
 	if (myIsPlayerCinematic == false)
 	{
-		if (CU::InputWrapper::GetInstance()->KeyDown(DIK_M) == true)
-		{
-			//CompleteGame();
-		}
-
-		if (CU::InputWrapper::GetInstance()->KeyDown(DIK_B) == true)
-		{
-			RestartLevel();
-		}
-
 		if (myLevel->Update(aDeltaTime, *myCamera) == true)
 		{
 			//return myStateStatus;
@@ -124,7 +115,7 @@ const eStateStatus InGameState::Update(const float& aDeltaTime)
 
 		if (myLevel->HasPlayerWon())
 		{
-			CompleteGame();
+			CompleteLevel();
 		}
 		else if (myLevel->HasAIWon())
 		{
@@ -220,10 +211,11 @@ void InGameState::ReceiveMessage(const OnClickMessage& aMessage)
 			CompleteGame();
 			break;
 		case eOnClickEvent::SPAWN_UNIT:
-			runtime = Prism::MemoryTracker::GetInstance()->GetRunTime();
+			/*runtime = Prism::MemoryTracker::GetInstance()->GetRunTime();
 			Prism::MemoryTracker::GetInstance()->SetRunTime(false);
-			myLevel->SpawnUnit();
-			Prism::MemoryTracker::GetInstance()->SetRunTime(runtime);
+			myLevel->SpawnUnit(aMessage.);
+			Prism::MemoryTracker::GetInstance()->SetRunTime(runtime);*/
+			myLevel->SpawnUnit(static_cast<eUnitType>(aMessage.myID - 1));
 			break;
 		default:
 			break;
