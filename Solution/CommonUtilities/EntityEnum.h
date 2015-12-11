@@ -22,7 +22,8 @@ enum eEntityType
 enum eUnitType
 {
 	NOT_A_UNIT = -1,
-	DRAGON,
+	GRUNT,
+	RANGER,
 };
 
 enum class ePropType

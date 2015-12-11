@@ -35,7 +35,9 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 {
 	for (int i = 0; i < 64; ++i)
 	{
-		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::PLAYER, eEntityType::UNIT, eUnitType::DRAGON, Prism::eOctreeType::DYNAMIC,
+		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::PLAYER, eEntityType::UNIT, eUnitType::GRUNT, Prism::eOctreeType::DYNAMIC,
+			aScene, { 65, 0, 40 }, aTerrain));
+		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::PLAYER, eEntityType::UNIT, eUnitType::RANGER, Prism::eOctreeType::DYNAMIC,
 			aScene, { 65, 0, 40 }, aTerrain));
 		
 	}
@@ -129,7 +131,7 @@ void PlayerDirector::OnResize(int aWidth, int aHeight)
 void PlayerDirector::SpawnUnit(Prism::Scene&)
 {
 	myTestGold--;
-	myBuilding->GetComponent<BuildingComponent>()->BuildUnit(eUnitType::DRAGON);
+	myBuilding->GetComponent<BuildingComponent>()->BuildUnit(eUnitType::GRUNT);
 }
 
 void PlayerDirector::ReceiveMessage(const SpawnUnitMessage& aMessage)

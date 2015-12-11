@@ -23,7 +23,9 @@ AIDirector::AIDirector(const Prism::Terrain& aTerrain, Prism::Scene& aScene)
 {
 	for (int i = 0; i < 64; ++i)
 	{
-		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::ENEMY, eEntityType::UNIT, eUnitType::DRAGON, Prism::eOctreeType::DYNAMIC,
+		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::ENEMY, eEntityType::UNIT, eUnitType::GRUNT, Prism::eOctreeType::DYNAMIC,
+			aScene, { 20.f + i, 0.f, 40.f }, aTerrain));
+		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::ENEMY, eEntityType::UNIT, eUnitType::RANGER, Prism::eOctreeType::DYNAMIC,
 			aScene, { 20.f + i, 0.f, 40.f }, aTerrain));
 	}
 
@@ -64,14 +66,14 @@ void AIDirector::Update(float aDeltaTime)
 
 	if (myCurrentAttackerCount < myOptimalAttackerCount)
 	{
-		myBuilding->GetComponent<BuildingComponent>()->BuildUnit(eUnitType::DRAGON);
+		myBuilding->GetComponent<BuildingComponent>()->BuildUnit(eUnitType::RANGER);
 		myUnitQueue.Add(eUnitActionType::ATTACKER);
 		++myCurrentAttackerCount;
 	}
 
 	if (myCurrentGathererCount < myOptimalGathererCount)
 	{
-		myBuilding->GetComponent<BuildingComponent>()->BuildUnit(eUnitType::DRAGON);
+		myBuilding->GetComponent<BuildingComponent>()->BuildUnit(eUnitType::GRUNT);
 		myUnitQueue.Add(eUnitActionType::GATHERER);
 		++myCurrentGathererCount;
 	}
