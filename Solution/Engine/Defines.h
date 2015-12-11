@@ -12,11 +12,11 @@
 #endif
 
 //DO NOT CHANGE
-#define DGFX_VERSION 3
+#define DGFX_VERSION 5
 
 //#define ENABLE_DEBUG_TEXT
 #ifndef DLL_EXPORT
-//#define THREADED_LOADING
+#define THREADED_LOADING
 //#define SCENE_USE_OCTREE
 #endif
 

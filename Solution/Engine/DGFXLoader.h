@@ -222,6 +222,7 @@ namespace Prism
 			VERTEX_TANGENT,
 			VERTEX_SKINWEIGHTS,
 			VERTEX_BONEID,
+			VERTEX_COLOR,
 		};
 		enum eTextureType
 		{

@@ -754,7 +754,6 @@ bool FillData(ModelData* someData, FbxNode* aNode, AnimationData* aAnimation)
 	{
 		lColorElement = mesh->GetElementVertexColor(0);
 	}
-	
 
 	// Populate the array with vertex attribute, if by control point.
 	const FbxVector4 * lControlPoints = mesh->GetControlPoints();
@@ -764,6 +763,8 @@ bool FillData(ModelData* someData, FbxNode* aNode, AnimationData* aAnimation)
 	FbxVector4 lCurrentTangent;
 	FbxVector2 lCurrentUV;
 	FbxColor lCurrentColor;
+
+#pragma region mappingISControlPoint
 	if (someData->mAllByControlPoint)
 	{
 		const FbxGeometryElementNormal * lNormalElement = NULL;
@@ -902,7 +903,7 @@ bool FillData(ModelData* someData, FbxNode* aNode, AnimationData* aAnimation)
 			if (someData->myHasVertexColor)
 			{
 				int lColorIndex = lIndex;
-				if (lColorElement->GetReferenceMode() == FbxLayerElement::eVertexColor)
+				if (lColorElement->GetReferenceMode() == FbxLayerElement::eIndexToDirect)
 				{
 					lColorIndex = lColorElement->GetIndexArray().GetAt(lIndex);
 				}
@@ -917,7 +918,7 @@ bool FillData(ModelData* someData, FbxNode* aNode, AnimationData* aAnimation)
 		}
 
 	}
-
+#pragma endregion
 	int lVertexCount = 0;
 	for (int lPolygonIndex = 0; lPolygonIndex < lPolygonCount; ++lPolygonIndex)
 	{
@@ -1063,12 +1064,16 @@ bool FillData(ModelData* someData, FbxNode* aNode, AnimationData* aAnimation)
 				}
 				if (someData->myHasVertexColor)
 				{
-					int lColorIndex = lVerticeIndex;
-					if (lColorElement->GetReferenceMode() == FbxLayerElement::eIndexToDirect)
-					{
-						lColorIndex = lColorElement->GetIndexArray().GetAt(lVerticeIndex);
-					}
+					int lColorIndex = lVerticeIndex + (TRIANGLE_VERTEX_COUNT * lPolygonIndex);
+					//if (lColorElement->GetReferenceMode() == FbxLayerElement::eIndexToDirect)
+					//{
+					//	lColorIndex = lColorElement->GetIndexArray().GetAt(lVerticeIndex);
+					//}
 					lCurrentColor = lColorElement->GetDirectArray().GetAt(lColorIndex);
+
+					lControlPointIndex;
+					lPolygonIndex;
+
 
 					lVertices[currentIndex + addedSize] = lCurrentColor[0];
 					lVertices[currentIndex + addedSize + 1] = lCurrentColor[1];
