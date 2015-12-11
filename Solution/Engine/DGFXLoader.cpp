@@ -161,9 +161,9 @@ namespace Prism
 		{
 			tempModel->myIsNULLObject = false;
 
+			LoadModelData(tempModel, aEffect, aStream);
 			CU::Matrix44<float> matrix;
 			aStream.read((char*)&tempModel->myOrientation.myMatrix[0], sizeof(float) * 16);
-			LoadModelData(tempModel, aEffect, aStream);
 		}
 
 		if (isLodGroup == 1)
@@ -203,9 +203,9 @@ namespace Prism
 		if (isNullObject == 0)
 		{
 			tempModel->myIsNULLObject = false;
+			LoadModelAnimatedData(tempModel, aEffect, aStream);
 			CU::Matrix44<float> matrix;
 			aStream.read((char*)&tempModel->myOrientation.myMatrix[0], sizeof(float) * 16);
-			LoadModelAnimatedData(tempModel, aEffect, aStream);
 		}
 
 		if (isAnimated == 1)
