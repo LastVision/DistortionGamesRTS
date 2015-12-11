@@ -170,14 +170,14 @@ namespace Script_Interface
 		return 0;
 	}
 
-	int DisableAI(lua_State* aState)//void
+	int DisableAI(lua_State*)//void
 	{
 		PostMaster::GetInstance()->SendMessage(AITimeMultiplierMessage(0.f));
 
 		return 0;
 	}
 
-	int EnableAI(lua_State* aState)//void
+	int EnableAI(lua_State*)//void
 	{
 		PostMaster::GetInstance()->SendMessage(AITimeMultiplierMessage(1.f));
 
