@@ -14,116 +14,118 @@
 #include "VertexIndexWrapper.h"
 #include "TransformationNode.h"
 
-Prism::ModelAnimated::ModelAnimated()
-	: BaseModel()
-	, myChildren(32)
-	, myChildTransforms(32)
-	, myVertexFormat(8)
-	, myIsNULLObject(true)
-	, myVertexBaseData(nullptr)
-	, myIndexBaseData(nullptr)
-	, myInited(false)
-	, myParent(nullptr)
-	, myVertexCount(0)
+namespace Prism
 {
-}
-
-Prism::ModelAnimated::~ModelAnimated()
-{
-	myChildren.DeleteAll();
-	myChildTransforms.DeleteAll();
-	myVertexFormat.DeleteAll();
-	delete myAnimation;
-	delete myVertexBaseData;
-	delete myIndexBaseData;
-}
-
-void Prism::ModelAnimated::Init()
-{
-	DL_ASSERT_EXP(myInited == false, "Tried to Init a ModelAnimated twice");
-
-	if (myIsNULLObject == false)
+	ModelAnimated::ModelAnimated()
+		: BaseModel()
+		, myChildren(32)
+		, myChildTransforms(32)
+		, myVertexFormat(8)
+		, myIsNULLObject(true)
+		, myVertexBaseData(nullptr)
+		, myIndexBaseData(nullptr)
+		, myInited(false)
+		, myParent(nullptr)
+		, myVertexCount(0)
 	{
-		const int size = myVertexFormat.Size();
-		D3D11_INPUT_ELEMENT_DESC* vertexDesc = new D3D11_INPUT_ELEMENT_DESC[size];
-		for (int i = 0; i < myVertexFormat.Size(); ++i)
+	}
+
+	ModelAnimated::~ModelAnimated()
+	{
+		myChildren.DeleteAll();
+		myChildTransforms.DeleteAll();
+		myVertexFormat.DeleteAll();
+		delete myAnimation;
+		delete myVertexBaseData;
+		delete myIndexBaseData;
+	}
+
+	void ModelAnimated::Init()
+	{
+		DL_ASSERT_EXP(myInited == false, "Tried to Init a ModelAnimated twice");
+
+		if (myIsNULLObject == false)
 		{
-			vertexDesc[i] = *myVertexFormat[i];
+			const int size = myVertexFormat.Size();
+			D3D11_INPUT_ELEMENT_DESC* vertexDesc = new D3D11_INPUT_ELEMENT_DESC[size];
+			for (int i = 0; i < myVertexFormat.Size(); ++i)
+			{
+				vertexDesc[i] = *myVertexFormat[i];
+			}
+
+			InitInputLayout(vertexDesc, size, "ModelAnimated::InputLayout");
+			delete[] vertexDesc;
+			InitVertexBuffer(myVertexBaseData->myStride, D3D11_USAGE_IMMUTABLE, 0);
+			InitIndexBuffer();
+
+			SetupVertexBuffer(myVertexBaseData->myNumberOfVertices
+				, myVertexBaseData->myStride, myVertexBaseData->myVertexData, "ModelAnimated::VertexBuffer");
+
+			SetupIndexBuffer(myIndexBaseData->myNumberOfIndices, myIndexBaseData->myIndexData, "ModelAnimated::IndexBuffer");
+
+			myVertexCount = myVertexBaseData->myNumberOfVertices;
 		}
 
-		InitInputLayout(vertexDesc, size, "ModelAnimated::InputLayout");
-		//EvaluetaEffectTechnique();
-		delete[] vertexDesc;
-		InitVertexBuffer(myVertexBaseData->myStride, D3D11_USAGE_IMMUTABLE, 0);
-		InitIndexBuffer();
-
-		SetupVertexBuffer(myVertexBaseData->myNumberOfVertices
-			, myVertexBaseData->myStride, myVertexBaseData->myVertexData, "ModelAnimated::VertexBuffer");
-
-		SetupIndexBuffer(myIndexBaseData->myNumberOfIndices, myIndexBaseData->myIndexData, "ModelAnimated::IndexBuffer");
-
-		myVertexCount = myVertexBaseData->myNumberOfVertices;
-	}
-
-	for (int i = 0; i < myChildren.Size(); ++i)
-	{
-		myChildren[i]->myFileName = myFileName;
-		myChildren[i]->Init();
-	}
-
-
-	myInited = true;
-
-	if (myEffect->GetFileName() == "Data/Resource/Shader/S_effect_pbl.fx")
-	{
-		for (int i = 0; i < mySurfaces.Size(); ++i)
+		for (int i = 0; i < myChildren.Size(); ++i)
 		{
-			if (mySurfaces[i]->VerifyTextures(myFileName) == false)
+			myChildren[i]->myFileName = myFileName;
+			myChildren[i]->Init();
+		}
+
+
+		myInited = true;
+
+		if (myEffect->GetFileName() == "Data/Resource/Shader/S_effect_pbl.fx")
+		{
+			for (int i = 0; i < mySurfaces.Size(); ++i)
 			{
-				DL_ASSERT(CU::Concatenate("Missing PBL-texture from ModelAnimated: %s", myFileName.c_str()));
+				if (mySurfaces[i]->VerifyTextures(myFileName) == false)
+				{
+					DL_ASSERT(CU::Concatenate("Missing PBL-texture from ModelAnimated: %s", myFileName.c_str()));
+				}
 			}
 		}
 	}
-}
 
-void Prism::ModelAnimated::AddChild(ModelAnimated* aChild)
-{
-	aChild->myParent = this;
-	myChildren.Add(aChild);
-	myChildTransforms.Add(new TransformationNode(aChild->myOrientation));
-}
-
-void Prism::ModelAnimated::SetEffect(Effect* aEffect)
-{
-	myEffect = aEffect;
-	myEffect->AddListener(this);
-
-	for (int i = 0; i < mySurfaces.Size(); ++i)
+	void ModelAnimated::AddChild(ModelAnimated* aChild)
 	{
-		mySurfaces[i]->SetEffect(myEffect);
-		mySurfaces[i]->ReloadSurface();
+		aChild->myParent = this;
+		myChildren.Add(aChild);
+		myChildTransforms.Add(new TransformationNode(aChild->myOrientation));
 	}
 
-	for (int i = 0; i < myChildren.Size(); ++i)
+	void ModelAnimated::SetEffect(Effect* aEffect)
 	{
-		myChildren[i]->SetEffect(aEffect);
+		myEffect = aEffect;
+		myEffect->AddListener(this);
+
+		for (int i = 0; i < mySurfaces.Size(); ++i)
+		{
+			mySurfaces[i]->SetEffect(myEffect);
+			mySurfaces[i]->ReloadSurface();
+		}
+
+		for (int i = 0; i < myChildren.Size(); ++i)
+		{
+			myChildren[i]->SetEffect(aEffect);
+		}
 	}
-}
 
-void Prism::ModelAnimated::Render(const CU::Matrix44<float>& aOrientation, const CU::Vector3<float>& aCameraPosition)
-{
-	aCameraPosition;
-	if (myIsNULLObject == false)
+	void ModelAnimated::Render(const CU::Matrix44<float>& aOrientation, const CU::Vector3<float>& aCameraPosition)
 	{
-		float blendFactor[4];
-		blendFactor[0] = 0.f;
-		blendFactor[1] = 0.f;
-		blendFactor[2] = 0.f;
-		blendFactor[3] = 0.f;
+		aCameraPosition;
+		if (myIsNULLObject == false)
+		{
+			float blendFactor[4];
+			blendFactor[0] = 0.f;
+			blendFactor[1] = 0.f;
+			blendFactor[2] = 0.f;
+			blendFactor[3] = 0.f;
 
-		myEffect->SetBlendState(NULL, blendFactor);
-		myEffect->SetWorldMatrix(aOrientation);
+			myEffect->SetBlendState(NULL, blendFactor);
+			myEffect->SetWorldMatrix(aOrientation);
 
-		BaseModel::Render();
+			BaseModel::Render();
+		}
 	}
 }
