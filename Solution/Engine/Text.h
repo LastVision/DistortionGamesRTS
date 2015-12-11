@@ -18,7 +18,6 @@ namespace Prism
 		void SetScale(const CU::Vector2<float>& aScale);
 		float GetWidth() const;
 
-		std::string myText;
 	private:
 		void operator=(Text&) = delete;
 		void ConstructBuffers();
@@ -26,6 +25,8 @@ namespace Prism
 
 		CU::GrowingArray<VertexPosUV> myVertices;
 		CU::GrowingArray<int> myIndices;
+
+		std::string myText;
 
 		CU::Vector4<float> myColor;
 	};
