@@ -36,11 +36,12 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 {
 	for (int i = 0; i < 64; ++i)
 	{
-		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::PLAYER, eEntityType::UNIT, eUnitType::DRAGON, Prism::eOctreeType::DYNAMIC,
+		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::PLAYER, eEntityType::UNIT, eUnitType::GRUNT, Prism::eOctreeType::DYNAMIC,
 			aScene, { 65, 0, 40 }, aTerrain));
-
+		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::PLAYER, eEntityType::UNIT, eUnitType::RANGER, Prism::eOctreeType::DYNAMIC,
+			aScene, { 65, 0, 40 }, aTerrain));
 	}
-
+	
 	myActiveUnits.Add(myUnits[0]);
 	for (int i = 0; i < myActiveUnits.Size(); ++i)
 	{
@@ -133,7 +134,7 @@ void PlayerDirector::OnResize(int aWidth, int aHeight)
 void PlayerDirector::SpawnUnit(Prism::Scene&)
 {
 	myTestGold--;
-	myBuilding->GetComponent<BuildingComponent>()->BuildUnit(eUnitType::DRAGON);
+	myBuilding->GetComponent<BuildingComponent>()->BuildUnit(eUnitType::GRUNT);
 }
 
 void PlayerDirector::ReceiveMessage(const SpawnUnitMessage& aMessage)
@@ -189,7 +190,7 @@ void PlayerDirector::ReceiveMessage(const OnClickMessage& aMessage)
 		case eOnClickEvent::UNIT_ACTION_STOP:
 			mySelectedAction = eSelectedAction::STOP;
 			break;
-
+		
 		default:
 			break;
 		}
@@ -206,7 +207,7 @@ void PlayerDirector::ReceiveMessage(const ResourceMessage& aMessage)
 			myTestGold = 0;
 		}
 	}
-}
+	}
 
 void PlayerDirector::ReceiveMessage(const TimeMultiplierMessage& aMessage)
 {
@@ -304,7 +305,7 @@ CU::Vector3<float> PlayerDirector::CalcCursorWorldPosition(const Prism::Camera& 
 	DEBUG_PRINT(myTweakValueX);
 	DEBUG_PRINT(myTweakValueY);
 	DEBUG_PRINT(cursorPos);
-
+	
 
 	CU::Vector3<float> worldPos(myTerrain.CalcIntersection(aCamera.GetOrientation().GetPos()
 		, aCamera.RayCast(cursorPos)));
@@ -357,8 +358,8 @@ void PlayerDirector::UpdateInputs()
 		myRightClicked = CU::InputWrapper::GetInstance()->MouseDown(1);
 	}
 
-	if (myLeftMouseClicked == true && myShiftPressed == false &&
-		(mySelectedAction == eSelectedAction::NONE || mySelectedAction == eSelectedAction::STOP
+	if (myLeftMouseClicked == true && myShiftPressed == false && 
+		(mySelectedAction == eSelectedAction::NONE || mySelectedAction == eSelectedAction::STOP 
 		|| mySelectedAction == eSelectedAction::HOLD_POSITION))
 	{
 		mySelectedUnits.RemoveAll();
@@ -414,28 +415,28 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 
 			/*if (mySelectedAction == eSelectedAction::ATTACK_MOVE && myLeftMouseClicked == true)
 			{
-			controller->AttackMove(targetPos, !myShiftPressed);
-			hasDoneAction = true;
+				controller->AttackMove(targetPos, !myShiftPressed);
+				hasDoneAction = true;
 			}
 			else if ((mySelectedAction == eSelectedAction::MOVE && myLeftMouseClicked) || myRightClicked)
 			{
-			controller->MoveTo(targetPos, !myShiftPressed);
-			hasDoneAction = true;
+				controller->MoveTo(targetPos, !myShiftPressed);
+				hasDoneAction = true;
 			}
 			else if (mySelectedAction == eSelectedAction::ATTACK_TAGRET || (myLeftMouseClicked == true && hoveredEnemy != nullptr))
 			{
-			controller->AttackTarget(hoveredEnemy, !myShiftPressed);
-			hasDoneAction = true;
+				controller->AttackTarget(hoveredEnemy, !myShiftPressed);
+				hasDoneAction = true;
 			}
 			else if (mySelectedAction == eSelectedAction::STOP)
 			{
-			controller->Stop();
-			hasDoneAction = true;
+				controller->Stop();
+				hasDoneAction = true;
 			}
 			else if (mySelectedAction == eSelectedAction::HOLD_POSITION)
 			{
-			controller->HoldPosition();
-			hasDoneAction = true;
+				controller->HoldPosition();
+				hasDoneAction = true;
 			}*/
 		}
 	}
@@ -451,7 +452,7 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 void PlayerDirector::SelectOrHoverEntity(Entity* aEntity, bool &aSelected, bool &aHovered
 	, const CU::Intersection::LineSegment3D& aMouseRay)
 {
-	if (myLeftMouseClicked == true && myShiftPressed == false
+	if (myLeftMouseClicked == true && myShiftPressed == false 
 		&& (mySelectedAction == eSelectedAction::NONE || mySelectedAction == eSelectedAction::HOLD_POSITION
 		|| mySelectedAction == eSelectedAction::STOP))
 	{

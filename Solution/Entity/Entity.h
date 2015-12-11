@@ -87,6 +87,7 @@ private:
 
 	bool mySelected;
 	bool myHovered;
+	bool myIsInScene;
 };
 
 template <typename T>
