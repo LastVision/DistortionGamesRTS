@@ -11,7 +11,8 @@ enum class eHistoryType
 {
 	ERROR,
 	HISTORY,
-	HELP
+	HELP,
+	GENERATED_COMMAND
 };
 
 struct History

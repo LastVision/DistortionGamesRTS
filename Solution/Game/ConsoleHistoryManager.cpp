@@ -56,6 +56,8 @@ void ConsoleHistoryManager::Load()
 		error << int(eHistoryType::ERROR);
 		std::stringstream help;
 		help << int(eHistoryType::HELP);
+		std::stringstream genCommand;
+		genCommand << int(eHistoryType::GENERATED_COMMAND);
 
 		eHistoryType type;
 		if (identifier == error.str().c_str())
@@ -65,6 +67,10 @@ void ConsoleHistoryManager::Load()
 		else if (identifier == help.str().c_str())
 		{
 			type = eHistoryType::HELP;
+		}
+		else if (identifier == genCommand.str().c_str())
+		{
+			type = eHistoryType::GENERATED_COMMAND;
 		}
 		else
 		{
@@ -288,6 +294,9 @@ void ConsoleHistoryManager::AddHistory(const std::string& aCommand, eHistoryType
 		break;
 	case eHistoryType::HELP:
 		tempHistory->myRenderText->SetColor({ 0.5f, 1.f, 0.5f, 1.f });
+		break;
+	case eHistoryType::GENERATED_COMMAND:
+		tempHistory->myRenderText->SetColor({ 0.6f, 0.6f, 0.6f, 1.f });
 		break;
 	default:
 		break;

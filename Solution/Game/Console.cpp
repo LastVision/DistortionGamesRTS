@@ -79,10 +79,21 @@ void Console::ReceiveMessage(const LUARunScriptMessage& aMessage)
 		output.open(aMessage.myFilePath, std::ios::in);
 
 		std::string line;
+		std::string errorLine;
 		while (std::getline(output, line))
 		{
-			LUA::ScriptSystem::GetInstance()->RunLuaFromString(line);
+			if (LUA::ScriptSystem::GetInstance()->ValidateLuaString(line, errorLine))
+			{
+				LUA::ScriptSystem::GetInstance()->RunLuaFromString(line);
+				Console::GetInstance()->GetConsoleHistory()->AddHistory(line, eHistoryType::GENERATED_COMMAND);
+			}
+			else
+			{
+				Console::GetInstance()->GetConsoleHistory()->AddHistory(errorLine, eHistoryType::ERROR);
+			}
+	
 		}
+		Console::GetInstance()->GetConsoleHistory()->Save();
 		output.close();
 	}
 }
