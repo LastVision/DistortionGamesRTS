@@ -179,6 +179,8 @@ namespace GUI
 		}
 
 		reader.CloseDocument();
+
+		OnResize(Prism::Engine::GetInstance()->GetWindowSizeInt().x, Prism::Engine::GetInstance()->GetWindowSizeInt().y);
 	}
 
 	void GUIManager::CheckMousePressed()

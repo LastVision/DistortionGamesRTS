@@ -52,6 +52,7 @@ void Prism::ModelAnimated::Init()
 		}
 
 		InitInputLayout(vertexDesc, size, "ModelAnimated::InputLayout");
+		//EvaluetaEffectTechnique();
 		delete[] vertexDesc;
 		InitVertexBuffer(myVertexBaseData->myStride, D3D11_USAGE_IMMUTABLE, 0);
 		InitIndexBuffer();
