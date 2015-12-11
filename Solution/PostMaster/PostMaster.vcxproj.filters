@@ -81,7 +81,7 @@
     <ClInclude Include="ResourceMessage.h">
       <Filter>Message</Filter>
     </ClInclude>
-    <ClInclude Include="AITimeMultiplierMessage.h">
+    <ClInclude Include="TimeMultiplierMessage.h">
       <Filter>Message</Filter>
     </ClInclude>
   </ItemGroup>

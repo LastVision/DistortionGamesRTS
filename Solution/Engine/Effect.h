@@ -28,7 +28,7 @@ namespace Prism
 		~Effect();
 
 		ID3DX11Effect* GetEffect();
-		ID3DX11EffectTechnique* GetTechnique();
+		ID3DX11EffectTechnique* GetTechnique(const std::string& aName = "Render");
 		const std::string& GetFileName() const;
 		bool Init(const std::string& aEffectFile);
 		void SetScaleVector(const CU::Vector3<float>& aScaleVector);
@@ -110,11 +110,6 @@ namespace Prism
 	inline ID3DX11Effect* Effect::GetEffect()
 	{
 		return myEffect;
-	}
-
-	inline ID3DX11EffectTechnique* Effect::GetTechnique()
-	{
-		return myTechnique;
 	}
 
 	inline const std::string& Effect::GetFileName() const

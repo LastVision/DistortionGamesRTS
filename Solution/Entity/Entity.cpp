@@ -4,12 +4,9 @@
 #include "AnimationComponent.h"
 #include "BuildingComponent.h"
 #include "CollisionComponent.h"
-#include "Component.h"
 #include "ControllerComponent.h"
 #include "GraphicsComponent.h"
 #include "HealthComponent.h"
-#include "Entity.h"
-#include "EntityData.h"
 #include "EntityId.h"
 #include <Scene.h>
 #include <Terrain.h>
@@ -49,7 +46,7 @@ Entity::Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& a
 		GetComponent<GraphicsComponent>()->SetRotation(aRotation);
 		GetComponent<GraphicsComponent>()->SetScale(aScale);
 	}
-	AddToScene();
+	//AddToScene();
 
 	if (aEntityData.myBuildingData.myExistsInEntity == true)
 	{
@@ -143,6 +140,8 @@ void Entity::AddToScene()
 	{
 		myScene.AddInstance(GetComponent<AnimationComponent>()->GetInstance());
 	}
+
+	myIsInScene = true;
 }
 
 void Entity::RemoveFromScene()
@@ -155,6 +154,8 @@ void Entity::RemoveFromScene()
 	{
 		myScene.RemoveInstance(GetComponent<AnimationComponent>()->GetInstance());
 	}
+
+	myIsInScene = false;
 }
 
 void Entity::Kill()

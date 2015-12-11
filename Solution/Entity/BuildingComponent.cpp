@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "BuildingComponent.h"
 #include "BuildingComponentData.h"
-#include "Entity.h"
 #include <PostMaster.h>
 #include <SpawnUnitMessage.h>
 
@@ -11,6 +10,7 @@ BuildingComponent::BuildingComponent(Entity& aEntity, BuildingCompnentData& aDat
 	, myMaxBuildTime(2.f)
 	, mySpawnQueueIndex(-1)
 {
+	aData;
 	for (int i = 0; i <= 4; i++)
 	{
 		mySpawnQueue[i] = eUnitType::NOT_A_UNIT;

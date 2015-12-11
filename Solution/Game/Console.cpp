@@ -98,6 +98,11 @@ void Console::ReceiveMessage(const LUARunScriptMessage& aMessage)
 	}
 }
 
+void Console::AddHistory(const std::string& aMessage, eHistoryType aType)
+{
+	myHistory->AddHistory(aMessage, aType);
+}
+
 void Console::ReadInput()
 {
 	CU::InputWrapper* input = CU::InputWrapper::GetInstance();
@@ -173,5 +178,7 @@ void Console::ReadInput()
 	{
 		//myInput = mySuggestion;
 	}
+
+	
 }
 

@@ -119,9 +119,9 @@ void Level::ReceiveMessage(const LUAToggleRenderLinesMessage& aMessage)
 	}
 }
 
-void Level::SpawnUnit()
+void Level::SpawnUnit(eUnitType aUnitType)
 {
-	myPlayer->SpawnUnit(*myScene);
+	myPlayer->SpawnUnit(aUnitType);
 }
 
 bool Level::HasPlayerWon() const

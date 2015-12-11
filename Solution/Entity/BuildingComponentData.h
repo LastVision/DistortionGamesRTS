@@ -1,5 +1,4 @@
 #pragma once
-#include <StaticArray.h>
 
 struct BuildingCompnentData
 {

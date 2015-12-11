@@ -52,8 +52,8 @@ namespace Prism
 				vertexDesc[i] = *myVertexFormat[i];
 			}
 
+			EvaluateEffectTechnique();
 			InitInputLayout(vertexDesc, size, "Model::InputLayout");
-			//EvaluateEffectTechnique();
 			delete[] vertexDesc;
 			InitVertexBuffer(myVertexBaseData->myStride, D3D11_USAGE_IMMUTABLE, 0);
 			InitIndexBuffer();
@@ -316,7 +316,6 @@ namespace Prism
 
 	void Model::EvaluateEffectTechnique()
 	{
-		//bool isAnimated = false;
 		int uvCount = 0;
 		bool hasVertexColor = false;
 		for (int i = 0; i < myVertexFormat.Size(); ++i)

@@ -1,6 +1,4 @@
 #pragma once
-
-#include "Component.h"
 #include <LineSegment3D.h>
 #include <Sphere.h>
 

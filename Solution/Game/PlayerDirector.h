@@ -48,7 +48,7 @@ public:
 
 	void OnResize(int aWidth, int aHeight);
 
-	void SpawnUnit(Prism::Scene& aScene);
+	void SpawnUnit(eUnitType aUnitType);
 
 	void SelectUnit(Entity* anEntity);
 
@@ -56,6 +56,7 @@ public:
 	void ReceiveMessage(const ToggleGUIMessage& aMessage) override;
 	void ReceiveMessage(const OnClickMessage& aMessage) override;
 	void ReceiveMessage(const ResourceMessage& aMessage) override;
+	void ReceiveMessage(const TimeMultiplierMessage& aMessage) override;
 
 	const CU::GrowingArray<Entity*>& GetSelectedUnits() const;
 	const BuildingComponent& GetBuildingComponent() const;

@@ -3,7 +3,6 @@
 #include "GraphicsComponent.h"
 #include "GraphicsComponentData.h"
 #include <Effect.h>
-#include "Entity.h"
 #include <Engine.h>
 #include <EngineEnums.h>
 #include <EffectContainer.h>
@@ -13,7 +12,6 @@
 #include <ModelProxy.h>
 #include <Scene.h>
 #include <Texture.h>
-#include <XMLReader.h>
 
 GraphicsComponent::GraphicsComponent(Entity& aEntity, GraphicsComponentData& aComponentData)
 	: Component(aEntity)
@@ -28,8 +26,10 @@ GraphicsComponent::GraphicsComponent(Entity& aEntity, GraphicsComponentData& aCo
 
 GraphicsComponent::~GraphicsComponent()
 {
-	if (myEntity.GetOctreeType() != Prism::eOctreeType::NOT_IN_OCTREE && myEntity.GetOwner() != eOwnerType::PLAYER)
+	if (myEntity.myIsInScene == true && myEntity.GetOctreeType() != Prism::eOctreeType::NOT_IN_OCTREE 
+		&& myEntity.GetOwner() != eOwnerType::PLAYER)
 	{
+
 		myEntity.GetScene().RemoveInstance(myInstance);
 	}
 	delete myInstance;
