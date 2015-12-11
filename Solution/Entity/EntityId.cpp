@@ -1,6 +1,5 @@
 #include "stdafx.h"
 
-#include "Entity.h"
 #include "EntityId.h"
 #include <MemoryTracker.h>
 #include "PollingStation.h"

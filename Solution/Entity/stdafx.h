@@ -8,10 +8,12 @@
 #include <EntityEnum.h>
 #include <GameConstants.h>
 #include <GrowingArray.h>
+
 #include <Matrix.h>
 #include <MemoryMacros.h>
 #include <StaticArray.h>
 #include <string>
+
 #include <unordered_map>
 #include <Vector.h>
 #include <XMLReader.h>

@@ -3,7 +3,6 @@
 #include "ActorComponent.h"
 #include "ActorComponentData.h"
 #include "ControllerComponent.h"
-#include "Entity.h"
 #include <Terrain.h>
 
 ActorComponent::ActorComponent(Entity& aEntity, ActorComponentData& aData, const Prism::Terrain& aTerrain)

@@ -1,6 +1,4 @@
 #pragma once
-#include "Component.h"
-#include <Matrix.h>
 
 namespace Prism
 {

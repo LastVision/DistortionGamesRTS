@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "BuildingComponent.h"
 #include "BuildingComponentData.h"
-#include "Entity.h"
 #include <PostMaster.h>
 #include <SpawnUnitMessage.h>
 
