@@ -234,10 +234,39 @@ bool ConsoleHistoryManager::CheckType(eHistoryType aType, bool aShouldGoBackward
 	//}
 }
 
+void ConsoleHistoryManager::SplitCommandToMulitpleLines(const std::string& aCommand, eHistoryType anEnum)
+{
+	std::string splitedCommandA = aCommand;
+	std::string splitedCommandB;
+	int currentEndLineIndex = splitedCommandA.find_first_of("\n");
+	splitedCommandA = aCommand.substr(0, currentEndLineIndex);
+	splitedCommandB = aCommand.substr(currentEndLineIndex + 1, aCommand.length() - 1);
+	splitedCommandA = RemoveTabFromString(splitedCommandA);
+	splitedCommandB = RemoveTabFromString(splitedCommandB);
+	AddHistory(splitedCommandA, anEnum);
+	AddHistory(splitedCommandB, anEnum);
+}
+
+std::string ConsoleHistoryManager::RemoveTabFromString(const std::string& aCommand)
+{
+	std::string noTabCommand = aCommand;
+	int currentTabIndex = noTabCommand.find_first_of("\t");
+	if (currentTabIndex != -1)
+	{
+		noTabCommand = aCommand.substr(currentTabIndex + 1, aCommand.length()-1);
+		RemoveTabFromString(noTabCommand);
+	}
+	return noTabCommand;
+}
 
 void ConsoleHistoryManager::AddHistory(const std::string& aCommand, eHistoryType anEnum)
 {
 	DL_ASSERT_EXP(aCommand.length() > 0, "Should not be able to save empty commands in history");
+	if (aCommand.find_first_of("\n") != -1)
+	{
+		SplitCommandToMulitpleLines(aCommand, anEnum);
+		return;
+	}
 	History* tempHistory;
 	
 	bool prevRuntime = Prism::MemoryTracker::GetInstance()->GetRunTime();
@@ -249,8 +278,6 @@ void ConsoleHistoryManager::AddHistory(const std::string& aCommand, eHistoryType
 	tempHistory->myMessage = aCommand;
 	tempHistory->myRenderText->SetText(aCommand);
 	tempHistory->myType = anEnum;
-	static int numberHelpFunction = 0;
-	float rbColor = 0.5f;
 	switch (anEnum)
 	{
 	case eHistoryType::ERROR:
@@ -260,9 +287,7 @@ void ConsoleHistoryManager::AddHistory(const std::string& aCommand, eHistoryType
 		tempHistory->myRenderText->SetColor({ 1.f, 1.f, 1.f, 1.f });
 		break;
 	case eHistoryType::HELP:
-		numberHelpFunction++;
-		if (numberHelpFunction % 2 == 0) rbColor = 0.1f;
-		tempHistory->myRenderText->SetColor({ rbColor, 1.f, rbColor, 1.f });
+		tempHistory->myRenderText->SetColor({ 0.5f, 1.f, 0.5f, 1.f });
 		break;
 	default:
 		break;
