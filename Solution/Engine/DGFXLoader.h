@@ -45,12 +45,6 @@
 	--	MODEL DATA (INDICES, VERTICES, INPUTLAYOUT, TEXTURES), ONLY IS isNullObject IS 0
 	-------------------------------------------------------------------------------------------------
 
-			--	ORIENTATION DATA
-			-------------------------------------------------------------------------------------------------
-			orientation	|	float array		|	the models base-orientation, can be read into a matrix in
-			|					|	one read by reading 16 * sizeof(float) bytes
-			-------------------------------------------------------------------------------------------------
-
 
 			--	INDEX DATA
 			-------------------------------------------------------------------------------------------------
@@ -105,6 +99,12 @@
 			filepath	|	char array		|	the texture-filepath, can read entire path in one read
 			|					|	by reading lenght * sizeof(char) bytes
 			-------------------------------------------------------------------------------------------------
+
+	--	ORIENTATION DATA
+	-------------------------------------------------------------------------------------------------
+	orientation	|	float array		|	the models base-orientation, can be read into a matrix in
+	|					|	one read by reading 16 * sizeof(float) bytes
+	-------------------------------------------------------------------------------------------------
 
 	--	MODEL DATA END
 	-------------------------------------------------------------------------------------------------

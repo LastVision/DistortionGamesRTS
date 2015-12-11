@@ -79,6 +79,7 @@ struct ModelData
 		VERTEX_TANGENT,
 		VERTEX_SKINWEIGHTS,
 		VERTEX_BONEID,
+		VERTEX_COLOR,
 	};
 
 	struct Layout
@@ -114,6 +115,7 @@ struct ModelData
 	bool mHasNormal;
 	bool mHasUV;
 	bool mAllByControlPoint;
+	bool myHasVertexColor;
 };
 
 	

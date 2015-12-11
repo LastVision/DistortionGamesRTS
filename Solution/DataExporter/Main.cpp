@@ -120,7 +120,7 @@ int main(int argC,      // Number of strings in array argv
 
 	CU::TimerManager::Destroy();
 	DL_Debug::Debug::Destroy();
-	system("PAUSE");
+
 	return EXIT_SUCCESS;
 }
 

@@ -134,6 +134,11 @@ void Prism::FBXFactory::FillData(ModelData* someData, Model* outData, Effect* aE
 			//desc->SemanticName = "BONES";
 			//desc->Format = DXGI_FORMAT_R32G32B32A32_SINT;
 		}
+		else if (currentLayout.myType == ModelData::VERTEX_COLOR)
+		{
+			desc->SemanticName = "COLOR";
+			desc->Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+		}
 		outData->myVertexFormat.Add(desc);
 	}
 	outData->myIsNULLObject = false;
@@ -249,6 +254,11 @@ void Prism::FBXFactory::FillData(ModelData* someData, ModelAnimated* outData, Ef
 		{
 			desc->SemanticName = "BONES";
 			desc->Format = DXGI_FORMAT_R32G32B32A32_SINT;
+		}
+		else if (currentLayout.myType == ModelData::VERTEX_COLOR)
+		{
+			desc->SemanticName = "COLOR";
+			desc->Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
 		}
 		outData->myVertexFormat.Add(desc);
 	}

@@ -40,6 +40,8 @@ public:
 	const CU::GrowingArray<History*>& GetHistoryArray();
 
 	bool IsInHistory(const std::string& aString) const;
+
+	void ResetHistoryCounter();
 private:
 	bool CheckType(eHistoryType aType, bool aShouldGoBackwards);
 
@@ -55,4 +57,9 @@ private:
 inline const CU::GrowingArray<History*>& ConsoleHistoryManager::GetHistoryArray()
 {
 	return myHistory;
+}
+
+inline void ConsoleHistoryManager::ResetHistoryCounter()
+{
+	myCurrentIndex = 0;
 }
