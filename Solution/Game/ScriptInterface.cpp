@@ -164,6 +164,12 @@ namespace Script_Interface
 		return 0;
 	}
 
+	int SkipLevel(lua_State*)//void
+	{
+		PostMaster::GetInstance()->SendMessage(GameStateMessage(eGameState::LOAD_NEXT_LEVEL));
+		return 0;
+	}
+
 	int ModifyResource(lua_State* aState)//void
 	{
 		int directorId = int(lua_tonumber(aState, 1));
@@ -238,5 +244,5 @@ void ScriptInterface::RegisterFunctions()
 	system->RegisterFunction("DisableAI", Script_Interface::DisableAI, "", "Disables AI");
 	system->RegisterFunction("EnableAI", Script_Interface::EnableAI, "", "Enables AI");
 	system->RegisterFunction("TimeMultiplier", Script_Interface::TimeMultiplier, "aMultiplier", "Modifies the game time. ex: TimeMultiplier(0.1) //this is slow  ");
-
+	system->RegisterFunction("SkipLevel", Script_Interface::SkipLevel, "", "You skip the current level, and goes to the next in the list. \nIf you are on the last level it will reload that level.");
 }
