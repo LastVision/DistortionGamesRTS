@@ -12,7 +12,7 @@
 #endif
 
 //DO NOT CHANGE
-#define DGFX_VERSION 6
+#define DGFX_VERSION 7
 
 //#define ENABLE_DEBUG_TEXT
 #ifndef DLL_EXPORT

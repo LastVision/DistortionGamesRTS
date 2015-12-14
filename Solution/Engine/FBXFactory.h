@@ -33,6 +33,7 @@ namespace Prism
 		void LoadModelForRadiusCalc(const char* aFilePath, CU::GrowingArray<CU::Vector3<float>>& someVerticesOut);
 
 		void ConvertToDGFX(const char* aInputPath, const char* aOutputPath);
+		void ConvertToDGFX(const char* aInputPath, const char* aOutputPath, CU::GrowingArray<std::string>& someOutErrors);
 		
 	private:
 		void FillData(ModelData* someData, Model* outData, Effect* aEffect);

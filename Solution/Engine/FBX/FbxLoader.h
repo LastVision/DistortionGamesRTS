@@ -205,7 +205,7 @@ public:
 	FBXLoader();
 	~FBXLoader();
 
-	FbxModelData* loadModel( const char* aFile );
+	FbxModelData* loadModel(const char* aFile, CU::GrowingArray<std::string>& someOutErrors);
 private:
 	FbxScene* LoadScene(const char* aFile);
 	FbxModelData* myLoadingModel;
