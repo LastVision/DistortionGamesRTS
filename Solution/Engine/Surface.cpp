@@ -47,19 +47,6 @@ bool Prism::Surface::SetTexture(const std::string& aResourceName, const std::str
 			myOwnerAlbedoTextures[0] = tex;
 			myOwnerAlbedoTextures[1] = TextureContainer::GetInstance()->GetTexture(playerAlbedo);
 			myOwnerAlbedoTextures[2] = TextureContainer::GetInstance()->GetTexture(enemyAlbedo);
-			
-
-			/*std::string neutralAlbedo(aFileName.begin(), aFileName.begin() + index);
-			neutralAlbedo += "_neutral.dds";
-
-			std::string enemyAlbedo(aFileName.begin(), aFileName.begin() + index);
-			enemyAlbedo += "_enemy.dds";
-
-			int needsToBeFinishedByNiklasYay = 5;
-
-			myOwnerAlbedoTextures[0] = TextureContainer::GetInstance()->GetTexture(neutralAlbedo);
-			myOwnerAlbedoTextures[1] = tex;
-			myOwnerAlbedoTextures[2] = TextureContainer::GetInstance()->GetTexture(enemyAlbedo);*/
 		}
 	}
 

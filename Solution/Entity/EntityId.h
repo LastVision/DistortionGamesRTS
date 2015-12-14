@@ -10,14 +10,15 @@ public:
 
 	int GetId(Entity* anEntity);
 	Entity* GetEntity(int aId) const;
-	Entity* GetTrigger(int aId) const;
+	Entity* GetTrigger(eEntityType aType, int aId) const;
 	
 private:
 	EntityId();
 	~EntityId();
 
 	CU::GrowingArray<Entity*> myEntities;
-	CU::GrowingArray<Entity*> myTriggers;
+	CU::GrowingArray<Entity*> myResourcePoints;
+	CU::GrowingArray<Entity*> myVictoryPoints;
 
 	static EntityId* myInstance;
 };

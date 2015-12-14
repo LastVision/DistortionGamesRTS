@@ -70,3 +70,7 @@ void Subscriber::ReceiveMessage(const ToggleGUIMessage&)
 void Subscriber::ReceiveMessage(const TriggerMessage&)
 {
 }
+
+void Subscriber::ReceiveMessage(const VictoryMessage&)
+{
+}

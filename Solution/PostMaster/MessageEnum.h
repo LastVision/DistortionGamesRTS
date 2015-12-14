@@ -16,5 +16,6 @@ enum class eMessageType
 	TRIGGER,
 	RESOURCE,
 	TIME_MULTIPLIER,
+	VICTORY,
 	COUNT,
 };

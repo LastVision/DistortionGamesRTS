@@ -15,6 +15,7 @@ struct ResourceMessage;
 struct SpawnUnitMessage;
 struct ToggleGUIMessage;
 struct TriggerMessage;
+struct VictoryMessage;
 
 class Subscriber
 {
@@ -37,5 +38,6 @@ public:
 	virtual void ReceiveMessage(const SpawnUnitMessage& aMessage);
 	virtual void ReceiveMessage(const ToggleGUIMessage& aMessage);
 	virtual void ReceiveMessage(const TriggerMessage& aMessage);
+	virtual void ReceiveMessage(const VictoryMessage& aMessage);
 };
 

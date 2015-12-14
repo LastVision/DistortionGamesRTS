@@ -15,6 +15,7 @@
 #include <TimeMultiplierMessage.h>
 #include <ToggleGUIMessage.h>
 #include <TriggerComponent.h>
+#include <VictoryMessage.h>
 
 namespace Script_Interface
 {
@@ -141,8 +142,9 @@ namespace Script_Interface
 
 	int GetTrigger(lua_State* aState)//void
 	{
-		int id = int(lua_tonumber(aState, 1));
-		Entity* entity = EntityId::GetInstance()->GetTrigger(id);
+		eEntityType type = static_cast<eEntityType>(int(lua_tonumber(aState, 1)));
+		int id = int(lua_tonumber(aState, 2));
+		Entity* entity = EntityId::GetInstance()->GetTrigger(type, id);
 		if (entity == nullptr)
 		{
 			std::stringstream ss;
@@ -192,6 +194,30 @@ namespace Script_Interface
 		}
 
 		PostMaster::GetInstance()->SendMessage(ResourceMessage(owner, resourceModifier));
+		return 0;
+	}
+
+	int ModifyVictory(lua_State* aState)//void
+	{
+		int directorId = int(lua_tonumber(aState, 1));
+		int victoryModifier = int(lua_tonumber(aState, 2));
+
+		eOwnerType owner = eOwnerType::NOT_USED;
+		if (directorId == eOwnerType::PLAYER)
+		{
+			owner = eOwnerType::PLAYER;
+		}
+		else if (directorId == eOwnerType::ENEMY)
+		{
+			owner = eOwnerType::ENEMY;
+		}
+
+		if (owner == eOwnerType::NOT_USED || owner == eOwnerType::NEUTRAL)
+		{
+			return 0;
+		}
+
+		PostMaster::GetInstance()->SendMessage(VictoryMessage(owner, victoryModifier));
 		return 0;
 	}
 
@@ -281,6 +307,7 @@ void ScriptInterface::RegisterFunctions()
 	system->RegisterFunction("GetTrigger", Script_Interface::GetTrigger, "aTrigger", "Returns the Entity id for trigger of the supplied input, ex: trigger0 = GetTrigger(0)");
 	system->RegisterFunction("ReloadLevel", Script_Interface::ReloadLevel, "", "Reloads the current level.");
 	system->RegisterFunction("ModifyResource", Script_Interface::ModifyResource, "aOwnerEnum, aResourceModifier", "Modifies resource of owner, ex: ModifyResource(eOwnerType.PLAYER, resourceGain)");
+	system->RegisterFunction("ModifyVictory", Script_Interface::ModifyVictory, "aOwnerEnum, aVictoryModifier", "Modifies victory points of owner, ex: ModifyVictory(eOwnerType.PLAYER, victoryPointGain)");
 	system->RegisterFunction("ModifyOwnership", Script_Interface::ModifyOwnership, "aTriggerId, aOwnerEnum, aResourceModifier", "Modifies ownership of trigger, ex:\n\t myResourcePoint0.myOwner = ModifyOwnership(myResourcePoint0.myId, eOwnerType.PLAYER, ownershipGain * aDelta)");
 	system->RegisterFunction("DisableAI", Script_Interface::DisableAI, "", "Disables AI");
 	system->RegisterFunction("EnableAI", Script_Interface::EnableAI, "", "Enables AI");

@@ -42,6 +42,9 @@ void PollingStation::RegisterEntity(Entity* aEntity)
 	case eEntityType::RESOURCE_POINT:
 		myResourcePoints.Add(aEntity);
 		break;
+	case eEntityType::VICTORY_POINT:
+		myVictoryPoints.Add(aEntity);
+		break;
 	default:
 		DL_ASSERT("PollingStation tried to Register an Entity with invalid Type");
 		break;
@@ -173,12 +176,21 @@ void PollingStation::CleanUp()
 			myResourcePoints.RemoveCyclicAtIndex(i);
 		}
 	}
+
+	for (int i = myVictoryPoints.Size() - 1; i >= 0; --i)
+	{
+		if (myVictoryPoints[i]->GetAlive() == false)
+		{
+			myVictoryPoints.RemoveCyclicAtIndex(i);
+		}
+	}
 }
 
 PollingStation::PollingStation()
 	: myPlayerUnits(64)
 	, myAIUnits(64)
-	, myResourcePoints(8)
+	, myResourcePoints(GC::resourcePointCount)
+	, myVictoryPoints(GC::victoryPointCount)
 {
 }
 
