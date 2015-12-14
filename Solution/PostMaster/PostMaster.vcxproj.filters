@@ -84,5 +84,8 @@
     <ClInclude Include="TimeMultiplierMessage.h">
       <Filter>Message</Filter>
     </ClInclude>
+    <ClInclude Include="VictoryMessage.h">
+      <Filter>Message</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

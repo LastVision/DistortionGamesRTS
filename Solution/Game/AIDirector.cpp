@@ -10,7 +10,7 @@
 #include <SpawnUnitMessage.h>
 
 AIDirector::AIDirector(const Prism::Terrain& aTerrain, Prism::Scene& aScene)
-	: Director(eDirectorType::AI, aTerrain)
+	: Director(eOwnerType::ENEMY, aTerrain)
 	, mySpawnTimer(0.f)
 	, myOptimalAttackerCount(0)
 	, myOptimalGathererCount(0)
@@ -51,6 +51,11 @@ AIDirector::~AIDirector()
 void AIDirector::Update(float aDeltaTime)
 {
 	aDeltaTime *= myTimeMultiplier;
+
+	//debug only, remove when handled by GUI //Linus
+	int enemyVictoryPoints = myVictoryPoints;
+	DEBUG_PRINT(enemyVictoryPoints);
+	//debug end
 
 	Director::Update(aDeltaTime);
 

@@ -27,6 +27,7 @@ private:
 	CU::GrowingArray<Entity*> myPlayerUnits;
 	CU::GrowingArray<Entity*> myAIUnits;
 	CU::GrowingArray<Entity*> myResourcePoints;
+	CU::GrowingArray<Entity*> myVictoryPoints;
 
 	static PollingStation* myInstance;
 };

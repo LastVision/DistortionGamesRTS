@@ -60,6 +60,7 @@ enum class eComponentType
 enum class eTriggerType
 {
 	RESOURCE,
+	VICTORY,
 };
 #undef ERROR
 enum class eHistoryType
