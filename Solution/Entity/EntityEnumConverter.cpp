@@ -26,7 +26,7 @@ namespace EntityEnumConverter
 		{
 			return eEntityType::RESOURCE_POINT;
 		}
-		DL_ASSERT("This entity type is not supported, please tell Daniel about it.");
+		DL_ASSERT("The " + aEntityType + " entity type is not supported, please tell Daniel about it.");
 		return eEntityType::_COUNT;
 	}
 	const ePropType ConvertStringToPropType(const std::string& aPropType)
@@ -35,7 +35,7 @@ namespace EntityEnumConverter
 		{
 			return ePropType::PINE_TREE;
 		}
-		DL_ASSERT("This prop type is not supported, please tell Daniel about it.");
+		DL_ASSERT("The " + aPropType + " prop type is not supported, please tell Daniel about it.");
 		return ePropType::NOT_A_PROP;
 	}
 	const eUnitType ConvertStringToUnitType(const std::string& aUnitType)
@@ -52,7 +52,7 @@ namespace EntityEnumConverter
 		{
 			return eUnitType::TANK;
 		}
-		DL_ASSERT("This unit type is not supported, please tell Daniel about it.");
+		DL_ASSERT("The " + aUnitType + " unit type is not supported, please tell Daniel about it.");
 		return eUnitType::NOT_A_UNIT;
 	}
 }
