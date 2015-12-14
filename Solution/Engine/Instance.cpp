@@ -55,17 +55,20 @@ void Prism::Instance::Render(const Camera& aCamera)
 {
 	if (myProxy.IsLoaded())
 	{
+
 		myProxy.GetEffect()->SetViewProjectionMatrix(aCamera.GetViewProjection());
 		myProxy.GetEffect()->SetScaleVector(myScale);
 		myProxy.GetEffect()->SetCameraPosition(aCamera.GetOrientation().GetPos());
 
 		if (myProxy.IsAnimated() == true)
 		{
+			myProxy.myModelAnimated->ActivateAlbedo(myOwnerType);
 			myProxy.GetEffect()->SetBones(myBones);
 			RenderModelAnimated(myProxy.myModelAnimated, myOrientation, aCamera, myHierarchy);
 		}
 		else
 		{
+			myProxy.myModel->ActivateAlbedo(myOwnerType);
 			myProxy.Render(myOrientation, aCamera.GetOrientation().GetPos());
 		}
 	}
@@ -154,17 +157,7 @@ void Prism::Instance::ResetAnimationTime(float aTime)
 
 void Prism::Instance::ActivateAlbedo(eOwnerType aOwner)
 {
-	if (myProxy.IsLoaded())
-	{
-		if (myProxy.IsAnimated() == true)
-		{
-			myProxy.myModelAnimated->ActivateAlbedo(aOwner);
-		}
-		else
-		{
-			myProxy.myModel->ActivateAlbedo(aOwner);
-		}
-	}
+	myOwnerType = aOwner;
 }
 
 Prism::ModelProxy& Prism::Instance::GetModel()

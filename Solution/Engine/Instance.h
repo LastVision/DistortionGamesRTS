@@ -65,6 +65,7 @@ namespace Prism
 		Animation* myAnimation;
 		float myTotalTime;
 		CU::StaticArray<CU::Matrix44<float>, MAX_NR_OF_BONES> myBones;
+		eOwnerType myOwnerType;
 	};
 
 	inline float Instance::GetObjectCullingRadius() const

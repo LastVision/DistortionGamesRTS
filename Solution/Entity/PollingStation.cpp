@@ -89,7 +89,6 @@ Entity* PollingStation::FindEntityAtPosition(const CU::Vector3<float>& aPosition
 {
 	float bestDist = FLT_MAX;
 	float dist = 0;
-	Entity* entity = nullptr;
 	CU::GrowingArray<Entity*>* list = nullptr;
 	switch (aEntityOwner)
 	{
