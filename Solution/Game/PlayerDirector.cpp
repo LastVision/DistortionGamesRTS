@@ -399,10 +399,11 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 	if (myLeftMousePressed == true)
 	{
 		secondTargetPos = CalcCursorWorldPosition(myFirstMousePosition, aCamera);
-		myTestBoxPositions[0] = secondTargetPos;
-		myTestBoxPositions[1] = { secondTargetPos.x, secondTargetPos.y, secondTargetPos.z - secondTargetPos.z + firstTargetPos.z };
-		myTestBoxPositions[2] = firstTargetPos;
-		myTestBoxPositions[3] = { secondTargetPos.x - secondTargetPos.x + firstTargetPos.x, secondTargetPos.y, secondTargetPos.z };
+
+		myTestBoxPositions[0] = { fminf(secondTargetPos.x, firstTargetPos.x), secondTargetPos.y, fminf(secondTargetPos.z, firstTargetPos.z) };
+		myTestBoxPositions[1] = { fminf(secondTargetPos.x, firstTargetPos.x), secondTargetPos.y, fmaxf(secondTargetPos.z, firstTargetPos.z) };
+		myTestBoxPositions[2] = { fmaxf(secondTargetPos.x, firstTargetPos.x), secondTargetPos.y, fmaxf(secondTargetPos.z, firstTargetPos.z) };
+		myTestBoxPositions[3] = { fmaxf(secondTargetPos.x, firstTargetPos.x), secondTargetPos.y, fminf(secondTargetPos.z, firstTargetPos.z) };
 
 		Prism::RenderLine3D(myTestBoxPositions[0], myTestBoxPositions[1]);
 		Prism::RenderLine3D(myTestBoxPositions[1], myTestBoxPositions[2]);
