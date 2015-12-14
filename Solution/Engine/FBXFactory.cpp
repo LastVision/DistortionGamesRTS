@@ -521,8 +521,9 @@ Prism::Model* Prism::FBXFactory::LoadModel(const char* aFilePath, Effect* aEffec
 	}
 	else
 	{
+		CU::GrowingArray<std::string> errors;
 		FBXData* data = new FBXData();
-		FbxModelData* fbxModelData = myLoader->loadModel(aFilePath);
+		FbxModelData* fbxModelData = myLoader->loadModel(aFilePath, errors);
 		data->myData = fbxModelData;
 		data->myPath = aFilePath;
 		myFBXData.push_back(data);
@@ -588,8 +589,9 @@ Prism::ModelAnimated* Prism::FBXFactory::LoadModelAnimated(const char* aFilePath
 	}
 	else
 	{
+		CU::GrowingArray<std::string> errors;
 		FBXData* data = new FBXData();
-		FbxModelData* fbxModelData = myLoader->loadModel(aFilePath);
+		FbxModelData* fbxModelData = myLoader->loadModel(aFilePath, errors);
 		data->myData = fbxModelData;
 		data->myPath = aFilePath;
 		myFBXData.push_back(data);
@@ -646,8 +648,9 @@ Prism::Animation* Prism::FBXFactory::LoadAnimation(const char* aFilePath)
 	}
 	else
 	{
+		CU::GrowingArray<std::string> errors;
 		FBXData* data = new FBXData();
-		FbxModelData* fbxModelData = myLoader->loadModel(aFilePath);
+		FbxModelData* fbxModelData = myLoader->loadModel(aFilePath, errors);
 		data->myData = fbxModelData;
 		data->myPath = aFilePath;
 		myFBXData.push_back(data);
@@ -672,7 +675,8 @@ Prism::Animation* Prism::FBXFactory::LoadAnimation(const char* aFilePath)
 void Prism::FBXFactory::LoadModelForRadiusCalc(const char* aFilePath
 	, CU::GrowingArray<CU::Vector3<float>>& someVerticesOut)
 {
-	FbxModelData* fbxModelData = myLoader->loadModel(aFilePath);
+	CU::GrowingArray<std::string> errors;
+	FbxModelData* fbxModelData = myLoader->loadModel(aFilePath, errors);
 
 	CreateModelForRadiusCalc(fbxModelData, someVerticesOut);
 	delete fbxModelData;
@@ -680,10 +684,17 @@ void Prism::FBXFactory::LoadModelForRadiusCalc(const char* aFilePath
 
 void Prism::FBXFactory::ConvertToDGFX(const char* aInputPath, const char* aOutputPath)
 {
+	CU::GrowingArray<std::string> errors;
+
+	ConvertToDGFX(aInputPath, aOutputPath, errors);
+}
+
+void Prism::FBXFactory::ConvertToDGFX(const char* aInputPath, const char* aOutputPath, CU::GrowingArray<std::string>& someOutErrors)
+{
 	CU::TimerManager::GetInstance()->StartTimer("ConvertDGFX");
 
 	FBXData* data = new FBXData();
-	FbxModelData* fbxModelData = myLoader->loadModel(aInputPath);
+	FbxModelData* fbxModelData = myLoader->loadModel(aInputPath, someOutErrors);
 	data->myData = fbxModelData;
 	data->myPath = aInputPath;
 
@@ -699,6 +710,7 @@ void Prism::FBXFactory::ConvertToDGFX(const char* aInputPath, const char* aOutpu
 
 	delete data;
 }
+
 
 void Prism::FBXFactory::CreateModelForRadiusCalc(FbxModelData* someModelData, CU::GrowingArray<CU::Vector3<float>>& someVerticesOut
 	, const CU::Matrix44<float>& aParentOrientation)
