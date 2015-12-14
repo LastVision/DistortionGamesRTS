@@ -115,11 +115,11 @@ void Entity::Update(float aDeltaTime)
 	{
 		Prism::RenderBox(myOrientation.GetPos(), eColorDebug::WHITE);
 	}
-	if (myComponents[static_cast<int>(eComponentType::ANIMATION)] != nullptr && myAlive == false && myState == eEntityState::DYING &&
-		static_cast<AnimationComponent*>(myComponents[static_cast<int>(eComponentType::ANIMATION)])->IsCurrentAnimationDone())
-	{
-		RemoveFromScene();
-	}
+	//if (myComponents[static_cast<int>(eComponentType::ANIMATION)] != nullptr && myAlive == false && myState == eEntityState::DYING &&
+	//	static_cast<AnimationComponent*>(myComponents[static_cast<int>(eComponentType::ANIMATION)])->IsCurrentAnimationDone())
+	//{
+	//	RemoveFromScene();
+	//}
 }
 
 void Entity::AddComponent(Component* aComponent)

@@ -43,6 +43,7 @@ void Director::CleanUp()
 	{
 		if (myActiveUnits[i]->GetShouldBeRemoved() == true)
 		{
+			myActiveUnits[i]->RemoveFromScene();
 			myActiveUnits.RemoveCyclicAtIndex(i);
 		}
 	}
