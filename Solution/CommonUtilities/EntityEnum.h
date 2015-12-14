@@ -24,7 +24,7 @@ enum eUnitType
 	NOT_A_UNIT = -1,
 	GRUNT,
 	RANGER,
-	SCOUT,
+	TANK,
 };
 
 enum class ePropType
