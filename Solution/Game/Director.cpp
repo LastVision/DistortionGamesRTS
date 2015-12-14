@@ -33,7 +33,7 @@ void Director::CleanUp()
 {
 	for (int i = myActiveUnits.Size() - 1; i >= 0; --i)
 	{
-		if (myActiveUnits[i]->GetAlive() == false)
+		if (myActiveUnits[i]->GetShouldBeRemoved() == true)
 		{
 			myActiveUnits.RemoveCyclicAtIndex(i);
 		}

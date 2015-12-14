@@ -65,6 +65,8 @@ public:
 	void SetHovered(bool aStatus);
 	bool IsHovered() const;
 
+	bool GetShouldBeRemoved() const;
+
 	CU::GrowingArray<CU::Vector2<float>> GetCutMesh() const;
 
 	int GetId() const;
