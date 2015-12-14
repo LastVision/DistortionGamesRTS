@@ -104,7 +104,15 @@ bool Prism::Surface::SetTexture(const std::string& aResourceName, ID3D11ShaderRe
 
 void Prism::Surface::ActivateAlbedo(eOwnerType aOwner)
 {
+	return;
+
 	DL_ASSERT_EXP(aOwner != eOwnerType::NOT_USED, "NOT_USED cannot be used to ActivateAlbedo");
+
+	if (myOwnerAlbedoTextures[0] == nullptr || myOwnerAlbedoTextures[1] == nullptr
+		|| myOwnerAlbedoTextures[2] == nullptr)
+	{
+		return;
+	}
 
 	for (int i = 0; i < myShaderResourceNames.Size(); ++i)
 	{
@@ -113,23 +121,13 @@ void Prism::Surface::ActivateAlbedo(eOwnerType aOwner)
 			switch (aOwner)
 			{
 			case NEUTRAL:
-				if (myOwnerAlbedoTextures[0] != nullptr)
-				{
-					myTextures[i] = myOwnerAlbedoTextures[0];
-				}
+				myTextures[i] = myOwnerAlbedoTextures[0];
 				break;
 			case PLAYER:
-				if (myOwnerAlbedoTextures[1] != nullptr)
-				{
-					myTextures[i] = myOwnerAlbedoTextures[1];
-				}
+				myTextures[i] = myOwnerAlbedoTextures[1];
 				break;
 			case ENEMY:
-				if (myOwnerAlbedoTextures[2] != nullptr)
-				{
-					myTextures[i] = myOwnerAlbedoTextures[2];
-				}
-
+				myTextures[i] = myOwnerAlbedoTextures[2];
 				break;
 			default:
 				myTextures[i] = myOwnerAlbedoTextures[0];
