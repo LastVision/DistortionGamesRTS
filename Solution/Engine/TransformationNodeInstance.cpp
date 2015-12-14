@@ -64,15 +64,15 @@ namespace Prism
 		myTransformationNode = aTransformationNode;
 	}
 
-	void TransformationNodeInstance::Update(float aElapsedTime)
+	void TransformationNodeInstance::Update(float aElapsedTime, float aAnimationLenght)
 	{
 		myElapsedTime += aElapsedTime;
 		for (int i = 0; i < myChildren.Size(); ++i)
 		{
-			myChildren[i]->Update(aElapsedTime);
+			myChildren[i]->Update(aElapsedTime, aAnimationLenght);
 		}
 
-		if (myElapsedTime > 5.f)
+		if (myElapsedTime > aAnimationLenght)
 		{
 			myElapsedTime = 0.f;
 		}

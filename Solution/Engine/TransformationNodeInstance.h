@@ -22,7 +22,7 @@ namespace Prism
 
 		void SetTransformationNode(TransformationNode* aTransformationNode);
 
-		void Update(float aElapsedTime);
+		void Update(float aElapsedTime, float aAnimationLenght);
 
 	private:
 		CU::GrowingArray<TransformationNodeInstance*> myChildren;

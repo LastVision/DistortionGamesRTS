@@ -42,7 +42,7 @@ void Prism::Instance::Update(float aDelta)
 			
 		}
 
-		myHierarchy.Update(aDelta);
+		myHierarchy.Update(aDelta, myAnimation->GetAnimationLenght());
 		if (myAnimation != nullptr)
 		{
 			myAnimation->Update(myTotalTime, myBones);
