@@ -44,6 +44,11 @@ ControllerComponent::~ControllerComponent()
 
 void ControllerComponent::Update(float aDelta)
 {
+	if (myEntity.GetState() == eEntityState::DYING)
+	{
+		return;
+	}
+
 	if (myCurrentAction.myAction == eAction::IDLE)
 	{
 		myEntity.SetState(eEntityState::IDLE);
@@ -349,6 +354,7 @@ void ControllerComponent::AttackTarget()
 			}
 			else
 			{
+				myAttackTarget->SetState(eEntityState::DYING);
 				myEntity.SetState(eEntityState::IDLE);
 			}
 		}
