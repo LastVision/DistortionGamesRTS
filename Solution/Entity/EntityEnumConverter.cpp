@@ -48,9 +48,9 @@ namespace EntityEnumConverter
 		{
 			return eUnitType::RANGER;
 		}
-		else if (aUnitType == "scout")
+		else if (aUnitType == "tank")
 		{
-			return eUnitType::SCOUT;
+			return eUnitType::TANK;
 		}
 		DL_ASSERT("This unit type is not supported, please tell Daniel about it.");
 		return eUnitType::NOT_A_UNIT;
