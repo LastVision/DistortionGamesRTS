@@ -35,10 +35,10 @@ bool Prism::Surface::SetTexture(const std::string& aResourceName, const std::str
 
 	if (aResourceName == "AlbedoTexture")
 	{
-		int index = aFileName.find("_ally.dds");
+		int index = aFileName.find("_neutral.dds");
 		if (index != std::string::npos)
 		{
-			/*std::string playerAlbedo(aFileName.begin(), aFileName.begin() + index);
+			std::string playerAlbedo(aFileName.begin(), aFileName.begin() + index);
 			playerAlbedo += "_player.dds";
 
 			std::string enemyAlbedo(aFileName.begin(), aFileName.begin() + index);
@@ -47,9 +47,9 @@ bool Prism::Surface::SetTexture(const std::string& aResourceName, const std::str
 			myOwnerAlbedoTextures[0] = tex;
 			myOwnerAlbedoTextures[1] = TextureContainer::GetInstance()->GetTexture(playerAlbedo);
 			myOwnerAlbedoTextures[2] = TextureContainer::GetInstance()->GetTexture(enemyAlbedo);
-			*/
+			
 
-			std::string neutralAlbedo(aFileName.begin(), aFileName.begin() + index);
+			/*std::string neutralAlbedo(aFileName.begin(), aFileName.begin() + index);
 			neutralAlbedo += "_neutral.dds";
 
 			std::string enemyAlbedo(aFileName.begin(), aFileName.begin() + index);
@@ -59,7 +59,7 @@ bool Prism::Surface::SetTexture(const std::string& aResourceName, const std::str
 
 			myOwnerAlbedoTextures[0] = TextureContainer::GetInstance()->GetTexture(neutralAlbedo);
 			myOwnerAlbedoTextures[1] = tex;
-			myOwnerAlbedoTextures[2] = TextureContainer::GetInstance()->GetTexture(enemyAlbedo);
+			myOwnerAlbedoTextures[2] = TextureContainer::GetInstance()->GetTexture(enemyAlbedo);*/
 		}
 	}
 
@@ -104,7 +104,7 @@ bool Prism::Surface::SetTexture(const std::string& aResourceName, ID3D11ShaderRe
 
 void Prism::Surface::ActivateAlbedo(eOwnerType aOwner)
 {
-	return;
+	//return;
 
 	DL_ASSERT_EXP(aOwner != eOwnerType::NOT_USED, "NOT_USED cannot be used to ActivateAlbedo");
 

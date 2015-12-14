@@ -226,13 +226,22 @@ void ControllerComponent::FillCommandList(const CU::Vector3<float>& aTargetPosit
 	CU::GrowingArray<Prism::Navigation::Triangle*> path(16);
 	if (myTerrain.GetPathFinder()->FindPath(myEntity.GetOrientation().GetPos(), aTargetPosition, path) == true)
 	{
-		for (int i = path.Size() - 1; i >= 0; --i)
+		if (path.Size() > 0)
 		{
-			CU::Vector3<float> target = path[i]->GetCenter();
-			target.y = 0.f;
+			for (int i = path.Size() - 1; i >= 0; --i)
+			{
+				CU::Vector3<float> target = path[i]->GetCenter();
+				target.y = 0.f;
 
-			action.myPosition = target;
+				action.myPosition = target;
 
+				myActions.Add(action);
+			}
+		}
+		else
+		{
+			action.myPosition = aTargetPosition;
+			action.myPosition.y = 0.f;
 			myActions.Add(action);
 		}
 	}
