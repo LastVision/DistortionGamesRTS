@@ -8,7 +8,7 @@
 
 #define USE_DGFX
 #ifdef USE_DGFX
-#define CONVERT_TO_DGFX_IN_RUNTIME
+//#define CONVERT_TO_DGFX_IN_RUNTIME
 #endif
 
 //DO NOT CHANGE
