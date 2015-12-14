@@ -67,7 +67,7 @@ namespace Prism
 		Engine::GetInstance()->GetContex()->IASetIndexBuffer(myIndexBuffer->myIndexBuffer
 			, myIndexBuffer->myIndexBufferFormat, myIndexBuffer->myByteOffset);
 
-		bool usePixelShader = Engine::GetInstance()->UsePBLPixelShader();
+		//bool usePixelShader = Engine::GetInstance()->UsePBLPixelShader();
 
 		for (int s = 0; s < mySurfaces.Size(); ++s)
 		{

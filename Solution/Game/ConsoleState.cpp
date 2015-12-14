@@ -230,7 +230,8 @@ void ConsoleState::ResumeState()
 
 void ConsoleState::OnResize(int aWidth, int aHeight)
 {
-
+	aWidth;
+	aHeight;
 }
 
 
