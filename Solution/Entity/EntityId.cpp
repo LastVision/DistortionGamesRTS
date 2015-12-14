@@ -33,7 +33,13 @@ int EntityId::GetId(Entity* anEntity)
 
 		if (anEntity->GetType() == eEntityType::RESOURCE_POINT)
 		{
-			myTriggers.Add(anEntity);
+			myResourcePoints.Add(anEntity);
+			PollingStation::GetInstance()->RegisterEntity(anEntity);
+		}
+
+		if (anEntity->GetType() == eEntityType::VICTORY_POINT)
+		{
+			myVictoryPoints.Add(anEntity);
 			PollingStation::GetInstance()->RegisterEntity(anEntity);
 		}
 	}
@@ -49,19 +55,35 @@ Entity* EntityId::GetEntity(int aId) const
 	return myEntities[aId];
 }
 
-Entity* EntityId::GetTrigger(int aId) const
+Entity* EntityId::GetTrigger(eEntityType aType, int aId) const
 {
-	if (aId >= myTriggers.Size() || aId < 0)
+	switch (aType)
 	{
-		return nullptr;
+	case RESOURCE_POINT:
+		if (aId >= myResourcePoints.Size() || aId < 0)
+		{
+			return nullptr;
+		}
+		return myResourcePoints[aId];
+		break;
+	case VICTORY_POINT:
+		if (aId >= myVictoryPoints.Size() || aId < 0)
+		{
+			return nullptr;
+		}
+		return myVictoryPoints[aId];
+		break;
+	default:
+		DL_ASSERT("Trigger not found.");
+		break;
 	}
-
-	return myTriggers[aId];
+	return nullptr;
 }
 
 EntityId::EntityId()
 	: myEntities(4096)
-	, myTriggers(GC::triggerCount)
+	, myResourcePoints(GC::resourcePointCount)
+	, myVictoryPoints(GC::victoryPointCount)
 {
 }
 

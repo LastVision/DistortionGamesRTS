@@ -14,7 +14,6 @@
 #include <PathFinder.h>
 #include "PlayerDirector.h"
 #include <PollingStation.h>
-#include <ResourceMessage.h>
 #include <Terrain.h>
 #include <ToggleGUIMessage.h>
 #include <ModelLoader.h>
@@ -24,7 +23,7 @@
 #include <PostMaster.h>
 
 PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aScene, GUI::Cursor* aCursor)
-	: Director(eDirectorType::PLAYER, aTerrain)
+	: Director(eOwnerType::PLAYER, aTerrain)
 	, myRenderGUI(true)
 	, myCursor(aCursor)
 	, myGUIManager(nullptr)
@@ -32,7 +31,6 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 	, myTweakValueX(3.273f)
 	, myTweakValueY(10.79f)
 	, mySelectedAction(eSelectedAction::NONE)
-	, myTestGold(60)
 	, myLeftMouseUp(false)
 	, myLeftMouseDown(false)
 	, myLeftMousePressed(false)
@@ -56,7 +54,6 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 
 	PostMaster::GetInstance()->Subscribe(eMessageType::TOGGLE_GUI, this);
 	PostMaster::GetInstance()->Subscribe(eMessageType::ON_CLICK, this);
-	PostMaster::GetInstance()->Subscribe(eMessageType::RESOURCE, this);
 	PostMaster::GetInstance()->Subscribe(eMessageType::TIME_MULTIPLIER, this);
 }
 
@@ -65,7 +62,6 @@ PlayerDirector::~PlayerDirector()
 	SAFE_DELETE(myGUIManager);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::TOGGLE_GUI, this);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::ON_CLICK, this);
-	PostMaster::GetInstance()->UnSubscribe(eMessageType::RESOURCE, this);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::TIME_MULTIPLIER, this);
 }
 
@@ -79,6 +75,12 @@ void PlayerDirector::InitGUI()
 void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 {
 	aDeltaTime *= myTimeMultiplier;
+
+	//debug only, remove when handled by GUI //Linus
+	int playerVictoryPoints = myVictoryPoints;
+	DEBUG_PRINT(playerVictoryPoints);
+	//debug end
+
 	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_G) == true)
 	{
 		PostMaster::GetInstance()->SendMessage(ToggleGUIMessage(!myRenderGUI, 1.f / 3.f));
@@ -206,18 +208,6 @@ void PlayerDirector::ReceiveMessage(const OnClickMessage& aMessage)
 		}
 	}
 }
-
-void PlayerDirector::ReceiveMessage(const ResourceMessage& aMessage)
-{
-	if (aMessage.myOwner == eOwnerType::PLAYER)
-	{
-		myTestGold += aMessage.myResourceModifier;
-		if (myTestGold < 0)
-		{
-			myTestGold = 0;
-		}
-	}
-	}
 
 void PlayerDirector::ReceiveMessage(const TimeMultiplierMessage& aMessage)
 {

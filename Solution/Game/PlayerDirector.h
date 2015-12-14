@@ -55,7 +55,6 @@ public:
 	void ReceiveMessage(const SpawnUnitMessage& aMessage) override;
 	void ReceiveMessage(const ToggleGUIMessage& aMessage) override;
 	void ReceiveMessage(const OnClickMessage& aMessage) override;
-	void ReceiveMessage(const ResourceMessage& aMessage) override;
 	void ReceiveMessage(const TimeMultiplierMessage& aMessage) override;
 
 	const CU::GrowingArray<Entity*>& GetSelectedUnits() const;
@@ -90,7 +89,6 @@ private:
 	CU::Vector2<float> myFirstMousePosition;
 	CU::Vector3<float> myTestBoxPositions[4];
 
-	int myTestGold;
 };
 
 inline const CU::GrowingArray<Entity*>& PlayerDirector::GetSelectedUnits() const

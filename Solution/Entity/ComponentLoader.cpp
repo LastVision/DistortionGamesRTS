@@ -198,6 +198,10 @@ void ComponentLoader::LoadTriggerComponent(XMLReader& aDocument, tinyxml2::XMLEl
 			{
 				aOutputData.myType = eTriggerType::RESOURCE;
 			}
+			else if (typeString == "victory")
+			{
+				aOutputData.myType = eTriggerType::VICTORY;
+			}
 			else
 			{
 				DL_ASSERT("Unknown trigger type.");

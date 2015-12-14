@@ -10,5 +10,6 @@ namespace GC
 	const int enemyDragonCount = 10;
 	const int enemyUnitCount = enemyGruntCount + enemyDragonCount;
 
-	const int triggerCount = 16;
+	const int resourcePointCount = 16;
+	const int victoryPointCount = 16;
 }
