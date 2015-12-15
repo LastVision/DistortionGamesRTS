@@ -6,7 +6,7 @@
 #include <DebugDrawer.h>
 #include <DL_Debug.h>
 #include <Engine.h>
-#include <EntityEnum.h>
+#include <GameEnum.h>
 #include <Entity.h>
 #include <GameConstants.h>
 #include <GrowingArray.h>

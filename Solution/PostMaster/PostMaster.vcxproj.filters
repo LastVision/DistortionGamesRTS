@@ -87,5 +87,8 @@
     <ClInclude Include="VictoryMessage.h">
       <Filter>Message</Filter>
     </ClInclude>
+    <ClInclude Include="EmitterMessage.h">
+      <Filter>Message</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
