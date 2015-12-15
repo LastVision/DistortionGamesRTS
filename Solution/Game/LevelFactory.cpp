@@ -1,12 +1,14 @@
 #include "stdafx.h"
 
 #include "AIDirector.h"
+#include <Camera.h>
 #include <CommonHelper.h>
 #include <DirectionalLight.h>
 #include "dirent.h"
 #include <Defines.h>
 #include <Effect.h>
 #include <EffectContainer.h>
+#include <EmitterMessage.h>
 #include <EngineEnums.h>
 #include <EntityFactory.h>
 #include <EntityEnumConverter.h>
@@ -18,14 +20,15 @@
 #include "PlayerDirector.h"
 #include <PollingStation.h>
 #include <PointLight.h>
+#include <PostMaster.h>
 #include <ScriptSystem.h>
 #include <SpotLight.h>
+#include <TimerManager.h>
 #include <Terrain.h>
 #include <TextureContainer.h>
 #include <Scene.h>
 #include <XMLReader.h>
 
-#include <TimerManager.h>
 
 NavmeshCutBox::NavmeshCutBox(const CU::Vector3f& aPosition, const CU::Vector3f& aExtend, const CU::Vector3f& aRotation)
 	: myPosition(aPosition)
@@ -105,6 +108,10 @@ Level* LevelFactory::LoadCurrentLevel()
 	myCurrentLevel->myPlayer->InitGUI(myCurrentLevel->myAI);
 
 	LUA::ScriptSystem::GetInstance()->CallFunction("Init", {});
+
+	CU::Vector3f weatherPosition = myCamera.GetOrientation().GetPos();
+	weatherPosition.y += 5;
+	//PostMaster::GetInstance()->SendMessage(EmitterMessage(eParticleType::WEATHER_SNOW, weatherPosition));
 
 	return myCurrentLevel;
 }

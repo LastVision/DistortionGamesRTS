@@ -75,5 +75,6 @@ enum class eHistoryType
 enum class eParticleType : int
 {
 	BLOOD,
+//	WEATHER_SNOW,
 	_COUNT
 };

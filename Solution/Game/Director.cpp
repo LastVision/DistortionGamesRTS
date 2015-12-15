@@ -2,6 +2,7 @@
 #include <BuildingComponent.h>
 #include "Director.h"
 #include <Entity.h>
+#include <HealthComponent.h>
 #include <PostMaster.h>
 #include <ResourceMessage.h>
 #include <VictoryMessage.h>
@@ -37,6 +38,17 @@ void Director::Update(float aDeltaTime)
 	for (int i = 0; i < myActiveUnits.Size(); ++i)
 	{
 		myActiveUnits[i]->Update(aDeltaTime);
+	}
+}
+
+void Director::RenderHealthBars(const Prism::Camera& aCamera)
+{
+	for (int i = 0; i < myActiveUnits.Size(); i++)
+	{
+		if (myActiveUnits[i]->GetAlive() == true)
+		{
+			myActiveUnits[i]->GetComponent<HealthComponent>()->RenderHealthBar(aCamera);
+		}
 	}
 }
 
