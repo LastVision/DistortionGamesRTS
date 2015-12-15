@@ -8,11 +8,11 @@ namespace Prism
 	class Terrain;
 }
 
-class NavMeshReader : public IReader
+class TerrainReader : public IReader
 {
 public:
-	NavMeshReader();
-	~NavMeshReader();
+	TerrainReader();
+	~TerrainReader();
 
 	void ReadFile(const std::string& aFilePath) override;
 

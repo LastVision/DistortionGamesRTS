@@ -92,3 +92,5 @@ Tools/CSharpUtilities/CSharpUtilities/obj/
 *.fx
 /Documentation/CreateProject.txt
 *.config
+/Solution/DataExporter/log
+/Workbed

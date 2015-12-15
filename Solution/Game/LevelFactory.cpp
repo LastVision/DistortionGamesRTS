@@ -210,8 +210,10 @@ void LevelFactory::ReadLevel(const std::string& aLevelPath)
 	}
 	for (int i = 0; i < myCurrentLevel->myEntities.Size(); ++i)
 	{
+		//DL_ASSERT("Cutting from entities not supported.");
 		myTerrain->GetNavMesh()->Cut(myCurrentLevel->myEntities[i]->GetCutMesh());
 	}
+	myTerrain->GetNavMesh()->CalcHeights(myTerrain);
 	int elapsed = static_cast<int>(
 		CU::TimerManager::GetInstance()->StopTimer("CreateNavMesh").GetMilliseconds());
 	RESOURCE_LOG("Creating NavMesh took %d ms", elapsed);

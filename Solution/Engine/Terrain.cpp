@@ -34,10 +34,12 @@ namespace Prism
 		, myVertexFormat(4)
 		, myPathFinder(nullptr)
 		, myNavMesh(nullptr)
+		, myIceHeight(1.25f)
 	{
 		DL_ASSERT_EXP(mySize.x == mySize.y, "Can't create non-quad terrain.");
 
 		myFileName = aTexturePath;
+		myCellSize = mySize.x / myHeightMap->myWidth;
 
 		CreateVertices();
 
@@ -47,13 +49,16 @@ namespace Prism
 	Terrain::Terrain(const std::string& aHeightMapPath, const CU::Vector2<float>& aSize, float aHeight)
 		: mySize(aSize)
 		, myHeight(aHeight)
+		, myIceHeight(1.25f)
 	{
 		myHeightMap = HeightMapFactory::Create(aHeightMapPath.c_str());
 
+		myCellSize = mySize.x / myHeightMap->myWidth;
 		CreateVertices();
 	}
 
 	Terrain::Terrain(const std::string& aBinaryPath, const std::string& aTexturePath, const std::string& aIceInfluence)
+		: myIceHeight(1.25f)
 	{
 		myFileName = aTexturePath;
 
@@ -65,6 +70,9 @@ namespace Prism
 			DL_ASSERT("Failed to open Terrain-binary-path, did you forget to run the tool?");
 			return;
 		}
+		int terrainVersion;
+		file.read((char*)&terrainVersion, sizeof(int));
+		DL_ASSERT_EXP(terrainVersion == TERRAIN_VERSION, "Wrong Terrain Version, did you forget to run the tool?");
 
 		myHeightMap = new HeightMap(file);
 
@@ -72,6 +80,7 @@ namespace Prism
 		file.read((char*)&mySize.x, sizeof(float) * 2);
 		file.read((char*)&myHeight, sizeof(float));
 
+		myCellSize = mySize.x / myHeightMap->myWidth;
 
 		int vertexCount;
 		file.read((char*)&vertexCount, sizeof(int));
@@ -135,10 +144,8 @@ namespace Prism
 
 		ZeroMemory(myInitData, sizeof(myInitData));
 
-		myCellSize = mySize.x / myHeightMap->myWidth;
-
 		myIce = new Ice(EffectContainer::GetInstance()->GetEffect("Data/Resource/Shader/S_effect_ice.fx")
-			, { 256.f, 256.f }, 1.25f, aIceInfluence);
+			, { 256.f, 256.f }, myIceHeight, aIceInfluence);
 		myIce->SetTextures();
 
 
@@ -194,9 +201,9 @@ namespace Prism
 
 		returnPosition.y = CU::Math::Lerp<float>(lowerY, upperY, alphaZ);
 
-		if (returnPosition.y < myIce->GetHeight())
+		if (returnPosition.y < myIceHeight)
 		{
-			returnPosition.y = myIce->GetHeight();
+			returnPosition.y = myIceHeight;
 		}
 		returnPosition.y += aHeightOffset;
 		return returnPosition;
