@@ -1,21 +1,22 @@
 #include <CommonHelper.h>
+#include <Defines.h>
 #include <HeightMap.h>
 #include <MathHelper.h>
 #include <NavMesh.h>
-#include "NavMeshReader.h"
+#include "TerrainReader.h"
 #include <Terrain.h>
 #include <XMLReader.h>
 #include <Vertices.h>
 #include <iostream>
 
-NavMeshReader::NavmeshCutBox::NavmeshCutBox(const CU::Vector3f& aPosition, const CU::Vector3f& aExtend, const CU::Vector3f& aRotation)
+TerrainReader::NavmeshCutBox::NavmeshCutBox(const CU::Vector3f& aPosition, const CU::Vector3f& aExtend, const CU::Vector3f& aRotation)
 	: myPosition(aPosition)
 	, myExtend(aExtend / 2.f)
 	, myRotation(aRotation)
 {
 }
 
-CU::GrowingArray<CU::Vector2<float>> NavMeshReader::NavmeshCutBox::GetCutMesh() const
+CU::GrowingArray<CU::Vector2<float>> TerrainReader::NavmeshCutBox::GetCutMesh() const
 {
 	CU::GrowingArray<CU::Vector2<float>> points(4);
 
@@ -39,18 +40,18 @@ CU::GrowingArray<CU::Vector2<float>> NavMeshReader::NavmeshCutBox::GetCutMesh() 
 
 
 
-NavMeshReader::NavMeshReader()
+TerrainReader::TerrainReader()
 	: myTerrain(nullptr)
 	, myCutBoxes(2048)
 {
 }
 
 
-NavMeshReader::~NavMeshReader()
+TerrainReader::~TerrainReader()
 {
 }
 
-void NavMeshReader::ReadFile(const std::string& aFilePath)
+void TerrainReader::ReadFile(const std::string& aFilePath)
 {
 	XMLReader reader;
 	reader.OpenDocument(aFilePath);
@@ -72,7 +73,7 @@ void NavMeshReader::ReadFile(const std::string& aFilePath)
 	reader.CloseDocument();
 }
 
-void NavMeshReader::ReadLevel(const std::string& aFilePath)
+void TerrainReader::ReadLevel(const std::string& aFilePath)
 {
 	XMLReader reader;
 	reader.OpenDocument(aFilePath);
@@ -92,6 +93,7 @@ void NavMeshReader::ReadLevel(const std::string& aFilePath)
 	{
 	myTerrain->GetNavMesh()->Cut(myCurrentLevel->myEntities[i]->GetCutMesh());
 	}*/
+	myTerrain->GetNavMesh()->CalcHeights(myTerrain);
 
 
 	std::string navPath = CU::GetGeneratedDataFolderFilePath(aFilePath, "nav");
@@ -100,6 +102,8 @@ void NavMeshReader::ReadLevel(const std::string& aFilePath)
 
 	std::fstream file;
 	file.open(navPath, std::ios::out | std::ios::binary);
+	int terrainVersion = TERRAIN_VERSION;
+	file.write((char*)&terrainVersion, sizeof(int));
 
 	SaveHeigthMap(file);
 	SaveTerrain(file);
@@ -116,7 +120,7 @@ void NavMeshReader::ReadLevel(const std::string& aFilePath)
 	myCutBoxes.DeleteAll();
 }
 
-void NavMeshReader::LoadTerrain(XMLReader& aReader, tinyxml2::XMLElement* aLevelElement)
+void TerrainReader::LoadTerrain(XMLReader& aReader, tinyxml2::XMLElement* aLevelElement)
 {
 	std::string heightMap;
 
@@ -126,7 +130,7 @@ void NavMeshReader::LoadTerrain(XMLReader& aReader, tinyxml2::XMLElement* aLevel
 	myTerrain = new Prism::Terrain(heightMap, { 256.f, 256.f }, 10.f);
 }
 
-void NavMeshReader::LoadCutBoxes(XMLReader& aReader, tinyxml2::XMLElement* aLevelElement)
+void TerrainReader::LoadCutBoxes(XMLReader& aReader, tinyxml2::XMLElement* aLevelElement)
 {
 	for (tinyxml2::XMLElement* e = aReader.FindFirstChild(aLevelElement); e != nullptr;
 		e = aReader.FindNextElement(e))
@@ -162,7 +166,7 @@ void NavMeshReader::LoadCutBoxes(XMLReader& aReader, tinyxml2::XMLElement* aLeve
 	}
 }
 
-void NavMeshReader::SaveHeigthMap(std::fstream& aStream)
+void TerrainReader::SaveHeigthMap(std::fstream& aStream)
 {
 	aStream.write((char*)&myTerrain->myHeightMap->myWidth, sizeof(int));
 	aStream.write((char*)&myTerrain->myHeightMap->myDepth, sizeof(int));
@@ -170,7 +174,7 @@ void NavMeshReader::SaveHeigthMap(std::fstream& aStream)
 		myTerrain->myHeightMap->myDepth);
 }
 
-void NavMeshReader::SaveTerrain(std::fstream& aStream)
+void TerrainReader::SaveTerrain(std::fstream& aStream)
 {
 	aStream.write((char*)&myTerrain->mySize.x, sizeof(float) * 2);
 	aStream.write((char*)&myTerrain->myHeight, sizeof(float));

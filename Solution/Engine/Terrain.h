@@ -24,7 +24,7 @@ namespace Prism
 
 	class Terrain : public BaseModel
 	{
-		friend class NavMeshReader;
+		friend class TerrainReader;
 	public:
 		Terrain(const std::string& aHeightMapPath, const std::string& aTexturePath
 			, const CU::Vector2<float>& aSize, float aHeight, const CU::Matrix44<float>& aOrientation
@@ -63,6 +63,7 @@ namespace Prism
 		const HeightMap* myHeightMap;
 		CU::Vector2<float> mySize;
 		float myHeight;
+		const float myIceHeight;
 		const CU::Matrix44<float> myOrientation;
 
 		CU::GrowingArray<D3D11_INPUT_ELEMENT_DESC*> myVertexFormat;

@@ -5,6 +5,8 @@
 
 namespace Prism
 {
+	class Terrain;
+
 	namespace Navigation
 	{
 		class Edge;
@@ -25,6 +27,8 @@ namespace Prism
 			const CU::GrowingArray<Triangle*>& GetTriangles() const;
 			void Cut(const CU::GrowingArray<CU::Vector2<float>>& someVertices); // needs to be clock wise convex hull
 
+			void CalcHeights(Terrain* aTerrain); // run after all cuts are done
+
 			void Save(const std::string& aFilePath);
 			void Save(std::fstream& aStream);
 
@@ -39,6 +43,7 @@ namespace Prism
 			void UniqueAddIfExist(Triangle* aTriangle, CU::GrowingArray<Triangle*>& someTrianglesOut) const;
 			bool Inside(const CU::GrowingArray<CU::Vector2<float>>& someVertices, const CU::Vector2<float>& aPosition) const;
 			CU::GrowingArray<Triangle*> myTriangles;
+			CU::GrowingArray<Edge*> myEdges; // for render only
 			CU::GrowingArray<Triangle*> myNewTriangles;
 			const float myTotalSize;
 			const float myCellSize;
