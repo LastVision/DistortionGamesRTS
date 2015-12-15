@@ -156,10 +156,6 @@ inline eEntityState Entity::GetState() const
 
 inline void Entity::SetState(eEntityState aState)
 {
-	if (myState == eEntityState::DYING)
-	{
-		int apa = 5;
-	}
 	myState = aState;
 }
 
