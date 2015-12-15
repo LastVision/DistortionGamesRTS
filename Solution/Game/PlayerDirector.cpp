@@ -18,7 +18,7 @@
 #include <ToggleGUIMessage.h>
 #include <ModelLoader.h>
 #include <SpawnUnitMessage.h>
-
+#include <Sprite.h>
 #include <FadeMessage.h>
 #include <PostMaster.h>
 
@@ -34,7 +34,13 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 	, myLeftMouseUp(false)
 	, myLeftMouseDown(false)
 	, myLeftMousePressed(false)
+	, mySelectionSpriteSize(0,0)
+	, mySelectionSpriteRenderPosition(0,0)
+	, mySelectionSpriteHotspot(0,0)
 {
+	myDragSelectionPositions.Reserve(4);
+	myDragSelectionSprite = new Prism::Sprite("Data/Resource/Texture/T_selection_box.dds", { 0.f, 0.f });
+
 	for (int i = 0; i < 64; ++i)
 	{
 		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::PLAYER, eEntityType::UNIT, eUnitType::GRUNT, Prism::eOctreeType::DYNAMIC,
@@ -60,6 +66,7 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 PlayerDirector::~PlayerDirector()
 {
 	SAFE_DELETE(myGUIManager);
+	SAFE_DELETE(myDragSelectionSprite);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::TOGGLE_GUI, this);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::ON_CLICK, this);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::TIME_MULTIPLIER, this);
@@ -127,13 +134,18 @@ void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 
 void PlayerDirector::Render(const Prism::Camera& aCamera)
 {
+	
 	if (myRenderGUI == true)
 	{
 		for (int i = 0; i < mySelectedUnits.Size(); i++)
 		{
 			mySelectedUnits[i]->GetComponent<HealthComponent>()->RenderHealthBar(aCamera);
 		}
-
+		if (myLeftMousePressed == true)
+		{
+			myDragSelectionSprite->SetSize(mySelectionSpriteSize, mySelectionSpriteHotspot);
+			myDragSelectionSprite->Render(mySelectionSpriteRenderPosition);
+		}
 		myGUIManager->Render();
 	}
 }
@@ -389,20 +401,31 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 {
 	CU::Vector3<float> firstTargetPos = CalcCursorWorldPosition(CU::InputWrapper::GetInstance()->GetMousePosition(), aCamera);
 	CU::Vector3<float> secondTargetPos;
+	CU::Vector2<float> mousePosition = CU::InputWrapper::GetInstance()->GetMousePosition();
 
 	if (myLeftMousePressed == true)
 	{
 		secondTargetPos = CalcCursorWorldPosition(myFirstMousePosition, aCamera);
 
-		myTestBoxPositions[0] = { fminf(secondTargetPos.x, firstTargetPos.x), secondTargetPos.y, fminf(secondTargetPos.z, firstTargetPos.z) };
-		myTestBoxPositions[1] = { fminf(secondTargetPos.x, firstTargetPos.x), secondTargetPos.y, fmaxf(secondTargetPos.z, firstTargetPos.z) };
-		myTestBoxPositions[2] = { fmaxf(secondTargetPos.x, firstTargetPos.x), secondTargetPos.y, fmaxf(secondTargetPos.z, firstTargetPos.z) };
-		myTestBoxPositions[3] = { fmaxf(secondTargetPos.x, firstTargetPos.x), secondTargetPos.y, fminf(secondTargetPos.z, firstTargetPos.z) };
+		myDragSelectionPositions[0] = { fminf(secondTargetPos.x, firstTargetPos.x), secondTargetPos.y, fminf(secondTargetPos.z, firstTargetPos.z) };
+		myDragSelectionPositions[1] = { fminf(secondTargetPos.x, firstTargetPos.x), secondTargetPos.y, fmaxf(secondTargetPos.z, firstTargetPos.z) };
+		myDragSelectionPositions[2] = { fmaxf(secondTargetPos.x, firstTargetPos.x), secondTargetPos.y, fmaxf(secondTargetPos.z, firstTargetPos.z) };
+		myDragSelectionPositions[3] = { fmaxf(secondTargetPos.x, firstTargetPos.x), secondTargetPos.y, fminf(secondTargetPos.z, firstTargetPos.z) };
 
-		Prism::RenderLine3D(myTestBoxPositions[0], myTestBoxPositions[1]);
-		Prism::RenderLine3D(myTestBoxPositions[1], myTestBoxPositions[2]);
-		Prism::RenderLine3D(myTestBoxPositions[2], myTestBoxPositions[3]);
-		Prism::RenderLine3D(myTestBoxPositions[3], myTestBoxPositions[0]);
+		mySelectionSpriteSize = { fabs(mousePosition.x - myFirstMousePosition.x), fabs(mousePosition.y - myFirstMousePosition.y) };
+		mySelectionSpriteHotspot = { 0.f, fabs(mousePosition.y - myFirstMousePosition.y) };
+
+		CU::Vector2<float> renderPosition;
+		renderPosition.x = fminf(myFirstMousePosition.x, mousePosition.x);
+		renderPosition.y = Prism::Engine::GetInstance()->GetWindowSize().y;
+		renderPosition.y -= fminf(myFirstMousePosition.y, mousePosition.y);
+		mySelectionSpriteRenderPosition = renderPosition;
+
+
+		//Prism::RenderLine3D(myDragSelectionPositions[0], myDragSelectionPositions[1]);
+		//Prism::RenderLine3D(myDragSelectionPositions[1], myDragSelectionPositions[2]);
+		//Prism::RenderLine3D(myDragSelectionPositions[2], myDragSelectionPositions[3]);
+		//Prism::RenderLine3D(myDragSelectionPositions[3], myDragSelectionPositions[0]);
 	}
 
 	Entity* hoveredEnemy = PollingStation::GetInstance()->FindEntityAtPosition(firstTargetPos, eOwnerType::ENEMY);
@@ -450,32 +473,6 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 				controller->HoldPosition();
 				hasDoneAction = true;
 			}
-
-			/*if (mySelectedAction == eSelectedAction::ATTACK_MOVE && myLeftMouseClicked == true)
-			{
-				controller->AttackMove(targetPos, !myShiftPressed);
-				hasDoneAction = true;
-			}
-			else if ((mySelectedAction == eSelectedAction::MOVE && myLeftMouseClicked) || myRightClicked)
-			{
-				controller->MoveTo(targetPos, !myShiftPressed);
-				hasDoneAction = true;
-			}
-			else if (mySelectedAction == eSelectedAction::ATTACK_TAGRET || (myLeftMouseClicked == true && hoveredEnemy != nullptr))
-			{
-				controller->AttackTarget(hoveredEnemy, targetPos, !myShiftPressed);
-				hasDoneAction = true;
-			}
-			else if (mySelectedAction == eSelectedAction::STOP)
-			{
-				controller->Stop();
-				hasDoneAction = true;
-			}
-			else if (mySelectedAction == eSelectedAction::HOLD_POSITION)
-			{
-				controller->HoldPosition();
-				hasDoneAction = true;
-			}*/
 		}
 	}
 
@@ -499,8 +496,8 @@ void PlayerDirector::SelectOrHoverEntity(Entity* aEntity, bool &aSelected, bool 
 
 	aEntity->SetHovered(false);
 
-	CU::Vector2<float> position1(myTestBoxPositions[0].x, myTestBoxPositions[0].z);
-	CU::Vector2<float> position2(myTestBoxPositions[2].x, myTestBoxPositions[2].z);
+	CU::Vector2<float> position1(myDragSelectionPositions[0].x, myDragSelectionPositions[0].z);
+	CU::Vector2<float> position2(myDragSelectionPositions[2].x, myDragSelectionPositions[2].z);
 
 
 	if (aEntity->GetComponent<CollisionComponent>()->Collide(position1, position2) == true)
