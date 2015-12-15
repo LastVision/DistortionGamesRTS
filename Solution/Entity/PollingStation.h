@@ -14,6 +14,7 @@ public:
 	
 	const CU::GrowingArray<Entity*>& GetUnits(eOwnerType anOwner) const;
 	const CU::GrowingArray<Entity*>& GetResourcePoints() const;
+	const CU::GrowingArray<Entity*>& GetVictoryPoints() const;
 
 	void CleanUp();
 

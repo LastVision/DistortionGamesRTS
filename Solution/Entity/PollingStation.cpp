@@ -151,6 +151,11 @@ const CU::GrowingArray<Entity*>& PollingStation::GetResourcePoints() const
 	return myResourcePoints;
 }
 
+const CU::GrowingArray<Entity*>& PollingStation::GetVictoryPoints() const
+{
+	return myVictoryPoints;
+}
+
 void PollingStation::CleanUp()
 {
 	for (int i = myPlayerUnits.Size() - 1; i >= 0; --i)
