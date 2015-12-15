@@ -54,6 +54,11 @@ void Director::CleanUp()
 
 bool Director::SpawnUnit(eUnitType aUnitType)
 {
+	if (myBuilding->GetComponent<BuildingComponent>()->IsQueueFull() == true)
+	{
+		return false;
+	}
+
 	if (myTestGold >= myBuilding->GetComponent<BuildingComponent>()->GetUnitCost(aUnitType))
 	{
 		myTestGold -= myBuilding->GetComponent<BuildingComponent>()->GetUnitCost(aUnitType);

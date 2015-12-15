@@ -23,6 +23,8 @@ public:
 
 	int GetUnitCost(eUnitType aUnitType);
 
+	bool IsQueueFull() const;
+
 private:
 
 	CU::StaticArray<int, 3> myUnitCosts;
@@ -62,4 +64,9 @@ inline const float& BuildingComponent::GetMaxBuildTime() const
 inline int BuildingComponent::GetSpawnQueueSize() const
 {
 	return mySpawnQueueIndex + 1;
+}
+
+inline bool BuildingComponent::IsQueueFull() const
+{
+	return mySpawnQueueIndex >= 4;
 }

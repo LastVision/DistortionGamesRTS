@@ -32,6 +32,7 @@ namespace GUI
 		Prism::Sprite* myUnitSprite;
 		Prism::Sprite* myBaseSprite;
 		Prism::Sprite* myResourcePointSprite;
+		Prism::Sprite* myVictoryPointSprite;
 
 	};
 }

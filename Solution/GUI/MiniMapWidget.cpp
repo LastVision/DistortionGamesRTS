@@ -26,6 +26,7 @@ namespace GUI
 		myUnitSprite = new Prism::Sprite("Data/Resource/Texture/UI/Minimap/T_minimap_unit.dds", { 10.f, 10.f });
 		myBaseSprite = new Prism::Sprite("Data/Resource/Texture/UI/Minimap/T_minimap_base.dds", { 20.f, 20.f });
 		myResourcePointSprite = new Prism::Sprite("Data/Resource/Texture/UI/Minimap/T_minimap_resource_point.dds", { 20.f, 20.f });
+		myVictoryPointSprite = new Prism::Sprite("Data/Resource/Texture/UI/Minimap/T_minimap_victory_point.dds", { 20.f, 20.f });
 
 	}
 
@@ -35,6 +36,7 @@ namespace GUI
 		SAFE_DELETE(myUnitSprite);
 		SAFE_DELETE(myBaseSprite);
 		SAFE_DELETE(myResourcePointSprite);
+		SAFE_DELETE(myVictoryPointSprite);
 	}
 
 	void MiniMapWidget::Render(const CU::Vector2<float>& aParentPosition)
@@ -44,6 +46,7 @@ namespace GUI
 		const CU::GrowingArray<Entity*>& playerUnits = PollingStation::GetInstance()->GetUnits(eOwnerType::PLAYER);
 		const CU::GrowingArray<Entity*>& enemyUnits = PollingStation::GetInstance()->GetUnits(eOwnerType::ENEMY);
 		const CU::GrowingArray<Entity*>& resourcePoints = PollingStation::GetInstance()->GetResourcePoints();
+		const CU::GrowingArray<Entity*>& victoryPoints = PollingStation::GetInstance()->GetVictoryPoints();
 
 		for (int i = 0; i < playerUnits.Size(); i++)
 		{
@@ -72,6 +75,23 @@ namespace GUI
 			}
 
 			myResourcePointSprite->Render(aParentPosition + myPosition + position, { 1.f, 1.f }, color);
+		}
+
+		for (int i = 0; i < victoryPoints.Size(); i++)
+		{
+			CU::Vector2<float> position = (victoryPoints[i]->GetPosition() / 255.f) * mySize;
+			CU::Vector4<float> color = { 0.5f, 0.5f, 0.f, 1.f };
+
+			if (victoryPoints[i]->GetOwner() == eOwnerType::PLAYER)
+			{
+				color = { 0.f, 0.f, 1.f, 1.f };
+			}
+			else if (victoryPoints[i]->GetOwner() == eOwnerType::ENEMY)
+			{
+				color = { 1.f, 0.f, 0.f, 1.f };
+			}
+
+			myVictoryPointSprite->Render(aParentPosition + myPosition + position, { 1.f, 1.f }, color);
 		}
 	}
 

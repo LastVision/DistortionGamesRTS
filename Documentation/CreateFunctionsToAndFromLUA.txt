@@ -18,3 +18,14 @@ ScriptInterface.cpp
 Lägg till funktionen, se hur de andra funkar, vill du returnera nåt "ut till LUA", kolla på GetOwner
 
 Lägg till den under RegisterFunctions, se de andra för referens
+
+
+3. Lägga till callbacks i LUAInit:
+RegisterCallback("ResourcePointEnter", "OnResourcePointEnter") = RegisterCallback("C++ funktionsnamn", "LUA funktionsnamn")
+
+skapa funktionen i lua:
+
+function OnResourcePointEnter(aTriggerID, aUnitID)
+	PrintConsole("aUnitID: " .. aUnitID .. " entered: " .. aTriggerID)
+end
+
