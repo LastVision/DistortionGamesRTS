@@ -78,3 +78,15 @@ void Director::ReceiveMessage(const VictoryMessage& aMessage)
 		}
 	}
 }
+
+bool Director::IsAlreadyActive(Entity* aUnit)
+{
+	for (int i = 0; i < myActiveUnits.Size(); ++i)
+	{
+		if (myActiveUnits[i] == aUnit)
+		{
+			return true;
+		}
+	}
+	return false;
+}

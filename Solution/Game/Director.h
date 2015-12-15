@@ -22,11 +22,14 @@ public:
 	void CleanUp();
 
 	int GetUnitCount() const;
+
 	
 	virtual void ReceiveMessage(const SpawnUnitMessage& aMessage) override;
 	void ReceiveMessage(const ResourceMessage& aMessage) override;
 	void ReceiveMessage(const VictoryMessage& aMessage) override;
 protected:
+	bool IsAlreadyActive(Entity* aUnit);
+
 	CU::GrowingArray<Entity*> myUnits;
 	CU::GrowingArray<Entity*> myActiveUnits;
 	Entity* myBuilding;

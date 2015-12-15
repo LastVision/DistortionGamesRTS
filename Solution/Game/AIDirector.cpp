@@ -94,6 +94,10 @@ void AIDirector::ReceiveMessage(const SpawnUnitMessage& aMessage)
 		{
 			if (myUnits[i]->GetUnitType() == static_cast<eUnitType>(aMessage.myUnitType) && myUnits[i]->GetAlive() == false)
 			{
+				if (IsAlreadyActive(myUnits[i]) == true)
+				{
+					continue;
+				}
 				myUnits[i]->Spawn(myBuilding->GetOrientation().GetPos() + CU::Vector3f(0.f, 0.f, -15.f));
 				myActiveUnits.Add(myUnits[i]);
 				break;

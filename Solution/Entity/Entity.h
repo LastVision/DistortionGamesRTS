@@ -91,6 +91,9 @@ private:
 	bool mySelected;
 	bool myHovered;
 	bool myIsInScene;
+	bool myDecayFlag;
+
+	float myCurrentDecayTime;
 };
 
 template <typename T>
