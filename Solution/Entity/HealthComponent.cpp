@@ -11,6 +11,7 @@ HealthComponent::HealthComponent(Entity& aEntity, HealthComponentData& aData)
 	: Component(aEntity)
 	, myMaxHealth(aData.myHealth)
 	, myCurrentHealth(aData.myHealth)
+	, myArmor(aData.myArmor)
 {
 	Prism::ModelLoader::GetInstance()->Pause();
 	myHealthBar = new GUI::BarWidget(myMaxHealth, myCurrentHealth, { 50.f, 10.f });
@@ -41,7 +42,7 @@ void HealthComponent::RenderHealthBar(const Prism::Camera& aCamera)
 	myHealthBar->Render({ newRenderPos.x, newRenderPos.y });
 }
 
-bool HealthComponent::TakeDamage(int aDamage)
+bool HealthComponent::TakeDamage(float aDamage)
 {
 	DL_ASSERT_EXP(aDamage >= 0, "Cant take negative damage, use Heal for healing if that was your intention");
 
@@ -63,7 +64,7 @@ bool HealthComponent::TakeDamage(int aDamage)
 	return true;
 }
 
-void HealthComponent::Heal(int aHealing)
+void HealthComponent::Heal(float aHealing)
 {
 	DL_ASSERT_EXP(aHealing >= 0, "Cant heal negative damage.");
 

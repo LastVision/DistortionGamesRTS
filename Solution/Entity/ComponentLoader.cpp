@@ -106,40 +106,25 @@ void ComponentLoader::LoadCollisionComponent(XMLReader& aDocument, tinyxml2::XML
 {
 	aOutputData.myExistsInEntity = true;
 
-	for (tinyxml2::XMLElement* e = aDocument.FindFirstChild(aSourceElement); e != nullptr; e = aDocument.FindNextElement(e))
-	{
-		std::string elementName = CU::ToLower(e->Name());
-		if (elementName == CU::ToLower("Radius"))
-		{
-			aDocument.ForceReadAttribute(e, "value", aOutputData.myRadius);
-		}
-		else
-		{
-			FailedToReadChildElementMessage(e->Name(), aSourceElement->Name());
-		}
-	}
+	tinyxml2::XMLElement* e = aDocument.ForceFindFirstChild(aSourceElement, "Radius");
+	aDocument.ForceReadAttribute(e, "value", aOutputData.myRadius);
 }
 
 void ComponentLoader::LoadControllerComponent(XMLReader& aDocument, tinyxml2::XMLElement* aSourceElement, ControllerComponentData& aOutputData)
 {
 	aOutputData.myExistsInEntity = true;
 
-	for (tinyxml2::XMLElement* e = aDocument.FindFirstChild(aSourceElement); e != nullptr; e = aDocument.FindNextElement(e))
-	{
-		std::string elementName = CU::ToLower(e->Name());
-		if (elementName == CU::ToLower("VisionRange"))
-		{
-			aDocument.ForceReadAttribute(e, "value", aOutputData.myVisionRange);
-		}
-		else if (elementName == CU::ToLower("AttackRange"))
-		{
-			aDocument.ForceReadAttribute(e, "value", aOutputData.myAttackRange);
-		}
-		else
-		{
-			FailedToReadChildElementMessage(e->Name(), aSourceElement->Name());
-		}
-	}
+	tinyxml2::XMLElement* e = aDocument.ForceFindFirstChild(aSourceElement, "VisionRange");
+	aDocument.ForceReadAttribute(e, "value", aOutputData.myVisionRange);
+
+	e = aDocument.ForceFindFirstChild(aSourceElement, "AttackRange");
+	aDocument.ForceReadAttribute(e, "value", aOutputData.myAttackRange);
+
+	e = aDocument.ForceFindFirstChild(aSourceElement, "AttackDamage");
+	aDocument.ForceReadAttribute(e, "value", aOutputData.myAttackDamage);
+
+	e = aDocument.ForceFindFirstChild(aSourceElement, "ChaseDistance");
+	aDocument.ForceReadAttribute(e, "value", aOutputData.myChaseDistance);
 }
 
 void ComponentLoader::LoadGraphicsComponent(XMLReader& aDocument, tinyxml2::XMLElement* aSourceElement, GraphicsComponentData& aOutputData)
@@ -169,18 +154,11 @@ void ComponentLoader::LoadHealthComponent(XMLReader& aDocument, tinyxml2::XMLEle
 {
 	aOutputData.myExistsInEntity = true;
 
-	for (tinyxml2::XMLElement* e = aDocument.FindFirstChild(aSourceElement); e != nullptr; e = aDocument.FindNextElement(e))
-	{
-		std::string elementName = CU::ToLower(e->Name());
-		if (elementName == CU::ToLower("Health"))
-		{
-			aDocument.ForceReadAttribute(e, "value", aOutputData.myHealth);
-		}
-		else
-		{
-			FailedToReadChildElementMessage(e->Name(), aSourceElement->Name());
-		}
-	}
+	tinyxml2::XMLElement* e = aDocument.ForceFindFirstChild(aSourceElement, "Health");
+	aDocument.ForceReadAttribute(e, "value", aOutputData.myHealth);
+
+	e = aDocument.ForceFindFirstChild(aSourceElement, "Armor");
+	aDocument.ForceReadAttribute(e, "value", aOutputData.myArmor);
 }
 
 void ComponentLoader::LoadTriggerComponent(XMLReader& aDocument, tinyxml2::XMLElement* aSourceElement, TriggerComponentData& aOutputData)
@@ -221,7 +199,7 @@ void ComponentLoader::LoadTriggerComponent(XMLReader& aDocument, tinyxml2::XMLEl
 
 void ComponentLoader::FailedToReadChildElementMessage(const std::string& aElement, const std::string& aParent)
 {
-	std::string errorMessage = "The element " + aElement + "in " + aParent +
-		"is not supported. Please check so you wrote right else tell a programmer.";
+	std::string errorMessage = "The element " + aElement + " in " + aParent +
+		" is not supported. Please check so you wrote right else tell a programmer.";
 	DL_ASSERT(errorMessage.c_str());
 }

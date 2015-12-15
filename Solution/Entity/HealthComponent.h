@@ -17,14 +17,15 @@ public:
 	static eComponentType GetTypeStatic();
 	eComponentType GetType() override;
 
-	bool TakeDamage(int aDamage);
-	void Heal(int aHealing);
+	bool TakeDamage(float aDamage);
+	void Heal(float aHealing);
 
 	void Reset() override;
 
 private:
-	int myMaxHealth;
-	int myCurrentHealth;
+	float myMaxHealth;
+	float myCurrentHealth;
+	float myArmor;
 
 	GUI::BarWidget* myHealthBar;
 };

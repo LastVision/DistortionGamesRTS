@@ -2,6 +2,7 @@
 
 struct HealthComponentData
 {
-	int myHealth;
+	float myHealth;
+	float myArmor;
 	bool myExistsInEntity = false;
 };

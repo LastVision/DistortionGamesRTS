@@ -14,6 +14,7 @@ ControllerComponent::ControllerComponent(Entity& aEntity, ControllerComponentDat
 	, myTerrain(aTerrain)
 	, myVisionRange(aData.myVisionRange * aData.myVisionRange)
 	, myAttackRange(aData.myAttackRange * aData.myAttackRange)
+	, myAttackDamage(aData.myAttackDamage)
 	, myAttackTarget(nullptr)
 	, myActions(16)
 	, myAttackTargetPathRefreshTime(0.5f)
@@ -345,7 +346,7 @@ void ControllerComponent::AttackTarget()
 			HealthComponent* targetHealth = myAttackTarget->GetComponent<HealthComponent>();
 			if (targetHealth != nullptr && myAttackTarget->GetAlive())
 			{
-				targetSurvived = targetHealth->TakeDamage(5);
+				targetSurvived = targetHealth->TakeDamage(myAttackDamage);
 			}
 
 			if (targetSurvived == true)
