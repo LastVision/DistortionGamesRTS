@@ -24,6 +24,7 @@ public:
 	int GetUnitCount() const;
 	bool SpawnUnit(eUnitType aUnitType);
 
+	const int& GetVictoryPoints() const;
 	
 	virtual void ReceiveMessage(const SpawnUnitMessage& aMessage) override;
 	void ReceiveMessage(const ResourceMessage& aMessage) override;
@@ -48,4 +49,9 @@ private:
 inline int Director::GetUnitCount() const
 {
 	return myActiveUnits.Size();
+}
+
+inline const int& Director::GetVictoryPoints() const
+{
+	return myVictoryPoints;
 }

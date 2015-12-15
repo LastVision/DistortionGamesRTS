@@ -7,6 +7,7 @@ namespace CU
 
 class Entity;
 class PlayerDirector;
+class AIDirector;
 
 namespace GUI
 {
@@ -17,7 +18,7 @@ namespace GUI
 	class GUIManager
 	{
 	public:
-		GUIManager(Cursor* aCursor, const std::string& aXMLPath, const PlayerDirector* aPlayer);
+		GUIManager(Cursor* aCursor, const std::string& aXMLPath, const PlayerDirector* aPlayer, const AIDirector* anAI);
 		~GUIManager();
 
 		void AddWidget(Widget* aWidget);
@@ -42,6 +43,7 @@ namespace GUI
 		void CheckMouseExited();
 
 		const PlayerDirector* myPlayer;
+		const AIDirector* myAI;
 		WidgetContainer* myWidgets;
 		Widget* myActiveWidget;
 		Cursor* myCursor;

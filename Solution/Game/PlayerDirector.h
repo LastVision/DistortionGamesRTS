@@ -35,6 +35,7 @@ enum class eSelectedAction
 };
 
 class BuildingComponent;
+class AIDirector;
 
 class PlayerDirector : public Director
 {
@@ -42,7 +43,7 @@ public:
 	PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aScene, GUI::Cursor* aCursor);
 	~PlayerDirector();
 
-	void InitGUI();
+	void InitGUI(const AIDirector* anAI);
 
 	void Update(float aDeltaTime, const Prism::Camera& aCamera);
 	void Render(const Prism::Camera& aCamera);

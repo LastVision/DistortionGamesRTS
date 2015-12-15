@@ -31,6 +31,7 @@
 Level::Level(const Prism::Camera& aCamera, Prism::Terrain* aTerrain, GUI::Cursor* aCursor)
 	: myEntities(64)
 	, myRenderNavMeshLines(false)
+	, myMaxVictoryPoint(-1)
 {
 	EntityFactory::GetInstance()->LoadEntities("Data/Resource/Entity/LI_entity.xml");
 	myTerrain = aTerrain;
@@ -118,12 +119,12 @@ void Level::SpawnUnit(eUnitType aUnitType)
 
 bool Level::HasPlayerWon() const
 {
-	return myAI->GetUnitCount() <= 0;
+	return myPlayer->GetVictoryPoints() >= myMaxVictoryPoint;
 }
 
 bool Level::HasAIWon() const
 {
-	return myPlayer->GetUnitCount() <= 0;
+	return myAI->GetVictoryPoints() >= myMaxVictoryPoint;
 }
 
 CU::Vector3<float> Level::GetCameraMoveVector() const

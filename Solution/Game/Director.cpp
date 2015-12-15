@@ -65,6 +65,7 @@ bool Director::SpawnUnit(eUnitType aUnitType)
 
 void Director::ReceiveMessage(const SpawnUnitMessage& aMessage)
 {
+	if (static_cast<eOwnerType>(aMessage.myOwnerType) != myOwner) return;
 	if (myActiveUnits.Size() < 64)
 	{
 		for (int i = 0; i < myUnits.Size(); ++i)

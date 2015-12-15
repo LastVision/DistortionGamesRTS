@@ -47,5 +47,7 @@ private:
 	PlayerDirector* myPlayer;
 	AIDirector* myAI;
 
+	int myMaxVictoryPoint;
+
 	bool myRenderNavMeshLines;
 };
