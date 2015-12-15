@@ -236,8 +236,12 @@ namespace Script_Interface
 		{
 			owner = eOwnerType::ENEMY;
 		}
+		else if (directorId == eOwnerType::NEUTRAL)
+		{
+			owner = eOwnerType::NEUTRAL;
+		}
 
-		if (owner == eOwnerType::NOT_USED || owner == eOwnerType::NEUTRAL)
+		if (owner == eOwnerType::NOT_USED)
 		{
 			return 0;
 		}
@@ -254,10 +258,10 @@ namespace Script_Interface
 		}
 		else
 		{
-			controlPoint->GetComponent<TriggerComponent>()->ModifyOwnership(owner, ownershipModifier);
+			owner = controlPoint->GetComponent<TriggerComponent>()->ModifyOwnership(owner, ownershipModifier);
 		}
 
-		lua_pushinteger(aState, static_cast<int>(controlPoint->GetOwner()));
+		lua_pushinteger(aState, static_cast<int>(owner));
 		return 1;
 	}
 

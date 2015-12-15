@@ -15,7 +15,7 @@ public:
 
 	static eComponentType GetTypeStatic();
 	virtual eComponentType GetType();
-	void ModifyOwnership(eOwnerType anOwner, float aModifyValue);
+	eOwnerType ModifyOwnership(eOwnerType anOwner, float aModifyValue);
 
 private:
 	void operator=(TriggerComponent&) = delete;
@@ -29,6 +29,7 @@ private:
 	float myOwnershipRatio;
 	CU::Vector3f myOriginalPosition;
 
+	eOwnerType myGainingPointsOwner;
 	const eTriggerType myType;
 	CU::GrowingArray<Entity*> myPlayerUnits;
 	CU::GrowingArray<Entity*> myEnemyUnits;
