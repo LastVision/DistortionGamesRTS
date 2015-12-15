@@ -16,6 +16,7 @@ namespace GUI
 
 class AIDirector;
 class Entity;
+class EmitterManager;
 class PlayerDirector;
 
 class Level : public Subscriber
@@ -43,9 +44,13 @@ private:
 	Prism::DirectionalLight* myLight;
 	Prism::Scene* myScene;
 
+	EmitterManager* myEmitterManager;
+
 	CU::GrowingArray<Entity*> myEntities;
 	PlayerDirector* myPlayer;
 	AIDirector* myAI;
+
+	int myMaxVictoryPoint;
 
 	bool myRenderNavMeshLines;
 };

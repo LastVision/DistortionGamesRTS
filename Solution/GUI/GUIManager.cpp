@@ -15,10 +15,11 @@
 
 namespace GUI
 {
-	GUIManager::GUIManager(Cursor* aCursor, const std::string& aXMLPath, const PlayerDirector* aPlayer)
+	GUIManager::GUIManager(Cursor* aCursor, const std::string& aXMLPath, const PlayerDirector* aPlayer, const AIDirector* anAI)
 		: myActiveWidget(nullptr)
 		, myCursor(aCursor)
 		, myPlayer(aPlayer)
+		, myAI(anAI)
 		, myMousePosition({ 0.f, 0.f })
 	{
 		ReadXML(aXMLPath);
@@ -171,7 +172,7 @@ namespace GUI
 				}
 				else if (type == "resourcebar")
 				{
-					ResourceBarWidget* resourceBar = new ResourceBarWidget(&reader, widgetElement, myPlayer);
+					ResourceBarWidget* resourceBar = new ResourceBarWidget(&reader, widgetElement, myPlayer, myAI);
 					container->AddWidget(resourceBar);
 				}
 			}
