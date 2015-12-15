@@ -89,7 +89,7 @@ void EmitterManager::RenderEmitters(Prism::Camera* aCamera)
 
 void EmitterManager::ReceiveMessage(const EmitterMessage& aMessage)
 {
-	CU::Vector3f position;
+	CU::Vector3f position = aMessage.myPosition;
 	if (aMessage.myEntityID != -1)
 	{
 		position = EntityId::GetInstance()->GetEntity(aMessage.myEntityID)->GetOrientation().GetPos();
@@ -129,15 +129,9 @@ void EmitterManager::ReadListOfLists(std::string aPath)
 		rootDocument.ForceReadAttribute(e, "ID", ID);
 		if (entityPath != "")
 		{
-			//
-			if (ID == static_cast<int>(eParticleType::BLOOD))
-			{
-				ReadList(entityPath);
-				EmitterData* newData = new EmitterData(entityPath);
-				myEmitters.Insert(ID, newData);
-			}
-			//
-
+			ReadList(entityPath);
+			EmitterData* newData = new EmitterData(entityPath);
+			myEmitters.Insert(ID, newData);
 		}
 	}
 	rootDocument.CloseDocument();
