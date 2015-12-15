@@ -16,6 +16,7 @@ namespace GUI
 
 class AIDirector;
 class Entity;
+class EmitterManager;
 class PlayerDirector;
 
 class Level : public Subscriber
@@ -42,6 +43,8 @@ private:
 	Prism::Terrain* myTerrain;
 	Prism::DirectionalLight* myLight;
 	Prism::Scene* myScene;
+
+	EmitterManager* myEmitterManager;
 
 	CU::GrowingArray<Entity*> myEntities;
 	PlayerDirector* myPlayer;

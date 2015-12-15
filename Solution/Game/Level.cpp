@@ -6,6 +6,7 @@
 #include <CollisionComponent.h>
 #include <DirectionalLight.h>
 #include <EffectContainer.h>
+#include "EmitterManager.h"
 #include <Engine.h>
 #include <EngineEnums.h>
 #include <Entity.h>
@@ -23,16 +24,15 @@
 #include "PollingStation.h"
 #include <PostMaster.h>
 #include <Scene.h>
-#include <Terrain.h>
-
-
 #include <ScriptSystem.h>
+#include <Terrain.h>
 
 Level::Level(const Prism::Camera& aCamera, Prism::Terrain* aTerrain, GUI::Cursor* aCursor)
 	: myEntities(64)
 	, myRenderNavMeshLines(false)
 {
 	EntityFactory::GetInstance()->LoadEntities("Data/Resource/Entity/LI_entity.xml");
+	myEmitterManager = new EmitterManager();
 	myTerrain = aTerrain;
 
 	myScene = new Prism::Scene(aCamera, *myTerrain);
@@ -46,6 +46,7 @@ Level::Level(const Prism::Camera& aCamera, Prism::Terrain* aTerrain, GUI::Cursor
 Level::~Level()
 {
 	myEntities.DeleteAll();
+	SAFE_DELETE(myEmitterManager);
 	SAFE_DELETE(myTerrain);
 	SAFE_DELETE(myLight);
 	SAFE_DELETE(myPlayer);
@@ -85,6 +86,8 @@ bool Level::Update(float aDeltaTime, Prism::Camera& aCamera)
 	myPlayer->Update(aDeltaTime, aCamera);
 	myAI->Update(aDeltaTime);
 
+	myEmitterManager->UpdateEmitters(aDeltaTime, CU::Matrix44f());
+
 	return true;
 }
 
@@ -96,6 +99,7 @@ void Level::Render(Prism::Camera& aCamera)
 
 	myPlayer->Render(aCamera);
 
+	myEmitterManager->RenderEmitters(&aCamera);
 }
 
 void Level::OnResize(int aWidth, int aHeigth)
