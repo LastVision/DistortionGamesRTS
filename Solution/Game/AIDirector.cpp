@@ -13,7 +13,7 @@ AIDirector::AIDirector(const Prism::Terrain& aTerrain, Prism::Scene& aScene)
 	: Director(eOwnerType::ENEMY, aTerrain)
 	, mySpawnTimer(0.f)
 	, myOptimalAttackerCount(0)
-	, myOptimalGathererCount(0)
+	, myOptimalGathererCount(1)
 	, myCurrentAttackerCount(0)
 	, myCurrentGathererCount(0)
 	, myPointOneGatherers(8)
@@ -72,40 +72,30 @@ void AIDirector::Update(float aDeltaTime)
 
 	if (myCurrentAttackerCount < myOptimalAttackerCount)
 	{
-		myBuilding->GetComponent<BuildingComponent>()->BuildUnit(eUnitType::RANGER);
-		myUnitQueue.Add(eUnitActionType::ATTACKER);
-		++myCurrentAttackerCount;
+		//myBuilding->GetComponent<BuildingComponent>()->BuildUnit(eUnitType::RANGER);
+		if (Director::SpawnUnit(eUnitType::RANGER) == true)
+		{
+			myUnitQueue.Add(eUnitActionType::ATTACKER);
+			++myCurrentAttackerCount;
+		}
 	}
 
 	if (myCurrentGathererCount < myOptimalGathererCount)
 	{
-		myBuilding->GetComponent<BuildingComponent>()->BuildUnit(eUnitType::GRUNT);
-		myUnitQueue.Add(eUnitActionType::GATHERER);
-		++myCurrentGathererCount;
+		//myBuilding->GetComponent<BuildingComponent>()->BuildUnit(eUnitType::GRUNT);
+		if (Director::SpawnUnit(eUnitType::GRUNT) == true)
+		{
+			myUnitQueue.Add(eUnitActionType::GATHERER);
+			++myCurrentGathererCount;
+		}
 	}
 }
 
 void AIDirector::ReceiveMessage(const SpawnUnitMessage& aMessage)
 {
-	if (aMessage.myOwnerType != static_cast<int>(eOwnerType::ENEMY)) return;
-	if (myActiveUnits.Size() < 64)
+	Director::ReceiveMessage(aMessage);
+	if (aMessage.myOwnerType == static_cast<int>(eOwnerType::ENEMY))
 	{
-		for (int i = 0; i < myUnits.Size(); ++i)
-		{
-			if (myUnits[i]->GetUnitType() == static_cast<eUnitType>(aMessage.myUnitType) && myUnits[i]->GetAlive() == false)
-			{
-				if (IsAlreadyActive(myUnits[i]) == true)
-				{
-					continue;
-				}
-				myUnits[i]->Spawn(myBuilding->GetOrientation().GetPos() + CU::Vector3f(0.f, 0.f, -15.f));
-				myActiveUnits.Add(myUnits[i]);
-				break;
-			}
-		}
-		PollingStation::GetInstance()->RegisterEntity(myActiveUnits.GetLast());
-
-
 		Entity* newEntity = myActiveUnits.GetLast();
 		newEntity->SetState(eEntityState::IDLE);
 
@@ -117,9 +107,42 @@ void AIDirector::ReceiveMessage(const SpawnUnitMessage& aMessage)
 		{
 			ActivateAttacker(newEntity);
 		}
-		
+
 		myUnitQueue.RemoveNonCyclicAtIndex(0);
 	}
+	//if (aMessage.myOwnerType != static_cast<int>(eOwnerType::ENEMY)) return;
+	//if (myActiveUnits.Size() < 64)
+	//{
+	//	for (int i = 0; i < myUnits.Size(); ++i)
+	//	{
+	//		if (myUnits[i]->GetUnitType() == static_cast<eUnitType>(aMessage.myUnitType) && myUnits[i]->GetAlive() == false)
+	//		{
+	//			if (IsAlreadyActive(myUnits[i]) == true)
+	//			{
+	//				continue;
+	//			}
+	//			myUnits[i]->Spawn(myBuilding->GetOrientation().GetPos() + CU::Vector3f(0.f, 0.f, -15.f));
+	//			myActiveUnits.Add(myUnits[i]);
+	//			break;
+	//		}
+	//	}
+	//	PollingStation::GetInstance()->RegisterEntity(myActiveUnits.GetLast());
+
+
+	//	Entity* newEntity = myActiveUnits.GetLast();
+	//	newEntity->SetState(eEntityState::IDLE);
+
+	//	if (myUnitQueue[0] == eUnitActionType::GATHERER)
+	//	{
+	//		ActivateGatherer(newEntity);
+	//	}
+	//	else if (myUnitQueue[0] == eUnitActionType::ATTACKER)
+	//	{
+	//		ActivateAttacker(newEntity);
+	//	}
+	//	
+	//	myUnitQueue.RemoveNonCyclicAtIndex(0);
+	//}
 }
 
 void AIDirector::ReceiveMessage(const TimeMultiplierMessage& aMessage)
