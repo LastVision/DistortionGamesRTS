@@ -9,6 +9,7 @@ BuildingComponent::BuildingComponent(Entity& aEntity, BuildingCompnentData& aDat
 	, myCurrentBuildTime(0.f)
 	, myMaxBuildTime(2.f)
 	, mySpawnQueueIndex(-1)
+	, myUnitCosts(aData.myUnitCosts)
 {
 	aData;
 	for (int i = 0; i <= 4; i++)
@@ -50,4 +51,9 @@ void BuildingComponent::BuildUnit(eUnitType aUnitType)
 		mySpawnQueueIndex++;
 		mySpawnQueue[mySpawnQueueIndex] = aUnitType;
 	}
+}
+
+int BuildingComponent::GetUnitCost(eUnitType aUnitType)
+{
+	return myUnitCosts[static_cast<int>(aUnitType)];
 }
