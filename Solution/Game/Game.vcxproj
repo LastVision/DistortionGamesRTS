@@ -197,6 +197,7 @@
     <ClInclude Include="AIDirector.h" />
     <ClInclude Include="Console.h" />
     <ClInclude Include="dirent.h" />
+    <ClInclude Include="EmitterManager.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="InGameState.h" />
@@ -220,6 +221,7 @@
     <ClCompile Include="Director.cpp" />
     <ClCompile Include="AIDirector.cpp" />
     <ClCompile Include="Console.cpp" />
+    <ClCompile Include="EmitterManager.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="InGameState.cpp" />
     <ClCompile Include="Level.cpp" />

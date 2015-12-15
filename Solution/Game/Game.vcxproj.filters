@@ -51,7 +51,12 @@
     <ClCompile Include="ConsoleHelp.cpp">
       <Filter>Console</Filter>
     </ClCompile>
-    <ClCompile Include="TriggerManager.cpp" />
+    <ClCompile Include="EmitterManager.cpp">
+      <Filter>Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="TriggerManager.cpp">
+      <Filter>Managers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -113,7 +118,12 @@
     <ClInclude Include="ConsoleHelp.h">
       <Filter>Console</Filter>
     </ClInclude>
-    <ClInclude Include="TriggerManager.h" />
+    <ClInclude Include="EmitterManager.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="TriggerManager.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="PreCompile">
@@ -133,6 +143,9 @@
     </Filter>
     <Filter Include="Console">
       <UniqueIdentifier>{583059cc-5171-43b9-b156-bd8a25cdcc30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Managers">
+      <UniqueIdentifier>{f085dd4d-badd-48c6-b55c-c3ab8aeb1674}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
