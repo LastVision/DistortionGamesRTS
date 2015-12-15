@@ -15,6 +15,8 @@ ControllerComponent::ControllerComponent(Entity& aEntity, ControllerComponentDat
 	, myVisionRange2(aData.myVisionRange * aData.myVisionRange)
 	, myAttackRange2(aData.myAttackRange * aData.myAttackRange)
 	, myAttackDamage(aData.myAttackDamage)
+	, myAttackSpeed(aData.myAttackSpeed)
+	, myAttackTimer(0.f)
 	, myChaseDistance2(aData.myChaseDistance * aData.myChaseDistance)
 	, myAttackTarget(nullptr)
 	, myActions(16)
@@ -50,6 +52,8 @@ void ControllerComponent::Update(float aDelta)
 	{
 		return;
 	}
+
+	myAttackTimer -= aDelta;
 
 	if (myCurrentAction.myAction == eAction::IDLE)
 	{
@@ -339,9 +343,10 @@ void ControllerComponent::AttackTarget()
 {
 	if (myEntity.GetState() == eEntityState::ATTACKING)
 	{
-		AnimationComponent* animation = myEntity.GetComponent<AnimationComponent>();
-		if (animation != nullptr && animation->IsCurrentAnimationDone())
+		if (myAttackTimer <= 0.f)
 		{
+			myAttackTimer = myAttackSpeed;
+
 			bool targetSurvived = false;
 
 			HealthComponent* targetHealth = myAttackTarget->GetComponent<HealthComponent>();
@@ -350,11 +355,14 @@ void ControllerComponent::AttackTarget()
 				targetSurvived = targetHealth->TakeDamage(myAttackDamage);
 			}
 
-			if (targetSurvived == true)
+			AnimationComponent* animation = myEntity.GetComponent<AnimationComponent>();
+			DL_ASSERT_EXP(animation != nullptr, "Animation missing from attacking unit");
+			if (animation != nullptr)
 			{
 				animation->RestartCurrentAnimation();
 			}
-			else
+
+			if (targetSurvived == false)
 			{
 				myAttackTarget->SetState(eEntityState::DYING);
 				myEntity.SetState(eEntityState::IDLE);
