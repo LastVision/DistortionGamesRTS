@@ -52,7 +52,7 @@ public:
 	ePropType GetPropType() const;
 	eUnitType GetUnitType() const;
 	eEntityState GetState() const;
-	void SetState(eEntityState aState){ myState = aState; };
+	void SetState(eEntityState aState);
 	Prism::eOctreeType GetOctreeType() const;
 	bool GetAlive() const;
 	void Kill();
@@ -152,6 +152,15 @@ inline eUnitType Entity::GetUnitType() const
 inline eEntityState Entity::GetState() const
 {
 	return myState;
+}
+
+inline void Entity::SetState(eEntityState aState)
+{
+	if (myState == eEntityState::DYING)
+	{
+		int apa = 5;
+	}
+	myState = aState;
 }
 
 inline Prism::eOctreeType Entity::GetOctreeType() const

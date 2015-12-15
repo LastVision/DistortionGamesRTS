@@ -12,9 +12,10 @@
 ControllerComponent::ControllerComponent(Entity& aEntity, ControllerComponentData& aData, const Prism::Terrain& aTerrain)
 	: Component(aEntity)
 	, myTerrain(aTerrain)
-	, myVisionRange(aData.myVisionRange * aData.myVisionRange)
-	, myAttackRange(aData.myAttackRange * aData.myAttackRange)
+	, myVisionRange2(aData.myVisionRange * aData.myVisionRange)
+	, myAttackRange2(aData.myAttackRange * aData.myAttackRange)
 	, myAttackDamage(aData.myAttackDamage)
+	, myChaseDistance2(aData.myChaseDistance * aData.myChaseDistance)
 	, myAttackTarget(nullptr)
 	, myActions(16)
 	, myAttackTargetPathRefreshTime(0.5f)
@@ -55,7 +56,7 @@ void ControllerComponent::Update(float aDelta)
 		myEntity.SetState(eEntityState::IDLE);
 
 		Entity* closeTarget = PollingStation::GetInstance()->FindClosestEntity(myEntity.GetOrientation().GetPos()
-			, myTargetType, myVisionRange);
+			, myTargetType, myVisionRange2);
 
 		if (closeTarget != nullptr)
 		{
@@ -81,7 +82,7 @@ void ControllerComponent::Update(float aDelta)
 			DoMoveAction(myCurrentAction.myPosition);
 
 			myAttackTarget = PollingStation::GetInstance()->FindClosestEntity(myEntity.GetOrientation().GetPos()
-				, myTargetType, myVisionRange);
+				, myTargetType, myVisionRange2);
 		}
 	}
 	else if (myCurrentAction.myAction == eAction::RETURN)
@@ -90,7 +91,7 @@ void ControllerComponent::Update(float aDelta)
 			, "ControllerComponent tried to do RETURN-Action without a valid ReturnPosition");
 
 		Entity* closeTarget = PollingStation::GetInstance()->FindClosestEntity(myReturnPosition
-			, myTargetType, myVisionRange);
+			, myTargetType, myVisionRange2);
 
 		if (closeTarget != nullptr)
 		{
@@ -113,7 +114,7 @@ void ControllerComponent::Update(float aDelta)
 	else if (myCurrentAction.myAction == eAction::HOLD_POSITION)
 	{
 		Entity* closeTarget = PollingStation::GetInstance()->FindClosestEntity(myEntity.GetOrientation().GetPos()
-			, myTargetType, myAttackRange);
+			, myTargetType, myAttackRange2);
 
 		if (closeTarget != nullptr)
 		{
@@ -130,7 +131,7 @@ void ControllerComponent::Update(float aDelta)
 		}
 
 		Entity* closeTarget = PollingStation::GetInstance()->FindClosestEntity(myEntity.GetOrientation().GetPos()
-			, myTargetType, myAttackRange);
+			, myTargetType, myAttackRange2);
 
 		if (closeTarget != nullptr && closeTarget == myAttackTarget)
 		{
@@ -293,13 +294,13 @@ void ControllerComponent::DoAttackAction()
 	{
 		float distanceToReturnPosition = CU::Length2(myEntity.GetOrientation().GetPos() - myReturnPosition);
 		hasReturnPosition = true;
-		if (distanceToReturnPosition > 100 /*maxChaseDistance*/)
+		if (distanceToReturnPosition > myChaseDistance2)
 		{
 			shouldReturn = true;
 		}
 	}
 
-	if (distanceToTarget < myAttackRange && shouldReturn == false)
+	if (distanceToTarget < myAttackRange2 && shouldReturn == false)
 	{
 		AttackTarget();
 		if (myAttackTarget->GetAlive() == false)

@@ -28,8 +28,8 @@ public:
 	void Spawn(const CU::Vector3f& aPosition);
 
 	const ControllerData& GetControllerData() const;
-	float GetVisionRange() const;
-	float GetAttackRange() const;
+	float GetVisionRange2() const;
+	float GetAttackRange2() const;
 
 	static eComponentType GetTypeStatic();
 	eComponentType GetType() override; 
@@ -69,10 +69,10 @@ private:
 	eOwnerType myOwnerType;
 	eOwnerType myTargetType;
 
-	float myVisionRange;
-	float myAttackRange;
+	float myVisionRange2;
+	float myAttackRange2;
 	float myAttackDamage;
-	float myChaseDistance;
+	float myChaseDistance2;
 	float myAttackTargetPathRefreshTime;
 	float myCurrentAttackTargetPathRefreshTime;
 
@@ -85,14 +85,14 @@ inline const ControllerComponent::ControllerData& ControllerComponent::GetContro
 	return myData;
 }
 
-inline float ControllerComponent::GetVisionRange() const
+inline float ControllerComponent::GetVisionRange2() const
 {
-	return myVisionRange;
+	return myVisionRange2;
 }
 
-inline float ControllerComponent::GetAttackRange() const
+inline float ControllerComponent::GetAttackRange2() const
 {
-	return myAttackRange;
+	return myAttackRange2;
 }
 
 inline eComponentType ControllerComponent::GetTypeStatic()

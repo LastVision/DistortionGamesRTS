@@ -51,7 +51,7 @@ void PollingStation::RegisterEntity(Entity* aEntity)
 	}
 }
 
-Entity* PollingStation::FindClosestEntity(const CU::Vector3<float>& aPosition, eOwnerType aEntityOwner, float aMaxDistance)
+Entity* PollingStation::FindClosestEntity(const CU::Vector3<float>& aPosition, eOwnerType aEntityOwner, float aMaxDistance2)
 {
 	float bestDist = FLT_MAX;
 	float dist = 0;
@@ -76,7 +76,7 @@ Entity* PollingStation::FindClosestEntity(const CU::Vector3<float>& aPosition, e
 		{
 			dist = CU::Length2((*list)[i]->GetOrientation().GetPos() - aPosition);
 
-			if (dist < bestDist && dist < aMaxDistance)
+			if (dist < bestDist && dist < aMaxDistance2)
 			{
 				bestDist = dist;
 				entity = (*list)[i];

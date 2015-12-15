@@ -18,6 +18,11 @@ ActorComponent::~ActorComponent()
 
 void ActorComponent::Update(float aDelta)
 {
+	if (myEntity.GetAlive() == false || myEntity.GetState() == eEntityState::DYING)
+	{
+		return;
+	}
+
 	const ControllerComponent::ControllerData& data = myEntity.GetComponent<ControllerComponent>()->GetControllerData();
 
 	CU::Vector3<float> direction = data.myDirection;
