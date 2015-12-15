@@ -85,4 +85,5 @@ void HealthComponent::Heal(float aHealing)
 void HealthComponent::Reset()
 {
 	myCurrentHealth = myMaxHealth;
+	myHealthBar->Update();
 }
