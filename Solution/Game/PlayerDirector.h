@@ -6,6 +6,7 @@ namespace Prism
 	class Camera;
 	class Terrain;
 	class Scene;
+	class Sprite;
 }
 
 namespace GUI
@@ -86,8 +87,13 @@ private:
 	float myTweakValueX;
 	float myTweakValueY;
 
+	CU::Vector2<float> mySelectionSpriteSize;
+	CU::Vector2<float> mySelectionSpriteRenderPosition;
+	CU::Vector2<float> mySelectionSpriteHotspot;
+
 	CU::Vector2<float> myFirstMousePosition;
-	CU::Vector3<float> myTestBoxPositions[4];
+	CU::GrowingArray<CU::Vector3<float>> myDragSelectionPositions;
+	Prism::Sprite* myDragSelectionSprite;
 
 };
 

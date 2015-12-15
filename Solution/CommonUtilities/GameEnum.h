@@ -71,3 +71,9 @@ enum class eHistoryType
 	GENERATED_COMMAND,
 	WARNING
 };
+
+enum class eParticleType : int
+{
+	BLOOD,
+	_COUNT
+};

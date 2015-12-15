@@ -107,7 +107,7 @@
       <Filter>TinyXML2</Filter>
     </ClInclude>
     <ClInclude Include="GameConstants.h" />
-    <ClInclude Include="EntityEnum.h" />
+    <ClInclude Include="GameEnum.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Math">

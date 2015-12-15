@@ -26,6 +26,7 @@ Entity::Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& a
 	, myPosition({aStartPosition.x, aStartPosition.z})
 	, myPropType(ePropType::NOT_A_PROP)
 	, myUnitType(eUnitType::NOT_A_UNIT)
+	, myDecayFlag(false)
 {
 	myId = EntityId::GetInstance()->GetId(this);
 	for (int i = 0; i < static_cast<int>(eComponentType::_COUNT); ++i)
@@ -107,6 +108,16 @@ void Entity::Update(float aDeltaTime)
 		}
 	}
 
+	if (myDecayFlag == true)
+	{
+		myCurrentDecayTime -= aDeltaTime;
+		myOrientation.SetPos({ myPosition.x, myOrientation.GetPos().y - 0.05f * aDeltaTime, myPosition.y });
+		if (myCurrentDecayTime < 0)
+		{
+			myCurrentDecayTime = 0;
+		}
+	}
+
 	if (mySelected == true)
 	{
 		Prism::RenderBox(myOrientation.GetPos());
@@ -115,11 +126,13 @@ void Entity::Update(float aDeltaTime)
 	{
 		Prism::RenderBox(myOrientation.GetPos(), eColorDebug::WHITE);
 	}
-	//if (myComponents[static_cast<int>(eComponentType::ANIMATION)] != nullptr && myAlive == false && myState == eEntityState::DYING &&
-	//	static_cast<AnimationComponent*>(myComponents[static_cast<int>(eComponentType::ANIMATION)])->IsCurrentAnimationDone())
-	//{
-	//	RemoveFromScene();
-	//}
+	if (myComponents[static_cast<int>(eComponentType::ANIMATION)] != nullptr && myAlive == false && myState == eEntityState::DYING &&
+		static_cast<AnimationComponent*>(myComponents[static_cast<int>(eComponentType::ANIMATION)])->IsCurrentAnimationDone() 
+		&& myDecayFlag == false)
+	{
+		myCurrentDecayTime = 30.f;
+		myDecayFlag = true;
+	}
 }
 
 void Entity::AddComponent(Component* aComponent)
@@ -173,6 +186,7 @@ void Entity::Kill()
 void Entity::Spawn(const CU::Vector3f& aSpawnPosition)
 {
 	myState = eEntityState::IDLE;
+	myDecayFlag = false;
 	Reset();
 	GetComponent<ControllerComponent>()->Spawn(aSpawnPosition);
 	AddToScene();
@@ -212,7 +226,8 @@ bool Entity::IsHovered() const
 
 bool Entity::GetShouldBeRemoved() const
 {
-	return myAlive == false && myState == eEntityState::DYING && static_cast<AnimationComponent*>(myComponents[static_cast<int>(eComponentType::ANIMATION)])->IsCurrentAnimationDone();
+	return myAlive == false && myState == eEntityState::DYING && myCurrentDecayTime == 0 && myDecayFlag == true &&
+		static_cast<AnimationComponent*>(myComponents[static_cast<int>(eComponentType::ANIMATION)])->IsCurrentAnimationDone();
 }
 
 CU::GrowingArray<CU::Vector2<float>> Entity::GetCutMesh() const
