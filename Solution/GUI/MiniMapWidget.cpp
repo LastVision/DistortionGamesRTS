@@ -41,12 +41,14 @@ namespace GUI
 
 	void MiniMapWidget::Render(const CU::Vector2<float>& aParentPosition)
 	{
-		myPlaceholderSprite->Render(aParentPosition + myPosition);
-
 		const CU::GrowingArray<Entity*>& playerUnits = PollingStation::GetInstance()->GetUnits(eOwnerType::PLAYER);
 		const CU::GrowingArray<Entity*>& enemyUnits = PollingStation::GetInstance()->GetUnits(eOwnerType::ENEMY);
 		const CU::GrowingArray<Entity*>& resourcePoints = PollingStation::GetInstance()->GetResourcePoints();
 		const CU::GrowingArray<Entity*>& victoryPoints = PollingStation::GetInstance()->GetVictoryPoints();
+		const Entity* enemyBase = PollingStation::GetInstance()->GetBase(eOwnerType::ENEMY);
+		const Entity* playerBase = PollingStation::GetInstance()->GetBase(eOwnerType::PLAYER);
+		
+		myPlaceholderSprite->Render(aParentPosition + myPosition);
 
 		for (int i = 0; i < playerUnits.Size(); i++)
 		{
@@ -93,6 +95,12 @@ namespace GUI
 
 			myVictoryPointSprite->Render(aParentPosition + myPosition + position, { 1.f, 1.f }, color);
 		}
+
+		CU::Vector2<float> basePosition = (enemyBase->GetPosition() / 255.f) * mySize;
+		myBaseSprite->Render(aParentPosition + myPosition + basePosition, { 1.f, 1.f }, { 1.f, 0.f, 0.f, 1.f });
+
+		basePosition = (playerBase->GetPosition() / 255.f) * mySize;
+		myBaseSprite->Render(aParentPosition + myPosition + basePosition, { 1.f, 1.f }, { 0.f, 0.f, 1.f, 1.f });
 	}
 
 	void MiniMapWidget::OnMousePressed(const CU::Vector2<float>& aPosition)

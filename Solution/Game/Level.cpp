@@ -101,6 +101,9 @@ void Level::Render(Prism::Camera& aCamera)
 
 	myEmitterManager->RenderEmitters(&aCamera);
 
+	myPlayer->RenderHealthBars(aCamera);
+	myAI->RenderHealthBars(aCamera);
+
 	myPlayer->Render(aCamera);
 }
 

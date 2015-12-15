@@ -137,10 +137,10 @@ void PlayerDirector::Render(const Prism::Camera& aCamera)
 	
 	if (myRenderGUI == true)
 	{
-		for (int i = 0; i < mySelectedUnits.Size(); i++)
-		{
-			mySelectedUnits[i]->GetComponent<HealthComponent>()->RenderHealthBar(aCamera);
-		}
+		//for (int i = 0; i < mySelectedUnits.Size(); i++)
+		//{
+		//	mySelectedUnits[i]->GetComponent<HealthComponent>()->RenderHealthBar(aCamera);
+		//}
 		if (myLeftMousePressed == true)
 		{
 			myDragSelectionSprite->SetSize(mySelectionSpriteSize, mySelectionSpriteHotspot);

@@ -18,6 +18,7 @@ public:
 	virtual ~Director();
 
 	virtual void Update(float aDeltaTime);
+	void RenderHealthBars(const Prism::Camera& aCamera);
 
 	void CleanUp();
 
