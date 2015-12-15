@@ -16,6 +16,7 @@
 #include <ModelLoader.h>
 #include <NavMesh.h>
 #include "PlayerDirector.h"
+#include <PollingStation.h>
 #include <PointLight.h>
 #include <ScriptSystem.h>
 #include <SpotLight.h>
@@ -506,6 +507,7 @@ void LevelFactory::LoadBases(XMLReader& aReader, tinyxml2::XMLElement* aLevelEle
 					*myCurrentLevel->myScene, propPosition, *myCurrentLevel->myTerrain, propRotation, propScale);
 				myCurrentLevel->myAI->myBuilding->AddToScene();
 				myCurrentLevel->myAI->myBuilding->Reset();
+				PollingStation::GetInstance()->RegisterEntity(myCurrentLevel->myAI->myBuilding);
 				enemyBase++;
 			}
 			else if (elementName == "playerbase")
@@ -515,6 +517,7 @@ void LevelFactory::LoadBases(XMLReader& aReader, tinyxml2::XMLElement* aLevelEle
 					*myCurrentLevel->myScene, propPosition, *myCurrentLevel->myTerrain, propRotation, propScale);
 				myCurrentLevel->myPlayer->myBuilding->AddToScene();
 				myCurrentLevel->myPlayer->myBuilding->Reset();
+				PollingStation::GetInstance()->RegisterEntity(myCurrentLevel->myPlayer->myBuilding);
 				playerBase++;
 			}
 		}

@@ -16,6 +16,8 @@ public:
 	const CU::GrowingArray<Entity*>& GetResourcePoints() const;
 	const CU::GrowingArray<Entity*>& GetVictoryPoints() const;
 
+	const Entity* GetBase(eOwnerType anOwner) const;
+
 	void CleanUp();
 
 
@@ -29,6 +31,9 @@ private:
 	CU::GrowingArray<Entity*> myAIUnits;
 	CU::GrowingArray<Entity*> myResourcePoints;
 	CU::GrowingArray<Entity*> myVictoryPoints;
+
+	Entity* myPlayerBuilding;
+	Entity* myAIBuilding;
 
 	static PollingStation* myInstance;
 };

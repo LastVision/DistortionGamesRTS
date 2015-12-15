@@ -45,6 +45,21 @@ void PollingStation::RegisterEntity(Entity* aEntity)
 	case eEntityType::VICTORY_POINT:
 		myVictoryPoints.Add(aEntity);
 		break;
+	case eEntityType::BASE_BUILING:
+		switch (aEntity->GetOwner())
+		{
+		case eOwnerType::PLAYER:
+			myPlayerBuilding = aEntity;
+			break;
+		case eOwnerType::ENEMY:
+			myAIBuilding = aEntity;
+			break;
+		default:
+			DL_ASSERT("PollingStation tried to Register a Base with invalid Owner");
+			break;
+		}
+		break;
+		break;
 	default:
 		DL_ASSERT("PollingStation tried to Register an Entity with invalid Type");
 		break;
@@ -154,6 +169,16 @@ const CU::GrowingArray<Entity*>& PollingStation::GetResourcePoints() const
 const CU::GrowingArray<Entity*>& PollingStation::GetVictoryPoints() const
 {
 	return myVictoryPoints;
+}
+
+const Entity* PollingStation::GetBase(eOwnerType anOwner) const
+{
+	if (anOwner == eOwnerType::PLAYER)
+	{
+		return myPlayerBuilding;
+	}
+
+	return myAIBuilding;
 }
 
 void PollingStation::CleanUp()
