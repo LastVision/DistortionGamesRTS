@@ -7,6 +7,10 @@
 #include "../GUI/BarWidget.h"
 #include "ModelLoader.h"
 
+#include "EntityId.h"
+#include <EmitterMessage.h>
+#include <PostMaster.h>
+
 HealthComponent::HealthComponent(Entity& aEntity, HealthComponentData& aData)
 	: Component(aEntity)
 	, myMaxHealth(aData.myHealth)
@@ -45,6 +49,8 @@ void HealthComponent::RenderHealthBar(const Prism::Camera& aCamera)
 bool HealthComponent::TakeDamage(float aDamage)
 {
 	DL_ASSERT_EXP(aDamage >= 0, "Cant take negative damage, use Heal for healing if that was your intention");
+
+	PostMaster::GetInstance()->SendMessage(EmitterMessage(eParticleType::BLOOD, myEntity.GetId()));
 
 	if (myEntity.GetAlive() == false)
 	{

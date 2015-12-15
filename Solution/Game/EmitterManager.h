@@ -2,7 +2,6 @@
 #include "Subscriber.h"
 #include <StaticArray.h>
 #define PREALLOCATED_EMITTER_SIZE 10
-#define EMITTER_DATA_SIZE 9
 class Entity;
 class ParticleEmitterComponent;
 
@@ -41,7 +40,7 @@ public:
 
 	/*void ReceiveMessage(const DestroyEmitterMessage& aMessage) override;
 	void ReceiveMessage(const SpawnExplosionMessage& aMessage) override;*/
-
+	void ReceiveMessage(const EmitterMessage& aMessage) override;
 
 private:
 
@@ -62,17 +61,18 @@ private:
 	
 	CU::GrowingArray<std::string> myXMLPaths;
 
-	CU::StaticArray<EmitterData*, EMITTER_DATA_SIZE> myEmitters;
-
-	/*Entity* myPlayer;
-
-	bool myIsCloseToPlayer;
-	*/
 	enum class eEmitterTypeID
 	{
 		BLOOD,
 		COUNT
 	};
+
+	CU::StaticArray<EmitterData*, static_cast<int>(eEmitterTypeID::COUNT)> myEmitters;
+
+	/*Entity* myPlayer;
+
+	bool myIsCloseToPlayer;
+	*/
 	/*
 	enum class eTYPE
 	{

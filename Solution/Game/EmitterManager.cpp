@@ -2,8 +2,10 @@
 
 #include <CommonHelper.h>
 #include "EmitterManager.h"
+#include <EmitterMessage.h>
 #include <ParticleDataContainer.h>
 #include <Entity.h>
+#include <EntityId.h>
 #include <ParticleEmitterInstance.h>
 #include <PostMaster.h>
 #include <XMLReader.h>
@@ -12,53 +14,28 @@
 EmitterManager::EmitterManager()
 	: myXMLPaths(64)
 {
-	/*PostMaster::GetInstance()->Subscribe(eMessageType::DESTORY_EMITTER, this);
-	PostMaster::GetInstance()->Subscribe(eMessageType::SPAWN_EXPLOSION_ON_UNIT_DEATH, this);
-	PostMaster::GetInstance()->Subscribe(eMessageType::SPAWN_EXPLOSION_ON_ASTROID_DEATH, this);
-	PostMaster::GetInstance()->Subscribe(eMessageType::SPAWN_EXPLOSION_ON_PROP_DEATH, this);
-	PostMaster::GetInstance()->Subscribe(eMessageType::SPAWN_EXPLOSION_ON_ROCKET_DEATH, this);
-	PostMaster::GetInstance()->Subscribe(eMessageType::SPAWN_EFFECT_ON_HIT, this);
-	PostMaster::GetInstance()->Subscribe(eMessageType::SPAWN_EFFECT_ON_ASTROID_HIT, this);
-	PostMaster::GetInstance()->Subscribe(eMessageType::SPAWN_ON_FINAL_STRUCTURE_1, this);
-	PostMaster::GetInstance()->Subscribe(eMessageType::SPAWN_ON_FINAL_STRUCTURE_2, this);
-	PostMaster::GetInstance()->Subscribe(eMessageType::SPAWN_ON_FINAL_STRUCTURE_3, this);*/
+	PostMaster* postMaster = PostMaster::GetInstance();
+	postMaster->Subscribe(eMessageType::PARTICLE, this);
+
 	int index = 0;
 	ReadListOfLists("Data/Resource/Particle/LI_emitter_lists.xml");
 
-	for (int i = 0; i < EMITTER_DATA_SIZE; ++i)
+	for (int i = 0; i < static_cast<int>(eEmitterTypeID::COUNT); ++i)
 	{
 		for (int j = 0; j < PREALLOCATED_EMITTER_SIZE; ++j)
 		{
 			Prism::ParticleEmitterInstance* newEmitter;
-			if (myXMLPaths[index].find("final_") != std::string::npos)
-			{
-				newEmitter = new Prism::ParticleEmitterInstance(Prism::ParticleDataContainer::GetInstance()->GetParticleData(myXMLPaths[index].c_str()), true);
-			}
-			else
-			{
-				newEmitter = new Prism::ParticleEmitterInstance(Prism::ParticleDataContainer::GetInstance()->GetParticleData(myXMLPaths[index].c_str()), false);
-			}
+
+			newEmitter = new Prism::ParticleEmitterInstance(Prism::ParticleDataContainer::GetInstance()->
+				GetParticleData(myXMLPaths[index].c_str()), false);
 			myEmitters[i]->myEmitterA.Insert(j, newEmitter);
 
-			if (myXMLPaths[index + 1].find("final_") != std::string::npos)
-			{
-				newEmitter = new Prism::ParticleEmitterInstance(Prism::ParticleDataContainer::GetInstance()->GetParticleData(myXMLPaths[index + 1].c_str()), true);
-			}
-			else
-			{
-				newEmitter = new Prism::ParticleEmitterInstance(Prism::ParticleDataContainer::GetInstance()->GetParticleData(myXMLPaths[index + 1].c_str()), false);
-			}
+			newEmitter = new Prism::ParticleEmitterInstance(Prism::ParticleDataContainer::GetInstance()->
+				GetParticleData(myXMLPaths[index + 1].c_str()), false);
 			myEmitters[i]->myEmitterB.Insert(j, newEmitter);
 
-			if (myXMLPaths[index + 2].find("final_") != std::string::npos)
-			{
-				newEmitter = new Prism::ParticleEmitterInstance(Prism::ParticleDataContainer::GetInstance()->GetParticleData(myXMLPaths[index + 2].c_str()), true);
-			}
-			else
-			{
-				newEmitter = new Prism::ParticleEmitterInstance(Prism::ParticleDataContainer::GetInstance()->GetParticleData(myXMLPaths[index + 2].c_str()), false);
-			}
-
+			newEmitter = new Prism::ParticleEmitterInstance(Prism::ParticleDataContainer::GetInstance()->
+				GetParticleData(myXMLPaths[index + 2].c_str()), false);
 			myEmitters[i]->myEmitterC.Insert(j, newEmitter);
 		}
 		index += 3;
@@ -67,17 +44,8 @@ EmitterManager::EmitterManager()
 
 EmitterManager::~EmitterManager()
 {
-	/*PostMaster::GetInstance()->UnSubscribe(eMessageType::DESTORY_EMITTER, this);
-	PostMaster::GetInstance()->UnSubscribe(eMessageType::SPAWN_EXPLOSION_ON_UNIT_DEATH, this);
-	PostMaster::GetInstance()->UnSubscribe(eMessageType::SPAWN_EXPLOSION_ON_ASTROID_DEATH, this);
-	PostMaster::GetInstance()->UnSubscribe(eMessageType::SPAWN_EXPLOSION_ON_PROP_DEATH, this);
-	PostMaster::GetInstance()->UnSubscribe(eMessageType::SPAWN_EXPLOSION_ON_ROCKET_DEATH, this);
-	PostMaster::GetInstance()->UnSubscribe(eMessageType::SPAWN_EFFECT_ON_HIT, this);
-	PostMaster::GetInstance()->UnSubscribe(eMessageType::SPAWN_EFFECT_ON_ASTROID_HIT, this);
-	PostMaster::GetInstance()->UnSubscribe(eMessageType::SPAWN_ON_FINAL_STRUCTURE_1, this);
-	PostMaster::GetInstance()->UnSubscribe(eMessageType::SPAWN_ON_FINAL_STRUCTURE_2, this);
-	PostMaster::GetInstance()->UnSubscribe(eMessageType::SPAWN_ON_FINAL_STRUCTURE_3, this);*/
-
+	PostMaster* postMaster = PostMaster::GetInstance();
+	postMaster->UnSubscribe(eMessageType::PARTICLE, this);
 
 	myEmitters.DeleteAll();
 }
@@ -89,16 +57,10 @@ EmitterManager::~EmitterManager()
 
 void EmitterManager::UpdateEmitters(float aDeltaTime, CU::Matrix44f aWorldMatrix)
 {
-	for (int i = 0; i < EMITTER_DATA_SIZE; ++i)
+	for (int i = 0; i < static_cast<int>(eEmitterTypeID::COUNT); ++i)
 	{
 		for (int j = 0; j < PREALLOCATED_EMITTER_SIZE; ++j)
 		{
-			/*if (myExplosions[i]->myEmitterA[j]->GetIsActive() == true)
-			{
-				myExplosions[i]->myEmitterA[j]->Update(aDeltaTime, aWorldMatrix);
-				myExplosions[i]->myEmitterB[j]->Update(aDeltaTime, aWorldMatrix);
-				myExplosions[i]->myEmitterC[j]->Update(aDeltaTime, aWorldMatrix);
-			}*/
 			myEmitters[i]->myEmitterA[j]->Update(aDeltaTime, aWorldMatrix);
 			myEmitters[i]->myEmitterB[j]->Update(aDeltaTime, aWorldMatrix);
 			myEmitters[i]->myEmitterC[j]->Update(aDeltaTime, aWorldMatrix);
@@ -108,20 +70,45 @@ void EmitterManager::UpdateEmitters(float aDeltaTime, CU::Matrix44f aWorldMatrix
 
 void EmitterManager::RenderEmitters(Prism::Camera* aCamera)
 {
-	for (int i = 0; i < EMITTER_DATA_SIZE; ++i)
+	for (int i = 0; i < static_cast<int>(eEmitterTypeID::COUNT); ++i)
 	{
 		for (int j = 0; j < PREALLOCATED_EMITTER_SIZE; ++j)
 		{
-			/*if (myExplosions[i]->myEmitterA[j]->GetIsActive() == true)
-			{
-				myExplosions[i]->myEmitterA[j]->Render(aCamera);
-				myExplosions[i]->myEmitterB[j]->Render(aCamera);
-				myExplosions[i]->myEmitterC[j]->Render(aCamera);
-			}*/
 			myEmitters[i]->myEmitterA[j]->Render(aCamera);
 			myEmitters[i]->myEmitterB[j]->Render(aCamera);
 			myEmitters[i]->myEmitterC[j]->Render(aCamera);
 		}
+	}
+}
+
+void EmitterManager::ReceiveMessage(const EmitterMessage& aMessage)
+{
+	if (aMessage.myMessageType == eMessageType::PARTICLE)
+	{
+		CU::Vector3f position;
+		if (aMessage.myEntityID != -1)
+		{
+			position = EntityId::GetInstance()->GetEntity(aMessage.myEntityID)->GetOrientation().GetPos();
+			position.y += 5;
+		}
+
+		int particleEffectIndex = static_cast<int>(aMessage.myParticleType);
+		if (myEmitters[particleEffectIndex]->myEmitterIndex >= PREALLOCATED_EMITTER_SIZE)
+		{
+			myEmitters[particleEffectIndex]->myEmitterIndex = 0;
+		}
+		int emitterIndex = myEmitters[particleEffectIndex]->myEmitterIndex;
+
+		myEmitters[particleEffectIndex]->myEmitterA[emitterIndex]->SetPosition(position);
+		myEmitters[particleEffectIndex]->myEmitterA[emitterIndex]->Activate();
+
+		myEmitters[particleEffectIndex]->myEmitterB[emitterIndex]->SetPosition(position);
+		myEmitters[particleEffectIndex]->myEmitterB[emitterIndex]->Activate();
+
+		myEmitters[particleEffectIndex]->myEmitterC[emitterIndex]->SetPosition(position);
+		myEmitters[particleEffectIndex]->myEmitterC[emitterIndex]->Activate();
+
+		myEmitters[particleEffectIndex]->myEmitterIndex++;
 	}
 }
 
@@ -201,63 +188,16 @@ void EmitterManager::ReadListOfLists(std::string aPath)
 		rootDocument.ForceReadAttribute(e, "src", entityPath);
 		int ID;
 		rootDocument.ForceReadAttribute(e, "ID", ID);
-		/*if (entityPath != "")
+		if (entityPath != "")
 		{
-			if (ID == static_cast<int>(eExplosionID::ENEMY_EXPLOSION))
+			if (ID == static_cast<int>(eEmitterTypeID::BLOOD))
 			{
 				ReadList(entityPath);
-				ExplosionData* newData = new ExplosionData(entityPath);
-				myExplosions.Insert(ID, newData);
+				EmitterData* newData = new EmitterData(entityPath);
+				myEmitters.Insert(ID, newData);
 			}
-			if (ID == static_cast<int>(eExplosionID::PROP_EXPLOSION))
-			{
-				ReadList(entityPath);
-				ExplosionData* newData = new ExplosionData(entityPath);
-				myExplosions.Insert(ID, newData);
-			}
-			if (ID == static_cast<int>(eExplosionID::ASTROID_EXPLOSION))
-			{
-				ReadList(entityPath);
-				ExplosionData* newData = new ExplosionData(entityPath);
-				myExplosions.Insert(ID, newData);
-			}
-			if (ID == static_cast<int>(eExplosionID::ROCKET_EXPLOSION))
-			{
-				ReadList(entityPath);
-				ExplosionData* newData = new ExplosionData(entityPath);
-				myExplosions.Insert(ID, newData);
-			}
-			if (ID == static_cast<int>(eExplosionID::ONHIT_EFFECT))
-			{
-				ReadList(entityPath);
-				ExplosionData* newData = new ExplosionData(entityPath);
-				myExplosions.Insert(ID, newData);
-			}
-			if (ID == static_cast<int>(eExplosionID::ON_ASTROID_HIT_EFFECT))
-			{
-				ReadList(entityPath);
-				ExplosionData* newData = new ExplosionData(entityPath);
-				myExplosions.Insert(ID, newData);
-			}
-			if (ID == static_cast<int>(eExplosionID::FINAL_EXPLOSION_1))
-			{
-				ReadList(entityPath);
-				ExplosionData* newData = new ExplosionData(entityPath);
-				myExplosions.Insert(ID, newData);
-			}
-			if (ID == static_cast<int>(eExplosionID::FINAL_EXPLOSION_2))
-			{
-				ReadList(entityPath);
-				ExplosionData* newData = new ExplosionData(entityPath);
-				myExplosions.Insert(ID, newData);
-			}
-			if (ID == static_cast<int>(eExplosionID::FINAL_EXPLOSION_3))
-			{
-				ReadList(entityPath);
-				ExplosionData* newData = new ExplosionData(entityPath);
-				myExplosions.Insert(ID, newData);
-			}
-		}*/
+			
+		}
 	}
 	rootDocument.CloseDocument();
 }
@@ -292,32 +232,14 @@ void EmitterManager::ReadList(std::string aPath)
 //	myExplosions[index]->myEmitterA[emitterIndex]->SetPosition(aMessage.myPosition);
 //	myExplosions[index]->myEmitterA[emitterIndex]->ToggleActive(true);
 //	myExplosions[index]->myEmitterA[emitterIndex]->ShouldLive(true);
-//	myExplosions[index]->myEmitterA[emitterIndex]->SetIsCloseToPlayer(false);
-//
-//	if (myIsCloseToPlayer == true)
-//	{
-//		myExplosions[index]->myEmitterA[emitterIndex]->SetIsCloseToPlayer(true);
-//	}
 //
 //	myExplosions[index]->myEmitterB[emitterIndex]->SetPosition(aMessage.myPosition);
 //	myExplosions[index]->myEmitterB[emitterIndex]->ToggleActive(true);
 //	myExplosions[index]->myEmitterB[emitterIndex]->ShouldLive(true);
-//	myExplosions[index]->myEmitterB[emitterIndex]->SetIsCloseToPlayer(false);
-//
-//	if (myIsCloseToPlayer == true)
-//	{
-//		myExplosions[index]->myEmitterB[emitterIndex]->SetIsCloseToPlayer(true);
-//	}
 //
 //	myExplosions[index]->myEmitterC[emitterIndex]->SetPosition(aMessage.myPosition);
 //	myExplosions[index]->myEmitterC[emitterIndex]->ToggleActive(true);
 //	myExplosions[index]->myEmitterC[emitterIndex]->ShouldLive(true);
-//	myExplosions[index]->myEmitterC[emitterIndex]->SetIsCloseToPlayer(false);
-//
-//	if (myIsCloseToPlayer == true)
-//	{
-//		myExplosions[index]->myEmitterC[emitterIndex]->SetIsCloseToPlayer(true);
-//	}
 //
 //	myExplosions[index]->myEmitterIndex++;
 //}

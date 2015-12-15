@@ -101,7 +101,7 @@ Level* LevelFactory::LoadCurrentLevel()
 	//myLoadLevelThread = new std::thread(&LevelFactory::ReadLevel, this, myLevelPaths[myCurrentID]);
 	ReadLevel(myLevelPaths[myCurrentID]);
 
-	myCurrentLevel->myPlayer->InitGUI();
+	myCurrentLevel->myPlayer->InitGUI(myCurrentLevel->myAI);
 
 	LUA::ScriptSystem::GetInstance()->CallFunction("Init", {});
 
@@ -244,6 +244,12 @@ void LevelFactory::ReadLevelSetting(const std::string& aLevelPath)
 	myAmbientHue.x = myAmbientHue.x / 255.f;
 	myAmbientHue.y = myAmbientHue.y / 255.f;
 	myAmbientHue.z = myAmbientHue.z / 255.f;
+
+	int maxVictoryPoint = -1;
+	tinyxml2::XMLElement* victoryElement = reader.ForceFindFirstChild(rootElement, "MaxVictoryPoint");
+	reader.ForceReadAttribute(victoryElement, "value", maxVictoryPoint);
+	myCurrentLevel->myMaxVictoryPoint = maxVictoryPoint;
+
 
 	reader.CloseDocument();
 }

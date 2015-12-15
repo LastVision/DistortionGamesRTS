@@ -19,6 +19,8 @@ namespace Prism
 		void Render(Camera* aCamera);
 		void Update(float aDeltaTime, const CU::Matrix44f& aWorldMatrix);
 		void SetPosition(CU::Vector3f aPosition);
+		void Activate();
+
 	private:
 
 		void CreateVertexBuffer();

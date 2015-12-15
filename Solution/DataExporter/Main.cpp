@@ -38,7 +38,7 @@
 #include "DGFXReader.h"
 #include <DL_Debug.h>
 #include <Engine.h>
-#include "NavMeshReader.h"
+#include "TerrainReader.h"
 #include "IReader.h"
 #include <TimerManager.h>
 
@@ -108,7 +108,7 @@ int main(int argC,      // Number of strings in array argv
 	{
 		std::cout << "---| Creating Terrain and NavMesh|---\n" << std::endl;
 
-		reader = new NavMeshReader();
+		reader = new TerrainReader();
 
 		reader->ReadFile("Data/Level/LI_level.xml");
 

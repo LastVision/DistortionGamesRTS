@@ -166,6 +166,7 @@ namespace Prism
 		if (myEmitterLife <= 0.f && myDeadParticleCount == myLogicalParticles.Size())
 		{
 			myIsActive = false;
+			myEmitterLife = myParticleEmitterData->myEmitterLifeTime;
 		}
 
 	}
@@ -245,6 +246,12 @@ namespace Prism
 	{
 		myOrientation.SetPos(aPosition);
 	}
+
+	void ParticleEmitterInstance::Activate()
+	{
+		myIsActive = true;
+	}
+
 
 }
 

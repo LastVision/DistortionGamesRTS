@@ -3,11 +3,12 @@
 #include <Sprite.h>
 #include "ResourceBarWidget.h"
 #include "../Game/PlayerDirector.h"
+#include "../Game/AIDirector.h"
 #include <XMLReader.h>
 
 namespace GUI
 {
-	ResourceBarWidget::ResourceBarWidget(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement, const PlayerDirector* aPlayer)
+	ResourceBarWidget::ResourceBarWidget(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement, const PlayerDirector* aPlayer, const AIDirector* anAI)
 		: myValueSprite(nullptr)
 	{
 		std::string valueSpritePath = "";
@@ -41,6 +42,18 @@ namespace GUI
 		if (value == "player_gold")
 		{
 			myValue = &aPlayer->GetTestGold();
+		}
+		else if (value == "player_victory_point")
+		{
+			myValue = &aPlayer->GetVictoryPoints();
+		}
+		else if (value == "enemy_victory_point")
+		{
+			myValue = &anAI->GetVictoryPoints();
+		}
+		else
+		{
+			assert("Wrong type in resourcebar XML");
 		}
 
 		mySize = size;
