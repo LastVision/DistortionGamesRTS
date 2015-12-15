@@ -13,6 +13,7 @@ namespace tinyxml2
 
 class XMLReader;
 class PlayerDirector;
+class AIDirector;
 
 namespace GUI
 {
@@ -21,7 +22,7 @@ namespace GUI
 	{
 
 	public:
-		ResourceBarWidget(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement, const PlayerDirector* aPlayer);
+		ResourceBarWidget(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement, const PlayerDirector* aPlayer, const AIDirector* anAI);
 		~ResourceBarWidget();
 
 		void Render(const CU::Vector2<float>& aParentPosition) override;

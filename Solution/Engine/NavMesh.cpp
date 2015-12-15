@@ -17,6 +17,7 @@ namespace Prism
 	{
 		NavMesh::NavMesh()
 			: myTriangles(4096)
+			, myEdges(4096)
 			, myNewTriangles(1024)
 			, myTotalSize(255.f)
 			, myCellSize(myTotalSize / QUADS_PER_SIDE)
@@ -72,13 +73,14 @@ namespace Prism
 		{
 			if (aRenderNavmeshLines == true)
 			{
-				for (int i = 0; i < myTriangles.Size(); ++i)
+				for (int i = 0; i < myEdges.Size(); ++i)
 				{
-					myTriangles[i]->Render();
+					myEdges[i]->Render();
 				}
 			}
 
 			DEBUG_PRINT(myTriangles.Size());
+			DEBUG_PRINT(myEdges.Size());
 		}
 
 		void NavMesh::Cut(Edge* anEdge)
@@ -235,6 +237,21 @@ namespace Prism
 			myNewTriangles.RemoveAll();
 		}
 
+		void NavMesh::CalcHeights(Terrain* aTerrain)
+		{
+			for (int i = 0; i < myTriangles.Size(); ++i)
+			{
+				UniqueAdd(myTriangles[i]->myEdge1, myEdges);
+				UniqueAdd(myTriangles[i]->myEdge2, myEdges);
+				UniqueAdd(myTriangles[i]->myEdge3, myEdges);
+			}
+
+			for (int i = 0; i < myEdges.Size(); ++i)
+			{
+				myEdges[i]->CalcHeights(aTerrain);
+			}
+		}
+
 		void NavMesh::Save(const std::string& aFilePath)
 		{
 			std::fstream file;
@@ -281,6 +298,8 @@ namespace Prism
 			{
 				aStream.write((char*)&edges[i]->myVertex1->myIndex, sizeof(int));
 				aStream.write((char*)&edges[i]->myVertex2->myIndex, sizeof(int));
+				aStream.write((char*)&edges[i]->myPosition3D1.x, sizeof(float) * 3);
+				aStream.write((char*)&edges[i]->myPosition3D2.x, sizeof(float) * 3);
 			}
 
 			count = myTriangles.Size();
@@ -319,13 +338,16 @@ namespace Prism
 
 			aStream.read((char*)&count, sizeof(int));
 
-			CU::GrowingArray<Edge*> edges(count);
+			myEdges.Init(count);
 			for (int i = 0; i < count; ++i)
 			{
 				int index[2];
 
 				aStream.read((char*)&index, sizeof(int) * 2);
-				edges.Add(new Edge(vertices[index[0]], vertices[index[1]]));
+				myEdges.Add(new Edge(vertices[index[0]], vertices[index[1]]));
+				Edge* current = myEdges.GetLast();
+				aStream.read((char*)&current->myPosition3D1.x, sizeof(float) * 3);
+				aStream.read((char*)&current->myPosition3D2.x, sizeof(float) * 3);
 			}
 
 
@@ -338,7 +360,7 @@ namespace Prism
 				int index[3];
 
 				aStream.read((char*)&index, sizeof(int) * 3);
-				myTriangles.Add(new Triangle(edges[index[0]], edges[index[1]], edges[index[2]]));
+				myTriangles.Add(new Triangle(myEdges[index[0]], myEdges[index[1]], myEdges[index[2]]));
 			}
 		}
 

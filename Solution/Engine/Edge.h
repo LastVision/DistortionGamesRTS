@@ -5,6 +5,8 @@
 
 namespace Prism
 {
+	class Terrain;
+
 	namespace Navigation
 	{
 		class Triangle;
@@ -23,6 +25,8 @@ namespace Prism
 			void Remove(Triangle* aTriangle);
 
 			const CU::Intersection::LineSegment2D myLineSegment;
+
+			void CalcHeights(Terrain* aTerrain);
 
 		private:
 			void operator=(Edge&) = delete;

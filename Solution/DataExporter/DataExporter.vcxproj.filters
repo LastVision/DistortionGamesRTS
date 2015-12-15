@@ -11,7 +11,7 @@
     <ClCompile Include="IReader.cpp">
       <Filter>Reader</Filter>
     </ClCompile>
-    <ClCompile Include="NavMeshReader.cpp">
+    <ClCompile Include="TerrainReader.cpp">
       <Filter>Reader</Filter>
     </ClCompile>
   </ItemGroup>
@@ -26,7 +26,7 @@
     <ClInclude Include="IReader.h">
       <Filter>Reader</Filter>
     </ClInclude>
-    <ClInclude Include="NavMeshReader.h">
+    <ClInclude Include="TerrainReader.h">
       <Filter>Reader</Filter>
     </ClInclude>
   </ItemGroup>

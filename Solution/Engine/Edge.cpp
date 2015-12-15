@@ -1,7 +1,8 @@
 #include "stdafx.h"
 #include "Edge.h"
-#include "Vertex.h"
+#include "Terrain.h"
 #include "Triangle.h"
+#include "Vertex.h"
 
 //#include "tga2d\engine.h"
 //#include "tga2d\drawers\debug_drawer.h"
@@ -91,6 +92,12 @@ namespace Prism
 			}
 
 			DL_ASSERT("Triangle not found.");
+		}
+
+		void Edge::CalcHeights(Terrain* aTerrain)
+		{
+			myPosition3D1 = aTerrain->GetHeight(myPosition3D1, 2.f);
+			myPosition3D2 = aTerrain->GetHeight(myPosition3D2, 2.f);
 		}
 	}
 }

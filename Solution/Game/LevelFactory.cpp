@@ -101,7 +101,7 @@ Level* LevelFactory::LoadCurrentLevel()
 	//myLoadLevelThread = new std::thread(&LevelFactory::ReadLevel, this, myLevelPaths[myCurrentID]);
 	ReadLevel(myLevelPaths[myCurrentID]);
 
-	myCurrentLevel->myPlayer->InitGUI();
+	myCurrentLevel->myPlayer->InitGUI(myCurrentLevel->myAI);
 
 	LUA::ScriptSystem::GetInstance()->CallFunction("Init", {});
 
@@ -210,8 +210,10 @@ void LevelFactory::ReadLevel(const std::string& aLevelPath)
 	}
 	for (int i = 0; i < myCurrentLevel->myEntities.Size(); ++i)
 	{
+		//DL_ASSERT("Cutting from entities not supported.");
 		myTerrain->GetNavMesh()->Cut(myCurrentLevel->myEntities[i]->GetCutMesh());
 	}
+	myTerrain->GetNavMesh()->CalcHeights(myTerrain);
 	int elapsed = static_cast<int>(
 		CU::TimerManager::GetInstance()->StopTimer("CreateNavMesh").GetMilliseconds());
 	RESOURCE_LOG("Creating NavMesh took %d ms", elapsed);
@@ -242,6 +244,12 @@ void LevelFactory::ReadLevelSetting(const std::string& aLevelPath)
 	myAmbientHue.x = myAmbientHue.x / 255.f;
 	myAmbientHue.y = myAmbientHue.y / 255.f;
 	myAmbientHue.z = myAmbientHue.z / 255.f;
+
+	int maxVictoryPoint = -1;
+	tinyxml2::XMLElement* victoryElement = reader.ForceFindFirstChild(rootElement, "MaxVictoryPoint");
+	reader.ForceReadAttribute(victoryElement, "value", maxVictoryPoint);
+	myCurrentLevel->myMaxVictoryPoint = maxVictoryPoint;
+
 
 	reader.CloseDocument();
 }

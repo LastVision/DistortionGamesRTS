@@ -6,6 +6,7 @@ namespace Prism
 	class Camera;
 	class Terrain;
 	class Scene;
+	class Sprite;
 }
 
 namespace GUI
@@ -34,6 +35,7 @@ enum class eSelectedAction
 };
 
 class BuildingComponent;
+class AIDirector;
 
 class PlayerDirector : public Director
 {
@@ -41,18 +43,18 @@ public:
 	PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aScene, GUI::Cursor* aCursor);
 	~PlayerDirector();
 
-	void InitGUI();
+	void InitGUI(const AIDirector* anAI);
 
 	void Update(float aDeltaTime, const Prism::Camera& aCamera);
 	void Render(const Prism::Camera& aCamera);
 
 	void OnResize(int aWidth, int aHeight);
 
-	void SpawnUnit(eUnitType aUnitType);
+	//void SpawnUnit(eUnitType aUnitType);
 
 	void SelectUnit(Entity* anEntity);
 
-	void ReceiveMessage(const SpawnUnitMessage& aMessage) override;
+	//void ReceiveMessage(const SpawnUnitMessage& aMessage) override;
 	void ReceiveMessage(const ToggleGUIMessage& aMessage) override;
 	void ReceiveMessage(const OnClickMessage& aMessage) override;
 	void ReceiveMessage(const TimeMultiplierMessage& aMessage) override;
@@ -86,8 +88,13 @@ private:
 	float myTweakValueX;
 	float myTweakValueY;
 
+	CU::Vector2<float> mySelectionSpriteSize;
+	CU::Vector2<float> mySelectionSpriteRenderPosition;
+	CU::Vector2<float> mySelectionSpriteHotspot;
+
 	CU::Vector2<float> myFirstMousePosition;
-	CU::Vector3<float> myTestBoxPositions[4];
+	CU::GrowingArray<CU::Vector3<float>> myDragSelectionPositions;
+	Prism::Sprite* myDragSelectionSprite;
 
 };
 
