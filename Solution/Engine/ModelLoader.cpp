@@ -267,18 +267,18 @@ namespace Prism
 
 	ModelProxy* ModelLoader::LoadModel(const std::string& aModelPath, const std::string& aEffectPath)
 	{
-#ifdef THREADED_LOADING
-		WaitUntilAddIsAllowed();
-
 		if (myProxies.find(aModelPath) != myProxies.end())
 		{
 			return myProxies[aModelPath];
 		}
 
-		myCanCopyArray = false;
-
 		ModelProxy* proxy = new ModelProxy();
 		proxy->SetModel(nullptr);
+
+#ifdef THREADED_LOADING
+		WaitUntilAddIsAllowed();
+
+		myCanCopyArray = false;
 
 		LoadData newData;
 		newData.myProxy = proxy;
@@ -287,43 +287,45 @@ namespace Prism
 		newData.myEffectPath = aEffectPath;
 
 		myBuffers[myInactiveBuffer].Add(newData);
-
-		myProxies[aModelPath] = proxy;
-
 		myCanCopyArray = true;
-
-		return proxy;
 #else
-		if (myProxies.find(aModelPath) != myProxies.end())
-		{
-			return myProxies[aModelPath];
-		}
+		Model* model = nullptr;
 
-		ModelProxy* proxy = new ModelProxy();
+	#ifdef USE_DGFX
+		#ifdef CONVERT_TO_DGFX_IN_RUNTIME
+			std::string animOutput = CU::GetGeneratedDataFolderFilePath(aModelPath.c_str(), "dgfx");
+			myModelFactory->ConvertToDGFX(aModelPath.c_str(), animOutput.c_str());
+		#endif
 
-		Model* model = myModelFactory->LoadModel(aModelPath.c_str(),
+		model = myDGFXLoader->LoadModel(aModelPath.c_str()
+			, EffectContainer::GetInstance()->GetEffect(aEffectPath));
+
+	#else
+		model = myModelFactory->LoadModel(aModelPath.c_str(),
 			EffectContainer::GetInstance()->GetEffect(aEffectPath));
+	#endif
 
 		proxy->SetModel(model);
+#endif
+		
 		myProxies[aModelPath] = proxy;
 		return proxy;
-#endif
 	}
 
 	ModelProxy* ModelLoader::LoadModelAnimated(const std::string& aModelPath, const std::string& aEffectPath)
 	{
-#ifdef THREADED_LOADING
-		WaitUntilAddIsAllowed();
-
 		if (myProxies.find(aModelPath) != myProxies.end())
 		{
 			return myProxies[aModelPath];
 		}
 
-		myCanCopyArray = false;
-
 		ModelProxy* proxy = new ModelProxy();
 		proxy->SetModel(nullptr);
+
+#ifdef THREADED_LOADING
+		WaitUntilAddIsAllowed();
+
+		myCanCopyArray = false;
 
 		LoadData newData;
 		newData.myProxy = proxy;
@@ -333,26 +335,28 @@ namespace Prism
 
 		myBuffers[myInactiveBuffer].Add(newData);
 
-		myProxies[aModelPath] = proxy;
-
 		myCanCopyArray = true;
-
-		return proxy;
 #else
-		if (myProxies.find(aModelPath) != myProxies.end())
-		{
-			return myProxies[aModelPath];
-		}
+		ModelAnimated* model = nullptr;
 
-		ModelProxy* proxy = new ModelProxy();
+		#ifdef USE_DGFX
+			#ifdef CONVERT_TO_DGFX_IN_RUNTIME
+				std::string animOutput = CU::GetGeneratedDataFolderFilePath(aModelPath.c_str(), "dgfx");
+				myModelFactory->ConvertToDGFX(aModelPath.c_str(), animOutput.c_str());
+			#endif
 
-		ModelAnimated* model = myModelFactory->LoadModelAnimated(aModelPath.c_str(),
-			EffectContainer::GetInstance()->GetEffect(aEffectPath));
+			model = myDGFXLoader->LoadAnimatedModel(aModelPath.c_str()
+				, EffectContainer::GetInstance()->GetEffect(aEffectPath));
+		#else
+			model = myModelFactory->LoadModelAnimated(aModelPath.c_str(),
+				EffectContainer::GetInstance()->GetEffect(aEffectPath));
+		#endif
 
 		proxy->SetModelAnimated(model);
+#endif
+
 		myProxies[aModelPath] = proxy;
 		return proxy;
-#endif
 	}
 
 	ModelProxy* ModelLoader::LoadCube(float aWidth, float aHeight, float aDepth
@@ -390,10 +394,11 @@ namespace Prism
 
 	AnimationProxy* ModelLoader::LoadAnimation(const char* aPath)
 	{
+		AnimationProxy* anim = new AnimationProxy();
+
 #ifdef THREADED_LOADING
 		WaitUntilAddIsAllowed();
 		myCanCopyArray = false;
-		AnimationProxy* anim = new AnimationProxy();
 
 		LoadData animData;
 		animData.myLoadType = eLoadType::ANIMATION;
@@ -402,12 +407,20 @@ namespace Prism
 
 		myBuffers[myInactiveBuffer].Add(animData);
 		myCanCopyArray = true;
-		return anim;
 #else
-		AnimationProxy* anim = new AnimationProxy();
-		anim->myAnimation = myModelFactory->LoadAnimation(aPath);
-		return anim;
+		#ifdef USE_DGFX
+			#ifdef CONVERT_TO_DGFX_IN_RUNTIME
+				std::string animOutput = CU::GetGeneratedDataFolderFilePath(aPath, "dgfx");
+				myModelFactory->ConvertToDGFX(aPath, animOutput.c_str());
+			#endif
+			anim->myAnimation = myDGFXLoader->LoadAnimation(aPath);
+
+		#else
+			anim->myAnimation = myModelFactory->LoadAnimation(aPath);
+		#endif
 #endif
+
+		return anim;
 	}
 
 	void ModelLoader::WaitUntilCopyIsAllowed()
