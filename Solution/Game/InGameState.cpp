@@ -220,7 +220,7 @@ void InGameState::ReceiveMessage(const OnClickMessage& aMessage)
 void InGameState::ReceiveMessage(const MoveCameraMessage& aMessage)
 {
 	CU::Vector2<float> position = aMessage.myPosition * 255.f;
-	float offset = 60.f;
+	float offset = 50.f;
 	position.y -= offset;
 
 	myCamera->SetPosition({ position.x, myCamera->GetOrientation().GetPos().y, position.y });
