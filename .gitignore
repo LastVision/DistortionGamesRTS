@@ -92,5 +92,5 @@ Tools/CSharpUtilities/CSharpUtilities/obj/
 *.fx
 /Documentation/CreateProject.txt
 *.config
-/Workbed/CopyDataToProg.bat
-/Workbed/CopyExesToRelease.bat
+/Solution/DataExporter/log
+/Workbed

@@ -21,7 +21,11 @@ public:
 	const float& GetMaxBuildTime() const;
 	int GetSpawnQueueSize() const;
 
+	int GetUnitCost(eUnitType aUnitType);
+
 private:
+
+	CU::StaticArray<int, 3> myUnitCosts;
 
 	CU::StaticArray<eUnitType, 5> mySpawnQueue;
 	int mySpawnQueueIndex;

@@ -157,8 +157,12 @@ void PlayerDirector::OnResize(int aWidth, int aHeight)
 
 void PlayerDirector::SpawnUnit(eUnitType aUnitType)
 {
-	myTestGold--;
-	myBuilding->GetComponent<BuildingComponent>()->BuildUnit(aUnitType);
+
+	if (myTestGold >= myBuilding->GetComponent<BuildingComponent>()->GetUnitCost(aUnitType))
+	{
+		myTestGold -= myBuilding->GetComponent<BuildingComponent>()->GetUnitCost(aUnitType);
+		myBuilding->GetComponent<BuildingComponent>()->BuildUnit(aUnitType);
+	}
 }
 
 void PlayerDirector::ReceiveMessage(const SpawnUnitMessage& aMessage)
@@ -174,9 +178,11 @@ void PlayerDirector::ReceiveMessage(const SpawnUnitMessage& aMessage)
 				{
 					continue;
 				}
+
 				myUnits[i]->Spawn(myBuilding->GetOrientation().GetPos() + CU::Vector3f(0.f, 0.f, -15.f));
 				myActiveUnits.Add(myUnits[i]);
 				break;
+
 			}
 		}
 		PollingStation::GetInstance()->RegisterEntity(myActiveUnits.GetLast());
