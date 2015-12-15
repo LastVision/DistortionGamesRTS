@@ -17,5 +17,6 @@ enum class eMessageType
 	RESOURCE,
 	TIME_MULTIPLIER,
 	VICTORY,
+	PARTICLE,
 	COUNT,
 };

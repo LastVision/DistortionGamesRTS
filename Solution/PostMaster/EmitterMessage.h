@@ -1,16 +1,17 @@
 #pragma once
 #include "Message.h"
+#include <GameEnum.h>
 
 struct EmitterMessage : public Message
 {
-	EmitterMessage(float aDuration);
+	EmitterMessage(eParticleType aParticleType);
 
-	const float myDuration;
+	const eParticleType myParticleType;
 };
 
 // takes in ratio, not actual position
-inline EmitterMessage::EmitterMessage(float aDuration)
-	: Message(eMessageType::FADE)
-	, myDuration(aDuration)
+inline EmitterMessage::EmitterMessage(eParticleType aParticleType)
+	: Message(eMessageType::PARTICLE)
+	, myParticleType(aParticleType)
 {
 }
