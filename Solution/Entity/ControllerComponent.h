@@ -72,6 +72,8 @@ private:
 	float myVisionRange2;
 	float myAttackRange2;
 	float myAttackDamage;
+	float myAttackSpeed;
+	float myAttackTimer;
 	float myChaseDistance2;
 	float myAttackTargetPathRefreshTime;
 	float myCurrentAttackTargetPathRefreshTime;
