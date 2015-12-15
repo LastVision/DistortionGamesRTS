@@ -56,19 +56,19 @@
     <OutDir>$(SolutionDir)..\Libs\</OutDir>
     <IntDir>$(SolutionDir)..\temp\$(ProjectName)\</IntDir>
     <TargetName>$(ProjectName)_$(Configuration)</TargetName>
-    <IncludePath>$(SolutionDir)\Memory;$(IncludePath)</IncludePath>
+    <IncludePath>$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)..\Libs\</OutDir>
     <IntDir>$(SolutionDir)..\temp\$(ProjectName)\</IntDir>
     <TargetName>$(ProjectName)_$(Configuration)</TargetName>
-    <IncludePath>$(SolutionDir)\Memory;$(IncludePath)</IncludePath>
+    <IncludePath>$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DataExporter|Win32'">
     <OutDir>$(SolutionDir)..\Libs\</OutDir>
     <IntDir>$(SolutionDir)..\temp\$(ProjectName)\</IntDir>
     <TargetName>$(ProjectName)_$(Configuration)</TargetName>
-    <IncludePath>$(SolutionDir)\Memory;$(IncludePath)</IncludePath>
+    <IncludePath>$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -76,7 +76,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PrecompiledHeader>Create</PrecompiledHeader>
-      <AdditionalIncludeDirectories>$(SolutionDir)\Memory;$(SolutionDir)\CommonUtilities;$(SolutionDir)\DL_Debug;$(SolutionDir)\Engine;$(SolutionDir)\PostMaster;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Memory;$(SolutionDir)CommonUtilities;$(SolutionDir)DL_Debug;$(SolutionDir)Engine;$(SolutionDir)PostMaster;$(SolutionDir)ParticleSystem;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -90,7 +90,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PrecompiledHeader>Create</PrecompiledHeader>
-      <AdditionalIncludeDirectories>$(SolutionDir)\Memory;$(SolutionDir)\CommonUtilities;$(SolutionDir)\DL_Debug;$(SolutionDir)\Engine;$(SolutionDir)\PostMaster;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Memory;$(SolutionDir)CommonUtilities;$(SolutionDir)DL_Debug;$(SolutionDir)Engine;$(SolutionDir)PostMaster;$(SolutionDir)ParticleSystem;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -106,7 +106,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PrecompiledHeader>Create</PrecompiledHeader>
-      <AdditionalIncludeDirectories>$(SolutionDir)\Memory;$(SolutionDir)\CommonUtilities;$(SolutionDir)\DL_Debug;$(SolutionDir)\Engine;$(SolutionDir)\PostMaster;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Memory;$(SolutionDir)CommonUtilities;$(SolutionDir)DL_Debug;$(SolutionDir)Engine;$(SolutionDir)PostMaster;$(SolutionDir)ParticleSystem;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -125,6 +125,7 @@
     <ClInclude Include="CollisionComponentData.h" />
     <ClInclude Include="EntityEnumConverter.h" />
     <ClInclude Include="EntityId.h" />
+    <ClInclude Include="ParticleComponent.h" />
     <ClInclude Include="TriggerComponent.h" />
     <ClInclude Include="TriggerComponentData.h" />
     <ClInclude Include="Component.h" />
@@ -149,6 +150,7 @@
     <ClCompile Include="CollisionComponent.cpp" />
     <ClCompile Include="EntityEnumConverter.cpp" />
     <ClCompile Include="EntityId.cpp" />
+    <ClCompile Include="ParticleComponent.cpp" />
     <ClCompile Include="TriggerComponent.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="ComponentLoader.cpp" />

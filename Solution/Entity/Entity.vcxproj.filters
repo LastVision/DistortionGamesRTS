@@ -90,6 +90,9 @@
       <Filter>EntityEnum</Filter>
     </ClCompile>
     <ClCompile Include="EntityId.cpp" />
+    <ClCompile Include="ParticleComponent.cpp">
+      <Filter>Component\Graphic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -164,5 +167,8 @@
       <Filter>EntityEnum</Filter>
     </ClInclude>
     <ClInclude Include="EntityId.h" />
+    <ClInclude Include="ParticleComponent.h">
+      <Filter>Component\Graphic</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
