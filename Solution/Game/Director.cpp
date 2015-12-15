@@ -1,9 +1,12 @@
 #include "stdafx.h"
+#include <BuildingComponent.h>
 #include "Director.h"
 #include <Entity.h>
 #include <PostMaster.h>
 #include <ResourceMessage.h>
 #include <VictoryMessage.h>
+#include <SpawnUnitMessage.h>
+#include <PollingStation.h>
 
 Director::Director(eOwnerType aOwnerType, const Prism::Terrain& aTerrain)
 	: myOwner(aOwnerType)
@@ -49,8 +52,37 @@ void Director::CleanUp()
 	}
 }
 
-void Director::ReceiveMessage(const SpawnUnitMessage&)
+bool Director::SpawnUnit(eUnitType aUnitType)
 {
+	if (myTestGold >= myBuilding->GetComponent<BuildingComponent>()->GetUnitCost(aUnitType))
+	{
+		myTestGold -= myBuilding->GetComponent<BuildingComponent>()->GetUnitCost(aUnitType);
+		myBuilding->GetComponent<BuildingComponent>()->BuildUnit(aUnitType);
+		return true;
+	}
+	return false;
+}
+
+void Director::ReceiveMessage(const SpawnUnitMessage& aMessage)
+{
+	if (myActiveUnits.Size() < 64)
+	{
+		for (int i = 0; i < myUnits.Size(); ++i)
+		{
+			if (myUnits[i]->GetUnitType() == static_cast<eUnitType>(aMessage.myUnitType) && myUnits[i]->GetAlive() == false)
+			{
+				if (IsAlreadyActive(myUnits[i]) == true)
+				{
+					continue;
+				}
+				myUnits[i]->Spawn(myBuilding->GetOrientation().GetPos() + CU::Vector3f(0.f, 0.f, -15.f));
+				myActiveUnits.Add(myUnits[i]);
+				break;
+			}
+		}
+		PollingStation::GetInstance()->RegisterEntity(myActiveUnits.GetLast());
+	}
+
 }
 
 

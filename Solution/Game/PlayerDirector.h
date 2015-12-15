@@ -49,11 +49,11 @@ public:
 
 	void OnResize(int aWidth, int aHeight);
 
-	void SpawnUnit(eUnitType aUnitType);
+	//void SpawnUnit(eUnitType aUnitType);
 
 	void SelectUnit(Entity* anEntity);
 
-	void ReceiveMessage(const SpawnUnitMessage& aMessage) override;
+	//void ReceiveMessage(const SpawnUnitMessage& aMessage) override;
 	void ReceiveMessage(const ToggleGUIMessage& aMessage) override;
 	void ReceiveMessage(const OnClickMessage& aMessage) override;
 	void ReceiveMessage(const TimeMultiplierMessage& aMessage) override;

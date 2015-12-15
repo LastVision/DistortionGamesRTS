@@ -155,39 +155,39 @@ void PlayerDirector::OnResize(int aWidth, int aHeight)
 	myGUIManager->OnResize(aWidth, aHeight);
 }
 
-void PlayerDirector::SpawnUnit(eUnitType aUnitType)
-{
+//void PlayerDirector::SpawnUnit(eUnitType aUnitType)
+//{
+//
+//	if (myTestGold >= myBuilding->GetComponent<BuildingComponent>()->GetUnitCost(aUnitType))
+//	{
+//		myTestGold -= myBuilding->GetComponent<BuildingComponent>()->GetUnitCost(aUnitType);
+//		myBuilding->GetComponent<BuildingComponent>()->BuildUnit(aUnitType);
+//	}
+//}
 
-	if (myTestGold >= myBuilding->GetComponent<BuildingComponent>()->GetUnitCost(aUnitType))
-	{
-		myTestGold -= myBuilding->GetComponent<BuildingComponent>()->GetUnitCost(aUnitType);
-		myBuilding->GetComponent<BuildingComponent>()->BuildUnit(aUnitType);
-	}
-}
-
-void PlayerDirector::ReceiveMessage(const SpawnUnitMessage& aMessage)
-{
-	if (aMessage.myOwnerType != static_cast<int>(eOwnerType::PLAYER)) return;
-	if (myActiveUnits.Size() < 64)
-	{
-		for (int i = 0; i < myUnits.Size(); ++i)
-		{
-			if (myUnits[i]->GetUnitType() == static_cast<eUnitType>(aMessage.myUnitType) && myUnits[i]->GetAlive() == false)
-			{
-				if (IsAlreadyActive(myUnits[i]) == true)
-				{
-					continue;
-				}
-
-				myUnits[i]->Spawn(myBuilding->GetOrientation().GetPos() + CU::Vector3f(0.f, 0.f, -15.f));
-				myActiveUnits.Add(myUnits[i]);
-				break;
-
-			}
-		}
-		PollingStation::GetInstance()->RegisterEntity(myActiveUnits.GetLast());
-	}
-}
+//void PlayerDirector::ReceiveMessage(const SpawnUnitMessage& aMessage)
+//{
+//	if (aMessage.myOwnerType != static_cast<int>(eOwnerType::PLAYER)) return;
+//	if (myActiveUnits.Size() < 64)
+//	{
+//		for (int i = 0; i < myUnits.Size(); ++i)
+//		{
+//			if (myUnits[i]->GetUnitType() == static_cast<eUnitType>(aMessage.myUnitType) && myUnits[i]->GetAlive() == false)
+//			{
+//				if (IsAlreadyActive(myUnits[i]) == true)
+//				{
+//					continue;
+//				}
+//
+//				myUnits[i]->Spawn(myBuilding->GetOrientation().GetPos() + CU::Vector3f(0.f, 0.f, -15.f));
+//				myActiveUnits.Add(myUnits[i]);
+//				break;
+//
+//			}
+//		}
+//		PollingStation::GetInstance()->RegisterEntity(myActiveUnits.GetLast());
+//	}
+//}
 
 void PlayerDirector::ReceiveMessage(const ToggleGUIMessage& aMessage)
 {

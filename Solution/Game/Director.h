@@ -22,6 +22,7 @@ public:
 	void CleanUp();
 
 	int GetUnitCount() const;
+	bool SpawnUnit(eUnitType aUnitType);
 
 	
 	virtual void ReceiveMessage(const SpawnUnitMessage& aMessage) override;
