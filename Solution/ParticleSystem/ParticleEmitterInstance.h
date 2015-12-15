@@ -20,7 +20,7 @@ namespace Prism
 		void Update(float aDeltaTime, const CU::Matrix44f& aWorldMatrix);
 		void SetPosition(CU::Vector3f aPosition);
 		void Activate();
-
+		bool IsActive();
 	private:
 
 		void CreateVertexBuffer();
@@ -51,4 +51,9 @@ namespace Prism
 
 		std::string myEmitterPath;
 	};
+
+	inline bool ParticleEmitterInstance::IsActive()
+	{
+		return myIsActive;
+	}
 }

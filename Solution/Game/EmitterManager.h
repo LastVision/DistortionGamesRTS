@@ -1,7 +1,7 @@
 #pragma once
 #include "Subscriber.h"
 #include <StaticArray.h>
-#define PREALLOCATED_EMITTER_SIZE 10
+#define PREALLOCATED_EMITTER_SIZE 128
 class Entity;
 class ParticleEmitterComponent;
 
@@ -47,27 +47,9 @@ private:
 	void ReadListOfLists(std::string aPath);
 	void ReadList(std::string aPath);
 
-	/*void EnemyExplosion(const SpawnExplosionMessage& aMessage);
-	void PropExplosion(const SpawnExplosionMessage& aMessage);
-	void AstroidExplosion(const SpawnExplosionMessage& aMessage);
-	void RocketExplosion(const SpawnExplosionMessage& aMessage);
-	void OnHitEffect(const SpawnExplosionMessage& aMessage);
-	void OnAstroidHitEffect(const SpawnExplosionMessage& aMessage);
-	void OnFirstFinal(const SpawnExplosionMessage& aMessage);
-	void OnSecondFinal(const SpawnExplosionMessage& aMessage);
-	void OnThirdFinal(const SpawnExplosionMessage& aMessage);*/
-
-
-	
 	CU::GrowingArray<std::string> myXMLPaths;
 
-	enum class eEmitterTypeID
-	{
-		BLOOD,
-		COUNT
-	};
-
-	CU::StaticArray<EmitterData*, static_cast<int>(eEmitterTypeID::COUNT)> myEmitters;
+	CU::StaticArray<EmitterData*, static_cast<int>(eParticleType::_COUNT)> myEmitters;
 
 	/*Entity* myPlayer;
 

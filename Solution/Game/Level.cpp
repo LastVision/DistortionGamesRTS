@@ -84,10 +84,11 @@ bool Level::Update(float aDeltaTime, Prism::Camera& aCamera)
 		myEntities[i]->Update(aDeltaTime);
 	}
 
+
 	myPlayer->Update(aDeltaTime, aCamera);
 	myAI->Update(aDeltaTime);
-
 	myEmitterManager->UpdateEmitters(aDeltaTime, CU::Matrix44f());
+
 
 	return true;
 }
@@ -98,9 +99,9 @@ void Level::Render(Prism::Camera& aCamera)
 
 	myScene->Render(myRenderNavMeshLines);
 
-	myPlayer->Render(aCamera);
-
 	myEmitterManager->RenderEmitters(&aCamera);
+
+	myPlayer->Render(aCamera);
 }
 
 void Level::OnResize(int aWidth, int aHeigth)
