@@ -1,4 +1,4 @@
 #pragma once
 
-#include <EntityEnum.h>
+#include <GameEnum.h>
 #include <GameConstants.h>
