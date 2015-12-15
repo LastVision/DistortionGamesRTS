@@ -76,7 +76,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PrecompiledHeader>Create</PrecompiledHeader>
-      <AdditionalIncludeDirectories>$(SolutionDir)Memory;$(SolutionDir)CommonUtilities;$(SolutionDir)DL_Debug;$(SolutionDir)Engine;$(SolutionDir)PostMaster;$(SolutionDir)ParticleSystem;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Memory;$(SolutionDir)CommonUtilities;$(SolutionDir)DL_Debug;$(SolutionDir)Engine;$(SolutionDir)PostMaster;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -90,7 +90,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PrecompiledHeader>Create</PrecompiledHeader>
-      <AdditionalIncludeDirectories>$(SolutionDir)Memory;$(SolutionDir)CommonUtilities;$(SolutionDir)DL_Debug;$(SolutionDir)Engine;$(SolutionDir)PostMaster;$(SolutionDir)ParticleSystem;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Memory;$(SolutionDir)CommonUtilities;$(SolutionDir)DL_Debug;$(SolutionDir)Engine;$(SolutionDir)PostMaster;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -106,7 +106,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PrecompiledHeader>Create</PrecompiledHeader>
-      <AdditionalIncludeDirectories>$(SolutionDir)Memory;$(SolutionDir)CommonUtilities;$(SolutionDir)DL_Debug;$(SolutionDir)Engine;$(SolutionDir)PostMaster;$(SolutionDir)ParticleSystem;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Memory;$(SolutionDir)CommonUtilities;$(SolutionDir)DL_Debug;$(SolutionDir)Engine;$(SolutionDir)PostMaster;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

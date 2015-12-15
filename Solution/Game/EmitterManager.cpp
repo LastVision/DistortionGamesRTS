@@ -4,7 +4,6 @@
 #include "EmitterManager.h"
 #include <ParticleDataContainer.h>
 #include <Entity.h>
-#include <ParticleComponent.h>
 #include <ParticleEmitterInstance.h>
 #include <PostMaster.h>
 #include <XMLReader.h>
