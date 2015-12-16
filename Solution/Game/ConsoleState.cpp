@@ -214,7 +214,7 @@ void ConsoleState::Render()
 	CU::Vector2<float> position = myLowerLeftCorner * 1.1f;
 	position.y += 30.f;
 
-	for (int i = history.Size() - 1; i >= 0; --i)
+	for (int i = history.Size() - 1; i >= history.Size()-23; --i)
 	{
 		position.y += 30.f;
 		history[i]->myRenderText->SetPosition(position);
