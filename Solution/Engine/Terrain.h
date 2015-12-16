@@ -10,7 +10,7 @@ namespace Prism
 	namespace Navigation
 	{
 		class NavMesh;
-		class PathFinderAStar;
+		class PathFinderFunnel;
 	}
 
 	class Camera;
@@ -45,7 +45,7 @@ namespace Prism
 		void CreateNavMesh();
 		void LoadNavMesh(const std::string& aBinaryPath);
 		Navigation::NavMesh* GetNavMesh() const;
-		Navigation::PathFinderAStar* GetPathFinder() const;
+		Navigation::PathFinderFunnel* GetPathFinder() const;
 
 		void CreatePathFinder();
 		Ice* GetIce();
@@ -76,7 +76,7 @@ namespace Prism
 		CU::GrowingArray<int> myIndices;
 
 		Navigation::NavMesh* myNavMesh;
-		Navigation::PathFinderAStar* myPathFinder;
+		Navigation::PathFinderFunnel* myPathFinder;
 
 		SplatMapContainer* mySplatMapContainer;
 		Ice* myIce;
@@ -87,7 +87,7 @@ namespace Prism
 		return myNavMesh;
 	}
 
-	inline Navigation::PathFinderAStar* Terrain::GetPathFinder() const
+	inline Navigation::PathFinderFunnel* Terrain::GetPathFinder() const
 	{
 		return myPathFinder;
 	}
