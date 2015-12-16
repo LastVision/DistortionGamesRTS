@@ -163,6 +163,7 @@ void ControllerComponent::Update(float aDelta)
 
 void ControllerComponent::MoveTo(const CU::Vector3<float>& aPosition, bool aClearCommandQueue)
 {
+	myEntity.SetState(eEntityState::IDLE);
 	FillCommandList(aPosition, eAction::MOVE, aClearCommandQueue);
 }
 
@@ -239,7 +240,7 @@ void ControllerComponent::FillCommandList(const CU::Vector3<float>& aTargetPosit
 	{
 		if (path.Size() > 0)
 		{
-			for (int i = path.Size() - 1; i >= 0; --i)
+			for (int i = 0; i < path.Size(); ++i)
 			{
 				CU::Vector3<float> target = path[i];
 				target.y = 0.f;

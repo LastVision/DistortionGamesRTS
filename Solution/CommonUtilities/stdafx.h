@@ -13,3 +13,4 @@
 #include "Vector.h"
 #include <MemoryMacros.h>
 #include "GameConstants.h"
+#include "MathHelper.h"

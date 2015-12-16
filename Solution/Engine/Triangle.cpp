@@ -23,9 +23,24 @@ namespace Prism
 
 			myCenter2D = (myVertex1->myPosition + myVertex2->myPosition + myVertex3->myPosition) / 3.f;
 
+			myEdge1->CalcPortals();
+			myEdge2->CalcPortals();
+			myEdge3->CalcPortals();
+
 			myCenter.x = myCenter2D.x;
-			myCenter.y = 25.7f;
+			myCenter.y = 0;
 			myCenter.z = myCenter2D.y;
+
+			float area = ((myVertex2->myPosition.x - myVertex1->myPosition.x)
+				*(myVertex3->myPosition.y - myVertex1->myPosition.y)
+				- (myVertex3->myPosition.x - myVertex1->myPosition.x)
+				*(myVertex2->myPosition.y - myVertex1->myPosition.y)) / 2.0f;
+			myArea = (area > 0.0) ? area : -area;
+
+			if (myArea < 0.1f)
+			{
+				int apa = 5;
+			}
 		}
 
 
@@ -222,15 +237,7 @@ namespace Prism
 
 		void Triangle::InitEdge(Edge* anEdge)
 		{
-			if (anEdge->myTriangle1 == nullptr)
-			{
-				anEdge->myTriangle1 = this;
-			}
-			else
-			{
-				DL_ASSERT_EXP(anEdge->myTriangle2 == nullptr, "edge already has two triangles");
-				anEdge->myTriangle2 = this;
-			}
+			anEdge->AddTriangle(this);
 		}
 
 		void Triangle::DeleteEdgeIfSolo(Edge* anEdge)

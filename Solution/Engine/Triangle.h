@@ -14,7 +14,9 @@ namespace Prism
 		{
 		public:
 			friend class PathFinderAStar;
+			friend class PathFinderFunnel;
 			friend class NavMesh;
+			friend class Edge;
 			Triangle(Edge* aEdge1, Edge* aEdge2, Edge* aEdge3);
 			~Triangle();
 
@@ -28,6 +30,7 @@ namespace Prism
 			Triangle* GetOther(Edge* anEdge, bool anAllowNotPartOfTriangle = false) const;
 			const CU::Vector3<float>& GetCenter() const;
 			const CU::Vector2<float>& GetCenter2D() const;
+			
 
 			float myTotalCost; // needed public for LesserTriangle-template class, can you find a better solution?
 		private:
@@ -37,6 +40,7 @@ namespace Prism
 			void InitEdge(Edge* anEdge);
 			void DeleteEdgeIfSolo(Edge* anEdge);
 			Edge* GetEdgeWithVertex(Vertex* aVertex, Edge* anEdge1, Edge* anEdge2) const;
+
 			Edge* myEdge1;
 			Edge* myEdge2;
 			Edge* myEdge3;
@@ -70,6 +74,7 @@ namespace Prism
 			float myCostToGoal;
 			bool myChecked;
 			Triangle* myPredec;
+			float myArea;
 		};
 
 		inline const CU::Vector3<float>& Triangle::GetCenter() const

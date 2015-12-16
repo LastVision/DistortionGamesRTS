@@ -8,8 +8,8 @@
 #include <GameEnum.h>
 #include <GameConstants.h>
 #include <GrowingArray.h>
+#include <MathHelper.h>
 #include <Matrix.h>
-#include <Matrix44.h>
 #include "Model.h"
 #include "Sprite.h"
 #include "ModelLoader.h"
