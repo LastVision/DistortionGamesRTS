@@ -192,6 +192,10 @@ namespace GUI
 			{
 				myActiveWidget->OnMousePressed(myMousePosition);
 			}
+			if (CU::InputWrapper::GetInstance()->MouseIsPressed(1) == true)
+			{
+				myActiveWidget->OnRightMousePressed(myMousePosition);
+			}
 		}
 	}
 	

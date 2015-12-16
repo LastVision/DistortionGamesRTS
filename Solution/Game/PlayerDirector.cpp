@@ -10,6 +10,7 @@
 #include <HealthComponent.h>
 #include <Intersection.h>
 #include <InputWrapper.h>
+#include <MinimapMoveMessage.h>
 #include <OnClickMessage.h>
 #include "PlayerDirector.h"
 #include <PollingStation.h>
@@ -60,6 +61,8 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 	PostMaster::GetInstance()->Subscribe(eMessageType::TOGGLE_GUI, this);
 	PostMaster::GetInstance()->Subscribe(eMessageType::ON_CLICK, this);
 	PostMaster::GetInstance()->Subscribe(eMessageType::TIME_MULTIPLIER, this);
+	PostMaster::GetInstance()->Subscribe(eMessageType::MOVE_UNITS, this);
+
 }
 
 PlayerDirector::~PlayerDirector()
@@ -69,6 +72,7 @@ PlayerDirector::~PlayerDirector()
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::TOGGLE_GUI, this);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::ON_CLICK, this);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::TIME_MULTIPLIER, this);
+	PostMaster::GetInstance()->UnSubscribe(eMessageType::MOVE_UNITS, this);
 }
 
 void PlayerDirector::InitGUI(const AIDirector* anAI, const Prism::Camera& aCamera)
@@ -81,11 +85,6 @@ void PlayerDirector::InitGUI(const AIDirector* anAI, const Prism::Camera& aCamer
 void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 {
 	aDeltaTime *= myTimeMultiplier;
-
-	//debug only, remove when handled by GUI //Linus
-	int playerVictoryPoints = myVictoryPoints;
-	DEBUG_PRINT(playerVictoryPoints);
-	//debug end
 
 	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_G) == true)
 	{
@@ -136,10 +135,6 @@ void PlayerDirector::Render(const Prism::Camera& aCamera)
 	aCamera;
 	if (myRenderGUI == true)
 	{
-		//for (int i = 0; i < mySelectedUnits.Size(); i++)
-		//{
-		//	mySelectedUnits[i]->GetComponent<HealthComponent>()->RenderHealthBar(aCamera);
-		//}
 		if (myLeftMousePressed == true)
 		{
 			myDragSelectionSprite->SetSize(mySelectionSpriteSize, mySelectionSpriteHotspot);
@@ -153,40 +148,6 @@ void PlayerDirector::OnResize(int aWidth, int aHeight)
 {
 	myGUIManager->OnResize(aWidth, aHeight);
 }
-
-//void PlayerDirector::SpawnUnit(eUnitType aUnitType)
-//{
-//
-//	if (myTestGold >= myBuilding->GetComponent<BuildingComponent>()->GetUnitCost(aUnitType))
-//	{
-//		myTestGold -= myBuilding->GetComponent<BuildingComponent>()->GetUnitCost(aUnitType);
-//		myBuilding->GetComponent<BuildingComponent>()->BuildUnit(aUnitType);
-//	}
-//}
-
-//void PlayerDirector::ReceiveMessage(const SpawnUnitMessage& aMessage)
-//{
-//	if (aMessage.myOwnerType != static_cast<int>(eOwnerType::PLAYER)) return;
-//	if (myActiveUnits.Size() < 64)
-//	{
-//		for (int i = 0; i < myUnits.Size(); ++i)
-//		{
-//			if (myUnits[i]->GetUnitType() == static_cast<eUnitType>(aMessage.myUnitType) && myUnits[i]->GetAlive() == false)
-//			{
-//				if (IsAlreadyActive(myUnits[i]) == true)
-//				{
-//					continue;
-//				}
-//
-//				myUnits[i]->Spawn(myBuilding->GetOrientation().GetPos() + CU::Vector3f(0.f, 0.f, -15.f));
-//				myActiveUnits.Add(myUnits[i]);
-//				break;
-//
-//			}
-//		}
-//		PollingStation::GetInstance()->RegisterEntity(myActiveUnits.GetLast());
-//	}
-//}
 
 void PlayerDirector::ReceiveMessage(const ToggleGUIMessage& aMessage)
 {
@@ -235,6 +196,17 @@ void PlayerDirector::ReceiveMessage(const TimeMultiplierMessage& aMessage)
 	if (aMessage.myOwner == eOwnerType::PLAYER)
 	{
 		myTimeMultiplier = aMessage.myMultiplier;
+	}
+}
+
+void PlayerDirector::ReceiveMessage(const MinimapMoveMessage& aMessage)
+{
+	CU::Vector2<float> position = aMessage.myPosition * 255.f;
+
+	for (unsigned int i = 0; i < mySelectedUnits.Size(); i++)
+	{
+		ControllerComponent* controller = myUnits[i]->GetComponent<ControllerComponent>();
+		controller->MoveTo({ position.x, 0.f, position.y }, true);
 	}
 }
 

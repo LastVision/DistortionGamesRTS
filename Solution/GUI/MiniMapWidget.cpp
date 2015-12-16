@@ -3,6 +3,7 @@
 #include "../Entity/Entity.h"
 #include "../Entity/PollingStation.h"
 #include "MiniMapWidget.h"
+#include <MinimapMoveMessage.h>
 #include <MoveCameraMessage.h>
 #include <PostMaster.h>
 
@@ -116,6 +117,13 @@ namespace GUI
 		CU::Vector2<float> position = aPosition - myPosition;
 		position /= mySize;
 		PostMaster::GetInstance()->SendMessage(MoveCameraMessage(position));
+	}
+
+	void MiniMapWidget::OnRightMousePressed(const CU::Vector2<float>& aPosition)
+	{
+		CU::Vector2<float> position = aPosition - myPosition;
+		position /= mySize;
+		PostMaster::GetInstance()->SendMessage(MinimapMoveMessage(position));
 	}
 
 	void MiniMapWidget::OnResize(const CU::Vector2<float>& aNewWindowSize, const CU::Vector2<float>& anOldWindowSize)
