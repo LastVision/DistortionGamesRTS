@@ -3,14 +3,14 @@
 
 struct ToggleBuildTimeMessage : public Message
 {
-	ToggleBuildTimeMessage(bool aUseBuildTime);
+	ToggleBuildTimeMessage(bool aIgnoreBuildTime);
 
-	const bool myUseBuildTime;
+	const bool myIgnoreBuildTime;
 };
 
 // takes in ratio, not actual position
-inline ToggleBuildTimeMessage::ToggleBuildTimeMessage(bool aUseBuildTime)
+inline ToggleBuildTimeMessage::ToggleBuildTimeMessage(bool aIgnoreBuildTime)
 	: Message(eMessageType::TOGGLE_BUILD_TIME)
-	, myUseBuildTime(aUseBuildTime)
+	, myIgnoreBuildTime(aIgnoreBuildTime)
 {
 }

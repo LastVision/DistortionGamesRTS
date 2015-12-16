@@ -206,7 +206,7 @@ void PlayerDirector::ReceiveMessage(const MinimapMoveMessage& aMessage)
 {
 	CU::Vector2<float> position = aMessage.myPosition * 255.f;
 
-	for (unsigned int i = 0; i < mySelectedUnits.Size(); i++)
+	for (int i = 0; i < mySelectedUnits.Size(); i++)
 	{
 		ControllerComponent* controller = mySelectedUnits[i]->GetComponent<ControllerComponent>();
 		controller->MoveTo({ position.x, 0.f, position.y }, true);
@@ -215,7 +215,7 @@ void PlayerDirector::ReceiveMessage(const MinimapMoveMessage& aMessage)
 
 void PlayerDirector::ReceiveMessage(const ToggleBuildTimeMessage& aMessage)
 {
-	myBuilding->GetComponent<BuildingComponent>()->SetUseBuildTime(aMessage.myUseBuildTime);
+	myBuilding->GetComponent<BuildingComponent>()->SetIgnoreBuildTime(aMessage.myIgnoreBuildTime);
 }
 
 const BuildingComponent& PlayerDirector::GetBuildingComponent() const

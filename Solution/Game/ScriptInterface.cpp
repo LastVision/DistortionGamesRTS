@@ -304,14 +304,14 @@ namespace Script_Interface
 
 	int DisableBuildTime(lua_State* aState)
 	{
-		PostMaster::GetInstance()->SendMessage(ToggleBuildTimeMessage(false));
+		PostMaster::GetInstance()->SendMessage(ToggleBuildTimeMessage(true));
 
 		return 0;
 	}
 
 	int EnableBuildTime(lua_State* aState)
 	{
-		PostMaster::GetInstance()->SendMessage(ToggleBuildTimeMessage(true));
+		PostMaster::GetInstance()->SendMessage(ToggleBuildTimeMessage(false));
 
 		return 0;
 	}

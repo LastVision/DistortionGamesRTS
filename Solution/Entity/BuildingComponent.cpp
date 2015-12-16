@@ -9,9 +9,9 @@ BuildingComponent::BuildingComponent(Entity& aEntity, BuildingComponentData& aDa
 	, myMaxBuildTime(2.f)
 	, mySpawnQueueIndex(-1)
 	, myUnitCosts(aData.myUnitCosts)
-	, myUseBuildTime(true)
+	, myUnitBuildTimes(aData.myUnitBuildTimes)
+	, myIgnoreBuildTime(false)
 {
-	aData;
 	for (int i = 0; i <= 4; i++)
 	{
 		mySpawnQueue[i] = eUnitType::NOT_A_UNIT;
@@ -26,18 +26,13 @@ void BuildingComponent::Update(float aDeltaTime)
 {
 	if (mySpawnQueue[0] != eUnitType::NOT_A_UNIT)
 	{
-		if (myUseBuildTime == true)
-		{
-			myCurrentBuildTime += aDeltaTime;
-		}
-		else 
-		{
-			myCurrentBuildTime += myMaxBuildTime;
-		}
+		myMaxBuildTime = myIgnoreBuildTime ? 0.f : myUnitBuildTimes[static_cast<int>(mySpawnQueue[0])];
+
+		myCurrentBuildTime += aDeltaTime;
 
 		if (myCurrentBuildTime >= myMaxBuildTime)
 		{
-			PostMaster::GetInstance()->SendMessage(SpawnUnitMessage(mySpawnQueue[0], myEntity.GetOwner()/*, myEntity.GetScene()*/));
+			PostMaster::GetInstance()->SendMessage(SpawnUnitMessage(mySpawnQueue[0], myEntity.GetOwner()));
 
 			for (int i = 0; i < mySpawnQueueIndex && i <= 3; i++)
 			{
@@ -48,6 +43,10 @@ void BuildingComponent::Update(float aDeltaTime)
 			myCurrentBuildTime = 0.f;
 			mySpawnQueueIndex--;
 		}
+	}
+	else
+	{
+		myMaxBuildTime = 0.f;
 	}
 }
 
