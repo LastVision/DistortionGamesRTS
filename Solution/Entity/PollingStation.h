@@ -9,8 +9,8 @@ public:
 
 	void RegisterEntity(Entity* aEntity);
 
-	Entity* FindClosestEntity(const CU::Vector3<float>& aPosition, eOwnerType aEntityOwner, float aMaxDistance2 = FLT_MAX);
-	Entity* FindEntityAtPosition(const CU::Vector3<float>& aPosition, eOwnerType aEntityOwner);
+	Entity* FindClosestEntity(const CU::Vector3<float>& aPosition, int aEntityOwner, float aMaxDistance2 = FLT_MAX);
+	Entity* FindEntityAtPosition(const CU::Vector3<float>& aPosition, int aEntityOwner);
 	
 	const CU::GrowingArray<Entity*>& GetUnits(eOwnerType anOwner) const;
 	const CU::GrowingArray<Entity*>& GetResourcePoints() const;
@@ -26,9 +26,12 @@ private:
 	PollingStation();
 	~PollingStation();
 
+	void FindClosestEntity(const CU::Vector3<float>& aPosition, const CU::GrowingArray<Entity*>& someEntities
+		,float aMaxDistance, float& aBestDistance, Entity* aOutEntity);
 
 	CU::GrowingArray<Entity*> myPlayerUnits;
 	CU::GrowingArray<Entity*> myAIUnits;
+	CU::GrowingArray<Entity*> myNeutralUnits;
 	CU::GrowingArray<Entity*> myResourcePoints;
 	CU::GrowingArray<Entity*> myVictoryPoints;
 

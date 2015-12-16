@@ -20,6 +20,7 @@
 #include <LUAToggleRenderLinesMessage.h>
 #include <LUAMoveCameraMessage.h>
 #include <ModelLoader.h>
+#include "NeutralDirector.h"
 #include "PlayerDirector.h"
 #include "PollingStation.h"
 #include <PostMaster.h>
@@ -42,6 +43,7 @@ Level::Level(const Prism::Camera& aCamera, Prism::Terrain* aTerrain, GUI::Cursor
 
 	myPlayer = new PlayerDirector(*myTerrain, *myScene, aCursor);
 	myAI = new AIDirector(*myTerrain, *myScene);
+	myNeutralDirector = new NeutralDirector(*myTerrain, *myScene);
 }
 
 Level::~Level()
@@ -52,6 +54,7 @@ Level::~Level()
 	SAFE_DELETE(myLight);
 	SAFE_DELETE(myPlayer);
 	SAFE_DELETE(myAI);
+	SAFE_DELETE(myNeutralDirector);
 	SAFE_DELETE(myScene);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::TOGGLE_LINES, this);
 	EntityFactory::Destroy();
@@ -69,6 +72,7 @@ bool Level::Update(float aDeltaTime, Prism::Camera& aCamera)
 	PollingStation::GetInstance()->CleanUp();
 	myPlayer->CleanUp();
 	myAI->CleanUp();
+	myNeutralDirector->CleanUp();
 
 	/*Prism::RenderLine3D({ 0.f, 0.f, 0.f }, { 100.f, 100.f, 100.f }, eColorDebug::BLACK, eColorDebug::GREEN);
 	Prism::RenderBox({ 128.f, 129.f, 128.f }, eColorDebug::BLUE, false);*/
@@ -87,6 +91,7 @@ bool Level::Update(float aDeltaTime, Prism::Camera& aCamera)
 
 	myPlayer->Update(aDeltaTime, aCamera);
 	myAI->Update(aDeltaTime);
+	myNeutralDirector->Update(aDeltaTime);
 	myEmitterManager->UpdateEmitters(aDeltaTime, CU::Matrix44f());
 
 
@@ -103,6 +108,7 @@ void Level::Render(Prism::Camera& aCamera)
 
 	myPlayer->RenderHealthBars(aCamera);
 	myAI->RenderHealthBars(aCamera);
+	myNeutralDirector->RenderHealthBars(aCamera);
 
 	myPlayer->Render(aCamera);
 }

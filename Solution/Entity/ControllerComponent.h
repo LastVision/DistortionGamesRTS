@@ -69,7 +69,7 @@ private:
 
 	const Prism::Terrain& myTerrain;
 	eOwnerType myOwnerType;
-	eOwnerType myTargetType;
+	int myTargetType;
 
 	float myVisionRange2;
 	float myAttackRange2;

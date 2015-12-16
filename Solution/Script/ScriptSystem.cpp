@@ -110,6 +110,7 @@ namespace LUA
 		std::string args(aString.begin() + aString.find_first_of('(') + 1, aString.begin() + aString.find_last_of(')'));
 		CU::TrimWhiteSpacesAtBeginAndEnd(args);
 
+		int argCount = 0;
 		while (args.length() > 0)
 		{
 			std::string arg;
@@ -128,10 +129,18 @@ namespace LUA
 
 			CU::TrimWhiteSpacesAtBeginAndEnd(arg);
 			PushStringArg(arg);
+			++argCount;
 		}
 
 
 		myLuaFunctions[functionName].myFunction(myLuaState);
+
+		lua_pop(myLuaState, argCount);
+
+		/*for (int i = 0; i < argCount; ++i)
+		{
+			lua_pop(myLuaState, i + 1);
+		}*/
 	}
 
 	bool ScriptSystem::ValidateLuaString(const std::string& aString, std::string& aErrorOut) const
