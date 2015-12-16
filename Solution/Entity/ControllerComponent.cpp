@@ -5,6 +5,7 @@
 #include "ControllerComponent.h"
 #include "HealthComponent.h"
 #include <PathFinderAStar.h>
+#include <PathFinderFunnel.h>
 #include "PollingStation.h"
 #include <Terrain.h>
 
@@ -233,14 +234,14 @@ void ControllerComponent::FillCommandList(const CU::Vector3<float>& aTargetPosit
 	ActionData action;
 	action.myAction = aAction;
 
-	CU::GrowingArray<Prism::Navigation::Triangle*> path(16);
+	CU::GrowingArray<CU::Vector3<float>> path(16);
 	if (myTerrain.GetPathFinder()->FindPath(myEntity.GetOrientation().GetPos(), aTargetPosition, path) == true)
 	{
 		if (path.Size() > 0)
 		{
 			for (int i = path.Size() - 1; i >= 0; --i)
 			{
-				CU::Vector3<float> target = path[i]->GetCenter();
+				CU::Vector3<float> target = path[i];
 				target.y = 0.f;
 
 				action.myPosition = target;
