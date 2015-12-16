@@ -14,7 +14,7 @@ struct EntityData
 	eEntityType myType;
 	ActorComponentData myActorData;
 	AnimationComponentData myAnimationData;
-	BuildingCompnentData myBuildingData;
+	BuildingComponentData myBuildingData;
 	CollisionComponentData myCollisionData;
 	ControllerComponentData myControllerData;
 	GraphicsComponentData myGraphicsData;

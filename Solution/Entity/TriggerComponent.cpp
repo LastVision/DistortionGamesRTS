@@ -3,7 +3,6 @@
 #include "CommonHelper.h"
 #include "MathHelper.h"
 #include "TriggerComponent.h"
-#include "TriggerComponentData.h"
 #include <TriggerMessage.h>
 #include <Intersection.h>
 #include "PollingStation.h"
@@ -17,6 +16,7 @@ TriggerComponent::TriggerComponent(Entity& aEntity, TriggerComponentData& aData)
 	, myRadius(aData.myRadius)
 	, myRadiusSquared(aData.myRadius * aData.myRadius)
 	, myOwnershipRatio(0)
+	, myGainingPointsOwner(eOwnerType::NEUTRAL)
 {
 	myOriginalPosition = myEntity.GetOrientation().GetPos();
 }
@@ -72,24 +72,34 @@ void TriggerComponent::CheckUnitsForAdd(const CU::GrowingArray<Entity*>& someUni
 	}
 }
 
-void TriggerComponent::ModifyOwnership(eOwnerType anOwner, float aModifyValue)
+eOwnerType TriggerComponent::ModifyOwnership(eOwnerType anOwner, float aModifyValue)
 {
-	if (anOwner == myEntity.GetOwner() || myEntity.GetOwner() == eOwnerType::NEUTRAL)
+	if (anOwner == eOwnerType::NEUTRAL)
+	{
+		myOwnershipRatio -= aModifyValue;
+	}
+	else if (anOwner == myEntity.GetOwner() || myOwnershipRatio <= 0.f)
 	{
 		myOwnershipRatio += aModifyValue;
+		myEntity.SetOwner(anOwner);
 	}
 	else
 	{
 		myOwnershipRatio -= aModifyValue;
 	}
+
 	myOwnershipRatio = CU::Clip(myOwnershipRatio, 0.f, 100.f);
 
 	if (myOwnershipRatio == 0.f)
 	{
 		myEntity.SetOwner(eOwnerType::NEUTRAL);
+		myGainingPointsOwner = eOwnerType::NEUTRAL;
 	}
-	if (myOwnershipRatio == 100.f)
+	else if (myOwnershipRatio == 100.f)
 	{
 		myEntity.SetOwner(anOwner);
+		myGainingPointsOwner = anOwner;
 	}
+
+	return myGainingPointsOwner;
 }

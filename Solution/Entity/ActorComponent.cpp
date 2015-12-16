@@ -1,7 +1,7 @@
 #include "stdafx.h"
 
 #include "ActorComponent.h"
-#include "ActorComponentData.h"
+//#include "ActorComponentData.h"
 #include "ControllerComponent.h"
 #include <Terrain.h>
 

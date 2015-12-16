@@ -3,7 +3,6 @@
 #include "Camera.h"
 #include "HealthComponent.h"
 #include <Engine.h>
-#include "HealthComponentData.h"
 #include "../GUI/BarWidget.h"
 #include "ModelLoader.h"
 

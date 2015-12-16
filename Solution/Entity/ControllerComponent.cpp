@@ -3,7 +3,6 @@
 #include "ActorComponent.h"
 #include "AnimationComponent.h"
 #include "ControllerComponent.h"
-#include "ControllerComponentData.h"
 #include "HealthComponent.h"
 #include <PathFinder.h>
 #include "PollingStation.h"
