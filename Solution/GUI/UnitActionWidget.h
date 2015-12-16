@@ -33,6 +33,9 @@ namespace GUI
 		void OnResize(const CU::Vector2<float>& aNewWindowSize, const CU::Vector2<float>& anOldWindowSize) override;
 
 	private:
+
+		WidgetContainer* ReadContainer(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement, CU::Vector2<float> aSize);
+
 		void operator=(UnitActionWidget&) = delete;
 
 		const CU::GrowingArray<Entity*>& myUnits;

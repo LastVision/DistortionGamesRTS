@@ -33,6 +33,7 @@ namespace GUI
 		void OnResize(const CU::Vector2<float>& aNewWindowSize, const CU::Vector2<float>& anOldWindowSize) override;
 
 	private:
+		void RenderBaseInfo(const CU::Vector2<float>& aParentPosition);
 		void RenderUnitInfo(const CU::Vector2<float>& aParentPosition);
 
 		void operator=(UnitInfoWidget&) = delete;

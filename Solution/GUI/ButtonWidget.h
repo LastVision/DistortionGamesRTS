@@ -24,7 +24,6 @@ namespace GUI
 
 		void Render(const CU::Vector2<float>& aParentPosition) override;
 		void OnMousePressed(const CU::Vector2<float>& aPosition) override;
-		void OnMouseDown(const CU::Vector2<float>& aPosition) override;
 		void OnMouseUp() override;
 		void OnMouseEnter() override;
 		void OnMouseExit() override;
