@@ -4,10 +4,11 @@
 #include "../Entity/BuildingComponent.h"
 #include "../Entity/Entity.h"
 #include "../Game/PlayerDirector.h"
+#include "../Entity/ActorComponent.h"
+#include "../Entity/ControllerComponent.h"
+#include "../Entity/HealthComponent.h"
 #include "UnitInfoWidget.h"
 #include "WidgetContainer.h"
-#include <Sprite.h>
-#include <XMLReader.h>
 
 namespace GUI
 {
@@ -91,14 +92,7 @@ namespace GUI
 				}
 				else
 				{
-					myGruntPortrait->Render(myPosition + aParentPosition + myPortraitPosition);
-
-					CU::Vector2<float> position = { myGruntUnit->GetSize().x / 2.f, myPosition.y };
-					position += aParentPosition + myUnitPosition;
-					myStatsSprite->Render(position);
-
-					//myUnits[0]->
-					// render stats
+					RenderUnitInfo(aParentPosition);
 				}
 			}
 			else if (mySelectedType == eEntityType::BASE_BUILING)
@@ -126,11 +120,42 @@ namespace GUI
 		CU::Vector2<float> portraitRatioSize = myBuildingPortrait->GetSize() / anOldWindowSize;
 		CU::Vector2<float> ratioUnitPostion = myUnitPosition / anOldWindowSize;
 		CU::Vector2<float> ratioPortraitPostion = myPortraitPosition / anOldWindowSize;
+		CU::Vector2<float> ratioStatsSize = myStatsSprite->GetSize() / anOldWindowSize;
 
 		myUnitPosition = ratioUnitPostion * aNewWindowSize;
 		myPortraitPosition = ratioPortraitPostion * aNewWindowSize;
 		myGruntUnit->SetSize(unitRatioSize * aNewWindowSize, { 0.f, 0.f });
 		myGruntPortrait->SetSize(portraitRatioSize * aNewWindowSize, { 0.f, 0.f });
 		myBuildingPortrait->SetSize(portraitRatioSize * aNewWindowSize, { 0.f, 0.f });
+		myStatsSprite->SetSize(ratioStatsSize * aNewWindowSize, { 0.f, 0.f });
+	}
+
+	void UnitInfoWidget::RenderUnitInfo(const CU::Vector2<float>& aParentPosition)
+	{
+		CU::Vector2<float> portraitPosition = myPosition + aParentPosition + myPortraitPosition;
+		myGruntPortrait->Render(portraitPosition);
+		portraitPosition.y -= myGruntPortrait->GetSize().y / 3.5f;
+		portraitPosition.x += myGruntPortrait->GetSize().x / 3.f;
+
+		std::string health = std::to_string(int(myUnits[0]->GetComponent<HealthComponent>()->GetCurrentHealth())) 
+			+ "/" + std::to_string(int(myUnits[0]->GetComponent<HealthComponent>()->GetMaxHealth()));
+		Prism::Engine::GetInstance()->PrintText(health, portraitPosition, Prism::eTextType::RELEASE_TEXT);
+
+		CU::Vector2<float> position = { myGruntUnit->GetSize().x / 2.f, myPosition.y };
+		position += aParentPosition + myUnitPosition;
+		myStatsSprite->Render(position);
+
+		position.x += myStatsSprite->GetSize().x / 20.f;
+		position.y -= myStatsSprite->GetSize().y / 2.f;
+		Prism::Engine::GetInstance()->PrintText(myUnits[0]->GetComponent<HealthComponent>()->GetArmor()
+			, position, Prism::eTextType::RELEASE_TEXT);
+
+		position.x += myStatsSprite->GetSize().x / 3.f;
+		Prism::Engine::GetInstance()->PrintText(myUnits[0]->GetComponent<ControllerComponent>()->GetAttackDamage()
+			, position, Prism::eTextType::RELEASE_TEXT);
+
+		position.x += myStatsSprite->GetSize().x / 3.f;
+		Prism::Engine::GetInstance()->PrintText(myUnits[0]->GetComponent<ActorComponent>()->GetSpeed()
+			, position, Prism::eTextType::RELEASE_TEXT);
 	}
 }

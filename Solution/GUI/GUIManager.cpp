@@ -7,11 +7,9 @@
 #include "../InputWrapper/InputWrapper.h"
 #include "MiniMapWidget.h"
 #include "ResourceBarWidget.h"
-#include <Sprite.h>
 #include "UnitActionWidget.h"
 #include "UnitInfoWidget.h"
 #include "WidgetContainer.h"
-#include <XMLReader.h>
 
 namespace GUI
 {
@@ -67,7 +65,7 @@ namespace GUI
 	{
 		CU::Vector3<float> movement;
 
-		float epsilon = 0.05f;
+		float epsilon = 0.01f;
 		if (myCursor->GetMousePositionZeroToOne().x < epsilon)
 		{
 			movement.x = -1.f;

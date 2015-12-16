@@ -47,6 +47,7 @@ namespace LUA
 		const std::vector<Documentation>& GetDocumentation() const;
 
 		std::string FindClosestFunction(const std::string& aInput) const;
+
 	private:
 		ScriptSystem();
 		~ScriptSystem();

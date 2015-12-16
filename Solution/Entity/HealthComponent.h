@@ -22,6 +22,10 @@ public:
 
 	void Reset() override;
 
+	float GetArmor() const;
+	float GetCurrentHealth() const;
+	float GetMaxHealth() const;
+
 private:
 	float myMaxHealth;
 	float myCurrentHealth;
@@ -38,4 +42,19 @@ inline eComponentType HealthComponent::GetTypeStatic()
 inline eComponentType HealthComponent::GetType()
 {
 	return GetTypeStatic();
+}
+
+inline float HealthComponent::GetArmor() const
+{
+	return myArmor;
+}
+
+inline float HealthComponent::GetCurrentHealth() const
+{
+	return myCurrentHealth;
+}
+
+inline float HealthComponent::GetMaxHealth() const
+{
+	return myMaxHealth;
 }

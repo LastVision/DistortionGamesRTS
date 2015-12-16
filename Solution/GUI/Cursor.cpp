@@ -2,7 +2,7 @@
 #include <CommonHelper.h>
 #include "Cursor.h"
 #include "../InputWrapper/InputWrapper.h"
-#include <Sprite.h>
+
 namespace GUI
 {
 	Cursor::Cursor(const CU::Vector2<int>& aWindowSize)
