@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "CollisionComponent.h"
-#include "CollisionComponentData.h"
 #include <Intersection.h>
 
 CollisionComponent::CollisionComponent(Entity& aEntity, CollisionComponentData& aData)

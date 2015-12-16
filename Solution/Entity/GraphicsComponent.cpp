@@ -1,7 +1,6 @@
 #include "stdafx.h"
 
 #include "GraphicsComponent.h"
-#include "GraphicsComponentData.h"
 #include <Effect.h>
 #include <Engine.h>
 #include <EngineEnums.h>
