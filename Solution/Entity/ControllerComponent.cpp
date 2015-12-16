@@ -63,7 +63,10 @@ void ControllerComponent::Update(float aDelta)
 	if (myCurrentAction.myAction == eAction::IDLE)
 	{
 		myEntity.SetState(eEntityState::IDLE);
-
+		if (myOwnerType == eOwnerType::NEUTRAL)
+		{
+			int apa = 5;
+		}
 		Entity* closeTarget = PollingStation::GetInstance()->FindClosestEntity(myEntity.GetOrientation().GetPos()
 			, myTargetType, myVisionRange2);
 
