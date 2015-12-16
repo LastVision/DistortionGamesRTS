@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "NavMesh.h"
-#include "PathFinder.h"
+#include "PathFinderAStar.h"
 #include "Edge.h"
 
 #include <sstream>
@@ -11,23 +11,23 @@ namespace Prism
 
 	namespace Navigation
 	{
-		PathFinder::PathFinder(NavMesh* aNavMesh)
+		PathFinderAStar::PathFinderAStar(NavMesh* aNavMesh)
 			: myNavMesh(aNavMesh)
 			, myHeuristicMult(10.f)
 		{
 		}
 
-		PathFinder::~PathFinder()
+		PathFinderAStar::~PathFinderAStar()
 		{
 		}
 
-		bool PathFinder::FindPath(const CU::Vector3<float>& aStart, const CU::Vector3<float>& anEnd
+		bool PathFinderAStar::FindPath(const CU::Vector3<float>& aStart, const CU::Vector3<float>& anEnd
 			, CU::GrowingArray<Triangle*>& someTrianglesOut)
 		{
 			return FindPath({ aStart.x, aStart.z }, { anEnd.x, anEnd.z }, someTrianglesOut);
 		}
 
-		bool PathFinder::FindPath(const CU::Vector2<float>& aStart
+		bool PathFinderAStar::FindPath(const CU::Vector2<float>& aStart
 			, const CU::Vector2<float>& anEnd, CU::GrowingArray<Triangle*>& someTrianglesOut)
 		{
 			myStart = nullptr;
@@ -57,11 +57,11 @@ namespace Prism
 			return false;
 		}
 
-		void PathFinder::Render()
+		void PathFinderAStar::Render()
 		{
 		}
 
-		bool PathFinder::FindStartAndEnd(const CU::Vector2<float>& aStart, const CU::Vector2<float>& anEnd)
+		bool PathFinderAStar::FindStartAndEnd(const CU::Vector2<float>& aStart, const CU::Vector2<float>& anEnd)
 		{
 			bool foundOne(false);
 			bool foundTwo(false);
@@ -96,7 +96,7 @@ namespace Prism
 			return foundTwo;
 		}
 
-		void PathFinder::ClearMesh()
+		void PathFinderAStar::ClearMesh()
 		{
 			myPathLength = -1.f;
 
@@ -108,7 +108,7 @@ namespace Prism
 			}
 		}
 
-		void PathFinder::AStar()
+		void PathFinderAStar::AStar()
 		{
 			CU::Heap<Triangle*, LesserTriangle<Triangle*>> toBeChecked;
 
@@ -212,7 +212,7 @@ namespace Prism
 			}
 		}
 
-		void PathFinder::FillPath(CU::GrowingArray<Triangle*>& someTrianglesOut) const
+		void PathFinderAStar::FillPath(CU::GrowingArray<Triangle*>& someTrianglesOut) const
 		{
 			Triangle* current = myEnd;
 

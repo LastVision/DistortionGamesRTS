@@ -1,6 +1,6 @@
 #pragma once
 
-struct BuildingCompnentData
+struct BuildingComponentData
 {
 	bool myExistsInEntity = false;
 	CU::StaticArray<eUnitType, 3> myBuildUnitTypes;

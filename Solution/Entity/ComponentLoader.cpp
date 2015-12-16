@@ -1,16 +1,8 @@
 #include "stdafx.h"
 
-#include "ActorComponentData.h"
-#include "AnimationComponentData.h"
-#include "BuildingComponentData.h"
-#include "CollisionComponentData.h"
 #include <CommonHelper.h>
 #include "ComponentLoader.h"
-#include "ControllerComponentData.h"
 #include "EntityEnumConverter.h"
-#include "GraphicsComponentData.h"
-#include "HealthComponentData.h"
-#include "TriggerComponentData.h"
 
 void ComponentLoader::LoadActorComponent(XMLReader& aDocument, tinyxml2::XMLElement* aSourceElement, ActorComponentData& aOutputData)
 {
@@ -68,7 +60,7 @@ void ComponentLoader::LoadAnimationComponent(XMLReader& aDocument, tinyxml2::XML
 	}
 }
 
-void ComponentLoader::LoadBuidlingComponent(XMLReader& aDocument, tinyxml2::XMLElement* aSourceElement, BuildingCompnentData& aOutputData)
+void ComponentLoader::LoadBuidlingComponent(XMLReader& aDocument, tinyxml2::XMLElement* aSourceElement, BuildingComponentData& aOutputData)
 {
 	aOutputData.myExistsInEntity = true;
 

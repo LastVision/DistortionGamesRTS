@@ -40,6 +40,7 @@ namespace GUI
 		Prism::Sprite* myGruntPortrait;
 		Prism::Sprite* myBuildingPortrait;
 		Prism::Sprite* myGruntUnit;
+		Prism::Sprite* myStatsSprite;
 		BarWidget* myBuildingTimer;
 
 		eEntityType mySelectedType;

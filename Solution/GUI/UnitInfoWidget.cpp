@@ -20,11 +20,13 @@ namespace GUI
 		std::string gruntUnitPath = "";
 		std::string gruntPortraitPath = "";
 		std::string buildingPortraitPath = "";
+		std::string statsSpritePath = "";
 		CU::Vector2<float> size;
 		CU::Vector2<float> unitSize;
 		CU::Vector2<float> portraitSize;
 		CU::Vector2<float> portraitPosition;
 		CU::Vector2<float> unitPosition;
+		CU::Vector2<float> statsSize;
 		
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "size"), "x", size.x);
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "size"), "y", size.y);
@@ -32,6 +34,8 @@ namespace GUI
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "unitsize"), "y", unitSize.y);
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "portraitsize"), "x", portraitSize.x);
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "portraitsize"), "y", portraitSize.y);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "statssize"), "x", statsSize.x);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "statssize"), "y", statsSize.y);
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "unitposition"), "x", unitPosition.x);
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "unitposition"), "y", unitPosition.y);
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "portraitposition"), "x", portraitPosition.x);
@@ -39,6 +43,7 @@ namespace GUI
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "gruntunit"), "path", gruntUnitPath);
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "gruntportrait"), "path", gruntPortraitPath);
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "buildingportrait"), "path", buildingPortraitPath);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "statssprite"), "path", statsSpritePath);
 
 		mySize = size;
 		myPosition = { 0.f, 0.f };
@@ -47,6 +52,7 @@ namespace GUI
 		myGruntUnit = new Prism::Sprite(gruntUnitPath, unitSize);
 		myGruntPortrait = new Prism::Sprite(gruntPortraitPath, portraitSize);
 		myBuildingPortrait = new Prism::Sprite(buildingPortraitPath, portraitSize);
+		myStatsSprite = new Prism::Sprite(statsSpritePath, statsSize);
 		myBuildingTimer = new BarWidget(myBuilding.GetMaxBuildTime(), myBuilding.GetCurrentBuildTime(), { unitSize.x * 4.f, unitSize.y / 2.f });
 	}
 
@@ -55,6 +61,7 @@ namespace GUI
 		SAFE_DELETE(myGruntPortrait);
 		SAFE_DELETE(myGruntUnit);
 		SAFE_DELETE(myBuildingPortrait);
+		SAFE_DELETE(myStatsSprite);
 		SAFE_DELETE(myBuildingTimer);
 	}
 
@@ -85,6 +92,13 @@ namespace GUI
 				else
 				{
 					myGruntPortrait->Render(myPosition + aParentPosition + myPortraitPosition);
+
+					CU::Vector2<float> position = { myGruntUnit->GetSize().x / 2.f, myPosition.y };
+					position += aParentPosition + myUnitPosition;
+					myStatsSprite->Render(position);
+
+					//myUnits[0]->
+					// render stats
 				}
 			}
 			else if (mySelectedType == eEntityType::BASE_BUILING)

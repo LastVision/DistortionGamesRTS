@@ -2,12 +2,12 @@
 #include "Component.h"
 #include <StaticArray.h>
 
-struct BuildingCompnentData;
+struct BuildingComponentData;
 
 class BuildingComponent : public Component
 {
 public:
-	BuildingComponent(Entity& aEntity, BuildingCompnentData& aData);
+	BuildingComponent(Entity& aEntity, BuildingComponentData& aData);
 	~BuildingComponent();
 
 	void Update(float aDeltaTime) override;

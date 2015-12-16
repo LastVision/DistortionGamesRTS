@@ -3,7 +3,6 @@
 #include "CommonHelper.h"
 #include "MathHelper.h"
 #include "TriggerComponent.h"
-#include "TriggerComponentData.h"
 #include <TriggerMessage.h>
 #include <Intersection.h>
 #include "PollingStation.h"

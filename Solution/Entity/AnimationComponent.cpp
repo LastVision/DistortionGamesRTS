@@ -1,7 +1,6 @@
 #include "stdafx.h"
 
 #include "AnimationComponent.h"
-#include "AnimationComponentData.h"
 #include "AnimationSystem.h"
 #include <Effect.h>
 #include <Engine.h>

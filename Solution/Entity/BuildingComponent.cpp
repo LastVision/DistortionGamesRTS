@@ -1,10 +1,9 @@
 #include "stdafx.h"
 #include "BuildingComponent.h"
-#include "BuildingComponentData.h"
 #include <PostMaster.h>
 #include <SpawnUnitMessage.h>
 
-BuildingComponent::BuildingComponent(Entity& aEntity, BuildingCompnentData& aData)
+BuildingComponent::BuildingComponent(Entity& aEntity, BuildingComponentData& aData)
 	: Component(aEntity)
 	, myCurrentBuildTime(0.f)
 	, myMaxBuildTime(2.f)
