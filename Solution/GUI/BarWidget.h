@@ -1,6 +1,10 @@
 #pragma once
 #include "Widget.h"
-#include <Sprite.h>
+
+namespace Prism
+{
+	class Sprite;
+}
 
 namespace GUI
 {

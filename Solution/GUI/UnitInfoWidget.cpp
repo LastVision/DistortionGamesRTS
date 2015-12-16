@@ -6,8 +6,6 @@
 #include "../Game/PlayerDirector.h"
 #include "UnitInfoWidget.h"
 #include "WidgetContainer.h"
-#include <Sprite.h>
-#include <XMLReader.h>
 
 namespace GUI
 {

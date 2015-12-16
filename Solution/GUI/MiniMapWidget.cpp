@@ -3,9 +3,7 @@
 #include "../Entity/PollingStation.h"
 #include "MiniMapWidget.h"
 #include <MoveCameraMessage.h>
-#include <Sprite.h>
 #include <PostMaster.h>
-#include <XMLReader.h>
 
 namespace GUI
 {
