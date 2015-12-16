@@ -24,6 +24,7 @@ void CU::InputWrapper::Destroy()
 }
 
 CU::InputWrapper::InputWrapper()
+	: myWindowIsActive(true)
 {
 
 }
@@ -60,39 +61,51 @@ CU::InputWrapper::~InputWrapper()
 
 void CU::InputWrapper::Update()
 {
-	CapturePreviousState();
-	HRESULT hr = myKeyboardDevice->GetDeviceState(sizeof(myKeyState), reinterpret_cast<void**>(&myKeyState));
-
-	if (FAILED(hr))
+	if (myWindowIsActive == true)
 	{
-		ZeroMemory(myKeyState, sizeof(myKeyState));
+		CapturePreviousState();
+		HRESULT hr = myKeyboardDevice->GetDeviceState(sizeof(myKeyState), reinterpret_cast<void**>(&myKeyState));
 
-		myKeyboardDevice->Acquire();
+		if (FAILED(hr))
+		{
+			ZeroMemory(myKeyState, sizeof(myKeyState));
+
+			myKeyboardDevice->Acquire();
+		}
+
+		hr = myMouseDevice->GetDeviceState(sizeof(DIMOUSESTATE), reinterpret_cast<void**>(&myMouseState));
+		if (FAILED(hr))
+		{
+			ZeroMemory(&myMouseState, sizeof(myMouseState));
+
+			myMouseDevice->Acquire();
+		}
+
+		tagPOINT cursorPoint;
+		GetCursorPos(&cursorPoint);
+		ScreenToClient(myWindowHandler, &cursorPoint);
+		myMousePos.x = static_cast<float>(cursorPoint.x);
+		myMousePos.y = static_cast<float>(cursorPoint.y);
+
+		if (myIsRecordingDeltas == false)
+		{
+			myMouseState.lX = 0;
+			myMouseState.lY = 0;
+		}
+
+		//myMousePos.x += myMouseState.lX;
+		//myMousePos.y += myMouseState.lY;
+		//myMousePos.z += myMouseState.lZ;
+		//}
 	}
+}
 
-	hr = myMouseDevice->GetDeviceState(sizeof(DIMOUSESTATE), reinterpret_cast<void**>(&myMouseState));
-	if (FAILED(hr))
+void CU::InputWrapper::ToggleWindowActive()
+{
+	if (myInstance != nullptr)
 	{
-		ZeroMemory(&myMouseState, sizeof(myMouseState));
-
-		myMouseDevice->Acquire();
+		myWindowIsActive = !myWindowIsActive;
 	}
-
-	tagPOINT cursorPoint;
-	GetCursorPos(&cursorPoint);
-	ScreenToClient(myWindowHandler, &cursorPoint);
-	myMousePos.x = static_cast<float>(cursorPoint.x);
-	myMousePos.y = static_cast<float>(cursorPoint.y);
-
-	if (myIsRecordingDeltas == false)
-	{
-		myMouseState.lX = 0;
-		myMouseState.lY = 0;
-	}
-
-	//myMousePos.x += myMouseState.lX;
-	//myMousePos.y += myMouseState.lY;
-	//myMousePos.z += myMouseState.lZ;
 }
 
 
