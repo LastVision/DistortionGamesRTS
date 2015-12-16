@@ -12,6 +12,8 @@
 
 #include <algorithm>
 #include <fstream>
+#include "../PostMaster/PostMaster.h"
+#include "../PostMaster/GameStateMessage.h"
 
 int PrintFromLua(lua_State* aState)
 {
@@ -203,6 +205,8 @@ namespace LUA
 		{
 			CheckError(luaL_dofile(myLuaState, myActiveFiles[i].c_str()));
 		}
+
+		PostMaster::GetInstance()->SendMessage(GameStateMessage(eGameState::RELOAD_LEVEL));
 	}
 
 	void ScriptSystem::CheckError(int aCode)
