@@ -9,7 +9,9 @@
 
 namespace GUI
 {
-	MiniMapWidget::MiniMapWidget(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement, const Prism::Camera* aCamera)
+	MiniMapWidget::MiniMapWidget(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement, const Prism::Camera* aCamera
+		, const bool& aCantClickOn)
+		: myCantClickOn(aCantClickOn)
 	{
 		CU::Vector2<float> size;
 		CU::Vector2<float> position;
@@ -60,16 +62,22 @@ namespace GUI
 
 	void MiniMapWidget::OnMousePressed(const CU::Vector2<float>& aPosition)
 	{
-		CU::Vector2<float> position = aPosition - myPosition;
-		position /= mySize;
-		PostMaster::GetInstance()->SendMessage(MoveCameraMessage(position));
+		if (myCantClickOn == false)
+		{
+			CU::Vector2<float> position = aPosition - myPosition;
+			position /= mySize;
+			PostMaster::GetInstance()->SendMessage(MoveCameraMessage(position));
+		}
 	}
 
 	void MiniMapWidget::OnRightMousePressed(const CU::Vector2<float>& aPosition)
 	{
-		CU::Vector2<float> position = aPosition - myPosition;
-		position /= mySize;
-		PostMaster::GetInstance()->SendMessage(MinimapMoveMessage(position));
+		if (myCantClickOn == false)
+		{
+			CU::Vector2<float> position = aPosition - myPosition;
+			position /= mySize;
+			PostMaster::GetInstance()->SendMessage(MinimapMoveMessage(position));
+		}
 	}
 
 	void MiniMapWidget::OnResize(const CU::Vector2<float>& aNewWindowSize, const CU::Vector2<float>& anOldWindowSize)

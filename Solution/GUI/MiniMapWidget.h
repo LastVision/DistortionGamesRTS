@@ -20,7 +20,8 @@ namespace GUI
 	{
 
 	public:
-		MiniMapWidget(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement, const Prism::Camera* aCamera);
+		MiniMapWidget(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement, const Prism::Camera* aCamera
+			, const bool& aCantClickOn);
 		~MiniMapWidget();
 
 		void Render(const CU::Vector2<float>& aParentPosition) override;
@@ -43,6 +44,7 @@ namespace GUI
 		Prism::Sprite* myCameraFrustum;
 
 		const CU::Matrix44<float>* myCameraOrientation;
+		const bool& myCantClickOn;
 
 	};
 }
