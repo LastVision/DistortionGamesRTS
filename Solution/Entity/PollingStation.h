@@ -27,7 +27,7 @@ private:
 	~PollingStation();
 
 	void FindClosestEntity(const CU::Vector3<float>& aPosition, const CU::GrowingArray<Entity*>& someEntities
-		,float aMaxDistance, float& aBestDistance, Entity* aOutEntity);
+		,float aMaxDistance, float& aBestDistance, Entity** aOutEntity);
 
 	CU::GrowingArray<Entity*> myPlayerUnits;
 	CU::GrowingArray<Entity*> myAIUnits;
