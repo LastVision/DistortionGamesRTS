@@ -171,6 +171,7 @@ void InGameState::ReceiveMessage(const GameStateMessage& aMessage)
 		Prism::MemoryTracker::GetInstance()->SetRunTime(false);
 		myLevel = myLevelFactory->LoadCurrentLevel();
 		Prism::MemoryTracker::GetInstance()->SetRunTime(runtime);
+		PostMaster::GetInstance()->SendMessage(LUARunScriptMessage("Data/Script/Autorun.script"));
 		break;
 
 	case eGameState::COMPLETE_LEVEL:
