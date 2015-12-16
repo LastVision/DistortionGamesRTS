@@ -205,7 +205,7 @@ void PlayerDirector::ReceiveMessage(const MinimapMoveMessage& aMessage)
 
 	for (unsigned int i = 0; i < mySelectedUnits.Size(); i++)
 	{
-		ControllerComponent* controller = myUnits[i]->GetComponent<ControllerComponent>();
+		ControllerComponent* controller = mySelectedUnits[i]->GetComponent<ControllerComponent>();
 		controller->MoveTo({ position.x, 0.f, position.y }, true);
 	}
 }
