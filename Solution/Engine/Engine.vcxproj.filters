@@ -162,9 +162,6 @@
     <ClCompile Include="Edge.cpp">
       <Filter>Terrain\NavMesh</Filter>
     </ClCompile>
-    <ClCompile Include="PathFinder.cpp">
-      <Filter>Terrain</Filter>
-    </ClCompile>
     <ClCompile Include="HeightMapFactory.cpp">
       <Filter>Terrain\HeightMap</Filter>
     </ClCompile>
@@ -176,6 +173,12 @@
     </ClCompile>
     <ClCompile Include="Ice.cpp">
       <Filter>Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="PathFinder.cpp">
+      <Filter>Terrain\PathFinder</Filter>
+    </ClCompile>
+    <ClCompile Include="PathFinderFunnel.cpp">
+      <Filter>Terrain\PathFinder</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -379,9 +382,6 @@
     <ClInclude Include="Edge.h">
       <Filter>Terrain\NavMesh</Filter>
     </ClInclude>
-    <ClInclude Include="PathFinder.h">
-      <Filter>Terrain</Filter>
-    </ClInclude>
     <ClInclude Include="HeightMap.h">
       <Filter>Terrain\HeightMap</Filter>
     </ClInclude>
@@ -399,6 +399,12 @@
     </ClInclude>
     <ClInclude Include="Ice.h">
       <Filter>Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="PathFinder.h">
+      <Filter>Terrain\PathFinder</Filter>
+    </ClInclude>
+    <ClInclude Include="PathFinderFunnel.h">
+      <Filter>Terrain\PathFinder</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -458,6 +464,9 @@
     </Filter>
     <Filter Include="Terrain\HeightMap">
       <UniqueIdentifier>{3e004790-9556-49a3-a41f-68c87da4990a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Terrain\PathFinder">
+      <UniqueIdentifier>{8a51d311-16cf-41d4-bb2f-4c3e6d08dd77}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
