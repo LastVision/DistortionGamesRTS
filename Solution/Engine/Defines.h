@@ -6,7 +6,11 @@
 #define MAX_NR_OF_BONES 64
 #define OCTREE_WIDTH 10000.f
 
+
+#ifdef _DEBUG
 #define USE_DGFX
+#endif
+
 #ifdef USE_DGFX
 //#define CONVERT_TO_DGFX_IN_RUNTIME
 #endif
