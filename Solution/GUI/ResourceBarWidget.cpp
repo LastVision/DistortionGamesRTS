@@ -1,10 +1,8 @@
 #include "stdafx.h"
 #include <Engine.h>
-#include <Sprite.h>
 #include "ResourceBarWidget.h"
 #include "../Game/PlayerDirector.h"
 #include "../Game/AIDirector.h"
-#include <XMLReader.h>
 
 namespace GUI
 {

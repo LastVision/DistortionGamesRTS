@@ -7,11 +7,9 @@
 #include "../InputWrapper/InputWrapper.h"
 #include "MiniMapWidget.h"
 #include "ResourceBarWidget.h"
-#include <Sprite.h>
 #include "UnitActionWidget.h"
 #include "UnitInfoWidget.h"
 #include "WidgetContainer.h"
-#include <XMLReader.h>
 
 namespace GUI
 {

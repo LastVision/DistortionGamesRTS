@@ -1,8 +1,6 @@
 #include "stdafx.h"
 #include <Engine.h>
-#include <Sprite.h>
 #include "WidgetContainer.h"
-#include <XMLReader.h>
 
 namespace GUI
 {
