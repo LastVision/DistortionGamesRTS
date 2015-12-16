@@ -33,6 +33,8 @@ namespace GUI
 		void OnResize(const CU::Vector2<float>& aNewWindowSize, const CU::Vector2<float>& anOldWindowSize) override;
 
 	private:
+		void RenderUnitInfo(const CU::Vector2<float>& aParentPosition);
+
 		void operator=(UnitInfoWidget&) = delete;
 
 		const CU::GrowingArray<Entity*>& myUnits;
@@ -48,5 +50,6 @@ namespace GUI
 
 		CU::Vector2<float> myUnitPosition;
 		CU::Vector2<float> myPortraitPosition;
+		float myTextScale;
 	};
 }

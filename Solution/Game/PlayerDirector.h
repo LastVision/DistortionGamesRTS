@@ -43,7 +43,7 @@ public:
 	PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aScene, GUI::Cursor* aCursor);
 	~PlayerDirector();
 
-	void InitGUI(const AIDirector* anAI);
+	void InitGUI(const AIDirector* anAI, const Prism::Camera& aCamera);
 
 	void Update(float aDeltaTime, const Prism::Camera& aCamera);
 	void Render(const Prism::Camera& aCamera);
@@ -58,6 +58,7 @@ public:
 	void ReceiveMessage(const ToggleGUIMessage& aMessage) override;
 	void ReceiveMessage(const OnClickMessage& aMessage) override;
 	void ReceiveMessage(const TimeMultiplierMessage& aMessage) override;
+	void ReceiveMessage(const MinimapMoveMessage& aMessage) override;
 
 	const CU::GrowingArray<Entity*>& GetSelectedUnits() const;
 	const BuildingComponent& GetBuildingComponent() const;

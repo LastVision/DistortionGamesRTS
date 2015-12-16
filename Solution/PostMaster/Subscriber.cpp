@@ -47,6 +47,10 @@ void Subscriber::ReceiveMessage(const Message&)
 {
 }
 
+void Subscriber::ReceiveMessage(const MinimapMoveMessage&)
+{
+}
+
 void Subscriber::ReceiveMessage(const MoveCameraMessage&)
 {
 }

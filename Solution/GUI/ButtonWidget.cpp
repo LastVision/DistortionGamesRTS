@@ -2,9 +2,7 @@
 #include "ButtonWidget.h"
 #include <Engine.h>
 #include <OnClickMessage.h>
-#include <Sprite.h>
 #include <PostMaster.h>
-#include <XMLReader.h>
 
 namespace GUI
 {

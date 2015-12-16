@@ -1,4 +1,5 @@
 #pragma once
+#include <Vector.h>
 
 namespace GUI
 {
@@ -13,6 +14,7 @@ namespace GUI
 		virtual void Render(const CU::Vector2<float>& aParentPosition);
 		virtual void OnMouseDown(const CU::Vector2<float>& aPosition);
 		virtual void OnMousePressed(const CU::Vector2<float>& aPosition);
+		virtual void OnRightMousePressed(const CU::Vector2<float>& aPosition);
 		virtual void OnMouseUp();
 		virtual void OnMouseEnter();
 		virtual void OnMouseExit();

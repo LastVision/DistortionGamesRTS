@@ -32,7 +32,9 @@ public:
 	float GetAttackRange2() const;
 
 	static eComponentType GetTypeStatic();
-	eComponentType GetType() override; 
+	eComponentType GetType() override;
+
+	float GetAttackDamage() const;
 
 private:
 	enum class eAction
@@ -105,4 +107,9 @@ inline eComponentType ControllerComponent::GetTypeStatic()
 inline eComponentType ControllerComponent::GetType()
 {
 	return GetTypeStatic();
+}
+
+inline float ControllerComponent::GetAttackDamage() const
+{
+	return myAttackDamage;
 }

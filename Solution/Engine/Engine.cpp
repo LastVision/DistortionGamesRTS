@@ -101,7 +101,7 @@ namespace Prism
 		{
 			myText->SetText(myTexts[i].myText);
 			myText->SetPosition(myTexts[i].myPosition);
-			//myText->SetScale({ myTexts[i].myScale / 2.f, myTexts[i].myScale / 2.f });
+			myText->SetScale({ myTexts[i].myScale, myTexts[i].myScale });
 			myText->SetColor(myTexts[i].myColor);
 			myText->Render();
 		}
@@ -113,7 +113,7 @@ namespace Prism
 			{
 				myDebugText->SetText(myDebugTexts[i].myText);
 				myDebugText->SetPosition(myDebugTexts[i].myPosition);
-				//myText->SetScale({ myDebugTexts[i].myScale / 2.f, myDebugTexts[i].myScale / 2.f });
+				myDebugText->SetScale({ myDebugTexts[i].myScale, myDebugTexts[i].myScale });
 				myDebugText->SetColor(myDebugTexts[i].myColor);
 				myDebugText->Render();
 			}

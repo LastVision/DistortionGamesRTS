@@ -116,6 +116,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="EmitterMessage.h" />
+    <ClInclude Include="MinimapMoveMessage.h" />
     <ClInclude Include="TimeMultiplierMessage.h" />
     <ClInclude Include="FadeMessage.h" />
     <ClInclude Include="GameStateMessage.h" />

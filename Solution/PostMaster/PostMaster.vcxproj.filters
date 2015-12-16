@@ -90,5 +90,8 @@
     <ClInclude Include="EmitterMessage.h">
       <Filter>Message</Filter>
     </ClInclude>
+    <ClInclude Include="MinimapMoveMessage.h">
+      <Filter>Message</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

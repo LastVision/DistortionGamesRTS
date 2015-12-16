@@ -9,6 +9,7 @@ struct LUAToggleRenderLinesMessage;
 struct LUAMoveCameraMessage;
 struct LUARunScriptMessage;
 struct Message;
+struct MinimapMoveMessage;
 struct MoveCameraMessage;
 struct OnClickMessage;
 struct ResizeMessage;
@@ -33,6 +34,7 @@ public:
 	virtual void ReceiveMessage(const LUAMoveCameraMessage& aMessage);
 	virtual void ReceiveMessage(const LUARunScriptMessage& aMessage);
 	virtual void ReceiveMessage(const Message& aMessage);
+	virtual void ReceiveMessage(const MinimapMoveMessage& aMessage);
 	virtual void ReceiveMessage(const MoveCameraMessage& aMessage);
 	virtual void ReceiveMessage(const OnClickMessage& aMessage);
 	virtual void ReceiveMessage(const ResizeMessage& aMessage);

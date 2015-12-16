@@ -20,6 +20,9 @@ public:
 
 	void LookInDirection(const CU::Vector3<float>& aDirection);
 	void LookAtPoint(const CU::Vector3<float>& aPoint);
+
+	float GetSpeed() const;
+
 private:
 	float mySpeed;
 	const Prism::Terrain& myTerrain;
@@ -33,4 +36,9 @@ inline eComponentType ActorComponent::GetTypeStatic()
 inline eComponentType ActorComponent::GetType()
 {
 	return GetTypeStatic();
+}
+
+inline float ActorComponent::GetSpeed() const
+{
+	return mySpeed;
 }

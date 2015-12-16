@@ -14,7 +14,7 @@
 #include "IndexBufferWrapper.h"
 #include <MathHelper.h>
 #include "NavMesh.h"
-#include "PathFinderAStar.h"
+#include "PathFinderFunnel.h"
 #include "Surface.h"
 #include "SplatMapContainer.h"
 #include "TextureContainer.h"
@@ -239,7 +239,7 @@ namespace Prism
 
 	void Terrain::CreatePathFinder()
 	{
-		myPathFinder = new Navigation::PathFinderAStar(myNavMesh);
+		myPathFinder = new Navigation::PathFinderFunnel(myNavMesh);
 	}
 
 	void Terrain::CreateVertices()

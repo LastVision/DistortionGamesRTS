@@ -1,10 +1,8 @@
 #include "stdafx.h"
 #include "ButtonWidget.h"
 #include "../Entity/Entity.h"
-#include <Sprite.h>
 #include "UnitActionWidget.h"
 #include "WidgetContainer.h"
-#include <XMLReader.h>
 
 namespace GUI
 {
