@@ -33,6 +33,9 @@ void PollingStation::RegisterEntity(Entity* aEntity)
 		case eOwnerType::ENEMY:
 			myAIUnits.Add(aEntity);
 			break;
+		case eOwnerType::NEUTRAL:
+			myNeutralUnits.Add(aEntity);
+			break;
 		default:
 			DL_ASSERT("PollingStation tried to Register an Unit with invalid Owner");
 			break;
@@ -66,9 +69,30 @@ void PollingStation::RegisterEntity(Entity* aEntity)
 	}
 }
 
-Entity* PollingStation::FindClosestEntity(const CU::Vector3<float>& aPosition, eOwnerType aEntityOwner, float aMaxDistance2)
+Entity* PollingStation::FindClosestEntity(const CU::Vector3<float>& aPosition, int aEntityOwner, float aMaxDistance2)
 {
 	float bestDist = FLT_MAX;
+	Entity* bestEntity = nullptr;
+
+
+	if ((aEntityOwner & eOwnerType::PLAYER) > 0)
+	{
+		FindClosestEntity(aPosition, myPlayerUnits, aMaxDistance2, bestDist, bestEntity);
+	}
+
+	if ((aEntityOwner & eOwnerType::ENEMY) > 0)
+	{
+		FindClosestEntity(aPosition, myAIUnits, aMaxDistance2, bestDist, bestEntity);
+	}
+
+	if ((aEntityOwner & eOwnerType::NEUTRAL) > 0)
+	{
+		FindClosestEntity(aPosition, myNeutralUnits, aMaxDistance2, bestDist, bestEntity);
+	}
+
+	return bestEntity;
+
+	/*float bestDist = FLT_MAX;
 	float dist = 0;
 	Entity* entity = nullptr;
 	CU::GrowingArray<Entity*>* list = nullptr;
@@ -100,14 +124,36 @@ Entity* PollingStation::FindClosestEntity(const CU::Vector3<float>& aPosition, e
 	}
 
 
-	return entity;
+	return entity;*/
 }
 
-Entity* PollingStation::FindEntityAtPosition(const CU::Vector3<float>& aPosition, eOwnerType aEntityOwner)
+Entity* PollingStation::FindEntityAtPosition(const CU::Vector3<float>& aPosition, int aEntityOwner)
 {
-	float bestDist = FLT_MAX;
-	float dist = 0;
-	CU::GrowingArray<Entity*>* list = nullptr;
+	return FindClosestEntity(aPosition, aEntityOwner, 10.f);
+
+	/*float bestDist = FLT_MAX;
+	Entity* bestEntity = nullptr;
+
+
+	if ((aEntityOwner & eOwnerType::PLAYER) > 0)
+	{
+		FindClosestEntity(aPosition, myPlayerUnits, 10.f, bestDist, bestEntity);
+	}
+
+	if ((aEntityOwner & eOwnerType::ENEMY) > 0)
+	{
+		FindClosestEntity(aPosition, myAIUnits, 10.f, bestDist, bestEntity);
+	}
+
+	if ((aEntityOwner & eOwnerType::NEUTRAL) > 0)
+	{
+		FindClosestEntity(aPosition, myNeutralUnits, 10.f, bestDist, bestEntity);
+	}
+
+	return bestEntity;*/
+
+
+	/*CU::GrowingArray<Entity*>* list = nullptr;
 	switch (aEntityOwner)
 	{
 	case PLAYER:
@@ -134,7 +180,7 @@ Entity* PollingStation::FindEntityAtPosition(const CU::Vector3<float>& aPosition
 		}
 	}
 
-	return nullptr;
+	return nullptr;*/
 }
 
 const CU::GrowingArray<Entity*>& PollingStation::GetUnits(eOwnerType anOwner) const
@@ -151,7 +197,7 @@ const CU::GrowingArray<Entity*>& PollingStation::GetUnits(eOwnerType anOwner) co
 		return myAIUnits;
 		break;
 	case NEUTRAL:
-		DL_ASSERT("Not implemented yet.");
+		return myNeutralUnits;
 		break;
 	default:
 		break;
@@ -199,6 +245,14 @@ void PollingStation::CleanUp()
 		}
 	}
 
+	for (int i = myNeutralUnits.Size() - 1; i >= 0; --i)
+	{
+		if (myNeutralUnits[i]->GetAlive() == false)
+		{
+			myNeutralUnits.RemoveCyclicAtIndex(i);
+		}
+	}
+
 	for (int i = myResourcePoints.Size() - 1; i >= 0; --i)
 	{
 		if (myResourcePoints[i]->GetAlive() == false)
@@ -219,6 +273,7 @@ void PollingStation::CleanUp()
 PollingStation::PollingStation()
 	: myPlayerUnits(64)
 	, myAIUnits(64)
+	, myNeutralUnits(64)
 	, myResourcePoints(GC::resourcePointCount)
 	, myVictoryPoints(GC::victoryPointCount)
 {
@@ -227,4 +282,23 @@ PollingStation::PollingStation()
 
 PollingStation::~PollingStation()
 {
+}
+
+void PollingStation::FindClosestEntity(const CU::Vector3<float>& aPosition
+	, const CU::GrowingArray<Entity*>& someEntities, float aMaxDistance, float& aBestDistance, Entity* aOutEntity)
+{
+	float dist;
+	for (int i = 0; i < someEntities.Size(); ++i)
+	{
+		if (someEntities[i]->GetAlive() == true)
+		{
+			dist = CU::Length2(someEntities[i]->GetOrientation().GetPos() - aPosition);
+
+			if (dist < aBestDistance && dist < aMaxDistance)
+			{
+				aOutEntity = someEntities[i];
+				aBestDistance = dist;
+			}
+		}
+	}
 }

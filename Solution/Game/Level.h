@@ -17,6 +17,7 @@ namespace GUI
 class AIDirector;
 class Entity;
 class EmitterManager;
+class NeutralDirector;
 class PlayerDirector;
 
 class Level : public Subscriber
@@ -49,6 +50,7 @@ private:
 	CU::GrowingArray<Entity*> myEntities;
 	PlayerDirector* myPlayer;
 	AIDirector* myAI;
+	NeutralDirector* myNeutralDirector;
 
 	int myMaxVictoryPoint;
 

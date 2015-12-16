@@ -30,15 +30,19 @@ ControllerComponent::ControllerComponent(Entity& aEntity, ControllerComponentDat
 	myOwnerType = myEntity.GetOwner();
 	if (myOwnerType == eOwnerType::PLAYER)
 	{
-		myTargetType = eOwnerType::ENEMY;
+		myTargetType = eOwnerType::ENEMY | eOwnerType::NEUTRAL;
 	}
 	else if (myOwnerType == eOwnerType::ENEMY)
 	{
-		myTargetType = eOwnerType::PLAYER;
+		myTargetType = eOwnerType::PLAYER | eOwnerType::NEUTRAL;
+	}
+	else if (myOwnerType == eOwnerType::NEUTRAL)
+	{
+		myTargetType = eOwnerType::PLAYER | eOwnerType::ENEMY;
 	}
 	else
 	{
-		DL_ASSERT("An Entity not owned by Player or Enemy tried to create a ControllerComponent");
+		DL_ASSERT("An Entity not owned by Player, Enemy or Neutral tried to create a ControllerComponent");
 	}
 }
 

@@ -12,6 +12,7 @@
 #include <ResourceMessage.h>
 #include "ScriptInterface.h"
 #include <ScriptSystem.h>
+#include <SpawnUnitMessage.h>
 #include <TimeMultiplierMessage.h>
 #include <TriggerComponent.h>
 #include <ToggleBuildTimeMessage.h>
@@ -315,6 +316,19 @@ namespace Script_Interface
 
 		return 0;
 	}
+
+	int SpawnNeutral(lua_State* aState)
+	{
+		int unitType = lua_tonumber(aState, 1);
+		float x = float(lua_tonumber(aState, 2));
+		float z = float(lua_tonumber(aState, 3));
+
+		CU::Vector2<float> pos(x, z);
+
+		PostMaster::GetInstance()->SendMessage(SpawnUnitMessage(unitType, eOwnerType::NEUTRAL, pos));
+
+		return 0;
+	}
 }
 
 void ScriptInterface::RegisterFunctions()
@@ -345,9 +359,9 @@ void ScriptInterface::RegisterFunctions()
 	system->RegisterFunction("EnableAI", Script_Interface::EnableAI, "", "Enables AI");
 	system->RegisterFunction("TimeMultiplier", Script_Interface::TimeMultiplier, "aMultiplier", "Modifies the game time. ex: TimeMultiplier(0.1) //this is slow  ");
 	system->RegisterFunction("SkipLevel", Script_Interface::SkipLevel, "", "You skip the current level, and goes to the next in the list. \nIf you are on the last level it will reload that level.");
-
 	system->RegisterFunction("Gold", Script_Interface::GiveResources, "", "You get 1000 resources.");
 	system->RegisterFunction("Victory", Script_Interface::GiveVictoryPoints, "", "You get 100 victory points.");
 	system->RegisterFunction("NoBuild", Script_Interface::DisableBuildTime, "", "Removes the buildtime on units, instaspawn, only for player.");
 	system->RegisterFunction("Build", Script_Interface::EnableBuildTime, "", "Enables the buildtime on units, not instaspawn, only for player.");
+	system->RegisterFunction("SpawnNeutral", Script_Interface::SpawnNeutral, "aType, aX, aZ", "Spawns a Netural creen of type aType at position aX, aZ.");
 }

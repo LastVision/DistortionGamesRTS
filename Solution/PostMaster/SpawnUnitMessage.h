@@ -8,19 +8,17 @@ namespace Prism
 
 struct SpawnUnitMessage : public Message
 {
-	SpawnUnitMessage(int aUnitType, int aOwner/*, Prism::Scene& aScene*/);
+	SpawnUnitMessage(int aUnitType, int aOwner, const CU::Vector2<float>& aPosition = CU::Vector2<float>(-1.f, -1.f));
 
 	int myUnitType;
 	int myOwnerType;
-
-	//Prism::Scene& myScene;
+	CU::Vector2<float> myPosition;
 };
 
-// takes in ratio, not actual position
-inline SpawnUnitMessage::SpawnUnitMessage(int aUnitType, int aOwner/*, Prism::Scene& aScene*/)
+inline SpawnUnitMessage::SpawnUnitMessage(int aUnitType, int aOwner, const CU::Vector2<float>& aPosition)
 	: Message(eMessageType::SPAWN_UNIT)
 	, myUnitType(aUnitType)
 	, myOwnerType(aOwner)
-	//, myScene(aScene)
+	, myPosition(aPosition)
 {
 }
