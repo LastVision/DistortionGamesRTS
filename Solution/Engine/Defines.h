@@ -23,5 +23,5 @@
 //#define SCENE_USE_OCTREE
 #endif
 
-//#define USE_BINARY_TERRAIN
+#define USE_BINARY_TERRAIN
 

@@ -25,12 +25,6 @@ namespace Prism
 		bool PathFinderFunnel::FindPath(const CU::Vector3<float>& aStart
 			, const CU::Vector3<float>& anEnd, CU::GrowingArray<CU::Vector3<float>>& someFunneledPointsOut) const
 		{
-			static int count = 0;
-			++count;
-			if (count % 4 == 0)
-			{
-				int apa = 5;
-			}
 			CU::GrowingArray<CU::Vector2<float>> funneledPoints(16);
 			bool returnValue = FindPath({ aStart.x, aStart.z }, { anEnd.x, anEnd.z }, funneledPoints);
 
@@ -192,7 +186,7 @@ namespace Prism
 				//someFunneledPointsOut.Add(somePortals.GetLast()->myLeft);
 			}
 
-			someFunneledPointsOut.Add(anEnd);
+			//someFunneledPointsOut.Add(anEnd);
 
 			return -1;
 		}
