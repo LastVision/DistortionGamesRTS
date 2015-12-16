@@ -288,28 +288,28 @@ namespace Script_Interface
 		return 0;
 	}
 
-	int GiveResources(lua_State* aState)
+	int GiveResources(lua_State*)
 	{
 		PostMaster::GetInstance()->SendMessage(ResourceMessage(eOwnerType::PLAYER, 1000));
 
 		return 0;
 	}
 
-	int GiveVictoryPoints(lua_State* aState)
+	int GiveVictoryPoints(lua_State*)
 	{
 		PostMaster::GetInstance()->SendMessage(VictoryMessage(eOwnerType::PLAYER, 100));
 
 		return 0;
 	}
 
-	int DisableBuildTime(lua_State* aState)
+	int DisableBuildTime(lua_State*)
 	{
 		PostMaster::GetInstance()->SendMessage(ToggleBuildTimeMessage(true));
 
 		return 0;
 	}
 
-	int EnableBuildTime(lua_State* aState)
+	int EnableBuildTime(lua_State*)
 	{
 		PostMaster::GetInstance()->SendMessage(ToggleBuildTimeMessage(false));
 
