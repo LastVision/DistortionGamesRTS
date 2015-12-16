@@ -65,7 +65,7 @@ namespace GUI
 	{
 		CU::Vector3<float> movement;
 
-		float epsilon = 0.05f;
+		float epsilon = 0.003f;
 		if (myCursor->GetMousePositionZeroToOne().x < epsilon)
 		{
 			movement.x = -1.f;
