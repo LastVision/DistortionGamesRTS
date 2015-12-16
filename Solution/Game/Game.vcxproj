@@ -211,6 +211,7 @@
     <ClInclude Include="LevelFactory.h" />
     <ClInclude Include="MainMenuState.h" />
     <ClInclude Include="MessageState.h" />
+    <ClInclude Include="NeutralDirector.h" />
     <ClInclude Include="PlayerDirector.h" />
     <ClInclude Include="ScriptInterface.h" />
     <ClInclude Include="StateEnums.h" />
@@ -234,6 +235,7 @@
     <ClCompile Include="LevelFactory.cpp" />
     <ClCompile Include="MainMenuState.cpp" />
     <ClCompile Include="MessageState.cpp" />
+    <ClCompile Include="NeutralDirector.cpp" />
     <ClCompile Include="PlayerDirector.cpp" />
     <ClCompile Include="ScriptInterface.cpp" />
     <ClCompile Include="StateStack.cpp" />
