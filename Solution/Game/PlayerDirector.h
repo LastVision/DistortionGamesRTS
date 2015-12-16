@@ -59,6 +59,7 @@ public:
 	void ReceiveMessage(const OnClickMessage& aMessage) override;
 	void ReceiveMessage(const TimeMultiplierMessage& aMessage) override;
 	void ReceiveMessage(const MinimapMoveMessage& aMessage) override;
+	void ReceiveMessage(const ToggleBuildTimeMessage& aMessage) override;
 
 	const CU::GrowingArray<Entity*>& GetSelectedUnits() const;
 	const BuildingComponent& GetBuildingComponent() const;

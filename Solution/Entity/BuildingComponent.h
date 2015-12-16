@@ -24,6 +24,7 @@ public:
 	int GetUnitCost(eUnitType aUnitType);
 
 	bool IsQueueFull() const;
+	void SetUseBuildTime(bool aUseBuildTime);
 
 private:
 
@@ -34,6 +35,8 @@ private:
 
 	float myCurrentBuildTime;
 	float myMaxBuildTime;
+
+	bool myUseBuildTime;
 };
 
 inline eComponentType BuildingComponent::GetTypeStatic()
@@ -69,4 +72,9 @@ inline int BuildingComponent::GetSpawnQueueSize() const
 inline bool BuildingComponent::IsQueueFull() const
 {
 	return mySpawnQueueIndex >= 4;
+}
+
+inline void BuildingComponent::SetUseBuildTime(bool aUseBuildTime)
+{
+	myUseBuildTime = aUseBuildTime;
 }

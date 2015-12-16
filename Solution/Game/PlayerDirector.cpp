@@ -16,6 +16,7 @@
 #include <PollingStation.h>
 #include <Terrain.h>
 #include <ToggleGUIMessage.h>
+#include <ToggleBuildTimeMessage.h>
 #include <ModelLoader.h>
 #include <SpawnUnitMessage.h>
 #include <Sprite.h>
@@ -62,6 +63,7 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 	PostMaster::GetInstance()->Subscribe(eMessageType::ON_CLICK, this);
 	PostMaster::GetInstance()->Subscribe(eMessageType::TIME_MULTIPLIER, this);
 	PostMaster::GetInstance()->Subscribe(eMessageType::MOVE_UNITS, this);
+	PostMaster::GetInstance()->Subscribe(eMessageType::TOGGLE_BUILD_TIME, this);
 
 }
 
@@ -73,6 +75,7 @@ PlayerDirector::~PlayerDirector()
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::ON_CLICK, this);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::TIME_MULTIPLIER, this);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::MOVE_UNITS, this);
+	PostMaster::GetInstance()->UnSubscribe(eMessageType::TOGGLE_BUILD_TIME, this);
 }
 
 void PlayerDirector::InitGUI(const AIDirector* anAI, const Prism::Camera& aCamera)
@@ -208,6 +211,11 @@ void PlayerDirector::ReceiveMessage(const MinimapMoveMessage& aMessage)
 		ControllerComponent* controller = mySelectedUnits[i]->GetComponent<ControllerComponent>();
 		controller->MoveTo({ position.x, 0.f, position.y }, true);
 	}
+}
+
+void PlayerDirector::ReceiveMessage(const ToggleBuildTimeMessage& aMessage)
+{
+	myBuilding->GetComponent<BuildingComponent>()->SetUseBuildTime(aMessage.myUseBuildTime);
 }
 
 const BuildingComponent& PlayerDirector::GetBuildingComponent() const

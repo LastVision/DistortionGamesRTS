@@ -19,5 +19,6 @@ enum class eMessageType
 	TIME_MULTIPLIER,
 	VICTORY,
 	PARTICLE,
+	TOGGLE_BUILD_TIME,
 	COUNT,
 };

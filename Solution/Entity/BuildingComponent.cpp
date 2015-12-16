@@ -9,6 +9,7 @@ BuildingComponent::BuildingComponent(Entity& aEntity, BuildingComponentData& aDa
 	, myMaxBuildTime(2.f)
 	, mySpawnQueueIndex(-1)
 	, myUnitCosts(aData.myUnitCosts)
+	, myUseBuildTime(true)
 {
 	aData;
 	for (int i = 0; i <= 4; i++)
@@ -25,7 +26,14 @@ void BuildingComponent::Update(float aDeltaTime)
 {
 	if (mySpawnQueue[0] != eUnitType::NOT_A_UNIT)
 	{
-		myCurrentBuildTime += aDeltaTime;
+		if (myUseBuildTime == true)
+		{
+			myCurrentBuildTime += aDeltaTime;
+		}
+		else 
+		{
+			myCurrentBuildTime += myMaxBuildTime;
+		}
 
 		if (myCurrentBuildTime >= myMaxBuildTime)
 		{

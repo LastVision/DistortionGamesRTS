@@ -138,6 +138,7 @@
     <ClInclude Include="LUACinematicMessage.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Subscriber.h" />
+    <ClInclude Include="ToggleBuildTimeMessage.h" />
     <ClInclude Include="ToggleGUIMessage.h" />
     <ClInclude Include="TriggerMessage.h" />
     <ClInclude Include="VictoryMessage.h" />
