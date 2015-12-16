@@ -30,6 +30,8 @@ namespace GUI
 		void OnResize(const CU::Vector2<float>& aNewWindowSize, const CU::Vector2<float>& anOldWindowSize) override;
 
 	private:
+		void operator=(MiniMapWidget&) = delete;
+
 		void RenderUnits(const CU::Vector2<float>& aParentPosition);
 		void RenderVictoryPoints(const CU::Vector2<float>& aParentPosition);
 		void RenderResourcePoints(const CU::Vector2<float>& aParentPosition);
