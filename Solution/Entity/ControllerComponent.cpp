@@ -4,7 +4,7 @@
 #include "AnimationComponent.h"
 #include "ControllerComponent.h"
 #include "HealthComponent.h"
-#include <PathFinder.h>
+#include <PathFinderAStar.h>
 #include "PollingStation.h"
 #include <Terrain.h>
 

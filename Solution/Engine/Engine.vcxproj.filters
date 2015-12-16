@@ -174,10 +174,10 @@
     <ClCompile Include="Ice.cpp">
       <Filter>Terrain</Filter>
     </ClCompile>
-    <ClCompile Include="PathFinder.cpp">
+    <ClCompile Include="PathFinderFunnel.cpp">
       <Filter>Terrain\PathFinder</Filter>
     </ClCompile>
-    <ClCompile Include="PathFinderFunnel.cpp">
+    <ClCompile Include="PathFinderAStar.cpp">
       <Filter>Terrain\PathFinder</Filter>
     </ClCompile>
   </ItemGroup>
@@ -400,10 +400,10 @@
     <ClInclude Include="Ice.h">
       <Filter>Terrain</Filter>
     </ClInclude>
-    <ClInclude Include="PathFinder.h">
+    <ClInclude Include="PathFinderFunnel.h">
       <Filter>Terrain\PathFinder</Filter>
     </ClInclude>
-    <ClInclude Include="PathFinderFunnel.h">
+    <ClInclude Include="PathFinderAStar.h">
       <Filter>Terrain\PathFinder</Filter>
     </ClInclude>
   </ItemGroup>

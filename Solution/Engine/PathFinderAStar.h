@@ -12,11 +12,11 @@ namespace Prism
 	{
 		class NavMesh;
 
-		class PathFinder
+		class PathFinderAStar
 		{
 		public:
-			PathFinder(NavMesh* aNavMesh);
-			~PathFinder();
+			PathFinderAStar(NavMesh* aNavMesh);
+			~PathFinderAStar();
 			bool FindPath(const CU::Vector3<float>& aStart, const CU::Vector3<float>& anEnd
 				, CU::GrowingArray<Triangle*>& someTrianglesOut);
 			bool FindPath(const CU::Vector2<float>& aStart, const CU::Vector2<float>& anEnd
@@ -25,7 +25,7 @@ namespace Prism
 			void Render();
 
 		private:
-			void operator=(PathFinder&) = delete;
+			void operator=(PathFinderAStar&) = delete;
 			bool FindStartAndEnd(const CU::Vector2<float>& aStart, const CU::Vector2<float>& anEnd);
 			void ClearMesh();
 			void AStar();
@@ -41,7 +41,7 @@ namespace Prism
 			float myPathLength;
 		};
 
-		inline float PathFinder::CostEstimate(Triangle* aStart, Triangle* anEnd) const
+		inline float PathFinderAStar::CostEstimate(Triangle* aStart, Triangle* anEnd) const
 		{
 			return myHeuristicMult
 				* (fabsf(aStart->myCenter.x - anEnd->myCenter.x)

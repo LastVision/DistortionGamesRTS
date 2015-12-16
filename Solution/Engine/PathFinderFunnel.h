@@ -1,8 +1,15 @@
 #pragma once
-class PathFinderFunnel
-{
-public:
-	PathFinderFunnel();
-	~PathFinderFunnel();
-};
 
+namespace Prism
+{
+	namespace Navigation
+	{
+		class PathFinderFunnel
+		{
+		public:
+			PathFinderFunnel();
+			~PathFinderFunnel();
+		};
+
+	}
+}

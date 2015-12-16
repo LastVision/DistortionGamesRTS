@@ -2,11 +2,17 @@
 #include "PathFinderFunnel.h"
 
 
-PathFinderFunnel::PathFinderFunnel()
+namespace Prism
 {
-}
+	namespace Navigation
+	{
+		PathFinderFunnel::PathFinderFunnel()
+		{
+		}
 
 
-PathFinderFunnel::~PathFinderFunnel()
-{
+		PathFinderFunnel::~PathFinderFunnel()
+		{
+		}
+	}
 }
