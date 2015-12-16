@@ -76,6 +76,7 @@ bool Prism::Surface::SetTexture(const std::string& aResourceName, const std::str
 
 bool Prism::Surface::SetTexture(const std::string& aResourceName, ID3D11ShaderResourceView* aResource)
 {
+	aResource;
 	ID3DX11EffectShaderResourceVariable* shaderVar = myEffect->GetEffect()->GetVariableByName(aResourceName.c_str())->AsShaderResource();
 	if (shaderVar->IsValid() == false)
 	{

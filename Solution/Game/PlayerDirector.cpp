@@ -134,7 +134,7 @@ void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 
 void PlayerDirector::Render(const Prism::Camera& aCamera)
 {
-	
+	aCamera;
 	if (myRenderGUI == true)
 	{
 		//for (int i = 0; i < mySelectedUnits.Size(); i++)
@@ -493,6 +493,8 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 void PlayerDirector::SelectOrHoverEntity(Entity* aEntity, bool &aSelected, bool &aHovered
 	, const CU::Intersection::LineSegment3D& aMouseRay)
 {
+	aSelected;
+	aMouseRay;
 	if (myLeftMouseDown == true && myShiftPressed == false
 		&& (mySelectedAction == eSelectedAction::NONE || mySelectedAction == eSelectedAction::HOLD_POSITION
 		|| mySelectedAction == eSelectedAction::STOP))
