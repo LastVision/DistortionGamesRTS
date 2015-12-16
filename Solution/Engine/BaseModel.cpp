@@ -24,6 +24,7 @@ namespace Prism
 
 		myVertexBuffer = nullptr;
 		myIndexBuffer = nullptr;
+		myBlendState = nullptr;
 
 	}
 
@@ -45,6 +46,12 @@ namespace Prism
 		{
 			myVertexLayout->Release();
 			myVertexLayout = nullptr;
+		}
+
+		if (myBlendState != nullptr)
+		{
+			myBlendState->Release();
+			myBlendState = nullptr;
 		}
 
 		delete myVertexBufferDesc;

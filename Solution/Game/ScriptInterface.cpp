@@ -13,8 +13,9 @@
 #include "ScriptInterface.h"
 #include <ScriptSystem.h>
 #include <TimeMultiplierMessage.h>
-#include <ToggleGUIMessage.h>
 #include <TriggerComponent.h>
+#include <ToggleBuildTimeMessage.h>
+#include <ToggleGUIMessage.h>
 #include <VictoryMessage.h>
 
 namespace Script_Interface
@@ -287,6 +288,33 @@ namespace Script_Interface
 		return 0;
 	}
 
+	int GiveResources(lua_State*)
+	{
+		PostMaster::GetInstance()->SendMessage(ResourceMessage(eOwnerType::PLAYER, 1000));
+
+		return 0;
+	}
+
+	int GiveVictoryPoints(lua_State*)
+	{
+		PostMaster::GetInstance()->SendMessage(VictoryMessage(eOwnerType::PLAYER, 100));
+
+		return 0;
+	}
+
+	int DisableBuildTime(lua_State*)
+	{
+		PostMaster::GetInstance()->SendMessage(ToggleBuildTimeMessage(true));
+
+		return 0;
+	}
+
+	int EnableBuildTime(lua_State*)
+	{
+		PostMaster::GetInstance()->SendMessage(ToggleBuildTimeMessage(false));
+
+		return 0;
+	}
 }
 
 void ScriptInterface::RegisterFunctions()
@@ -317,4 +345,9 @@ void ScriptInterface::RegisterFunctions()
 	system->RegisterFunction("EnableAI", Script_Interface::EnableAI, "", "Enables AI");
 	system->RegisterFunction("TimeMultiplier", Script_Interface::TimeMultiplier, "aMultiplier", "Modifies the game time. ex: TimeMultiplier(0.1) //this is slow  ");
 	system->RegisterFunction("SkipLevel", Script_Interface::SkipLevel, "", "You skip the current level, and goes to the next in the list. \nIf you are on the last level it will reload that level.");
+
+	system->RegisterFunction("Gold", Script_Interface::GiveResources, "", "You get 1000 resources.");
+	system->RegisterFunction("Victory", Script_Interface::GiveVictoryPoints, "", "You get 100 victory points.");
+	system->RegisterFunction("NoBuild", Script_Interface::DisableBuildTime, "", "Removes the buildtime on units, instaspawn, only for player.");
+	system->RegisterFunction("Build", Script_Interface::EnableBuildTime, "", "Enables the buildtime on units, not instaspawn, only for player.");
 }

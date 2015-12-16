@@ -82,6 +82,10 @@ void ComponentLoader::LoadBuidlingComponent(XMLReader& aDocument, tinyxml2::XMLE
 			aDocument.ForceReadAttribute(e, "cost", unitCost);
 			aOutputData.myUnitCosts.Insert(numberOfUnitType, unitCost);
 
+			float unitBuildTime = 0.f;
+			aDocument.ForceReadAttribute(e, "buildTime", unitBuildTime);
+			aOutputData.myUnitBuildTimes.Insert(numberOfUnitType, unitBuildTime);
+
 			eUnitType buildUnitType = EntityEnumConverter::ConvertStringToUnitType(CU::ToLower(unitType));
 			DL_ASSERT_EXP(buildUnitType != eUnitType::NOT_A_UNIT, "The " + unitType + " type is not supported.");
 			aOutputData.myBuildUnitTypes.Insert(numberOfUnitType, buildUnitType);
@@ -120,6 +124,9 @@ void ComponentLoader::LoadControllerComponent(XMLReader& aDocument, tinyxml2::XM
 
 	e = aDocument.ForceFindFirstChild(aSourceElement, "ChaseDistance");
 	aDocument.ForceReadAttribute(e, "value", aOutputData.myChaseDistance);
+
+	e = aDocument.ForceFindFirstChild(aSourceElement, "ChaseDistanceNeutral");
+	aDocument.ForceReadAttribute(e, "value", aOutputData.myChaseDistanceNeutral);
 }
 
 void ComponentLoader::LoadGraphicsComponent(XMLReader& aDocument, tinyxml2::XMLElement* aSourceElement, GraphicsComponentData& aOutputData)

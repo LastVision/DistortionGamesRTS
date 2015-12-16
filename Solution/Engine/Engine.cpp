@@ -42,9 +42,8 @@ namespace Prism
 
 	Engine::~Engine()
 	{
-		delete myFadeData.mySprite;
-		myFadeData.mySprite = nullptr;
-		delete myModelFactory;
+		SAFE_DELETE(myFadeData.mySprite);
+		SAFE_DELETE(myModelFactory);
 
 		SAFE_DELETE(myText);
 		SAFE_DELETE(myDebugText);
@@ -59,13 +58,11 @@ namespace Prism
 		ModelLoader::GetInstance()->ClearLoadJobs();
 		ModelLoader::GetInstance()->WaitUntilFinished();
 		ModelLoader::GetInstance()->Shutdown();
-
 		myModelLoaderThread->join();
 		ModelLoader::Destroy();
-		delete myModelLoaderThread;
+		SAFE_DELETE(myModelLoaderThread);
 
-		delete myDirectX;
-		myDirectX = nullptr;
+		SAFE_DELETE(myDirectX);
 	}
 
 	bool Engine::Create(HWND& aHwnd, WNDPROC aWndProc, SetupInfo& aSetupInfo)
@@ -87,8 +84,7 @@ namespace Prism
 
 	void Engine::Destroy()
 	{
-		delete myInstance;
-		myInstance = nullptr;
+		SAFE_DELETE(myInstance);
 	}
 
 	Engine* Engine::GetInstance()
@@ -105,7 +101,7 @@ namespace Prism
 		{
 			myText->SetText(myTexts[i].myText);
 			myText->SetPosition(myTexts[i].myPosition);
-			//myText->SetScale({ myTexts[i].myScale / 2.f, myTexts[i].myScale / 2.f });
+			myText->SetScale({ myTexts[i].myScale, myTexts[i].myScale });
 			myText->SetColor(myTexts[i].myColor);
 			myText->Render();
 		}
@@ -117,7 +113,7 @@ namespace Prism
 			{
 				myDebugText->SetText(myDebugTexts[i].myText);
 				myDebugText->SetPosition(myDebugTexts[i].myPosition);
-				//myText->SetScale({ myDebugTexts[i].myScale / 2.f, myDebugTexts[i].myScale / 2.f });
+				myDebugText->SetScale({ myDebugTexts[i].myScale, myDebugTexts[i].myScale });
 				myDebugText->SetColor(myDebugTexts[i].myColor);
 				myDebugText->Render();
 			}

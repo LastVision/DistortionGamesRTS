@@ -11,10 +11,6 @@ Subscriber::~Subscriber()
 {
 }
 
-void Subscriber::ReceiveMessage(const TimeMultiplierMessage&)
-{
-}
-
 void Subscriber::ReceiveMessage(const FadeMessage&)
 {
 }
@@ -47,6 +43,10 @@ void Subscriber::ReceiveMessage(const Message&)
 {
 }
 
+void Subscriber::ReceiveMessage(const MinimapMoveMessage&)
+{
+}
+
 void Subscriber::ReceiveMessage(const MoveCameraMessage&)
 {
 }
@@ -64,6 +64,14 @@ void Subscriber::ReceiveMessage(const ResourceMessage&)
 }
 
 void Subscriber::ReceiveMessage(const SpawnUnitMessage&)
+{
+}
+
+void Subscriber::ReceiveMessage(const TimeMultiplierMessage&)
+{
+}
+
+void Subscriber::ReceiveMessage(const ToggleBuildTimeMessage&)
 {
 }
 

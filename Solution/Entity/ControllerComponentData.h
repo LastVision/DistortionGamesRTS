@@ -7,5 +7,6 @@ struct ControllerComponentData
 	float myAttackDamage;
 	float myAttackSpeed;
 	float myChaseDistance;
+	float myChaseDistanceNeutral;
 	bool myExistsInEntity = false;
 };

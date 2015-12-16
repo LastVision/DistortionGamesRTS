@@ -6,6 +6,7 @@ enum class eMessageType
 	RESIZE,
 	ON_CLICK,
 	MOVE_CAMERA,
+	MOVE_UNITS,
 	LUA_MOVE_CAMERA,
 	SPAWN_UNIT,
 	CINEMATIC,
@@ -18,5 +19,6 @@ enum class eMessageType
 	TIME_MULTIPLIER,
 	VICTORY,
 	PARTICLE,
+	TOGGLE_BUILD_TIME,
 	COUNT,
 };

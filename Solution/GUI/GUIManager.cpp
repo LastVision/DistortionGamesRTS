@@ -13,12 +13,14 @@
 
 namespace GUI
 {
-	GUIManager::GUIManager(Cursor* aCursor, const std::string& aXMLPath, const PlayerDirector* aPlayer, const AIDirector* anAI)
+	GUIManager::GUIManager(Cursor* aCursor, const std::string& aXMLPath, const PlayerDirector* aPlayer
+		, const AIDirector* anAI, const Prism::Camera* aCamera)
 		: myActiveWidget(nullptr)
 		, myCursor(aCursor)
 		, myPlayer(aPlayer)
 		, myAI(anAI)
 		, myMousePosition({ 0.f, 0.f })
+		, myCamera(aCamera)
 	{
 		ReadXML(aXMLPath);
 	}
@@ -165,7 +167,7 @@ namespace GUI
 				}
 				else if (type == "minimap")
 				{
-					MiniMapWidget* minimap = new MiniMapWidget(&reader, widgetElement);
+					MiniMapWidget* minimap = new MiniMapWidget(&reader, widgetElement, myCamera, myPlayer->GetRenderDragSelection());
 					container->AddWidget(minimap);
 				}
 				else if (type == "resourcebar")
@@ -189,6 +191,10 @@ namespace GUI
 			if (CU::InputWrapper::GetInstance()->MouseIsPressed(0) == true)
 			{
 				myActiveWidget->OnMousePressed(myMousePosition);
+			}
+			if (CU::InputWrapper::GetInstance()->MouseIsPressed(1) == true)
+			{
+				myActiveWidget->OnRightMousePressed(myMousePosition);
 			}
 		}
 	}

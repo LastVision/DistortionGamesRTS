@@ -9,6 +9,11 @@ class Entity;
 class PlayerDirector;
 class AIDirector;
 
+namespace Prism
+{
+	class Camera;
+}
+
 namespace GUI
 {
 	class WidgetContainer;
@@ -18,7 +23,8 @@ namespace GUI
 	class GUIManager
 	{
 	public:
-		GUIManager(Cursor* aCursor, const std::string& aXMLPath, const PlayerDirector* aPlayer, const AIDirector* anAI);
+		GUIManager(Cursor* aCursor, const std::string& aXMLPath, const PlayerDirector* aPlayer
+			, const AIDirector* anAI, const Prism::Camera* aCamera);
 		~GUIManager();
 
 		void AddWidget(Widget* aWidget);
@@ -42,6 +48,7 @@ namespace GUI
 		void CheckMouseEntered();
 		void CheckMouseExited();
 
+		const Prism::Camera* myCamera;
 		const PlayerDirector* myPlayer;
 		const AIDirector* myAI;
 		WidgetContainer* myWidgets;

@@ -19,6 +19,9 @@
     <Filter Include="Message\ScriptMessage">
       <UniqueIdentifier>{4737b0c2-cf0b-401a-bc99-dd36b0c3a89e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Message\CheatMessages">
+      <UniqueIdentifier>{95e4a8e8-7d53-4eab-9bf2-789a40687581}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -89,6 +92,12 @@
     </ClInclude>
     <ClInclude Include="EmitterMessage.h">
       <Filter>Message</Filter>
+    </ClInclude>
+    <ClInclude Include="MinimapMoveMessage.h">
+      <Filter>Message</Filter>
+    </ClInclude>
+    <ClInclude Include="ToggleBuildTimeMessage.h">
+      <Filter>Message\CheatMessages</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

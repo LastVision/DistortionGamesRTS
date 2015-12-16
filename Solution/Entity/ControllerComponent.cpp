@@ -18,6 +18,7 @@ ControllerComponent::ControllerComponent(Entity& aEntity, ControllerComponentDat
 	, myAttackSpeed(aData.myAttackSpeed)
 	, myAttackTimer(0.f)
 	, myChaseDistance2(aData.myChaseDistance * aData.myChaseDistance)
+	, myChaseDistanceNeutral2(aData.myChaseDistanceNeutral * aData.myChaseDistanceNeutral)
 	, myAttackTarget(nullptr)
 	, myActions(16)
 	, myAttackTargetPathRefreshTime(0.5f)
@@ -299,7 +300,14 @@ void ControllerComponent::DoAttackAction()
 	{
 		float distanceToReturnPosition = CU::Length2(myEntity.GetOrientation().GetPos() - myReturnPosition);
 		hasReturnPosition = true;
-		if (distanceToReturnPosition > myChaseDistance2)
+		float chaseDistance = myChaseDistance2;
+
+		if (myEntity.GetOwner() == eOwnerType::NEUTRAL)
+		{
+			chaseDistance = myChaseDistanceNeutral2;
+		}
+
+		if (distanceToReturnPosition > chaseDistance)
 		{
 			shouldReturn = true;
 		}

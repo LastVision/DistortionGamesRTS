@@ -6,10 +6,8 @@
 #define MAX_NR_OF_BONES 64
 #define OCTREE_WIDTH 10000.f
 
-
-#ifdef _DEBUG
+//If we get random crashes in .exes undefine USE_DGFX
 #define USE_DGFX
-#endif
 
 #ifdef USE_DGFX
 //#define CONVERT_TO_DGFX_IN_RUNTIME
@@ -21,7 +19,7 @@
 
 //#define ENABLE_DEBUG_TEXT
 #ifndef DLL_EXPORT
-//#define THREADED_LOADING
+#define THREADED_LOADING
 //#define SCENE_USE_OCTREE
 #endif
 

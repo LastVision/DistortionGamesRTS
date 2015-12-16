@@ -57,6 +57,9 @@
     <ClCompile Include="TriggerManager.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
+    <ClCompile Include="NeutralDirector.cpp">
+      <Filter>Director</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -123,6 +126,9 @@
     </ClInclude>
     <ClInclude Include="TriggerManager.h">
       <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="NeutralDirector.h">
+      <Filter>Director</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
