@@ -42,9 +42,8 @@ namespace Prism
 
 	Engine::~Engine()
 	{
-		delete myFadeData.mySprite;
-		myFadeData.mySprite = nullptr;
-		delete myModelFactory;
+		SAFE_DELETE(myFadeData.mySprite);
+		SAFE_DELETE(myModelFactory);
 
 		SAFE_DELETE(myText);
 		SAFE_DELETE(myDebugText);
@@ -59,13 +58,11 @@ namespace Prism
 		ModelLoader::GetInstance()->ClearLoadJobs();
 		ModelLoader::GetInstance()->WaitUntilFinished();
 		ModelLoader::GetInstance()->Shutdown();
-
 		myModelLoaderThread->join();
 		ModelLoader::Destroy();
-		delete myModelLoaderThread;
+		SAFE_DELETE(myModelLoaderThread);
 
-		delete myDirectX;
-		myDirectX = nullptr;
+		SAFE_DELETE(myDirectX);
 	}
 
 	bool Engine::Create(HWND& aHwnd, WNDPROC aWndProc, SetupInfo& aSetupInfo)
@@ -87,8 +84,7 @@ namespace Prism
 
 	void Engine::Destroy()
 	{
-		delete myInstance;
-		myInstance = nullptr;
+		SAFE_DELETE(myInstance);
 	}
 
 	Engine* Engine::GetInstance()

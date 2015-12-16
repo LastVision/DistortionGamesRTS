@@ -46,13 +46,17 @@ namespace Prism
 
 		CU::TimerManager::GetInstance()->StartTimer("LoadDGFX");
 
-
 		std::fstream file;
 		file.open(dgfxFile.c_str(), std::ios::in | std::ios::binary);
 		DL_ASSERT_EXP(file.fail() == false, CU::Concatenate("Failed to open %s, did you forget to run the tool?", dgfxFile.c_str()));
-
+		if (file.fail() == true)
+		{
+			assert(false && "FAILED TO OPEN DGFX-FILE");
+			return nullptr;
+		}
 
 		Model* newModel = CreateModel(aEffect, file);
+
 		file.close();
 
 		newModel->Init();
@@ -76,10 +80,14 @@ namespace Prism
 
 		CU::TimerManager::GetInstance()->StartTimer("LoadDGFXAnimated");
 
-
 		std::fstream file;
 		file.open(dgfxFile.c_str(), std::ios::in | std::ios::binary);
 		DL_ASSERT_EXP(file.fail() == false, CU::Concatenate("Failed to open %s, did you forget to run the tool?", dgfxFile.c_str()));
+		if (file.fail() == true)
+		{
+			assert(false && "FAILED TO OPEN DGFX-FILE");
+			return nullptr;
+		}
 
 		ModelAnimated* newModel = CreateModelAnimated(aEffect, file);
 
@@ -107,24 +115,39 @@ namespace Prism
 
 		CU::TimerManager::GetInstance()->StartTimer("LoadAnimationDGFX");
 
+
 		std::fstream stream;
 		stream.open(dgfxFile.c_str(), std::ios::in | std::ios::binary);
 		DL_ASSERT_EXP(stream.fail() == false, CU::Concatenate("Failed to open %s, did you forget to run the tool?", dgfxFile.c_str()));
+		if (stream.fail() == true)
+		{
+			_wassert(L"FAILED TO OPEN DGFX-FILE", L"DGFXLoader.cpp", 159);
+			return nullptr;
+		}
 
-		int fileVersion;
+		int fileVersion = -1;
 		stream.read((char*)&fileVersion, sizeof(int));
 		DL_ASSERT_EXP(fileVersion == DGFX_VERSION, "Found a old DGFX-Animation, try running the Converter again");
+		if (fileVersion != DGFX_VERSION)
+		{
+			_wassert(L"FOUND OLD ANIMATION_DGFX", L"DGFXLoader.cpp", 173);
+			return nullptr;
+		}
 
-		int isNullObject;
+		int isNullObject = -1;
 		stream.read((char*)&isNullObject, sizeof(int));
 
-		int isLodGroup;
+		int isLodGroup = -1;
 		stream.read((char*)&isLodGroup, sizeof(int));
 		DL_ASSERT_EXP(isLodGroup == 0, "AnimatedModel cant be LOD'ed, not supported yet");
 
-		int isAnimated;
+		int isAnimated = -1;
 		stream.read((char*)&isAnimated, sizeof(int));
 
+		if (isNullObject == 0)
+		{
+			_wassert(L"ANIMATION NEEDS TO BE A NULLOBJECT, BUT IT WASNT", L"DGFXLoader.cpp", 189);
+		}
 
 		Animation* animation = LoadAnimation(nullptr, stream);
 
@@ -135,7 +158,6 @@ namespace Prism
 		RESOURCE_LOG("DGFX-Animation \"%s\" took %d ms to load", dgfxFile.c_str(), elapsed);
 
 		myAnimations[aFilePath] = animation;
-
 		return animation;
 	}
 
@@ -144,17 +166,22 @@ namespace Prism
 		Model* tempModel = new Model();
 		tempModel->SetEffect(aEffect);
 
-		int fileVersion;
+		int fileVersion = -1;
 		aStream.read((char*)&fileVersion, sizeof(int));
 		DL_ASSERT_EXP(fileVersion == DGFX_VERSION, "Found a old DGFX-Model, try running the Converter again");
+		if (aStream.fail() == true)
+		{
+			assert(false && "Found a old DGFX-Model, RELEASE-ASSERT");
+			return nullptr;
+		}
 
-		int isNullObject;
+		int isNullObject = -1;
 		aStream.read((char*)&isNullObject, sizeof(int));
 
-		int isLodGroup;
+		int isLodGroup = -1;
 		aStream.read((char*)&isLodGroup, sizeof(int));
 
-		int isAnimated;
+		int isAnimated = -1;
 		aStream.read((char*)&isAnimated, sizeof(int));
 
 		if (isNullObject == 0)
@@ -171,7 +198,7 @@ namespace Prism
 			LoadLodGroup(tempModel, aStream);
 		}
 
-		int childCount;
+		int childCount = 0;
 		aStream.read((char*)&childCount, sizeof(int));
 		for (int i = 0; i < childCount; ++i)
 		{
@@ -186,18 +213,23 @@ namespace Prism
 		ModelAnimated* tempModel = new ModelAnimated();
 		tempModel->SetEffect(aEffect);
 
-		int fileVersion;
+		int fileVersion = -1;
 		aStream.read((char*)&fileVersion, sizeof(int));
 		DL_ASSERT_EXP(fileVersion == DGFX_VERSION, "Found a old Animated DGFX-Model, try running the Converter again");
+		if (aStream.fail() == true)
+		{
+			assert(false && "Found a old Animated DGFX-Model, RELEASE-ASSERT");
+			return nullptr;
+		}
 
-		int isNullObject;
+		int isNullObject = -1;
 		aStream.read((char*)&isNullObject, sizeof(int));
 
-		int isLodGroup;
+		int isLodGroup = 0;
 		aStream.read((char*)&isLodGroup, sizeof(int));
 		DL_ASSERT_EXP(isLodGroup == 0, "AnimatedModel cant be LOD'ed, not supported yet");
 
-		int isAnimated;
+		int isAnimated = 0;
 		aStream.read((char*)&isAnimated, sizeof(int));
 
 		if (isNullObject == 0)
@@ -213,7 +245,7 @@ namespace Prism
 			LoadAnimation(tempModel, aStream);
 		}
 
-		int childCount;
+		int childCount = 0;
 		aStream.read((char*)&childCount, sizeof(int));
 		for (int i = 0; i < childCount; ++i)
 		{
@@ -225,7 +257,7 @@ namespace Prism
 
 	void DGFXLoader::LoadModelData(Model* aOutData, Effect* aEffect, std::fstream& aStream)
 	{
-		int indexCount;
+		int indexCount = 0;
 		aStream.read((char*)&indexCount, sizeof(int)); //Index count
 
 		unsigned int* indexData = new unsigned int[indexCount];
@@ -239,9 +271,9 @@ namespace Prism
 		aOutData->myIndexBaseData = indexWrapper;
 
 
-		int vertexCount;
+		int vertexCount = 0;
 		aStream.read((char*)&vertexCount, sizeof(int)); //Vertex count
-		int stride;
+		int stride = 0;
 		aStream.read((char*)&stride, sizeof(int)); //Vertex stride
 
 		int sizeOfBuffer = vertexCount * stride * sizeof(float);
@@ -256,15 +288,15 @@ namespace Prism
 		aOutData->myVertexBaseData = vertexData;
 
 
-		int layoutCount;
+		int layoutCount = 0;
 		aStream.read((char*)&layoutCount, sizeof(int)); //Inputlayout element count
 
 		for (int i = 0; i < layoutCount; ++i)
 		{
-			int byteOffset;
+			int byteOffset = 0;
 			aStream.read((char*)&byteOffset, sizeof(int)); //Inputlayout element count
 
-			int semanticIndex;
+			int semanticIndex = 0;
 			aStream.read((char*)&semanticIndex, sizeof(int)); //Inputlayout semantic index
 
 
@@ -275,7 +307,7 @@ namespace Prism
 			desc->InputSlot = 0;
 			desc->InstanceDataStepRate = 0;
 
-			int type;
+			int type = -1;
 			aStream.read((char*)&type, sizeof(int)); //element type
 
 			if (type == eVertexLayout::VERTEX_POS)
@@ -318,6 +350,12 @@ namespace Prism
 				desc->SemanticName = "COLOR";
 				desc->Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
 			}
+			else
+			{
+				DL_ASSERT("Found a invalid InputElement while loading DGFX");
+				assert(false && "Found a invalid InputElement while loading DGFX, RELEASE-ASSERT");
+			}
+
 			aOutData->myVertexFormat.Add(desc);
 		}
 
@@ -341,31 +379,36 @@ namespace Prism
 			{
 				resourceName = "AlbedoTexture";
 			}
-			if (textureType == eTextureType::NORMAL)
+			else if (textureType == eTextureType::NORMAL)
 			{
 				resourceName = "NormalTexture";
 			}
-			if (textureType == eTextureType::ROUGHNESS)
+			else if (textureType == eTextureType::ROUGHNESS)
 			{
 				resourceName = "RoughnessTexture";
 			}
-			if (textureType == eTextureType::METALNESS)
+			else if (textureType == eTextureType::METALNESS)
 			{
 				resourceName = "MetalnessTexture";
 			}
-			if (textureType == eTextureType::AMBIENT)
+			else if (textureType == eTextureType::AMBIENT)
 			{
 				resourceName = "AOTexture";
 			}
-			if (textureType == eTextureType::EMISSIVE)
+			else if (textureType == eTextureType::EMISSIVE)
 			{
 				resourceName = "EmissiveTexture";
 			}
+			else
+			{
+				DL_ASSERT("Found a invalid TextureType while loading DGFX");
+				assert(false && "Found a invalid TextureType while loading DGFX, RELEASE-ASSERT");
+			}
 
 
-			int textureLenght;
+			int textureLenght = 0;
 			aStream.read((char*)&textureLenght, sizeof(int)); //currentTexture.myFileName lenght
-			char* texture = new char[textureLenght];
+			char* texture = new char[textureLenght+1];
 			aStream.read(texture, sizeof(char) * textureLenght); //currentTexture.myFileName
 			texture[textureLenght] = '\0';
 
@@ -378,7 +421,7 @@ namespace Prism
 
 	void DGFXLoader::LoadModelAnimatedData(ModelAnimated* aOutData, Effect* aEffect, std::fstream& aStream)
 	{
-		int indexCount;
+		int indexCount = 0;
 		aStream.read((char*)&indexCount, sizeof(int)); //Index count
 
 		unsigned int* indexData = new unsigned int[indexCount];
@@ -392,9 +435,9 @@ namespace Prism
 		aOutData->myIndexBaseData = indexWrapper;
 
 
-		int vertexCount;
+		int vertexCount = 0;
 		aStream.read((char*)&vertexCount, sizeof(int)); //Vertex count
-		int stride;
+		int stride = 0;
 		aStream.read((char*)&stride, sizeof(int)); //Vertex stride
 
 		int sizeOfBuffer = vertexCount * stride * sizeof(float);
@@ -409,15 +452,15 @@ namespace Prism
 		aOutData->myVertexBaseData = vertexData;
 
 
-		int layoutCount;
+		int layoutCount = 0;
 		aStream.read((char*)&layoutCount, sizeof(int)); //Inputlayout element count
 
 		for (int i = 0; i < layoutCount; ++i)
 		{
-			int byteOffset;
+			int byteOffset = -1;
 			aStream.read((char*)&byteOffset, sizeof(int)); //Inputlayout element count
 
-			int semanticIndex;
+			int semanticIndex = -1;
 			aStream.read((char*)&semanticIndex, sizeof(int)); //Inputlayout semantic index
 
 			D3D11_INPUT_ELEMENT_DESC* desc = new D3D11_INPUT_ELEMENT_DESC();
@@ -427,7 +470,7 @@ namespace Prism
 			desc->InputSlot = 0;
 			desc->InstanceDataStepRate = 0;
 
-			int type;
+			int type = -1;
 			aStream.read((char*)&type, sizeof(int)); //semanticName lenght
 
 			if (type == eVertexLayout::VERTEX_POS)
@@ -465,6 +508,11 @@ namespace Prism
 				desc->SemanticName = "BONES";
 				desc->Format = DXGI_FORMAT_R32G32B32A32_SINT;
 			}
+			else
+			{
+				DL_ASSERT("Found a invalid InputElement while loading DGFX");
+				assert(false && "Found a invalid InputElement while loading DGFX, RELEASE-ASSERT");
+			}
 
 			aOutData->myVertexFormat.Add(desc);
 		}
@@ -477,11 +525,11 @@ namespace Prism
 		surface.SetVertexCount(vertexCount);
 		surface.SetEffect(aEffect);
 
-		int textureCount;
+		int textureCount = 0;
 		aStream.read((char*)&textureCount, sizeof(int)); //numberOfTextures
 		for (int i = 0; i < textureCount; ++i)
 		{
-			int textureType;
+			int textureType = -1;
 			aStream.read((char*)&textureType, sizeof(int)); //textureType
 
 			std::string resourceName;
@@ -489,31 +537,36 @@ namespace Prism
 			{
 				resourceName = "AlbedoTexture";
 			}
-			if (textureType == eTextureType::NORMAL)
+			else if (textureType == eTextureType::NORMAL)
 			{
 				resourceName = "NormalTexture";
 			}
-			if (textureType == eTextureType::ROUGHNESS)
+			else if (textureType == eTextureType::ROUGHNESS)
 			{
 				resourceName = "RoughnessTexture";
 			}
-			if (textureType == eTextureType::METALNESS)
+			else if (textureType == eTextureType::METALNESS)
 			{
 				resourceName = "MetalnessTexture";
 			}
-			if (textureType == eTextureType::AMBIENT)
+			else if (textureType == eTextureType::AMBIENT)
 			{
 				resourceName = "AOTexture";
 			}
-			if (textureType == eTextureType::EMISSIVE)
+			else if (textureType == eTextureType::EMISSIVE)
 			{
 				resourceName = "EmissiveTexture";
 			}
+			else
+			{
+				DL_ASSERT("Found a invalid TextureType while loading DGFX");
+				assert(false && "Found a invalid TextureType while loading DGFX, RELEASE-ASSERT");
+			}
 
 
-			int textureLenght;
+			int textureLenght = 0;
 			aStream.read((char*)&textureLenght, sizeof(int)); //currentTexture.myFileName lenght
-			char* texture = new char[textureLenght];
+			char* texture = new char[textureLenght+1];
 			aStream.read(texture, sizeof(char) * textureLenght); //currentTexture.myFileName
 			texture[textureLenght] = '\0';
 
@@ -528,14 +581,14 @@ namespace Prism
 	{
 		Prism::LodGroup* lodGroup = new Prism::LodGroup();
 
-		int lodCount;
+		int lodCount = 0;
 		aStream.read((char*)&lodCount, sizeof(int));
 
 		lodGroup->myLods.Reserve(lodCount);
 		aStream.read((char*)&lodGroup->myLods[0], sizeof(Prism::Lod) * lodCount);
 
 
-		int threshHoldCount;
+		int threshHoldCount = 0;
 		aStream.read((char*)&threshHoldCount, sizeof(int));
 
 		lodGroup->myThreshHolds.Reserve(threshHoldCount);
@@ -555,16 +608,17 @@ namespace Prism
 		Animation* newAnimation = new Animation();
 
 
-		int nrOfbones;
+		int nrOfbones = 0;
 		aStream.read((char*)&nrOfbones, sizeof(int));
 
 		for (int i = 0; i < nrOfbones; ++i)
 		{
-			int boneNameLenght;
+			int boneNameLenght = 0;
 			aStream.read((char*)&boneNameLenght, sizeof(int));
-			char* boneName = new char[boneNameLenght];
-			boneName[boneNameLenght] = '\0';
+
+			char* boneName = new char[boneNameLenght+1];
 			aStream.read(boneName, sizeof(char) * boneNameLenght);
+			boneName[boneNameLenght] = '\0';
 
 			CU::Matrix44<float> boneMatrix;
 			aStream.read((char*)&boneMatrix.myMatrix[0], sizeof(float) * 16);
@@ -573,11 +627,10 @@ namespace Prism
 			aStream.read((char*)&boneBindMatrix.myMatrix[0], sizeof(float) * 16);
 
 
-			int nrOfFrames;
+			int nrOfFrames = 0;
 			aStream.read((char*)&nrOfFrames, sizeof(int));
 			if (nrOfFrames > 0)
 			{
-
 				AnimationNode* newNode = new AnimationNode(nrOfFrames);
 				newNode->myValues.Reserve(nrOfFrames);
 
@@ -598,7 +651,7 @@ namespace Prism
 
 		newAnimation->SetHierarchy(rootBone);
 
-		float animationLenght;
+		float animationLenght = 0.f;
 		aStream.read((char*)&animationLenght, sizeof(float));
 
 		newAnimation->SetAnimationLenght(animationLenght);
@@ -614,14 +667,16 @@ namespace Prism
 	void DGFXLoader::LoadBoneHierarchy(HierarchyBone& aOutBone, std::fstream& aStream)
 	{
 		aStream.read((char*)&aOutBone.myBoneID, sizeof(int));
-		int boneNameLenght;
+
+		int boneNameLenght = 0;
 		aStream.read((char*)&boneNameLenght, sizeof(int));
-		char* boneName = new char[boneNameLenght];
-		boneName[boneNameLenght] = '\0';
+
+		char* boneName = new char[boneNameLenght+1];
 		aStream.read(boneName, sizeof(char) * boneNameLenght);
+		boneName[boneNameLenght] = '\0';
 		aOutBone.myBoneName = boneName;
 		
-		int nrOfChildren;
+		int nrOfChildren = 0;
 		aStream.read((char*)&nrOfChildren, sizeof(int));
 
 		if (nrOfChildren > 0)

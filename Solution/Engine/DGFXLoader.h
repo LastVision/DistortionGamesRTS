@@ -29,16 +29,16 @@
 	--	GENERAL DATA FOR ALL MODELS
 	-------------------------------------------------------------------------------------------------
 	DGFXVersion	|		int			|	can be used to check if the model has been exported
-	|					|	with a fileformat that the engine currently supports
+				|					|	with a fileformat that the engine currently supports
 	-------------------------------------------------------------------------------------------------
-	isNullObject	|		int			|	 is 0 if the model is NOT a nullObject
-	|					|	and is 1 if the model IS a nullObject
+	isNullObject|		int			|	 is 0 if the model is NOT a nullObject
+				|					|	and is 1 if the model IS a nullObject
 	-------------------------------------------------------------------------------------------------
 	isLodgroup	|		int			|	 is 0 if the model is NOT a lodGroup
-	|					|	and is 1 if the model IS a lodGroup
+				|					|	and is 1 if the model IS a lodGroup
 	------------------------------------------------------------------------------------------------
 	isAnimated	|		int			|	is 0 if the model is NOT animated
-	|					|	and is 1 if the model IS animated
+				|					|	and is 1 if the model IS animated
 	-------------------------------------------------------------------------------------------------
 
 
