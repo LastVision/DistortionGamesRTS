@@ -203,7 +203,7 @@ void PlayerDirector::ReceiveMessage(const MinimapMoveMessage& aMessage)
 {
 	CU::Vector2<float> position = aMessage.myPosition * 255.f;
 
-	for (unsigned int i = 0; i < mySelectedUnits.Size(); i++)
+	for (int i = 0; i < mySelectedUnits.Size(); i++)
 	{
 		ControllerComponent* controller = mySelectedUnits[i]->GetComponent<ControllerComponent>();
 		controller->MoveTo({ position.x, 0.f, position.y }, true);
