@@ -77,6 +77,7 @@ private:
 	float myAttackSpeed;
 	float myAttackTimer;
 	float myChaseDistance2;
+	float myChaseDistanceNeutral2;
 	float myAttackTargetPathRefreshTime;
 	float myCurrentAttackTargetPathRefreshTime;
 
