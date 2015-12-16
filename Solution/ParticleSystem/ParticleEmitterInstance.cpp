@@ -163,7 +163,7 @@ namespace Prism
 			myEmissionTime = myParticleEmitterData->myEmissionRate;
 		}
 
-		if (myEmitterLife <= 0.f && myDeadParticleCount >= myLogicalParticles.Size())
+		if (myEmitterLife <= 0.f && myDeadParticleCount == myLogicalParticles.Size())
 		{
 			myIsActive = false;
 			myEmitterLife = myParticleEmitterData->myEmitterLifeTime;
