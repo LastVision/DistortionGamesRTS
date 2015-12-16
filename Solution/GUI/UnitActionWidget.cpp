@@ -25,39 +25,11 @@ namespace GUI
 		mySize = size;
 		myPosition = position;
 
-		tinyxml2::XMLElement* containerElement = aReader->ForceFindFirstChild(anXMLElement, "unit");
-		GUI::WidgetContainer* container = new WidgetContainer(nullptr, size);
-		tinyxml2::XMLElement* widgetElement = aReader->FindFirstChild(containerElement, "widget");
-		for (; widgetElement != nullptr; widgetElement = aReader->FindNextElement(widgetElement))
-		{
-			std::string type = "";
-
-			aReader->ForceReadAttribute(widgetElement, "type", type);
-
-			if (type == "button")
-			{
-				ButtonWidget* button = new ButtonWidget(aReader, widgetElement);
-				container->AddWidget(button);
-			}
-		}
-		myUnitActionButtons = container;
-
+		tinyxml2::XMLElement* unitElement = aReader->ForceFindFirstChild(anXMLElement, "unit");
 		tinyxml2::XMLElement* buildingElement = aReader->ForceFindFirstChild(anXMLElement, "building");
-		GUI::WidgetContainer* buildingContainer = new WidgetContainer(nullptr, size);
-		tinyxml2::XMLElement* buildingWidgetElement = aReader->FindFirstChild(buildingElement, "widget");
-		for (; buildingWidgetElement != nullptr; buildingWidgetElement = aReader->FindNextElement(buildingWidgetElement))
-		{
-			std::string type = "";
 
-			aReader->ForceReadAttribute(buildingWidgetElement, "type", type);
-
-			if (type == "button")
-			{
-				ButtonWidget* button = new ButtonWidget(aReader, buildingWidgetElement);
-				buildingContainer->AddWidget(button);
-			}
-		}
-		myBuildingActionButtons = buildingContainer;
+		myUnitActionButtons = ReadContainer(aReader, unitElement, size);
+		myBuildingActionButtons = ReadContainer(aReader, buildingElement, size);
 	}
 
 	UnitActionWidget::~UnitActionWidget()
@@ -113,5 +85,24 @@ namespace GUI
 		Widget::OnResize(aNewWindowSize, anOldWindowSize);
 		myUnitActionButtons->OnResize(aNewWindowSize, anOldWindowSize);
 		myBuildingActionButtons->OnResize(aNewWindowSize, anOldWindowSize);
+	}
+
+	WidgetContainer* UnitActionWidget::ReadContainer(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement, CU::Vector2<float> aSize)
+	{
+		GUI::WidgetContainer* container = new WidgetContainer(nullptr, aSize);
+		tinyxml2::XMLElement* widgetElement = aReader->FindFirstChild(anXMLElement, "widget");
+		for (; widgetElement != nullptr; widgetElement = aReader->FindNextElement(widgetElement))
+		{
+			std::string type = "";
+
+			aReader->ForceReadAttribute(widgetElement, "type", type);
+
+			if (type == "button")
+			{
+				ButtonWidget* button = new ButtonWidget(aReader, widgetElement);
+				container->AddWidget(button);
+			}
+		}
+		return container;
 	}
 }

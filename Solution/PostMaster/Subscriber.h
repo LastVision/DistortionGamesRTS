@@ -1,6 +1,5 @@
 #pragma once
 
-struct TimeMultiplierMessage;
 struct FadeMessage;
 struct EmitterMessage;
 struct GameStateMessage;
@@ -15,7 +14,9 @@ struct OnClickMessage;
 struct ResizeMessage;
 struct ResourceMessage;
 struct SpawnUnitMessage;
+struct TimeMultiplierMessage;
 struct ToggleGUIMessage;
+struct ToggleBuildTimeMessage;
 struct TriggerMessage;
 struct VictoryMessage;
 
@@ -25,7 +26,6 @@ public:
 	Subscriber();
 	~Subscriber();
 
-	virtual void ReceiveMessage(const TimeMultiplierMessage& aMessage);
 	virtual void ReceiveMessage(const FadeMessage& aMessage);
 	virtual void ReceiveMessage(const GameStateMessage& aMessage);
 	virtual void ReceiveMessage(const EmitterMessage& aMessage);
@@ -40,6 +40,8 @@ public:
 	virtual void ReceiveMessage(const ResizeMessage& aMessage);
 	virtual void ReceiveMessage(const ResourceMessage& aMessage);
 	virtual void ReceiveMessage(const SpawnUnitMessage& aMessage);
+	virtual void ReceiveMessage(const TimeMultiplierMessage& aMessage);
+	virtual void ReceiveMessage(const ToggleBuildTimeMessage& aMessage);
 	virtual void ReceiveMessage(const ToggleGUIMessage& aMessage);
 	virtual void ReceiveMessage(const TriggerMessage& aMessage);
 	virtual void ReceiveMessage(const VictoryMessage& aMessage);

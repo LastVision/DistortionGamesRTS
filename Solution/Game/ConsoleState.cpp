@@ -66,7 +66,7 @@ const eStateStatus ConsoleState::Update(const float& aDeltaTime)
 
 	if (CU::InputWrapper::GetInstance()->KeyUp(DIK_ESCAPE) == true)
 	{
-		myStateStatus = ePopMainState;
+		myStateStatus = ePopSubState;
 		return eStateStatus::eKeepState;
 	}
 

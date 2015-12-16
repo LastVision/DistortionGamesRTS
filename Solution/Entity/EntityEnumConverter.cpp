@@ -35,6 +35,30 @@ namespace EntityEnumConverter
 		{
 			return ePropType::PINE_TREE;
 		}
+		else if (aPropType == "birchtree")
+		{
+			return ePropType::BIRCH_TREE;
+		}
+		else if (aPropType == "house_large")
+		{
+			return ePropType::HOUSE_LARGE;
+		}
+		else if (aPropType == "house_medium")
+		{
+			return ePropType::HOUSE_MEDIUM;
+		}
+		else if (aPropType == "house_small")
+		{
+			return ePropType::HOUSE_SMALL;
+		}
+		else if (aPropType == "resource_pole")
+		{
+			return ePropType::RESOURCE_POLE;
+		}
+		else if (aPropType == "victory_pole")
+		{
+			return ePropType::VICTORY_POLE;
+		}
 		DL_ASSERT("The " + aPropType + " prop type is not supported, please tell Daniel about it.");
 		return ePropType::NOT_A_PROP;
 	}

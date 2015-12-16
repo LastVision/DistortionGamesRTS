@@ -20,20 +20,23 @@ public:
 	const float& GetCurrentBuildTime() const;
 	const float& GetMaxBuildTime() const;
 	int GetSpawnQueueSize() const;
-
 	int GetUnitCost(eUnitType aUnitType);
+	void SetIgnoreBuildTime(bool anIgnoreBuildTime); // enables instabuilding
 
 	bool IsQueueFull() const;
 
 private:
 
 	CU::StaticArray<int, 3> myUnitCosts;
+	CU::StaticArray<float, 3> myUnitBuildTimes;
 
 	CU::StaticArray<eUnitType, 5> mySpawnQueue;
 	int mySpawnQueueIndex;
 
 	float myCurrentBuildTime;
 	float myMaxBuildTime;
+
+	bool myIgnoreBuildTime;
 };
 
 inline eComponentType BuildingComponent::GetTypeStatic()
@@ -69,4 +72,9 @@ inline int BuildingComponent::GetSpawnQueueSize() const
 inline bool BuildingComponent::IsQueueFull() const
 {
 	return mySpawnQueueIndex >= 4;
+}
+
+inline void BuildingComponent::SetIgnoreBuildTime(bool anIgnoreBuildTime)
+{
+	myIgnoreBuildTime = anIgnoreBuildTime;
 }
