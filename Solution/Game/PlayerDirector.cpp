@@ -11,7 +11,7 @@
 #include <Intersection.h>
 #include <InputWrapper.h>
 #include <OnClickMessage.h>
-#include <PathFinder.h>
+#include <PathFinderAStar.h>
 #include "PlayerDirector.h"
 #include <PollingStation.h>
 #include <Terrain.h>
