@@ -167,7 +167,7 @@ namespace GUI
 				}
 				else if (type == "minimap")
 				{
-					MiniMapWidget* minimap = new MiniMapWidget(&reader, widgetElement, myCamera);
+					MiniMapWidget* minimap = new MiniMapWidget(&reader, widgetElement, myCamera, myPlayer->GetRenderDragSelection());
 					container->AddWidget(minimap);
 				}
 				else if (type == "resourcebar")

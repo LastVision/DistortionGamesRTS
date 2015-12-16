@@ -50,11 +50,8 @@ public:
 
 	void OnResize(int aWidth, int aHeight);
 
-	//void SpawnUnit(eUnitType aUnitType);
-
 	void SelectUnit(Entity* anEntity);
 
-	//void ReceiveMessage(const SpawnUnitMessage& aMessage) override;
 	void ReceiveMessage(const ToggleGUIMessage& aMessage) override;
 	void ReceiveMessage(const OnClickMessage& aMessage) override;
 	void ReceiveMessage(const TimeMultiplierMessage& aMessage) override;
@@ -66,6 +63,8 @@ public:
 	CU::Vector3<float> GetCameraMoveVector() const;
 
 	const int& GetTestGold() const;
+	const bool& GetRenderDragSelection() const;
+
 private:
 	void UpdateInputs();
 	CU::Vector3<float> CalcCursorWorldPosition(const CU::Vector2<float>& aMousePosition, const Prism::Camera& aCamera);
@@ -83,6 +82,8 @@ private:
 	bool myLeftMouseDown;
 	bool myLeftMousePressed;
 	bool myRightClicked;
+	bool myMouseIsOverGUI;
+	bool myRenderDragSelection;
 	eSelectedAction mySelectedAction;
 
 	bool myRenderGUI;
@@ -95,8 +96,11 @@ private:
 	CU::Vector2<float> mySelectionSpriteHotspot;
 
 	CU::Vector2<float> myFirstMousePosition;
+	CU::Vector3<float> myFirstCameraPosition;
+	CU::Vector3<float> myFirstMousePositionInWorld;
 	CU::GrowingArray<CU::Vector3<float>> myDragSelectionPositions;
 	Prism::Sprite* myDragSelectionSprite;
+
 
 };
 
@@ -108,4 +112,9 @@ inline const CU::GrowingArray<Entity*>& PlayerDirector::GetSelectedUnits() const
 inline const int& PlayerDirector::GetTestGold() const
 {
 	return myTestGold;
+}
+
+inline const bool& PlayerDirector::GetRenderDragSelection() const
+{
+	return myRenderDragSelection;
 }
