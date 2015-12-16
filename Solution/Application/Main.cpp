@@ -7,6 +7,7 @@
 #include <atlstr.h>
 #include <TimerManager.h>
 #include <CommonHelper.h>
+#include <InputWrapper.h>
 //#include <vld.h>
 
 
@@ -149,6 +150,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		PostQuitMessage(0);
 		break;
 	case WM_ACTIVATE:
+		CU::InputWrapper::GetInstance()->ToggleWindowActive();
 		if (globalGame != nullptr)
 		{
 			if (LOWORD(wParam) == WA_INACTIVE)
@@ -166,7 +168,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				if (globalIsActive == false)
 				{
 					bool currFullscreen = Prism::Engine::GetInstance()->IsFullscreen();
-
 					if (currFullscreen != globalPreviousFullscreenState)
 					{
 						Prism::Engine::GetInstance()->SetFullscreen(globalPreviousFullscreenState);

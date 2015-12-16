@@ -36,7 +36,7 @@ namespace CU
 		void Update();
 		void PauseDeltaRecording();
 		void ResumeDeltaRecording();
-
+		void ToggleWindowActive();
 	private:
 		InputWrapper();
 		~InputWrapper();
@@ -60,5 +60,6 @@ namespace CU
 		HWND myWindowHandler;
 
 		bool myIsRecordingDeltas;
+		bool myWindowIsActive;
 	};
 }

@@ -13,7 +13,7 @@ namespace Prism
 		class Triangle
 		{
 		public:
-			friend class PathFinder;
+			friend class PathFinderAStar;
 			friend class NavMesh;
 			Triangle(Edge* aEdge1, Edge* aEdge2, Edge* aEdge3);
 			~Triangle();
