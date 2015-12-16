@@ -17,6 +17,7 @@ namespace GUI
 		, mySelectedType(eEntityType::_COUNT)
 		, myBuilding(aPlayer->GetBuildingComponent())
 		, myBuildingTimer(nullptr)
+		, myTextScale(1.f)
 	{
 		std::string gruntUnitPath = "";
 		std::string gruntPortraitPath = "";
@@ -105,7 +106,7 @@ namespace GUI
 					CU::Vector2<float> position = myPosition + aParentPosition + myUnitPosition + (myBuildingTimer->GetSize() / 2.f);
 					myBuildingTimer->Render(position);
 					position.x += myBuildingTimer->GetSize().x + 10.f;
-					Prism::Engine::GetInstance()->PrintText(myBuilding.GetSpawnQueueSize(), position, Prism::eTextType::RELEASE_TEXT);
+					Prism::Engine::GetInstance()->PrintText(myBuilding.GetSpawnQueueSize(), position, Prism::eTextType::RELEASE_TEXT, myTextScale);
 				}
 			}
 		}
@@ -128,6 +129,7 @@ namespace GUI
 		myGruntPortrait->SetSize(portraitRatioSize * aNewWindowSize, { 0.f, 0.f });
 		myBuildingPortrait->SetSize(portraitRatioSize * aNewWindowSize, { 0.f, 0.f });
 		myStatsSprite->SetSize(ratioStatsSize * aNewWindowSize, { 0.f, 0.f });
+		//myTextScale = myTextScale /;
 	}
 
 	void UnitInfoWidget::RenderUnitInfo(const CU::Vector2<float>& aParentPosition)
@@ -139,7 +141,7 @@ namespace GUI
 
 		std::string health = std::to_string(int(myUnits[0]->GetComponent<HealthComponent>()->GetCurrentHealth())) 
 			+ "/" + std::to_string(int(myUnits[0]->GetComponent<HealthComponent>()->GetMaxHealth()));
-		Prism::Engine::GetInstance()->PrintText(health, portraitPosition, Prism::eTextType::RELEASE_TEXT);
+		Prism::Engine::GetInstance()->PrintText(health, portraitPosition, Prism::eTextType::RELEASE_TEXT, myTextScale);
 
 		CU::Vector2<float> position = { myGruntUnit->GetSize().x / 2.f, myPosition.y };
 		position += aParentPosition + myUnitPosition;
@@ -148,14 +150,14 @@ namespace GUI
 		position.x += myStatsSprite->GetSize().x / 20.f;
 		position.y -= myStatsSprite->GetSize().y / 2.f;
 		Prism::Engine::GetInstance()->PrintText(myUnits[0]->GetComponent<HealthComponent>()->GetArmor()
-			, position, Prism::eTextType::RELEASE_TEXT);
+			, position, Prism::eTextType::RELEASE_TEXT, myTextScale);
 
 		position.x += myStatsSprite->GetSize().x / 3.f;
 		Prism::Engine::GetInstance()->PrintText(myUnits[0]->GetComponent<ControllerComponent>()->GetAttackDamage()
-			, position, Prism::eTextType::RELEASE_TEXT);
+			, position, Prism::eTextType::RELEASE_TEXT, myTextScale);
 
 		position.x += myStatsSprite->GetSize().x / 3.f;
 		Prism::Engine::GetInstance()->PrintText(myUnits[0]->GetComponent<ActorComponent>()->GetSpeed()
-			, position, Prism::eTextType::RELEASE_TEXT);
+			, position, Prism::eTextType::RELEASE_TEXT, myTextScale);
 	}
 }

@@ -50,5 +50,6 @@ namespace GUI
 
 		CU::Vector2<float> myUnitPosition;
 		CU::Vector2<float> myPortraitPosition;
+		float myTextScale;
 	};
 }

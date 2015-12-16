@@ -105,7 +105,7 @@ Level* LevelFactory::LoadCurrentLevel()
 	//myLoadLevelThread = new std::thread(&LevelFactory::ReadLevel, this, myLevelPaths[myCurrentID]);
 	ReadLevel(myLevelPaths[myCurrentID]);
 
-	myCurrentLevel->myPlayer->InitGUI(myCurrentLevel->myAI);
+	myCurrentLevel->myPlayer->InitGUI(myCurrentLevel->myAI, myCamera);
 
 	LUA::ScriptSystem::GetInstance()->CallFunction("Init", {});
 

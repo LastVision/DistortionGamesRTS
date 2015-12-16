@@ -71,10 +71,10 @@ PlayerDirector::~PlayerDirector()
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::TIME_MULTIPLIER, this);
 }
 
-void PlayerDirector::InitGUI(const AIDirector* anAI)
+void PlayerDirector::InitGUI(const AIDirector* anAI, const Prism::Camera& aCamera)
 {
 	Prism::ModelLoader::GetInstance()->Pause();
-	myGUIManager = new GUI::GUIManager(myCursor, "Data/Resource/GUI/GUI_ingame.xml", this, anAI);
+	myGUIManager = new GUI::GUIManager(myCursor, "Data/Resource/GUI/GUI_ingame.xml", this, anAI, &aCamera);
 	Prism::ModelLoader::GetInstance()->UnPause();
 }
 
