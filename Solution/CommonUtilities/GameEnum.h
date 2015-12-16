@@ -31,6 +31,10 @@ enum class ePropType
 {
 	NOT_A_PROP,
 	PINE_TREE,
+	BIRCH_TREE,
+	HOUSE_SMALL,
+	HOUSE_MEDIUM,
+	HOUSE_LARGE
 };
 
 enum class eEntityState : int
