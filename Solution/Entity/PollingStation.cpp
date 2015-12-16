@@ -77,110 +77,25 @@ Entity* PollingStation::FindClosestEntity(const CU::Vector3<float>& aPosition, i
 
 	if ((aEntityOwner & eOwnerType::PLAYER) > 0)
 	{
-		FindClosestEntity(aPosition, myPlayerUnits, aMaxDistance2, bestDist, bestEntity);
+		FindClosestEntity(aPosition, myPlayerUnits, aMaxDistance2, bestDist, &bestEntity);
 	}
 
 	if ((aEntityOwner & eOwnerType::ENEMY) > 0)
 	{
-		FindClosestEntity(aPosition, myAIUnits, aMaxDistance2, bestDist, bestEntity);
+		FindClosestEntity(aPosition, myAIUnits, aMaxDistance2, bestDist, &bestEntity);
 	}
 
 	if ((aEntityOwner & eOwnerType::NEUTRAL) > 0)
 	{
-		FindClosestEntity(aPosition, myNeutralUnits, aMaxDistance2, bestDist, bestEntity);
+		FindClosestEntity(aPosition, myNeutralUnits, aMaxDistance2, bestDist, &bestEntity);
 	}
 
 	return bestEntity;
-
-	/*float bestDist = FLT_MAX;
-	float dist = 0;
-	Entity* entity = nullptr;
-	CU::GrowingArray<Entity*>* list = nullptr;
-	switch (aEntityOwner)
-	{
-	case PLAYER:
-		list = &myPlayerUnits;
-		break;
-	case ENEMY:
-		list = &myAIUnits;
-		break;
-	default:
-		DL_ASSERT("PollingStation tried to FindClosestEntity of an unknown type");
-		break;
-	}
-
-	for (int i = 0; i < (*list).Size(); ++i)
-	{
-		if ((*list)[i]->GetAlive() == true)
-		{
-			dist = CU::Length2((*list)[i]->GetOrientation().GetPos() - aPosition);
-
-			if (dist < bestDist && dist < aMaxDistance2)
-			{
-				bestDist = dist;
-				entity = (*list)[i];
-			}
-		}
-	}
-
-
-	return entity;*/
 }
 
 Entity* PollingStation::FindEntityAtPosition(const CU::Vector3<float>& aPosition, int aEntityOwner)
 {
 	return FindClosestEntity(aPosition, aEntityOwner, 10.f);
-
-	/*float bestDist = FLT_MAX;
-	Entity* bestEntity = nullptr;
-
-
-	if ((aEntityOwner & eOwnerType::PLAYER) > 0)
-	{
-		FindClosestEntity(aPosition, myPlayerUnits, 10.f, bestDist, bestEntity);
-	}
-
-	if ((aEntityOwner & eOwnerType::ENEMY) > 0)
-	{
-		FindClosestEntity(aPosition, myAIUnits, 10.f, bestDist, bestEntity);
-	}
-
-	if ((aEntityOwner & eOwnerType::NEUTRAL) > 0)
-	{
-		FindClosestEntity(aPosition, myNeutralUnits, 10.f, bestDist, bestEntity);
-	}
-
-	return bestEntity;*/
-
-
-	/*CU::GrowingArray<Entity*>* list = nullptr;
-	switch (aEntityOwner)
-	{
-	case PLAYER:
-		list = &myPlayerUnits;
-		break;
-	case ENEMY:
-		list = &myAIUnits;
-		break;
-	default:
-		DL_ASSERT("PollingStation tried to FindClosestEntity of an unknown type");
-		break;
-	}
-
-	for (int i = 0; i < (*list).Size(); ++i)
-	{
-		if ((*list)[i]->GetAlive() == true)
-		{
-			dist = CU::Length2((*list)[i]->GetOrientation().GetPos() - aPosition);
-
-			if (dist < bestDist && dist < 10.f)
-			{
-				return (*list)[i];;
-			}
-		}
-	}
-
-	return nullptr;*/
 }
 
 const CU::GrowingArray<Entity*>& PollingStation::GetUnits(eOwnerType anOwner) const
@@ -285,7 +200,7 @@ PollingStation::~PollingStation()
 }
 
 void PollingStation::FindClosestEntity(const CU::Vector3<float>& aPosition
-	, const CU::GrowingArray<Entity*>& someEntities, float aMaxDistance, float& aBestDistance, Entity* aOutEntity)
+	, const CU::GrowingArray<Entity*>& someEntities, float aMaxDistance, float& aBestDistance, Entity** aOutEntity)
 {
 	float dist;
 	for (int i = 0; i < someEntities.Size(); ++i)
@@ -296,7 +211,7 @@ void PollingStation::FindClosestEntity(const CU::Vector3<float>& aPosition
 
 			if (dist < aBestDistance && dist < aMaxDistance)
 			{
-				aOutEntity = someEntities[i];
+				*aOutEntity = someEntities[i];
 				aBestDistance = dist;
 			}
 		}
