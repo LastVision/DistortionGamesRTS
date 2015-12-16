@@ -34,7 +34,9 @@ enum class ePropType
 	BIRCH_TREE,
 	HOUSE_SMALL,
 	HOUSE_MEDIUM,
-	HOUSE_LARGE
+	HOUSE_LARGE,
+	RESOURCE_POLE,
+	VICTORY_POLE,
 };
 
 enum class eEntityState : int

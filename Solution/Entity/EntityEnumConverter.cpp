@@ -51,6 +51,14 @@ namespace EntityEnumConverter
 		{
 			return ePropType::HOUSE_SMALL;
 		}
+		else if (aPropType == "resource_pole")
+		{
+			return ePropType::RESOURCE_POLE;
+		}
+		else if (aPropType == "victory_pole")
+		{
+			return ePropType::VICTORY_POLE;
+		}
 		DL_ASSERT("The " + aPropType + " prop type is not supported, please tell Daniel about it.");
 		return ePropType::NOT_A_PROP;
 	}
