@@ -76,7 +76,7 @@ void InGameState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCur
 	PostMaster::GetInstance()->Subscribe(eMessageType::TRIGGER, this);
 
 	PostMaster::GetInstance()->SendMessage(LUARunScriptMessage("Data/Script/Autorun.script"));
-	
+
 	myIsActiveState = true;
 }
 
@@ -178,7 +178,7 @@ void InGameState::ReceiveMessage(const GameStateMessage& aMessage)
 		{
 			PostMaster::GetInstance()->SendMessage(OnClickMessage(eOnClickEvent::GAME_WIN));
 		}
-		else 
+		else
 		{
 			CompleteLevel();
 		}
@@ -250,7 +250,7 @@ void InGameState::ReceiveMessage(const LUACinematicMessage& aMessage)
 
 void InGameState::ReceiveMessage(const TriggerMessage& aMessage)
 {
-	LUA::ScriptSystem::GetInstance()->CallFunction("TriggerEvent", {static_cast<float>(aMessage.myTrigger->GetId())
+	LUA::ScriptSystem::GetInstance()->CallFunction("TriggerEvent", { static_cast<float>(aMessage.myTrigger->GetId())
 		, static_cast<float>(aMessage.myUnit->GetId()), static_cast<float>(aMessage.myType) });
 }
 
@@ -334,19 +334,44 @@ void InGameState::UpdateCamera(float aDeltaTime, const CU::Vector3<float>& aCame
 
 	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_NUMPAD2) == true)
 	{
-	myCameraOrientation = CU::Matrix44<float>::CreateRotateAroundX(-rotationSpeed) * myCameraOrientation;
+		myCameraOrientation = CU::Matrix44<float>::CreateRotateAroundX(-rotationSpeed) * myCameraOrientation;
 	}
 	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_NUMPAD8) == true)
 	{
-	myCameraOrientation = CU::Matrix44<float>::CreateRotateAroundX(rotationSpeed) * myCameraOrientation;
+		myCameraOrientation = CU::Matrix44<float>::CreateRotateAroundX(rotationSpeed) * myCameraOrientation;
 	}
 	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_NUMPAD4) == true)
 	{
-	myCameraOrientation = CU::Matrix44<float>::CreateRotateAroundY(-rotationSpeed) * myCameraOrientation;
+		myCameraOrientation = CU::Matrix44<float>::CreateRotateAroundY(-rotationSpeed) * myCameraOrientation;
 	}
 	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_NUMPAD6) == true)
 	{
-	myCameraOrientation = CU::Matrix44<float>::CreateRotateAroundY(rotationSpeed) * myCameraOrientation;
+		myCameraOrientation = CU::Matrix44<float>::CreateRotateAroundY(rotationSpeed) * myCameraOrientation;
+	}
+
+	cameraPos = myCameraOrientation.GetPos();
+	if (cameraPos.x < 0.f)
+	{
+		cameraPos.x = 0.f;
+		myCameraOrientation.SetPos(cameraPos);
+	}
+
+	if (cameraPos.z < -50.f)
+	{
+		cameraPos.z = -50.f;
+		myCameraOrientation.SetPos(cameraPos);
+	}
+
+	if (cameraPos.x > 255.f)
+	{
+		cameraPos.x = 255.f;
+		myCameraOrientation.SetPos(cameraPos);
+	}
+
+	if (cameraPos.z > 205.f)
+	{
+		cameraPos.z = 205.f;
+		myCameraOrientation.SetPos(cameraPos);
 	}
 }
 

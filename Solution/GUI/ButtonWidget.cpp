@@ -73,16 +73,11 @@ namespace GUI
 	void ButtonWidget::OnMousePressed(const CU::Vector2<float>&)
 	{
 		myImageCurrent = myImagePressed;
-		//Click();
-	}
-
-	void ButtonWidget::OnMouseDown(const CU::Vector2<float>&)
-	{
-		Click();
 	}
 
 	void ButtonWidget::OnMouseUp()
 	{
+		Click();
 		myImageCurrent = myImageNormal;
 	}
 
@@ -110,11 +105,6 @@ namespace GUI
 			aPosition.x <= myPosition.x + mySize.x - myImageCurrent->GetHotspot().x &&
 			aPosition.y >= myPosition.y - myImageCurrent->GetHotspot().y &&
 			aPosition.y <= myPosition.y + mySize.y - myImageCurrent->GetHotspot().y;
-
-	//	return	aPosition.x >= myPosition.x - mySize.x / 2.f &&
-	//		aPosition.y >= myPosition.y - mySize.y / 2.f &&
-	//		aPosition.x <= myPosition.x + mySize.x / 2.f &&
-	//		aPosition.y <= myPosition.y + mySize.y / 2.f;
 	}
 
 	void ButtonWidget::SetPosition(const CU::Vector2<float>& aPosition)

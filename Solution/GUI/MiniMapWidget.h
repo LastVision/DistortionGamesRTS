@@ -29,6 +29,11 @@ namespace GUI
 		void OnResize(const CU::Vector2<float>& aNewWindowSize, const CU::Vector2<float>& anOldWindowSize) override;
 
 	private:
+		void RenderUnits(const CU::Vector2<float>& aParentPosition);
+		void RenderVictoryPoints(const CU::Vector2<float>& aParentPosition);
+		void RenderResourcePoints(const CU::Vector2<float>& aParentPosition);
+		void RenderBases(const CU::Vector2<float>& aParentPosition);
+
 		Prism::Sprite* myPlaceholderSprite;
 
 		Prism::Sprite* myUnitSprite;

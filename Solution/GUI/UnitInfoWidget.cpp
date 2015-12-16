@@ -98,16 +98,7 @@ namespace GUI
 			}
 			else if (mySelectedType == eEntityType::BASE_BUILING)
 			{
-				myBuildingPortrait->Render(myPosition + aParentPosition + myPortraitPosition);
-
-				if (myBuilding.GetEntityToSpawn() != eEntityType::EMPTY)
-				{
-					myBuildingTimer->Update();
-					CU::Vector2<float> position = myPosition + aParentPosition + myUnitPosition + (myBuildingTimer->GetSize() / 2.f);
-					myBuildingTimer->Render(position);
-					position.x += myBuildingTimer->GetSize().x + 10.f;
-					Prism::Engine::GetInstance()->PrintText(myBuilding.GetSpawnQueueSize(), position, Prism::eTextType::RELEASE_TEXT, myTextScale);
-				}
+				RenderBaseInfo(aParentPosition);
 			}
 		}
 	}
@@ -130,6 +121,20 @@ namespace GUI
 		myBuildingPortrait->SetSize(portraitRatioSize * aNewWindowSize, { 0.f, 0.f });
 		myStatsSprite->SetSize(ratioStatsSize * aNewWindowSize, { 0.f, 0.f });
 		//myTextScale = myTextScale /;
+	}
+
+	void UnitInfoWidget::RenderBaseInfo(const CU::Vector2<float>& aParentPosition)
+	{
+		myBuildingPortrait->Render(myPosition + aParentPosition + myPortraitPosition);
+
+		if (myBuilding.GetEntityToSpawn() != eEntityType::EMPTY)
+		{
+			myBuildingTimer->Update();
+			CU::Vector2<float> position = myPosition + aParentPosition + myUnitPosition + (myBuildingTimer->GetSize() / 2.f);
+			myBuildingTimer->Render(position);
+			position.x += myBuildingTimer->GetSize().x + 10.f;
+			Prism::Engine::GetInstance()->PrintText(myBuilding.GetSpawnQueueSize(), position, Prism::eTextType::RELEASE_TEXT, myTextScale);
+		}
 	}
 
 	void UnitInfoWidget::RenderUnitInfo(const CU::Vector2<float>& aParentPosition)
