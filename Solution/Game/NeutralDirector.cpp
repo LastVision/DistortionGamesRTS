@@ -2,7 +2,8 @@
 #include "NeutralDirector.h"
 
 
-NeutralDirector::NeutralDirector()
+NeutralDirector::NeutralDirector(eOwnerType aOwnerType, const Prism::Terrain& aTerrain)
+	: Director(aOwnerType, aTerrain)
 {
 }
 
