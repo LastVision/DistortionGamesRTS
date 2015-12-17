@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include <BuildingComponent.h>
+#include "Console.h"
 #include "Director.h"
 #include <Entity.h>
 #include <HealthComponent.h>
@@ -85,6 +86,8 @@ void Director::ReceiveMessage(const SpawnUnitMessage& aMessage)
 	if (static_cast<eOwnerType>(aMessage.myOwnerType) != myOwner) return;
 	if (myActiveUnits.Size() < 64)
 	{
+		Entity* spawnedUnit = nullptr;
+
 		for (int i = 0; i < myUnits.Size(); ++i)
 		{
 			if (myUnits[i]->GetUnitType() == static_cast<eUnitType>(aMessage.myUnitType) && myUnits[i]->GetAlive() == false)
@@ -95,12 +98,36 @@ void Director::ReceiveMessage(const SpawnUnitMessage& aMessage)
 				}
 				myUnits[i]->Spawn(myBuilding->GetOrientation().GetPos() + CU::Vector3f(0.f, 0.f, -15.f));
 				myActiveUnits.Add(myUnits[i]);
+				spawnedUnit = myUnits[i];
 				break;
 			}
 		}
-		PollingStation::GetInstance()->RegisterEntity(myActiveUnits.GetLast());
-	}
 
+		if (spawnedUnit != nullptr)
+		{
+			PollingStation::GetInstance()->RegisterEntity(spawnedUnit);
+		}
+		else
+		{
+			std::string msg;
+			switch (myOwner)
+			{
+			case eOwnerType::PLAYER:
+				msg = "PLAYER tried to spawn unit when at UnitCap";
+				break;
+			case eOwnerType::ENEMY:
+				msg = "ENEMY tried to spawn unit when at UnitCap";
+				break;
+			case eOwnerType::NEUTRAL:
+				msg = "NEUTRAL tried to spawn unit when at UnitCap";
+				break;
+			default:
+				break;
+			}
+
+			Console::GetInstance()->AddHistory(msg, eHistoryType::WARNING);
+		}
+	}
 }
 
 
