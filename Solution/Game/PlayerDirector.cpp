@@ -6,6 +6,7 @@
 #include <ControllerComponent.h>
 #include <TimeMultiplierMessage.h>
 #include <Entity.h>
+#include <EntityData.h>
 #include <EntityFactory.h>
 #include <GUIManager.h>
 #include <GraphicsComponent.h>
@@ -71,15 +72,27 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 	PostMaster::GetInstance()->Subscribe(eMessageType::MOVE_UNITS, this);
 	PostMaster::GetInstance()->Subscribe(eMessageType::TOGGLE_BUILD_TIME, this);
 
+	EntityData tempData;
+	tempData.myGraphicsData.myExistsInEntity = true;
+	tempData.myGraphicsData.myModelPath = "Data/Resource/Model/Prop/Pine_tree/SM_pine_tree_bare_a.fbx";
+	tempData.myGraphicsData.myEffectPath = "Data/Resource/Shader/S_effect_pbl.fx";
 
+	tempData.myTotemData.myExistsInEntity = true;
+	tempData.myTotemData.myHealPerSecond = 5.f;
+	tempData.myTotemData.myRadius = 15.f;
+	myTotem = new Entity(eOwnerType::PLAYER, Prism::eOctreeType::DYNAMIC, tempData, aScene, { 128.f, 10.f, 128.f },
+		aTerrain, { 0.f, 0.f, 0.f }, { 1.f, 1.f, 1.f });
+	myTotem->AddToScene();
 
 
 }
 
 PlayerDirector::~PlayerDirector()
 {
+	myTotem->RemoveFromScene();
 	SAFE_DELETE(myGUIManager);
 	SAFE_DELETE(myDragSelectionSprite);
+	SAFE_DELETE(myTotem);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::TOGGLE_GUI, this);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::ON_CLICK, this);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::TIME_MULTIPLIER, this);
@@ -121,6 +134,7 @@ void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 	Director::Update(aDeltaTime);
 	UpdateMouseInteraction(aCamera);
 	myBuilding->Update(aDeltaTime);
+	myTotem->Update(aDeltaTime);
 
 	for (int i = mySelectedUnits.Size() - 1; i >= 0; --i) // remove dead units
 	{

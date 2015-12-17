@@ -7,17 +7,17 @@
 #include "PollingStation.h"
 #include "PostMaster.h"
 #include "TotemComponent.h"
+#include "TotemComponentData.h"
 #include "TriggerMessage.h"
 
-TotemComponent::TotemComponent(Entity& aEntity, eOwnerType anOwner, float aRadius, float aHealPerSecond)
+TotemComponent::TotemComponent(Entity& aEntity, TotemComponentData& aData)
 	: Component(aEntity)
-	, myOwner(anOwner)
-	, myRadius(aRadius)
+	, myRadius(aData.myRadius)
 	, myRadiusSquared(myRadius * myRadius)
-	, myHealPerSecond(aHealPerSecond)
+	, myHealPerSecond(aData.myHealPerSecond)
+	, myUnits(GC::playerUnitCount)
 {
 }
-
 
 TotemComponent::~TotemComponent()
 {
@@ -26,7 +26,7 @@ TotemComponent::~TotemComponent()
 void TotemComponent::Update(float aDeltaTime)
 {
 	CheckUnitsForRemove(myUnits);
-	CheckUnitsForAdd(PollingStation::GetInstance()->GetUnits(myOwner), myUnits);
+	CheckUnitsForAdd(PollingStation::GetInstance()->GetUnits(myEntity.GetOwner()), myUnits);
 
 	for (int i = 0; i < myUnits.Size(); ++i)
 	{

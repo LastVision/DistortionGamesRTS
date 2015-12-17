@@ -4,7 +4,7 @@ class TotemComponent :
 	public Component
 {
 public:
-	TotemComponent(Entity& aEntity, eOwnerType anOwner, float aRadius, float aHealPerSecond );
+	TotemComponent(Entity& aEntity, TotemComponentData& aData);
 	~TotemComponent();
 
 	void Update(float aDelta) override;
@@ -24,7 +24,7 @@ private:
 	const float myHealPerSecond;
 	//CU::Vector3f myOriginalPosition;
 
-	eOwnerType myOwner;
+	//eOwnerType myOwner;
 	//const eTriggerType myType;
 	CU::GrowingArray<Entity*> myUnits;
 };

@@ -16,6 +16,7 @@ enum eEntityType
 	BASE_BUILING = 4,
 	RESOURCE_POINT = 8,
 	VICTORY_POINT = 16,
+	TOTEM = 32,
 	_COUNT,
 };
 

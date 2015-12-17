@@ -200,5 +200,8 @@
     <ClInclude Include="ArriveBehavior.h">
       <Filter>Behavior</Filter>
     </ClInclude>
+    <ClInclude Include="TotemComponentData.h">
+      <Filter>EntityFactory\EntityData\ComponentData</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

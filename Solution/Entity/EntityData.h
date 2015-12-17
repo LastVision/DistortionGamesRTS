@@ -8,6 +8,7 @@
 #include "GraphicsComponentData.h"
 #include "HealthComponentData.h"
 #include "TriggerComponentData.h"
+#include "TotemComponentData.h"
 
 struct EntityData
 {
@@ -20,6 +21,7 @@ struct EntityData
 	GraphicsComponentData myGraphicsData;
 	HealthComponentData myHealthData;
 	TriggerComponentData myTriggerData;
+	TotemComponentData myTotemData;
 
 	union 
 	{
