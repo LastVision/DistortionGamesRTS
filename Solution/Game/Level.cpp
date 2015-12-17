@@ -115,15 +115,15 @@ void Level::Render(Prism::Camera& aCamera)
 	myPlayer->Render(aCamera);
 
 	
-	const CU::GrowingArray<Prism::Navigation::Triangle*>& path = myTerrain->GetPathFinder()->GetAStar()->GetLatestPath();
-	for (int i = 0; i < path.Size() - 1; ++i)
-	{
-		CU::Vector3<float> aStar0 = path[i]->GetCenter();
-		CU::Vector3<float> aStar1 = path[i + 1]->GetCenter();
-		aStar0 = myTerrain->GetHeight(aStar0, 2.f);
-		aStar1 = myTerrain->GetHeight(aStar1, 2.f);
-		Prism::RenderLine3D(aStar0, aStar1, eColorDebug::BLACK, eColorDebug::PINK);
-	}
+	//const CU::GrowingArray<Prism::Navigation::Triangle*>& path = myTerrain->GetPathFinder()->GetAStar()->GetLatestPath();
+	//for (int i = 0; i < path.Size() - 1; ++i)
+	//{
+	//	CU::Vector3<float> aStar0 = path[i]->GetCenter();
+	//	CU::Vector3<float> aStar1 = path[i + 1]->GetCenter();
+	//	aStar0 = myTerrain->GetHeight(aStar0, 2.f);
+	//	aStar1 = myTerrain->GetHeight(aStar1, 2.f);
+	//	Prism::RenderLine3D(aStar0, aStar1, eColorDebug::BLACK, eColorDebug::PINK);
+	//}
 }
 
 void Level::OnResize(int aWidth, int aHeigth)
