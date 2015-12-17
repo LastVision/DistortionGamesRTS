@@ -89,6 +89,7 @@ Entity::Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& a
 
 	if (aEntityData.myTotemData.myExistsInEntity == true)
 	{
+		myOrientation.SetPos(aStartPosition);
 		myComponents[static_cast<int>(eComponentType::TOTEM)] = new TotemComponent(*this, aEntityData.myTotemData);
 	}
 	

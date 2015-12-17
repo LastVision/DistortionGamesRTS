@@ -12,7 +12,8 @@ public:
 	static eComponentType GetTypeStatic();
 	virtual eComponentType GetType();
 	eOwnerType ModifyOwnership(eOwnerType anOwner, float aModifyValue);
-
+	void SetTargetPosition(const CU::Vector3f& aTargetPosition);
+	float GetCurrentCooldown();
 private:
 	void operator=(TotemComponent&) = delete;
 
@@ -22,10 +23,16 @@ private:
 	const float myRadius;
 	const float myRadiusSquared;
 	const float myHealPerSecond;
-	//CU::Vector3f myOriginalPosition;
+	const float myOriginalCooldown;
+	const float myLifeTime;
+	float myCurrentCooldown;
+	float myAlpha;
+	bool myHasReachedTarget;
 
-	//eOwnerType myOwner;
-	//const eTriggerType myType;
+
+	CU::Vector3f myOriginalPosition;
+	CU::Vector3f myTargetPosition;
+
 	CU::GrowingArray<Entity*> myUnits;
 };
 
@@ -37,4 +44,9 @@ inline eComponentType TotemComponent::GetTypeStatic()
 inline eComponentType TotemComponent::GetType()
 {
 	return GetTypeStatic();
+}
+
+inline float TotemComponent::GetCurrentCooldown()
+{
+	return myCurrentCooldown;
 }

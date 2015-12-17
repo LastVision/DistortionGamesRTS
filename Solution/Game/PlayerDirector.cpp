@@ -80,7 +80,10 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 	tempData.myTotemData.myExistsInEntity = true;
 	tempData.myTotemData.myHealPerSecond = 5.f;
 	tempData.myTotemData.myRadius = 15.f;
-	myTotem = new Entity(eOwnerType::PLAYER, Prism::eOctreeType::DYNAMIC, tempData, aScene, { 128.f, 10.f, 128.f },
+	tempData.myTotemData.myCooldown = 30.f;
+	tempData.myTotemData.myLifeTime = 10.f;
+
+	myTotem = new Entity(eOwnerType::PLAYER, Prism::eOctreeType::DYNAMIC, tempData, aScene, { 128.f, 100.f, 128.f },
 		aTerrain, { 0.f, 0.f, 0.f }, { 1.f, 1.f, 1.f });
 	myTotem->AddToScene();
 
@@ -209,6 +212,10 @@ void PlayerDirector::ReceiveMessage(const OnClickMessage& aMessage)
 
 		case eOnClickEvent::UNIT_ACTION_STOP:
 			mySelectedAction = eSelectedAction::STOP;
+			break;
+
+		case eOnClickEvent::PLACE_TOTEM:
+			mySelectedAction = eSelectedAction::PLACE_TOTEM;
 			break;
 
 		default:
@@ -391,6 +398,12 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 	CU::Vector3<float> secondTargetPos;
 	CU::Vector2<float> mousePosition = CU::InputWrapper::GetInstance()->GetMousePosition();
 
+
+	if (myLeftMouseDown == true && mySelectedAction == eSelectedAction::PLACE_TOTEM)
+	{
+		PlaceTotem(firstTargetPos);
+	}
+
 	if (myLeftMouseDown == true)
 	{
 		myRenderDragSelection = true;
@@ -536,4 +549,10 @@ void PlayerDirector::SelectAllUnits()
 			SelectUnit(myUnits[i]);
 		}
 	}
+}
+
+void PlayerDirector::PlaceTotem(const CU::Vector3f& aPositionInWorld)
+{
+	//myTotem->SetPosition(aPositionInWorld);
+	myTotem->GetComponent<TotemComponent>()->SetTargetPosition(aPositionInWorld);
 }

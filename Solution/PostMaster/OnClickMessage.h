@@ -15,6 +15,7 @@ enum class eOnClickEvent
 	UNIT_ACTION_ATTACK_MOVE,
 	UNIT_ACTION_PATROL,
 	UNIT_ACTION_STAND_GROUND,
+	PLACE_TOTEM
 };
 
 struct OnClickMessage : public Message

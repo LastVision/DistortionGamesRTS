@@ -1,6 +1,7 @@
 #include "stdafx.h"
 
 #include "CollisionComponent.h"
+#include "MathHelper.h"
 #include "HealthComponent.h"
 #include "Intersection.h"
 #include "MathHelper.h"
@@ -15,8 +16,14 @@ TotemComponent::TotemComponent(Entity& aEntity, TotemComponentData& aData)
 	, myRadius(aData.myRadius)
 	, myRadiusSquared(myRadius * myRadius)
 	, myHealPerSecond(aData.myHealPerSecond)
+	, myCurrentCooldown(0)
+	, myOriginalCooldown(aData.myCooldown)
+	, myLifeTime(aData.myLifeTime)
 	, myUnits(GC::playerUnitCount)
+	, myHasReachedTarget(true)
+	, myAlpha(0.f)
 {
+	myOriginalPosition = myEntity.GetOrientation().GetPos();
 }
 
 TotemComponent::~TotemComponent()
@@ -32,7 +39,23 @@ void TotemComponent::Update(float aDeltaTime)
 	{
 		myUnits[i]->GetComponent<HealthComponent>()->Heal(myHealPerSecond*aDeltaTime);
 	}
+	myAlpha += aDeltaTime;
+	myCurrentCooldown -= aDeltaTime;
 
+	if (myHasReachedTarget == false)
+	{
+		myEntity.SetPosition(CU::Math::Lerp<CU::Vector3f>(myOriginalPosition, myTargetPosition, myAlpha));
+	}
+
+
+	if (myAlpha >= 1.f)
+	{
+		myHasReachedTarget = true;
+		if (myAlpha >= 10.f)
+		{
+			myEntity.SetPosition(myOriginalPosition);
+		}
+	}
 }
 
 void TotemComponent::CheckUnitsForRemove(CU::GrowingArray<Entity*>& someUnits) const
@@ -69,5 +92,18 @@ void TotemComponent::CheckUnitsForAdd(const CU::GrowingArray<Entity*>& someUnits
 				someUnitsOut.Add(current);
 			}
 		}
+	}
+}
+
+void TotemComponent::SetTargetPosition(const CU::Vector3f& aTargetPosition)
+{
+	if (myCurrentCooldown <= 0.f)
+	{
+		myTargetPosition = aTargetPosition;
+		myOriginalPosition.x = aTargetPosition.x;
+		myOriginalPosition.z = aTargetPosition.z;
+		myHasReachedTarget = false;
+		myAlpha = 0.f;
+		myCurrentCooldown = myOriginalCooldown;
 	}
 }
