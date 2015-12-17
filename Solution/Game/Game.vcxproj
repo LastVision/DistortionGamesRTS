@@ -195,6 +195,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Ability.h" />
     <ClInclude Include="ConsoleBackspace.h" />
     <ClInclude Include="ConsoleHelp.h" />
     <ClInclude Include="ConsoleHistoryManager.h" />
@@ -220,6 +221,7 @@
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Ability.cpp" />
     <ClCompile Include="ConsoleBackspace.cpp" />
     <ClCompile Include="ConsoleHelp.cpp" />
     <ClCompile Include="ConsoleHistoryManager.cpp" />
