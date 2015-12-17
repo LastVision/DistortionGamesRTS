@@ -123,12 +123,20 @@
     <ClInclude Include="ActorComponentData.h" />
     <ClInclude Include="AnimationComponent.h" />
     <ClInclude Include="AnimationComponentData.h" />
+    <ClInclude Include="ArriveBehavior.h" />
+    <ClInclude Include="Behavior.h" />
+    <ClInclude Include="BlendedBehavior.h" />
     <ClInclude Include="BuildingComponent.h" />
     <ClInclude Include="BuildingComponentData.h" />
     <ClInclude Include="CollisionComponent.h" />
     <ClInclude Include="CollisionComponentData.h" />
+    <ClInclude Include="EnrageComponent.h" />
+    <ClInclude Include="EnrageComponentData.h" />
     <ClInclude Include="EntityEnumConverter.h" />
     <ClInclude Include="EntityId.h" />
+    <ClInclude Include="EvadeBehavior.h" />
+    <ClInclude Include="TotemComponent.h" />
+    <ClInclude Include="TotemComponentData.h" />
     <ClInclude Include="TriggerComponent.h" />
     <ClInclude Include="TriggerComponentData.h" />
     <ClInclude Include="Component.h" />
@@ -149,10 +157,16 @@
   <ItemGroup>
     <ClCompile Include="ActorComponent.cpp" />
     <ClCompile Include="AnimationComponent.cpp" />
+    <ClCompile Include="ArriveBehavior.cpp" />
+    <ClCompile Include="Behavior.cpp" />
+    <ClCompile Include="BlendedBehavior.cpp" />
     <ClCompile Include="BuildingComponent.cpp" />
     <ClCompile Include="CollisionComponent.cpp" />
+    <ClCompile Include="EnrageComponent.cpp" />
     <ClCompile Include="EntityEnumConverter.cpp" />
     <ClCompile Include="EntityId.cpp" />
+    <ClCompile Include="EvadeBehavior.cpp" />
+    <ClCompile Include="TotemComponent.cpp" />
     <ClCompile Include="TriggerComponent.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="ComponentLoader.cpp" />

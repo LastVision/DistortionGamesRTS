@@ -5,8 +5,11 @@
 #include <CollisionComponent.h>
 #include <ControllerComponent.h>
 #include <TimeMultiplierMessage.h>
+#include <Entity.h>
+#include <EntityData.h>
 #include <EntityFactory.h>
 #include <GUIManager.h>
+#include <GraphicsComponent.h>
 #include <HealthComponent.h>
 #include <Intersection.h>
 #include <InputWrapper.h>
@@ -17,11 +20,13 @@
 #include <Terrain.h>
 #include <ToggleGUIMessage.h>
 #include <ToggleBuildTimeMessage.h>
+#include <TotemComponent.h>
 #include <ModelLoader.h>
 #include <SpawnUnitMessage.h>
 #include <SpriteProxy.h>
 #include <FadeMessage.h>
 #include <PostMaster.h>
+
 
 PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aScene, GUI::Cursor* aCursor)
 	: Director(eOwnerType::PLAYER, aTerrain)
@@ -69,12 +74,30 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 	PostMaster::GetInstance()->Subscribe(eMessageType::MOVE_UNITS, this);
 	PostMaster::GetInstance()->Subscribe(eMessageType::TOGGLE_BUILD_TIME, this);
 
+	EntityData tempData;
+	tempData.myGraphicsData.myExistsInEntity = true;
+	tempData.myGraphicsData.myModelPath = "Data/Resource/Model/Prop/Pine_tree/SM_pine_tree_bare_a.fbx";
+	tempData.myGraphicsData.myEffectPath = "Data/Resource/Shader/S_effect_pbl.fx";
+
+	tempData.myTotemData.myExistsInEntity = true;
+	tempData.myTotemData.myHealPerSecond = 5.f;
+	tempData.myTotemData.myRadius = 15.f;
+	tempData.myTotemData.myCooldown = 30.f;
+	tempData.myTotemData.myLifeTime = 10.f;
+
+	myTotem = new Entity(eOwnerType::PLAYER, Prism::eOctreeType::DYNAMIC, tempData, aScene, { 128.f, 100.f, 128.f },
+		aTerrain, { 0.f, 0.f, 0.f }, { 1.f, 1.f, 1.f });
+	myTotem->AddToScene();
+
+
 }
 
 PlayerDirector::~PlayerDirector()
 {
+	myTotem->RemoveFromScene();
 	SAFE_DELETE(myGUIManager);
 	SAFE_DELETE(myDragSelectionSprite);
+	SAFE_DELETE(myTotem);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::TOGGLE_GUI, this);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::ON_CLICK, this);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::TIME_MULTIPLIER, this);
@@ -116,6 +139,7 @@ void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 	Director::Update(aDeltaTime);
 	UpdateMouseInteraction(aCamera);
 	myBuilding->Update(aDeltaTime);
+	myTotem->Update(aDeltaTime);
 
 	for (int i = mySelectedUnits.Size() - 1; i >= 0; --i) // remove dead units
 	{
@@ -190,6 +214,10 @@ void PlayerDirector::ReceiveMessage(const OnClickMessage& aMessage)
 
 		case eOnClickEvent::UNIT_ACTION_STOP:
 			mySelectedAction = eSelectedAction::STOP;
+			break;
+
+		case eOnClickEvent::PLACE_TOTEM:
+			mySelectedAction = eSelectedAction::PLACE_TOTEM;
 			break;
 
 		default:
@@ -372,6 +400,12 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 	CU::Vector3<float> secondTargetPos;
 	CU::Vector2<float> mousePosition = CU::InputWrapper::GetInstance()->GetMousePosition();
 
+
+	if (myLeftMouseDown == true && mySelectedAction == eSelectedAction::PLACE_TOTEM)
+	{
+		PlaceTotem(firstTargetPos);
+	}
+
 	if (myLeftMouseDown == true)
 	{
 		myRenderDragSelection = true;
@@ -517,4 +551,10 @@ void PlayerDirector::SelectAllUnits()
 			SelectUnit(myUnits[i]);
 		}
 	}
+}
+
+void PlayerDirector::PlaceTotem(const CU::Vector3f& aPositionInWorld)
+{
+	//myTotem->SetPosition(aPositionInWorld);
+	myTotem->GetComponent<TotemComponent>()->SetTargetPosition(aPositionInWorld);
 }

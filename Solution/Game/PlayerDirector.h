@@ -23,6 +23,8 @@ namespace CU
 	}
 }
 
+class Entity;
+
 enum class eSelectedAction
 {
 	NONE,
@@ -31,7 +33,8 @@ enum class eSelectedAction
 	STOP,
 	ATTACK_MOVE,
 	HOLD_POSITION,
-	PATROL
+	PATROL,
+	PLACE_TOTEM
 };
 
 class BuildingComponent;
@@ -72,6 +75,8 @@ private:
 	void SelectOrHoverEntity(Entity* aEntity, bool &aSelected, bool &aHovered
 		, const CU::Intersection::LineSegment3D& aMouseRay);
 	void SelectAllUnits();
+	
+	void PlaceTotem(const CU::Vector3f& aPositionInWorld);
 
 	CU::GrowingArray<Entity*> mySelectedUnits;
 	GUI::GUIManager* myGUIManager;
@@ -100,6 +105,8 @@ private:
 	CU::Vector3<float> myFirstMousePositionInWorld;
 	CU::GrowingArray<CU::Vector3<float>> myDragSelectionPositions;
 	Prism::SpriteProxy* myDragSelectionSprite;
+
+	Entity* myTotem;
 
 
 };

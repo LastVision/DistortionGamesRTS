@@ -158,6 +158,10 @@ namespace GUI
 		{
 			myClickEvent = new OnClickMessage(eOnClickEvent::UNIT_ACTION_PATROL);
 		}
+		else if (clickEvent == "action_place_totem")
+		{
+			myClickEvent = new OnClickMessage(eOnClickEvent::PLACE_TOTEM);
+		}
 		else if (clickEvent == "action_move_attack")
 		{
 			myClickEvent = new OnClickMessage(eOnClickEvent::UNIT_ACTION_ATTACK_MOVE);
