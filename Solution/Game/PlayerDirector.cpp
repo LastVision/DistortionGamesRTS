@@ -5,8 +5,10 @@
 #include <CollisionComponent.h>
 #include <ControllerComponent.h>
 #include <TimeMultiplierMessage.h>
+#include <Entity.h>
 #include <EntityFactory.h>
 #include <GUIManager.h>
+#include <GraphicsComponent.h>
 #include <HealthComponent.h>
 #include <Intersection.h>
 #include <InputWrapper.h>
@@ -17,11 +19,13 @@
 #include <Terrain.h>
 #include <ToggleGUIMessage.h>
 #include <ToggleBuildTimeMessage.h>
+#include <TotemComponent.h>
 #include <ModelLoader.h>
 #include <SpawnUnitMessage.h>
 #include <Sprite.h>
 #include <FadeMessage.h>
 #include <PostMaster.h>
+
 
 PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aScene, GUI::Cursor* aCursor)
 	: Director(eOwnerType::PLAYER, aTerrain)
@@ -66,6 +70,9 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 	PostMaster::GetInstance()->Subscribe(eMessageType::TIME_MULTIPLIER, this);
 	PostMaster::GetInstance()->Subscribe(eMessageType::MOVE_UNITS, this);
 	PostMaster::GetInstance()->Subscribe(eMessageType::TOGGLE_BUILD_TIME, this);
+
+
+
 
 }
 

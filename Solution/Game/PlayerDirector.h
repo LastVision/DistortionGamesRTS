@@ -23,6 +23,8 @@ namespace CU
 	}
 }
 
+class Entity;
+
 enum class eSelectedAction
 {
 	NONE,
@@ -100,6 +102,8 @@ private:
 	CU::Vector3<float> myFirstMousePositionInWorld;
 	CU::GrowingArray<CU::Vector3<float>> myDragSelectionPositions;
 	Prism::Sprite* myDragSelectionSprite;
+
+	Entity* myTotem;
 
 
 };

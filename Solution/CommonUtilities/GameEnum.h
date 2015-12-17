@@ -60,6 +60,7 @@ enum class eComponentType
 	MOVEMENT,
 	HEALTH,
 	BUILDING,
+	TOTEM,
 	_COUNT,
 };
 

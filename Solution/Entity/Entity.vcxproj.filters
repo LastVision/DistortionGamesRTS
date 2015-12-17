@@ -46,6 +46,9 @@
     <Filter Include="Component\Collision">
       <UniqueIdentifier>{5043742a-adfa-47f4-82c5-69554f24e8cf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Component\Totem">
+      <UniqueIdentifier>{3d3c71e4-7e08-4c84-9cb7-78834e005011}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -90,6 +93,9 @@
       <Filter>EntityEnum</Filter>
     </ClCompile>
     <ClCompile Include="EntityId.cpp" />
+    <ClCompile Include="TotemComponent.cpp">
+      <Filter>Component\Totem</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -164,5 +170,8 @@
       <Filter>EntityEnum</Filter>
     </ClInclude>
     <ClInclude Include="EntityId.h" />
+    <ClInclude Include="TotemComponent.h">
+      <Filter>Component\Totem</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
