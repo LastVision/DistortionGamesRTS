@@ -5,6 +5,7 @@
 #include "BuildingComponent.h"
 #include "CollisionComponent.h"
 #include "ControllerComponent.h"
+#include "EnrageComponent.h"
 #include "GraphicsComponent.h"
 #include "HealthComponent.h"
 #include "EntityId.h"
@@ -91,6 +92,11 @@ Entity::Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& a
 	{
 		myOrientation.SetPos(aStartPosition);
 		myComponents[static_cast<int>(eComponentType::TOTEM)] = new TotemComponent(*this, aEntityData.myTotemData);
+	}
+
+	if (aEntityData.myEnrageData.myExistsInEntity == true)
+	{
+		myComponents[static_cast<int>(eComponentType::ENRAGE)] = new EnrageComponent(*this, aEntityData.myEnrageData);
 	}
 	
 }

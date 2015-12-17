@@ -62,8 +62,7 @@ void EnrageComponent::Activate()
 		myOriginalRechargeTime = controller->GetAttackSpeed();
 
 
-		health->SetHealth(health->GetCurrentHealth() - (health->GetMaxHealth()
-			* ((myData.myHealthModifier + 100.f) / 100.f)));
+		health->TakeDamage((health->GetMaxHealth() * (myData.myHealthModifier / 100.f)) + myOriginalArmor);
 		health->SetArmor(myOriginalArmor * ((myData.myArmorModifier + 100.f) / 100.f));
 		actor->SetSpeed(myOriginalMovementSpeed * ((myData.myMovementSpeedModifier + 100.f) / 100.f));
 

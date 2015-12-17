@@ -99,6 +99,7 @@ enum class eComponentType
 	HEALTH,
 	BUILDING,
 	TOTEM,
+	ENRAGE,
 	_COUNT,
 };
 
