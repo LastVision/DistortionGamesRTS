@@ -54,9 +54,6 @@
     <ClCompile Include="EmitterManager.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
-    <ClCompile Include="TriggerManager.cpp">
-      <Filter>Managers</Filter>
-    </ClCompile>
     <ClCompile Include="NeutralDirector.cpp">
       <Filter>Director</Filter>
     </ClCompile>
@@ -122,9 +119,6 @@
       <Filter>Console</Filter>
     </ClInclude>
     <ClInclude Include="EmitterManager.h">
-      <Filter>Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="TriggerManager.h">
       <Filter>Managers</Filter>
     </ClInclude>
     <ClInclude Include="NeutralDirector.h">
