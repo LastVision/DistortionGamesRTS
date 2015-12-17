@@ -54,12 +54,10 @@
     <ClCompile Include="EmitterManager.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
-    <ClCompile Include="TriggerManager.cpp">
-      <Filter>Managers</Filter>
-    </ClCompile>
     <ClCompile Include="NeutralDirector.cpp">
       <Filter>Director</Filter>
     </ClCompile>
+    <ClCompile Include="Ability.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -124,12 +122,10 @@
     <ClInclude Include="EmitterManager.h">
       <Filter>Managers</Filter>
     </ClInclude>
-    <ClInclude Include="TriggerManager.h">
-      <Filter>Managers</Filter>
-    </ClInclude>
     <ClInclude Include="NeutralDirector.h">
       <Filter>Director</Filter>
     </ClInclude>
+    <ClInclude Include="Ability.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="PreCompile">

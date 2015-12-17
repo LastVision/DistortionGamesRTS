@@ -24,6 +24,8 @@ namespace Prism
 
 			void Render();
 
+			const CU::GrowingArray<Triangle*>& GetLatestPath();
+
 		private:
 			void operator=(PathFinderAStar&) = delete;
 			bool FindStartAndEnd(const CU::Vector2<float>& aStart, const CU::Vector2<float>& anEnd);
@@ -39,6 +41,8 @@ namespace Prism
 
 			float myHeuristicMult;
 			float myPathLength;
+
+			CU::GrowingArray<Triangle*> myLatestPath;
 		};
 
 		inline float PathFinderAStar::CostEstimate(Triangle* aStart, Triangle* anEnd) const
@@ -46,6 +50,11 @@ namespace Prism
 			return myHeuristicMult
 				* (fabsf(aStart->myCenter.x - anEnd->myCenter.x)
 				+ fabsf(aStart->myCenter.y - anEnd->myCenter.y));
+		}
+
+		inline const CU::GrowingArray<Triangle*>& PathFinderAStar::GetLatestPath()
+		{
+			return myLatestPath;
 		}
 	}
 }

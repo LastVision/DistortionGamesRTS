@@ -17,6 +17,8 @@ namespace Prism
 			, myLineSegment(aVertex1->myPosition, aVertex2->myPosition)
 			, myTriangle1(nullptr)
 			, myTriangle2(nullptr)
+			, myPortal1(nullptr)
+			, myPortal2(nullptr)
 		{
 			++myVertex1->myEdgeCount;
 			++myVertex2->myEdgeCount;
@@ -51,6 +53,8 @@ namespace Prism
 			// needed for cutting in navMesh..?
 			SAFE_DELETE(myTriangle1);
 			SAFE_DELETE(myTriangle2);
+			SAFE_DELETE(myPortal1);
+			SAFE_DELETE(myPortal2);
 		}
 
 		void Edge::Render()
@@ -98,6 +102,68 @@ namespace Prism
 		{
 			myPosition3D1 = aTerrain->GetHeight(myPosition3D1, 2.f);
 			myPosition3D2 = aTerrain->GetHeight(myPosition3D2, 2.f);
+		}
+
+		Portal* Edge::GetPortal(const Triangle* aTriangle) const
+		{
+			if (aTriangle == myTriangle1)
+			{
+				return myPortal1;
+			}
+			DL_ASSERT_EXP(aTriangle == myTriangle2, "Triangle not part of edge");
+			return myPortal2;
+		}
+
+		void Edge::AddTriangle(Triangle* aTriangle)
+		{
+			if (myTriangle1 == nullptr)
+			{
+				myTriangle1 = aTriangle;
+			}
+			else
+			{
+				DL_ASSERT_EXP(myTriangle2 == nullptr, "edge already has two triangles");
+				myTriangle2 = aTriangle;
+			}
+		}
+
+		void Edge::CalcPortals()
+		{
+			if (myTriangle1 != nullptr)
+			{
+				static CU::Matrix33<float> rotationMatrix = CU::Matrix33<float>::CreateRotateAroundZ(CU_PI_DIV_2);
+
+				CU::Vector2<float> edge = myVertex2->myPosition - myVertex1->myPosition;
+
+				CU::Vector2<float> normal = edge * rotationMatrix;
+
+				CU::Vector2<float> fromCenter = myVertex1->myPosition - myTriangle1->myCenter2D;
+
+				if (CU::Dot(normal, fromCenter) > 0)
+				{
+					SAFE_DELETE(myPortal1);
+					myPortal1 = new Portal(myVertex1->myPosition, myVertex2->myPosition);
+					if (myTriangle2 != nullptr)
+					{
+						SAFE_DELETE(myPortal2);
+						myPortal2 = new Portal(myVertex2->myPosition, myVertex1->myPosition);
+					}
+				}
+				else
+				{
+					SAFE_DELETE(myPortal1);
+					myPortal1 = new Portal(myVertex2->myPosition, myVertex1->myPosition);
+					if (myTriangle2 != nullptr)
+					{
+						SAFE_DELETE(myPortal2);
+						myPortal2 = new Portal(myVertex1->myPosition, myVertex2->myPosition);
+					}
+				}
+			}
+			else if (myTriangle2 != nullptr)
+			{
+				DL_ASSERT("Triangle 2 exists without Triangle 1");
+			}
 		}
 	}
 }
