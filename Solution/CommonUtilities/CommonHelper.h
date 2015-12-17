@@ -98,6 +98,25 @@ namespace CU
 		return generatedDataFilePath;
 	}
 
+	//If OptionalExtension is blank, the outputstring will have the same extension as the input string
+	//OptionalExtension needs to be entered without a period, "xml", NOT ".xml"
+	inline std::string GetRealDataFolderFilePath(const std::string& aFilePath, const std::string& anOptionalNewExtension = "")
+	{
+		std::string pathWithoutData(aFilePath.begin() + 14, aFilePath.end());
+
+		if (anOptionalNewExtension != "")
+		{
+			int extensionIndex = pathWithoutData.find_last_of(".");
+			pathWithoutData = std::string(pathWithoutData.begin(), pathWithoutData.begin() + extensionIndex + 1);
+			pathWithoutData += anOptionalNewExtension;
+		}
+
+		std::string realDataFilePath = "Data/";
+		realDataFilePath += pathWithoutData;
+
+		return realDataFilePath;
+	}
+
 	inline void BuildFoldersInPath(const std::string& aPath)
 	{
 		unsigned int slashIndex = aPath.find_first_of("/");

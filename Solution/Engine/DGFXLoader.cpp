@@ -44,6 +44,14 @@ namespace Prism
 
 		std::string dgfxFile = CU::GetGeneratedDataFolderFilePath(aFilePath, "dgfx");
 
+#ifndef RELEASE_BUILD
+		if (CheckIfFbxIsNewer(dgfxFile) == true)
+		{
+			DL_MESSAGE_BOX("Found a FBX-File thats newer than the DGFX-File, did you forget to run the tool?", "Old DGFX", MB_ICONQUESTION);
+		}
+#endif
+
+
 		CU::TimerManager::GetInstance()->StartTimer("LoadDGFX");
 
 		std::fstream file;
@@ -77,6 +85,13 @@ namespace Prism
 		}
 
 		std::string dgfxFile = CU::GetGeneratedDataFolderFilePath(aFilePath, "dgfx");
+
+#ifndef RELEASE_BUILD
+		if (CheckIfFbxIsNewer(dgfxFile) == true)
+		{
+			DL_MESSAGE_BOX("Found a FBX-File thats newer than the DGFX-File, did you forget to run the tool?", "Old DGFX", MB_ICONQUESTION);
+		}
+#endif
 
 		CU::TimerManager::GetInstance()->StartTimer("LoadDGFXAnimated");
 
@@ -112,6 +127,13 @@ namespace Prism
 		}
 
 		std::string dgfxFile = CU::GetGeneratedDataFolderFilePath(aFilePath, "dgfx");
+
+#ifndef RELEASE_BUILD
+		if (CheckIfFbxIsNewer(dgfxFile) == true)
+		{
+			DL_MESSAGE_BOX("Found a FBX-File thats newer than the DGFX-File, did you forget to run the tool?", "Old DGFX", MB_ICONQUESTION);
+		}
+#endif
 
 		CU::TimerManager::GetInstance()->StartTimer("LoadAnimationDGFX");
 
@@ -691,5 +713,32 @@ namespace Prism
 		}
 
 		delete[] boneName;
+	}
+
+	bool DGFXLoader::CheckIfFbxIsNewer(const std::string& aDGFXPath)
+	{
+		std::string fbxPath = CU::GetRealDataFolderFilePath(aDGFXPath, "fbx");
+
+		HANDLE dgfxHandle;
+		HANDLE fbxHandle;
+
+		dgfxHandle = CreateFile(aDGFXPath.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL
+			, OPEN_EXISTING, 0, NULL);
+
+		fbxHandle = CreateFile(fbxPath.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL
+			, OPEN_EXISTING, 0, NULL);
+
+		FILETIME dgfxTime;
+		FILETIME fbxTime;
+
+		GetFileTime(dgfxHandle, NULL, NULL, &dgfxTime);
+		GetFileTime(fbxHandle, NULL, NULL, &fbxTime);
+
+		if (CompareFileTime(&dgfxTime, &fbxTime) == -1)
+		{
+			return true;
+		}
+
+		return false;
 	}
 }
