@@ -13,7 +13,7 @@
 NeutralDirector::NeutralDirector(const Prism::Terrain& aTerrain, Prism::Scene& aScene)
 	: Director(eOwnerType::NEUTRAL, aTerrain)
 {
-	for (int i = 0; i < 2; ++i)
+	for (int i = 0; i < 8; ++i)
 	{
 		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::NEUTRAL, eEntityType::UNIT, eUnitType::GRUNT, Prism::eOctreeType::DYNAMIC,
 			aScene, { 20.f + i, 0.f, 40.f }, aTerrain));
