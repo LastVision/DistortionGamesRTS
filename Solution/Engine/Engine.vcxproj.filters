@@ -39,9 +39,6 @@
       <Filter>Octree</Filter>
     </ClCompile>
     <ClCompile Include="Frustum.cpp" />
-    <ClCompile Include="Sprite.cpp">
-      <Filter>Rendering</Filter>
-    </ClCompile>
     <ClCompile Include="Effect.cpp">
       <Filter>Rendering\Effect</Filter>
     </ClCompile>
@@ -180,6 +177,12 @@
     <ClCompile Include="PathFinderAStar.cpp">
       <Filter>Terrain\PathFinder</Filter>
     </ClCompile>
+    <ClCompile Include="Sprite.cpp">
+      <Filter>Rendering\Sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteProxy.cpp">
+      <Filter>Rendering\Sprite</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h" />
@@ -252,9 +255,6 @@
     <ClInclude Include="EngineEnums.h" />
     <ClInclude Include="LodStructs.h">
       <Filter>FBX</Filter>
-    </ClInclude>
-    <ClInclude Include="Sprite.h">
-      <Filter>Rendering</Filter>
     </ClInclude>
     <ClInclude Include="Effect.h">
       <Filter>Rendering\Effect</Filter>
@@ -406,6 +406,12 @@
     <ClInclude Include="PathFinderAStar.h">
       <Filter>Terrain\PathFinder</Filter>
     </ClInclude>
+    <ClInclude Include="Sprite.h">
+      <Filter>Rendering\Sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteProxy.h">
+      <Filter>Rendering\Sprite</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Precompile">
@@ -467,6 +473,9 @@
     </Filter>
     <Filter Include="Terrain\PathFinder">
       <UniqueIdentifier>{8a51d311-16cf-41d4-bb2f-4c3e6d08dd77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering\Sprite">
+      <UniqueIdentifier>{60336301-3065-4576-a4c9-e0a77c04a688}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
