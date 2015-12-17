@@ -22,6 +22,7 @@ TotemComponent::TotemComponent(Entity& aEntity, TotemComponentData& aData)
 	, myUnits(GC::playerUnitCount)
 	, myHasReachedTarget(true)
 	, myAlpha(0.f)
+	, myActive(false)
 {
 	myOriginalPosition = myEntity.GetOrientation().GetPos();
 }
@@ -35,10 +36,14 @@ void TotemComponent::Update(float aDeltaTime)
 	CheckUnitsForRemove(myUnits);
 	CheckUnitsForAdd(PollingStation::GetInstance()->GetUnits(myEntity.GetOwner()), myUnits);
 
-	for (int i = 0; i < myUnits.Size(); ++i)
+	if (myActive == true)
 	{
-		myUnits[i]->GetComponent<HealthComponent>()->Heal(myHealPerSecond*aDeltaTime);
+		for (int i = 0; i < myUnits.Size(); ++i)
+		{
+			myUnits[i]->GetComponent<HealthComponent>()->Heal(myHealPerSecond*aDeltaTime);
+		}
 	}
+
 	myAlpha += aDeltaTime;
 	myCurrentCooldown -= aDeltaTime;
 
@@ -51,8 +56,9 @@ void TotemComponent::Update(float aDeltaTime)
 	if (myAlpha >= 1.f)
 	{
 		myHasReachedTarget = true;
-		if (myAlpha >= 10.f)
+		if (myAlpha >= myOriginalCooldown)
 		{
+			myActive = false;
 			myEntity.SetPosition(myOriginalPosition);
 		}
 	}
@@ -104,6 +110,7 @@ void TotemComponent::SetTargetPosition(const CU::Vector3f& aTargetPosition)
 		myOriginalPosition.z = aTargetPosition.z;
 		myHasReachedTarget = false;
 		myAlpha = 0.f;
+		myActive = true;
 		myCurrentCooldown = myOriginalCooldown;
 	}
 }

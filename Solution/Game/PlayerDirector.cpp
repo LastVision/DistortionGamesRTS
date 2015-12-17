@@ -5,6 +5,7 @@
 #include <CollisionComponent.h>
 #include <ControllerComponent.h>
 #include <TimeMultiplierMessage.h>
+#include <EnrageComponent.h>
 #include <Entity.h>
 #include <EntityData.h>
 #include <EntityFactory.h>
@@ -218,6 +219,11 @@ void PlayerDirector::ReceiveMessage(const OnClickMessage& aMessage)
 			mySelectedAction = eSelectedAction::PLACE_TOTEM;
 			break;
 
+		case eOnClickEvent::ENRAGE:
+			mySelectedAction = eSelectedAction::ENRAGE;
+			break;
+
+
 		default:
 			break;
 		}
@@ -404,6 +410,12 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 		PlaceTotem(firstTargetPos);
 	}
 
+	if (mySelectedAction == eSelectedAction::ENRAGE)
+	{
+		Enrage();
+	}
+
+
 	if (myLeftMouseDown == true)
 	{
 		myRenderDragSelection = true;
@@ -555,4 +567,16 @@ void PlayerDirector::PlaceTotem(const CU::Vector3f& aPositionInWorld)
 {
 	//myTotem->SetPosition(aPositionInWorld);
 	myTotem->GetComponent<TotemComponent>()->SetTargetPosition(aPositionInWorld);
+}
+
+void PlayerDirector::Enrage()
+{
+	for (int i = 0; i < mySelectedUnits.Size(); ++i)
+	{
+		EnrageComponent* enrageComp = mySelectedUnits[i]->GetComponent<EnrageComponent>();
+		if (enrageComp != nullptr)
+		{
+			enrageComp->Activate();
+		}
+	}
 }

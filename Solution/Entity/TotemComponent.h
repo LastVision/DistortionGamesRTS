@@ -29,6 +29,8 @@ private:
 	float myAlpha;
 	bool myHasReachedTarget;
 
+	bool myActive;
+
 
 	CU::Vector3f myOriginalPosition;
 	CU::Vector3f myTargetPosition;

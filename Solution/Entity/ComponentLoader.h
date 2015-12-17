@@ -27,6 +27,7 @@ public:
 	void LoadGraphicsComponent(XMLReader& aDocument, tinyxml2::XMLElement* aSourceElement, GraphicsComponentData& aOutputData);
 	void LoadHealthComponent(XMLReader& aDocument, tinyxml2::XMLElement* aSourceElement, HealthComponentData& aOutputData);
 	void LoadTriggerComponent(XMLReader& aDocument, tinyxml2::XMLElement* aSourceElement, TriggerComponentData& aOutputData);
+	void LoadEnrageComponent(XMLReader& aDocument, tinyxml2::XMLElement* aSourceElement, EnrageComponentData& aOutputData);
 private:
 	void FailedToReadChildElementMessage(const std::string& aElement, const std::string& aParent);
 };

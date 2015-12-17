@@ -34,7 +34,8 @@ enum class eSelectedAction
 	ATTACK_MOVE,
 	HOLD_POSITION,
 	PATROL,
-	PLACE_TOTEM
+	PLACE_TOTEM,
+	ENRAGE
 };
 
 class BuildingComponent;
@@ -77,6 +78,7 @@ private:
 	void SelectAllUnits();
 	
 	void PlaceTotem(const CU::Vector3f& aPositionInWorld);
+	void Enrage();
 
 	CU::GrowingArray<Entity*> mySelectedUnits;
 	GUI::GUIManager* myGUIManager;

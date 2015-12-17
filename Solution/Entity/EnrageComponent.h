@@ -10,6 +10,8 @@ public:
 
 	void Update(float aDeltaTime);
 
+	static eComponentType GetTypeStatic();
+	virtual eComponentType GetType();
 	bool IsActive();
 	void Activate();
 
@@ -31,6 +33,16 @@ private:
 	float myOriginalMovementSpeed;
 
 };
+
+inline eComponentType EnrageComponent::GetTypeStatic()
+{
+	return eComponentType::ENRAGE;
+}
+
+inline eComponentType EnrageComponent::GetType()
+{
+	return GetTypeStatic();
+}
 
 inline bool EnrageComponent::IsActive()
 {

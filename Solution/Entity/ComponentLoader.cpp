@@ -199,6 +199,35 @@ void ComponentLoader::LoadTriggerComponent(XMLReader& aDocument, tinyxml2::XMLEl
 	}
 }
 
+void ComponentLoader::LoadEnrageComponent(XMLReader& aDocument, tinyxml2::XMLElement* aSourceElement, EnrageComponentData& aOutputData)
+{
+	aOutputData.myExistsInEntity = true;
+
+	tinyxml2::XMLElement* e = aDocument.ForceFindFirstChild(aSourceElement, "Duration");
+	aDocument.ForceReadAttribute(e, "value", aOutputData.myDuration);
+
+	e = aDocument.ForceFindFirstChild(aSourceElement, "Cooldown");
+	aDocument.ForceReadAttribute(e, "value", aOutputData.myCooldown);
+
+	e = aDocument.ForceFindFirstChild(aSourceElement, "ArmorModifier");
+	aDocument.ForceReadAttribute(e, "value", aOutputData.myArmorModifier);
+
+	e = aDocument.ForceFindFirstChild(aSourceElement, "HealthModifier");
+	aDocument.ForceReadAttribute(e, "value", aOutputData.myHealthModifier);
+
+	e = aDocument.ForceFindFirstChild(aSourceElement, "AttackDamageModifier");
+	aDocument.ForceReadAttribute(e, "value", aOutputData.myAttackDamageModifier);
+
+	e = aDocument.ForceFindFirstChild(aSourceElement, "AttackRange2Modifier");
+	aDocument.ForceReadAttribute(e, "value", aOutputData.myAttackRange2Modifier);
+
+	e = aDocument.ForceFindFirstChild(aSourceElement, "RechargeTimeModifier");
+	aDocument.ForceReadAttribute(e, "value", aOutputData.myRechargeTimeModifier);
+
+	e = aDocument.ForceFindFirstChild(aSourceElement, "MovementSpeedModifier");
+	aDocument.ForceReadAttribute(e, "value", aOutputData.myMovementSpeedModifier);
+}
+
 void ComponentLoader::FailedToReadChildElementMessage(const std::string& aElement, const std::string& aParent)
 {
 	std::string errorMessage = "The element " + aElement + " in " + aParent +

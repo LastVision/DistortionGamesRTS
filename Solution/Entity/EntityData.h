@@ -5,6 +5,7 @@
 #include "BuildingComponentData.h"
 #include "CollisionComponentData.h"
 #include "ControllerComponentData.h"
+#include "EnrageComponentData.h"
 #include "GraphicsComponentData.h"
 #include "HealthComponentData.h"
 #include "TriggerComponentData.h"
@@ -22,6 +23,7 @@ struct EntityData
 	HealthComponentData myHealthData;
 	TriggerComponentData myTriggerData;
 	TotemComponentData myTotemData;
+	EnrageComponentData myEnrageData;
 
 	union 
 	{

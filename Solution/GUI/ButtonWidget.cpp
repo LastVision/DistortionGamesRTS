@@ -170,6 +170,10 @@ namespace GUI
 		{
 			myClickEvent = new OnClickMessage(eOnClickEvent::UNIT_ACTION_STAND_GROUND);
 		}
+		else if (clickEvent == "action_enrage")
+		{
+			myClickEvent = new OnClickMessage(eOnClickEvent::ENRAGE);
+		}
 		else if (clickEvent == "spawn_unit")
 		{
 			int ID = -1;
