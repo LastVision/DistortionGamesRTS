@@ -457,7 +457,7 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 		mySelectionSpriteRenderPosition = renderPosition;
 	}
 
-	Entity* hoveredEnemy = PollingStation::GetInstance()->FindEntityAtPosition(firstTargetPos, eOwnerType::ENEMY);
+	Entity* hoveredEnemy = PollingStation::GetInstance()->FindEntityAtPosition(firstTargetPos, eOwnerType::ENEMY | eOwnerType::NEUTRAL);
 	if (hoveredEnemy != nullptr)
 	{
 		Prism::RenderBox(hoveredEnemy->GetOrientation().GetPos(), eColorDebug::RED);
