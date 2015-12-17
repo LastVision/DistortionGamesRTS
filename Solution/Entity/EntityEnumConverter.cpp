@@ -187,21 +187,21 @@ namespace EntityEnumConverter
 		{
 			return ePropType::PIPES_B;
 		}
-		else if (aPropType == "sm_rumble_a")
+		else if (aPropType == "sm_rubble_a")
 		{
-			return ePropType::RUMBLE_A;
+			return ePropType::RUBBLE_A;
 		}
-		else if (aPropType == "sm_rumble_b")
+		else if (aPropType == "sm_rubble_b")
 		{
-			return ePropType::RUMBLE_B;
+			return ePropType::RUBBLE_B;
 		}
-		else if (aPropType == "sm_rumble_c")
+		else if (aPropType == "sm_rubble_c")
 		{
-			return ePropType::RUMBLE_C;
+			return ePropType::RUBBLE_C;
 		}
-		else if (aPropType == "sm_rumble_d")
+		else if (aPropType == "sm_rubble_d")
 		{
-			return ePropType::RUMBLE_D;
+			return ePropType::RUBBLE_D;
 		}
 		else if (aPropType == "sm_tank_a")
 		{
