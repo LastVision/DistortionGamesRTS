@@ -9,8 +9,15 @@ namespace GUI
 		, myIsFloat(false)
 	{
 		mySize = aSize;
-		myBackgroundSprite = new Prism::Sprite("Data/Resource/Texture/UI/T_healthbar_background.dds", mySize, mySize / 2.f);
-		myValueSprite = new Prism::Sprite("Data/Resource/Texture/UI/T_healthbar_value.dds", mySize, mySize / 2.f);
+
+		myBackgroundSprite = Prism::ModelLoader::GetInstance()->LoadSprite(
+			"Data/Resource/Texture/UI/T_healthbar_background.dds", mySize, mySize / 2.f);
+
+		myValueSprite = Prism::ModelLoader::GetInstance()->LoadSprite(
+			"Data/Resource/Texture/UI/T_healthbar_value.dds", mySize, mySize / 2.f);
+
+		/*myBackgroundSprite = new Prism::Sprite("Data/Resource/Texture/UI/T_healthbar_background.dds", mySize, mySize / 2.f);
+		myValueSprite = new Prism::Sprite("Data/Resource/Texture/UI/T_healthbar_value.dds", mySize, mySize / 2.f);*/
 	}
 
 	BarWidget::BarWidget(const float& aMaxValue, const float& aCurrentValue, CU::Vector2<float> aSize)
@@ -19,8 +26,15 @@ namespace GUI
 		, myIsFloat(true)
 	{
 		mySize = aSize;
-		myBackgroundSprite = new Prism::Sprite("Data/Resource/Texture/UI/T_healthbar_background.dds", mySize, mySize / 2.f);
-		myValueSprite = new Prism::Sprite("Data/Resource/Texture/UI/T_healthbar_value.dds", mySize, mySize / 2.f);
+
+		myBackgroundSprite = Prism::ModelLoader::GetInstance()->LoadSprite(
+			"Data/Resource/Texture/UI/T_healthbar_background.dds", mySize, mySize / 2.f);
+
+		myValueSprite = Prism::ModelLoader::GetInstance()->LoadSprite(
+			"Data/Resource/Texture/UI/T_healthbar_value.dds", mySize, mySize / 2.f);
+
+		/*myBackgroundSprite = new Prism::Sprite("Data/Resource/Texture/UI/T_healthbar_background.dds", mySize, mySize / 2.f);
+		myValueSprite = new Prism::Sprite("Data/Resource/Texture/UI/T_healthbar_value.dds", mySize, mySize / 2.f);*/
 	}
 
 	BarWidget::~BarWidget()

@@ -3,7 +3,7 @@
 
 namespace Prism
 {
-	class Sprite;
+	class SpriteProxy;
 	class Camera;
 }
 
@@ -37,13 +37,13 @@ namespace GUI
 		void RenderResourcePoints(const CU::Vector2<float>& aParentPosition);
 		void RenderBases(const CU::Vector2<float>& aParentPosition);
 
-		Prism::Sprite* myPlaceholderSprite;
+		Prism::SpriteProxy* myPlaceholderSprite;
 
-		Prism::Sprite* myUnitSprite;
-		Prism::Sprite* myBaseSprite;
-		Prism::Sprite* myResourcePointSprite;
-		Prism::Sprite* myVictoryPointSprite;
-		Prism::Sprite* myCameraFrustum;
+		Prism::SpriteProxy* myUnitSprite;
+		Prism::SpriteProxy* myBaseSprite;
+		Prism::SpriteProxy* myResourcePointSprite;
+		Prism::SpriteProxy* myVictoryPointSprite;
+		Prism::SpriteProxy* myCameraFrustum;
 
 		const CU::Matrix44<float>* myCameraOrientation;
 		const bool& myCantClickOn;

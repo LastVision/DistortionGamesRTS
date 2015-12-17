@@ -220,11 +220,20 @@ namespace Prism
 			myVertexBuffer->myVertexBuffer->Release();
 
 		myVertexBufferDesc->ByteWidth = aVertexSize * aVertexCount;
-		myInitData->pSysMem = aVertexData;
 
+		HRESULT hr;
+		if (aVertexData != nullptr)
+		{
+			myInitData->pSysMem = aVertexData;
+			hr = Engine::GetInstance()->GetDevice()->CreateBuffer(myVertexBufferDesc, myInitData
+				, &myVertexBuffer->myVertexBuffer);
+		}
+		else
+		{
+			hr = Engine::GetInstance()->GetDevice()->CreateBuffer(myVertexBufferDesc, NULL
+				, &myVertexBuffer->myVertexBuffer);
+		}
 
-		HRESULT hr = Engine::GetInstance()->GetDevice()->CreateBuffer(myVertexBufferDesc, myInitData
-			, &myVertexBuffer->myVertexBuffer);
 		if (FAILED(hr) != S_OK)
 		{
 			DL_ASSERT("BaseModel::SetupVertexBuffer: Failed to SetupVertexBuffer");

@@ -6,7 +6,7 @@ namespace Prism
 	class Camera;
 	class Terrain;
 	class Scene;
-	class Sprite;
+	class SpriteProxy;
 }
 
 namespace GUI
@@ -104,7 +104,7 @@ private:
 	CU::Vector3<float> myFirstCameraPosition;
 	CU::Vector3<float> myFirstMousePositionInWorld;
 	CU::GrowingArray<CU::Vector3<float>> myDragSelectionPositions;
-	Prism::Sprite* myDragSelectionSprite;
+	Prism::SpriteProxy* myDragSelectionSprite;
 
 	Entity* myTotem;
 

@@ -10,8 +10,10 @@ namespace GUI
 	{
 		myWindowSize.x = float(aWindowSize.x);
 		myWindowSize.y = float(aWindowSize.y);
-
-		mySprite = new Prism::Sprite("Data/Resource/Texture/UI/T_crosshair_default.dds", { 70.f, 70.f }, { 35.f, 35.f });
+		
+		mySprite = Prism::ModelLoader::GetInstance()->LoadSprite(
+			"Data/Resource/Texture/UI/T_crosshair_default.dds", { 70.f, 70.f }, { 35.f, 35.f });
+		//mySprite = new Prism::Sprite("Data/Resource/Texture/UI/T_crosshair_default.dds", { 70.f, 70.f }, { 35.f, 35.f });
 		myPosition = myWindowSize / 2.f;
 
 		myPositionZeroToOne = myPosition / myWindowSize;
