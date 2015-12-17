@@ -17,6 +17,7 @@
 #include <MathHelper.h>
 #include <ModelLoader.h>
 #include <NavMesh.h>
+#include "NeutralDirector.h"
 #include "PlayerDirector.h"
 #include <PollingStation.h>
 #include <PointLight.h>
@@ -199,6 +200,7 @@ void LevelFactory::ReadLevel(const std::string& aLevelPath)
 	LoadBases(reader, levelElement);
 	LoadProps(reader, levelElement);
 	LoadControlPoints(reader, levelElement);
+	LoadCreeps(reader, levelElement);
 #ifndef USE_BINARY_TERRAIN
 	LoadCutBoxes(reader, levelElement);
 #endif
@@ -260,93 +262,6 @@ void LevelFactory::ReadLevelSetting(const std::string& aLevelPath)
 
 
 	reader.CloseDocument();
-}
-
-void LevelFactory::FindTextures(const char* aDirName)
-{
-	DIR *dir;
-	char buffer[PATH_MAX + 2];
-	char *p = buffer;
-	const char *src;
-	char *end = &buffer[PATH_MAX];
-	int ok;
-
-	/* Copy directory name to buffer */
-	src = aDirName;
-	while (p < end  &&  *src != '\0') {
-		*p++ = *src++;
-	}
-	*p = '\0';
-
-	/* Open directory stream */
-	dir = opendir(aDirName);
-	if (dir != NULL) {
-		struct dirent *ent;
-
-		/* Print all files and directories within the directory */
-		while ((ent = readdir(dir)) != NULL) {
-			char *q = p;
-			char c;
-
-			/* Get final character of directory name */
-			if (buffer < q) {
-				c = q[-1];
-			}
-			else {
-				c = ':';
-			}
-
-			/* Append directory separator if not already there */
-			if (c != ':'  &&  c != '/'  &&  c != '\\') {
-				*q++ = '/';
-			}
-
-			/* Append file name */
-			src = ent->d_name;
-			while (q < end  &&  *src != '\0') {
-				*q++ = *src++;
-			}
-			*q = '\0';
-
-			/* Decide what to do with the directory entry */
-			switch (ent->d_type) {
-			case DT_LNK:
-			case DT_REG:
-				/* Output file name with directory */
-				//printf("%s\n", buffer);
-				LoadTexture(buffer);
-				break;
-
-			case DT_DIR:
-				/* Scan sub-directory recursively */
-				if (strcmp(ent->d_name, ".") != 0
-					&& strcmp(ent->d_name, "..") != 0) {
-					FindTextures(buffer);
-				}
-				break;
-
-			default:
-				/* Ignore device entries */
-				/*NOP*/;
-			}
-
-		}
-
-		closedir(dir);
-		ok = 1;
-
-	}
-	else {
-		DL_ASSERT(CU::Concatenate("Cannot open directory %s", aDirName));
-	}
-}
-
-void LevelFactory::LoadTexture(const std::string& aPath)
-{
-	if (aPath.compare(aPath.size() - 4, 4, ".dds") == 0)
-	{
-		Prism::TextureContainer::GetInstance()->GetTexture(aPath);
-	}
 }
 
 void LevelFactory::LoadLights(XMLReader& aReader, tinyxml2::XMLElement* aLevelElement)
@@ -430,6 +345,15 @@ void LevelFactory::LoadProps(XMLReader& aReader, tinyxml2::XMLElement* aLevelEle
 			propPosition, *myCurrentLevel->myTerrain, propRotation, propScale));
 		myCurrentLevel->myEntities.GetLast()->AddToScene();
 		myCurrentLevel->myEntities.GetLast()->Reset();
+	}
+}
+
+void LevelFactory::LoadCreeps(XMLReader& aReader, tinyxml2::XMLElement* aLevelElement)
+{
+	for (tinyxml2::XMLElement* entityElement = aReader.FindFirstChild(aLevelElement, "creep"); entityElement != nullptr;
+		entityElement = aReader.FindNextElement(entityElement, "creep"))
+	{
+		myCurrentLevel->myNeutralDirector->ReadCreep(aReader, entityElement);
 	}
 }
 

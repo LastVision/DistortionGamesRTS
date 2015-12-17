@@ -120,7 +120,7 @@ void ComponentLoader::LoadControllerComponent(XMLReader& aDocument, tinyxml2::XM
 	aDocument.ForceReadAttribute(e, "value", aOutputData.myAttackDamage);
 
 	e = aDocument.ForceFindFirstChild(aSourceElement, "AttackSpeed");
-	aDocument.ForceReadAttribute(e, "value", aOutputData.myAttackSpeed);
+	aDocument.ForceReadAttribute(e, "value", aOutputData.myAttackRechargeTime);
 
 	e = aDocument.ForceFindFirstChild(aSourceElement, "ChaseDistance");
 	aDocument.ForceReadAttribute(e, "value", aOutputData.myChaseDistance);

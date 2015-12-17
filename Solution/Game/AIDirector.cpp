@@ -21,7 +21,7 @@ AIDirector::AIDirector(const Prism::Terrain& aTerrain, Prism::Scene& aScene)
 	, myAttackers(8)
 	, myUnitQueue(8)
 {
-	for (int i = 0; i < 8; ++i)
+	for (int i = 0; i < 64; ++i)
 	{
 		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::ENEMY, eEntityType::UNIT, eUnitType::GRUNT, Prism::eOctreeType::DYNAMIC,
 			aScene, { 20.f + i, 0.f, 40.f }, aTerrain));

@@ -10,6 +10,7 @@ namespace Prism
 	class ModelProxy;
 	class FBXFactory;
 	class DGFXLoader;
+	class SpriteProxy;
 
 	class ModelLoader
 	{
@@ -31,7 +32,9 @@ namespace Prism
 		ModelProxy* LoadCube(float aWidth = 1.f, float aHeight = 1.f, float aDepth = 1.f
 			, CU::Vector4f aColour = { 1.f, 1.f, 1.f, 1.f });
 
-		AnimationProxy* LoadAnimation(const char* aPath);
+		AnimationProxy* LoadAnimation(const std::string& aPath);
+		SpriteProxy* LoadSprite(const std::string& aPath, const CU::Vector2<float>& aSize
+			, const CU::Vector2<float>& aHotSpot = { 0.f, 0.f });
 
 	private:
 		enum class eLoadType
@@ -40,24 +43,38 @@ namespace Prism
 			MODEL_ANIMATED,
 			ANIMATION,
 			CUBE,
+			SPRITE,
 		};
+
 		struct LoadData
 		{
-			ModelProxy* myProxy;
+			union
+			{
+				ModelProxy* myModelProxy;
+				AnimationProxy* myAnimationProxy;
+				SpriteProxy* mySpriteProxy;
+			};
+
 			eLoadType myLoadType;
-			AnimationProxy* myAnimationProxy;
 			std::string myModelPath = "";
 			std::string myEffectPath = "";
-			CU::Vector3<float> mySize;
+			CU::Vector4<float> mySize; //Cube uses X/Y/Z, Sprite uses X/Y as size and Z/W as hotspot
 			CU::Vector4<float> myColor;
 		};
 
 		ModelLoader();
 		~ModelLoader();
 
+		bool CheckIfWorking();
 		void WaitUntilCopyIsAllowed();
 		void WaitUntilAddIsAllowed();
-		void AddPrefetchJobs();
+		void CopyLoadJobs();
+
+		void CreateModel(LoadData& someData);
+		void CreateModelAnimated(LoadData& someData);
+		void CreateAnimation(LoadData& someData);
+		void CreateCube(LoadData& someData);
+		void CreateSprite(LoadData& someData);
 
 		CU::GrowingArray<LoadData> myBuffers[2];
 		CU::GrowingArray<LoadData> myLoadArray;
@@ -69,12 +86,12 @@ namespace Prism
 		volatile bool myIsLoading;
 		volatile bool myClearLoadJobs;
 		volatile bool myIsPaused;
-		volatile bool myHasPrefetched;
 
 		FBXFactory* myModelFactory;
 		DGFXLoader* myDGFXLoader;
 		CU::GrowingArray<Model*> myNonFXBModels;
-		std::unordered_map<std::string, ModelProxy*> myProxies;
+		std::unordered_map<std::string, ModelProxy*> myModelProxies;
+		std::unordered_map<std::string, Sprite*> mySprites;
 
 		static ModelLoader* myInstance;
 	};

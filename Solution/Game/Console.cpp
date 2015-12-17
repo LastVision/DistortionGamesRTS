@@ -7,6 +7,7 @@
 #include <LUARunScriptMessage.h>
 #include <ScriptSystem.h>
 #include <PostMaster.h>
+#include <ModelLoader.h>
 
 Console* Console::myInstance = nullptr;
 
@@ -100,7 +101,9 @@ void Console::ReceiveMessage(const LUARunScriptMessage& aMessage)
 
 void Console::AddHistory(const std::string& aMessage, eHistoryType aType)
 {
+	Prism::ModelLoader::GetInstance()->Pause();
 	myHistory->AddHistory(aMessage, aType);
+	Prism::ModelLoader::GetInstance()->UnPause();
 }
 
 void Console::ReadInput()

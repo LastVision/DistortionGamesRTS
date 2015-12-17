@@ -2,6 +2,7 @@
 
 #include "BaseModel.h"
 #include <Matrix.h>
+#include "ModelLoader.h"
 
 struct ID3D11Texture2D;
 
@@ -9,13 +10,9 @@ namespace Prism
 {
 	class Sprite : public BaseModel
 	{
+		friend class Engine;
+		friend class ModelLoader;
 	public:
-		Sprite(const std::string& aFileName, const CU::Vector2<float>& aSpriteSize
-			, const CU::Vector2<float>& aHotSpot = { 0.f, 0.f });
-
-		Sprite(ID3D11Texture2D* aTexture, const CU::Vector2<float>& aSpriteSize
-			, const CU::Vector2<float>& aHotSpot = { 0.f, 0.f });
-
 		void Render(const CU::Vector2<float>& aPosition, const CU::Vector2<float>& aScale = { 1.f, 1.f }
 			, const CU::Vector4<float>& aColor = { 1.f, 1.f, 1.f, 1.f });
 
@@ -30,6 +27,12 @@ namespace Prism
 
 		const CU::Vector2<float>& GetHotspot() const;
 	private:
+		Sprite(const std::string& aFileName, const CU::Vector2<float>& aSpriteSize
+			, const CU::Vector2<float>& aHotSpot = { 0.f, 0.f });
+
+		Sprite(ID3D11Texture2D* aTexture, const CU::Vector2<float>& aSpriteSize
+			, const CU::Vector2<float>& aHotSpot = { 0.f, 0.f });
+
 		void CreateVertices();
 
 
@@ -39,14 +42,33 @@ namespace Prism
 		CU::Matrix44<float> myOrientation;
 		CU::Vector2<float> mySize;
 		CU::Vector2<float> myHotspot;
+		CU::Vector2<float> myNewSize;
+		CU::Vector2<float> myNewHotSpot;
 	};
 }
 
 inline void Prism::Sprite::SetSize(const CU::Vector2<float> aTextureSize, const CU::Vector2<float>& aHotSpot)
 {
-	myHotspot = aHotSpot;
-	mySize = aTextureSize;
-	CreateVertices();
+	if (aTextureSize.x != mySize.x || aTextureSize.y != mySize.y
+		|| aHotSpot.x != myHotspot.x || aHotSpot.y != myHotspot.y)
+	{
+		ModelLoader::GetInstance()->Pause();
+		myHotspot = aHotSpot;
+		mySize = aTextureSize;
+		CreateVertices();
+		ModelLoader::GetInstance()->UnPause();
+		//Do the resizing on ModelLoader instead? so we dont have to pause
+	}
+
+	myNewSize = aTextureSize;
+	myNewHotSpot = aHotSpot;
+
+	//ModelLoader::GetInstance()->Pause();
+	//myHotspot = aHotSpot;
+	//mySize = aTextureSize;
+	//CreateVertices();
+	//ModelLoader::GetInstance()->UnPause();
+	////Do the resizing on ModelLoader instead? so we dont have to pause
 }
 
 inline const CU::Vector2<float>& Prism::Sprite::GetSize() const
