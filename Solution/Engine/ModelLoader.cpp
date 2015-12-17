@@ -385,11 +385,6 @@ namespace Prism
 
 	bool ModelLoader::CheckIfWorking()
 	{
-		if (myIsPaused == false && (myBuffers[myInactiveBuffer].Size() > 0
-			&& myLoadArray.Size() > 0))
-		{
-			int apa = 5;
-		}
 		if (myIsPaused == true || (myBuffers[myInactiveBuffer].Size() == 0
 			&& myLoadArray.Size() == 0) || myClearLoadJobs == true)
 		{
