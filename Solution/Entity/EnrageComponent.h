@@ -8,13 +8,19 @@ public:
 	EnrageComponent(Entity& anEntity, EnrageComponentData& aData);
 	~EnrageComponent();
 
-	void Update(float aDelta);
+	void Update(float aDeltaTime);
 
 	bool IsActive();
+	void Activate();
 
 private:
-	float myDuration;
-	float myCooldown;
+
+	const float myOriginalDuration;
+	float myCurrentDuration;
+
+	const float myOriginalCooldown;
+	float myCurrentCooldown;
+
 	bool myIsActive;
 
 };
