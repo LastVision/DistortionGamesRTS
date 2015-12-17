@@ -39,6 +39,18 @@ namespace EntityEnumConverter
 		{
 			return ePropType::BIRCH_TREE_A;
 		}
+		else if (aPropType == "house_large")
+		{
+			return ePropType::HOUSE_LARGE;
+		}
+		else if (aPropType == "house_medium")
+		{
+			return ePropType::HOUSE_MEDIUM;
+		}
+		else if (aPropType == "house_small")
+		{
+			return ePropType::HOUSE_SMALL;
+		}
 		else if (aPropType == "SM_birch_tree_bare_a")
 		{
 			return ePropType::BIRCH_TREE_A;
