@@ -41,6 +41,7 @@ void TotemComponent::Update(float aDeltaTime)
 	if (myDuration >= myEndTime)
 	{
 		myActive = false;
+		myEntity.SetPosition(myOriginalPosition);
 	}
 	
 	CheckUnitsForRemove(myUnits);
@@ -65,11 +66,11 @@ void TotemComponent::Update(float aDeltaTime)
 	if (myAlpha >= 1.f)
 	{
 		myHasReachedTarget = true;
-		if (myAlpha >= myOriginalCooldown)
-		{
-			myActive = false;
-			myEntity.SetPosition(myOriginalPosition);
-		}
+		//if (myAlpha >= myOriginalCooldown)
+		//{
+		//	myActive = false;
+		//	myEntity.SetPosition(myOriginalPosition);
+		//}
 	}
 }
 
