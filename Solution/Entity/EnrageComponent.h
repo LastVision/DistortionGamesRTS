@@ -15,13 +15,20 @@ public:
 
 private:
 
-	const float myOriginalDuration;
 	float myCurrentDuration;
 
-	const float myOriginalCooldown;
 	float myCurrentCooldown;
 
 	bool myIsActive;
+
+	EnrageComponentData myData;
+
+	float myOriginalArmor;
+	//float myOriginalHealth;
+	float myOriginalAttackDamage;
+	float myOriginalRechargeTime;
+	float myOriginalAttackRange2;
+	float myOriginalMovementSpeed;
 
 };
 

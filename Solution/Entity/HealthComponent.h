@@ -26,6 +26,9 @@ public:
 	float GetCurrentHealth() const;
 	float GetMaxHealth() const;
 
+	void SetArmor(float aArmor);
+	void SetHealth(float aHealth);
+
 private:
 	float myMaxHealth;
 	float myCurrentHealth;
@@ -57,4 +60,14 @@ inline float HealthComponent::GetCurrentHealth() const
 inline float HealthComponent::GetMaxHealth() const
 {
 	return myMaxHealth;
+}
+
+inline void HealthComponent::SetArmor(float aArmor)
+{
+	myArmor = aArmor;
+}
+
+inline void HealthComponent::SetHealth(float aHealth)
+{
+	myCurrentHealth = aHealth;
 }
