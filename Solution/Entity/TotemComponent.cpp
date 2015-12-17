@@ -18,7 +18,8 @@ TotemComponent::TotemComponent(Entity& aEntity, TotemComponentData& aData)
 	, myHealPerSecond(aData.myHealPerSecond)
 	, myCurrentCooldown(0)
 	, myOriginalCooldown(aData.myCooldown)
-	, myLifeTime(aData.myLifeTime)
+	, myEndTime(aData.myDuration)
+	, myDuration(0.f)
 	, myUnits(GC::playerUnitCount)
 	, myHasReachedTarget(true)
 	, myAlpha(0.f)
@@ -33,6 +34,15 @@ TotemComponent::~TotemComponent()
 
 void TotemComponent::Update(float aDeltaTime)
 {
+	myAlpha += aDeltaTime;
+	myCurrentCooldown -= aDeltaTime;
+	myDuration += aDeltaTime;
+
+	if (myDuration >= myEndTime)
+	{
+		myActive = false;
+	}
+	
 	CheckUnitsForRemove(myUnits);
 	CheckUnitsForAdd(PollingStation::GetInstance()->GetUnits(myEntity.GetOwner()), myUnits);
 
@@ -44,8 +54,7 @@ void TotemComponent::Update(float aDeltaTime)
 		}
 	}
 
-	myAlpha += aDeltaTime;
-	myCurrentCooldown -= aDeltaTime;
+
 
 	if (myHasReachedTarget == false)
 	{
@@ -112,5 +121,6 @@ void TotemComponent::SetTargetPosition(const CU::Vector3f& aTargetPosition)
 		myAlpha = 0.f;
 		myActive = true;
 		myCurrentCooldown = myOriginalCooldown;
+		myDuration = 0.f;
 	}
 }

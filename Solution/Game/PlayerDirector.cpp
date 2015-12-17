@@ -84,7 +84,7 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 	tempData.myTotemData.myHealPerSecond = 5.f;
 	tempData.myTotemData.myRadius = 15.f;
 	tempData.myTotemData.myCooldown = 30.f;
-	tempData.myTotemData.myLifeTime = 10.f;
+	tempData.myTotemData.myDuration = 10.f;
 
 	myTotem = new Entity(eOwnerType::PLAYER, Prism::eOctreeType::DYNAMIC, tempData, aScene, { 128.f, 100.f, 128.f },
 		aTerrain, { 0.f, 0.f, 0.f }, { 1.f, 1.f, 1.f });

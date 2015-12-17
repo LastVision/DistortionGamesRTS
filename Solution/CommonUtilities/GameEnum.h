@@ -122,5 +122,6 @@ enum class eParticleType : int
 {
 	BLOOD,
 //	WEATHER_SNOW,
+	HEALING,
 	_COUNT
 };
