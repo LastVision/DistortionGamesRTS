@@ -63,7 +63,7 @@ void TotemComponent::Update(float aDeltaTime)
 	}
 
 
-	if (myAlpha >= 1.f)
+	if (myAlpha >= 1.2f && myHasReachedTarget == false)
 	{
 		myHasReachedTarget = true;
 		myActive = true;
@@ -121,6 +121,7 @@ void TotemComponent::SetTargetPosition(const CU::Vector3f& aTargetPosition)
 		myOriginalPosition.z = aTargetPosition.z;
 		myHasReachedTarget = false;
 		myAlpha = 0.f;
+		myActive = false;
 		myCurrentCooldown = myOriginalCooldown;
 		myDuration = 0.f;
 	}
