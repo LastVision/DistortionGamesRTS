@@ -111,6 +111,7 @@
     <ClCompile Include="ArriveBehavior.cpp">
       <Filter>Behavior</Filter>
     </ClCompile>
+    <ClCompile Include="EnrageComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -203,5 +204,7 @@
     <ClInclude Include="TotemComponentData.h">
       <Filter>EntityFactory\EntityData\ComponentData</Filter>
     </ClInclude>
+    <ClInclude Include="EnrageComponent.h" />
+    <ClInclude Include="EnrageComponentData.h" />
   </ItemGroup>
 </Project>
