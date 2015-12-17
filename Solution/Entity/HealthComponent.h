@@ -62,12 +62,12 @@ inline float HealthComponent::GetMaxHealth() const
 	return myMaxHealth;
 }
 
-void HealthComponent::SetArmor(float aArmor)
+inline void HealthComponent::SetArmor(float aArmor)
 {
 	myArmor = aArmor;
 }
 
-void HealthComponent::SetHealth(float aHealth)
+inline void HealthComponent::SetHealth(float aHealth)
 {
 	myCurrentHealth = aHealth;
 }

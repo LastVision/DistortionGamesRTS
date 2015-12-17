@@ -28,9 +28,15 @@ void EnrageComponent::Update(float aDeltaTime)
 		{
 			myIsActive = false;
 
-			/*
-				Revert the modifiers that were activated when enrage activated.
-				*/
+			HealthComponent* health = myEntity.GetComponent<HealthComponent>();
+			ControllerComponent* controller = myEntity.GetComponent<ControllerComponent>();
+			ActorComponent* actor = myEntity.GetComponent<ActorComponent>();
+
+			health->SetArmor(myOriginalArmor);
+			actor->SetSpeed(myOriginalMovementSpeed);
+			controller->SetAttackDamage(myOriginalAttackDamage);
+			controller->SetAttackRange2(myOriginalAttackRange2);
+			controller->SetRechargeTime(myOriginalRechargeTime);
 
 		}
 	}
@@ -53,7 +59,7 @@ void EnrageComponent::Activate()
 		myOriginalMovementSpeed = actor->GetSpeed();
 		myOriginalAttackDamage = controller->GetAttackDamage();
 		myOriginalAttackRange2 = controller->GetAttackRange2();
-		myOriginalAttackSpeed = controller->GetAttackSpeed();
+		myOriginalRechargeTime = controller->GetAttackSpeed();
 
 
 		health->SetHealth(health->GetCurrentHealth() - (health->GetMaxHealth()
@@ -61,9 +67,9 @@ void EnrageComponent::Activate()
 		health->SetArmor(myOriginalArmor * ((myData.myArmorModifier + 100.f) / 100.f));
 		actor->SetSpeed(myOriginalMovementSpeed * ((myData.myMovementSpeedModifier + 100.f) / 100.f));
 
-		myOriginalAttackDamage = controller->GetAttackDamage();
-		myOriginalAttackRange2 = controller->GetAttackRange2();
-		myOriginalAttackSpeed = controller->GetAttackSpeed();
+		controller->SetAttackDamage(myOriginalAttackDamage * ((myData.myAttackDamageModifier + 100.f) / 100.f));
+		controller->SetAttackRange2(myOriginalAttackRange2 * ((myData.myAttackRange2Modifier + 100.f) / 100.f));
+		controller->SetRechargeTime(myOriginalRechargeTime * ((myData.myRechargeTimeModifier + 100.f) / 100.f));
 
 	}
 }

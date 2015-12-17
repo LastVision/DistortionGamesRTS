@@ -26,7 +26,7 @@ private:
 	float myOriginalArmor;
 	//float myOriginalHealth;
 	float myOriginalAttackDamage;
-	float myOriginalAttackSpeed;
+	float myOriginalRechargeTime;
 	float myOriginalAttackRange2;
 	float myOriginalMovementSpeed;
 

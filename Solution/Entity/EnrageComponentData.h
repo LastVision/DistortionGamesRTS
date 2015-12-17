@@ -9,8 +9,8 @@ struct EnrageComponentData
 	float myHealthModifier;
 
 	float myAttackDamageModifier;
-	float myAttackSpeedModifier;
-	float myAttackRangeModifier;
+	float myAttackRange2Modifier;
+	float myRechargeTimeModifier;
 
 	float myMovementSpeedModifier;
 
