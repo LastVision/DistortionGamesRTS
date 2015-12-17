@@ -32,12 +32,12 @@ AIDirector::AIDirector(const Prism::Terrain& aTerrain, Prism::Scene& aScene)
 	}
 
 
-	for (int i = 0; i < 2; ++i)
+	/*for (int i = 0; i < 2; ++i)
 	{
 		myActiveUnits.Add(myUnits[i]);
 		myActiveUnits[i]->Spawn({ 140.f, 0.f, 130.f });
 		PollingStation::GetInstance()->RegisterEntity(myActiveUnits[i]);
-	}
+	}*/
 
 	PostMaster::GetInstance()->Subscribe(eMessageType::TIME_MULTIPLIER, this);
 }

@@ -62,12 +62,12 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 			aScene, { 20.f + i, 0.f, 40.f }, aTerrain));
 	}
 
-	myActiveUnits.Add(myUnits[0]);
+	/*myActiveUnits.Add(myUnits[0]);
 	for (int i = 0; i < myActiveUnits.Size(); ++i)
 	{
 		myActiveUnits[i]->Spawn({ 65.f, 0.f, 25.f });
 		PollingStation::GetInstance()->RegisterEntity(myActiveUnits[i]);
-	}
+	}*/
 
 	PostMaster::GetInstance()->Subscribe(eMessageType::TOGGLE_GUI, this);
 	PostMaster::GetInstance()->Subscribe(eMessageType::ON_CLICK, this);
