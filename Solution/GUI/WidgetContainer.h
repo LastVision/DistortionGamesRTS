@@ -4,7 +4,7 @@
 
 namespace Prism
 {
-	class Sprite;
+	class SpriteProxy;
 }
 
 namespace tinyxml2
@@ -20,7 +20,7 @@ namespace GUI
 	{
 	public:
 
-		WidgetContainer(Prism::Sprite* aBackgroundSprite, const CU::Vector2<float>& aSize);
+		WidgetContainer(Prism::SpriteProxy* aBackgroundSprite, const CU::Vector2<float>& aSize);
 		~WidgetContainer();
 
 		void AddWidget(Widget* aWidget);
@@ -35,7 +35,7 @@ namespace GUI
 
 	private:
 		CU::GrowingArray<Widget*> myWidgets;
-		Prism::Sprite* myBackground;
+		Prism::SpriteProxy* myBackground;
 	};
 
 	inline int WidgetContainer::GetSize() const

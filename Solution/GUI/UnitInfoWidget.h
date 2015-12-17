@@ -8,7 +8,7 @@ namespace tinyxml2
 
 namespace Prism
 {
-	class Sprite;
+	class SpriteProxy;
 }
 
 class XMLReader;
@@ -40,10 +40,10 @@ namespace GUI
 
 		const CU::GrowingArray<Entity*>& myUnits;
 		const BuildingComponent& myBuilding;
-		Prism::Sprite* myGruntPortrait;
-		Prism::Sprite* myBuildingPortrait;
-		Prism::Sprite* myGruntUnit;
-		Prism::Sprite* myStatsSprite;
+		Prism::SpriteProxy* myGruntPortrait;
+		Prism::SpriteProxy* myBuildingPortrait;
+		Prism::SpriteProxy* myGruntUnit;
+		Prism::SpriteProxy* myStatsSprite;
 		BarWidget* myBuildingTimer;
 
 		eEntityType mySelectedType;

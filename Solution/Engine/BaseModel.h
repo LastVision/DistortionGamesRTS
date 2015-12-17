@@ -22,7 +22,7 @@ namespace Prism
 	{
 	public:
 		BaseModel();
-		~BaseModel();
+		virtual ~BaseModel();
 		Effect* GetEffect();
 
 	protected:

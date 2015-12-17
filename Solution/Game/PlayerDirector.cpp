@@ -19,7 +19,7 @@
 #include <ToggleBuildTimeMessage.h>
 #include <ModelLoader.h>
 #include <SpawnUnitMessage.h>
-#include <Sprite.h>
+#include <SpriteProxy.h>
 #include <FadeMessage.h>
 #include <PostMaster.h>
 
@@ -42,9 +42,11 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 	, mySelectionSpriteHotspot(0, 0)
 {
 	myDragSelectionPositions.Reserve(4);
-	myDragSelectionSprite = new Prism::Sprite("Data/Resource/Texture/T_selection_box.dds", { 0.f, 0.f });
+	myDragSelectionSprite = Prism::ModelLoader::GetInstance()->LoadSprite(
+		"Data/Resource/Texture/T_selection_box.dds", { 0.f, 0.f });
+	//myDragSelectionSprite = new Prism::Sprite("Data/Resource/Texture/T_selection_box.dds", { 0.f, 0.f });
 
-	for (int i = 0; i < 8; ++i)
+	for (int i = 0; i < 64; ++i)
 	{
 		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::PLAYER, eEntityType::UNIT, eUnitType::GRUNT, Prism::eOctreeType::DYNAMIC,
 			aScene, { 65, 0, 40 }, aTerrain));

@@ -51,10 +51,14 @@ namespace GUI
 		myPosition = { 0.f, 0.f };
 		myUnitPosition = unitPosition;
 		myPortraitPosition = portraitPosition;
-		myGruntUnit = new Prism::Sprite(gruntUnitPath, unitSize);
+		myGruntUnit = Prism::ModelLoader::GetInstance()->LoadSprite(gruntUnitPath, unitSize);
+		myGruntPortrait = Prism::ModelLoader::GetInstance()->LoadSprite(gruntPortraitPath, portraitSize);
+		myBuildingPortrait = Prism::ModelLoader::GetInstance()->LoadSprite(buildingPortraitPath, portraitSize);
+		myStatsSprite = Prism::ModelLoader::GetInstance()->LoadSprite(statsSpritePath, statsSize);
+		/*myGruntUnit = new Prism::Sprite(gruntUnitPath, unitSize);
 		myGruntPortrait = new Prism::Sprite(gruntPortraitPath, portraitSize);
 		myBuildingPortrait = new Prism::Sprite(buildingPortraitPath, portraitSize);
-		myStatsSprite = new Prism::Sprite(statsSpritePath, statsSize);
+		myStatsSprite = new Prism::Sprite(statsSpritePath, statsSize);*/
 		myBuildingTimer = new BarWidget(myBuilding.GetMaxBuildTime(), myBuilding.GetCurrentBuildTime(), { unitSize.x * 4.f, unitSize.y / 2.f });
 	}
 

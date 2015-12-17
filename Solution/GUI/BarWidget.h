@@ -3,7 +3,7 @@
 
 namespace Prism
 {
-	class Sprite;
+	class SpriteProxy;
 }
 
 namespace GUI
@@ -22,8 +22,8 @@ namespace GUI
 	private:
 		void operator=(BarWidget&) = delete;
 
-		Prism::Sprite* myBackgroundSprite;
-		Prism::Sprite* myValueSprite;
+		Prism::SpriteProxy* myBackgroundSprite;
+		Prism::SpriteProxy* myValueSprite;
 
 		bool myIsFloat;
 		

@@ -3,7 +3,7 @@
 
 namespace Prism
 {
-	class Sprite;
+	class SpriteProxy;
 }
 
 namespace CU
@@ -32,6 +32,6 @@ namespace GUI
 		CU::Vector2<float> myPosition;
 		CU::Vector2<float> myPositionZeroToOne;
 		CU::Vector2<float> myWindowSize;
-		Prism::Sprite* mySprite;
+		Prism::SpriteProxy* mySprite;
 	};
 }

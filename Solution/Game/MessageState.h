@@ -3,7 +3,7 @@
 
 namespace Prism
 {
-	class Sprite;
+	class SpriteProxy;
 }
 struct GameStateMessage;
 
@@ -27,9 +27,9 @@ public:
 
 private:
 
-	Prism::Sprite* myBackground;
+	Prism::SpriteProxy* myBackground;
 
-	Prism::Sprite* myBlackOverlay;
+	Prism::SpriteProxy* myBlackOverlay;
 
 	CU::Vector2<float> mySpriteSize;
 

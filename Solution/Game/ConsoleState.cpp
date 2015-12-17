@@ -4,8 +4,9 @@
 #include "ConsoleHelp.h"
 #include "ConsoleHistoryManager.h"
 #include <InputWrapper.h>
+#include <ModelLoader.h>
 #include <ScriptSystem.h>
-#include <Sprite.h>
+#include <SpriteProxy.h>
 #include <Text.h>
 
 ConsoleState::ConsoleState(bool& aShouldReOpenConsole)
@@ -30,10 +31,16 @@ void ConsoleState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCu
 
 	CU::Vector2<float> windowSize = Prism::Engine::GetInstance()->GetWindowSize();
 	windowSize *= 0.75f;
-
-	myBackground = new Prism::Sprite("Data/Resource/Texture/Console/T_console_window.dds", windowSize);
+	
+	myBackground = Prism::ModelLoader::GetInstance()->LoadSprite(
+		"Data/Resource/Texture/Console/T_console_window.dds", windowSize);
+	myMarker = Prism::ModelLoader::GetInstance()->LoadSprite(
+		"Data/Resource/Texture/UI/T_healthbar_background.dds", { 2.f, 20.f }, { 0.f, 0.f });
+	mySuggestionBox = Prism::ModelLoader::GetInstance()->LoadSprite(
+		"Data/Resource/Texture/Console/T_console_window_suggestions.dds", { windowSize.x - 50.f, 30.f });
+	/*myBackground = new Prism::Sprite("Data/Resource/Texture/Console/T_console_window.dds", windowSize);
 	myMarker = new Prism::Sprite("Data/Resource/Texture/UI/T_healthbar_background.dds", { 2.f, 20.f }, { 0.f, 0.f });
-	mySuggestionBox = new Prism::Sprite("Data/Resource/Texture/Console/T_console_window_suggestions.dds", { windowSize.x - 50.f, 30.f });
+	mySuggestionBox = new Prism::Sprite("Data/Resource/Texture/Console/T_console_window_suggestions.dds", { windowSize.x - 50.f, 30.f });*/
 	myMarkerBlinker = true;
 
 	myText = new Prism::Text(*Prism::Engine::GetInstance()->GetFont(Prism::eFont::CONSOLE));
