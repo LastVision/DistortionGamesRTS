@@ -4,7 +4,7 @@ struct TotemComponentData
 {
 	float myRadius;
 	float myHealPerSecond;
-	float myLifeTime;
+	float myDuration;
 	float myCooldown;
 	bool myExistsInEntity = false;
 };

@@ -24,8 +24,12 @@ private:
 	const float myRadiusSquared;
 	const float myHealPerSecond;
 	const float myOriginalCooldown;
-	const float myLifeTime;
+	
+	const float myEndTime;
+	float myDuration;
 	float myCurrentCooldown;
+
+
 	float myAlpha;
 	bool myHasReachedTarget;
 
