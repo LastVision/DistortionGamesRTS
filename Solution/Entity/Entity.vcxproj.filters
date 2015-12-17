@@ -49,6 +49,9 @@
     <Filter Include="Component\Totem">
       <UniqueIdentifier>{3d3c71e4-7e08-4c84-9cb7-78834e005011}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Behavior">
+      <UniqueIdentifier>{f24e054a-7e2d-4fa0-a384-74200c617424}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -95,6 +98,18 @@
     <ClCompile Include="EntityId.cpp" />
     <ClCompile Include="TotemComponent.cpp">
       <Filter>Component\Totem</Filter>
+    </ClCompile>
+    <ClCompile Include="EvadeBehavior.cpp">
+      <Filter>Behavior</Filter>
+    </ClCompile>
+    <ClCompile Include="BlendedBehavior.cpp">
+      <Filter>Behavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Behavior.cpp">
+      <Filter>Behavior</Filter>
+    </ClCompile>
+    <ClCompile Include="ArriveBehavior.cpp">
+      <Filter>Behavior</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -172,6 +187,18 @@
     <ClInclude Include="EntityId.h" />
     <ClInclude Include="TotemComponent.h">
       <Filter>Component\Totem</Filter>
+    </ClInclude>
+    <ClInclude Include="EvadeBehavior.h">
+      <Filter>Behavior</Filter>
+    </ClInclude>
+    <ClInclude Include="BlendedBehavior.h">
+      <Filter>Behavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Behavior.h">
+      <Filter>Behavior</Filter>
+    </ClInclude>
+    <ClInclude Include="ArriveBehavior.h">
+      <Filter>Behavior</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
