@@ -1,7 +1,6 @@
 #include "stdafx.h"
 
 #include "EntityId.h"
-#include <MemoryTracker.h>
 #include "PollingStation.h"
 
 EntityId* EntityId::myInstance = nullptr;
