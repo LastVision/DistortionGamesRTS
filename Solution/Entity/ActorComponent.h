@@ -23,6 +23,8 @@ public:
 
 	float GetSpeed() const;
 
+	void SetSpeed(float aSpeed);
+
 private:
 	float mySpeed;
 	const Prism::Terrain& myTerrain;
@@ -41,4 +43,9 @@ inline eComponentType ActorComponent::GetType()
 inline float ActorComponent::GetSpeed() const
 {
 	return mySpeed;
+}
+
+inline void ActorComponent::SetSpeed(float aSpeed)
+{
+	mySpeed = aSpeed;
 }

@@ -35,6 +35,8 @@ public:
 	eComponentType GetType() override;
 
 	float GetAttackDamage() const;
+	float GetAttackSpeed() const;
+
 
 private:
 	enum class eAction
@@ -113,4 +115,9 @@ inline eComponentType ControllerComponent::GetType()
 inline float ControllerComponent::GetAttackDamage() const
 {
 	return myAttackDamage;
+}
+
+inline float ControllerComponent::GetAttackSpeed() const
+{
+	return myAttackSpeed;
 }
