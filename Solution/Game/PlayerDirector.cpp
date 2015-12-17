@@ -94,7 +94,7 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 
 PlayerDirector::~PlayerDirector()
 {
-	myTotem->RemoveFromScene();
+	//myTotem->RemoveFromScene();
 	SAFE_DELETE(myGUIManager);
 	SAFE_DELETE(myDragSelectionSprite);
 	SAFE_DELETE(myTotem);
