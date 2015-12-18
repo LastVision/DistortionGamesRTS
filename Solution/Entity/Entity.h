@@ -70,6 +70,10 @@ public:
 	CU::GrowingArray<CU::Vector2<float>> GetCutMesh() const;
 
 	int GetId() const;
+	float GetMaxSpeed() const;
+	void SetMaxSpeed(float aSpeed);
+
+	const CU::Vector2<float>& GetVelocity() const;
 
 private:
 	void operator=(Entity&) = delete;
@@ -87,6 +91,9 @@ private:
 
 	CU::Matrix44<float> myOrientation;
 	CU::Vector2<float> myPosition;
+
+	CU::Vector2<float> myVelocity;
+	float myMaxSpeed;
 
 	bool mySelected;
 	bool myHovered;
@@ -177,4 +184,19 @@ inline int Entity::GetId() const
 inline void Entity::SetOwner(eOwnerType anOwner)
 {
 	myOwner = anOwner;
+}
+
+inline float Entity::GetMaxSpeed() const
+{
+	return myMaxSpeed;
+}
+
+inline void Entity::SetMaxSpeed(float aSpeed)
+{
+	myMaxSpeed = aSpeed;
+}
+
+inline const CU::Vector2<float>& Entity::GetVelocity() const
+{
+	return myVelocity;
 }

@@ -8,8 +8,8 @@
 ActorComponent::ActorComponent(Entity& aEntity, ActorComponentData& aData, const Prism::Terrain& aTerrain)
 	: Component(aEntity)
 	, myTerrain(aTerrain)
-	, mySpeed(aData.myMoveSpeed)
 {
+	myEntity.myMaxSpeed = aData.myMoveSpeed;
 }
 
 ActorComponent::~ActorComponent()
@@ -25,24 +25,36 @@ void ActorComponent::Update(float aDelta)
 
 	const ControllerComponent::ControllerData& data = myEntity.GetComponent<ControllerComponent>()->GetControllerData();
 
-	CU::Vector3<float> direction = data.myDirection;
-	if (CU::Length(direction) > 0.f)
+	myEntity.myVelocity += data.myAcceleration * aDelta;
+	float velocity2 = CU::Length2(myEntity.myVelocity);
+	if (velocity2 > myEntity.myMaxSpeed * myEntity.myMaxSpeed)
 	{
-		CU::Normalize(direction);
-		LookInDirection(direction);
+		CU::Normalize(myEntity.myVelocity);
+		myEntity.myVelocity *= myEntity.myMaxSpeed;
+	}
+
+	if (velocity2 > 1.f || CU::Length2(data.myAcceleration) > 1.f)
+	{
+		//CU::Normalize(direction);
+		LookInDirection(myEntity.myVelocity);
 		myEntity.SetState(eEntityState::WALKING);
 		
-		CU::Vector3<float> position = myEntity.myOrientation.GetPos();
+		CU::Vector2<float> position = myEntity.myPosition;
 
-		position += direction * mySpeed * aDelta;
-		myEntity.myOrientation.SetPos(position);
+		position += myEntity.myVelocity * aDelta;
+		myEntity.myOrientation.SetPos({ position.x, 0, position.y });
 		myTerrain.CalcEntityHeight(myEntity.myOrientation);
+	}
+	else
+	{
+		myEntity.SetState(eEntityState::IDLE);
 	}
 }
 
-void ActorComponent::LookInDirection(const CU::Vector3<float>& aDirection)
+void ActorComponent::LookInDirection(const CU::Vector2<float>& aDirection)
 {
-	CU::Vector3<float> direction = CU::GetNormalized(aDirection);
+	CU::Vector2<float> direction2D = CU::GetNormalized(aDirection);
+	CU::Vector3<float> direction = { direction2D.x, 0, direction2D.y };
 
 	CU::Vector3<float> forward = myEntity.myOrientation.GetForward();
 	CU::Normalize(forward);
@@ -62,8 +74,8 @@ void ActorComponent::LookInDirection(const CU::Vector3<float>& aDirection)
 	}
 }
 
-void ActorComponent::LookAtPoint(const CU::Vector3<float>& aPoint)
+void ActorComponent::LookAtPoint(const CU::Vector2<float>& aPoint)
 {
-	CU::Vector3<float> direction = aPoint - myEntity.GetOrientation().GetPos();
+	CU::Vector2<float> direction = aPoint - myEntity.myPosition;
 	LookInDirection(direction);
 }

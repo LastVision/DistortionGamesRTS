@@ -1,5 +1,4 @@
 #include "stdafx.h"
-#include "ActorComponent.h"
 #include "ControllerComponent.h"
 #include "EnrageComponent.h"
 #include "HealthComponent.h"
@@ -30,10 +29,9 @@ void EnrageComponent::Update(float aDeltaTime)
 
 			HealthComponent* health = myEntity.GetComponent<HealthComponent>();
 			ControllerComponent* controller = myEntity.GetComponent<ControllerComponent>();
-			ActorComponent* actor = myEntity.GetComponent<ActorComponent>();
 
 			health->SetArmor(myOriginalArmor);
-			actor->SetSpeed(myOriginalMovementSpeed);
+			myEntity.SetMaxSpeed(myOriginalMovementSpeed);
 			controller->SetAttackDamage(myOriginalAttackDamage);
 			controller->SetAttackRange2(myOriginalAttackRange2);
 			controller->SetRechargeTime(myOriginalRechargeTime);
@@ -48,7 +46,6 @@ void EnrageComponent::Activate()
 	{
 		HealthComponent* health = myEntity.GetComponent<HealthComponent>();
 		ControllerComponent* controller = myEntity.GetComponent<ControllerComponent>();
-		ActorComponent* actor = myEntity.GetComponent<ActorComponent>();
 
 
 		myIsActive = true;
@@ -56,7 +53,7 @@ void EnrageComponent::Activate()
 		myCurrentCooldown = myData.myCooldown;
 
 		myOriginalArmor = health->GetArmor();
-		myOriginalMovementSpeed = actor->GetSpeed();
+		myOriginalMovementSpeed = myEntity.GetMaxSpeed();
 		myOriginalAttackDamage = controller->GetAttackDamage();
 		myOriginalAttackRange2 = controller->GetAttackRange2();
 		myOriginalRechargeTime = controller->GetAttackSpeed();
@@ -64,7 +61,7 @@ void EnrageComponent::Activate()
 
 		health->TakeDamage((health->GetMaxHealth() * (myData.myHealthModifier / 100.f)) + myOriginalArmor, &myEntity);
 		health->SetArmor(myOriginalArmor * ((myData.myArmorModifier + 100.f) / 100.f));
-		actor->SetSpeed(myOriginalMovementSpeed * ((myData.myMovementSpeedModifier + 100.f) / 100.f));
+		myEntity.SetMaxSpeed(myOriginalMovementSpeed * ((myData.myMovementSpeedModifier + 100.f) / 100.f));
 
 		controller->SetAttackDamage(myOriginalAttackDamage * ((myData.myAttackDamageModifier + 100.f) / 100.f));
 		controller->SetAttackRange2(myOriginalAttackRange2 * ((myData.myAttackRange2Modifier + 100.f) / 100.f));

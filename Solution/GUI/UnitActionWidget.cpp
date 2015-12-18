@@ -11,10 +11,15 @@ namespace GUI
 		, myUnitActionButtons(nullptr)
 		, myBuildingActionButtons(nullptr)
 		, myIsUnitSelected(false)
+		, myHasSelectedGrunt(false)
+		, myHasSelectedRanger(false)
+		, myHasSelectedTank(false)
 		, mySelectedType(eEntityType::_COUNT)
 	{
 		CU::Vector2<float> size;
 		CU::Vector2<float> position;
+		CU::Vector2<float> buttonSize;
+		CU::Vector2<float> buttonPosition;
 		std::string path = "";
 
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "size"), "x", size.x);
@@ -26,15 +31,35 @@ namespace GUI
 		myPosition = position;
 
 		tinyxml2::XMLElement* unitElement = aReader->ForceFindFirstChild(anXMLElement, "unit");
+		tinyxml2::XMLElement* gruntElement = aReader->ForceFindFirstChild(anXMLElement, "grunt");
+		tinyxml2::XMLElement* rangerElement = aReader->ForceFindFirstChild(anXMLElement, "ranger");
+		tinyxml2::XMLElement* tankElement = aReader->ForceFindFirstChild(anXMLElement, "tank");
 		tinyxml2::XMLElement* buildingElement = aReader->ForceFindFirstChild(anXMLElement, "building");
 
 		myUnitActionButtons = ReadContainer(aReader, unitElement, size);
 		myBuildingActionButtons = ReadContainer(aReader, buildingElement, size);
+
+		buttonSize = myUnitActionButtons->GetFirstWidget()->GetSize();
+		buttonPosition = myUnitActionButtons->GetFirstWidget()->GetPosition();
+
+		buttonPosition.x -= (buttonSize.x * 0.5f);
+		buttonPosition.y += (buttonSize.y * 0.5f);
+
+		myGruntActionButtons = ReadContainer(aReader, gruntElement, { buttonSize.x, buttonSize.y * 2.f });
+		myRangerActionButtons = ReadContainer(aReader, rangerElement, { buttonSize.x, buttonSize.y * 2.f });
+		myTankActionButtons = ReadContainer(aReader, tankElement, { buttonSize.x, buttonSize.y * 2.f });
+
+		myGruntActionButtons->SetPosition({ buttonPosition.x + (buttonSize.x * 2.f) + 1.f, (buttonPosition.y - buttonSize.y * 3.f) - 3.f });
+		myRangerActionButtons->SetPosition({ buttonPosition.x + (buttonSize.x * 3.f) + 2.f, (buttonPosition.y - buttonSize.y * 3.f) - 3.f });
+		myTankActionButtons->SetPosition({ buttonPosition.x + (buttonSize.x * 4.f) + 3.f, (buttonPosition.y - buttonSize.y * 3.f) - 3.f });
 	}
 
 	UnitActionWidget::~UnitActionWidget()
 	{
 		SAFE_DELETE(myUnitActionButtons);
+		SAFE_DELETE(myGruntActionButtons);
+		SAFE_DELETE(myRangerActionButtons);
+		SAFE_DELETE(myTankActionButtons);
 		SAFE_DELETE(myBuildingActionButtons);
 	}
 
@@ -45,6 +70,21 @@ namespace GUI
 			if (mySelectedType == eEntityType::UNIT)
 			{
 				myUnitActionButtons->Render(myPosition + aParentPosition);
+
+				if (myHasSelectedGrunt == true)
+				{
+					myGruntActionButtons->Render(myPosition + aParentPosition);
+				}
+
+				if (myHasSelectedRanger == true)
+				{
+					myRangerActionButtons->Render(myPosition + aParentPosition);
+				}
+
+				if (myHasSelectedTank == true)
+				{
+					myTankActionButtons->Render(myPosition + aParentPosition);
+				}
 			}
 			else if (mySelectedType == eEntityType::BASE_BUILING)
 			{
@@ -57,10 +97,35 @@ namespace GUI
 	{
 		Widget::Update();
 
+		myHasSelectedGrunt = false;
+		myHasSelectedRanger = false;
+		myHasSelectedTank = false;
+
 		myIsUnitSelected = myUnits.Size() > 0;
 		if (myIsUnitSelected == true)
 		{
 			mySelectedType = myUnits[0]->GetType();
+		}
+
+		if (mySelectedType == eEntityType::UNIT)
+		{
+			for (int i = 0; i < myUnits.Size(); i++)
+			{
+				if (myHasSelectedGrunt == false && myUnits[i]->GetUnitType() == eUnitType::GRUNT)
+				{
+					myHasSelectedGrunt = true;
+				}
+
+				if (myHasSelectedRanger == false && myUnits[i]->GetUnitType() == eUnitType::RANGER)
+				{
+					myHasSelectedRanger = true;
+				}
+
+				if (myHasSelectedTank == false && myUnits[i]->GetUnitType() == eUnitType::TANK)
+				{
+					myHasSelectedTank = true;
+				}
+			}
 		}
 	}
 
@@ -70,6 +135,31 @@ namespace GUI
 		{
 			if (mySelectedType == eEntityType::UNIT)
 			{
+				Widget* widget = nullptr;
+
+				if (myHasSelectedGrunt == true)
+				{
+					Widget* gruntWidget = myGruntActionButtons->MouseIsOver(aPosition - myPosition);
+					widget = gruntWidget == nullptr ? widget : gruntWidget;
+				}
+				if(myHasSelectedRanger == true)
+				{
+					//DL_ASSERT_EXP(widget == nullptr, "Cant hover on two actions in unit action bar!");
+					Widget* rangerWidget = myRangerActionButtons->MouseIsOver(aPosition - myPosition);
+					widget = rangerWidget == nullptr ? widget : rangerWidget;
+				}
+				if (myHasSelectedTank == true)
+				{
+					//DL_ASSERT_EXP(widget == nullptr, "Cant hover on two actions in unit action bar!");
+					Widget* tankWidget = myTankActionButtons->MouseIsOver(aPosition - myPosition);
+					widget = tankWidget == nullptr ? widget : tankWidget;
+				}
+
+				if (widget != nullptr)
+				{
+					return widget;
+				}
+
 				return myUnitActionButtons->MouseIsOver(aPosition - myPosition);
 			}
 			else if (mySelectedType == eEntityType::BASE_BUILING)
@@ -85,6 +175,9 @@ namespace GUI
 		Widget::OnResize(aNewWindowSize, anOldWindowSize);
 		myUnitActionButtons->OnResize(aNewWindowSize, anOldWindowSize);
 		myBuildingActionButtons->OnResize(aNewWindowSize, anOldWindowSize);
+		myGruntActionButtons->OnResize(aNewWindowSize, anOldWindowSize);
+		myRangerActionButtons->OnResize(aNewWindowSize, anOldWindowSize);
+		myTankActionButtons->OnResize(aNewWindowSize, anOldWindowSize);
 	}
 
 	WidgetContainer* UnitActionWidget::ReadContainer(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement, CU::Vector2<float> aSize)

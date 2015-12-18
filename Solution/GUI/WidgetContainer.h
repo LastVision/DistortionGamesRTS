@@ -33,6 +33,8 @@ namespace GUI
 
 		int GetSize() const;
 
+		Widget* GetFirstWidget();
+
 	private:
 		CU::GrowingArray<Widget*> myWidgets;
 		Prism::SpriteProxy* myBackground;
@@ -41,5 +43,11 @@ namespace GUI
 	inline int WidgetContainer::GetSize() const
 	{
 		return myWidgets.Size();
+	}
+
+	inline Widget* WidgetContainer::GetFirstWidget()
+	{
+		DL_ASSERT_EXP(myWidgets.Size() > 0, "Trying to get first widget from an empty container");
+		return myWidgets[0];
 	}
 }
