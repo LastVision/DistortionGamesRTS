@@ -144,13 +144,11 @@ namespace GUI
 				}
 				if(myHasSelectedRanger == true)
 				{
-					//DL_ASSERT_EXP(widget == nullptr, "Cant hover on two actions in unit action bar!");
 					Widget* rangerWidget = myRangerActionButtons->MouseIsOver(aPosition - myPosition);
 					widget = rangerWidget == nullptr ? widget : rangerWidget;
 				}
 				if (myHasSelectedTank == true)
 				{
-					//DL_ASSERT_EXP(widget == nullptr, "Cant hover on two actions in unit action bar!");
 					Widget* tankWidget = myTankActionButtons->MouseIsOver(aPosition - myPosition);
 					widget = tankWidget == nullptr ? widget : tankWidget;
 				}
