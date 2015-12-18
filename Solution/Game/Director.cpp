@@ -9,6 +9,7 @@
 #include <VictoryMessage.h>
 #include <SpawnUnitMessage.h>
 #include <PollingStation.h>
+#include <UpgradeUnitMessage.h>
 
 Director::Director(eOwnerType aOwnerType, const Prism::Terrain& aTerrain)
 	: myOwner(aOwnerType)
@@ -22,6 +23,7 @@ Director::Director(eOwnerType aOwnerType, const Prism::Terrain& aTerrain)
 	PostMaster::GetInstance()->Subscribe(eMessageType::SPAWN_UNIT, this);
 	PostMaster::GetInstance()->Subscribe(eMessageType::RESOURCE, this);
 	PostMaster::GetInstance()->Subscribe(eMessageType::VICTORY, this);
+	PostMaster::GetInstance()->Subscribe(eMessageType::UPGRADE_UNIT, this);
 }
 
 
@@ -32,6 +34,7 @@ Director::~Director()
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::SPAWN_UNIT, this);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::RESOURCE, this);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::VICTORY, this);
+	PostMaster::GetInstance()->UnSubscribe(eMessageType::UPGRADE_UNIT, this);
 }
 
 void Director::Update(float aDeltaTime)
@@ -78,6 +81,29 @@ bool Director::SpawnUnit(eUnitType aUnitType)
 		myBuilding->GetComponent<BuildingComponent>()->BuildUnit(aUnitType);
 		return true;
 	}
+	return false;
+}
+
+bool Director::UpgradeUnit(eUnitType aUnitType)
+{
+	BuildingComponent* building = myBuilding->GetComponent<BuildingComponent>();
+	if (building->IsQueueFull() == true)
+	{
+		return false;
+	}
+
+	if (building->CanUpgrade(aUnitType) == false)
+	{
+		return false;
+	}
+
+	if (myTestGold >= building->GetUpgradeCost(aUnitType))
+	{
+		myTestGold -= building->GetUpgradeCost(aUnitType);
+		building->UpgradeUnit(aUnitType);
+		return true;
+	}
+
 	return false;
 }
 
@@ -152,6 +178,32 @@ void Director::ReceiveMessage(const VictoryMessage& aMessage)
 		if (myVictoryPoints < 0)
 		{
 			myVictoryPoints = 0;
+		}
+	}
+}
+
+void Director::ReceiveMessage(const UpgradeUnitMessage& aMessage)
+{
+	if (aMessage.myOwner == myOwner)
+	{
+		const Upgrade& upgrade = aMessage.myUpgrade;
+		for (int i = 0; i < myUnits.Size(); ++i)
+		{
+			if (myUnits[i]->GetUnitType() == aMessage.myUnit)
+			{
+				HealthComponent* comp = myUnits[i]->GetComponent<HealthComponent>();
+				if (comp != nullptr)
+				{
+					float oldArmor = comp->GetArmor();
+					float newArmor = oldArmor * upgrade.myArmorModifier;
+					if (int(oldArmor) == int(newArmor))
+					{
+						newArmor = oldArmor + 1.f;
+					}
+
+					comp->SetArmor(newArmor);
+				}
+			}
 		}
 	}
 }

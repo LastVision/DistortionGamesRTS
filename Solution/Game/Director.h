@@ -2,6 +2,7 @@
 
 #include <GrowingArray.h>
 #include <Subscriber.h>
+#include <GameStructs.h>
 
 class Entity;
 
@@ -24,12 +25,14 @@ public:
 
 	int GetUnitCount() const;
 	bool SpawnUnit(eUnitType aUnitType);
+	bool UpgradeUnit(eUnitType aUnitType);
 
 	const int& GetVictoryPoints() const;
 	
 	virtual void ReceiveMessage(const SpawnUnitMessage& aMessage) override;
 	void ReceiveMessage(const ResourceMessage& aMessage) override;
 	void ReceiveMessage(const VictoryMessage& aMessage) override;
+	void ReceiveMessage(const UpgradeUnitMessage& aMessage) override;
 
 protected:
 	bool IsAlreadyActive(Entity* aUnit);

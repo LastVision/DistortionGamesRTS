@@ -99,5 +99,8 @@
     <ClInclude Include="ToggleBuildTimeMessage.h">
       <Filter>Message\CheatMessages</Filter>
     </ClInclude>
+    <ClInclude Include="UpgradeUnitMessage.h">
+      <Filter>Message</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

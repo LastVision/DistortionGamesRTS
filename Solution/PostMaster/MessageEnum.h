@@ -20,5 +20,6 @@ enum class eMessageType
 	VICTORY,
 	PARTICLE,
 	TOGGLE_BUILD_TIME,
+	UPGRADE_UNIT,
 	COUNT,
 };

@@ -43,7 +43,15 @@ namespace GUI
 		WidgetContainer* myUnitActionButtons;
 		WidgetContainer* myBuildingActionButtons;
 
+		WidgetContainer* myGruntActionButtons;
+		WidgetContainer* myRangerActionButtons;
+		WidgetContainer* myTankActionButtons;
+
 		bool myIsUnitSelected;
 		eEntityType mySelectedType;
+
+		bool myHasSelectedGrunt;
+		bool myHasSelectedRanger;
+		bool myHasSelectedTank;
 	};
 }

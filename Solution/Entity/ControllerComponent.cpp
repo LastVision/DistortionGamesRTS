@@ -4,6 +4,7 @@
 #include "AnimationComponent.h"
 #include "BlendedBehavior.h"
 #include "ControllerComponent.h"
+#include "GrenadeComponent.h"
 #include "HealthComponent.h"
 #include <PathFinderAStar.h>
 #include <PathFinderFunnel.h>
@@ -67,7 +68,7 @@ void ControllerComponent::Update(float aDelta)
 	if (myEntity.GetState() == eEntityState::IDLE)
 	{
 		StartNextAction();
-	}
+		}
 
 	//if (myCurrentAction.myAction == eAction::IDLE)
 	//{
@@ -232,7 +233,7 @@ void ControllerComponent::AttackMove(const CU::Vector3<float>& aPosition, bool a
 	//{
 	//	myAttackTarget = target;
 	//}
-}
+	}
 
 void ControllerComponent::Stop()
 {
@@ -275,11 +276,11 @@ void ControllerComponent::FillCommandList(eAction aAction, bool aClearCommandQue
 	if (myActions.Size() > 0)
 	{
 		myActions.Insert(0, action);
-	}
-	else
-	{
-		myActions.Add(action);
-	}
+		}
+		else
+		{
+			myActions.Add(action);
+		}
 	//CU::GrowingArray<CU::Vector3<float>> path(16);
 	//if (myTerrain.GetPathFinder()->FindPath(myEntity.GetOrientation().GetPos(), { aTargetPosition.x, 0, aTargetPosition.y }, path) == true)
 	//{
@@ -326,15 +327,15 @@ void ControllerComponent::DoIdle()
 }
 
 void ControllerComponent::DoMove()
-{
+		{
 	myBehavior->SetTarget(GetPosition(myCurrentAction));
-}
+		}
 
 void ControllerComponent::DoAttackTarget(float aDelta)
 {
 	myCurrentAttackTargetPathRefreshTime -= aDelta;
 	if (myCurrentAttackTargetPathRefreshTime <= 0.f)
-	{
+		{
 		RefreshPathToAttackTarget();
 	}
 
@@ -342,22 +343,22 @@ void ControllerComponent::DoAttackTarget(float aDelta)
 	if (CU::Length2(myCurrentAction.myEntity->GetPosition() - myEntity.GetPosition()) < myAttackRange2)
 	{
 		AttackTarget();
-	}
-	else
-	{
+			}
+			else
+			{
 		DoMove();
 	}
-}
+			}
 
 void ControllerComponent::DoReturn()
 {
 	DL_ASSERT("Not implemented yet.");
-}
+		}
 
 void ControllerComponent::DoHold()
 {
 	DL_ASSERT("Not implemented yet.");
-}
+	}
 
 void ControllerComponent::DoAttackMove()
 {
@@ -437,9 +438,16 @@ void ControllerComponent::AttackTarget()
 		myEntity.SetState(eEntityState::ATTACKING);
 		myAttackTimer = myAttackRechargeTime;
 
-		bool targetSurvived = false;
-
+		if (myEntity.GetUnitType() == eUnitType::GRUNT)
+		{
+			if (myEntity.GetComponent<GrenadeComponent>()->GetCooldown() <= 0.f)
+			{
+				myEntity.GetComponent<GrenadeComponent>()->ThrowGrenade(myCurrentAction.myEntity->GetOrientation().GetPos());
+			}
+		}
+		
 		HealthComponent* targetHealth = myCurrentAction.myEntity->GetComponent<HealthComponent>();
+		bool targetSurvived = false;
 		if (targetHealth != nullptr && myCurrentAction.myEntity->GetAlive())
 		{
 			targetSurvived = targetHealth->TakeDamage(myAttackDamage);
@@ -454,7 +462,6 @@ void ControllerComponent::AttackTarget()
 
 		if (targetSurvived == false)
 		{
-			myCurrentAction.myEntity->SetState(eEntityState::DYING);
 			myEntity.SetState(eEntityState::IDLE);
 			myBehavior->SetTarget(myEntity.GetPosition());
 		}
@@ -546,12 +553,12 @@ void ControllerComponent::RenderDebugLines() const
 		{
 			color = GetActionColor(myActions[i-1].myAction);
 
-			
+
 			pointA = myTerrain.GetHeight(GetPosition(myActions[i]), 1.f);
 			pointB = myTerrain.GetHeight(GetPosition(myActions[i-1]), 1.f);
-			Prism::RenderLine3D(pointA, pointB, color);
+				Prism::RenderLine3D(pointA, pointB, color);
+			}
 		}
-	}
 }
 
 const CU::Vector2<float>& ControllerComponent::GetPosition(const ActionData& anActionData) const

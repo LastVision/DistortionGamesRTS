@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+#include "AnimationComponent.h"
 #include "Camera.h"
 #include "HealthComponent.h"
 #include <Engine.h>
@@ -49,13 +50,13 @@ bool HealthComponent::TakeDamage(float aDamage)
 {
 	DL_ASSERT_EXP(aDamage >= 0, "Cant take negative damage, use Heal for healing if that was your intention");
 
+	PostMaster::GetInstance()->SendMessage(EmitterMessage(eParticleType::BLOOD, myEntity.GetId()));
+
 	float damage = aDamage - myArmor;
 	if (damage <= 0.f)
 	{
 		return true;
 	}
-
-	PostMaster::GetInstance()->SendMessage(EmitterMessage(eParticleType::BLOOD, myEntity.GetId()));
 
 	if (myEntity.GetAlive() == false)
 	{
@@ -67,6 +68,8 @@ bool HealthComponent::TakeDamage(float aDamage)
 	{
 		myCurrentHealth = 0;
 		myEntity.Kill();
+
+		myEntity.SetState(eEntityState::DYING);
 		return false;
 	}
 
