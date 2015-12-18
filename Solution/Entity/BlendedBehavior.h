@@ -1,8 +1,16 @@
 #pragma once
-class BlendedBehavior
+#include "Behavior.h"
+
+class BlendedBehavior : public Behavior
 {
 public:
-	BlendedBehavior();
+	BlendedBehavior(const Entity& anEntity);
 	~BlendedBehavior();
+
+	const CU::Vector2<float>& Update() override;
+	void SetTarget(const CU::Vector2<float>& aTargetPosition) override;
+
+private:
+	CU::GrowingArray<Behavior*> myBehaviors;
 };
 

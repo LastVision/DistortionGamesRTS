@@ -38,6 +38,7 @@ namespace Prism
 		void Render(const Camera& aCamera, bool aRenderNavMeshLines);
 		void CalcEntityHeight(CU::Matrix44<float>& anOrientation) const;
 		CU::Vector3<float> GetHeight(const CU::Vector3<float>& aPosition, float aHeightOffset = 0.f) const;
+		CU::Vector3<float> GetHeight(const CU::Vector2<float>& aPosition, float aHeightOffset = 0.f) const;
 
 		CU::Vector3<float> CalcIntersection(const CU::Vector3<float>& aCameraPos
 			, const CU::Vector3<float>& aRayCastToZero) const;

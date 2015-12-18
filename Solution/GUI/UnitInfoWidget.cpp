@@ -162,7 +162,7 @@ namespace GUI
 			, position, Prism::eTextType::RELEASE_TEXT, myTextScale);
 
 		position.x += myStatsSprite->GetSize().x / 3.f;
-		Prism::Engine::GetInstance()->PrintText(myUnits[0]->GetComponent<ActorComponent>()->GetSpeed()
+		Prism::Engine::GetInstance()->PrintText(myUnits[0]->GetMaxSpeed()
 			, position, Prism::eTextType::RELEASE_TEXT, myTextScale);
 	}
 }

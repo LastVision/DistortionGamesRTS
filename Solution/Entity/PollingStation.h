@@ -11,6 +11,7 @@ public:
 
 	Entity* FindClosestEntity(const CU::Vector3<float>& aPosition, int aEntityOwner, float aMaxDistance2 = FLT_MAX);
 	Entity* FindEntityAtPosition(const CU::Vector3<float>& aPosition, int aEntityOwner);
+	void FindAllEntitiesCloseToEntity(Entity* anEntity, float aRadius, CU::GrowingArray<Entity*>& someEntitiesOut);
 	
 	const CU::GrowingArray<Entity*>& GetUnits(eOwnerType anOwner) const;
 	const CU::GrowingArray<Entity*>& GetResourcePoints() const;

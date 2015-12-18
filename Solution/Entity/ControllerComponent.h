@@ -5,13 +5,15 @@ namespace Prism
 	class Terrain;
 }
 
+class Behavior;
+
 struct ControllerComponentData;
 class ControllerComponent : public Component
 {
 public:
 	struct ControllerData
 	{
-		CU::Vector3<float> myDirection;
+		CU::Vector2<float> myAcceleration;
 	};
 
 	ControllerComponent(Entity& aEntity, ControllerComponentData& aData, const Prism::Terrain& aTerrain);
@@ -50,11 +52,11 @@ private:
 	struct ActionData
 	{
 		eAction myAction;
-		CU::Vector3<float> myPosition;
+		CU::Vector2<float> myPosition;
 	};
 
-	void FillCommandList(const CU::Vector3<float>& aTargetPosition, eAction aAction, bool aClearCommandQueue);
-	void DoMoveAction(const CU::Vector3<float>& aTargetPosition);
+	void FillCommandList(const CU::Vector2<float>& aTargetPosition, eAction aAction, bool aClearCommandQueue);
+	void DoMoveAction(const CU::Vector2<float>& aTargetPosition);
 	void DoAttackAction();
 	void AttackTarget();
 	void StartNextAction();
@@ -64,8 +66,9 @@ private:
 	
 	Entity* myAttackTarget;
 	ControllerData myData;
+	Behavior* myBehavior;
 
-	CU::Vector3<float> myReturnPosition;
+	CU::Vector2<float> myReturnPosition;
 
 	const Prism::Terrain& myTerrain;
 	eOwnerType myOwnerType;

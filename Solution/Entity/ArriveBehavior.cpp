@@ -2,11 +2,56 @@
 #include "ArriveBehavior.h"
 
 
-ArriveBehavior::ArriveBehavior()
+ArriveBehavior::ArriveBehavior(const Entity& anEntity)
+	: Behavior(anEntity)
+	, myTimeToTarget(0.1f)
+	, mySlowRadius(3.0f)
+	, myTargetRadius(10.f)
+	, myMaxAcceleration(100000.f)
+	, myActive(false)
 {
 }
 
 
 ArriveBehavior::~ArriveBehavior()
 {
+}
+
+const CU::Vector2<float>& ArriveBehavior::Update()
+{
+	if (myActive == false) // can remove?
+	{
+		myAcceleration.x = 0;
+		myAcceleration.y = 0;
+		return myAcceleration;
+	}
+
+
+	CU::Vector2<float> direction = myTarget - myEntity.GetPosition();
+	float distance = CU::Length(direction);
+
+	float targetSpeed;
+	if (distance > mySlowRadius)
+	{
+		targetSpeed = myEntity.GetMaxSpeed();
+	}
+	else
+	{
+		targetSpeed = myEntity.GetMaxSpeed() * distance / mySlowRadius;
+	}
+
+	CU::Vector2<float> targetVelocity = direction;
+	CU::Normalize(targetVelocity);
+	targetVelocity *= targetSpeed;
+
+	myAcceleration = targetVelocity - myEntity.GetVelocity();
+	myAcceleration /= myTimeToTarget;
+
+	if (CU::Length2(myAcceleration) > myMaxAcceleration * myMaxAcceleration)
+	{
+		CU::Normalize(myAcceleration);
+		myAcceleration *= myMaxAcceleration;
+	}
+
+	return myAcceleration;
 }

@@ -2,12 +2,15 @@
 
 #include "ActorComponent.h"
 #include "AnimationComponent.h"
+#include "BlendedBehavior.h"
 #include "ControllerComponent.h"
 #include "HealthComponent.h"
 #include <PathFinderAStar.h>
 #include <PathFinderFunnel.h>
 #include "PollingStation.h"
 #include <Terrain.h>
+
+
 
 ControllerComponent::ControllerComponent(Entity& aEntity, ControllerComponentData& aData, const Prism::Terrain& aTerrain)
 	: Component(aEntity)
@@ -23,6 +26,7 @@ ControllerComponent::ControllerComponent(Entity& aEntity, ControllerComponentDat
 	, myActions(16)
 	, myAttackTargetPathRefreshTime(0.5f)
 	, myCurrentAttackTargetPathRefreshTime(myAttackTargetPathRefreshTime)
+	, myBehavior(new BlendedBehavior(myEntity))
 {
 	DL_ASSERT_EXP(myEntity.GetComponent<ActorComponent>() != nullptr
 		, "ControllerComponent wont work without a ActorComponent");
@@ -49,6 +53,7 @@ ControllerComponent::ControllerComponent(Entity& aEntity, ControllerComponentDat
 
 ControllerComponent::~ControllerComponent()
 {
+	SAFE_DELETE(myBehavior);
 }
 
 void ControllerComponent::Update(float aDelta)
@@ -73,13 +78,11 @@ void ControllerComponent::Update(float aDelta)
 		if (closeTarget != nullptr)
 		{
 			myAttackTarget = closeTarget;
-			myReturnPosition = myEntity.GetOrientation().GetPos();
-			myReturnPosition.y = 0.f;
+			myReturnPosition = myEntity.myPosition;
 
 			ActionData action;
 			action.myAction = eAction::ATTACK_TARGET;
-			action.myPosition = myAttackTarget->GetOrientation().GetPos();
-			action.myPosition.y = 0.f;
+			action.myPosition = myAttackTarget->myPosition;
 			myActions.Add(action);
 		}
 	}
@@ -94,7 +97,7 @@ void ControllerComponent::Update(float aDelta)
 			DoMoveAction(myCurrentAction.myPosition);
 
 			myAttackTarget = PollingStation::GetInstance()->FindClosestEntity(myEntity.GetOrientation().GetPos()
-				, myTargetType, myVisionRange2);
+				, myTargetType, myVisionRange2 * 10.f);
 		}
 	}
 	else if (myCurrentAction.myAction == eAction::RETURN)
@@ -102,7 +105,7 @@ void ControllerComponent::Update(float aDelta)
 		DL_ASSERT_EXP(myReturnPosition.x != FLT_MAX && myReturnPosition.y != FLT_MAX
 			, "ControllerComponent tried to do RETURN-Action without a valid ReturnPosition");
 
-		Entity* closeTarget = PollingStation::GetInstance()->FindClosestEntity(myReturnPosition
+		Entity* closeTarget = PollingStation::GetInstance()->FindClosestEntity({ myReturnPosition.x, 0, myReturnPosition.y }
 			, myTargetType, myVisionRange2);
 
 		if (closeTarget != nullptr)
@@ -112,14 +115,13 @@ void ControllerComponent::Update(float aDelta)
 		}
 		else
 		{
-			if (myReturnPosition.x != FLT_MAX && myReturnPosition.z != FLT_MAX)
+			if (myReturnPosition.x != FLT_MAX && myReturnPosition.y != FLT_MAX)
 			{
 				DoMoveAction(myReturnPosition);
 			}
 			else
 			{
-				myReturnPosition = myEntity.myOrientation.GetPos();
-				myReturnPosition.y = 0.f;
+				myReturnPosition = myEntity.myPosition;
 			}
 		}
 	}
@@ -156,7 +158,7 @@ void ControllerComponent::Update(float aDelta)
 	}
 	else if (myCurrentAction.myAction == eAction::MOVE)
 	{
-		DoMoveAction(myCurrentAction.myPosition);
+		//DoMoveAction(myCurrentAction.myPosition);
 	}
 
 
@@ -165,6 +167,7 @@ void ControllerComponent::Update(float aDelta)
 		StartNextAction();
 	}
 
+	myData.myAcceleration = myBehavior->Update();
 
 	RenderDebugLines();
 }
@@ -172,18 +175,18 @@ void ControllerComponent::Update(float aDelta)
 void ControllerComponent::MoveTo(const CU::Vector3<float>& aPosition, bool aClearCommandQueue)
 {
 	myEntity.SetState(eEntityState::IDLE);
-	FillCommandList(aPosition, eAction::MOVE, aClearCommandQueue);
+	FillCommandList({ aPosition.x, aPosition.z }, eAction::MOVE, aClearCommandQueue);
 }
 
 void ControllerComponent::AttackTarget(Entity* aEntity, bool aClearCommandQueue)
 {
 	myAttackTarget = aEntity;
-	FillCommandList(myAttackTarget->GetOrientation().GetPos(), eAction::ATTACK_TARGET, aClearCommandQueue);
+	FillCommandList(myAttackTarget->myPosition, eAction::ATTACK_TARGET, aClearCommandQueue);
 }
 
 void ControllerComponent::AttackMove(const CU::Vector3<float>& aPosition, bool aClearCommandQueue)
 {
-	FillCommandList(aPosition, eAction::ATTACK_MOVE, aClearCommandQueue);
+	FillCommandList({ aPosition.x, aPosition.z }, eAction::ATTACK_MOVE, aClearCommandQueue);
 
 	Entity* target = nullptr;
 	switch (myEntity.GetOwner())
@@ -212,8 +215,8 @@ void ControllerComponent::Stop()
 {
 	myActions.RemoveAll();
 	myCurrentAction.myAction = eAction::IDLE;
-	myCurrentAction.myPosition = myEntity.GetOrientation().GetPos();
-	myData.myDirection = { 0.f, 0.f, 0.f };
+	myCurrentAction.myPosition = myEntity.myPosition;
+	myData.myAcceleration = { 0.f, 0.f };
 	myAttackTarget = nullptr;
 }
 
@@ -221,8 +224,8 @@ void ControllerComponent::HoldPosition()
 {
 	myActions.RemoveAll();
 	myCurrentAction.myAction = eAction::HOLD_POSITION;
-	myCurrentAction.myPosition = myEntity.GetOrientation().GetPos();
-	myData.myDirection = { 0.f, 0.f, 0.f };
+	myCurrentAction.myPosition = myEntity.myPosition;
+	myData.myAcceleration = { 0.f, 0.f };
 	myAttackTarget = nullptr;
 	myEntity.SetState(eEntityState::IDLE);
 }
@@ -233,25 +236,25 @@ void ControllerComponent::Spawn(const CU::Vector3f& aPosition)
 	myTerrain.CalcEntityHeight(myEntity.myOrientation);
 }
 
-void ControllerComponent::FillCommandList(const CU::Vector3<float>& aTargetPosition, eAction aAction, bool aClearCommandQueue)
+void ControllerComponent::FillCommandList(const CU::Vector2<float>& aTargetPosition, eAction aAction, bool aClearCommandQueue)
 {
 	if (aClearCommandQueue == true)
 	{
 		myActions.RemoveAll();
+		myEntity.SetState(eEntityState::IDLE);
 	}
 
 	ActionData action;
 	action.myAction = aAction;
 
 	CU::GrowingArray<CU::Vector3<float>> path(16);
-	if (myTerrain.GetPathFinder()->FindPath(myEntity.GetOrientation().GetPos(), aTargetPosition, path) == true)
+	if (myTerrain.GetPathFinder()->FindPath(myEntity.GetOrientation().GetPos(), { aTargetPosition.x, 0, aTargetPosition.y }, path) == true)
 	{
 		if (path.Size() > 0)
 		{
 			for (int i = 0; i < path.Size(); ++i)
 			{
-				CU::Vector3<float> target = path[i];
-				target.y = 0.f;
+				CU::Vector2<float> target = { path[i].x, path[i].z };
 
 				action.myPosition = target;
 
@@ -261,41 +264,37 @@ void ControllerComponent::FillCommandList(const CU::Vector3<float>& aTargetPosit
 		else
 		{
 			action.myPosition = aTargetPosition;
-			action.myPosition.y = 0.f;
 			myActions.Add(action);
 		}
 	}
 
-	if (aClearCommandQueue == true)
-	{
-		StartNextAction();
-	}
+	//if (aClearCommandQueue == true)
+	//{
+	//	StartNextAction();
+	//}
 }
 
-void ControllerComponent::DoMoveAction(const CU::Vector3<float>& aTargetPosition)
+void ControllerComponent::DoMoveAction(const CU::Vector2<float>& aTargetPosition)
 {
-	if (myEntity.GetState() != eEntityState::WALKING)
-	{
-		CU::Vector3<float> pos = myEntity.myOrientation.GetPos();
-		pos.y = 0.f;
-		myData.myDirection = aTargetPosition - pos;
-		myEntity.SetState(eEntityState::WALKING);
-	}
-	else if (myEntity.GetState() == eEntityState::WALKING)
-	{
-		CU::Vector3<float> position = myEntity.myOrientation.GetPos();
-		myEntity.myOrientation.SetPos({ position.x, 0.f, position.z });
+	//if (myEntity.GetState() != eEntityState::WALKING) // derp?
+	//{
+	//	myEntity.SetState(eEntityState::WALKING);
+	//}
+	//else if (myEntity.GetState() == eEntityState::WALKING)
+	//{
+	//	//CU::Vector3<float> position = myEntity.myOrientation.GetPos();
+	//	//myEntity.myOrientation.SetPos({ position.x, 0.f, position.z });
 
-		float dotResult = CU::Dot(myEntity.myOrientation.GetForward(), aTargetPosition - position);
-		if (dotResult <= 0)
-		{
-			myEntity.myOrientation.SetPos(aTargetPosition);
-			myData.myDirection = { 0.f, 0.f, 0.f };
-			myEntity.SetState(eEntityState::IDLE);
-		}
+	//	//float dotResult = CU::Dot(myEntity.myOrientation.GetForward(), aTargetPosition - position);
+	//	//if (dotResult <= 0)
+	//	//{
+	//	//	myEntity.myOrientation.SetPos(aTargetPosition);
+	//	//	myData.myAcceleration = { 0.f, 0.f };
+	//	//	myEntity.SetState(eEntityState::IDLE);
+	//	//}
 
-		myEntity.myOrientation.SetPos(position);
-	}
+	//	//myEntity.myOrientation.SetPos(position);
+	//}
 }
 
 void ControllerComponent::DoAttackAction()
@@ -305,7 +304,7 @@ void ControllerComponent::DoAttackAction()
 	float distanceToTarget = CU::Length2(myEntity.GetOrientation().GetPos() - myAttackTarget->GetOrientation().GetPos());
 	if (myReturnPosition.x != FLT_MAX && myReturnPosition.y != FLT_MAX)
 	{
-		float distanceToReturnPosition = CU::Length2(myEntity.GetOrientation().GetPos() - myReturnPosition);
+		float distanceToReturnPosition = CU::Length2(myEntity.myPosition - myReturnPosition);
 		hasReturnPosition = true;
 		float chaseDistance = myChaseDistance2;
 
@@ -329,9 +328,7 @@ void ControllerComponent::DoAttackAction()
 			{
 				myCurrentAction.myAction = eAction::RETURN;
 				myEntity.GetComponent<ActorComponent>()->LookAtPoint(myReturnPosition);
-				CU::Vector3<float> pos = myEntity.myOrientation.GetPos();
-				pos.y = 0.f;
-				myData.myDirection = myReturnPosition - pos;
+				myData.myAcceleration = myReturnPosition - myEntity.myPosition;					//should be in behavior
 			}
 			else
 			{
@@ -343,15 +340,11 @@ void ControllerComponent::DoAttackAction()
 	{
 		myCurrentAction.myAction = eAction::RETURN;
 		myEntity.GetComponent<ActorComponent>()->LookAtPoint(myReturnPosition);
-		CU::Vector3<float> pos = myEntity.myOrientation.GetPos();
-		pos.y = 0.f;
-		myData.myDirection = myReturnPosition - pos;
+		myData.myAcceleration = myReturnPosition - myEntity.myPosition;
 	}
 	else
 	{
-		CU::Vector3<float> pos = myAttackTarget->GetOrientation().GetPos();
-		pos.y = 0.f;
-		DoMoveAction(pos);
+		DoMoveAction(myAttackTarget->myPosition);
 	}
 }
 
@@ -388,7 +381,7 @@ void ControllerComponent::AttackTarget()
 	else
 	{
 		myEntity.SetState(eEntityState::ATTACKING);
-		myData.myDirection = { 0.f, 0.f, 0.f };
+		myData.myAcceleration = { 0.f, 0.f };
 	}
 }
 
@@ -396,15 +389,24 @@ void ControllerComponent::StartNextAction()
 {
 	if (myActions.Size() > 0)
 	{
-		myReturnPosition = myEntity.GetOrientation().GetPos();
+		myReturnPosition = myEntity.myPosition;
 		myCurrentAction.myAction = myActions[0].myAction;
 		myCurrentAction.myPosition = myActions[0].myPosition;
 		myActions.RemoveNonCyclicAtIndex(0);
+		myBehavior->SetTarget(myCurrentAction.myPosition);
+
+		if (myCurrentAction.myAction == eAction::ATTACK_MOVE
+			|| myCurrentAction.myAction == eAction::ATTACK_TARGET
+			|| myCurrentAction.myAction == eAction::MOVE
+			|| myCurrentAction.myAction == eAction::RETURN)
+		{
+			myEntity.SetState(eEntityState::WALKING);
+		}
 	}
 	else
 	{
 		myCurrentAction.myAction = eAction::IDLE;
-		myCurrentAction.myPosition = myEntity.GetOrientation().GetPos();
+		myCurrentAction.myPosition = myEntity.myPosition;
 	}
 }
 

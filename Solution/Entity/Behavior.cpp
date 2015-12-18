@@ -2,7 +2,8 @@
 #include "Behavior.h"
 
 
-Behavior::Behavior()
+Behavior::Behavior(const Entity& anEntity)
+	: myEntity(anEntity)
 {
 }
 

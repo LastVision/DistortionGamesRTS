@@ -179,6 +179,12 @@ namespace Prism
 		anOrientation.SetPos(GetHeight(anOrientation.GetPos(), 0));
 	}
 
+
+	CU::Vector3<float> Terrain::GetHeight(const CU::Vector2<float>& aPosition, float aHeightOffset) const
+	{
+		return GetHeight({ aPosition.x, 0, aPosition.y }, aHeightOffset);
+	}
+
 	CU::Vector3<float> Terrain::GetHeight(const CU::Vector3<float>& aPosition, float aHeightOffset) const
 	{
 		CU::Vector3<float> position00(aPosition);
