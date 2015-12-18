@@ -228,6 +228,31 @@ void ComponentLoader::LoadEnrageComponent(XMLReader& aDocument, tinyxml2::XMLEle
 	aDocument.ForceReadAttribute(e, "value", aOutputData.myMovementSpeedModifier);
 }
 
+void ComponentLoader::LoadGrenadeComponent(XMLReader& aDocument, tinyxml2::XMLElement* aSourceElement, GrenadeComponentData& aOutputData)
+{
+	aOutputData.myExistsInEntity = true;
+
+	tinyxml2::XMLElement* e = aDocument.ForceFindFirstChild(aSourceElement, "Range");
+	aDocument.ForceReadAttribute(e, "value", aOutputData.myRange);
+
+	e = aDocument.ForceFindFirstChild(aSourceElement, "Radius");
+	aDocument.ForceReadAttribute(e, "value", aOutputData.myRadius);
+
+	e = aDocument.ForceFindFirstChild(aSourceElement, "Cooldown");
+	aDocument.ForceReadAttribute(e, "value", aOutputData.myCooldown);
+
+	e = aDocument.ForceFindFirstChild(aSourceElement, "Damage");
+	aDocument.ForceReadAttribute(e, "value", aOutputData.myDamage);
+
+	e = aDocument.ForceFindFirstChild(aSourceElement, "Delay");
+	aDocument.ForceReadAttribute(e, "value", aOutputData.myDelay);
+
+	e = aDocument.ForceFindFirstChild(aSourceElement, "DamageAllies");
+	aDocument.ForceReadAttribute(e, "value", aOutputData.myAlliesShouldTakeDamage);
+
+}
+
+
 void ComponentLoader::FailedToReadChildElementMessage(const std::string& aElement, const std::string& aParent)
 {
 	std::string errorMessage = "The element " + aElement + " in " + aParent +

@@ -100,6 +100,7 @@ enum class eComponentType
 	BUILDING,
 	TOTEM,
 	ENRAGE,
+	GRENADE,
 	_COUNT,
 };
 
