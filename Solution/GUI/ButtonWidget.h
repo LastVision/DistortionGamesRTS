@@ -3,7 +3,7 @@
 
 namespace Prism
 {
-	class Sprite;
+	class SpriteProxy;
 }
 
 namespace tinyxml2
@@ -38,10 +38,10 @@ namespace GUI
 	private:
 		void Click();
 		
-		Prism::Sprite* myImageNormal;
-		Prism::Sprite* myImagePressed;
-		Prism::Sprite* myImageHover;
-		Prism::Sprite* myImageCurrent;
+		Prism::SpriteProxy* myImageNormal;
+		Prism::SpriteProxy* myImagePressed;
+		Prism::SpriteProxy* myImageHover;
+		Prism::SpriteProxy* myImageCurrent;
 
 		OnClickMessage* myClickEvent;
 	};

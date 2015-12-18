@@ -3,7 +3,7 @@
 
 namespace Prism
 {
-	class Sprite;
+	class SpriteProxy;
 	class Text;
 }
 
@@ -28,10 +28,10 @@ private:
 	void HandleHistoryMode();
 	void HandleSuggestionMode();
 
-	Prism::Sprite* myBackground;
+	Prism::SpriteProxy* myBackground;
 	bool& myShouldReOpenConsole;
-	Prism::Sprite* myMarker;
-	Prism::Sprite* mySuggestionBox;
+	Prism::SpriteProxy* myMarker;
+	Prism::SpriteProxy* mySuggestionBox;
 	CU::GrowingArray<std::string> myLuaSuggestions;
 	Prism::Text* mySuggestionText;
 	std::string mySuggestionString;

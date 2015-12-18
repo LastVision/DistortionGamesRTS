@@ -4,7 +4,7 @@
 
 namespace GUI
 {
-	WidgetContainer::WidgetContainer(Prism::Sprite* aBackgroundSprite, const CU::Vector2<float>& aSize)
+	WidgetContainer::WidgetContainer(Prism::SpriteProxy* aBackgroundSprite, const CU::Vector2<float>& aSize)
 		: myBackground(aBackgroundSprite)
 		, myWidgets(8)
 	{

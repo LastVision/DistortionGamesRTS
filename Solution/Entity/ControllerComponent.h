@@ -37,6 +37,11 @@ public:
 	eComponentType GetType() override;
 
 	float GetAttackDamage() const;
+	float GetAttackSpeed() const;
+
+	void SetAttackDamage(float aDamage);
+	void SetRechargeTime(float aRechargeTime);
+	void SetAttackRange2(float aRange2);
 
 private:
 	enum class eAction
@@ -77,7 +82,7 @@ private:
 	float myVisionRange2;
 	float myAttackRange2;
 	float myAttackDamage;
-	float myAttackSpeed;
+	float myAttackRechargeTime;
 	float myAttackTimer;
 	float myChaseDistance2;
 	float myChaseDistanceNeutral2;
@@ -116,4 +121,24 @@ inline eComponentType ControllerComponent::GetType()
 inline float ControllerComponent::GetAttackDamage() const
 {
 	return myAttackDamage;
+}
+
+inline float ControllerComponent::GetAttackSpeed() const
+{
+	return myAttackRechargeTime;
+}
+
+inline void ControllerComponent::SetAttackDamage(float aDamage)
+{
+	myAttackDamage = aDamage;
+}
+
+inline void ControllerComponent::SetRechargeTime(float aRechargeTime)
+{
+	myAttackRechargeTime = aRechargeTime;
+}
+
+inline void ControllerComponent::SetAttackRange2(float aRange2)
+{
+	myAttackRange2 = aRange2;
 }

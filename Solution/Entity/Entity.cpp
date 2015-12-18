@@ -5,12 +5,15 @@
 #include "BuildingComponent.h"
 #include "CollisionComponent.h"
 #include "ControllerComponent.h"
+#include "EnrageComponent.h"
 #include "GraphicsComponent.h"
 #include "HealthComponent.h"
 #include "EntityId.h"
 #include <Scene.h>
 #include <Terrain.h>
+#include "TotemComponent.h"
 #include "TriggerComponent.h"
+
 
 Entity::Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& aEntityData
 	, Prism::Scene& aScene, const CU::Vector3<float> aStartPosition, const Prism::Terrain& aTerrain
@@ -83,6 +86,17 @@ Entity::Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& a
 	if (aEntityData.myHealthData.myExistsInEntity == true)
 	{
 		myComponents[static_cast<int>(eComponentType::HEALTH)] = new HealthComponent(*this, aEntityData.myHealthData);
+	}
+
+	if (aEntityData.myTotemData.myExistsInEntity == true)
+	{
+		myOrientation.SetPos(aStartPosition);
+		myComponents[static_cast<int>(eComponentType::TOTEM)] = new TotemComponent(*this, aEntityData.myTotemData);
+	}
+
+	if (aEntityData.myEnrageData.myExistsInEntity == true)
+	{
+		myComponents[static_cast<int>(eComponentType::ENRAGE)] = new EnrageComponent(*this, aEntityData.myEnrageData);
 	}
 	
 }

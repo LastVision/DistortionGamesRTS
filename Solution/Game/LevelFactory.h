@@ -57,11 +57,10 @@ private:
 	void ReadLevel(const std::string& aLevelPath);
 	void ReadLevelSetting(const std::string& aLevelPath);
 
-	void FindTextures(const char* aDirName);
-	void LoadTexture(const std::string& aPath);
 	void LoadLights(XMLReader& aReader, tinyxml2::XMLElement* aLevelElement);
 	void LoadDirectionalLights(XMLReader& aReader, tinyxml2::XMLElement* aLevelElement);
 	void LoadProps(XMLReader& aReader, tinyxml2::XMLElement* aLevelElement);
+	void LoadCreeps(XMLReader& aReader, tinyxml2::XMLElement* aLevelElement);
 	void LoadControlPoints(XMLReader& aReader, tinyxml2::XMLElement* aLevelElement);
 	void LoadBases(XMLReader& aReader, tinyxml2::XMLElement* aLevelElement);
 	void LoadCutBoxes(XMLReader& aReader, tinyxml2::XMLElement* aLevelElement);

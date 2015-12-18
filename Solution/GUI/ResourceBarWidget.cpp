@@ -33,7 +33,9 @@ namespace GUI
 			aReader->ForceReadAttribute(spriteElement, "sizey", valueSpriteSize.y);
 			aReader->ForceReadAttribute(spriteElement, "positionx", valueSpritePosition.x);
 			aReader->ForceReadAttribute(spriteElement, "positiony", valueSpritePosition.y);
-			myValueSprite = new Prism::Sprite(valueSpritePath, valueSpriteSize);
+			myValueSprite = Prism::ModelLoader::GetInstance()->LoadSprite(valueSpritePath, valueSpriteSize);
+
+			//myValueSprite = new Prism::Sprite(valueSpritePath, valueSpriteSize);
 			mySpritePosition = valueSpritePosition;
 		}
 

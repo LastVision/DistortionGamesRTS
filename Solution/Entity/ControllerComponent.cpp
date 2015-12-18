@@ -18,7 +18,7 @@ ControllerComponent::ControllerComponent(Entity& aEntity, ControllerComponentDat
 	, myVisionRange2(aData.myVisionRange * aData.myVisionRange)
 	, myAttackRange2(aData.myAttackRange * aData.myAttackRange)
 	, myAttackDamage(aData.myAttackDamage)
-	, myAttackSpeed(aData.myAttackSpeed)
+	, myAttackRechargeTime(aData.myAttackRechargeTime)
 	, myAttackTimer(0.f)
 	, myChaseDistance2(aData.myChaseDistance * aData.myChaseDistance)
 	, myChaseDistanceNeutral2(aData.myChaseDistanceNeutral * aData.myChaseDistanceNeutral)
@@ -354,7 +354,7 @@ void ControllerComponent::AttackTarget()
 	{
 		if (myAttackTimer <= 0.f)
 		{
-			myAttackTimer = myAttackSpeed;
+			myAttackTimer = myAttackRechargeTime;
 
 			bool targetSurvived = false;
 

@@ -4,6 +4,7 @@
 #include "ComponentLoader.h"
 #include "EntityFactory.h"
 #include "EntityEnumConverter.h"
+#include <string>
 
 
 EntityFactory* EntityFactory::myInstance = nullptr;
@@ -68,7 +69,8 @@ Entity* EntityFactory::CreateEntity(eOwnerType aOwner, eEntityType aType, ePropT
 			return newEntity;
 		}
 	}
-	DL_ASSERT("Prop not found.");
+	std::string errorMessage = "Prop " + std::to_string(static_cast<int>(aPropType)) + " not found.";
+	DL_ASSERT(errorMessage);
 	return nullptr;
 }
 
@@ -168,6 +170,18 @@ void EntityFactory::LoadEntity(const char* aEntityPath)
 			if (newData.myHealthData.myExistsInEntity == true) DL_ASSERT("You already have a HealthComponent");
 
 			myComponentLoader->LoadHealthComponent(entityDocument, e, newData.myHealthData);
+		}
+		else if (elementName == CU::ToLower("EnrageComponent"))
+		{
+			if (newData.myEnrageData.myExistsInEntity == true) DL_ASSERT("You already have a EnrageComponent");
+
+			myComponentLoader->LoadEnrageComponent(entityDocument, e, newData.myEnrageData);
+		}
+		else if (elementName == CU::ToLower("GrenadeComponent"))
+		{
+			if (newData.myGrenadeData.myExistsInEntity == true) DL_ASSERT("You already have a GrenadeComponent");
+
+			myComponentLoader->LoadGrenadeComponent(entityDocument, e, newData.myGrenadeData);
 		}
 		else 
 		{

@@ -4,21 +4,25 @@
 //#include "FadeMessage.h"
 #include "GameStateMessage.h"
 #include "MessageState.h"
-#include <Sprite.h>
+#include <ModelLoader.h>
+#include <SpriteProxy.h>
 #include <InputWrapper.h>
 #include "PostMaster.h"
 
 MessageState::MessageState(const std::string& aTexturePath, const CU::Vector2<float>& aSize)
 	: myEvent(nullptr)
 {
-	myBackground = new Prism::Sprite(aTexturePath, aSize, aSize / 2.f);
+	myBackground = Prism::ModelLoader::GetInstance()->LoadSprite(aTexturePath, aSize, aSize / 2.f);
+	/*myBackground = new Prism::Sprite(aTexturePath, aSize, aSize / 2.f);*/
 	myTextMessage = "";
 	mySpriteSize = { 64.f, 64.f };
 
 	CU::Vector2<float> windowSize = CU::Vector2<float>(float(Prism::Engine::GetInstance()->GetWindowSize().x),
 		float(Prism::Engine::GetInstance()->GetWindowSize().y));
 
-	myBlackOverlay = new Prism::Sprite("Data/Resource/Texture/Menu/Splash/T_background_default.dds", windowSize, windowSize / 2.f);
+	myBlackOverlay = Prism::ModelLoader::GetInstance()->LoadSprite(
+		"Data/Resource/Texture/Menu/Splash/T_background_default.dds", windowSize, windowSize / 2.f);
+	//myBlackOverlay = new Prism::Sprite("Data/Resource/Texture/Menu/Splash/T_background_default.dds", windowSize, windowSize / 2.f);
 }
 
 MessageState::~MessageState()

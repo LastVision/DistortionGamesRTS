@@ -99,11 +99,14 @@ namespace Prism
 
 		for (int i = 0; i < myTexts.Size(); ++i)
 		{
-			myText->SetText(myTexts[i].myText);
-			myText->SetPosition(myTexts[i].myPosition);
-			myText->SetScale({ myTexts[i].myScale, myTexts[i].myScale });
-			myText->SetColor(myTexts[i].myColor);
-			myText->Render();
+			if (myIsLoading == false)
+			{
+				myText->SetText(myTexts[i].myText);
+				myText->SetPosition(myTexts[i].myPosition);
+				myText->SetScale({ myTexts[i].myScale, myTexts[i].myScale });
+				myText->SetColor(myTexts[i].myColor);
+				myText->Render();
+			}
 		}
 		myTexts.RemoveAll();
 
@@ -167,7 +170,7 @@ namespace Prism
 		myWindowSize.x = static_cast<float>(myWindowSizeInt.x);
 		myWindowSize.y = static_cast<float>(myWindowSizeInt.y);
 
-		if (myDirectX != nullptr) 
+		if (myDirectX != nullptr)
 		{
 			myDirectX->OnResize(aWidth, aHeigth);
 		}

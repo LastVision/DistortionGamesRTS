@@ -41,10 +41,15 @@ namespace GUI
 		myPosition = position;
 		myHoverText = hoverText;
 
-		myImageNormal = new Prism::Sprite(spritePathNormal, mySize, mySize / 2.f);
+		myImageNormal = Prism::ModelLoader::GetInstance()->LoadSprite(spritePathNormal, mySize, mySize / 2.f);
+		myImageHover = Prism::ModelLoader::GetInstance()->LoadSprite(spritePathHover, mySize, mySize / 2.f);
+		myImagePressed = Prism::ModelLoader::GetInstance()->LoadSprite(spritePathPressed, mySize, mySize / 2.f);
+		myImageCurrent = myImageNormal;
+
+		/*myImageNormal = new Prism::Sprite(spritePathNormal, mySize, mySize / 2.f);
 		myImageHover = new Prism::Sprite(spritePathHover, mySize, mySize / 2.f);
 		myImagePressed = new Prism::Sprite(spritePathPressed, mySize, mySize / 2.f);
-		myImageCurrent = myImageNormal;
+		myImageCurrent = myImageNormal;*/
 	}
 
 	ButtonWidget::~ButtonWidget()
@@ -153,6 +158,10 @@ namespace GUI
 		{
 			myClickEvent = new OnClickMessage(eOnClickEvent::UNIT_ACTION_PATROL);
 		}
+		else if (clickEvent == "action_place_totem")
+		{
+			myClickEvent = new OnClickMessage(eOnClickEvent::PLACE_TOTEM);
+		}
 		else if (clickEvent == "action_move_attack")
 		{
 			myClickEvent = new OnClickMessage(eOnClickEvent::UNIT_ACTION_ATTACK_MOVE);
@@ -160,6 +169,10 @@ namespace GUI
 		else if (clickEvent == "action_stand_ground")
 		{
 			myClickEvent = new OnClickMessage(eOnClickEvent::UNIT_ACTION_STAND_GROUND);
+		}
+		else if (clickEvent == "action_enrage")
+		{
+			myClickEvent = new OnClickMessage(eOnClickEvent::ENRAGE);
 		}
 		else if (clickEvent == "spawn_unit")
 		{

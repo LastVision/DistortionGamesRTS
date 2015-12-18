@@ -1,23 +1,32 @@
 #include "stdafx.h"
 
 #include "CollisionComponent.h"
+#include "MathHelper.h"
 #include "HealthComponent.h"
 #include "Intersection.h"
 #include "MathHelper.h"
 #include "PollingStation.h"
 #include "PostMaster.h"
 #include "TotemComponent.h"
+#include "TotemComponentData.h"
 #include "TriggerMessage.h"
 
-TotemComponent::TotemComponent(Entity& aEntity, eOwnerType anOwner, float aRadius, float aHealPerSecond)
+TotemComponent::TotemComponent(Entity& aEntity, TotemComponentData& aData)
 	: Component(aEntity)
-	, myOwner(anOwner)
-	, myRadius(aRadius)
+	, myRadius(aData.myRadius)
 	, myRadiusSquared(myRadius * myRadius)
-	, myHealPerSecond(aHealPerSecond)
+	, myHealPerSecond(aData.myHealPerSecond)
+	, myCurrentCooldown(0)
+	, myOriginalCooldown(aData.myCooldown)
+	, myEndTime(aData.myDuration)
+	, myDuration(0.f)
+	, myUnits(GC::playerUnitCount)
+	, myHasReachedTarget(true)
+	, myAlpha(0.f)
+	, myActive(false)
 {
+	myOriginalPosition = myEntity.GetOrientation().GetPos();
 }
-
 
 TotemComponent::~TotemComponent()
 {
@@ -25,14 +34,45 @@ TotemComponent::~TotemComponent()
 
 void TotemComponent::Update(float aDeltaTime)
 {
-	CheckUnitsForRemove(myUnits);
-	CheckUnitsForAdd(PollingStation::GetInstance()->GetUnits(myOwner), myUnits);
+	myAlpha += aDeltaTime;
+	myCurrentCooldown -= aDeltaTime;
+	myDuration += aDeltaTime;
 
-	for (int i = 0; i < myUnits.Size(); ++i)
+	if (myDuration >= myEndTime)
 	{
-		myUnits[i]->GetComponent<HealthComponent>()->Heal(myHealPerSecond*aDeltaTime);
+		myActive = false;
+		myEntity.SetPosition(myOriginalPosition);
+	}
+	
+	CheckUnitsForRemove(myUnits);
+	CheckUnitsForAdd(PollingStation::GetInstance()->GetUnits(myEntity.GetOwner()), myUnits);
+
+	if (myActive == true)
+	{
+		for (int i = 0; i < myUnits.Size(); ++i)
+		{
+			myUnits[i]->GetComponent<HealthComponent>()->Heal(myHealPerSecond*aDeltaTime);
+		}
 	}
 
+
+
+	if (myHasReachedTarget == false)
+	{
+		myEntity.SetPosition(CU::Math::Lerp<CU::Vector3f>(myOriginalPosition, myTargetPosition, myAlpha));
+	}
+
+
+	if (myAlpha >= 1.2f && myHasReachedTarget == false)
+	{
+		myHasReachedTarget = true;
+		myActive = true;
+		//if (myAlpha >= myOriginalCooldown)
+		//{
+		//	myActive = false;
+		//	myEntity.SetPosition(myOriginalPosition);
+		//}
+	}
 }
 
 void TotemComponent::CheckUnitsForRemove(CU::GrowingArray<Entity*>& someUnits) const
@@ -69,5 +109,20 @@ void TotemComponent::CheckUnitsForAdd(const CU::GrowingArray<Entity*>& someUnits
 				someUnitsOut.Add(current);
 			}
 		}
+	}
+}
+
+void TotemComponent::SetTargetPosition(const CU::Vector3f& aTargetPosition)
+{
+	if (myCurrentCooldown <= 0.f)
+	{
+		myTargetPosition = aTargetPosition;
+		myOriginalPosition.x = aTargetPosition.x;
+		myOriginalPosition.z = aTargetPosition.z;
+		myHasReachedTarget = false;
+		myAlpha = 0.f;
+		myActive = false;
+		myCurrentCooldown = myOriginalCooldown;
+		myDuration = 0.f;
 	}
 }

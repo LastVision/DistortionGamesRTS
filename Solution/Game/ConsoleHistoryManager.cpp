@@ -4,6 +4,7 @@
 #include <fstream>
 #include <MathHelper.h>
 #include <Text.h>
+#include <ModelLoader.h>
 
 
 ConsoleHistoryManager::ConsoleHistoryManager()
@@ -267,6 +268,8 @@ std::string ConsoleHistoryManager::RemoveTabFromString(const std::string& aComma
 
 void ConsoleHistoryManager::AddHistory(const std::string& aCommand, eHistoryType anEnum)
 {
+	Prism::ModelLoader::GetInstance()->Pause();
+
 	DL_ASSERT_EXP(aCommand.length() > 0, "Should not be able to save empty commands in history");
 	if (aCommand.find_first_of("\n") != -1)
 	{
@@ -313,6 +316,8 @@ void ConsoleHistoryManager::AddHistory(const std::string& aCommand, eHistoryType
 	myHistory.Add(tempHistory);
 
 	myInsertIndex++;
+
+	Prism::ModelLoader::GetInstance()->UnPause();
 }
 
 

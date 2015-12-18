@@ -5,9 +5,12 @@
 #include "BuildingComponentData.h"
 #include "CollisionComponentData.h"
 #include "ControllerComponentData.h"
+#include "EnrageComponentData.h"
 #include "GraphicsComponentData.h"
+#include "GrenadeComponentData.h"
 #include "HealthComponentData.h"
 #include "TriggerComponentData.h"
+#include "TotemComponentData.h"
 
 struct EntityData
 {
@@ -20,6 +23,9 @@ struct EntityData
 	GraphicsComponentData myGraphicsData;
 	HealthComponentData myHealthData;
 	TriggerComponentData myTriggerData;
+	TotemComponentData myTotemData;
+	EnrageComponentData myEnrageData;
+	GrenadeComponentData myGrenadeData;
 
 	union 
 	{

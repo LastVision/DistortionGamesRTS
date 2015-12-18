@@ -120,7 +120,7 @@ void ComponentLoader::LoadControllerComponent(XMLReader& aDocument, tinyxml2::XM
 	aDocument.ForceReadAttribute(e, "value", aOutputData.myAttackDamage);
 
 	e = aDocument.ForceFindFirstChild(aSourceElement, "AttackSpeed");
-	aDocument.ForceReadAttribute(e, "value", aOutputData.myAttackSpeed);
+	aDocument.ForceReadAttribute(e, "value", aOutputData.myAttackRechargeTime);
 
 	e = aDocument.ForceFindFirstChild(aSourceElement, "ChaseDistance");
 	aDocument.ForceReadAttribute(e, "value", aOutputData.myChaseDistance);
@@ -198,6 +198,60 @@ void ComponentLoader::LoadTriggerComponent(XMLReader& aDocument, tinyxml2::XMLEl
 		}
 	}
 }
+
+void ComponentLoader::LoadEnrageComponent(XMLReader& aDocument, tinyxml2::XMLElement* aSourceElement, EnrageComponentData& aOutputData)
+{
+	aOutputData.myExistsInEntity = true;
+
+	tinyxml2::XMLElement* e = aDocument.ForceFindFirstChild(aSourceElement, "Duration");
+	aDocument.ForceReadAttribute(e, "value", aOutputData.myDuration);
+
+	e = aDocument.ForceFindFirstChild(aSourceElement, "Cooldown");
+	aDocument.ForceReadAttribute(e, "value", aOutputData.myCooldown);
+
+	e = aDocument.ForceFindFirstChild(aSourceElement, "ArmorModifier");
+	aDocument.ForceReadAttribute(e, "value", aOutputData.myArmorModifier);
+
+	e = aDocument.ForceFindFirstChild(aSourceElement, "HealthModifier");
+	aDocument.ForceReadAttribute(e, "value", aOutputData.myHealthModifier);
+
+	e = aDocument.ForceFindFirstChild(aSourceElement, "AttackDamageModifier");
+	aDocument.ForceReadAttribute(e, "value", aOutputData.myAttackDamageModifier);
+
+	e = aDocument.ForceFindFirstChild(aSourceElement, "AttackRange2Modifier");
+	aDocument.ForceReadAttribute(e, "value", aOutputData.myAttackRange2Modifier);
+
+	e = aDocument.ForceFindFirstChild(aSourceElement, "RechargeTimeModifier");
+	aDocument.ForceReadAttribute(e, "value", aOutputData.myRechargeTimeModifier);
+
+	e = aDocument.ForceFindFirstChild(aSourceElement, "MovementSpeedModifier");
+	aDocument.ForceReadAttribute(e, "value", aOutputData.myMovementSpeedModifier);
+}
+
+void ComponentLoader::LoadGrenadeComponent(XMLReader& aDocument, tinyxml2::XMLElement* aSourceElement, GrenadeComponentData& aOutputData)
+{
+	aOutputData.myExistsInEntity = true;
+
+	tinyxml2::XMLElement* e = aDocument.ForceFindFirstChild(aSourceElement, "Range");
+	aDocument.ForceReadAttribute(e, "value", aOutputData.myRange);
+
+	e = aDocument.ForceFindFirstChild(aSourceElement, "Radius");
+	aDocument.ForceReadAttribute(e, "value", aOutputData.myRadius);
+
+	e = aDocument.ForceFindFirstChild(aSourceElement, "Cooldown");
+	aDocument.ForceReadAttribute(e, "value", aOutputData.myCooldown);
+
+	e = aDocument.ForceFindFirstChild(aSourceElement, "Damage");
+	aDocument.ForceReadAttribute(e, "value", aOutputData.myDamage);
+
+	e = aDocument.ForceFindFirstChild(aSourceElement, "Delay");
+	aDocument.ForceReadAttribute(e, "value", aOutputData.myDelay);
+
+	e = aDocument.ForceFindFirstChild(aSourceElement, "DamageAllies");
+	aDocument.ForceReadAttribute(e, "value", aOutputData.myAlliesShouldTakeDamage);
+
+}
+
 
 void ComponentLoader::FailedToReadChildElementMessage(const std::string& aElement, const std::string& aParent)
 {

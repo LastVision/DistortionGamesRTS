@@ -16,6 +16,7 @@ enum eEntityType
 	BASE_BUILING = 4,
 	RESOURCE_POINT = 8,
 	VICTORY_POINT = 16,
+	TOTEM = 32,
 	_COUNT,
 };
 
@@ -30,13 +31,50 @@ enum eUnitType
 enum class ePropType
 {
 	NOT_A_PROP,
-	PINE_TREE,
-	BIRCH_TREE,
+	PINE_TREE_A,
+	PINE_TREE_B,
+	PINE_TREE_C,
+	PINE_TREE_D,
+	BIRCH_TREE_A,
 	HOUSE_SMALL,
 	HOUSE_MEDIUM,
 	HOUSE_LARGE,
+	HOUSE_GROUP,
 	RESOURCE_POLE,
 	VICTORY_POLE,
+	BUSH_A,
+	BUSH_B,
+	BUSH_C,
+	ROCK_LARGE,
+	ROCK_MEDIUM,
+	ROCK_SMALL,
+	ROCKS_GROUP_A,
+	ROCKS_GROUP_B,
+	BONES_MEDIUM,
+	BONES_SMALL,
+	BROKENSHIP_A,
+	BROKENSHIP_B,
+	BROKENSUBMARINE_A,
+	CAR_A,
+	FENCE_A,
+	FENCE_B,
+	JUNKPILE_A,
+	JUNKPILE_B,
+	LOG_A,
+	LOG_GROUP,
+	OLDPIER_A,
+	PIPES_A,
+	PIPES_B,
+	RUBBLE_A,
+	RUBBLE_B,
+	RUBBLE_C,
+	RUBBLE_D,
+	TANK_A,
+	TENT_A,
+	TENT_B,
+	WHEELS_A,
+	WHEELS_B
+
 };
 
 enum class eEntityState : int
@@ -61,6 +99,8 @@ enum class eComponentType
 	HEALTH,
 	BUILDING,
 	TOTEM,
+	ENRAGE,
+	GRENADE,
 	_COUNT,
 };
 
@@ -82,6 +122,7 @@ enum class eHistoryType
 enum class eParticleType : int
 {
 	BLOOD,
-//	WEATHER_SNOW,
+	//WEATHER_SNOW,
+	//HEALING,
 	_COUNT
 };

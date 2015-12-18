@@ -113,7 +113,8 @@ namespace GUI
 		tinyxml2::XMLElement* containerElement = reader.ForceFindFirstChild(rootElement, "container");
 		for (; containerElement != nullptr; containerElement = reader.FindNextElement(containerElement))
 		{
-			Prism::Sprite* backgroundSprite = nullptr;
+			Prism::SpriteProxy* backgroundSprite = nullptr;
+			//Prism::Sprite* backgroundSprite = nullptr;
 
 			reader.ForceReadAttribute(reader.ForceFindFirstChild(containerElement, "size"), "x", size.x);
 			reader.ForceReadAttribute(reader.ForceFindFirstChild(containerElement, "size"), "y", size.y);
@@ -132,11 +133,13 @@ namespace GUI
 					CU::Vector2<float> spriteSize;
 					reader.ForceReadAttribute(spriteSizeElement, "x", spriteSize.x);
 					reader.ForceReadAttribute(spriteSizeElement, "y", spriteSize.y);
-					backgroundSprite = new Prism::Sprite(path, spriteSize);
+					backgroundSprite = Prism::ModelLoader::GetInstance()->LoadSprite(path, spriteSize);
+					//backgroundSprite = new Prism::Sprite(path, spriteSize);
 				}
 				else
 				{
-					backgroundSprite = new Prism::Sprite(path, size);
+					backgroundSprite = Prism::ModelLoader::GetInstance()->LoadSprite(path, size);
+					//backgroundSprite = new Prism::Sprite(path, size);
 				}
 			}
 

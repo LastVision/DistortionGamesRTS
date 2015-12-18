@@ -3,7 +3,7 @@
 
 namespace Prism
 {
-	class Sprite;
+	class SpriteProxy;
 }
 
 namespace tinyxml2
@@ -34,7 +34,7 @@ namespace GUI
 
 		const int* myValue;
 
-		Prism::Sprite* myValueSprite;
+		Prism::SpriteProxy* myValueSprite;
 
 		CU::Vector2<float> mySpritePosition;
 		CU::Vector2<float> myTextPosition;

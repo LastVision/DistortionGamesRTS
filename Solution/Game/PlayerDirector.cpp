@@ -5,7 +5,9 @@
 #include <CollisionComponent.h>
 #include <ControllerComponent.h>
 #include <TimeMultiplierMessage.h>
+#include <EnrageComponent.h>
 #include <Entity.h>
+#include <EntityData.h>
 #include <EntityFactory.h>
 #include <GUIManager.h>
 #include <GraphicsComponent.h>
@@ -22,7 +24,7 @@
 #include <TotemComponent.h>
 #include <ModelLoader.h>
 #include <SpawnUnitMessage.h>
-#include <Sprite.h>
+#include <SpriteProxy.h>
 #include <FadeMessage.h>
 #include <PostMaster.h>
 
@@ -46,9 +48,11 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 	, mySelectionSpriteHotspot(0, 0)
 {
 	myDragSelectionPositions.Reserve(4);
-	myDragSelectionSprite = new Prism::Sprite("Data/Resource/Texture/T_selection_box.dds", { 0.f, 0.f });
+	myDragSelectionSprite = Prism::ModelLoader::GetInstance()->LoadSprite(
+		"Data/Resource/Texture/T_selection_box.dds", { 0.f, 0.f });
+	//myDragSelectionSprite = new Prism::Sprite("Data/Resource/Texture/T_selection_box.dds", { 0.f, 0.f });
 
-	for (int i = 0; i < 8; ++i)
+	for (int i = 0; i < 64; ++i)
 	{
 		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::PLAYER, eEntityType::UNIT, eUnitType::GRUNT, Prism::eOctreeType::DYNAMIC,
 			aScene, { 65, 0, 40 }, aTerrain));
@@ -58,12 +62,12 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 			aScene, { 20.f + i, 0.f, 40.f }, aTerrain));
 	}
 
-	myActiveUnits.Add(myUnits[0]);
+	/*myActiveUnits.Add(myUnits[0]);
 	for (int i = 0; i < myActiveUnits.Size(); ++i)
 	{
 		myActiveUnits[i]->Spawn({ 65.f, 0.f, 25.f });
 		PollingStation::GetInstance()->RegisterEntity(myActiveUnits[i]);
-	}
+	}*/
 
 	PostMaster::GetInstance()->Subscribe(eMessageType::TOGGLE_GUI, this);
 	PostMaster::GetInstance()->Subscribe(eMessageType::ON_CLICK, this);
@@ -71,15 +75,28 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 	PostMaster::GetInstance()->Subscribe(eMessageType::MOVE_UNITS, this);
 	PostMaster::GetInstance()->Subscribe(eMessageType::TOGGLE_BUILD_TIME, this);
 
+	EntityData tempData;
+	tempData.myGraphicsData.myExistsInEntity = true;
+	tempData.myGraphicsData.myModelPath = "Data/Resource/Model/Prop/Pine_tree/SM_pine_tree_bare_a.fbx";
+	tempData.myGraphicsData.myEffectPath = "Data/Resource/Shader/S_effect_pbl.fx";
 
+	tempData.myTotemData.myExistsInEntity = true;
+	tempData.myTotemData.myHealPerSecond = 5.f;
+	tempData.myTotemData.myRadius = 15.f;
+	tempData.myTotemData.myCooldown = 30.f;
+	tempData.myTotemData.myDuration = 10.f;
 
-
+	myTotem = new Entity(eOwnerType::PLAYER, Prism::eOctreeType::DYNAMIC, tempData, aScene, { 128.f, 100.f, 128.f },
+		aTerrain, { 0.f, 0.f, 0.f }, { 1.f, 1.f, 1.f });
+	myTotem->AddToScene();
 }
 
 PlayerDirector::~PlayerDirector()
 {
+	//myTotem->RemoveFromScene();
 	SAFE_DELETE(myGUIManager);
 	SAFE_DELETE(myDragSelectionSprite);
+	SAFE_DELETE(myTotem);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::TOGGLE_GUI, this);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::ON_CLICK, this);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::TIME_MULTIPLIER, this);
@@ -121,6 +138,7 @@ void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 	Director::Update(aDeltaTime);
 	UpdateMouseInteraction(aCamera);
 	myBuilding->Update(aDeltaTime);
+	myTotem->Update(aDeltaTime);
 
 	for (int i = mySelectedUnits.Size() - 1; i >= 0; --i) // remove dead units
 	{
@@ -196,6 +214,15 @@ void PlayerDirector::ReceiveMessage(const OnClickMessage& aMessage)
 		case eOnClickEvent::UNIT_ACTION_STOP:
 			mySelectedAction = eSelectedAction::STOP;
 			break;
+
+		case eOnClickEvent::PLACE_TOTEM:
+			mySelectedAction = eSelectedAction::PLACE_TOTEM;
+			break;
+
+		case eOnClickEvent::ENRAGE:
+			mySelectedAction = eSelectedAction::ENRAGE;
+			break;
+
 
 		default:
 			break;
@@ -377,6 +404,18 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 	CU::Vector3<float> secondTargetPos;
 	CU::Vector2<float> mousePosition = CU::InputWrapper::GetInstance()->GetMousePosition();
 
+
+	if (myLeftMouseDown == true && mySelectedAction == eSelectedAction::PLACE_TOTEM)
+	{
+		PlaceTotem(firstTargetPos);
+	}
+
+	if (mySelectedAction == eSelectedAction::ENRAGE)
+	{
+		Enrage();
+	}
+
+
 	if (myLeftMouseDown == true)
 	{
 		myRenderDragSelection = true;
@@ -418,7 +457,7 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 		mySelectionSpriteRenderPosition = renderPosition;
 	}
 
-	Entity* hoveredEnemy = PollingStation::GetInstance()->FindEntityAtPosition(firstTargetPos, eOwnerType::ENEMY);
+	Entity* hoveredEnemy = PollingStation::GetInstance()->FindEntityAtPosition(firstTargetPos, eOwnerType::ENEMY | eOwnerType::NEUTRAL);
 	if (hoveredEnemy != nullptr)
 	{
 		Prism::RenderBox(hoveredEnemy->GetOrientation().GetPos(), eColorDebug::RED);
@@ -520,6 +559,24 @@ void PlayerDirector::SelectAllUnits()
 		if (myUnits[i]->GetAlive() == true)
 		{
 			SelectUnit(myUnits[i]);
+		}
+	}
+}
+
+void PlayerDirector::PlaceTotem(const CU::Vector3f& aPositionInWorld)
+{
+	//myTotem->SetPosition(aPositionInWorld);
+	myTotem->GetComponent<TotemComponent>()->SetTargetPosition(aPositionInWorld);
+}
+
+void PlayerDirector::Enrage()
+{
+	for (int i = 0; i < mySelectedUnits.Size(); ++i)
+	{
+		EnrageComponent* enrageComp = mySelectedUnits[i]->GetComponent<EnrageComponent>();
+		if (enrageComp != nullptr)
+		{
+			enrageComp->Activate();
 		}
 	}
 }

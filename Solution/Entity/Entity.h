@@ -71,6 +71,7 @@ public:
 
 	int GetId() const;
 	float GetMaxSpeed() const;
+	void SetMaxSpeed(float aSpeed);
 
 	const CU::Vector2<float>& GetVelocity() const;
 
@@ -188,6 +189,11 @@ inline void Entity::SetOwner(eOwnerType anOwner)
 inline float Entity::GetMaxSpeed() const
 {
 	return myMaxSpeed;
+}
+
+inline void Entity::SetMaxSpeed(float aSpeed)
+{
+	myMaxSpeed = aSpeed;
 }
 
 inline const CU::Vector2<float>& Entity::GetVelocity() const
