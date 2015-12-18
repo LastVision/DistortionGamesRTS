@@ -252,12 +252,6 @@ void ControllerComponent::HoldPosition()
 	myEntity.SetState(eEntityState::IDLE);
 }
 
-void ControllerComponent::Spawn(const CU::Vector3f& aPosition)
-{
-	myEntity.myOrientation.SetPos(aPosition);
-	myTerrain.CalcEntityHeight(myEntity.myOrientation);
-}
-
 void ControllerComponent::FillCommandList(eAction aAction, bool aClearCommandQueue, Entity* aEntity
 	, const CU::Vector2<float>& aTargetPosition)
 {
@@ -599,4 +593,11 @@ eColorDebug ControllerComponent::GetActionColor(eAction aAction) const
 	}
 
 	return eColorDebug::NOT_USED;
+}
+
+void ControllerComponent::Reset()
+{
+	myTerrain.CalcEntityHeight(myEntity.myOrientation);
+	myData.myAcceleration = { 0.f, 0.f };
+	myBehavior->SetTarget({ myEntity.GetPosition().x + CU::Math::RandomRange<float>(-0.1f, 0.1f), myEntity.GetPosition().y - 2.f });
 }

@@ -27,8 +27,6 @@ public:
 	void Stop();
 	void HoldPosition();
 
-	void Spawn(const CU::Vector3f& aPosition);
-
 	const ControllerData& GetControllerData() const;
 	float GetVisionRange2() const;
 	float GetAttackRange2() const;
@@ -42,6 +40,8 @@ public:
 	void SetAttackDamage(float aDamage);
 	void SetRechargeTime(float aRechargeTime);
 	void SetAttackRange2(float aRange2);
+
+	void Reset() override;
 
 private:
 	enum class eAction

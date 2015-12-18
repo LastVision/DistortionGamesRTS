@@ -9,6 +9,7 @@
 #include <GameConstants.h>
 #include <GrowingArray.h>
 
+#include <MathHelper.h>
 #include <Matrix.h>
 #include <MemoryMacros.h>
 #include <StaticArray.h>

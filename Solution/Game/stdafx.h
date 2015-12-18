@@ -10,6 +10,7 @@
 #include <Entity.h>
 #include <GameConstants.h>
 #include <GrowingArray.h>
+#include <MathHelper.h>
 #include <Matrix.h>
 #include <string>
 #include <unordered_map>

@@ -207,8 +207,10 @@ void Entity::Spawn(const CU::Vector3f& aSpawnPosition)
 {
 	myState = eEntityState::IDLE;
 	myDecayFlag = false;
+	myOrientation.SetPos(aSpawnPosition);
+	myPosition.x = aSpawnPosition.x;
+	myPosition.y = aSpawnPosition.z;
 	Reset();
-	GetComponent<ControllerComponent>()->Spawn(aSpawnPosition);
 	AddToScene();
 }
 
