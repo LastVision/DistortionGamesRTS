@@ -7,6 +7,7 @@
 #include "ControllerComponent.h"
 #include "EnrageComponent.h"
 #include "GraphicsComponent.h"
+#include "GrenadeComponent.h"
 #include "HealthComponent.h"
 #include "EntityId.h"
 #include <Scene.h>
@@ -97,6 +98,11 @@ Entity::Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& a
 	if (aEntityData.myEnrageData.myExistsInEntity == true)
 	{
 		myComponents[static_cast<int>(eComponentType::ENRAGE)] = new EnrageComponent(*this, aEntityData.myEnrageData);
+	}
+
+	if (aEntityData.myGrenadeData.myExistsInEntity == true)
+	{
+		myComponents[static_cast<int>(eComponentType::GRENADE)] = new GrenadeComponent(*this, aEntityData.myGrenadeData);
 	}
 	
 }

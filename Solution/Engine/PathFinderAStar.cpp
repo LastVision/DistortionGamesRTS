@@ -226,6 +226,7 @@ namespace Prism
 				someTrianglesOut.Add(current);
 				current = current->myPredec;
 			}
+			someTrianglesOut.Add(current);
 		}
 	}
 }

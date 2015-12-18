@@ -14,7 +14,7 @@ public:
 	void Update(float aDelta) override;
 
 	static eComponentType GetTypeStatic();
-	virtual eComponentType GetType();
+	eComponentType GetType() override;
 	eOwnerType ModifyOwnership(eOwnerType anOwner, float aModifyValue);
 
 private:

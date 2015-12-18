@@ -18,15 +18,10 @@ public:
 	eComponentType GetType() override;
 
 
-	void LookInDirection(const CU::Vector3<float>& aDirection);
-	void LookAtPoint(const CU::Vector3<float>& aPoint);
-
-	float GetSpeed() const;
-
-	void SetSpeed(float aSpeed);
+	void LookInDirection(const CU::Vector2<float>& aDirection);
+	void LookAtPoint(const CU::Vector2<float>& aPoint);
 
 private:
-	float mySpeed;
 	const Prism::Terrain& myTerrain;
 };
 
@@ -38,14 +33,4 @@ inline eComponentType ActorComponent::GetTypeStatic()
 inline eComponentType ActorComponent::GetType()
 {
 	return GetTypeStatic();
-}
-
-inline float ActorComponent::GetSpeed() const
-{
-	return mySpeed;
-}
-
-inline void ActorComponent::SetSpeed(float aSpeed)
-{
-	mySpeed = aSpeed;
 }

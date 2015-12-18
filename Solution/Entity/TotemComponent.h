@@ -10,7 +10,7 @@ public:
 	void Update(float aDelta) override;
 
 	static eComponentType GetTypeStatic();
-	virtual eComponentType GetType();
+	eComponentType GetType() override;
 	eOwnerType ModifyOwnership(eOwnerType anOwner, float aModifyValue);
 	void SetTargetPosition(const CU::Vector3f& aTargetPosition);
 	float GetCurrentCooldown();

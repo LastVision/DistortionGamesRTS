@@ -100,6 +100,7 @@ enum class eComponentType
 	BUILDING,
 	TOTEM,
 	ENRAGE,
+	GRENADE,
 	_COUNT,
 };
 
@@ -123,5 +124,6 @@ enum class eParticleType : int
 	BLOOD,
 	//WEATHER_SNOW,
 	//HEALING,
+	GRENADE_EXPLOSION,
 	_COUNT
 };

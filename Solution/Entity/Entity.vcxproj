@@ -135,6 +135,8 @@
     <ClInclude Include="EntityEnumConverter.h" />
     <ClInclude Include="EntityId.h" />
     <ClInclude Include="EvadeBehavior.h" />
+    <ClInclude Include="GrenadeComponent.h" />
+    <ClInclude Include="GrenadeComponentData.h" />
     <ClInclude Include="TotemComponent.h" />
     <ClInclude Include="TotemComponentData.h" />
     <ClInclude Include="TriggerComponent.h" />
@@ -166,6 +168,7 @@
     <ClCompile Include="EntityEnumConverter.cpp" />
     <ClCompile Include="EntityId.cpp" />
     <ClCompile Include="EvadeBehavior.cpp" />
+    <ClCompile Include="GrenadeComponent.cpp" />
     <ClCompile Include="TotemComponent.cpp" />
     <ClCompile Include="TriggerComponent.cpp" />
     <ClCompile Include="Component.cpp" />

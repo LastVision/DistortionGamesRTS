@@ -1,8 +1,15 @@
 #pragma once
-class EvadeBehavior
+#include "Behavior.h"
+
+class EvadeBehavior : public Behavior
 {
 public:
-	EvadeBehavior();
+	EvadeBehavior(const Entity& anEntity);
 	~EvadeBehavior();
+
+	const CU::Vector2<float>& Update() override;
+
+private:
+	CU::GrowingArray<Entity*> myEntitiesToEvade;
 };
 

@@ -177,6 +177,12 @@ void EntityFactory::LoadEntity(const char* aEntityPath)
 
 			myComponentLoader->LoadEnrageComponent(entityDocument, e, newData.myEnrageData);
 		}
+		else if (elementName == CU::ToLower("GrenadeComponent"))
+		{
+			if (newData.myGrenadeData.myExistsInEntity == true) DL_ASSERT("You already have a GrenadeComponent");
+
+			myComponentLoader->LoadGrenadeComponent(entityDocument, e, newData.myGrenadeData);
+		}
 		else 
 		{
 			std::string errorMessage = "The component " + elementName + 

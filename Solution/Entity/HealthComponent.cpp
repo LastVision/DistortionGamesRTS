@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+#include "AnimationComponent.h"
 #include "Camera.h"
 #include "HealthComponent.h"
 #include <Engine.h>
@@ -45,9 +46,17 @@ void HealthComponent::RenderHealthBar(const Prism::Camera& aCamera)
 	myHealthBar->Render({ newRenderPos.x, newRenderPos.y });
 }
 
-bool HealthComponent::TakeDamage(float aDamage)
+bool HealthComponent::TakeDamage(float aDamage, Entity* aAttacker)
 {
 	DL_ASSERT_EXP(aDamage >= 0, "Cant take negative damage, use Heal for healing if that was your intention");
+
+	AnimationComponent* animation = aAttacker->GetComponent<AnimationComponent>();
+	DL_ASSERT_EXP(animation != nullptr, "Animation missing from attacking unit");
+	if (animation != nullptr)
+	{
+		animation->RestartCurrentAnimation();
+	}
+	PostMaster::GetInstance()->SendMessage(EmitterMessage(eParticleType::BLOOD, myEntity.GetId()));
 
 	float damage = aDamage - myArmor;
 	if (damage <= 0.f)
@@ -55,18 +64,25 @@ bool HealthComponent::TakeDamage(float aDamage)
 		return true;
 	}
 
-	PostMaster::GetInstance()->SendMessage(EmitterMessage(eParticleType::BLOOD, myEntity.GetId()));
 
 	if (myEntity.GetAlive() == false)
 	{
 		return true; // is this funky?
 	}
 
+
+
+
+
+
 	myCurrentHealth -= damage;
 	if (myCurrentHealth <= 0)
 	{
 		myCurrentHealth = 0;
 		myEntity.Kill();
+
+		myEntity.SetState(eEntityState::DYING);
+		aAttacker->SetState(eEntityState::IDLE);
 		return false;
 	}
 

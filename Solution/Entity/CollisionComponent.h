@@ -17,7 +17,7 @@ public:
 	float GetRadius() const;
 
 	static eComponentType GetTypeStatic();
-	virtual eComponentType GetType();
+	eComponentType GetType() override;
 
 private:
 	CU::Intersection::Sphere mySphere;
