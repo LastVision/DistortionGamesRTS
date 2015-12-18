@@ -283,7 +283,16 @@ void PlayerDirector::SelectUnit(Entity* anEntity)
 {
 	if (mySelectedUnits.Size() > 0 && mySelectedUnits[0]->GetType() != anEntity->GetType())
 	{
-		return;
+		if (mySelectedUnits[0]->GetType() == eEntityType::BASE_BUILING)
+		{
+			myBuilding->SetSelect(false);
+			myBuilding->SetHovered(false);
+			mySelectedUnits.RemoveAll();
+		}
+		else
+		{
+			return;
+		}
 	}
 
 	for (int i = 0; i < mySelectedUnits.Size(); i++)
