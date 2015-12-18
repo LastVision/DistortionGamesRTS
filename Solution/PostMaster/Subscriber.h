@@ -19,6 +19,7 @@ struct ToggleGUIMessage;
 struct ToggleBuildTimeMessage;
 struct TriggerMessage;
 struct VictoryMessage;
+struct UpgradeUnitMessage;
 
 class Subscriber
 {
@@ -45,5 +46,6 @@ public:
 	virtual void ReceiveMessage(const ToggleGUIMessage& aMessage);
 	virtual void ReceiveMessage(const TriggerMessage& aMessage);
 	virtual void ReceiveMessage(const VictoryMessage& aMessage);
+	virtual void ReceiveMessage(const UpgradeUnitMessage& aMessage);
 };
 

@@ -319,7 +319,7 @@ namespace Script_Interface
 
 	int SpawnNeutral(lua_State* aState)
 	{
-		int unitType = lua_tonumber(aState, 1);
+		int unitType = int(lua_tonumber(aState, 1));
 		float x = float(lua_tonumber(aState, 2));
 		float z = float(lua_tonumber(aState, 3));
 

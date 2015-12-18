@@ -108,6 +108,7 @@
     </ClInclude>
     <ClInclude Include="GameConstants.h" />
     <ClInclude Include="GameEnum.h" />
+    <ClInclude Include="GameStructs.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Math">

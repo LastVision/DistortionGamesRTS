@@ -141,6 +141,7 @@
     <ClInclude Include="ToggleBuildTimeMessage.h" />
     <ClInclude Include="ToggleGUIMessage.h" />
     <ClInclude Include="TriggerMessage.h" />
+    <ClInclude Include="UpgradeUnitMessage.h" />
     <ClInclude Include="VictoryMessage.h" />
   </ItemGroup>
   <ItemGroup>

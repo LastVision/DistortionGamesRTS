@@ -128,6 +128,21 @@ void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 		}
 	}
 
+	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_NUMPAD1) == true)
+	{
+		UpgradeUnit(eUnitType::GRUNT);
+	}
+
+	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_NUMPAD2) == true)
+	{
+		UpgradeUnit(eUnitType::RANGER);
+	}
+
+	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_NUMPAD3) == true)
+	{
+		UpgradeUnit(eUnitType::TANK);
+	}
+
 	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_F2) == true)
 	{
 		SelectAllUnits();

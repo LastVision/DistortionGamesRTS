@@ -91,6 +91,46 @@ void ComponentLoader::LoadBuidlingComponent(XMLReader& aDocument, tinyxml2::XMLE
 			aOutputData.myBuildUnitTypes.Insert(numberOfUnitType, buildUnitType);
 			numberOfUnitType++;
 		}
+		else if (elementName == CU::ToLower("Upgrades"))
+		{
+			for (tinyxml2::XMLElement* unitElem = aDocument.ForceFindFirstChild(e); unitElem != nullptr;
+				unitElem = aDocument.FindNextElement(unitElem))
+			{
+				std::string unit = CU::ToLower(unitElem->Name());
+				eUnitType unitType = EntityEnumConverter::ConvertStringToUnitType(unit);
+				int unitIndex = static_cast<int>(unitType);
+				int upgradeIndex = 0;
+
+				for (tinyxml2::XMLElement* upgradeElem = aDocument.ForceFindFirstChild(unitElem); upgradeElem != nullptr;
+					upgradeElem = aDocument.FindNextElement(upgradeElem))
+				{
+					Upgrade upgrade;
+					upgrade.myInProgress = false;
+					aDocument.ForceReadAttribute(upgradeElem, "buildTime", upgrade.myBuildTime);
+					aDocument.ForceReadAttribute(upgradeElem, "cost", upgrade.myCost);
+					aDocument.ForceReadAttribute(upgradeElem, "attack", upgrade.myAttackModifier);
+					aDocument.ForceReadAttribute(upgradeElem, "armor", upgrade.myArmorModifier);
+					aDocument.ForceReadAttribute(upgradeElem, "attackspeed", upgrade.myAttackSpeedModifier);
+					aDocument.ForceReadAttribute(upgradeElem, "movespeed", upgrade.myMoveSpeedModifier);
+
+					upgrade.myAttackModifier += 100.f;
+					upgrade.myAttackModifier /= 100.f;
+
+					upgrade.myArmorModifier += 100.f;
+					upgrade.myArmorModifier /= 100.f;
+
+					upgrade.myAttackSpeedModifier += 100.f;
+					upgrade.myAttackSpeedModifier /= 100.f;
+
+					upgrade.myMoveSpeedModifier += 100.f;
+					upgrade.myMoveSpeedModifier /= 100.f;
+
+					aOutputData.myUnitUpgrades[unitIndex][upgradeIndex] = upgrade;
+
+					++upgradeIndex;
+				}
+			}
+		}
 		else 
 		{
 			FailedToReadChildElementMessage(e->Name(), aSourceElement->Name());

@@ -2,19 +2,20 @@
 #include "BuildingComponent.h"
 #include <PostMaster.h>
 #include <SpawnUnitMessage.h>
+#include <UpgradeUnitMessage.h>
 
 BuildingComponent::BuildingComponent(Entity& aEntity, BuildingComponentData& aData)
 	: Component(aEntity)
 	, myCurrentBuildTime(0.f)
 	, myMaxBuildTime(2.f)
-	, mySpawnQueueIndex(-1)
 	, myUnitCosts(aData.myUnitCosts)
 	, myUnitBuildTimes(aData.myUnitBuildTimes)
 	, myIgnoreBuildTime(false)
+	, myUnitUpgrades(aData.myUnitUpgrades)
 {
-	for (int i = 0; i <= 4; i++)
+	for (int i = 0; i < 3; ++i)
 	{
-		mySpawnQueue[i] = eUnitType::NOT_A_UNIT;
+		myUnitUpgradeProgress[i] = 0;
 	}
 }
 
@@ -24,42 +25,90 @@ BuildingComponent::~BuildingComponent()
 
 void BuildingComponent::Update(float aDeltaTime)
 {
-	if (mySpawnQueue[0] != eUnitType::NOT_A_UNIT)
+	if (mySpawnQueue.empty() == true)
 	{
-		myMaxBuildTime = myIgnoreBuildTime ? 0.f : myUnitBuildTimes[static_cast<int>(mySpawnQueue[0])];
+		return;
+	}
 
-		myCurrentBuildTime += aDeltaTime;
 
-		if (myCurrentBuildTime >= myMaxBuildTime)
-		{
-			PostMaster::GetInstance()->SendMessage(SpawnUnitMessage(mySpawnQueue[0], myEntity.GetOwner()));
+	const BuildInfo& currentOrder = mySpawnQueue.front();
+	if (currentOrder.myUnit == eUnitType::NOT_A_UNIT)
+	{
+		return;
+	}
 
-			for (int i = 0; i < mySpawnQueueIndex && i <= 3; i++)
-			{
-				mySpawnQueue[i] = mySpawnQueue[i + 1];
-			}
+	int unitIndex = static_cast<int>(currentOrder.myUnit);
+	int upgradeIndex = myUnitUpgradeProgress[unitIndex];
 
-			mySpawnQueue[mySpawnQueueIndex] = eUnitType::NOT_A_UNIT;
-			myCurrentBuildTime = 0.f;
-			mySpawnQueueIndex--;
-		}
+	if (currentOrder.myIsUpgrade == true)
+	{
+		myMaxBuildTime = myIgnoreBuildTime ? 0.f : myUnitUpgrades[unitIndex][upgradeIndex].myBuildTime;
 	}
 	else
 	{
-		myMaxBuildTime = 0.f;
+		myMaxBuildTime = myIgnoreBuildTime ? 0.f : myUnitBuildTimes[unitIndex];
+	}
+
+	myCurrentBuildTime += aDeltaTime;
+	if (myCurrentBuildTime >= myMaxBuildTime)
+	{
+		if (currentOrder.myIsUpgrade == true)
+		{
+			PostMaster::GetInstance()->SendMessage(UpgradeUnitMessage(currentOrder.myUnit, myUnitUpgrades[unitIndex][upgradeIndex]
+				, myEntity.GetOwner()));
+			++myUnitUpgradeProgress[unitIndex];
+		}
+		else
+		{
+			PostMaster::GetInstance()->SendMessage(SpawnUnitMessage(currentOrder.myUnit, myEntity.GetOwner()));
+		}
+
+		mySpawnQueue.pop();
+		myCurrentBuildTime = 0.f;
 	}
 }
 
 void BuildingComponent::BuildUnit(eUnitType aUnitType)
 {
-	if (mySpawnQueueIndex < 4)
+	if (mySpawnQueue.size() < BUILD_QUEUE_SIZE)
 	{
-		mySpawnQueueIndex++;
-		mySpawnQueue[mySpawnQueueIndex] = aUnitType;
+		mySpawnQueue.push({ aUnitType, false });
 	}
 }
+
+void BuildingComponent::UpgradeUnit(eUnitType aUnitType)
+{
+	if (mySpawnQueue.size() < BUILD_QUEUE_SIZE)
+	{
+		mySpawnQueue.push({ aUnitType, true });
+		int unitIndex = static_cast<int>(aUnitType);
+		int upgradeIndex = myUnitUpgradeProgress[unitIndex];
+		myUnitUpgrades[unitIndex][upgradeIndex].myInProgress = true;
+	}
+}
+
 
 int BuildingComponent::GetUnitCost(eUnitType aUnitType)
 {
 	return myUnitCosts[static_cast<int>(aUnitType)];
+}
+
+int BuildingComponent::GetUpgradeCost(eUnitType aUnitType)
+{
+	int unitIndex = static_cast<int>(aUnitType);
+	int upgradeIndex = myUnitUpgradeProgress[unitIndex];
+	return myUnitUpgrades[unitIndex][upgradeIndex].myCost;
+}
+
+bool BuildingComponent::CanUpgrade(eUnitType aUnitType)
+{
+	int unitIndex = static_cast<int>(aUnitType);
+	int upgradeIndex = myUnitUpgradeProgress[unitIndex];
+
+	if (myUnitUpgrades[unitIndex][upgradeIndex].myInProgress == true)
+	{
+		return false;
+	}
+
+	return upgradeIndex < 3;
 }

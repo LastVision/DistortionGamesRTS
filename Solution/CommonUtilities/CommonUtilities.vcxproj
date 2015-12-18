@@ -216,6 +216,7 @@
     <ClInclude Include="GameEnum.h" />
     <ClInclude Include="Fov90Frustum.h" />
     <ClInclude Include="GameConstants.h" />
+    <ClInclude Include="GameStructs.h" />
     <ClInclude Include="Greater.h" />
     <ClInclude Include="GrowingArray.h" />
     <ClInclude Include="Heap.h" />

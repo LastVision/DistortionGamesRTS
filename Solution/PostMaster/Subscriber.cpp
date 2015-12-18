@@ -86,3 +86,7 @@ void Subscriber::ReceiveMessage(const TriggerMessage&)
 void Subscriber::ReceiveMessage(const VictoryMessage&)
 {
 }
+
+void Subscriber::ReceiveMessage(const UpgradeUnitMessage&)
+{
+}
