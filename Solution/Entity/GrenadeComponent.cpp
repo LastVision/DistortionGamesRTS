@@ -4,6 +4,7 @@
 #include "GrenadeComponent.h"
 #include "HealthComponent.h"
 #include "Intersection.h"
+#include "EmitterMessage.h"
 #include "Postmaster.h"
 #include "PollingStation.h"
 #include "TriggerMessage.h"
@@ -95,7 +96,7 @@ float GrenadeComponent::GetCooldown() const
 void GrenadeComponent::Explosion()
 {
 	CU::Vector2<float> my2DPosition = { myPosition.x, myPosition.z };
-	//sendmessagetoparticlemanagerwithposition
+	PostMaster::GetInstance()->SendMessage(EmitterMessage(eParticleType::GRENADE_EXPLOSION, myPosition));
 	if (myUnits.Size() > 0)
 	{
 		for (int i = 0; i < myUnits.Size(); ++i)
