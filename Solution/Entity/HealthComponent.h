@@ -17,7 +17,7 @@ public:
 	static eComponentType GetTypeStatic();
 	eComponentType GetType() override;
 
-	bool TakeDamage(float aDamage);
+	bool TakeDamage(float aDamage, Entity* aAttacker);
 	void Heal(float aHealing);
 
 	void Reset() override;

@@ -124,7 +124,7 @@ void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 	{
 		for (int i = 0; i < mySelectedUnits.Size(); i++)
 		{
-			mySelectedUnits[i]->GetComponent<HealthComponent>()->TakeDamage(1);
+			mySelectedUnits[i]->GetComponent<HealthComponent>()->TakeDamage(1, mySelectedUnits[i]);
 		}
 	}
 

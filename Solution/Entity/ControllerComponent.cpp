@@ -3,6 +3,7 @@
 #include "ActorComponent.h"
 #include "AnimationComponent.h"
 #include "ControllerComponent.h"
+#include "GrenadeComponent.h"
 #include "HealthComponent.h"
 #include <PathFinderAStar.h>
 #include <PathFinderFunnel.h>
@@ -363,26 +364,34 @@ void ControllerComponent::AttackTarget()
 		{
 			myAttackTimer = myAttackRechargeTime;
 
-			bool targetSurvived = false;
+			if (myEntity.GetUnitType() == eUnitType::GRUNT)
+			{
+				if (myEntity.GetComponent<GrenadeComponent>()->GetCooldown() <= 0.f)
+				{
+					myEntity.GetComponent<GrenadeComponent>()->ThrowGrenade(myAttackTarget->GetOrientation().GetPos());
+				}
+			}
+
+			//bool targetSurvived = false;
 
 			HealthComponent* targetHealth = myAttackTarget->GetComponent<HealthComponent>();
 			if (targetHealth != nullptr && myAttackTarget->GetAlive())
 			{
-				targetSurvived = targetHealth->TakeDamage(myAttackDamage);
+				targetHealth->TakeDamage(myAttackDamage, &myEntity);
 			}
 
-			AnimationComponent* animation = myEntity.GetComponent<AnimationComponent>();
-			DL_ASSERT_EXP(animation != nullptr, "Animation missing from attacking unit");
-			if (animation != nullptr)
-			{
-				animation->RestartCurrentAnimation();
-			}
+			//AnimationComponent* animation = myEntity.GetComponent<AnimationComponent>();
+			//DL_ASSERT_EXP(animation != nullptr, "Animation missing from attacking unit");
+			//if (animation != nullptr)
+			//{
+			//	animation->RestartCurrentAnimation();
+			//}
 
-			if (targetSurvived == false)
-			{
-				myAttackTarget->SetState(eEntityState::DYING);
-				myEntity.SetState(eEntityState::IDLE);
-			}
+			//if (targetSurvived == false)
+			//{
+			//	myAttackTarget->SetState(eEntityState::DYING);
+			//	myEntity.SetState(eEntityState::IDLE);
+			//}
 		}
 	}
 	else
