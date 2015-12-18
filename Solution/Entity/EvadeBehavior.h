@@ -10,6 +10,7 @@ public:
 	const CU::Vector2<float>& Update() override;
 
 private:
+	float myMaxAcceleration;
 	CU::GrowingArray<Entity*> myEntitiesToEvade;
 };
 

@@ -50,26 +50,38 @@ private:
 		MOVE,
 		ATTACK_TARGET,
 		RETURN,
-		HOLD_POSITION,
+		HOLD,
 		ATTACK_MOVE
 	};
 
 	struct ActionData
 	{
+		ActionData()
+			: myAction(eAction::IDLE)
+			, myPosition(-1.f, -1.f)
+			, myEntity(nullptr)
+		{}
 		eAction myAction;
 		CU::Vector2<float> myPosition;
+		Entity* myEntity;
 	};
 
-	void FillCommandList(const CU::Vector2<float>& aTargetPosition, eAction aAction, bool aClearCommandQueue);
-	void DoMoveAction(const CU::Vector2<float>& aTargetPosition);
-	void DoAttackAction();
+	void FillCommandList(eAction aAction, bool aClearCommandQueue, Entity* aEntity = nullptr, const CU::Vector2<float>& aTargetPosition = { -1.f, -1.f });
+	void DoIdle();
+	void DoMove();
+	void DoAttackTarget(float aDelta);
+	void DoReturn();
+	void DoHold();
+	void DoAttackMove();
+
+
 	void AttackTarget();
 	void StartNextAction();
 	void RefreshPathToAttackTarget();
 	void RenderDebugLines() const;
+	const CU::Vector2<float>& GetPosition(const ActionData& anActionData) const;
 	eColorDebug GetActionColor(eAction aAction) const;
 	
-	Entity* myAttackTarget;
 	ControllerData myData;
 	Behavior* myBehavior;
 

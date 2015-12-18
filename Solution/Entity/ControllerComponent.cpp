@@ -22,7 +22,6 @@ ControllerComponent::ControllerComponent(Entity& aEntity, ControllerComponentDat
 	, myAttackTimer(0.f)
 	, myChaseDistance2(aData.myChaseDistance * aData.myChaseDistance)
 	, myChaseDistanceNeutral2(aData.myChaseDistanceNeutral * aData.myChaseDistanceNeutral)
-	, myAttackTarget(nullptr)
 	, myActions(16)
 	, myAttackTargetPathRefreshTime(0.5f)
 	, myCurrentAttackTargetPathRefreshTime(myAttackTargetPathRefreshTime)
@@ -65,107 +64,133 @@ void ControllerComponent::Update(float aDelta)
 
 	myAttackTimer -= aDelta;
 
-	if (myCurrentAction.myAction == eAction::IDLE)
-	{
-		myEntity.SetState(eEntityState::IDLE);
-		if (myOwnerType == eOwnerType::NEUTRAL)
-		{
-			int apa = 5;
-		}
-		Entity* closeTarget = PollingStation::GetInstance()->FindClosestEntity(myEntity.GetOrientation().GetPos()
-			, myTargetType, myVisionRange2);
-
-		if (closeTarget != nullptr)
-		{
-			myAttackTarget = closeTarget;
-			myReturnPosition = myEntity.myPosition;
-
-			ActionData action;
-			action.myAction = eAction::ATTACK_TARGET;
-			action.myPosition = myAttackTarget->myPosition;
-			myActions.Add(action);
-		}
-	}
-	else if (myCurrentAction.myAction == eAction::ATTACK_MOVE)
-	{
-		if (myAttackTarget != nullptr)
-		{
-			DoAttackAction();
-		}
-		else
-		{
-			DoMoveAction(myCurrentAction.myPosition);
-
-			myAttackTarget = PollingStation::GetInstance()->FindClosestEntity(myEntity.GetOrientation().GetPos()
-				, myTargetType, myVisionRange2 * 10.f);
-		}
-	}
-	else if (myCurrentAction.myAction == eAction::RETURN)
-	{
-		DL_ASSERT_EXP(myReturnPosition.x != FLT_MAX && myReturnPosition.y != FLT_MAX
-			, "ControllerComponent tried to do RETURN-Action without a valid ReturnPosition");
-
-		Entity* closeTarget = PollingStation::GetInstance()->FindClosestEntity({ myReturnPosition.x, 0, myReturnPosition.y }
-			, myTargetType, myVisionRange2);
-
-		if (closeTarget != nullptr)
-		{
-			myAttackTarget = closeTarget;
-			myCurrentAction.myAction = eAction::ATTACK_TARGET;
-		}
-		else
-		{
-			if (myReturnPosition.x != FLT_MAX && myReturnPosition.y != FLT_MAX)
-			{
-				DoMoveAction(myReturnPosition);
-			}
-			else
-			{
-				myReturnPosition = myEntity.myPosition;
-			}
-		}
-	}
-	else if (myCurrentAction.myAction == eAction::HOLD_POSITION)
-	{
-		Entity* closeTarget = PollingStation::GetInstance()->FindClosestEntity(myEntity.GetOrientation().GetPos()
-			, myTargetType, myAttackRange2);
-
-		if (closeTarget != nullptr)
-		{
-			myAttackTarget = closeTarget;
-			AttackTarget();
-		}
-	}
-	else if (myCurrentAction.myAction == eAction::ATTACK_TARGET)
-	{
-		myCurrentAttackTargetPathRefreshTime -= aDelta;
-		if (myCurrentAttackTargetPathRefreshTime <= 0.f)
-		{
-			RefreshPathToAttackTarget();
-		}
-
-		Entity* closeTarget = PollingStation::GetInstance()->FindClosestEntity(myEntity.GetOrientation().GetPos()
-			, myTargetType, myAttackRange2);
-
-		if (closeTarget != nullptr && closeTarget == myAttackTarget)
-		{
-			AttackTarget();
-		}
-		else
-		{
-			DoMoveAction(myCurrentAction.myPosition);
-		}
-	}
-	else if (myCurrentAction.myAction == eAction::MOVE)
-	{
-		//DoMoveAction(myCurrentAction.myPosition);
-	}
-
-
 	if (myEntity.GetState() == eEntityState::IDLE)
 	{
 		StartNextAction();
 	}
+
+	//if (myCurrentAction.myAction == eAction::IDLE)
+	//{
+	//	myEntity.SetState(eEntityState::IDLE);
+	//	if (myOwnerType == eOwnerType::NEUTRAL)
+	//	{
+	//		int apa = 5;
+	//	}
+	//	Entity* closeTarget = PollingStation::GetInstance()->FindClosestEntity(myEntity.GetOrientation().GetPos()
+	//		, myTargetType, myVisionRange2);
+
+	//	if (closeTarget != nullptr)
+	//	{
+	//		myAttackTarget = closeTarget;
+	//		myReturnPosition = myEntity.myPosition;
+
+	//		ActionData action;
+	//		action.myAction = eAction::ATTACK_TARGET;
+	//		action.myPosition = myAttackTarget->myPosition;
+	//		myActions.Add(action);
+	//	}
+	//}
+	//else if (myCurrentAction.myAction == eAction::ATTACK_MOVE)
+	//{
+	//	if (myAttackTarget != nullptr)
+	//	{
+	//		DoAttackAction();
+	//	}
+	//	else
+	//	{
+	//		DoMoveAction(myCurrentAction.myPosition);
+
+	//		myAttackTarget = PollingStation::GetInstance()->FindClosestEntity(myEntity.GetOrientation().GetPos()
+	//			, myTargetType, myVisionRange2 * 10.f);
+	//	}
+	//}
+	//else if (myCurrentAction.myAction == eAction::RETURN)
+	//{
+	//	DL_ASSERT_EXP(myReturnPosition.x != FLT_MAX && myReturnPosition.y != FLT_MAX
+	//		, "ControllerComponent tried to do RETURN-Action without a valid ReturnPosition");
+
+	//	Entity* closeTarget = PollingStation::GetInstance()->FindClosestEntity({ myReturnPosition.x, 0, myReturnPosition.y }
+	//		, myTargetType, myVisionRange2);
+
+	//	if (closeTarget != nullptr)
+	//	{
+	//		myAttackTarget = closeTarget;
+	//		myCurrentAction.myAction = eAction::ATTACK_TARGET;
+	//	}
+	//	else
+	//	{
+	//		if (myReturnPosition.x != FLT_MAX && myReturnPosition.y != FLT_MAX)
+	//		{
+	//			DoMoveAction(myReturnPosition);
+	//		}
+	//		else
+	//		{
+	//			myReturnPosition = myEntity.myPosition;
+	//		}
+	//	}
+	//}
+	//else if (myCurrentAction.myAction == eAction::HOLD)
+	//{
+	//	Entity* closeTarget = PollingStation::GetInstance()->FindClosestEntity(myEntity.GetOrientation().GetPos()
+	//		, myTargetType, myAttackRange2);
+
+	//	if (closeTarget != nullptr)
+	//	{
+	//		myAttackTarget = closeTarget;
+	//		AttackTarget();
+	//	}
+	//}
+	//else if (myCurrentAction.myAction == eAction::ATTACK_TARGET)
+	//{
+	//	myCurrentAttackTargetPathRefreshTime -= aDelta;
+	//	if (myCurrentAttackTargetPathRefreshTime <= 0.f)
+	//	{
+	//		RefreshPathToAttackTarget();
+	//	}
+
+	//	Entity* closeTarget = PollingStation::GetInstance()->FindClosestEntity(myEntity.GetOrientation().GetPos()
+	//		, myTargetType, myAttackRange2);
+
+	//	if (closeTarget != nullptr && closeTarget == myAttackTarget)
+	//	{
+	//		AttackTarget();
+	//	}
+	//	else
+	//	{
+	//		DoMoveAction(myCurrentAction.myPosition);
+	//	}
+	//}
+	//else if (myCurrentAction.myAction == eAction::MOVE)
+	//{
+	//	//DoMoveAction(myCurrentAction.myPosition);
+	//}
+
+	switch (myCurrentAction.myAction)
+	{
+		case eAction::IDLE:
+			DoIdle();
+			break;
+		case eAction::MOVE:
+			DoMove();
+			break;
+		case eAction::ATTACK_TARGET:
+			DoAttackTarget(aDelta);
+			break;
+		case eAction::RETURN:
+			DoReturn();
+			break;
+		case eAction::HOLD:
+			DoHold();
+			break;
+		case eAction::ATTACK_MOVE:
+			DoAttackMove();
+			break;
+	default:
+		DL_ASSERT("Unkown action");
+		break;
+	}
+
+
 
 	myData.myAcceleration = myBehavior->Update();
 
@@ -174,41 +199,39 @@ void ControllerComponent::Update(float aDelta)
 
 void ControllerComponent::MoveTo(const CU::Vector3<float>& aPosition, bool aClearCommandQueue)
 {
-	myEntity.SetState(eEntityState::IDLE);
-	FillCommandList({ aPosition.x, aPosition.z }, eAction::MOVE, aClearCommandQueue);
+	FillCommandList(eAction::MOVE, aClearCommandQueue, nullptr, { aPosition.x, aPosition.z });
 }
 
 void ControllerComponent::AttackTarget(Entity* aEntity, bool aClearCommandQueue)
 {
-	myAttackTarget = aEntity;
-	FillCommandList(myAttackTarget->myPosition, eAction::ATTACK_TARGET, aClearCommandQueue);
+	FillCommandList(eAction::ATTACK_TARGET, aClearCommandQueue, aEntity);
 }
 
 void ControllerComponent::AttackMove(const CU::Vector3<float>& aPosition, bool aClearCommandQueue)
 {
-	FillCommandList({ aPosition.x, aPosition.z }, eAction::ATTACK_MOVE, aClearCommandQueue);
+	FillCommandList(eAction::ATTACK_MOVE, aClearCommandQueue, nullptr, { aPosition.x, aPosition.z });
 
-	Entity* target = nullptr;
-	switch (myEntity.GetOwner())
-	{
-	case eOwnerType::PLAYER:
-		target = PollingStation::GetInstance()->FindEntityAtPosition(aPosition, eOwnerType::ENEMY);
-		break;
-	case eOwnerType::ENEMY:
-		target = PollingStation::GetInstance()->FindEntityAtPosition(aPosition, eOwnerType::PLAYER);
-		break;
-	default:
-		DL_ASSERT("An Entity thats not owned by Player or AI tried to Attack");
-		break;
-	}
+	//Entity* target = nullptr;
+	//switch (myEntity.GetOwner())
+	//{
+	//case eOwnerType::PLAYER:
+	//	target = PollingStation::GetInstance()->FindEntityAtPosition(aPosition, eOwnerType::ENEMY);
+	//	break;
+	//case eOwnerType::ENEMY:
+	//	target = PollingStation::GetInstance()->FindEntityAtPosition(aPosition, eOwnerType::PLAYER);
+	//	break;
+	//default:
+	//	DL_ASSERT("An Entity thats not owned by Player or AI tried to Attack");
+	//	break;
+	//}
 
-	myReturnPosition.x = FLT_MAX;
-	myReturnPosition.y = FLT_MAX;
+	//myReturnPosition.x = FLT_MAX;
+	//myReturnPosition.y = FLT_MAX;
 
-	if (myEntity.GetState() != eEntityState::ATTACKING || myAttackTarget != target)
-	{
-		myAttackTarget = target;
-	}
+	//if (myEntity.GetState() != eEntityState::ATTACKING || myAttackTarget != target)
+	//{
+	//	myAttackTarget = target;
+	//}
 }
 
 void ControllerComponent::Stop()
@@ -217,16 +240,14 @@ void ControllerComponent::Stop()
 	myCurrentAction.myAction = eAction::IDLE;
 	myCurrentAction.myPosition = myEntity.myPosition;
 	myData.myAcceleration = { 0.f, 0.f };
-	myAttackTarget = nullptr;
 }
 
 void ControllerComponent::HoldPosition()
 {
 	myActions.RemoveAll();
-	myCurrentAction.myAction = eAction::HOLD_POSITION;
+	myCurrentAction.myAction = eAction::HOLD;
 	myCurrentAction.myPosition = myEntity.myPosition;
 	myData.myAcceleration = { 0.f, 0.f };
-	myAttackTarget = nullptr;
 	myEntity.SetState(eEntityState::IDLE);
 }
 
@@ -236,7 +257,8 @@ void ControllerComponent::Spawn(const CU::Vector3f& aPosition)
 	myTerrain.CalcEntityHeight(myEntity.myOrientation);
 }
 
-void ControllerComponent::FillCommandList(const CU::Vector2<float>& aTargetPosition, eAction aAction, bool aClearCommandQueue)
+void ControllerComponent::FillCommandList(eAction aAction, bool aClearCommandQueue, Entity* aEntity
+	, const CU::Vector2<float>& aTargetPosition)
 {
 	if (aClearCommandQueue == true)
 	{
@@ -244,29 +266,40 @@ void ControllerComponent::FillCommandList(const CU::Vector2<float>& aTargetPosit
 		myEntity.SetState(eEntityState::IDLE);
 	}
 
+	//find path within DoMove, or here later
+
 	ActionData action;
 	action.myAction = aAction;
-
-	CU::GrowingArray<CU::Vector3<float>> path(16);
-	if (myTerrain.GetPathFinder()->FindPath(myEntity.GetOrientation().GetPos(), { aTargetPosition.x, 0, aTargetPosition.y }, path) == true)
+	action.myEntity = aEntity;
+	action.myPosition = aTargetPosition;
+	if (myActions.Size() > 0)
 	{
-		if (path.Size() > 0)
-		{
-			for (int i = 0; i < path.Size(); ++i)
-			{
-				CU::Vector2<float> target = { path[i].x, path[i].z };
-
-				action.myPosition = target;
-
-				myActions.Add(action);
-			}
-		}
-		else
-		{
-			action.myPosition = aTargetPosition;
-			myActions.Add(action);
-		}
+		myActions.Insert(0, action);
 	}
+	else
+	{
+		myActions.Add(action);
+	}
+	//CU::GrowingArray<CU::Vector3<float>> path(16);
+	//if (myTerrain.GetPathFinder()->FindPath(myEntity.GetOrientation().GetPos(), { aTargetPosition.x, 0, aTargetPosition.y }, path) == true)
+	//{
+	//	if (path.Size() > 0)
+	//	{
+	//		for (int i = path.Size() - 1; i >= 0; --i)
+	//		{
+	//			CU::Vector2<float> target = { path[i].x, path[i].z };
+
+	//			action.myPosition = target;
+
+	//			myActions.Add(action);
+	//		}
+	//	}
+	//	else
+	//	{
+	//		action.myPosition = aTargetPosition;
+	//		myActions.Add(action);
+	//	}
+	//}
 
 	//if (aClearCommandQueue == true)
 	//{
@@ -274,114 +307,157 @@ void ControllerComponent::FillCommandList(const CU::Vector2<float>& aTargetPosit
 	//}
 }
 
-void ControllerComponent::DoMoveAction(const CU::Vector2<float>& aTargetPosition)
+void ControllerComponent::DoIdle()
 {
-	//if (myEntity.GetState() != eEntityState::WALKING) // derp?
-	//{
-	//	myEntity.SetState(eEntityState::WALKING);
-	//}
-	//else if (myEntity.GetState() == eEntityState::WALKING)
-	//{
-	//	//CU::Vector3<float> position = myEntity.myOrientation.GetPos();
-	//	//myEntity.myOrientation.SetPos({ position.x, 0.f, position.z });
+	myEntity.SetState(eEntityState::IDLE);
+	
+	Entity* closestTarget = PollingStation::GetInstance()->FindClosestEntity(myEntity.GetOrientation().GetPos()
+		, myTargetType, myVisionRange2);
 
-	//	//float dotResult = CU::Dot(myEntity.myOrientation.GetForward(), aTargetPosition - position);
-	//	//if (dotResult <= 0)
-	//	//{
-	//	//	myEntity.myOrientation.SetPos(aTargetPosition);
-	//	//	myData.myAcceleration = { 0.f, 0.f };
-	//	//	myEntity.SetState(eEntityState::IDLE);
-	//	//}
+	if (closestTarget != nullptr)
+	{
+		myReturnPosition = myEntity.myPosition;
 
-	//	//myEntity.myOrientation.SetPos(position);
-	//}
+		ActionData action;
+		action.myAction = eAction::ATTACK_TARGET;
+		action.myEntity = closestTarget;
+		myActions.Add(action);
+	}
 }
 
-void ControllerComponent::DoAttackAction()
+void ControllerComponent::DoMove()
 {
-	bool shouldReturn = false;
-	bool hasReturnPosition = false;
-	float distanceToTarget = CU::Length2(myEntity.GetOrientation().GetPos() - myAttackTarget->GetOrientation().GetPos());
-	if (myReturnPosition.x != FLT_MAX && myReturnPosition.y != FLT_MAX)
+	myBehavior->SetTarget(GetPosition(myCurrentAction));
+}
+
+void ControllerComponent::DoAttackTarget(float aDelta)
+{
+	myCurrentAttackTargetPathRefreshTime -= aDelta;
+	if (myCurrentAttackTargetPathRefreshTime <= 0.f)
 	{
-		float distanceToReturnPosition = CU::Length2(myEntity.myPosition - myReturnPosition);
-		hasReturnPosition = true;
-		float chaseDistance = myChaseDistance2;
-
-		if (myEntity.GetOwner() == eOwnerType::NEUTRAL)
-		{
-			chaseDistance = myChaseDistanceNeutral2;
-		}
-
-		if (distanceToReturnPosition > chaseDistance)
-		{
-			shouldReturn = true;
-		}
+		RefreshPathToAttackTarget();
 	}
 
-	if (distanceToTarget < myAttackRange2 && shouldReturn == false)
+	
+	if (CU::Length2(myCurrentAction.myEntity->GetPosition() - myEntity.GetPosition()) < myAttackRange2)
 	{
 		AttackTarget();
-		if (myAttackTarget->GetAlive() == false)
-		{
-			if (hasReturnPosition == true)
-			{
-				myCurrentAction.myAction = eAction::RETURN;
-				myEntity.GetComponent<ActorComponent>()->LookAtPoint(myReturnPosition);
-				myData.myAcceleration = myReturnPosition - myEntity.myPosition;					//should be in behavior
-			}
-			else
-			{
-				myAttackTarget = nullptr;
-			}
-		}
-	}
-	else if (shouldReturn == true)
-	{
-		myCurrentAction.myAction = eAction::RETURN;
-		myEntity.GetComponent<ActorComponent>()->LookAtPoint(myReturnPosition);
-		myData.myAcceleration = myReturnPosition - myEntity.myPosition;
 	}
 	else
 	{
-		DoMoveAction(myAttackTarget->myPosition);
+		DoMove();
 	}
 }
+
+void ControllerComponent::DoReturn()
+{
+	DL_ASSERT("Not implemented yet.");
+}
+
+void ControllerComponent::DoHold()
+{
+	DL_ASSERT("Not implemented yet.");
+}
+
+void ControllerComponent::DoAttackMove()
+{
+	Entity* closestTarget = PollingStation::GetInstance()->FindClosestEntity(myEntity.GetOrientation().GetPos()
+		, myTargetType, myVisionRange2);
+
+	if (closestTarget != nullptr)
+	{
+		myReturnPosition = myEntity.myPosition;
+
+		ActionData action;
+		action.myAction = eAction::ATTACK_TARGET;
+		action.myEntity = closestTarget;
+		myActions.Add(action);
+	}
+	else
+	{
+		DoMove();
+	}
+}
+
+//void ControllerComponent::DoAttack()
+//{
+//	bool shouldReturn = false;
+//	bool hasReturnPosition = false;
+//	float distanceToTarget = CU::Length2(myEntity.GetOrientation().GetPos() - myAttackTarget->GetOrientation().GetPos());
+//	if (myReturnPosition.x != FLT_MAX && myReturnPosition.y != FLT_MAX)
+//	{
+//		float distanceToReturnPosition = CU::Length2(myEntity.myPosition - myReturnPosition);
+//		hasReturnPosition = true;
+//		float chaseDistance = myChaseDistance2;
+//
+//		if (myEntity.GetOwner() == eOwnerType::NEUTRAL)
+//		{
+//			chaseDistance = myChaseDistanceNeutral2;
+//		}
+//
+//		if (distanceToReturnPosition > chaseDistance)
+//		{
+//			shouldReturn = true;
+//		}
+//	}
+//
+//	if (distanceToTarget < myAttackRange2 && shouldReturn == false)
+//	{
+//		AttackTarget();
+//		if (myAttackTarget->GetAlive() == false)
+//		{
+//			if (hasReturnPosition == true)
+//			{
+//				myCurrentAction.myAction = eAction::RETURN;
+//				myEntity.GetComponent<ActorComponent>()->LookAtPoint(myReturnPosition);
+//				myData.myAcceleration = myReturnPosition - myEntity.myPosition;					//should be in behavior
+//			}
+//			else
+//			{
+//				myAttackTarget = nullptr;
+//			}
+//		}
+//	}
+//	else if (shouldReturn == true)
+//	{
+//		myCurrentAction.myAction = eAction::RETURN;
+//		myEntity.GetComponent<ActorComponent>()->LookAtPoint(myReturnPosition);
+//		myData.myAcceleration = myReturnPosition - myEntity.myPosition;
+//	}
+//	else
+//	{
+//		DoMoveAction(myAttackTarget->myPosition);
+//	}
+//}
 
 void ControllerComponent::AttackTarget()
 {
-	if (myEntity.GetState() == eEntityState::ATTACKING)
-	{
-		if (myAttackTimer <= 0.f)
-		{
-			myAttackTimer = myAttackRechargeTime;
-
-			bool targetSurvived = false;
-
-			HealthComponent* targetHealth = myAttackTarget->GetComponent<HealthComponent>();
-			if (targetHealth != nullptr && myAttackTarget->GetAlive())
-			{
-				targetSurvived = targetHealth->TakeDamage(myAttackDamage);
-			}
-
-			AnimationComponent* animation = myEntity.GetComponent<AnimationComponent>();
-			DL_ASSERT_EXP(animation != nullptr, "Animation missing from attacking unit");
-			if (animation != nullptr)
-			{
-				animation->RestartCurrentAnimation();
-			}
-
-			if (targetSurvived == false)
-			{
-				myAttackTarget->SetState(eEntityState::DYING);
-				myEntity.SetState(eEntityState::IDLE);
-			}
-		}
-	}
-	else
+	if (myAttackTimer <= 0.f)
 	{
 		myEntity.SetState(eEntityState::ATTACKING);
-		myData.myAcceleration = { 0.f, 0.f };
+		myAttackTimer = myAttackRechargeTime;
+
+		bool targetSurvived = false;
+
+		HealthComponent* targetHealth = myCurrentAction.myEntity->GetComponent<HealthComponent>();
+		if (targetHealth != nullptr && myCurrentAction.myEntity->GetAlive())
+		{
+			targetSurvived = targetHealth->TakeDamage(myAttackDamage);
+		}
+
+		AnimationComponent* animation = myEntity.GetComponent<AnimationComponent>();
+		DL_ASSERT_EXP(animation != nullptr, "Animation missing from attacking unit");
+		if (animation != nullptr)
+		{
+			animation->RestartCurrentAnimation();
+		}
+
+		if (targetSurvived == false)
+		{
+			myCurrentAction.myEntity->SetState(eEntityState::DYING);
+			myEntity.SetState(eEntityState::IDLE);
+			myBehavior->SetTarget(myEntity.GetPosition());
+		}
 	}
 }
 
@@ -390,29 +466,52 @@ void ControllerComponent::StartNextAction()
 	if (myActions.Size() > 0)
 	{
 		myReturnPosition = myEntity.myPosition;
-		myCurrentAction.myAction = myActions[0].myAction;
-		myCurrentAction.myPosition = myActions[0].myPosition;
-		myActions.RemoveNonCyclicAtIndex(0);
-		myBehavior->SetTarget(myCurrentAction.myPosition);
+		myCurrentAction.myAction = myActions.GetLast().myAction;
+		myCurrentAction.myPosition = myActions.GetLast().myPosition;
+		myCurrentAction.myEntity = myActions.GetLast().myEntity;
+		myActions.RemoveCyclicAtIndex(myActions.Size() - 1);
 
-		if (myCurrentAction.myAction == eAction::ATTACK_MOVE
-			|| myCurrentAction.myAction == eAction::ATTACK_TARGET
-			|| myCurrentAction.myAction == eAction::MOVE
-			|| myCurrentAction.myAction == eAction::RETURN)
-		{
-			myEntity.SetState(eEntityState::WALKING);
-		}
+		//switch (myCurrentAction.myAction)
+		//{
+		//	case eAction::IDLE:
+		//		DL_ASSERT("Can't have idle in action queue..?");
+		//		break;
+		//	case eAction::MOVE:
+		//		myEntity.SetState(eEntityState::WALKING);
+		//		break;
+		//	case eAction::ATTACK_TARGET:
+		//		myEntity.SetState(eEntityState::ATTACKING);
+		//		break;
+		//	case eAction::RETURN:
+		//		myEntity.SetState(eEntityState::ATTACKING);
+		//		break;
+		//	case eAction::HOLD:
+		//		myEntity.SetState(eEntityState::ATTACKING);
+		//		break;
+		//	case eAction::ATTACK_MOVE:
+		//		myEntity.SetState(eEntityState::ATTACKING);
+		//		break;
+		//}
+
+		//if (myCurrentAction.myAction == eAction::ATTACK_MOVE
+		//	|| myCurrentAction.myAction == eAction::ATTACK_TARGET
+		//	|| myCurrentAction.myAction == eAction::MOVE
+		//	|| myCurrentAction.myAction == eAction::RETURN)
+		//{
+		//	myEntity.SetState(eEntityState::WALKING);
+		//}
 	}
 	else
 	{
 		myCurrentAction.myAction = eAction::IDLE;
 		myCurrentAction.myPosition = myEntity.myPosition;
+		myCurrentAction.myEntity = nullptr;
 	}
 }
 
 void ControllerComponent::RefreshPathToAttackTarget()
 {
-	AttackTarget(myAttackTarget, true);
+	AttackTarget(myCurrentAction.myEntity, true);
 	myCurrentAttackTargetPathRefreshTime = myAttackTargetPathRefreshTime;
 }
 
@@ -428,7 +527,7 @@ void ControllerComponent::RenderDebugLines() const
 		}
 		else
 		{
-			pointB = myTerrain.GetHeight(myCurrentAction.myPosition, 1.f);
+			pointB = myTerrain.GetHeight(GetPosition(myCurrentAction), 1.f);
 		}
 
 		Prism::RenderLine3D(pointA, pointB, GetActionColor(myCurrentAction.myAction));
@@ -436,24 +535,33 @@ void ControllerComponent::RenderDebugLines() const
 
 	if (myActions.Size() > 0)
 	{
-		CU::Vector3<float> pointA = myTerrain.GetHeight(myCurrentAction.myPosition, 1.f);
-		CU::Vector3<float> pointB = myTerrain.GetHeight(myActions[0].myPosition, 1.f);
-		eColorDebug color = GetActionColor(myActions[0].myAction);
+		CU::Vector3<float> pointA = myTerrain.GetHeight(GetPosition(myCurrentAction), 1.f);
+
+		CU::Vector3<float> pointB = myTerrain.GetHeight(GetPosition(myActions.GetLast()), 1.f);
+		eColorDebug color = GetActionColor(myActions.GetLast().myAction);
 
 		Prism::RenderLine3D(pointA, pointB, color);
 
-		for (int i = 1; i < myActions.Size(); ++i)
+		for (int i = myActions.Size() - 1; i >= 1; --i)
 		{
-			color = GetActionColor(myActions[i].myAction);
+			color = GetActionColor(myActions[i-1].myAction);
 
-			if (myActions[i].myAction != eAction::IDLE)
-			{
-				pointA = myTerrain.GetHeight(myActions[i-1].myPosition, 1.f);
-				pointB = myTerrain.GetHeight(myActions[i].myPosition, 1.f);
-				Prism::RenderLine3D(pointA, pointB, color);
-			}
+			
+			pointA = myTerrain.GetHeight(GetPosition(myActions[i]), 1.f);
+			pointB = myTerrain.GetHeight(GetPosition(myActions[i-1]), 1.f);
+			Prism::RenderLine3D(pointA, pointB, color);
 		}
 	}
+}
+
+const CU::Vector2<float>& ControllerComponent::GetPosition(const ActionData& anActionData) const
+{
+	if (anActionData.myEntity != nullptr)
+	{
+		return anActionData.myEntity->GetPosition();
+	}
+	DL_ASSERT_EXP(anActionData.myPosition.x != -1 && anActionData.myPosition.y != -1, "Action Data not valid.");
+	return anActionData.myPosition;
 }
 
 eColorDebug ControllerComponent::GetActionColor(eAction aAction) const
@@ -475,7 +583,7 @@ eColorDebug ControllerComponent::GetActionColor(eAction aAction) const
 	case ControllerComponent::eAction::RETURN:
 		return eColorDebug::YELLOW;
 		break;
-	case ControllerComponent::eAction::HOLD_POSITION:
+	case ControllerComponent::eAction::HOLD:
 		return eColorDebug::YELLOW;
 		break;
 	default:

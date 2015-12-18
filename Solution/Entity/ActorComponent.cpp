@@ -45,7 +45,7 @@ void ActorComponent::Update(float aDelta)
 		myEntity.myOrientation.SetPos({ position.x, 0, position.y });
 		myTerrain.CalcEntityHeight(myEntity.myOrientation);
 	}
-	else
+	else if (myEntity.GetState() != eEntityState::ATTACKING)
 	{
 		myEntity.SetState(eEntityState::IDLE);
 	}

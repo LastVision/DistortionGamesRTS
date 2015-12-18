@@ -98,6 +98,33 @@ Entity* PollingStation::FindEntityAtPosition(const CU::Vector3<float>& aPosition
 	return FindClosestEntity(aPosition, aEntityOwner, 10.f);
 }
 
+void PollingStation::FindAllEntitiesCloseToEntity(const Entity* anEntity, float aRadius
+	, CU::GrowingArray<Entity*>& someEntitiesOut)
+{
+	FindAllEntitiesCloseToEntity(myPlayerUnits, anEntity, aRadius, someEntitiesOut);
+	FindAllEntitiesCloseToEntity(myNeutralUnits, anEntity, aRadius, someEntitiesOut);
+	FindAllEntitiesCloseToEntity(myAIUnits, anEntity, aRadius, someEntitiesOut);
+}
+
+void PollingStation::FindAllEntitiesCloseToEntity(const CU::GrowingArray<Entity*>& someEntitiesIn
+	, const Entity* anEntity, float aRadius, CU::GrowingArray<Entity*>& someEntitiesOut)
+{
+	float dist2;
+	for (int i = 0; i < someEntitiesIn.Size(); ++i)
+	{
+		Entity* current = someEntitiesIn[i];
+		if (current->GetAlive() == true && current != anEntity)
+		{
+			dist2 = CU::Length2(current->GetPosition() - anEntity->GetPosition());
+
+			if (dist2 < aRadius * aRadius)
+			{
+				someEntitiesOut.Add(current);
+			}
+		}
+	}
+}
+
 const CU::GrowingArray<Entity*>& PollingStation::GetUnits(eOwnerType anOwner) const
 {
 	switch (anOwner)
