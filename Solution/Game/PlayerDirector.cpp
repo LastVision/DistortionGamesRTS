@@ -447,6 +447,7 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 		myFirstCameraPosition = aCamera.GetOrientation().GetPos();
 	}
 
+
 	if (myMouseIsOverGUI == true)
 	{
 		myRenderDragSelection = false;
@@ -493,13 +494,13 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 
 	CU::Intersection::LineSegment3D line(aCamera.GetOrientation().GetPos(), firstTargetPos);
 
-	for (int i = 0; i < myUnits.Size(); ++i)
+	for (int i = 0; i < myActiveUnits.Size(); ++i)
 	{
-		SelectOrHoverEntity(myUnits[i], hasSelected, hasHovered, line);
+		SelectOrHoverEntity(myActiveUnits[i], hasSelected, hasHovered, line);
 
-		if (myMouseIsOverGUI == false && myUnits[i]->IsSelected())
+		if (myMouseIsOverGUI == false && myActiveUnits[i]->IsSelected())
 		{
-			ControllerComponent* controller = myUnits[i]->GetComponent<ControllerComponent>();
+			ControllerComponent* controller = myActiveUnits[i]->GetComponent<ControllerComponent>();
 			if ((mySelectedAction == eSelectedAction::ATTACK_TAGRET && hoveredEnemy != nullptr && myLeftMouseUp == true)
 				|| (hoveredEnemy != nullptr && myRightClicked == true))
 			{
@@ -561,6 +562,13 @@ void PlayerDirector::SelectOrHoverEntity(Entity* aEntity, bool &aSelected, bool 
 		{
 			unitCollided = true;
 		}
+		else
+		{
+			if (aEntity->GetComponent<CollisionComponent>()->Collide(aMouseRay) == true)
+			{
+				unitCollided = true;
+			}
+		}
 	}
 	else
 	{
@@ -576,7 +584,8 @@ void PlayerDirector::SelectOrHoverEntity(Entity* aEntity, bool &aSelected, bool 
 		{
 			SelectUnit(aEntity);
 		}
-		else if (aHovered == false)
+		//else if (aHovered == false)
+		else
 		{
 			aEntity->SetHovered(true);
 			aHovered = true;
