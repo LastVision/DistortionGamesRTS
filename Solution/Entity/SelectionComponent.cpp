@@ -8,10 +8,10 @@ SelectionComponent::SelectionComponent(Entity& aEntity, SelectionComponentData& 
 	: Component(aEntity)
 	, myHover(nullptr)
 {
-	Prism::ModelProxy* model = Prism::ModelLoader::GetInstance()->LoadModel(aComponentData.myModelPath
-		, aComponentData.myEffectPath);
-
-	myInstance = new Prism::Instance(*model, myEntity.myOrientation, myEntity.GetOctreeType(), myCullingRadius);
+	//Prism::ModelProxy* model = Prism::ModelLoader::GetInstance()->LoadModel(aComponentData.myModelPath
+	//	, aComponentData.myEffectPath);
+	//
+	//myInstance = new Prism::Instance(*model, myEntity.myOrientation, myEntity.GetOctreeType(), myCullingRadius);
 }
 
 
