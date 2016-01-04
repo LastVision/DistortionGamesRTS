@@ -159,6 +159,36 @@ const CU::GrowingArray<Entity*>& PollingStation::GetVictoryPoints() const
 	return myVictoryPoints;
 }
 
+int PollingStation::GetResourcePointsCount(eOwnerType anOwner) const
+{
+	int count = 0;
+
+	for (int i = 0; i < myResourcePoints.Size(); ++i)
+	{
+		if (myResourcePoints[i]->GetOwner() == anOwner)
+		{
+			++count;
+		}
+	}
+
+	return count;
+}
+
+int PollingStation::GetVictoryPointsCount(eOwnerType anOwner) const
+{
+	int count = 0;
+
+	for (int i = 0; i < myVictoryPoints.Size(); ++i)
+	{
+		if (myVictoryPoints[i]->GetOwner() == anOwner)
+		{
+			++count;
+		}
+	}
+
+	return count;
+}
+
 const Entity* PollingStation::GetBase(eOwnerType anOwner) const
 {
 	if (anOwner == eOwnerType::PLAYER)

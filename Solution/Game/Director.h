@@ -39,6 +39,7 @@ protected:
 
 	CU::GrowingArray<Entity*> myUnits;
 	CU::GrowingArray<Entity*> myActiveUnits;
+	CU::GrowingArray<Entity*> myDeadUnits;
 	Entity* myBuilding;
 	const eOwnerType myOwner;
 	const Prism::Terrain& myTerrain;

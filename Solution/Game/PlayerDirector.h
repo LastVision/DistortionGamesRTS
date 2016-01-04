@@ -1,8 +1,7 @@
 #pragma once
 #include "Director.h"
 #include <StaticArray.h>
-
-#define AMOUNT_OF_CONTROL_GROUPS 4
+#include "GameDefines.h"
 
 namespace Prism
 {
@@ -72,7 +71,7 @@ public:
 	const int& GetTestGold() const;
 	const bool& GetRenderDragSelection() const;
 
-	CU::StaticArray<CU::GrowingArray<Entity*>, AMOUNT_OF_CONTROL_GROUPS> myControlGroups;
+	const CU::StaticArray<CU::GrowingArray<Entity*>, AMOUNT_OF_CONTROL_GROUPS>& GetControlGroups() const;
 
 private:
 	void UpdateInputs();
@@ -85,6 +84,8 @@ private:
 	
 	void PlaceTotem(const CU::Vector3f& aPositionInWorld);
 	void Enrage();
+
+	CU::StaticArray<CU::GrowingArray<Entity*>, AMOUNT_OF_CONTROL_GROUPS> myControlGroups;
 
 	CU::GrowingArray<Entity*> mySelectedUnits;
 	GUI::GUIManager* myGUIManager;
@@ -116,8 +117,6 @@ private:
 	Prism::SpriteProxy* myDragSelectionSprite;
 
 	Entity* myTotem;
-
-
 };
 
 inline const CU::GrowingArray<Entity*>& PlayerDirector::GetSelectedUnits() const
@@ -133,4 +132,9 @@ inline const int& PlayerDirector::GetTestGold() const
 inline const bool& PlayerDirector::GetRenderDragSelection() const
 {
 	return myRenderDragSelection;
+}
+
+inline const CU::StaticArray<CU::GrowingArray<Entity*>, AMOUNT_OF_CONTROL_GROUPS>& PlayerDirector::GetControlGroups() const
+{
+	return myControlGroups;
 }
