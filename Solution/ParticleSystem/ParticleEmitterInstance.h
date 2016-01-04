@@ -4,6 +4,7 @@
 #include "ParticleEmitterData.h"
 #include "ParticleData.h"
 #include <bitset>
+struct _D3DX11_TECHNIQUE_DESC;
 namespace Prism
 {
 	class Camera;
@@ -16,11 +17,12 @@ namespace Prism
 		ParticleEmitterInstance(ParticleEmitterData* someData, bool anAllowManyParticles = false);
 		~ParticleEmitterInstance();
 		void ReleaseData();
-		void Render(Camera* aCamera);
+		void Render();
 		void Update(float aDeltaTime, const CU::Matrix44f& aWorldMatrix);
 		void SetPosition(CU::Vector3f aPosition);
 		void Activate();
 		bool IsActive();
+		void SetGPUData(Camera* aCamera);
 	private:
 
 		void CreateVertexBuffer();
@@ -48,6 +50,7 @@ namespace Prism
 		int myDeadParticleCount;
 
 		bool myIsActive;
+		_D3DX11_TECHNIQUE_DESC* myTechniqueDesc;
 
 		std::string myEmitterPath;
 	};

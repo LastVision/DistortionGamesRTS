@@ -43,6 +43,10 @@ Game::Game()
 {
 	PostMaster::Create();
 	Prism::Audio::AudioInterface::CreateInstance();
+
+	Prism::Audio::AudioInterface::GetInstance()->Init("Data/Resource/Sound/Init.bnk");
+	Prism::Audio::AudioInterface::GetInstance()->LoadBank("Data/Resource/Sound/RTSSoundBank.bnk");
+
 	Prism::Engine::GetInstance()->SetShowDebugText(myShowSystemInfo);
 
 	myCursor = new GUI::Cursor(Prism::Engine::GetInstance()->GetWindowSizeInt());
@@ -56,7 +60,6 @@ Game::~Game()
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::GAME_STATE, this);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::FADE, this);
 	SAFE_DELETE(myCursor);
-	Prism::Audio::AudioInterface::GetInstance()->PostEvent("Stop_MenuMusic", 0);
 	Prism::Audio::AudioInterface::Destroy();
 	Prism::StreakDataContainer::Destroy();
 	Prism::ParticleDataContainer::Destroy();
@@ -105,7 +108,7 @@ bool Game::Update()
 {
 	CU::InputWrapper::GetInstance()->Update();
 	CU::TimerManager::GetInstance()->Update();
-
+	Prism::Audio::AudioInterface::GetInstance()->Update();
 	float deltaTime = CU::TimerManager::GetInstance()->GetMasterTimer().GetTime().GetFrameTime();
 	float fps = 1.f / deltaTime;
 	DEBUG_PRINT(fps);
