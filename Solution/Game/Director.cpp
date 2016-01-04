@@ -3,7 +3,6 @@
 #include "Console.h"
 #include "Director.h"
 #include <Entity.h>
-#include <Formation.h>
 #include <HealthComponent.h>
 #include <PostMaster.h>
 #include <ResourceMessage.h>
@@ -21,24 +20,17 @@ Director::Director(eOwnerType aOwnerType, const Prism::Terrain& aTerrain)
 	, myTimeMultiplier(1.f)
 	, myVictoryPoints(0)
 	, myTestGold(60)
-	, myFormations(GC::directorUnitCap)
-	, myActiveFormations(GC::directorUnitCap)
 {
 	PostMaster::GetInstance()->Subscribe(eMessageType::SPAWN_UNIT, this);
 	PostMaster::GetInstance()->Subscribe(eMessageType::RESOURCE, this);
 	PostMaster::GetInstance()->Subscribe(eMessageType::VICTORY, this);
 	PostMaster::GetInstance()->Subscribe(eMessageType::UPGRADE_UNIT, this);
 
-	for (int i = 0; i < GC::directorUnitCap; ++i)
-	{
-		myFormations.Add(new Formation(myTerrain));
-	}
 }
 
 
 Director::~Director()
 {
-	myFormations.DeleteAll();
 	myUnits.DeleteAll();
 	SAFE_DELETE(myBuilding);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::SPAWN_UNIT, this);
@@ -63,10 +55,6 @@ void Director::Update(float aDeltaTime)
 			myDeadUnits.Add(myActiveUnits[i]);
 			myActiveUnits.RemoveCyclicAtIndex(i);
 		}
-	}
-	for (int i = 0; i < myActiveFormations.Size(); ++i)
-	{
-		myActiveFormations[i]->Update(aDeltaTime);
 	}
 }
 
