@@ -71,7 +71,7 @@ public:
 	const int& GetTestGold() const;
 	const bool& GetRenderDragSelection() const;
 
-	const CU::StaticArray<CU::GrowingArray<Entity*>, AMOUNT_OF_CONTROL_GROUPS>& GetControlGroups();
+	const CU::StaticArray<CU::GrowingArray<Entity*>, AMOUNT_OF_CONTROL_GROUPS>& GetControlGroups() const;
 
 private:
 	void UpdateInputs();
@@ -134,7 +134,7 @@ inline const bool& PlayerDirector::GetRenderDragSelection() const
 	return myRenderDragSelection;
 }
 
-inline const CU::StaticArray<CU::GrowingArray<Entity*>, AMOUNT_OF_CONTROL_GROUPS>& PlayerDirector::GetControlGroups()
+inline const CU::StaticArray<CU::GrowingArray<Entity*>, AMOUNT_OF_CONTROL_GROUPS>& PlayerDirector::GetControlGroups() const
 {
 	return myControlGroups;
 }
