@@ -28,7 +28,6 @@
 #include <FadeMessage.h>
 #include <PostMaster.h>
 
-
 PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aScene, GUI::Cursor* aCursor)
 	: Director(eOwnerType::PLAYER, aTerrain)
 	, myRenderGUI(true)
@@ -38,6 +37,7 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 	, myTweakValueX(3.273f)
 	, myTweakValueY(10.79f)
 	, mySelectedAction(eSelectedAction::NONE)
+	, myControlPressed(false)
 	, myLeftMouseUp(false)
 	, myLeftMouseDown(false)
 	, myMouseIsOverGUI(false)
@@ -50,7 +50,6 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 	myDragSelectionPositions.Reserve(4);
 	myDragSelectionSprite = Prism::ModelLoader::GetInstance()->LoadSprite(
 		"Data/Resource/Texture/T_selection_box.dds", { 0.f, 0.f });
-	//myDragSelectionSprite = new Prism::Sprite("Data/Resource/Texture/T_selection_box.dds", { 0.f, 0.f });
 
 	for (int i = 0; i < 64; ++i)
 	{
@@ -61,13 +60,6 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::PLAYER, eEntityType::UNIT, eUnitType::TANK, Prism::eOctreeType::DYNAMIC,
 			aScene, { 20.f + i, 0.f, 40.f }, aTerrain));
 	}
-
-	/*myActiveUnits.Add(myUnits[0]);
-	for (int i = 0; i < myActiveUnits.Size(); ++i)
-	{
-		myActiveUnits[i]->Spawn({ 65.f, 0.f, 25.f });
-		PollingStation::GetInstance()->RegisterEntity(myActiveUnits[i]);
-	}*/
 
 	PostMaster::GetInstance()->Subscribe(eMessageType::TOGGLE_GUI, this);
 	PostMaster::GetInstance()->Subscribe(eMessageType::ON_CLICK, this);
@@ -164,6 +156,8 @@ void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 		}
 	}
 
+	UpdateControlGroups();
+
 	if (myRenderGUI == true)
 	{
 		myGUIManager->Update();
@@ -257,10 +251,20 @@ void PlayerDirector::ReceiveMessage(const MinimapMoveMessage& aMessage)
 {
 	CU::Vector2<float> position = aMessage.myPosition * 255.f;
 
-	for (int i = 0; i < mySelectedUnits.Size(); i++)
+	if (mySelectedAction == eSelectedAction::ATTACK_MOVE)
 	{
-		ControllerComponent* controller = mySelectedUnits[i]->GetComponent<ControllerComponent>();
-		controller->MoveTo({ position.x, 0.f, position.y }, true);
+		for (int i = 0; i < mySelectedUnits.Size(); i++)
+		{
+			mySelectedUnits[i]->GetComponent<ControllerComponent>()->AttackMove({ position.x, 0.f, position.y }, !myShiftPressed);
+		}
+		mySelectedAction = eSelectedAction::NONE;
+	}
+	else
+	{
+		for (int i = 0; i < mySelectedUnits.Size(); i++)
+		{
+			mySelectedUnits[i]->GetComponent<ControllerComponent>()->MoveTo({ position.x, 0.f, position.y }, true);
+		}
 	}
 }
 
@@ -384,6 +388,8 @@ void PlayerDirector::UpdateInputs()
 {
 	myShiftPressed = CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_LSHIFT)
 		|| CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_RSHIFT);
+	myControlPressed = CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_LCONTROL)
+		|| CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_RCONTROL);
 	myMouseIsOverGUI = myGUIManager->MouseOverGUI();
 
 	if (mySelectedUnits.Size() > 0)
@@ -422,12 +428,80 @@ void PlayerDirector::UpdateInputs()
 	}
 }
 
+void PlayerDirector::UpdateControlGroups()
+{
+	if (mySelectedUnits.Size() > 0 && myControlPressed == true)
+	{
+		if (CU::InputWrapper::GetInstance()->KeyDown(DIK_1) == true)
+		{
+			myControlGroups[0] = mySelectedUnits;
+		}
+		else if (CU::InputWrapper::GetInstance()->KeyDown(DIK_2) == true)
+		{
+			myControlGroups[1] = mySelectedUnits;
+		}
+		else if (CU::InputWrapper::GetInstance()->KeyDown(DIK_3) == true)
+		{
+			myControlGroups[2] = mySelectedUnits;
+		}
+		else if (CU::InputWrapper::GetInstance()->KeyDown(DIK_4) == true)
+		{
+			myControlGroups[3] = mySelectedUnits;
+		}
+	}
+
+	for (int i = 0; i < AMOUNT_OF_CONTROL_GROUPS; i++)
+	{
+		for (int j = myControlGroups[i].Size() - 1; j >= 0; --j)
+		{
+			if (myControlGroups[i][j]->GetAlive() == false)
+			{
+				myControlGroups[i].RemoveCyclicAtIndex(j);
+			}
+		}
+	}
+
+	if (myControlPressed == false)
+	{
+		int index = -1;
+
+		if (CU::InputWrapper::GetInstance()->KeyDown(DIK_1) == true)
+		{
+			index = 0;
+		}
+		else if (CU::InputWrapper::GetInstance()->KeyDown(DIK_2) == true)
+		{
+			index = 1;
+		}
+		else if (CU::InputWrapper::GetInstance()->KeyDown(DIK_3) == true)
+		{
+			index = 2;
+		}
+		else if (CU::InputWrapper::GetInstance()->KeyDown(DIK_4) == true)
+		{
+			index = 3;
+		}
+
+		if (index != -1 && myControlGroups[index].Size() > 0)
+		{
+			for (int i = 0; i < mySelectedUnits.Size(); i++)
+			{
+				mySelectedUnits[i]->SetSelect(false);
+			}
+			mySelectedUnits = myControlGroups[index];
+			for (int i = 0; i < mySelectedUnits.Size(); i++)
+			{
+				mySelectedUnits[i]->SetSelect(true);
+			}
+		}
+	}
+}
+
 void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 {
 	CU::Vector3<float> firstTargetPos = CalcCursorWorldPosition(CU::InputWrapper::GetInstance()->GetMousePosition(), aCamera);
 	CU::Vector3<float> secondTargetPos;
 	CU::Vector2<float> mousePosition = CU::InputWrapper::GetInstance()->GetMousePosition();
-
 
 	if (myLeftMouseDown == true && mySelectedAction == eSelectedAction::PLACE_TOTEM)
 	{
@@ -439,17 +513,18 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 		Enrage();
 	}
 
-
 	if (myLeftMouseDown == true)
 	{
 		myRenderDragSelection = true;
-		if (myMouseIsOverGUI == true)
-		{
-			myRenderDragSelection = false;
-		}
 		myFirstMousePosition = CU::InputWrapper::GetInstance()->GetMousePosition();
 		myFirstMousePositionInWorld = CalcCursorWorldPosition(myFirstMousePosition, aCamera);
 		myFirstCameraPosition = aCamera.GetOrientation().GetPos();
+	}
+
+
+	if (myMouseIsOverGUI == true)
+	{
+		myRenderDragSelection = false;
 	}
 
 	if (myLeftMousePressed == true && myRenderDragSelection == true)
@@ -493,13 +568,13 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 
 	CU::Intersection::LineSegment3D line(aCamera.GetOrientation().GetPos(), firstTargetPos);
 
-	for (int i = 0; i < myUnits.Size(); ++i)
+	for (int i = 0; i < myActiveUnits.Size(); ++i)
 	{
-		SelectOrHoverEntity(myUnits[i], hasSelected, hasHovered, line);
+		SelectOrHoverEntity(myActiveUnits[i], hasSelected, hasHovered, line);
 
-		if (myMouseIsOverGUI == false && myUnits[i]->IsSelected())
+		if (myMouseIsOverGUI == false && myActiveUnits[i]->IsSelected())
 		{
-			ControllerComponent* controller = myUnits[i]->GetComponent<ControllerComponent>();
+			ControllerComponent* controller = myActiveUnits[i]->GetComponent<ControllerComponent>();
 			if ((mySelectedAction == eSelectedAction::ATTACK_TAGRET && hoveredEnemy != nullptr && myLeftMouseUp == true)
 				|| (hoveredEnemy != nullptr && myRightClicked == true))
 			{
@@ -543,7 +618,7 @@ void PlayerDirector::SelectOrHoverEntity(Entity* aEntity, bool &aSelected, bool 
 	aSelected;
 	aMouseRay;
 
-	if (myLeftMouseDown == true && myShiftPressed == false
+	if (myLeftMouseDown == true && myShiftPressed == false && myMouseIsOverGUI == false
 		&& (mySelectedAction == eSelectedAction::NONE || mySelectedAction == eSelectedAction::HOLD_POSITION
 		|| mySelectedAction == eSelectedAction::STOP))
 	{
@@ -561,6 +636,13 @@ void PlayerDirector::SelectOrHoverEntity(Entity* aEntity, bool &aSelected, bool 
 		{
 			unitCollided = true;
 		}
+		else
+		{
+			if (aEntity->GetComponent<CollisionComponent>()->Collide(aMouseRay) == true)
+			{
+				unitCollided = true;
+			}
+		}
 	}
 	else
 	{
@@ -576,7 +658,8 @@ void PlayerDirector::SelectOrHoverEntity(Entity* aEntity, bool &aSelected, bool 
 		{
 			SelectUnit(aEntity);
 		}
-		else if (aHovered == false)
+		//else if (aHovered == false)
+		else
 		{
 			aEntity->SetHovered(true);
 			aHovered = true;

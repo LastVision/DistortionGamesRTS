@@ -11,11 +11,6 @@ struct ControllerComponentData;
 class ControllerComponent : public Component
 {
 public:
-	struct ControllerData
-	{
-		CU::Vector2<float> myAcceleration;
-	};
-
 	ControllerComponent(Entity& aEntity, ControllerComponentData& aData, const Prism::Terrain& aTerrain);
 	~ControllerComponent();
 
@@ -27,7 +22,7 @@ public:
 	void Stop();
 	void HoldPosition();
 
-	const ControllerData& GetControllerData() const;
+	const CU::Vector2<float>& GetAcceleration() const;
 	float GetVisionRange2() const;
 	float GetAttackRange2() const;
 
@@ -82,7 +77,7 @@ private:
 	const CU::Vector2<float>& GetPosition(const ActionData& anActionData) const;
 	eColorDebug GetActionColor(eAction aAction) const;
 	
-	ControllerData myData;
+	CU::Vector2<float> myAcceleration;
 	Behavior* myBehavior;
 
 	CU::Vector2<float> myReturnPosition;
@@ -105,9 +100,9 @@ private:
 	ActionData myCurrentAction;
 };
 
-inline const ControllerComponent::ControllerData& ControllerComponent::GetControllerData() const
+inline const CU::Vector2<float>& ControllerComponent::GetAcceleration() const
 {
-	return myData;
+	return myAcceleration;
 }
 
 inline float ControllerComponent::GetVisionRange2() const

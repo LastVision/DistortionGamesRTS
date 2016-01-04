@@ -18,6 +18,9 @@ Prism::Instance::Instance(ModelProxy& aModel, const CU::Matrix44<float>& anOrien
 	, myScale({1,1,1})
 	, myObjectCullingRadius(aObjectCullingRadius)
 	, myHierarchyIsBuilt(false)
+	, myIsHovered(false)
+	, myIsSelected(false)
+	, mySelectionColor(0.f, 0.f, 1.f, 0.1f)
 {
 }
 
@@ -68,6 +71,20 @@ void Prism::Instance::Render(const Camera& aCamera)
 		}
 		else
 		{
+			
+			if (myIsSelected == true)
+			{
+				mySelectionColor.w = 1.f;
+			}
+			else if (myIsHovered == true)
+			{
+				mySelectionColor.w = 0.5f;
+			}
+			else
+			{
+				mySelectionColor.w = 0.1f;
+			}
+			myProxy.myModel->GetEffect()->SetAmbientHue(mySelectionColor);
 			myProxy.myModel->ActivateAlbedo(myOwnerType);
 			myProxy.Render(myOrientation, aCamera.GetOrientation().GetPos());
 		}

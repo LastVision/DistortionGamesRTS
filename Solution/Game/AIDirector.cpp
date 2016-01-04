@@ -124,7 +124,7 @@ void AIDirector::NotLoseLogic()
 
 					CU::Vector3<float> pos(victoryPoints[i]->GetPosition().x, 0.f
 						, victoryPoints[i]->GetPosition().y);
-					attacker->GetComponent<ControllerComponent>()->MoveTo(pos, true);
+					attacker->GetComponent<ControllerComponent>()->AttackMove(pos, true);
 					break;
 				}
 			}

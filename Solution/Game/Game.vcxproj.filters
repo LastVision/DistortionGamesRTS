@@ -124,6 +124,7 @@
     <ClInclude Include="NeutralDirector.h">
       <Filter>Director</Filter>
     </ClInclude>
+    <ClInclude Include="GameDefines.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="PreCompile">

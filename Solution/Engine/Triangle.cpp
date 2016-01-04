@@ -36,11 +36,6 @@ namespace Prism
 				- (myVertex3->myPosition.x - myVertex1->myPosition.x)
 				*(myVertex2->myPosition.y - myVertex1->myPosition.y)) / 2.0f;
 			myArea = (area > 0.0) ? area : -area;
-
-			if (myArea < 0.1f)
-			{
-				int apa = 5;
-			}
 		}
 
 

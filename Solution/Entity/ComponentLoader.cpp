@@ -292,6 +292,30 @@ void ComponentLoader::LoadGrenadeComponent(XMLReader& aDocument, tinyxml2::XMLEl
 
 }
 
+void ComponentLoader::LoadSelectionComponent(XMLReader& aDocument, tinyxml2::XMLElement* aSourceElement, SelectionComponentData& aOutputData)
+{
+	aOutputData.myExistsInEntity = true;
+
+	for (tinyxml2::XMLElement* e = aDocument.FindFirstChild(aSourceElement); e != nullptr; e = aDocument.FindNextElement(e))
+	{
+		std::string elementName = CU::ToLower(e->Name());
+		if (elementName == CU::ToLower("Hover"))
+		{
+			std::string modelPath;
+			std::string effectPath;
+			aDocument.ForceReadAttribute(e, "modelPath", modelPath);
+			aDocument.ForceReadAttribute(e, "shaderPath", effectPath);
+			aOutputData.myModelPath = modelPath.c_str();
+			aOutputData.myEffectPath = effectPath.c_str();
+		}
+		else
+		{
+			FailedToReadChildElementMessage(e->Name(), aSourceElement->Name());
+		}
+	}
+
+}
+
 
 void ComponentLoader::FailedToReadChildElementMessage(const std::string& aElement, const std::string& aParent)
 {

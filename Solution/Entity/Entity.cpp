@@ -11,6 +11,7 @@
 #include "HealthComponent.h"
 #include "EntityId.h"
 #include <Scene.h>
+#include "SelectionComponent.h"
 #include <Terrain.h>
 #include "TotemComponent.h"
 #include "TriggerComponent.h"
@@ -104,6 +105,15 @@ Entity::Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& a
 	{
 		myComponents[static_cast<int>(eComponentType::GRENADE)] = new GrenadeComponent(*this, aEntityData.myGrenadeData);
 	}
+
+	if (myOwner == eOwnerType::PLAYER)
+	{
+		if (aEntityData.mySelectionData.myExistsInEntity == true)
+		{
+			myComponents[static_cast<int>(eComponentType::SELECTION)] = new SelectionComponent(*this, aEntityData.mySelectionData);
+		}
+	}
+	
 	
 }
 
@@ -141,6 +151,7 @@ void Entity::Update(float aDeltaTime)
 	if (mySelected == true)
 	{
 		Prism::RenderBox(myOrientation.GetPos());
+		//mySelectionCircle.Render(myOrientation.GetPos());
 	}
 	else if (myHovered == true)
 	{
@@ -178,6 +189,10 @@ void Entity::AddToScene()
 	{
 		myScene.AddInstance(GetComponent<AnimationComponent>()->GetInstance());
 	}
+	if (GetComponent<SelectionComponent>() != nullptr && GetComponent<SelectionComponent>()->GetInstance() != nullptr)
+	{
+		myScene.AddInstance(GetComponent<SelectionComponent>()->GetInstance());
+	}
 
 	myIsInScene = true;
 }
@@ -191,6 +206,10 @@ void Entity::RemoveFromScene()
 	else if (GetComponent<AnimationComponent>() != nullptr)
 	{
 		myScene.RemoveInstance(GetComponent<AnimationComponent>()->GetInstance());
+	}
+	if (GetComponent<SelectionComponent>() != nullptr)
+	{
+		myScene.RemoveInstance(GetComponent<SelectionComponent>()->GetInstance());
 	}
 
 	myIsInScene = false;

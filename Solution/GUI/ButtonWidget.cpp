@@ -45,11 +45,6 @@ namespace GUI
 		myImageHover = Prism::ModelLoader::GetInstance()->LoadSprite(spritePathHover, mySize, mySize / 2.f);
 		myImagePressed = Prism::ModelLoader::GetInstance()->LoadSprite(spritePathPressed, mySize, mySize / 2.f);
 		myImageCurrent = myImageNormal;
-
-		/*myImageNormal = new Prism::Sprite(spritePathNormal, mySize, mySize / 2.f);
-		myImageHover = new Prism::Sprite(spritePathHover, mySize, mySize / 2.f);
-		myImagePressed = new Prism::Sprite(spritePathPressed, mySize, mySize / 2.f);
-		myImageCurrent = myImageNormal;*/
 	}
 
 	ButtonWidget::~ButtonWidget()
@@ -182,7 +177,7 @@ namespace GUI
 		}
 		else
 		{
-			std::string message = "[GUI]: No onclick event named " + clickEvent;
+			std::string message = "[ButtonWidget]: No onclick event named " + clickEvent;
 			DL_ASSERT(message);
 		}
 	}
