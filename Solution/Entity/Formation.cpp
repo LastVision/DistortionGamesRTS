@@ -18,13 +18,9 @@ Formation::~Formation()
 }
 
 
-void Formation::ReInit(const CU::GrowingArray<Entity*>& someUnits, const Entity* aTargetUnit, const CU::Vector2<float>& aTarget)
+void Formation::Activate(const Entity* aTargetUnit, const CU::Vector2<float>& aTarget)
 {
-	Reset();
-	for (int i = 0; i < someUnits.Size(); ++i)
-	{
-		myUnits.Add(someUnits[i]);
-	}
+	myActive = true;
 	myTarget = aTarget;
 	myTargetUnit = aTargetUnit;
 
@@ -68,7 +64,12 @@ bool Formation::Update(float aDeltaTime)
 	if (CU::Dot(myPath.GetLast() - myOrientation2D.GetPos(), CU::Vector2<float>(0, 1.f) * myOrientation2D) < 0)
 	{
 		int apa = 5;
+
+		myActive = false;
+		Reset();
+		return false;
 	}
+
 
 	
 	return true;
@@ -78,10 +79,6 @@ void Formation::Reset()
 {
 	myUnits.RemoveAll();
 	myPath.RemoveAll();
-	myTarget.x = -1.f;
-	myTarget.y = -1.f;
-	myTargetUnit = nullptr;
-	myOrientation2D = CU::Matrix33<float>();
 }
 
 void Formation::CalcPosition()
