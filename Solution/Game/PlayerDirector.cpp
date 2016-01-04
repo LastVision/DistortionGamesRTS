@@ -28,7 +28,6 @@
 #include <FadeMessage.h>
 #include <PostMaster.h>
 
-
 PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aScene, GUI::Cursor* aCursor)
 	: Director(eOwnerType::PLAYER, aTerrain)
 	, myRenderGUI(true)
@@ -50,7 +49,6 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 	myDragSelectionPositions.Reserve(4);
 	myDragSelectionSprite = Prism::ModelLoader::GetInstance()->LoadSprite(
 		"Data/Resource/Texture/T_selection_box.dds", { 0.f, 0.f });
-	//myDragSelectionSprite = new Prism::Sprite("Data/Resource/Texture/T_selection_box.dds", { 0.f, 0.f });
 
 	for (int i = 0; i < 64; ++i)
 	{
@@ -61,13 +59,6 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::PLAYER, eEntityType::UNIT, eUnitType::TANK, Prism::eOctreeType::DYNAMIC,
 			aScene, { 20.f + i, 0.f, 40.f }, aTerrain));
 	}
-
-	/*myActiveUnits.Add(myUnits[0]);
-	for (int i = 0; i < myActiveUnits.Size(); ++i)
-	{
-		myActiveUnits[i]->Spawn({ 65.f, 0.f, 25.f });
-		PollingStation::GetInstance()->RegisterEntity(myActiveUnits[i]);
-	}*/
 
 	PostMaster::GetInstance()->Subscribe(eMessageType::TOGGLE_GUI, this);
 	PostMaster::GetInstance()->Subscribe(eMessageType::ON_CLICK, this);
@@ -257,10 +248,20 @@ void PlayerDirector::ReceiveMessage(const MinimapMoveMessage& aMessage)
 {
 	CU::Vector2<float> position = aMessage.myPosition * 255.f;
 
-	for (int i = 0; i < mySelectedUnits.Size(); i++)
+	if (mySelectedAction == eSelectedAction::ATTACK_MOVE)
 	{
-		ControllerComponent* controller = mySelectedUnits[i]->GetComponent<ControllerComponent>();
-		controller->MoveTo({ position.x, 0.f, position.y }, true);
+		for (int i = 0; i < mySelectedUnits.Size(); i++)
+		{
+			mySelectedUnits[i]->GetComponent<ControllerComponent>()->AttackMove({ position.x, 0.f, position.y }, !myShiftPressed);
+		}
+		mySelectedAction = eSelectedAction::NONE;
+	}
+	else
+	{
+		for (int i = 0; i < mySelectedUnits.Size(); i++)
+		{
+			mySelectedUnits[i]->GetComponent<ControllerComponent>()->MoveTo({ position.x, 0.f, position.y }, true);
+		}
 	}
 }
 
@@ -428,7 +429,6 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 	CU::Vector3<float> secondTargetPos;
 	CU::Vector2<float> mousePosition = CU::InputWrapper::GetInstance()->GetMousePosition();
 
-
 	if (myLeftMouseDown == true && mySelectedAction == eSelectedAction::PLACE_TOTEM)
 	{
 		PlaceTotem(firstTargetPos);
@@ -439,17 +439,17 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 		Enrage();
 	}
 
-
 	if (myLeftMouseDown == true)
 	{
 		myRenderDragSelection = true;
-		if (myMouseIsOverGUI == true)
-		{
-			myRenderDragSelection = false;
-		}
 		myFirstMousePosition = CU::InputWrapper::GetInstance()->GetMousePosition();
 		myFirstMousePositionInWorld = CalcCursorWorldPosition(myFirstMousePosition, aCamera);
 		myFirstCameraPosition = aCamera.GetOrientation().GetPos();
+	}
+
+	if (myMouseIsOverGUI == true)
+	{
+		myRenderDragSelection = false;
 	}
 
 	if (myLeftMousePressed == true && myRenderDragSelection == true)
@@ -543,7 +543,7 @@ void PlayerDirector::SelectOrHoverEntity(Entity* aEntity, bool &aSelected, bool 
 	aSelected;
 	aMouseRay;
 
-	if (myLeftMouseDown == true && myShiftPressed == false
+	if (myLeftMouseDown == true && myShiftPressed == false && myMouseIsOverGUI == false
 		&& (mySelectedAction == eSelectedAction::NONE || mySelectedAction == eSelectedAction::HOLD_POSITION
 		|| mySelectedAction == eSelectedAction::STOP))
 	{
