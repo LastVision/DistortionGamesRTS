@@ -46,10 +46,9 @@ namespace Prism
 
 		myEmitterLife = myParticleEmitterData->myEmitterLifeTime;
 
+		myTechniqueDesc = new _D3DX11_TECHNIQUE_DESC();
+
 		CreateVertexBuffer();
-
-
-	
 
 	}
 
@@ -62,6 +61,7 @@ namespace Prism
 
 
 		SAFE_DELETE(myVertexWrapper);
+		SAFE_DELETE(myTechniqueDesc);
 	}
 
 	void ParticleEmitterInstance::ReleaseData()

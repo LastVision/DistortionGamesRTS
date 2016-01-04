@@ -96,7 +96,7 @@ float GrenadeComponent::GetCooldown() const
 void GrenadeComponent::Explosion()
 {
 	CU::Vector2<float> my2DPosition = { myPosition.x, myPosition.z };
-	//PostMaster::GetInstance()->SendMessage(EmitterMessage(eParticleType::GRENADE_EXPLOSION, myPosition));
+	PostMaster::GetInstance()->SendMessage(EmitterMessage(eParticleType::GRENADE_EXPLOSION, myPosition));
 	if (myUnits.Size() > 0)
 	{
 		for (int i = 0; i < myUnits.Size(); ++i)
