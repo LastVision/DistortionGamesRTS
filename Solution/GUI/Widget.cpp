@@ -28,6 +28,10 @@ namespace GUI
 	{
 	}
 
+	void Widget::OnRightMouseDown(const CU::Vector2<float>&)
+	{
+	}
+
 	void Widget::OnMousePressed(const CU::Vector2<float>&)
 	{
 	}

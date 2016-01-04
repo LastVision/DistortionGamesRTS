@@ -210,6 +210,10 @@ namespace GUI
 			{
 				myActiveWidget->OnMouseDown(myMousePosition);
 			}
+			if (CU::InputWrapper::GetInstance()->MouseDown(1) == true)
+			{
+				myActiveWidget->OnRightMouseDown(myMousePosition);
+			}
 		}
 	}
 	

@@ -183,6 +183,12 @@ void EntityFactory::LoadEntity(const char* aEntityPath)
 
 			myComponentLoader->LoadGrenadeComponent(entityDocument, e, newData.myGrenadeData);
 		}
+		else if (elementName == CU::ToLower("SelectionComponent"))
+		{
+			if (newData.mySelectionData.myExistsInEntity == true) DL_ASSERT("You already have a SelectionComponent");
+
+			myComponentLoader->LoadSelectionComponent(entityDocument, e, newData.mySelectionData);
+		}
 		else 
 		{
 			std::string errorMessage = "The component " + elementName + 
