@@ -37,6 +37,7 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 	, myTweakValueX(3.273f)
 	, myTweakValueY(10.79f)
 	, mySelectedAction(eSelectedAction::NONE)
+	, myControlPressed(false)
 	, myLeftMouseUp(false)
 	, myLeftMouseDown(false)
 	, myMouseIsOverGUI(false)
@@ -154,6 +155,8 @@ void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 			mySelectedUnits.RemoveCyclicAtIndex(i);
 		}
 	}
+
+	UpdateControlGroups();
 
 	if (myRenderGUI == true)
 	{
@@ -385,6 +388,8 @@ void PlayerDirector::UpdateInputs()
 {
 	myShiftPressed = CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_LSHIFT)
 		|| CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_RSHIFT);
+	myControlPressed = CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_LCONTROL)
+		|| CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_RCONTROL);
 	myMouseIsOverGUI = myGUIManager->MouseOverGUI();
 
 	if (mySelectedUnits.Size() > 0)
@@ -420,6 +425,75 @@ void PlayerDirector::UpdateInputs()
 		|| mySelectedAction == eSelectedAction::HOLD_POSITION))
 	{
 		mySelectedUnits.RemoveAll();
+	}
+}
+
+void PlayerDirector::UpdateControlGroups()
+{
+	if (mySelectedUnits.Size() > 0 && myControlPressed == true)
+	{
+		if (CU::InputWrapper::GetInstance()->KeyDown(DIK_1) == true)
+		{
+			myControlGroups[0] = mySelectedUnits;
+		}
+		else if (CU::InputWrapper::GetInstance()->KeyDown(DIK_2) == true)
+		{
+			myControlGroups[1] = mySelectedUnits;
+		}
+		else if (CU::InputWrapper::GetInstance()->KeyDown(DIK_3) == true)
+		{
+			myControlGroups[3] = mySelectedUnits;
+		}
+		else if (CU::InputWrapper::GetInstance()->KeyDown(DIK_4) == true)
+		{
+			myControlGroups[4] = mySelectedUnits;
+		}
+	}
+
+	for (int i = 0; i < AMOUNT_OF_CONTROL_GROUPS; i++)
+	{
+		for (int j = myControlGroups[i].Size() - 1; j >= 0; --j)
+		{
+			if (myControlGroups[i][j]->GetAlive() == false)
+			{
+				myControlGroups[i].RemoveCyclicAtIndex(j);
+			}
+		}
+	}
+
+	if (myControlPressed == false)
+	{
+		int index = -1;
+
+		if (CU::InputWrapper::GetInstance()->KeyDown(DIK_1) == true)
+		{
+			index = 0;
+		}
+		else if (CU::InputWrapper::GetInstance()->KeyDown(DIK_2) == true)
+		{
+			index = 1;
+		}
+		else if (CU::InputWrapper::GetInstance()->KeyDown(DIK_3) == true)
+		{
+			index = 2;
+		}
+		else if (CU::InputWrapper::GetInstance()->KeyDown(DIK_4) == true)
+		{
+			index = 3;
+		}
+
+		if (index != -1)
+		{
+			for (int i = 0; i < mySelectedUnits.Size(); i++)
+			{
+				mySelectedUnits[i]->SetSelect(false);
+			}
+			mySelectedUnits = myControlGroups[index];
+			for (int i = 0; i < mySelectedUnits.Size(); i++)
+			{
+				mySelectedUnits[i]->SetSelect(true);
+			}
+		}
 	}
 }
 

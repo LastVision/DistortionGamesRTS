@@ -1,5 +1,8 @@
 #pragma once
 #include "Director.h"
+#include <StaticArray.h>
+
+#define AMOUNT_OF_CONTROL_GROUPS 4
 
 namespace Prism
 {
@@ -69,8 +72,11 @@ public:
 	const int& GetTestGold() const;
 	const bool& GetRenderDragSelection() const;
 
+	CU::StaticArray<CU::GrowingArray<Entity*>, AMOUNT_OF_CONTROL_GROUPS> myControlGroups;
+
 private:
 	void UpdateInputs();
+	void UpdateControlGroups();
 	CU::Vector3<float> CalcCursorWorldPosition(const CU::Vector2<float>& aMousePosition, const Prism::Camera& aCamera);
 	void UpdateMouseInteraction(const Prism::Camera& aCamera);
 	void SelectOrHoverEntity(Entity* aEntity, bool &aSelected, bool &aHovered
@@ -85,6 +91,7 @@ private:
 	GUI::Cursor* myCursor;
 
 	bool myShiftPressed;
+	bool myControlPressed;
 	bool myLeftMouseUp;
 	bool myLeftMouseDown;
 	bool myLeftMousePressed;
