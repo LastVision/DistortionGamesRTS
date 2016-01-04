@@ -1,8 +1,7 @@
 #pragma once
 #include "Director.h"
 #include <StaticArray.h>
-
-#define AMOUNT_OF_CONTROL_GROUPS 4
+#include "GameDefines.h"
 
 namespace Prism
 {
@@ -72,6 +71,7 @@ public:
 	const int& GetTestGold() const;
 	const bool& GetRenderDragSelection() const;
 
+	const CU::StaticArray<CU::GrowingArray<Entity*>, AMOUNT_OF_CONTROL_GROUPS>& GetControlGroups();
 
 private:
 	void UpdateInputs();
@@ -132,4 +132,9 @@ inline const int& PlayerDirector::GetTestGold() const
 inline const bool& PlayerDirector::GetRenderDragSelection() const
 {
 	return myRenderDragSelection;
+}
+
+inline const CU::StaticArray<CU::GrowingArray<Entity*>, AMOUNT_OF_CONTROL_GROUPS>& PlayerDirector::GetControlGroups()
+{
+	return myControlGroups;
 }

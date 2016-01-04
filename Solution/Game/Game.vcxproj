@@ -205,6 +205,7 @@
     <ClInclude Include="dirent.h" />
     <ClInclude Include="EmitterManager.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GameDefines.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="InGameState.h" />
     <ClInclude Include="Level.h" />

@@ -17,6 +17,7 @@
   <ItemGroup>
     <ClInclude Include="BarWidget.h" />
     <ClInclude Include="ButtonWidget.h" />
+    <ClInclude Include="ControlGroupWidget.h" />
     <ClInclude Include="Cursor.h" />
     <ClInclude Include="GUIManager.h" />
     <ClInclude Include="MiniMapWidget.h" />
@@ -30,6 +31,7 @@
   <ItemGroup>
     <ClCompile Include="BarWidget.cpp" />
     <ClCompile Include="ButtonWidget.cpp" />
+    <ClCompile Include="ControlGroupWidget.cpp" />
     <ClCompile Include="Cursor.cpp" />
     <ClCompile Include="GUIManager.cpp" />
     <ClCompile Include="MiniMapWidget.cpp" />
