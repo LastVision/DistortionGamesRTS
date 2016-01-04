@@ -12,6 +12,7 @@ namespace Prism
 {
 	ParticleEmitterData::ParticleEmitterData()
 		: myInputLayout(nullptr)
+		, myUseEmitterLifeTime(true)
 	{
 	}
 
@@ -39,63 +40,54 @@ namespace Prism
 		read.ReadAttribute(element, "filepath", myTextureName);
 
 		element = read.ForceFindFirstChild(emitter, "EmitterSize");
-		read.ReadAttribute(element, "x", myEmitterSize.x);
-		read.ReadAttribute(element, "y", myEmitterSize.y);
-		read.ReadAttribute(element, "z", myEmitterSize.z);
+		read.ReadAttribute(element, "x", "y", "z", myEmitterSize);
+		myEmitterSize *= 0.5f;
 
-		element = read.ForceFindFirstChild(emitter, "ParticleMaxRotation");
-		read.ReadAttribute(element, "value", myMaxRotation);
+		element = read.ForceFindFirstChild(emitter, "ParticleRotation");
+		read.ReadAttribute(element, "min", myMinRotation);
+		read.ReadAttribute(element, "max", myMaxRotation);
 
-		element = read.ForceFindFirstChild(emitter, "ParticleMinRotation");
-		read.ReadAttribute(element, "value", myMinRotation);
 
 		element = read.ForceFindFirstChild(emitter, "ParticleMaxVelocity");
-		read.ReadAttribute(element, "x", myMaxVelocity.x);
-		read.ReadAttribute(element, "y", myMaxVelocity.y);
-		read.ReadAttribute(element, "z", myMaxVelocity.z);
+		read.ReadAttribute(element, "x", "y", "z", myMaxVelocity);
 
 		element = read.ForceFindFirstChild(emitter, "ParticleMinVelocity");
-		read.ReadAttribute(element, "x", myMinVelocity.x);
-		read.ReadAttribute(element, "y", myMinVelocity.y);
-		read.ReadAttribute(element, "z", myMinVelocity.z);
+		read.ReadAttribute(element, "x", "y", "z", myMinVelocity);
 
 		element = read.ForceFindFirstChild(emitter, "ParticleSpeedMultiplier");
 		read.ReadAttribute(element, "value", mySpeedMultiplier);
 
 		element = read.ForceFindFirstChild(emitter, "ParticleStartColor");
-		read.ReadAttribute(element, "r", myData.myStartColor.x);
-		read.ReadAttribute(element, "g", myData.myStartColor.y);
-		read.ReadAttribute(element, "b", myData.myStartColor.z);
+		read.ReadAttribute(element, "r", "g", "b", myData.myStartColor);
 
 		element = read.ForceFindFirstChild(emitter, "ParticleEndColor");
-		read.ReadAttribute(element, "r", myData.myEndColor.x);
-		read.ReadAttribute(element, "g", myData.myEndColor.y);
-		read.ReadAttribute(element, "b", myData.myEndColor.z);
+		read.ReadAttribute(element, "r", "g", "b", myData.myEndColor);
 
 		element = read.ForceFindFirstChild(emitter, "ParticleLifeTime");
 		read.ReadAttribute(element, "value", myParticlesLifeTime);
 
 		element = read.ForceFindFirstChild(emitter, "EmitterLifeTime");
 		read.ReadAttribute(element, "value", myEmitterLifeTime);
+		if (myEmitterLifeTime < 0)
+		{
+			myUseEmitterLifeTime = false;
+		}
 
-		element = read.ForceFindFirstChild(emitter, "UseEmitterLifeTime");
-		read.ReadAttribute(element, "value", myUseEmitterLifeTime);
-
-
-		element = read.ForceFindFirstChild(emitter, "EmissionRate");
+		element = read.ForceFindFirstChild(emitter, "EmittsPerSecond");
 		read.ReadAttribute(element, "value", myEmissionRate);
+		myEmissionRate = 1 / myEmissionRate;
 
 		element = read.ForceFindFirstChild(emitter, "ParticlesPerEmitt");
 		read.ReadAttribute(element, "value", myParticlesPerEmitt);
 
-		element = read.ForceFindFirstChild(emitter, "EmissionRateDelta");
-		read.ReadAttribute(element, "value", myEmissionRateDelta);
+		//Dead code, use in the future?
+		//element = read.ForceFindFirstChild(emitter, "EmissionRateDelta");
+		//read.ReadAttribute(element, "value", myEmissionRateDelta);
 
 
-		element = read.ForceFindFirstChild(emitter, "ParticleMaxScale");
-		read.ReadAttribute(element, "value", myMaxScale);
-		element = read.ForceFindFirstChild(emitter, "ParticleMinScale");
-		read.ReadAttribute(element, "value", myMinScale);
+		element = read.ForceFindFirstChild(emitter, "ParticleScale");
+		read.ReadAttribute(element, "min", myMinScale);
+		read.ReadAttribute(element, "max", myMaxScale);
 
 
 		element = read.ForceFindFirstChild(emitter, "ParticleAlphaDelta");
@@ -114,13 +106,8 @@ namespace Prism
 
 		read.CloseDocument();
 
-		myData.myStartColor.x = (myData.myStartColor.x / 255.f);
-		myData.myStartColor.y = (myData.myStartColor.y / 255.f);
-		myData.myStartColor.z = (myData.myStartColor.z / 255.f);
-
-		myData.myEndColor.x = (myData.myEndColor.x / 255.f);
-		myData.myEndColor.y = (myData.myEndColor.y / 255.f);
-		myData.myEndColor.z = (myData.myEndColor.z / 255.f);
+		myData.myStartColor /= 255.f;
+		myData.myEndColor /= 255.f;
 
 		myData.myMaxStartSize = myMaxScale;
 		myData.myMinStartSize = myMinScale;
