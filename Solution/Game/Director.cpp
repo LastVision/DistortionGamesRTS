@@ -16,6 +16,7 @@ Director::Director(eOwnerType aOwnerType, const Prism::Terrain& aTerrain)
 	, myTerrain(aTerrain)
 	, myUnits(64)
 	, myActiveUnits(64)
+	, myDeadUnits(32)
 	, myTimeMultiplier(1.f)
 	, myVictoryPoints(0)
 	, myTestGold(60)
@@ -39,9 +40,20 @@ Director::~Director()
 
 void Director::Update(float aDeltaTime)
 {
-	for (int i = 0; i < myActiveUnits.Size(); ++i)
+	for (int i = 0; i < myDeadUnits.Size(); ++i)
+	{
+		myDeadUnits[i]->Update(aDeltaTime);
+	}
+
+	for (int i = myActiveUnits.Size()-1; i >= 0; --i)
 	{
 		myActiveUnits[i]->Update(aDeltaTime);
+
+		if (myActiveUnits[i]->GetAlive() == false)
+		{
+			myDeadUnits.Add(myActiveUnits[i]);
+			myActiveUnits.RemoveCyclicAtIndex(i);
+		}
 	}
 }
 
@@ -58,6 +70,15 @@ void Director::RenderHealthBars(const Prism::Camera& aCamera)
 
 void Director::CleanUp()
 {
+	for (int i = myDeadUnits.Size() - 1; i >= 0; --i)
+	{
+		if (myDeadUnits[i]->GetShouldBeRemoved() == true)
+		{
+			myDeadUnits[i]->RemoveFromScene();
+			myDeadUnits.RemoveCyclicAtIndex(i);
+		}
+	}
+
 	for (int i = myActiveUnits.Size() - 1; i >= 0; --i)
 	{
 		if (myActiveUnits[i]->GetShouldBeRemoved() == true)
