@@ -13,6 +13,7 @@ namespace GUI
 		virtual void Update();
 		virtual void Render(const CU::Vector2<float>& aParentPosition);
 		virtual void OnMouseDown(const CU::Vector2<float>& aPosition);
+		virtual void OnRightMouseDown(const CU::Vector2<float>& aPosition);
 		virtual void OnMousePressed(const CU::Vector2<float>& aPosition);
 		virtual void OnRightMousePressed(const CU::Vector2<float>& aPosition);
 		virtual void OnMouseUp();

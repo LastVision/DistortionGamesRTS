@@ -37,14 +37,6 @@ namespace GUI
 			"Data/Resource/Texture/UI/Minimap/T_minimap_victory_point.dds", { 20.f, 20.f }, { 10.f, 10.f });
 		myCameraFrustum = Prism::ModelLoader::GetInstance()->LoadSprite(
 			"Data/Resource/Texture/UI/Minimap/T_minimap_camera.dds", { 100.f, 50.f }, { 0.f, 0.f });
-
-
-		/*myPlaceholderSprite = new Prism::Sprite("Data/Resource/Texture/UI/Minimap/T_minimap_placeholder.dds", mySize);
-		myUnitSprite = new Prism::Sprite("Data/Resource/Texture/UI/Minimap/T_minimap_unit.dds", { 10.f, 10.f }, { 5.f, 5.f });
-		myBaseSprite = new Prism::Sprite("Data/Resource/Texture/UI/Minimap/T_minimap_base.dds", { 20.f, 20.f }, { 10.f, 10.f });
-		myResourcePointSprite = new Prism::Sprite("Data/Resource/Texture/UI/Minimap/T_minimap_resource_point.dds", { 20.f, 20.f }, { 10.f, 10.f });
-		myVictoryPointSprite = new Prism::Sprite("Data/Resource/Texture/UI/Minimap/T_minimap_victory_point.dds", { 20.f, 20.f }, { 10.f, 10.f });
-		myCameraFrustum = new Prism::Sprite("Data/Resource/Texture/UI/Minimap/T_minimap_camera.dds", { 100.f, 50.f }, { 0.f, 0.f });*/
 	}
 
 	MiniMapWidget::~MiniMapWidget()
@@ -84,7 +76,7 @@ namespace GUI
 		}
 	}
 
-	void MiniMapWidget::OnRightMousePressed(const CU::Vector2<float>& aPosition)
+	void MiniMapWidget::OnRightMouseDown(const CU::Vector2<float>& aPosition)
 	{
 		if (myCantClickOn == false)
 		{
