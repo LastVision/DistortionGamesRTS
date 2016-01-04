@@ -316,6 +316,10 @@ void ComponentLoader::LoadSelectionComponent(XMLReader& aDocument, tinyxml2::XML
 
 }
 
+void ComponentLoader::LoadSoundComponent(XMLReader&, tinyxml2::XMLElement*, SoundComponentData& aOutputData)
+{
+	aOutputData.myExistsInEntity = true;
+}
 
 void ComponentLoader::FailedToReadChildElementMessage(const std::string& aElement, const std::string& aParent)
 {

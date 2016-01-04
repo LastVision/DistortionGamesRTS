@@ -117,6 +117,8 @@ private:
 	Prism::SpriteProxy* myDragSelectionSprite;
 
 	Entity* myTotem;
+
+	int myAudioSFXID;
 };
 
 inline const CU::GrowingArray<Entity*>& PlayerDirector::GetSelectedUnits() const
