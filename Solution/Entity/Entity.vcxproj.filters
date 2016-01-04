@@ -254,5 +254,8 @@
     <ClInclude Include="SoundComponent.h">
       <Filter>Component\Sound</Filter>
     </ClInclude>
+    <ClInclude Include="SoundComponentData.h">
+      <Filter>EntityFactory\EntityData\ComponentData</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

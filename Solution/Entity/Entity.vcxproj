@@ -141,6 +141,7 @@
     <ClInclude Include="SelectionComponent.h" />
     <ClInclude Include="SelectionComponentData.h" />
     <ClInclude Include="SoundComponent.h" />
+    <ClInclude Include="SoundComponentData.h" />
     <ClInclude Include="TotemComponent.h" />
     <ClInclude Include="TotemComponentData.h" />
     <ClInclude Include="TriggerComponent.h" />

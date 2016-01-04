@@ -189,6 +189,12 @@ void EntityFactory::LoadEntity(const char* aEntityPath)
 
 			myComponentLoader->LoadSelectionComponent(entityDocument, e, newData.mySelectionData);
 		}
+		else if (elementName == CU::ToLower("SoundComponent"))
+		{
+			if (newData.mySoundData.myExistsInEntity == true) DL_ASSERT("You already have a SoundComponent");
+
+			myComponentLoader->LoadSoundComponent(entityDocument, e, newData.mySoundData);
+		}
 		else 
 		{
 			std::string errorMessage = "The component " + elementName + 

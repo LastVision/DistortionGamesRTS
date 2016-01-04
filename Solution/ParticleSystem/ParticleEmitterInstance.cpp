@@ -72,7 +72,7 @@ namespace Prism
 	void ParticleEmitterInstance::Render()
 	{
 		UpdateVertexBuffer();
-		myParticleEmitterData->myEffect->SetTexture(TextureContainer::GetInstance()->GetTexture(myParticleEmitterData->myTextureName.c_str()));
+		myParticleEmitterData->myEffect->SetTexture(TextureContainer::GetInstance()->GetTexture(myParticleEmitterData->myTextureName));
 
 		Engine::GetInstance()->GetContex()->IASetVertexBuffers(
 			myVertexWrapper->myStartSlot

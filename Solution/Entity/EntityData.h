@@ -12,6 +12,7 @@
 #include "SelectionComponentData.h"
 #include "TriggerComponentData.h"
 #include "TotemComponentData.h"
+#include "SoundComponentData.h"
 
 struct EntityData
 {
@@ -28,6 +29,7 @@ struct EntityData
 	EnrageComponentData myEnrageData;
 	GrenadeComponentData myGrenadeData;
 	SelectionComponentData mySelectionData;
+	SoundComponentData mySoundData;
 
 	union 
 	{

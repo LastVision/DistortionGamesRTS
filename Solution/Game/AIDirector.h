@@ -20,7 +20,17 @@ public:
 	void ReceiveMessage(const TimeMultiplierMessage& aMessage) override;
 
 private:
+	enum class eAction
+	{
+		CAPTURE_POINT,
+		SPAWN_GRUNT,
+		SPAWN_RANGER,
+		SPAWN_TANK,
+		NONE
+	};
+
 	void NotLoseLogic();
+	void WinSlowlyLogic();
 
 	bool myPlayerHasStarted;
 
