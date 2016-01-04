@@ -7,6 +7,7 @@ namespace Prism
 		class NavMesh;
 		class PathFinderAStar;
 		struct Portal;
+		class Triangle;
 
 		class PathFinderFunnel
 		{

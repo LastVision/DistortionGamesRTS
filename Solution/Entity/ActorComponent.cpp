@@ -23,9 +23,9 @@ void ActorComponent::Update(float aDelta)
 		return;
 	}
 
-	const ControllerComponent::ControllerData& data = myEntity.GetComponent<ControllerComponent>()->GetControllerData();
+	const CU::Vector2<float>& acceleration = myEntity.GetComponent<ControllerComponent>()->GetAcceleration();
 
-	myEntity.myVelocity += data.myAcceleration * aDelta;
+	myEntity.myVelocity += acceleration * aDelta;
 	float velocity2 = CU::Length2(myEntity.myVelocity);
 	if (velocity2 > myEntity.myMaxSpeed * myEntity.myMaxSpeed)
 	{
@@ -33,7 +33,7 @@ void ActorComponent::Update(float aDelta)
 		myEntity.myVelocity *= myEntity.myMaxSpeed;
 	}
 
-	if (velocity2 > 1.f || CU::Length2(data.myAcceleration) > 1.f)
+	if (velocity2 > 1.f || CU::Length2(acceleration) > 1.f)
 	{
 		//CU::Normalize(direction);
 		LookInDirection(myEntity.myVelocity);

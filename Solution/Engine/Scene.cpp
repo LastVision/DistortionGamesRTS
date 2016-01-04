@@ -81,7 +81,7 @@ void Prism::Scene::Render(bool aRenderNavMeshLines)
 	myTerrain.GetEffect()->UpdateDirectionalLights(myDirectionalLightData);
 	//myTerrain.UpdatePointLights(myPointLightData);
 	//myTerrain.UpdateSpotLights(mySpotLightData);
-	myTerrain.Render(myCamera, aRenderNavMeshLines);
+	//myTerrain.Render(myCamera, aRenderNavMeshLines);
 
 #ifdef SCENE_USE_OCTREE
 	myOctree->Update();

@@ -12,4 +12,6 @@ namespace GC
 
 	const int resourcePointCount = 16;
 	const int victoryPointCount = 16;
+
+	const int directorUnitCap = 60;
 }
