@@ -73,15 +73,18 @@ void EmitterManager::UpdateEmitters(float aDeltaTime, CU::Matrix44f aWorldMatrix
 
 void EmitterManager::RenderEmitters(Prism::Camera* aCamera)
 {
+
+	myEmitters[0]->myEmitterA[0]->SetGPUData(aCamera);
+
 	for (int i = 0; i < static_cast<int>(eParticleType::_COUNT); ++i)
 	{
 		for (int j = 0; j < PREALLOCATED_EMITTER_SIZE; ++j)
 		{
 			if (myEmitters[i]->myEmitterA[j]->IsActive() == true)
 			{
-				myEmitters[i]->myEmitterA[j]->Render(aCamera);
-				myEmitters[i]->myEmitterB[j]->Render(aCamera);
-				myEmitters[i]->myEmitterC[j]->Render(aCamera);
+				myEmitters[i]->myEmitterA[j]->Render();
+				myEmitters[i]->myEmitterB[j]->Render();
+				myEmitters[i]->myEmitterC[j]->Render();
 			}
 		}
 	}
