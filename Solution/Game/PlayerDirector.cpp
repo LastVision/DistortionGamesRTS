@@ -543,31 +543,43 @@ void PlayerDirector::SelectOrHoverEntity(Entity* aEntity, bool &aSelected, bool 
 	aSelected;
 	aMouseRay;
 
+	if (myLeftMouseDown == true && myShiftPressed == false
+		&& (mySelectedAction == eSelectedAction::NONE || mySelectedAction == eSelectedAction::HOLD_POSITION
+		|| mySelectedAction == eSelectedAction::STOP))
+	{
+		aEntity->SetSelect(false);
+	}
+	aEntity->SetHovered(false);
+
+	bool unitCollided = false;
 	if (myRenderDragSelection == true)
 	{
-		if (myLeftMouseDown == true && myShiftPressed == false
-			&& (mySelectedAction == eSelectedAction::NONE || mySelectedAction == eSelectedAction::HOLD_POSITION
-			|| mySelectedAction == eSelectedAction::STOP))
-		{
-			aEntity->SetSelect(false);
-		}
-
-		aEntity->SetHovered(false);
-
 		CU::Vector2<float> position1(myDragSelectionPositions[0].x, myDragSelectionPositions[0].z);
 		CU::Vector2<float> position2(myDragSelectionPositions[2].x, myDragSelectionPositions[2].z);
 
 		if (aEntity->GetComponent<CollisionComponent>()->Collide(position1, position2) == true)
 		{
-			if (myLeftMouseUp == true)
-			{
-				SelectUnit(aEntity);
-			}
-			else if (aHovered == false)
-			{
-				aEntity->SetHovered(true);
-				aHovered = true;
-			}
+			unitCollided = true;
+		}
+	}
+	else
+	{
+		if (aEntity->GetComponent<CollisionComponent>()->Collide(aMouseRay) == true)
+		{
+			unitCollided = true;
+		}
+	}
+
+	if (unitCollided == true)
+	{
+		if (myLeftMouseUp == true)
+		{
+			SelectUnit(aEntity);
+		}
+		else if (aHovered == false)
+		{
+			aEntity->SetHovered(true);
+			aHovered = true;
 		}
 	}
 }
