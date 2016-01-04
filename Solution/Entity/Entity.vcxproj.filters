@@ -61,6 +61,9 @@
     <Filter Include="Component\Enrage">
       <UniqueIdentifier>{a067185f-42df-4953-8b23-249edf71486c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Component\Sound">
+      <UniqueIdentifier>{b6d0dbce-fc33-490f-b89d-b9fed0911932}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -131,6 +134,9 @@
     </ClCompile>
     <ClCompile Include="SelectionComponent.cpp">
       <Filter>Component\Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundComponent.cpp">
+      <Filter>Component\Sound</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -244,6 +250,9 @@
     </ClInclude>
     <ClInclude Include="SelectionComponentData.h">
       <Filter>EntityFactory\EntityData\ComponentData</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundComponent.h">
+      <Filter>Component\Sound</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
