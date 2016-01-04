@@ -18,8 +18,12 @@ public:
 	static eComponentType GetTypeStatic();
 	eComponentType GetType() override;
 
+	Prism::Instance* GetInstance();
+
 private:
-	Prism::Instance* myHover;
+	Prism::Instance* myInstance;
+	bool myPreviousHover;
+	float myCullingRadius;
 };
 
 inline eComponentType SelectionComponent::GetTypeStatic()
@@ -30,4 +34,9 @@ inline eComponentType SelectionComponent::GetTypeStatic()
 inline eComponentType SelectionComponent::GetType()
 {
 	return GetTypeStatic();
+}
+
+inline Prism::Instance* SelectionComponent::GetInstance()
+{
+	return myInstance;
 }

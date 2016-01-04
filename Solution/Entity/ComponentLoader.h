@@ -9,6 +9,7 @@ struct GraphicsComponentData;
 struct HealthComponentData;
 struct TriggerComponentData;
 struct GrenadeComponentData;
+struct SelectionComponentData;
 
 class XMLReader;
 
@@ -30,6 +31,7 @@ public:
 	void LoadTriggerComponent(XMLReader& aDocument, tinyxml2::XMLElement* aSourceElement, TriggerComponentData& aOutputData);
 	void LoadEnrageComponent(XMLReader& aDocument, tinyxml2::XMLElement* aSourceElement, EnrageComponentData& aOutputData);
 	void LoadGrenadeComponent(XMLReader& aDocument, tinyxml2::XMLElement* aSourceElement, GrenadeComponentData& aOutputData);
+	void LoadSelectionComponent(XMLReader& aDocument, tinyxml2::XMLElement* aSourceElement, SelectionComponentData& aOutputData);
 private:
 	void FailedToReadChildElementMessage(const std::string& aElement, const std::string& aParent);
 };

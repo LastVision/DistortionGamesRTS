@@ -89,7 +89,10 @@ namespace Prism
 
 	void Effect::SetAmbientHue(CU::Vector4f aVector)
 	{
-		myAmbientHue->SetFloatVector(&aVector.x);
+		if (myAmbientHue != nullptr)
+		{
+			myAmbientHue->SetFloatVector(&aVector.x);
+		}
 	}
 
 	void Effect::SetBones(const CU::StaticArray<CU::Matrix44<float>, MAX_NR_OF_BONES>& someBones)
