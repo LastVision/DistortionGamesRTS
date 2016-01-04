@@ -23,6 +23,7 @@
     <ClInclude Include="MiniMapWidget.h" />
     <ClInclude Include="ResourceBarWidget.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="TextWidget.h" />
     <ClInclude Include="UnitActionWidget.h" />
     <ClInclude Include="UnitInfoWidget.h" />
     <ClInclude Include="Widget.h" />
@@ -44,6 +45,7 @@
       <MultiProcessorCompilation Condition="'$(Configuration)|$(Platform)'=='DataExporter|Win32'">false</MultiProcessorCompilation>
       <MultiProcessorCompilation Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</MultiProcessorCompilation>
     </ClCompile>
+    <ClCompile Include="TextWidget.cpp" />
     <ClCompile Include="UnitActionWidget.cpp" />
     <ClCompile Include="UnitInfoWidget.cpp" />
     <ClCompile Include="Widget.cpp" />
