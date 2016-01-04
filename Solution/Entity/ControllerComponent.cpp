@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+#include <AudioInterface.h>
 #include "ActorComponent.h"
 #include "AnimationComponent.h"
 #include "BlendedBehavior.h"
@@ -102,6 +103,10 @@ void ControllerComponent::Update(float aDelta)
 
 void ControllerComponent::MoveTo(const CU::Vector3<float>& aPosition, bool aClearCommandQueue)
 {
+	if (myEntity.GetUnitType() == eUnitType::GRUNT)
+	{
+		Prism::Audio::AudioInterface::GetInstance()->PostEvent("Grunt_Move", 0);
+	}
 	FillCommandList(eAction::MOVE, aClearCommandQueue, nullptr, { aPosition.x, aPosition.z });
 }
 
