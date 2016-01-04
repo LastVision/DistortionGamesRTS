@@ -139,6 +139,7 @@
     <ClInclude Include="GrenadeComponent.h" />
     <ClInclude Include="GrenadeComponentData.h" />
     <ClInclude Include="SelectionComponent.h" />
+    <ClInclude Include="SelectionComponentData.h" />
     <ClInclude Include="TotemComponent.h" />
     <ClInclude Include="TotemComponentData.h" />
     <ClInclude Include="TriggerComponent.h" />

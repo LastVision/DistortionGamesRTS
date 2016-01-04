@@ -242,5 +242,8 @@
     <ClInclude Include="SelectionComponent.h">
       <Filter>Component\Graphic</Filter>
     </ClInclude>
+    <ClInclude Include="SelectionComponentData.h">
+      <Filter>EntityFactory\EntityData\ComponentData</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
