@@ -77,7 +77,7 @@ namespace Prism
 			myPortalEnd->myRight = anEnd;
 			portals.Add(myPortalEnd);
 
-			StringPull(aStart, anEnd, portals, someFunneledPointsOut);
+			StringPull(portals, someFunneledPointsOut);
 		}
 
 
@@ -98,8 +98,7 @@ namespace Prism
 			return CU::Length2(aA - aB) < eq;
 		}
 
-		int PathFinderFunnel::StringPull(const CU::Vector2<float>& aStart, const CU::Vector2<float>& anEnd
-			, const CU::GrowingArray<Portal*>& somePortals
+		int PathFinderFunnel::StringPull(const CU::GrowingArray<Portal*>& somePortals
 			, CU::GrowingArray<CU::Vector2<float>>& someFunneledPointsOut) const
 		{
 			//find straight path

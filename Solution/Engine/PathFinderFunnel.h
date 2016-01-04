@@ -30,8 +30,7 @@ namespace Prism
 
 			float TriArea2(const CU::Vector2<float>& aA, const CU::Vector2<float>& aB, const CU::Vector2<float>& aC) const;
 			bool VEqual(const CU::Vector2<float>& aA, const CU::Vector2<float>& aB) const;
-			int StringPull(const CU::Vector2<float>& aStart, const CU::Vector2<float>& anEnd
-				, const CU::GrowingArray<Portal*>& somePortals, CU::GrowingArray<CU::Vector2<float>>& someFunneledPointsOut) const;
+			int StringPull(const CU::GrowingArray<Portal*>& somePortals, CU::GrowingArray<CU::Vector2<float>>& someFunneledPointsOut) const;
 			Portal* GetPortal(const Triangle* aTriangle0, const Triangle* aTriangle1) const;
 			PathFinderAStar* myAStar;
 
