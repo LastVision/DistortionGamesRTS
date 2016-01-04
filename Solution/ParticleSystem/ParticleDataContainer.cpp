@@ -2,6 +2,12 @@
 #include "ParticleDataContainer.h"
 
 #include "ParticleEmitterData.h"
+#include <D3DX11.h>
+#include <d3dx11effect.h>
+
+#include "Camera.h"
+#include "Effect.h"
+#include "Engine.h"
 
 #ifdef DLL_EXPORT
 #include "Engine.h"
@@ -60,6 +66,22 @@ namespace Prism
 
 		return myParticleData[aFilePath];
 #endif
+	}
+
+
+	void ParticleDataContainer::SetGPUData(Camera* aCamera)
+	{
+		for (auto it = myParticleData.begin(); it != myParticleData.end(); ++it)
+		{
+			ParticleEmitterData* tempData = it->second;
+			tempData->myEffect->SetViewMatrix(CU::InverseSimple(aCamera->GetOrientation()));
+			tempData->myEffect->SetProjectionMatrix(aCamera->GetProjection());
+
+			Engine::GetInstance()->GetContex()->IASetInputLayout(tempData->myInputLayout);
+			Engine::GetInstance()->GetContex()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
+
+			tempData->myEffect->GetTechnique()->GetDesc(tempData->myTechniqueDesc);
+		}
 	}
 
 	void ParticleDataContainer::LoadParticleData(const char* aFilePath)

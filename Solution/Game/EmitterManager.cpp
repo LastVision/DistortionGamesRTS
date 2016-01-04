@@ -74,7 +74,7 @@ void EmitterManager::UpdateEmitters(float aDeltaTime, CU::Matrix44f aWorldMatrix
 void EmitterManager::RenderEmitters(Prism::Camera* aCamera)
 {
 
-	myEmitters[0]->myEmitterA[0]->SetGPUData(aCamera);
+	Prism::ParticleDataContainer::GetInstance()->SetGPUData(aCamera);
 
 	for (int i = 0; i < static_cast<int>(eParticleType::_COUNT); ++i)
 	{
