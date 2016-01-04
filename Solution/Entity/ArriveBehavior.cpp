@@ -6,7 +6,7 @@ ArriveBehavior::ArriveBehavior(const Entity& anEntity)
 	: Behavior(anEntity)
 	, myTimeToTarget(0.1f)
 	, mySlowRadius(3.0f)
-	, myTargetRadius(10.f)
+	, myTargetRadius(2.25f)
 	, myMaxAcceleration(100000.f)
 	, myActive(false)
 {
@@ -29,6 +29,15 @@ const CU::Vector2<float>& ArriveBehavior::Update()
 
 	CU::Vector2<float> direction = myTarget - myEntity.GetPosition();
 	float distance = CU::Length(direction);
+
+	if (distance > myTargetRadius)
+	{
+		myDone = false;
+	}
+	else
+	{
+		myDone = true;
+	}
 
 	float targetSpeed;
 	if (distance > mySlowRadius)

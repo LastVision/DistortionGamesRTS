@@ -66,7 +66,7 @@ void ControllerComponent::Update(float aDelta)
 
 	myAttackTimer -= aDelta;
 
-	if (myEntity.GetState() == eEntityState::IDLE)
+	if (myEntity.GetState() == eEntityState::IDLE || myBehavior->GetDone())
 	{
 		StartNextAction();
 	}

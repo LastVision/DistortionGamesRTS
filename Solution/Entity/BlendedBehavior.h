@@ -9,6 +9,7 @@ public:
 
 	const CU::Vector2<float>& Update() override;
 	void SetTarget(const CU::Vector2<float>& aTargetPosition) override;
+	bool GetDone() const override;
 
 private:
 	CU::GrowingArray<Behavior*> myBehaviors;
