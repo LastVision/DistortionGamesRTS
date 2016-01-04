@@ -37,3 +37,15 @@ void BlendedBehavior::SetTarget(const CU::Vector2<float>& aTargetPosition)
 		myBehaviors[i]->SetTarget(aTargetPosition);
 	}
 }
+
+bool BlendedBehavior::GetDone() const
+{
+	for (int i = 0; i < myBehaviors.Size(); ++i)
+	{
+		if (myBehaviors[i]->GetDone() == true)
+		{
+			return true;
+		}
+	}
+	return false;
+}

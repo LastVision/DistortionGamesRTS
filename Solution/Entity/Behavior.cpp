@@ -4,6 +4,7 @@
 
 Behavior::Behavior(const Entity& anEntity)
 	: myEntity(anEntity)
+	, myDone(false)
 {
 }
 

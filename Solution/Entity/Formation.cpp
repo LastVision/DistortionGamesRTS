@@ -63,7 +63,7 @@ bool Formation::Update(float aDeltaTime)
 
 	if (CU::Dot(myPath.GetLast() - myOrientation2D.GetPos(), CU::Vector2<float>(0, 1.f) * myOrientation2D) < 0)
 	{
-		int apa = 5;
+		// now has reached target, go to next or is finished.
 
 		myActive = false;
 		Reset();
