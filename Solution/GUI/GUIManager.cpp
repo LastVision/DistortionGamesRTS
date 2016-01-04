@@ -8,6 +8,7 @@
 #include "../InputWrapper/InputWrapper.h"
 #include "MiniMapWidget.h"
 #include "ResourceBarWidget.h"
+#include "TextWidget.h"
 #include "UnitActionWidget.h"
 #include "UnitInfoWidget.h"
 #include "WidgetContainer.h"
@@ -180,6 +181,11 @@ namespace GUI
 				{
 					ControlGroupWidget* controlGroup = new ControlGroupWidget(&reader, widgetElement, myPlayer);
 					container->AddWidget(controlGroup);
+				}
+				else if (type == "text")
+				{
+					TextWidget* textWidget = new TextWidget(&reader, widgetElement);
+					container->AddWidget(textWidget);
 				}
 			}
 			myWidgets->AddWidget(container);

@@ -22,6 +22,8 @@ namespace GUI
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "background"), "path", backgroundPath);
 
 		myBackground = Prism::ModelLoader::GetInstance()->LoadSprite(backgroundPath, mySize, mySize / 2.f);
+
+		myText->SetText("Hello\nworld");
 	}
 
 	TextWidget::~TextWidget()
@@ -32,8 +34,9 @@ namespace GUI
 
 	void TextWidget::Render(const CU::Vector2<float>& aParentPosition)
 	{
+		myText->SetPosition(myPosition + aParentPosition);
 		myBackground->Render(myPosition + aParentPosition);
-		//render text here
+		myText->Render();
 	}
 
 	void TextWidget::OnResize(const CU::Vector2<float>& aNewSize, const CU::Vector2<float>& anOldSize)
