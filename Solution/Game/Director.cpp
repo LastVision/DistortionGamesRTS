@@ -147,6 +147,13 @@ void Director::ReceiveMessage(const SpawnUnitMessage& aMessage)
 				myUnits[i]->Spawn(myBuilding->GetOrientation().GetPos() + CU::Vector3f(0.f, 0.f, -15.f));
 				myActiveUnits.Add(myUnits[i]);
 				spawnedUnit = myUnits[i];
+
+				int deadIndex = myDeadUnits.Find(spawnedUnit);
+				if (deadIndex > -1)
+				{
+					myDeadUnits.RemoveCyclicAtIndex(deadIndex);
+				}
+
 				break;
 			}
 		}
