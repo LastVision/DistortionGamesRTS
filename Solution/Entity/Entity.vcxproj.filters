@@ -129,6 +129,9 @@
     <ClCompile Include="EnrageComponent.cpp">
       <Filter>Component\Enrage</Filter>
     </ClCompile>
+    <ClCompile Include="SelectionComponent.cpp">
+      <Filter>Component\Graphic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -235,6 +238,9 @@
     </ClInclude>
     <ClInclude Include="EnrageComponent.h">
       <Filter>Component\Enrage</Filter>
+    </ClInclude>
+    <ClInclude Include="SelectionComponent.h">
+      <Filter>Component\Graphic</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

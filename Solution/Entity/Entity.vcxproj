@@ -138,6 +138,7 @@
     <ClInclude Include="Formation.h" />
     <ClInclude Include="GrenadeComponent.h" />
     <ClInclude Include="GrenadeComponentData.h" />
+    <ClInclude Include="SelectionComponent.h" />
     <ClInclude Include="TotemComponent.h" />
     <ClInclude Include="TotemComponentData.h" />
     <ClInclude Include="TriggerComponent.h" />
@@ -171,6 +172,7 @@
     <ClCompile Include="EvadeBehavior.cpp" />
     <ClCompile Include="Formation.cpp" />
     <ClCompile Include="GrenadeComponent.cpp" />
+    <ClCompile Include="SelectionComponent.cpp" />
     <ClCompile Include="TotemComponent.cpp" />
     <ClCompile Include="TriggerComponent.cpp" />
     <ClCompile Include="Component.cpp" />
