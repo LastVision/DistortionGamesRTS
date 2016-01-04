@@ -442,11 +442,11 @@ void PlayerDirector::UpdateControlGroups()
 		}
 		else if (CU::InputWrapper::GetInstance()->KeyDown(DIK_3) == true)
 		{
-			myControlGroups[3] = mySelectedUnits;
+			myControlGroups[2] = mySelectedUnits;
 		}
 		else if (CU::InputWrapper::GetInstance()->KeyDown(DIK_4) == true)
 		{
-			myControlGroups[4] = mySelectedUnits;
+			myControlGroups[3] = mySelectedUnits;
 		}
 	}
 
@@ -482,7 +482,7 @@ void PlayerDirector::UpdateControlGroups()
 			index = 3;
 		}
 
-		if (index != -1)
+		if (index != -1 && myControlGroups[index].Size() > 0)
 		{
 			for (int i = 0; i < mySelectedUnits.Size(); i++)
 			{
