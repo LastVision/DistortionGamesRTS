@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+#include <AudioInterface.h>
 #include "ActorComponent.h"
 #include "AnimationComponent.h"
 #include "BlendedBehavior.h"
@@ -68,138 +69,44 @@ void ControllerComponent::Update(float aDelta)
 	if (myEntity.GetState() == eEntityState::IDLE)
 	{
 		StartNextAction();
-		}
-
-	//if (myCurrentAction.myAction == eAction::IDLE)
-	//{
-	//	myEntity.SetState(eEntityState::IDLE);
-	//	if (myOwnerType == eOwnerType::NEUTRAL)
-	//	{
-	//		int apa = 5;
-	//	}
-	//	Entity* closeTarget = PollingStation::GetInstance()->FindClosestEntity(myEntity.GetOrientation().GetPos()
-	//		, myTargetType, myVisionRange2);
-
-	//	if (closeTarget != nullptr)
-	//	{
-	//		myAttackTarget = closeTarget;
-	//		myReturnPosition = myEntity.myPosition;
-
-	//		ActionData action;
-	//		action.myAction = eAction::ATTACK_TARGET;
-	//		action.myPosition = myAttackTarget->myPosition;
-	//		myActions.Add(action);
-	//	}
-	//}
-	//else if (myCurrentAction.myAction == eAction::ATTACK_MOVE)
-	//{
-	//	if (myAttackTarget != nullptr)
-	//	{
-	//		DoAttackAction();
-	//	}
-	//	else
-	//	{
-	//		DoMoveAction(myCurrentAction.myPosition);
-
-	//		myAttackTarget = PollingStation::GetInstance()->FindClosestEntity(myEntity.GetOrientation().GetPos()
-	//			, myTargetType, myVisionRange2 * 10.f);
-	//	}
-	//}
-	//else if (myCurrentAction.myAction == eAction::RETURN)
-	//{
-	//	DL_ASSERT_EXP(myReturnPosition.x != FLT_MAX && myReturnPosition.y != FLT_MAX
-	//		, "ControllerComponent tried to do RETURN-Action without a valid ReturnPosition");
-
-	//	Entity* closeTarget = PollingStation::GetInstance()->FindClosestEntity({ myReturnPosition.x, 0, myReturnPosition.y }
-	//		, myTargetType, myVisionRange2);
-
-	//	if (closeTarget != nullptr)
-	//	{
-	//		myAttackTarget = closeTarget;
-	//		myCurrentAction.myAction = eAction::ATTACK_TARGET;
-	//	}
-	//	else
-	//	{
-	//		if (myReturnPosition.x != FLT_MAX && myReturnPosition.y != FLT_MAX)
-	//		{
-	//			DoMoveAction(myReturnPosition);
-	//		}
-	//		else
-	//		{
-	//			myReturnPosition = myEntity.myPosition;
-	//		}
-	//	}
-	//}
-	//else if (myCurrentAction.myAction == eAction::HOLD)
-	//{
-	//	Entity* closeTarget = PollingStation::GetInstance()->FindClosestEntity(myEntity.GetOrientation().GetPos()
-	//		, myTargetType, myAttackRange2);
-
-	//	if (closeTarget != nullptr)
-	//	{
-	//		myAttackTarget = closeTarget;
-	//		AttackTarget();
-	//	}
-	//}
-	//else if (myCurrentAction.myAction == eAction::ATTACK_TARGET)
-	//{
-	//	myCurrentAttackTargetPathRefreshTime -= aDelta;
-	//	if (myCurrentAttackTargetPathRefreshTime <= 0.f)
-	//	{
-	//		RefreshPathToAttackTarget();
-	//	}
-
-	//	Entity* closeTarget = PollingStation::GetInstance()->FindClosestEntity(myEntity.GetOrientation().GetPos()
-	//		, myTargetType, myAttackRange2);
-
-	//	if (closeTarget != nullptr && closeTarget == myAttackTarget)
-	//	{
-	//		AttackTarget();
-	//	}
-	//	else
-	//	{
-	//		DoMoveAction(myCurrentAction.myPosition);
-	//	}
-	//}
-	//else if (myCurrentAction.myAction == eAction::MOVE)
-	//{
-	//	//DoMoveAction(myCurrentAction.myPosition);
-	//}
+	}
 
 	switch (myCurrentAction.myAction)
 	{
-		case eAction::IDLE:
-			DoIdle();
-			break;
-		case eAction::MOVE:
-			DoMove();
-			break;
-		case eAction::ATTACK_TARGET:
-			DoAttackTarget(aDelta);
-			break;
-		case eAction::RETURN:
-			DoReturn();
-			break;
-		case eAction::HOLD:
-			DoHold();
-			break;
-		case eAction::ATTACK_MOVE:
-			DoAttackMove();
-			break;
+	case eAction::IDLE:
+		DoIdle();
+		break;
+	case eAction::MOVE:
+		DoMove();
+		break;
+	case eAction::ATTACK_TARGET:
+		DoAttackTarget(aDelta);
+		break;
+	case eAction::RETURN:
+		DoReturn();
+		break;
+	case eAction::HOLD:
+		DoHold();
+		break;
+	case eAction::ATTACK_MOVE:
+		DoAttackMove();
+		break;
 	default:
 		DL_ASSERT("Unkown action");
 		break;
 	}
 
-
-
-	myData.myAcceleration = myBehavior->Update();
+	myAcceleration = myBehavior->Update();
 
 	RenderDebugLines();
 }
 
 void ControllerComponent::MoveTo(const CU::Vector3<float>& aPosition, bool aClearCommandQueue)
 {
+	if (myEntity.GetUnitType() == eUnitType::GRUNT)
+	{
+		Prism::Audio::AudioInterface::GetInstance()->PostEvent("Grunt_Move", 0);
+	}
 	FillCommandList(eAction::MOVE, aClearCommandQueue, nullptr, { aPosition.x, aPosition.z });
 }
 
@@ -211,36 +118,14 @@ void ControllerComponent::AttackTarget(Entity* aEntity, bool aClearCommandQueue)
 void ControllerComponent::AttackMove(const CU::Vector3<float>& aPosition, bool aClearCommandQueue)
 {
 	FillCommandList(eAction::ATTACK_MOVE, aClearCommandQueue, nullptr, { aPosition.x, aPosition.z });
-
-	//Entity* target = nullptr;
-	//switch (myEntity.GetOwner())
-	//{
-	//case eOwnerType::PLAYER:
-	//	target = PollingStation::GetInstance()->FindEntityAtPosition(aPosition, eOwnerType::ENEMY);
-	//	break;
-	//case eOwnerType::ENEMY:
-	//	target = PollingStation::GetInstance()->FindEntityAtPosition(aPosition, eOwnerType::PLAYER);
-	//	break;
-	//default:
-	//	DL_ASSERT("An Entity thats not owned by Player or AI tried to Attack");
-	//	break;
-	//}
-
-	//myReturnPosition.x = FLT_MAX;
-	//myReturnPosition.y = FLT_MAX;
-
-	//if (myEntity.GetState() != eEntityState::ATTACKING || myAttackTarget != target)
-	//{
-	//	myAttackTarget = target;
-	//}
-	}
+}
 
 void ControllerComponent::Stop()
 {
 	myActions.RemoveAll();
 	myCurrentAction.myAction = eAction::IDLE;
 	myCurrentAction.myPosition = myEntity.myPosition;
-	myData.myAcceleration = { 0.f, 0.f };
+	myAcceleration = { 0.f, 0.f };
 }
 
 void ControllerComponent::HoldPosition()
@@ -248,7 +133,7 @@ void ControllerComponent::HoldPosition()
 	myActions.RemoveAll();
 	myCurrentAction.myAction = eAction::HOLD;
 	myCurrentAction.myPosition = myEntity.myPosition;
-	myData.myAcceleration = { 0.f, 0.f };
+	myAcceleration = { 0.f, 0.f };
 	myEntity.SetState(eEntityState::IDLE);
 }
 
@@ -265,36 +150,60 @@ void ControllerComponent::FillCommandList(eAction aAction, bool aClearCommandQue
 
 	ActionData action;
 	action.myAction = aAction;
-	action.myEntity = aEntity;
-	action.myPosition = aTargetPosition;
-	if (myActions.Size() > 0)
+	action.myEntity = nullptr;
+	//action.myPosition = aTargetPosition;
+	//if (myActions.Size() > 0)
+	//{
+	//	myActions.Insert(0, action);
+	//}
+	//else
+	//{
+	//	myActions.Add(action);
+	//}
+
+	CU::Vector3<float> targetPosition(aTargetPosition.x, 0, aTargetPosition.y);
+
+	if (aEntity != nullptr)
 	{
-		myActions.Insert(0, action);
+		targetPosition = aEntity->GetOrientation().GetPos();
+	}
+
+	CU::GrowingArray<CU::Vector3<float>> path(16);
+	if (myTerrain.GetPathFinder()->FindPath(myEntity.GetOrientation().GetPos(), targetPosition, path) == true)
+	{
+		if (path.Size() > 0)
+		{
+			for (int i = 0; i < path.Size(); ++i)
+			{
+				CU::Vector2<float> target = { path[i].x, path[i].z };
+
+				action.myPosition = target;
+
+				if (myActions.Size() > 0)
+				{
+					if (i == path.Size() - 1)
+					{
+						action.myEntity = aEntity;
+					}
+					myActions.Insert(0, action);
+				}
+				else
+				{
+					if (i == path.Size() - 1)
+					{
+						action.myEntity = aEntity;
+					}
+					myActions.Add(action);
+				}
+			}
 		}
 		else
 		{
+			action.myPosition = aTargetPosition;
+			action.myEntity = aEntity;
 			myActions.Add(action);
 		}
-	//CU::GrowingArray<CU::Vector3<float>> path(16);
-	//if (myTerrain.GetPathFinder()->FindPath(myEntity.GetOrientation().GetPos(), { aTargetPosition.x, 0, aTargetPosition.y }, path) == true)
-	//{
-	//	if (path.Size() > 0)
-	//	{
-	//		for (int i = path.Size() - 1; i >= 0; --i)
-	//		{
-	//			CU::Vector2<float> target = { path[i].x, path[i].z };
-
-	//			action.myPosition = target;
-
-	//			myActions.Add(action);
-	//		}
-	//	}
-	//	else
-	//	{
-	//		action.myPosition = aTargetPosition;
-	//		myActions.Add(action);
-	//	}
-	//}
+	}
 
 	//if (aClearCommandQueue == true)
 	//{
@@ -305,7 +214,7 @@ void ControllerComponent::FillCommandList(eAction aAction, bool aClearCommandQue
 void ControllerComponent::DoIdle()
 {
 	myEntity.SetState(eEntityState::IDLE);
-	
+
 	Entity* closestTarget = PollingStation::GetInstance()->FindClosestEntity(myEntity.GetOrientation().GetPos()
 		, myTargetType, myVisionRange2);
 
@@ -321,38 +230,38 @@ void ControllerComponent::DoIdle()
 }
 
 void ControllerComponent::DoMove()
-		{
+{
 	myBehavior->SetTarget(GetPosition(myCurrentAction));
-		}
+}
 
 void ControllerComponent::DoAttackTarget(float aDelta)
 {
 	myCurrentAttackTargetPathRefreshTime -= aDelta;
 	if (myCurrentAttackTargetPathRefreshTime <= 0.f)
-		{
+	{
 		RefreshPathToAttackTarget();
 	}
 
-	
-	if (CU::Length2(myCurrentAction.myEntity->GetPosition() - myEntity.GetPosition()) < myAttackRange2)
+
+	if (myCurrentAction.myEntity != nullptr && CU::Length2(myCurrentAction.myEntity->GetPosition() - myEntity.GetPosition()) < myAttackRange2)
 	{
 		AttackTarget();
-			}
-			else
-			{
+	}
+	else
+	{
 		DoMove();
 	}
-			}
+}
 
 void ControllerComponent::DoReturn()
 {
 	DL_ASSERT("Not implemented yet.");
-		}
+}
 
 void ControllerComponent::DoHold()
 {
 	DL_ASSERT("Not implemented yet.");
-	}
+}
 
 void ControllerComponent::DoAttackMove()
 {
@@ -374,57 +283,6 @@ void ControllerComponent::DoAttackMove()
 	}
 }
 
-//void ControllerComponent::DoAttack()
-//{
-//	bool shouldReturn = false;
-//	bool hasReturnPosition = false;
-//	float distanceToTarget = CU::Length2(myEntity.GetOrientation().GetPos() - myAttackTarget->GetOrientation().GetPos());
-//	if (myReturnPosition.x != FLT_MAX && myReturnPosition.y != FLT_MAX)
-//	{
-//		float distanceToReturnPosition = CU::Length2(myEntity.myPosition - myReturnPosition);
-//		hasReturnPosition = true;
-//		float chaseDistance = myChaseDistance2;
-//
-//		if (myEntity.GetOwner() == eOwnerType::NEUTRAL)
-//		{
-//			chaseDistance = myChaseDistanceNeutral2;
-//		}
-//
-//		if (distanceToReturnPosition > chaseDistance)
-//		{
-//			shouldReturn = true;
-//		}
-//	}
-//
-//	if (distanceToTarget < myAttackRange2 && shouldReturn == false)
-//	{
-//		AttackTarget();
-//		if (myAttackTarget->GetAlive() == false)
-//		{
-//			if (hasReturnPosition == true)
-//			{
-//				myCurrentAction.myAction = eAction::RETURN;
-//				myEntity.GetComponent<ActorComponent>()->LookAtPoint(myReturnPosition);
-//				myData.myAcceleration = myReturnPosition - myEntity.myPosition;					//should be in behavior
-//			}
-//			else
-//			{
-//				myAttackTarget = nullptr;
-//			}
-//		}
-//	}
-//	else if (shouldReturn == true)
-//	{
-//		myCurrentAction.myAction = eAction::RETURN;
-//		myEntity.GetComponent<ActorComponent>()->LookAtPoint(myReturnPosition);
-//		myData.myAcceleration = myReturnPosition - myEntity.myPosition;
-//	}
-//	else
-//	{
-//		DoMoveAction(myAttackTarget->myPosition);
-//	}
-//}
-
 void ControllerComponent::AttackTarget()
 {
 	if (myAttackTimer <= 0.f)
@@ -439,7 +297,7 @@ void ControllerComponent::AttackTarget()
 				myEntity.GetComponent<GrenadeComponent>()->ThrowGrenade(myCurrentAction.myEntity->GetOrientation().GetPos());
 			}
 		}
-		
+
 		HealthComponent* targetHealth = myCurrentAction.myEntity->GetComponent<HealthComponent>();
 		bool targetSurvived = false;
 		if (targetHealth != nullptr && myCurrentAction.myEntity->GetAlive())
@@ -471,36 +329,6 @@ void ControllerComponent::StartNextAction()
 		myCurrentAction.myPosition = myActions.GetLast().myPosition;
 		myCurrentAction.myEntity = myActions.GetLast().myEntity;
 		myActions.RemoveCyclicAtIndex(myActions.Size() - 1);
-
-		//switch (myCurrentAction.myAction)
-		//{
-		//	case eAction::IDLE:
-		//		DL_ASSERT("Can't have idle in action queue..?");
-		//		break;
-		//	case eAction::MOVE:
-		//		myEntity.SetState(eEntityState::WALKING);
-		//		break;
-		//	case eAction::ATTACK_TARGET:
-		//		myEntity.SetState(eEntityState::ATTACKING);
-		//		break;
-		//	case eAction::RETURN:
-		//		myEntity.SetState(eEntityState::ATTACKING);
-		//		break;
-		//	case eAction::HOLD:
-		//		myEntity.SetState(eEntityState::ATTACKING);
-		//		break;
-		//	case eAction::ATTACK_MOVE:
-		//		myEntity.SetState(eEntityState::ATTACKING);
-		//		break;
-		//}
-
-		//if (myCurrentAction.myAction == eAction::ATTACK_MOVE
-		//	|| myCurrentAction.myAction == eAction::ATTACK_TARGET
-		//	|| myCurrentAction.myAction == eAction::MOVE
-		//	|| myCurrentAction.myAction == eAction::RETURN)
-		//{
-		//	myEntity.SetState(eEntityState::WALKING);
-		//}
 	}
 	else
 	{
@@ -545,14 +373,14 @@ void ControllerComponent::RenderDebugLines() const
 
 		for (int i = myActions.Size() - 1; i >= 1; --i)
 		{
-			color = GetActionColor(myActions[i-1].myAction);
+			color = GetActionColor(myActions[i - 1].myAction);
 
 
 			pointA = myTerrain.GetHeight(GetPosition(myActions[i]), 1.f);
-			pointB = myTerrain.GetHeight(GetPosition(myActions[i-1]), 1.f);
-				Prism::RenderLine3D(pointA, pointB, color);
-			}
+			pointB = myTerrain.GetHeight(GetPosition(myActions[i - 1]), 1.f);
+			Prism::RenderLine3D(pointA, pointB, color);
 		}
+	}
 }
 
 const CU::Vector2<float>& ControllerComponent::GetPosition(const ActionData& anActionData) const
@@ -598,6 +426,6 @@ eColorDebug ControllerComponent::GetActionColor(eAction aAction) const
 void ControllerComponent::Reset()
 {
 	myTerrain.CalcEntityHeight(myEntity.myOrientation);
-	myData.myAcceleration = { 0.f, 0.f };
+	myAcceleration = { 0.f, 0.f };
 	myBehavior->SetTarget({ myEntity.GetPosition().x + CU::Math::RandomRange<float>(-0.1f, 0.1f), myEntity.GetPosition().y - 2.f });
 }

@@ -38,6 +38,7 @@
     <ClInclude Include="BarWidget.h">
       <Filter>Widget</Filter>
     </ClInclude>
+    <ClInclude Include="ControlGroupWidget.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -69,5 +70,6 @@
     <ClCompile Include="BarWidget.cpp">
       <Filter>Widget</Filter>
     </ClCompile>
+    <ClCompile Include="ControlGroupWidget.cpp" />
   </ItemGroup>
 </Project>

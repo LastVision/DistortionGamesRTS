@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "ButtonWidget.h"
+#include "ControlGroupWidget.h"
 #include "Cursor.h"
 #include <Engine.h>
 #include "../Game/PlayerDirector.h"
@@ -114,8 +115,7 @@ namespace GUI
 		for (; containerElement != nullptr; containerElement = reader.FindNextElement(containerElement))
 		{
 			Prism::SpriteProxy* backgroundSprite = nullptr;
-			//Prism::Sprite* backgroundSprite = nullptr;
-
+		
 			reader.ForceReadAttribute(reader.ForceFindFirstChild(containerElement, "size"), "x", size.x);
 			reader.ForceReadAttribute(reader.ForceFindFirstChild(containerElement, "size"), "y", size.y);
 			reader.ForceReadAttribute(reader.ForceFindFirstChild(containerElement, "position"), "x", position.x);
@@ -134,12 +134,10 @@ namespace GUI
 					reader.ForceReadAttribute(spriteSizeElement, "x", spriteSize.x);
 					reader.ForceReadAttribute(spriteSizeElement, "y", spriteSize.y);
 					backgroundSprite = Prism::ModelLoader::GetInstance()->LoadSprite(path, spriteSize);
-					//backgroundSprite = new Prism::Sprite(path, spriteSize);
 				}
 				else
 				{
 					backgroundSprite = Prism::ModelLoader::GetInstance()->LoadSprite(path, size);
-					//backgroundSprite = new Prism::Sprite(path, size);
 				}
 			}
 
@@ -178,6 +176,11 @@ namespace GUI
 					ResourceBarWidget* resourceBar = new ResourceBarWidget(&reader, widgetElement, myPlayer, myAI);
 					container->AddWidget(resourceBar);
 				}
+				else if (type == "control_groups")
+				{
+					ControlGroupWidget* controlGroup = new ControlGroupWidget(&reader, widgetElement, myPlayer);
+					container->AddWidget(controlGroup);
+				}
 			}
 			myWidgets->AddWidget(container);
 		}
@@ -209,6 +212,10 @@ namespace GUI
 			if (CU::InputWrapper::GetInstance()->MouseDown(0) == true)
 			{
 				myActiveWidget->OnMouseDown(myMousePosition);
+			}
+			if (CU::InputWrapper::GetInstance()->MouseDown(1) == true)
+			{
+				myActiveWidget->OnRightMouseDown(myMousePosition);
 			}
 		}
 	}

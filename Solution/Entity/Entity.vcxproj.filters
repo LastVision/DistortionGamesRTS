@@ -49,11 +49,17 @@
     <Filter Include="Component\Totem">
       <UniqueIdentifier>{3d3c71e4-7e08-4c84-9cb7-78834e005011}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Behavior">
-      <UniqueIdentifier>{f24e054a-7e2d-4fa0-a384-74200c617424}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Component\Grenade">
       <UniqueIdentifier>{5995aa2a-d3be-4926-9551-12f6e142106c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Movement">
+      <UniqueIdentifier>{12f0ed25-8fb9-4979-ab74-c9476b9724b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Movement\Behavior">
+      <UniqueIdentifier>{f24e054a-7e2d-4fa0-a384-74200c617424}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\Enrage">
+      <UniqueIdentifier>{a067185f-42df-4953-8b23-249edf71486c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -103,20 +109,28 @@
       <Filter>Component\Totem</Filter>
     </ClCompile>
     <ClCompile Include="EvadeBehavior.cpp">
-      <Filter>Behavior</Filter>
+      <Filter>Movement\Behavior</Filter>
     </ClCompile>
     <ClCompile Include="BlendedBehavior.cpp">
-      <Filter>Behavior</Filter>
+      <Filter>Movement\Behavior</Filter>
     </ClCompile>
     <ClCompile Include="Behavior.cpp">
-      <Filter>Behavior</Filter>
+      <Filter>Movement\Behavior</Filter>
     </ClCompile>
     <ClCompile Include="ArriveBehavior.cpp">
-      <Filter>Behavior</Filter>
+      <Filter>Movement\Behavior</Filter>
     </ClCompile>
-    <ClCompile Include="EnrageComponent.cpp" />
     <ClCompile Include="GrenadeComponent.cpp">
       <Filter>Component\Grenade</Filter>
+    </ClCompile>
+    <ClCompile Include="Formation.cpp">
+      <Filter>Movement</Filter>
+    </ClCompile>
+    <ClCompile Include="EnrageComponent.cpp">
+      <Filter>Component\Enrage</Filter>
+    </ClCompile>
+    <ClCompile Include="SelectionComponent.cpp">
+      <Filter>Component\Graphic</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -196,21 +210,20 @@
       <Filter>Component\Totem</Filter>
     </ClInclude>
     <ClInclude Include="EvadeBehavior.h">
-      <Filter>Behavior</Filter>
+      <Filter>Movement\Behavior</Filter>
     </ClInclude>
     <ClInclude Include="BlendedBehavior.h">
-      <Filter>Behavior</Filter>
+      <Filter>Movement\Behavior</Filter>
     </ClInclude>
     <ClInclude Include="Behavior.h">
-      <Filter>Behavior</Filter>
+      <Filter>Movement\Behavior</Filter>
     </ClInclude>
     <ClInclude Include="ArriveBehavior.h">
-      <Filter>Behavior</Filter>
+      <Filter>Movement\Behavior</Filter>
     </ClInclude>
     <ClInclude Include="TotemComponentData.h">
       <Filter>EntityFactory\EntityData\ComponentData</Filter>
     </ClInclude>
-    <ClInclude Include="EnrageComponent.h" />
     <ClInclude Include="EnrageComponentData.h">
       <Filter>EntityFactory\EntityData\ComponentData</Filter>
     </ClInclude>
@@ -218,6 +231,18 @@
       <Filter>Component\Grenade</Filter>
     </ClInclude>
     <ClInclude Include="GrenadeComponentData.h">
+      <Filter>EntityFactory\EntityData\ComponentData</Filter>
+    </ClInclude>
+    <ClInclude Include="Formation.h">
+      <Filter>Movement</Filter>
+    </ClInclude>
+    <ClInclude Include="EnrageComponent.h">
+      <Filter>Component\Enrage</Filter>
+    </ClInclude>
+    <ClInclude Include="SelectionComponent.h">
+      <Filter>Component\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="SelectionComponentData.h">
       <Filter>EntityFactory\EntityData\ComponentData</Filter>
     </ClInclude>
   </ItemGroup>

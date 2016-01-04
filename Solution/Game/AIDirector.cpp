@@ -2,42 +2,37 @@
 #include "AIDirector.h"
 #include <BuildingComponent.h>
 #include <ControllerComponent.h>
-#include <TimeMultiplierMessage.h>
 #include <Entity.h>
 #include <EntityFactory.h>
+#include <GameConstants.h>
 #include <PollingStation.h>
 #include <PostMaster.h>
 #include <SpawnUnitMessage.h>
+#include <TimeMultiplierMessage.h>
 
 AIDirector::AIDirector(const Prism::Terrain& aTerrain, Prism::Scene& aScene)
 	: Director(eOwnerType::ENEMY, aTerrain)
-	, mySpawnTimer(0.f)
-	, myOptimalAttackerCount(0)
-	, myOptimalGathererCount(2)
-	, myCurrentAttackerCount(0)
-	, myCurrentGathererCount(0)
-	, myPointOneGatherers(8)
-	, myPointTwoGatherers(8)
-	, myAttackers(8)
-	, myUnitQueue(8)
+	, myPlayerHasStarted(false)
+	, myIdleUnits(32)
+	, mySurviveGatherer(nullptr)
 {
-	for (int i = 0; i < 64; ++i)
+	for (int i = 0; i < GC::enemyGruntCount; ++i)
 	{
 		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::ENEMY, eEntityType::UNIT, eUnitType::GRUNT, Prism::eOctreeType::DYNAMIC,
 			aScene, { 20.f + i, 0.f, 40.f }, aTerrain));
+	}
+
+	for (int i = 0; i < GC::enemyRangerCount; ++i)
+	{
 		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::ENEMY, eEntityType::UNIT, eUnitType::RANGER, Prism::eOctreeType::DYNAMIC,
-			aScene, { 20.f + i, 0.f, 40.f }, aTerrain));
-		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::ENEMY, eEntityType::UNIT, eUnitType::TANK, Prism::eOctreeType::DYNAMIC,
 			aScene, { 20.f + i, 0.f, 40.f }, aTerrain));
 	}
 
-
-	/*for (int i = 0; i < 2; ++i)
+	for (int i = 0; i < GC::enemyTankCount; ++i)
 	{
-		myActiveUnits.Add(myUnits[i]);
-		myActiveUnits[i]->Spawn({ 140.f, 0.f, 130.f });
-		PollingStation::GetInstance()->RegisterEntity(myActiveUnits[i]);
-	}*/
+		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::ENEMY, eEntityType::UNIT, eUnitType::TANK, Prism::eOctreeType::DYNAMIC,
+			aScene, { 20.f + i, 0.f, 40.f }, aTerrain));
+	}
 
 	PostMaster::GetInstance()->Subscribe(eMessageType::TIME_MULTIPLIER, this);
 }
@@ -52,43 +47,27 @@ void AIDirector::Update(float aDeltaTime)
 {
 	aDeltaTime *= myTimeMultiplier;
 
-	//debug only, remove when handled by GUI //Linus
-	int enemyVictoryPoints = myVictoryPoints;
-	DEBUG_PRINT(enemyVictoryPoints);
-	//debug end
-
 	Director::Update(aDeltaTime);
 
-	CleanUpGatherers();
-	CleanUpAttackers();
+	if (myPlayerHasStarted == false)
+	{
+		myPlayerHasStarted = PollingStation::GetInstance()->GetUnits(eOwnerType::PLAYER).Size() > 0;
+		return;
+	}
 
+	if (mySurviveGatherer != nullptr && mySurviveGatherer->GetAlive() == false)
+	{
+		mySurviveGatherer = nullptr;
+	}
 
-	mySpawnTimer += aDeltaTime;
 	myBuilding->Update(aDeltaTime);
 
-	int playerUnitCount = PollingStation::GetInstance()->GetUnits(eOwnerType::PLAYER).Size();
-	myOptimalAttackerCount = playerUnitCount;
-
-
-	if (myCurrentAttackerCount < myOptimalAttackerCount)
+	if (myBuilding->GetComponent<BuildingComponent>()->GetSpawnQueueSize() > 0)
 	{
-		//myBuilding->GetComponent<BuildingComponent>()->BuildUnit(eUnitType::RANGER);
-		if (Director::SpawnUnit(eUnitType::RANGER) == true)
-		{
-			myUnitQueue.Add(eUnitActionType::ATTACKER);
-			++myCurrentAttackerCount;
-		}
+		return;
 	}
 
-	if (myCurrentGathererCount < myOptimalGathererCount)
-	{
-		//myBuilding->GetComponent<BuildingComponent>()->BuildUnit(eUnitType::GRUNT);
-		if (Director::SpawnUnit(eUnitType::GRUNT) == true)
-		{
-			myUnitQueue.Add(eUnitActionType::GATHERER);
-			++myCurrentGathererCount;
-		}
-	}
+	NotLoseLogic();
 }
 
 void AIDirector::ReceiveMessage(const SpawnUnitMessage& aMessage)
@@ -99,50 +78,8 @@ void AIDirector::ReceiveMessage(const SpawnUnitMessage& aMessage)
 		Entity* newEntity = myActiveUnits.GetLast();
 		newEntity->SetState(eEntityState::IDLE);
 
-		if (myUnitQueue[0] == eUnitActionType::GATHERER)
-		{
-			ActivateGatherer(newEntity);
-		}
-		else if (myUnitQueue[0] == eUnitActionType::ATTACKER)
-		{
-			ActivateAttacker(newEntity);
-		}
-
-		myUnitQueue.RemoveNonCyclicAtIndex(0);
+		myIdleUnits.Add(newEntity);
 	}
-	//if (aMessage.myOwnerType != static_cast<int>(eOwnerType::ENEMY)) return;
-	//if (myActiveUnits.Size() < 64)
-	//{
-	//	for (int i = 0; i < myUnits.Size(); ++i)
-	//	{
-	//		if (myUnits[i]->GetUnitType() == static_cast<eUnitType>(aMessage.myUnitType) && myUnits[i]->GetAlive() == false)
-	//		{
-	//			if (IsAlreadyActive(myUnits[i]) == true)
-	//			{
-	//				continue;
-	//			}
-	//			myUnits[i]->Spawn(myBuilding->GetOrientation().GetPos() + CU::Vector3f(0.f, 0.f, -15.f));
-	//			myActiveUnits.Add(myUnits[i]);
-	//			break;
-	//		}
-	//	}
-	//	PollingStation::GetInstance()->RegisterEntity(myActiveUnits.GetLast());
-
-
-	//	Entity* newEntity = myActiveUnits.GetLast();
-	//	newEntity->SetState(eEntityState::IDLE);
-
-	//	if (myUnitQueue[0] == eUnitActionType::GATHERER)
-	//	{
-	//		ActivateGatherer(newEntity);
-	//	}
-	//	else if (myUnitQueue[0] == eUnitActionType::ATTACKER)
-	//	{
-	//		ActivateAttacker(newEntity);
-	//	}
-	//	
-	//	myUnitQueue.RemoveNonCyclicAtIndex(0);
-	//}
 }
 
 void AIDirector::ReceiveMessage(const TimeMultiplierMessage& aMessage)
@@ -153,52 +90,53 @@ void AIDirector::ReceiveMessage(const TimeMultiplierMessage& aMessage)
 	}
 }
 
-void AIDirector::CleanUpGatherers()
+void AIDirector::NotLoseLogic()
 {
-	//If we have enough resources, remove some units from gathering and make available
-	//to the other "Advisors"
-}
+	const PollingStation* pollingStation = PollingStation::GetInstance();
 
-void AIDirector::CleanUpAttackers()
-{
-	for (int i = myAttackers.Size() - 1; i >= 0; --i)
+	if (pollingStation->GetResourcePointsCount(eOwnerType::ENEMY) < 1 && mySurviveGatherer == nullptr)
 	{
-		if (myAttackers[i]->GetAlive() == false)
+		if (myIdleUnits.Size() == 0)
 		{
-			myAttackers.RemoveCyclicAtIndex(i);
-			--myCurrentAttackerCount;
+			Director::SpawnUnit(eUnitType::GRUNT);
+		}
+		else
+		{
+			mySurviveGatherer = myIdleUnits.GetLast();
+			myIdleUnits.RemoveCyclicAtIndex(myIdleUnits.Size() - 1);
+
+			const CU::GrowingArray<Entity*> resources = pollingStation->GetResourcePoints();
+			CU::Vector3<float> pos(resources[0]->GetPosition().x, 0.f
+				, resources[0]->GetPosition().y);
+			mySurviveGatherer->GetComponent<ControllerComponent>()->MoveTo(pos, true);
 		}
 	}
-}
 
-void AIDirector::ActivateGatherer(Entity* aEntity)
-{
-	const CU::GrowingArray<Entity*>& resourcePoints = PollingStation::GetInstance()->GetResourcePoints();
-	int pointIndex = -1;
-	if (myPointOneGatherers.Size() < myPointTwoGatherers.Size())
+
+	int playerVictoryPoints = pollingStation->GetVictoryPointsCount(eOwnerType::PLAYER);
+	if (playerVictoryPoints > 0)
 	{
-		pointIndex = 0;
-		myPointOneGatherers.Add(aEntity);
-	}
-	else
-	{
-		pointIndex = 1;
-		myPointTwoGatherers.Add(aEntity);
-	}
+		int playerCount = pollingStation->GetUnits(eOwnerType::PLAYER).Size();
+		if (myIdleUnits.Size() == 0 && playerCount > myActiveUnits.Size()-1)
+		{
+			Director::SpawnUnit(eUnitType::GRUNT);
+		}
+		else if (myIdleUnits.Size() > 0)
+		{
+			const CU::GrowingArray<Entity*> victoryPoints = pollingStation->GetVictoryPoints();
+			for (int i = 0; i < victoryPoints.Size(); ++i)
+			{
+				if (victoryPoints[i]->GetOwner() == eOwnerType::PLAYER)
+				{
+					Entity* attacker = myIdleUnits.GetLast();
+					myIdleUnits.RemoveCyclicAtIndex(myIdleUnits.Size() - 1);
 
-
-	CU::Vector2<float> pos = resourcePoints[pointIndex]->GetPosition();
-	aEntity->GetComponent<ControllerComponent>()->MoveTo({ pos.x, 0.f, pos.y }, true);
-}
-
-void AIDirector::ActivateAttacker(Entity* aEntity)
-{
-	CU::Vector3<float> position = aEntity->GetOrientation().GetPos();
-
-	Entity* closestPlayerUnit = PollingStation::GetInstance()->FindClosestEntity(position, eOwnerType::PLAYER);
-	if (closestPlayerUnit != nullptr)
-	{
-		aEntity->GetComponent<ControllerComponent>()->AttackTarget(closestPlayerUnit, true);
-		myAttackers.Add(aEntity);
+					CU::Vector3<float> pos(victoryPoints[i]->GetPosition().x, 0.f
+						, victoryPoints[i]->GetPosition().y);
+					attacker->GetComponent<ControllerComponent>()->AttackMove(pos, true);
+					break;
+				}
+			}
+		}
 	}
 }

@@ -1,6 +1,7 @@
 #include "stdafx.h"
 
 #include "AnimationComponent.h"
+#include <AudioInterface.h>
 #include "Camera.h"
 #include "HealthComponent.h"
 #include <Engine.h>
@@ -72,8 +73,8 @@ bool HealthComponent::TakeDamage(float aDamage)
 		myEntity.SetState(eEntityState::DYING);
 		return false;
 	}
-
-	myHealthBar->Update();
+	Prism::Audio::AudioInterface::GetInstance()->PostEvent("Grunt_TakeDamage", 0);
+	myHealthBar->Update(); 
 
 	return true;
 }

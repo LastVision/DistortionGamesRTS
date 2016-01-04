@@ -20,28 +20,11 @@ public:
 	void ReceiveMessage(const TimeMultiplierMessage& aMessage) override;
 
 private:
-	enum eUnitActionType
-	{
-		GATHERER,
-		ATTACKER
-	};
+	void NotLoseLogic();
 
-	void CleanUpGatherers();
-	void CleanUpAttackers();
+	bool myPlayerHasStarted;
 
-	void ActivateGatherer(Entity* aEntity);
-	void ActivateAttacker(Entity* aEntity);
-
-	float mySpawnTimer;
-	int myOptimalGathererCount;
-	int myOptimalAttackerCount;
-	int myCurrentAttackerCount;
-	int myCurrentGathererCount;
-
-	CU::GrowingArray<Entity*> myPointOneGatherers;
-	CU::GrowingArray<Entity*> myPointTwoGatherers;
-	CU::GrowingArray<Entity*> myAttackers;
-
-	CU::GrowingArray<eUnitActionType> myUnitQueue;
+	CU::GrowingArray<Entity*> myIdleUnits;
+	Entity* mySurviveGatherer;
 };
 

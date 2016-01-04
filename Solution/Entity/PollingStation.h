@@ -17,11 +17,15 @@ public:
 	const CU::GrowingArray<Entity*>& GetResourcePoints() const;
 	const CU::GrowingArray<Entity*>& GetVictoryPoints() const;
 
+	//Returns the number of ResourcePoints held by anOwner
+	int GetResourcePointsCount(eOwnerType anOwner) const;
+
+	//Returns the number of VictoryPoints held by anOwner
+	int GetVictoryPointsCount(eOwnerType anOwner) const;
+
 	const Entity* GetBase(eOwnerType anOwner) const;
 
 	void CleanUp();
-
-
 
 private:
 	PollingStation();

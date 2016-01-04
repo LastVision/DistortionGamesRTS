@@ -101,6 +101,7 @@ enum class eComponentType
 	TOTEM,
 	ENRAGE,
 	GRENADE,
+	SELECTION,
 	_COUNT,
 };
 

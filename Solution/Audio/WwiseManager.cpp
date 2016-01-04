@@ -304,6 +304,8 @@ namespace Prism
 			{
 				AK::MemoryMgr::Term();
 			}
+			SAFE_DELETE(m_pLowLevelIO);
+
 		}
 
 		void WwiseManager::SetErrorCallBack(callback_function aErrorCallback)
