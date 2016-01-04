@@ -5,6 +5,7 @@
 #include <GameStructs.h>
 
 class Entity;
+class Formation;
 
 namespace Prism
 {
@@ -39,6 +40,8 @@ protected:
 
 	CU::GrowingArray<Entity*> myUnits;
 	CU::GrowingArray<Entity*> myActiveUnits;
+	CU::GrowingArray<Formation*> myFormations;
+	CU::GrowingArray<Formation*> myActiveFormations;
 	Entity* myBuilding;
 	const eOwnerType myOwner;
 	const Prism::Terrain& myTerrain;
