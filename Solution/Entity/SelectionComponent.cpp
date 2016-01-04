@@ -35,6 +35,7 @@ void SelectionComponent::Update(float aDeltaTime)
 	else if (myEntity.IsHovered() == true)
 	{
 		myInstance->SetHovered(true);
+
 	}
 	else
 	{
