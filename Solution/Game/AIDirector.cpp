@@ -2,12 +2,13 @@
 #include "AIDirector.h"
 #include <BuildingComponent.h>
 #include <ControllerComponent.h>
-#include <TimeMultiplierMessage.h>
 #include <Entity.h>
 #include <EntityFactory.h>
+#include <GameConstants.h>
 #include <PollingStation.h>
 #include <PostMaster.h>
 #include <SpawnUnitMessage.h>
+#include <TimeMultiplierMessage.h>
 
 AIDirector::AIDirector(const Prism::Terrain& aTerrain, Prism::Scene& aScene)
 	: Director(eOwnerType::ENEMY, aTerrain)
@@ -15,12 +16,20 @@ AIDirector::AIDirector(const Prism::Terrain& aTerrain, Prism::Scene& aScene)
 	, myIdleUnits(32)
 	, mySurviveGatherer(nullptr)
 {
-	for (int i = 0; i < 64; ++i)
+	for (int i = 0; i < GC::enemyGruntCount; ++i)
 	{
 		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::ENEMY, eEntityType::UNIT, eUnitType::GRUNT, Prism::eOctreeType::DYNAMIC,
 			aScene, { 20.f + i, 0.f, 40.f }, aTerrain));
+	}
+
+	for (int i = 0; i < GC::enemyRangerCount; ++i)
+	{
 		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::ENEMY, eEntityType::UNIT, eUnitType::RANGER, Prism::eOctreeType::DYNAMIC,
 			aScene, { 20.f + i, 0.f, 40.f }, aTerrain));
+	}
+
+	for (int i = 0; i < GC::enemyTankCount; ++i)
+	{
 		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::ENEMY, eEntityType::UNIT, eUnitType::TANK, Prism::eOctreeType::DYNAMIC,
 			aScene, { 20.f + i, 0.f, 40.f }, aTerrain));
 	}
