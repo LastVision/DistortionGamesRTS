@@ -66,21 +66,6 @@
     <ClInclude Include="FadeMessage.h">
       <Filter>Message</Filter>
     </ClInclude>
-    <ClInclude Include="ToggleGUIMessage.h">
-      <Filter>Message</Filter>
-    </ClInclude>
-    <ClInclude Include="LUARunScriptMessage.h">
-      <Filter>Message\ScriptMessage</Filter>
-    </ClInclude>
-    <ClInclude Include="LUACinematicMessage.h">
-      <Filter>Message\ScriptMessage</Filter>
-    </ClInclude>
-    <ClInclude Include="LUAMoveCameraMessage.h">
-      <Filter>Message\ScriptMessage</Filter>
-    </ClInclude>
-    <ClInclude Include="LUAToggleRenderLinesMessage.h">
-      <Filter>Message\ScriptMessage</Filter>
-    </ClInclude>
     <ClInclude Include="TriggerMessage.h">
       <Filter>Message</Filter>
     </ClInclude>
@@ -107,6 +92,18 @@
     </ClInclude>
     <ClInclude Include="TextMessage.h">
       <Filter>Message\GUIMessage</Filter>
+    </ClInclude>
+    <ClInclude Include="ToggleGUIMessage.h">
+      <Filter>Message\GUIMessage</Filter>
+    </ClInclude>
+    <ClInclude Include="CinematicMessage.h">
+      <Filter>Message\ScriptMessage</Filter>
+    </ClInclude>
+    <ClInclude Include="RunScriptMessage.h">
+      <Filter>Message\ScriptMessage</Filter>
+    </ClInclude>
+    <ClInclude Include="ToggleRenderLinesMessage.h">
+      <Filter>Message\ScriptMessage</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

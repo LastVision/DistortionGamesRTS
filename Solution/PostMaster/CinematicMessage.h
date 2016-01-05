@@ -8,16 +8,16 @@ enum class eCinematicAction
 	END
 };
 
-struct LUACinematicMessage : public Message
+struct CinematicMessage : public Message
 {
-	LUACinematicMessage(int aCinematicIndex, eCinematicAction aAction);
+	CinematicMessage(int aCinematicIndex, eCinematicAction aAction);
 
 	const int myCinematicIndex;
 	const eCinematicAction myAction;
 };
 
-inline LUACinematicMessage::LUACinematicMessage(int aCinematicIndex, eCinematicAction aAction)
-	: Message(eMessageType::MOVE_CAMERA)
+inline CinematicMessage::CinematicMessage(int aCinematicIndex, eCinematicAction aAction)
+	: Message(eMessageType::CINEMATIC)
 	, myCinematicIndex(aCinematicIndex)
 	, myAction(aAction)
 {

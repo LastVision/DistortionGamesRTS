@@ -25,14 +25,14 @@ namespace GUI
 		myBackground = Prism::ModelLoader::GetInstance()->LoadSprite(backgroundPath, mySize, mySize / 2.f);
 
 		myText->SetText("Hello\nworld");
-		PostMaster::GetInstance()->Subscribe(eMessageType::GUI_TEXT, this);
+		PostMaster::GetInstance()->Subscribe(eMessageType::TEXT, this);
 	}
 
 	TextWidget::~TextWidget()
 	{
 		SAFE_DELETE(myBackground);
 		SAFE_DELETE(myText);
-		PostMaster::GetInstance()->UnSubscribe(eMessageType::GUI_TEXT, this);
+		PostMaster::GetInstance()->UnSubscribe(eMessageType::TEXT, this);
 	}
 
 	void TextWidget::Render(const CU::Vector2<float>& aParentPosition)
@@ -55,7 +55,7 @@ namespace GUI
 
 	void TextWidget::ReceiveMessage(const TextMessage& aMessage)
 	{
-		if (aMessage.myMessageType == eMessageType::GUI_TEXT)
+		if (aMessage.myMessageType == eMessageType::TEXT)
 		{
 			myText->SetText(aMessage.myText);
 		}

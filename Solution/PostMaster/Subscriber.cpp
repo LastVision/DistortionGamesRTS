@@ -11,6 +11,10 @@ Subscriber::~Subscriber()
 {
 }
 
+void Subscriber::ReceiveMessage(const CinematicMessage&)
+{
+}
+
 void Subscriber::ReceiveMessage(const FadeMessage&)
 {
 }
@@ -20,22 +24,6 @@ void Subscriber::ReceiveMessage(const EmitterMessage&)
 }
 
 void Subscriber::ReceiveMessage(const GameStateMessage&)
-{
-}
-
-void Subscriber::ReceiveMessage(const LUACinematicMessage&)
-{
-}
-
-void Subscriber::ReceiveMessage(const LUAToggleRenderLinesMessage&)
-{
-}
-
-void Subscriber::ReceiveMessage(const LUAMoveCameraMessage&)
-{
-}
-
-void Subscriber::ReceiveMessage(const LUARunScriptMessage&)
 {
 }
 
@@ -63,6 +51,10 @@ void Subscriber::ReceiveMessage(const ResourceMessage&)
 {
 }
 
+void Subscriber::ReceiveMessage(const RunScriptMessage&)
+{
+}
+
 void Subscriber::ReceiveMessage(const SpawnUnitMessage&)
 {
 }
@@ -80,6 +72,10 @@ void Subscriber::ReceiveMessage(const ToggleBuildTimeMessage&)
 }
 
 void Subscriber::ReceiveMessage(const ToggleGUIMessage&)
+{
+}
+
+void Subscriber::ReceiveMessage(const ToggleRenderLinesMessage&)
 {
 }
 

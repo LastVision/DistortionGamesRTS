@@ -11,7 +11,7 @@ struct TextMessage : public Message
 
 // takes in ratio, not actual position
 inline TextMessage::TextMessage(const std::string& aText)
-	: Message(eMessageType::GUI_TEXT)
+	: Message(eMessageType::TEXT)
 	, myText(aText)
 {
 }

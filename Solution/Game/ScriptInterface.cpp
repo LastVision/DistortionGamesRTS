@@ -1,15 +1,14 @@
 #include "stdafx.h"
 
+#include <CinematicMessage.h>
 #include "Console.h"
 #include <Entity.h>
 #include <EntityId.h>
 #include <GameStateMessage.h>
-#include <LUACinematicMessage.h>
-#include <LUAMoveCameraMessage.h>
-#include <LUARunScriptMessage.h>
-#include <LUAToggleRenderLinesMessage.h>
+#include <MoveCameraMessage.h>
 #include <PostMaster.h>
 #include <ResourceMessage.h>
+#include <RunScriptMessage.h>
 #include "ScriptInterface.h"
 #include <ScriptSystem.h>
 #include <SpawnUnitMessage.h>
@@ -18,6 +17,7 @@
 #include <TriggerComponent.h>
 #include <ToggleBuildTimeMessage.h>
 #include <ToggleGUIMessage.h>
+#include <ToggleRenderLinesMessage.h>
 #include <VictoryMessage.h>
 
 namespace Script_Interface
@@ -50,7 +50,7 @@ namespace Script_Interface
 		CU::Normalize(moveAmount);
 		moveAmount *= distance;
 
-		PostMaster::GetInstance()->SendMessage(LUAMoveCameraMessage(moveAmount));
+		PostMaster::GetInstance()->SendMessage(MoveCameraMessage(moveAmount));
 
 		return 0;
 	}
@@ -90,14 +90,14 @@ namespace Script_Interface
 	int StartCinematic(lua_State* aState)//int aCinematicIndex
 	{
 		int cinematicIndex = int(lua_tonumber(aState, 1));
-		PostMaster::GetInstance()->SendMessage(LUACinematicMessage(cinematicIndex, eCinematicAction::START));
+		PostMaster::GetInstance()->SendMessage(CinematicMessage(cinematicIndex, eCinematicAction::START));
 
 		return 0;
 	}
 
 	int EndCinematic(lua_State*)//void
 	{
-		PostMaster::GetInstance()->SendMessage(LUACinematicMessage(0, eCinematicAction::END));
+		PostMaster::GetInstance()->SendMessage(CinematicMessage(0, eCinematicAction::END));
 		return 0;
 	}
 
@@ -118,19 +118,19 @@ namespace Script_Interface
 	int ScriptRun(lua_State* aState)//string aScriptFile
 	{
 		std::string filePath = lua_tostring(aState, 1);
-		PostMaster::GetInstance()->SendMessage(LUARunScriptMessage(filePath));
+		PostMaster::GetInstance()->SendMessage(RunScriptMessage(filePath));
 		return 0;
 	}
 
 	int HideNavMesh(lua_State*)//void
 	{
-		PostMaster::GetInstance()->SendMessage(LUAToggleRenderLinesMessage(false));
+		PostMaster::GetInstance()->SendMessage(ToggleRenderLinesMessage(false));
 		return 0;
 	}
 
 	int ShowNavMesh(lua_State*)//void
 	{
-		PostMaster::GetInstance()->SendMessage(LUAToggleRenderLinesMessage(true));
+		PostMaster::GetInstance()->SendMessage(ToggleRenderLinesMessage(true));
 		return 0;
 	}
 

@@ -16,7 +16,7 @@ public:
 	ConsoleHistoryManager* GetConsoleHistory();
 	ConsoleHelp* GetConsoleHelp();
 
-	void ReceiveMessage(const LUARunScriptMessage& aMessage) override;
+	void ReceiveMessage(const RunScriptMessage& aMessage) override;
 
 	void ClearInput();
 

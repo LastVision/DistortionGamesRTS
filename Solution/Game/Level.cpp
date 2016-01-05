@@ -17,8 +17,7 @@
 #include <InputWrapper.h>
 #include <Intersection.h>
 #include "Level.h"
-#include <LUAToggleRenderLinesMessage.h>
-#include <LUAMoveCameraMessage.h>
+#include <MoveCameraMessage.h>
 #include <ModelLoader.h>
 #include <PathFinderAStar.h>
 #include <PathFinderFunnel.h>
@@ -29,6 +28,7 @@
 #include <Scene.h>
 #include <ScriptSystem.h>
 #include <Terrain.h>
+#include <ToggleRenderLinesMessage.h>
 
 Level::Level(const Prism::Camera& aCamera, Prism::Terrain* aTerrain, GUI::Cursor* aCursor)
 	: myEntities(64)
@@ -41,7 +41,7 @@ Level::Level(const Prism::Camera& aCamera, Prism::Terrain* aTerrain, GUI::Cursor
 
 	myScene = new Prism::Scene(aCamera, *myTerrain);
 
-	PostMaster::GetInstance()->Subscribe(eMessageType::TOGGLE_LINES, this);
+	PostMaster::GetInstance()->Subscribe(eMessageType::TOGGLE_RENDER_LINES, this);
 
 	myPlayer = new PlayerDirector(*myTerrain, *myScene, aCursor);
 	myAI = new AIDirector(*myTerrain, *myScene);
@@ -58,7 +58,7 @@ Level::~Level()
 	SAFE_DELETE(myAI);
 	SAFE_DELETE(myNeutralDirector);
 	SAFE_DELETE(myScene);
-	PostMaster::GetInstance()->UnSubscribe(eMessageType::TOGGLE_LINES, this);
+	PostMaster::GetInstance()->UnSubscribe(eMessageType::TOGGLE_RENDER_LINES, this);
 	EntityFactory::Destroy();
 	EntityId::Destroy();
 	PollingStation::Destroy();
@@ -131,9 +131,9 @@ void Level::OnResize(int aWidth, int aHeigth)
 	myPlayer->OnResize(aWidth, aHeigth);
 }
 
-void Level::ReceiveMessage(const LUAToggleRenderLinesMessage& aMessage)
+void Level::ReceiveMessage(const ToggleRenderLinesMessage& aMessage)
 {
-	if (aMessage.myMessageType == eMessageType::TOGGLE_LINES)
+	if (aMessage.myMessageType == eMessageType::TOGGLE_RENDER_LINES)
 	{
 		myRenderNavMeshLines = aMessage.myToggleFlag;
 	}
