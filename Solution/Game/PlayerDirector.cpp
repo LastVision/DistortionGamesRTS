@@ -111,8 +111,10 @@ void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 {
 	aDeltaTime *= myTimeMultiplier;
 
+	//Prism::Audio::AudioInterface::GetInstance()->SetListenerPosition(aCamera.GetOrientation().GetPos().x
+	//	, aCamera.GetOrientation().GetPos().y, aCamera.GetOrientation().GetPos().z);
 	Prism::Audio::AudioInterface::GetInstance()->SetListenerPosition(aCamera.GetOrientation().GetPos().x
-		, aCamera.GetOrientation().GetPos().y, aCamera.GetOrientation().GetPos().z);
+		, 7.5f, aCamera.GetOrientation().GetPos().z + 25.f);
 
 	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_G) == true)
 	{

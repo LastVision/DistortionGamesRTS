@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+#include <AudioInterface.h>
 #include "CollisionComponent.h"
 #include "GrenadeComponent.h"
 #include "HealthComponent.h"
@@ -8,6 +9,7 @@
 #include "Postmaster.h"
 #include "PollingStation.h"
 #include "TriggerMessage.h"
+#include "SoundComponent.h">
 
 GrenadeComponent::GrenadeComponent(Entity& anEntity, GrenadeComponentData& aGrenadeData)
 	: Component(anEntity)
@@ -97,6 +99,8 @@ void GrenadeComponent::Explosion()
 {
 	CU::Vector2<float> my2DPosition = { myPosition.x, myPosition.z };
 	PostMaster::GetInstance()->SendMessage(EmitterMessage(eParticleType::GRENADE_EXPLOSION, myPosition));
+	Prism::Audio::AudioInterface::GetInstance()->PostEvent("Grunt_GrenadeExplosion"
+		, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
 	if (myUnits.Size() > 0)
 	{
 		for (int i = 0; i < myUnits.Size(); ++i)

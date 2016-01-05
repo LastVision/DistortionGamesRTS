@@ -10,6 +10,7 @@
 #include <PathFinderAStar.h>
 #include <PathFinderFunnel.h>
 #include "PollingStation.h"
+#include "SoundComponent.h"
 #include <Terrain.h>
 
 
@@ -105,8 +106,9 @@ void ControllerComponent::MoveTo(const CU::Vector3<float>& aPosition, bool aClea
 {
 	if (myEntity.GetUnitType() == eUnitType::GRUNT)
 	{
-		Prism::Audio::AudioInterface::GetInstance()->PostEvent("Grunt_Move", 0);
-		//Prism::Audio::AudioInterface::GetInstance()->PostEvent("Grunt_Move", GetComponent<SoundComponent>()->GetID());
+		//Prism::Audio::AudioInterface::GetInstance()->PostEvent("Grunt_Move", 0);
+		Prism::Audio::AudioInterface::GetInstance()->PostEvent("Grunt_Move"
+			, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
 	}
 	else if (myEntity.GetUnitType() == eUnitType::RANGER)
 	{
@@ -304,6 +306,11 @@ void ControllerComponent::AttackTarget()
 			if (myEntity.GetComponent<GrenadeComponent>()->GetCooldown() <= 0.f)
 			{
 				myEntity.GetComponent<GrenadeComponent>()->ThrowGrenade(myCurrentAction.myEntity->GetOrientation().GetPos());
+			}
+			else
+			{
+				Prism::Audio::AudioInterface::GetInstance()->PostEvent("Grunt_MachineGun"
+					, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
 			}
 		}
 
