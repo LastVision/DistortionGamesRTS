@@ -95,7 +95,7 @@ namespace Prism
 			//	tech = myEffect->GetTechnique();
 			//}
 
-			tech = myEffect->GetTechnique(myTechniqueName.c_str());
+			tech = myEffect->GetTechnique(myTechniqueName);
 
 			if (tech->IsValid() == false)
 			{
