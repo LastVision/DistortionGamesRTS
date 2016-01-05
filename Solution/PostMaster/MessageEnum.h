@@ -21,5 +21,6 @@ enum class eMessageType
 	PARTICLE,
 	TOGGLE_BUILD_TIME,
 	UPGRADE_UNIT,
+	GUI_TEXT,
 	COUNT,
 };

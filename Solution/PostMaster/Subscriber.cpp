@@ -67,6 +67,10 @@ void Subscriber::ReceiveMessage(const SpawnUnitMessage&)
 {
 }
 
+void Subscriber::ReceiveMessage(const TextMessage&)
+{
+}
+
 void Subscriber::ReceiveMessage(const TimeMultiplierMessage&)
 {
 }
