@@ -1,4 +1,5 @@
 #pragma once
+#include <Subscriber.h>
 #include "Widget.h"
 
 namespace Prism
@@ -16,7 +17,7 @@ class XMLReader;
 
 namespace GUI
 {
-	class TextWidget : public Widget
+	class TextWidget : public Widget, public Subscriber
 	{
 	public:
 		TextWidget(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement);
@@ -27,6 +28,8 @@ namespace GUI
 		void OnResize(const CU::Vector2<float>& aNewSize, const CU::Vector2<float>& anOldSize) override;
 
 		void SetPosition(const CU::Vector2<float>& aPosition) override;
+
+		void ReceiveMessage(const TextMessage& aMessage) override;
 
 	private:
 

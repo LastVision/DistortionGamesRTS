@@ -4,6 +4,7 @@
 #include <OnClickMessage.h>
 #include <PostMaster.h>
 #include <Text.h>
+#include <TextMessage.h>
 
 namespace GUI
 {
@@ -24,12 +25,14 @@ namespace GUI
 		myBackground = Prism::ModelLoader::GetInstance()->LoadSprite(backgroundPath, mySize, mySize / 2.f);
 
 		myText->SetText("Hello\nworld");
+		PostMaster::GetInstance()->Subscribe(eMessageType::GUI_TEXT, this);
 	}
 
 	TextWidget::~TextWidget()
 	{
 		SAFE_DELETE(myBackground);
 		SAFE_DELETE(myText);
+		PostMaster::GetInstance()->UnSubscribe(eMessageType::GUI_TEXT, this);
 	}
 
 	void TextWidget::Render(const CU::Vector2<float>& aParentPosition)
@@ -48,5 +51,13 @@ namespace GUI
 	void TextWidget::SetPosition(const CU::Vector2<float>& aPosition)
 	{
 		myPosition = { aPosition.x + myBackground->GetHotspot().x, aPosition.y - myBackground->GetHotspot().y };
+	}
+
+	void TextWidget::ReceiveMessage(const TextMessage& aMessage)
+	{
+		if (aMessage.myMessageType == eMessageType::GUI_TEXT)
+		{
+			myText->SetText(aMessage.myText);
+		}
 	}
 }
