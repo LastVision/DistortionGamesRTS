@@ -45,11 +45,7 @@ namespace Prism
 		myIsActive = myParticleEmitterData->myIsActiveAtStart;
 
 		myEmitterLife = myParticleEmitterData->myEmitterLifeTime;
-
-		myTechniqueDesc = new _D3DX11_TECHNIQUE_DESC();
-
 		CreateVertexBuffer();
-
 	}
 
 	ParticleEmitterInstance::~ParticleEmitterInstance()
@@ -59,9 +55,7 @@ namespace Prism
 			myVertexWrapper->myVertexBuffer->Release();
 		}
 
-
 		SAFE_DELETE(myVertexWrapper);
-		SAFE_DELETE(myTechniqueDesc);
 	}
 
 	void ParticleEmitterInstance::ReleaseData()
@@ -73,6 +67,7 @@ namespace Prism
 	{
 		UpdateVertexBuffer();
 		myParticleEmitterData->myEffect->SetTexture(TextureContainer::GetInstance()->GetTexture(myParticleEmitterData->myTextureName));
+		myParticleEmitterData->myEffect->SetWorldMatrix(myOrientation);
 
 		Engine::GetInstance()->GetContex()->IASetVertexBuffers(
 			myVertexWrapper->myStartSlot
@@ -82,7 +77,7 @@ namespace Prism
 			, &myVertexWrapper->myByteOffset);
 
 
-		for (UINT i = 0; i < myTechniqueDesc->Passes; ++i)
+		for (UINT i = 0; i < myParticleEmitterData->myTechniqueDesc->Passes; ++i)
 		{
 			myParticleEmitterData->myEffect->GetTechnique()->GetPassByIndex(i)->Apply(0, Engine::GetInstance()->GetContex());
 			Engine::GetInstance()->GetContex()->Draw(myGraphicalParticles.Size(), 0);
@@ -157,7 +152,7 @@ namespace Prism
 			myEmissionTime = myParticleEmitterData->myEmissionRate;
 		}
 
-		if (myEmitterLife <= 0.f && myDeadParticleCount == myLogicalParticles.Size())
+		if (myEmitterLife <= 0.f && myDeadParticleCount >= myLogicalParticles.Size())
 		{
 			myIsActive = false;
 		}
@@ -242,19 +237,6 @@ namespace Prism
 	{
 		myIsActive = true;
 		myEmitterLife = myParticleEmitterData->myEmitterLifeTime;
-	}
-
-
-	void ParticleEmitterInstance::SetGPUData(Camera* aCamera)
-	{
-		myParticleEmitterData->myEffect->SetWorldMatrix(myOrientation);
-		myParticleEmitterData->myEffect->SetViewMatrix(CU::InverseSimple(aCamera->GetOrientation()));
-		myParticleEmitterData->myEffect->SetProjectionMatrix(aCamera->GetProjection());
-	
-		Engine::GetInstance()->GetContex()->IASetInputLayout(myParticleEmitterData->myInputLayout);
-		Engine::GetInstance()->GetContex()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
-
-		myParticleEmitterData->myEffect->GetTechnique()->GetDesc(myTechniqueDesc);
 	}
 
 }

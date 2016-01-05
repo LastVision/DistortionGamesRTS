@@ -20,9 +20,10 @@ namespace Prism
 	{
 		if (myInputLayout != nullptr)
 		{
-			myInputLayout->Release();
-			myInputLayout = nullptr;
+			SAFE_RELEASE(myInputLayout);
 		}
+		SAFE_DELETE(myTechniqueDesc);
+	
 	}
 
 	void ParticleEmitterData::LoadDataFile(const char* aFilePath)
@@ -121,6 +122,8 @@ namespace Prism
 		myEffect = EffectContainer::GetInstance()->GetEffect(myEffectName.c_str());
 		
 		CreateInputLayout();
+		myTechniqueDesc = new _D3DX11_TECHNIQUE_DESC();
+
 	}
 
 	void ParticleEmitterData::CreateInputLayout()

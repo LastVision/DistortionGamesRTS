@@ -154,7 +154,6 @@ bool XMLReader::ReadAttribute(const tinyxml2::XMLElement* aElementToReadFrom, co
 			return true;
 		}
 	}
-
 	return false;
 }
 
@@ -176,4 +175,5 @@ bool XMLReader::ReadAttribute(const tinyxml2::XMLElement* aElementToReadFrom, co
 			}
 		}
 	}
+	return false;
 }

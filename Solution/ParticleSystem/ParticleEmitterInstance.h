@@ -4,7 +4,6 @@
 #include "ParticleEmitterData.h"
 #include "ParticleData.h"
 #include <bitset>
-struct _D3DX11_TECHNIQUE_DESC;
 namespace Prism
 {
 	class Camera;
@@ -50,7 +49,6 @@ namespace Prism
 		int myDeadParticleCount;
 
 		bool myIsActive;
-		_D3DX11_TECHNIQUE_DESC* myTechniqueDesc;
 
 		std::string myEmitterPath;
 	};
