@@ -393,7 +393,7 @@ void ControllerComponent::AttackTarget()
 		}
 		else if (myEntity.GetUnitType() == eUnitType::RANGER)
 		{
-			if (myRangerOneShotCooldown <= 0.f)
+			if (myRangerOneShotTimer <= 0.f)
 			{
 				Prism::Audio::AudioInterface::GetInstance()->PostEvent("Ranger_OneShot"
 					, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
