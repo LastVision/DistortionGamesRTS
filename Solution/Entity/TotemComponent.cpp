@@ -40,16 +40,32 @@ void TotemComponent::Update(float aDeltaTime)
 	myCurrentCooldown -= aDeltaTime;
 	myDuration += aDeltaTime;
 
+	CheckUnitsForRemove(myUnits);
+	CheckUnitsForAdd(PollingStation::GetInstance()->GetUnits(myEntity.GetOwner()), myUnits);
+
 	if (myDuration >= myEndTime)
 	{
 		Prism::Audio::AudioInterface::GetInstance()->PostEvent("Stop_Totem"
 			, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
 		myActive = false;
 		myEntity.SetPosition(myOriginalPosition);
+		for (int i = 0; i < myUnits.Size(); ++i)
+		{
+			myUnits[i]->GetComponent<HealthComponent>()->SetIsHealing(false);
+		}
+	}
+	else
+	{
+		if (myHasReachedTarget == true && myActive == true)
+		{
+			for (int i = 0; i < myUnits.Size(); ++i)
+			{
+				myUnits[i]->GetComponent<HealthComponent>()->SetIsHealing(true);
+			}
+		}
 	}
 	
-	CheckUnitsForRemove(myUnits);
-	CheckUnitsForAdd(PollingStation::GetInstance()->GetUnits(myEntity.GetOwner()), myUnits);
+
 
 	if (myActive == true)
 	{
