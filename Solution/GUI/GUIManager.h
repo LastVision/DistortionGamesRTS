@@ -28,7 +28,7 @@ namespace GUI
 		~GUIManager();
 
 		void AddWidget(Widget* aWidget);
-		void Update();
+		void Update(float aDelta);
 		void Render();
 
 		void OnResize(int aWidth, int aHeight);

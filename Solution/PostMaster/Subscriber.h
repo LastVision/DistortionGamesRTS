@@ -5,6 +5,7 @@ struct FadeMessage;
 struct EmitterMessage;
 struct GameStateMessage;
 struct Message;
+struct MinimapEventMessage;
 struct MinimapMoveMessage;
 struct MoveCameraMessage;
 struct OnClickMessage;
@@ -32,6 +33,7 @@ public:
 	virtual void ReceiveMessage(const EmitterMessage& aMessage);
 	virtual void ReceiveMessage(const GameStateMessage& aMessage);
 	virtual void ReceiveMessage(const Message& aMessage);
+	virtual void ReceiveMessage(const MinimapEventMessage& aMessage);
 	virtual void ReceiveMessage(const MinimapMoveMessage& aMessage);
 	virtual void ReceiveMessage(const MoveCameraMessage& aMessage);
 	virtual void ReceiveMessage(const OnClickMessage& aMessage);

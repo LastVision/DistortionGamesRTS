@@ -15,7 +15,7 @@ namespace GUI
 		BarWidget(const float& aMaxValue, const float& aCurrentValue, CU::Vector2<float> aSize);
 		~BarWidget();
 
-		void Update() override;
+		void Update(float aDelta) override;
 		void Render(const CU::Vector2<float>& aParentPosition) override;
 		void OnResize(const CU::Vector2<float>& aNewWindowSize, const CU::Vector2<float>& anOldWindowSize) override;
 

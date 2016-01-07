@@ -26,6 +26,7 @@ enum eUnitType
 	GRUNT,
 	RANGER,
 	TANK,
+	NON_ATTACK_TUTORIAL,
 };
 
 enum class ePropType

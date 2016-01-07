@@ -21,5 +21,6 @@ enum class eMessageType
 	TOGGLE_BUILD_TIME,
 	UPGRADE_UNIT,
 	TEXT,
+	MINIMAP_EVENT,
 	COUNT,
 };

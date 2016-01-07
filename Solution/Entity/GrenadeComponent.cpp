@@ -9,7 +9,7 @@
 #include "Postmaster.h"
 #include "PollingStation.h"
 #include "TriggerMessage.h"
-#include "SoundComponent.h">
+#include "SoundComponent.h"
 
 GrenadeComponent::GrenadeComponent(Entity& anEntity, GrenadeComponentData& aGrenadeData)
 	: Component(anEntity)
@@ -105,7 +105,7 @@ void GrenadeComponent::Explosion()
 	{
 		for (int i = 0; i < myUnits.Size(); ++i)
 		{
-			float length2 = CU::Length2(myUnits[i]->GetPosition() - my2DPosition);
+//			float length2 = CU::Length2(myUnits[i]->GetPosition() - my2DPosition);
 			myUnits[i]->GetComponent<HealthComponent>()->TakeDamage(myDamage);
 		}
 	}

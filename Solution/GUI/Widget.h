@@ -10,7 +10,7 @@ namespace GUI
 		virtual ~Widget();
 		virtual void Destroy();
 
-		virtual void Update();
+		virtual void Update(float aDelta);
 		virtual void Render(const CU::Vector2<float>& aParentPosition);
 		virtual void OnMouseDown(const CU::Vector2<float>& aPosition);
 		virtual void OnRightMouseDown(const CU::Vector2<float>& aPosition);

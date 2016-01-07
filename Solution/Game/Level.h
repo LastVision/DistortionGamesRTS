@@ -19,6 +19,7 @@ class Entity;
 class EmitterManager;
 class NeutralDirector;
 class PlayerDirector;
+class Tutorial;
 
 class Level : public Subscriber
 {
@@ -26,6 +27,8 @@ class Level : public Subscriber
 public:
 	Level(const Prism::Camera& aCamera, Prism::Terrain* aTerrain, GUI::Cursor* aCursor);
 	~Level();
+
+	void LoadTutorial(const Prism::Camera& aCamera, const std::string& aTutorialPath);
 
 	bool Update(float aDeltaTime, Prism::Camera& aCamera);
 	void Render(Prism::Camera& aCamera);
@@ -46,6 +49,7 @@ private:
 	Prism::Terrain* myTerrain;
 	Prism::DirectionalLight* myLight;
 	Prism::Scene* myScene;
+	Tutorial* myTutorial;
 
 	EmitterManager* myEmitterManager;
 

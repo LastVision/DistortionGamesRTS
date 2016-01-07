@@ -54,7 +54,7 @@ private:
 	void operator=(LevelFactory) = delete;
 
 	void ReadLevelList(const std::string& aLevelListPath);
-	void ReadLevel(const std::string& aLevelPath);
+	void ReadLevel(const std::string& aLevelPath, std::string& aTutorialPathOut);
 	void ReadLevelSetting(const std::string& aLevelPath);
 
 	void LoadLights(XMLReader& aReader, tinyxml2::XMLElement* aLevelElement);

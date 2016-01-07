@@ -108,7 +108,7 @@ bool HealthComponent::TakeDamage(float aDamage)
 			, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
 	}
 
-	myHealthBar->Update(); 
+	myHealthBar->Update(0.f); 
 
 	return true;
 }
@@ -122,11 +122,11 @@ void HealthComponent::Heal(float aHealing)
 	{
 		myCurrentHealth = myMaxHealth;
 	}
-	myHealthBar->Update();
+	myHealthBar->Update(0.f);
 }
 
 void HealthComponent::Reset()
 {
 	myCurrentHealth = myMaxHealth;
-	myHealthBar->Update();
+	myHealthBar->Update(0.f);
 }

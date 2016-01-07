@@ -43,7 +43,7 @@ namespace GUI
 		SAFE_DELETE(myValueSprite);
 	}
 
-	void BarWidget::Update()
+	void BarWidget::Update(float)
 	{
 		if (myIsFloat == false)
 		{

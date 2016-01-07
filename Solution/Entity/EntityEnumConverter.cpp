@@ -240,6 +240,10 @@ namespace EntityEnumConverter
 		{
 			return eUnitType::TANK;
 		}
+		else if (aUnitType == "non_attack_tutorial")
+		{
+			return eUnitType::NON_ATTACK_TUTORIAL;
+		}
 		DL_ASSERT("The " + aUnitType + " unit type is not supported, please tell Daniel about it.");
 		return eUnitType::NOT_A_UNIT;
 	}

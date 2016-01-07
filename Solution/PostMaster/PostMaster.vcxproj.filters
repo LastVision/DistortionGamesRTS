@@ -105,5 +105,8 @@
     <ClInclude Include="ToggleRenderLinesMessage.h">
       <Filter>Message\ScriptMessage</Filter>
     </ClInclude>
+    <ClInclude Include="MinimapEventMessage.h">
+      <Filter>Message</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

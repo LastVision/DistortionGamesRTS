@@ -31,6 +31,10 @@ void Subscriber::ReceiveMessage(const Message&)
 {
 }
 
+void Subscriber::ReceiveMessage(const MinimapEventMessage&)
+{
+}
+
 void Subscriber::ReceiveMessage(const MinimapMoveMessage&)
 {
 }

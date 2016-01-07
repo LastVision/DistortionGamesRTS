@@ -1,7 +1,9 @@
 #include "stdafx.h"
+#include <AudioInterface.h>
 #include "ControllerComponent.h"
 #include "EnrageComponent.h"
 #include "HealthComponent.h"
+#include "SoundComponent.h"
 
 EnrageComponent::EnrageComponent(Entity& anEntity, EnrageComponentData& aData)
 	: Component(anEntity)
@@ -66,6 +68,9 @@ void EnrageComponent::Activate()
 		controller->SetAttackDamage(myOriginalAttackDamage * ((myData.myAttackDamageModifier + 100.f) / 100.f));
 		controller->SetAttackRange2(myOriginalAttackRange2 * ((myData.myAttackRange2Modifier + 100.f) / 100.f));
 		controller->SetRechargeTime(myOriginalRechargeTime * ((myData.myRechargeTimeModifier + 100.f) / 100.f));
+
+		Prism::Audio::AudioInterface::GetInstance()->PostEvent("Tank_Enrage"
+			, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
 
 	}
 }

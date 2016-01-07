@@ -24,7 +24,7 @@ namespace GUI
 		~WidgetContainer();
 
 		void AddWidget(Widget* aWidget);
-		void Update() override;
+		void Update(float aDelta) override;
 		void Render(const CU::Vector2<float>& aParentPosition) override;
 
 		Widget* MouseIsOver(const CU::Vector2<float>& aPosition) override;

@@ -16,7 +16,7 @@ namespace GUI
 	{
 	}
 
-	void Widget::Update()
+	void Widget::Update(float)
 	{
 	}
 

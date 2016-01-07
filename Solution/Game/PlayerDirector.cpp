@@ -82,6 +82,8 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 	tempData.myTotemData.myCooldown = 30.f;
 	tempData.myTotemData.myDuration = 10.f;
 
+	tempData.mySoundData.myExistsInEntity = true;
+
 	myTotem = new Entity(eOwnerType::PLAYER, Prism::eOctreeType::DYNAMIC, tempData, aScene, { 128.f, 100.f, 128.f },
 		aTerrain, { 0.f, 0.f, 0.f }, { 1.f, 1.f, 1.f });
 	myTotem->AddToScene();
@@ -170,7 +172,7 @@ void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 
 	if (myRenderGUI == true)
 	{
-		myGUIManager->Update();
+		myGUIManager->Update(aDeltaTime);
 	}
 
 	if (myMouseIsOverGUI == false && (myLeftMouseUp == true || myRightClicked == true))
@@ -271,10 +273,10 @@ void PlayerDirector::ReceiveMessage(const TimeMultiplierMessage& aMessage)
 void PlayerDirector::ReceiveMessage(const MinimapMoveMessage& aMessage)
 {
 	CU::Vector2<float> position = aMessage.myPosition * 255.f;
-
+	bool myHasPlayedSound = false;
 	for (int i = 0; i < mySelectedUnits.Size(); i++)
 	{
-		mySelectedUnits[i]->GetComponent<ControllerComponent>()->MoveTo({ position.x, 0.f, position.y }, true);
+		mySelectedUnits[i]->GetComponent<ControllerComponent>()->MoveTo({ position.x, 0.f, position.y }, true, myHasPlayedSound);
 	}
 }
 
@@ -398,12 +400,14 @@ CU::Vector3<float> PlayerDirector::CalcCursorWorldPosition(const CU::Vector2<flo
 	DEBUG_PRINT(worldPos);
 
 	//Debug:
+#ifndef RELEASE_BUILD
 	Prism::RenderBox(worldPos);
 	Prism::RenderLine3D(worldPos, { 100.f, 100.f, 100.f });
+#endif
 
 	return worldPos;
 }
-
+	
 void PlayerDirector::UpdateInputs()
 {
 	myShiftPressed = CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_LSHIFT)
@@ -586,7 +590,7 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 	bool hasDoneAction = false;
 
 	CU::Intersection::LineSegment3D line(aCamera.GetOrientation().GetPos(), firstTargetPos);
-
+	bool myHasPlayedSound = false;
 	for (int i = 0; i < myActiveUnits.Size(); ++i)
 	{
 		SelectOrHoverEntity(myActiveUnits[i], hasSelected, hasHovered, line);
@@ -597,27 +601,27 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 			if ((mySelectedAction == eSelectedAction::ATTACK_TAGRET && hoveredEnemy != nullptr && myLeftMouseUp == true)
 				|| (hoveredEnemy != nullptr && myRightClicked == true))
 			{
-				controller->AttackTarget(hoveredEnemy, !myShiftPressed);
+				controller->AttackTarget(hoveredEnemy, !myShiftPressed, myHasPlayedSound);
 				hasDoneAction = true;
 			}
 			else if (mySelectedAction == eSelectedAction::ATTACK_MOVE && myLeftMouseUp == true)
 			{
-				controller->AttackMove(firstTargetPos, !myShiftPressed);
+				controller->AttackMove(firstTargetPos, !myShiftPressed, myHasPlayedSound);
 				hasDoneAction = true;
 			}
 			else if ((mySelectedAction == eSelectedAction::MOVE && myLeftMouseUp) || myRightClicked)
 			{
-				controller->MoveTo(firstTargetPos, !myShiftPressed);
+				controller->MoveTo(firstTargetPos, !myShiftPressed, myHasPlayedSound);
 				hasDoneAction = true;
 			}
 			else if (mySelectedAction == eSelectedAction::STOP)
 			{
-				controller->Stop();
+				controller->Stop(myHasPlayedSound);
 				hasDoneAction = true;
 			}
 			else if (mySelectedAction == eSelectedAction::HOLD_POSITION)
 			{
-				controller->HoldPosition();
+				controller->HoldPosition(myHasPlayedSound);
 				hasDoneAction = true;
 			}
 		}
@@ -720,9 +724,10 @@ void PlayerDirector::Enrage()
 
 void PlayerDirector::AttackMoveSelectedUnits(const CU::Vector2<float>& aPosition)
 {
+	bool myHasPlayedSound = false;
 	for (int i = 0; i < mySelectedUnits.Size(); i++)
 	{
-		mySelectedUnits[i]->GetComponent<ControllerComponent>()->AttackMove({ aPosition.x, 0.f, aPosition.y }, !myShiftPressed);
+		mySelectedUnits[i]->GetComponent<ControllerComponent>()->AttackMove({ aPosition.x, 0.f, aPosition.y }, !myShiftPressed, myHasPlayedSound);
 	}
 	mySelectedAction = eSelectedAction::NONE;
 }

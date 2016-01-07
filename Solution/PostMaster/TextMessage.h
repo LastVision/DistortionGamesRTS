@@ -1,16 +1,19 @@
 #pragma once
 #include "Message.h"
-#include <string>
+
+namespace Prism
+{
+	class Text;
+}
 
 struct TextMessage : public Message
 {
-	TextMessage(const std::string& aText);
+	TextMessage(Prism::Text* aText);
 
-	const std::string myText;
+	Prism::Text* myText;
 };
 
-// takes in ratio, not actual position
-inline TextMessage::TextMessage(const std::string& aText)
+inline TextMessage::TextMessage(Prism::Text* aText)
 	: Message(eMessageType::TEXT)
 	, myText(aText)
 {

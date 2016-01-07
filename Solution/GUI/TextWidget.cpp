@@ -10,7 +10,7 @@ namespace GUI
 {
 	TextWidget::TextWidget(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement)
 		: myBackground(nullptr)
-		, myText(new Prism::Text(*Prism::Engine::GetInstance()->GetFont(Prism::eFont::DIALOGUE)))
+		, myText(nullptr)
 	{
 		std::string backgroundPath;
 
@@ -24,22 +24,23 @@ namespace GUI
 
 		myBackground = Prism::ModelLoader::GetInstance()->LoadSprite(backgroundPath, mySize, mySize / 2.f);
 
-		myText->SetText("Hello\nworld");
 		PostMaster::GetInstance()->Subscribe(eMessageType::TEXT, this);
 	}
 
 	TextWidget::~TextWidget()
 	{
 		SAFE_DELETE(myBackground);
-		SAFE_DELETE(myText);
 		PostMaster::GetInstance()->UnSubscribe(eMessageType::TEXT, this);
 	}
 
 	void TextWidget::Render(const CU::Vector2<float>& aParentPosition)
 	{
-		myText->SetPosition(myPosition + aParentPosition);
-		myBackground->Render(myPosition + aParentPosition);
-		myText->Render();
+		if (myText != nullptr)
+		{
+			myText->SetPosition(myPosition + aParentPosition);
+			myBackground->Render(myPosition + aParentPosition);
+			myText->Render();
+		}
 	}
 
 	void TextWidget::OnResize(const CU::Vector2<float>& aNewSize, const CU::Vector2<float>& anOldSize)
@@ -57,7 +58,7 @@ namespace GUI
 	{
 		if (aMessage.myMessageType == eMessageType::TEXT)
 		{
-			myText->SetText(aMessage.myText);
+			myText = aMessage.myText;
 		}
 	}
 }
