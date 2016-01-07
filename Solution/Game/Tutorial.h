@@ -1,16 +1,19 @@
 #pragma once
 
-class Director;
+class PlayerDirector;
+class NeutralDirector;
 
 class Tutorial
 {
 public:
-	Tutorial(const std::string& aXMLPath, const Director* aPlayer, const CU::Matrix44<float>& aCameraOrientation);
+	Tutorial(const std::string& aXMLPath, const PlayerDirector* aPlayer, const CU::Matrix44<float>& aCameraOrientation
+		, const NeutralDirector* aNeutral);
 	~Tutorial();
 
 	void Update(float aDeltaTime);
 
 private:
+	
 
 	enum class Action
 	{
@@ -23,14 +26,18 @@ private:
 	struct Mission
 	{
 		Mission() {}
-		Mission(const std::string& aText, Action anAction) : myText(aText), myAction(anAction) {}
-		std::string myText;
+		Mission(Prism::Text* aText, Action anAction) : myText(aText), myAction(anAction) {}
+		Prism::Text* myText;
 		Action myAction;
 	};
 
+	Action GetAction(const std::string& anAction) const;
+
 	void operator=(Tutorial&) = delete;
 
-	const Director* myPlayer;
+	const PlayerDirector* myPlayer;
+	const NeutralDirector* myNeutral;
+	int myPreviousNeutralCount;
 	const CU::Matrix44<float>& myCameraOrientation;
 	CU::Vector3<float> myPreviousCameraPosition;
 

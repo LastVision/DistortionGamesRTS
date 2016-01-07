@@ -330,13 +330,6 @@ namespace Script_Interface
 
 		return 0;
 	}
-
-	int SetGUIText(lua_State* aState)
-	{
-		std::string text = lua_tostring(aState, 1);
-		PostMaster::GetInstance()->SendMessage(TextMessage(text));
-		return 0;
-	}
 }
 
 void ScriptInterface::RegisterFunctions()
@@ -372,5 +365,4 @@ void ScriptInterface::RegisterFunctions()
 	system->RegisterFunction("NoBuild", Script_Interface::DisableBuildTime, "", "Removes the buildtime on units, instaspawn, only for player.");
 	system->RegisterFunction("Build", Script_Interface::EnableBuildTime, "", "Enables the buildtime on units, not instaspawn, only for player.");
 	system->RegisterFunction("SpawnNeutral", Script_Interface::SpawnNeutral, "aType, aX, aZ", "Spawns a Netural creen of type aType at position aX, aZ.");
-	system->RegisterFunction("SetGUIText", Script_Interface::SetGUIText, "aText", "Set the text in a GUI TextBox.");
 }

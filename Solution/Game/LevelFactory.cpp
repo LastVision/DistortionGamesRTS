@@ -104,7 +104,8 @@ Level* LevelFactory::LoadCurrentLevel()
 
 	SAFE_DELETE(myLoadLevelThread);
 	//myLoadLevelThread = new std::thread(&LevelFactory::ReadLevel, this, myLevelPaths[myCurrentID]);
-	ReadLevel(myLevelPaths[myCurrentID]);
+	std::string tutorialPath;
+	ReadLevel(myLevelPaths[myCurrentID], tutorialPath);
 
 	myCurrentLevel->myPlayer->InitGUI(myCurrentLevel->myAI, myCamera);
 
@@ -114,6 +115,9 @@ Level* LevelFactory::LoadCurrentLevel()
 	weatherPosition.y += 5;
 	//PostMaster::GetInstance()->SendMessage(EmitterMessage(eParticleType::WEATHER_SNOW, weatherPosition));
 
+	Prism::ModelLoader::GetInstance()->Pause();
+	myCurrentLevel->LoadTutorial(myCamera, tutorialPath); // needs to be after InitGUI
+	Prism::ModelLoader::GetInstance()->UnPause();
 	return myCurrentLevel;
 }
 
@@ -172,7 +176,7 @@ void LevelFactory::ReadLevelList(const std::string& aLevelListPath)
 	reader.CloseDocument();
 }
 
-void LevelFactory::ReadLevel(const std::string& aLevelPath)
+void LevelFactory::ReadLevel(const std::string& aLevelPath, std::string& aTutorialPathOut)
 {
 	Prism::ModelLoader* modelLoader = Prism::ModelLoader::GetInstance();
 	Prism::EffectContainer* effectContainer = Prism::EffectContainer::GetInstance();
@@ -193,8 +197,10 @@ void LevelFactory::ReadLevel(const std::string& aLevelPath)
 	levelElement = reader.ForceFindFirstChild(levelElement, "scene");
 
 	std::string cubeMap;
-	reader.ReadAttribute(reader.ForceFindFirstChild(levelElement, "cubemap"), "source", cubeMap);
+	reader.ForceReadAttribute(reader.ForceFindFirstChild(levelElement, "cubemap"), "source", cubeMap);
 	effectContainer->SetCubeMap(cubeMap);
+
+	reader.ForceReadAttribute(reader.ForceFindFirstChild(levelElement, "tutorial"), "source", aTutorialPathOut);
 
 	LoadLights(reader, levelElement);
 	LoadBases(reader, levelElement);

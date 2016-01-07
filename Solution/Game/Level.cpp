@@ -29,6 +29,7 @@
 #include <ScriptSystem.h>
 #include <Terrain.h>
 #include <ToggleRenderLinesMessage.h>
+#include "Tutorial.h"
 
 Level::Level(const Prism::Camera& aCamera, Prism::Terrain* aTerrain, GUI::Cursor* aCursor)
 	: myEntities(64)
@@ -51,6 +52,7 @@ Level::Level(const Prism::Camera& aCamera, Prism::Terrain* aTerrain, GUI::Cursor
 Level::~Level()
 {
 	myEntities.DeleteAll();
+	SAFE_DELETE(myTutorial);
 	SAFE_DELETE(myEmitterManager);
 	SAFE_DELETE(myTerrain);
 	SAFE_DELETE(myLight);
@@ -62,7 +64,11 @@ Level::~Level()
 	EntityFactory::Destroy();
 	EntityId::Destroy();
 	PollingStation::Destroy();
-	
+}
+
+void Level::LoadTutorial(const Prism::Camera& aCamera, const std::string& aTutorialPath)
+{
+	myTutorial = new Tutorial(aTutorialPath, myPlayer, aCamera.GetOrientation(), myNeutralDirector);
 }
 
 bool Level::Update(float aDeltaTime, Prism::Camera& aCamera)
@@ -84,6 +90,8 @@ bool Level::Update(float aDeltaTime, Prism::Camera& aCamera)
 	//{
 	//	PostMaster::GetInstance()->SendMessage(GameStateMessage(eGameState::COMPLETE_LEVEL));
 	//}
+
+	myTutorial->Update(aDeltaTime);
 
 	for (int i = 0; i < myEntities.Size(); ++i)
 	{
