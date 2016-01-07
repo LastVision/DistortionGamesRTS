@@ -29,7 +29,7 @@ class InGameState : public GameState, public Subscriber
 {
 public:
 
-	InGameState();
+	InGameState(int aLevelindex);
 	~InGameState();
 
 	void InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCursor) override;
@@ -78,6 +78,8 @@ private:
 
 	bool myIsPlayerCinematic;
 	int myCinematicIndex;
+
+	int myStartLevelIndex;
 };
 
 inline bool InGameState::IsComplete() const

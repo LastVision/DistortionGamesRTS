@@ -29,8 +29,9 @@
 #include <CinematicMessage.h>
 #include <RunScriptMessage.h>
 
-InGameState::InGameState()
+InGameState::InGameState(int aLevelIndex)
 	: myShouldReOpenConsole(false)
+	, myStartLevelIndex(aLevelIndex)
 {
 	myIsActiveState = false;
 	myIsPlayerCinematic = false;
@@ -63,7 +64,7 @@ void InGameState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCur
 	myStateStatus = eStateStatus::eKeepState;
 	myCursor = aCursor;
 	myLevelFactory = new LevelFactory("Data/Level/LI_level.xml", *myCamera, myCursor);
-	myLevel = myLevelFactory->LoadLevel(1);
+	myLevel = myLevelFactory->LoadLevel(myStartLevelIndex);
 
 	CU::Vector2<int> windowSize = Prism::Engine::GetInstance()->GetWindowSizeInt();
 

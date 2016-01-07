@@ -152,7 +152,7 @@ void LevelFactory::ReadLevelList(const std::string& aLevelListPath)
 	XMLReader reader;
 	reader.OpenDocument(aLevelListPath);
 	std::string levelPath = "";
-	int ID = 0;
+	int ID = -1;
 	int lastID = ID - 1;
 
 	tinyxml2::XMLElement* rootElement = reader.ForceFindFirstChild("root");

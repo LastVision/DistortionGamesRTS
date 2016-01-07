@@ -23,7 +23,6 @@ Tutorial::Tutorial(const std::string& aXMLPath, const PlayerDirector* aPlayer, c
 	myPreviousNeutralCount = myNeutral->GetUnitCount();
 	myPreviousCameraPosition = myCameraOrientation.GetPos();
 
-
 	XMLReader reader;
 	reader.OpenDocument(aXMLPath);
 
