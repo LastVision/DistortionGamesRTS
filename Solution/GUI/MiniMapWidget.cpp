@@ -91,10 +91,11 @@ namespace GUI
 		
 		if (myShouldRenderEvent == true)
 		{
-			if (static_cast<int>(myEventTimer) % 2 == 0)
+			//if (static_cast<int>(myEventTimer) % 2 == 0)
 			{
 				CU::Vector2<float> position = (myEventPosition / 255.f) * mySize;
-				myEventSprite->Render(aParentPosition + myPosition + position);
+				float scale = 2 + 5 * log(myEventTimer + 1);
+				myEventSprite->Render(aParentPosition + myPosition + position, { scale, scale }, { 1.f, 1.f, 1.f, 1.f - (myEventTimer * 51.f / 255.f) });
 			}
 
 		}
