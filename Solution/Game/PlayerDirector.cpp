@@ -51,6 +51,7 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 	, mySelectionSpriteHotspot(0, 0)
 	, myAudioSFXID(-1)
 	, myHasEventToGoTo(false)
+	, myTestUpgradeLevel(0)
 {
 	myAudioSFXID = Prism::Audio::AudioInterface::GetInstance()->GetUniqueID();
 	myDragSelectionPositions.Reserve(4);

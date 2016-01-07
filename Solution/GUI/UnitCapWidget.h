@@ -13,6 +13,7 @@ namespace GUI
 		void Render(const CU::Vector2<float>& aParentPosition) override;
 
 	private:
+		void operator=(UnitCapWidget&) = delete;
 
 		const int& myUnitCap;
 		const int& myUnitCount;
