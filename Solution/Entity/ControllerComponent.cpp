@@ -29,6 +29,8 @@ ControllerComponent::ControllerComponent(Entity& aEntity, ControllerComponentDat
 	, myAttackTargetPathRefreshTime(0.5f)
 	, myCurrentAttackTargetPathRefreshTime(myAttackTargetPathRefreshTime)
 	, myBehavior(new BlendedBehavior(myEntity))
+	, myRangerOneShotTimer(0.f)
+	, myRangerOneShotCooldown(aData.myRangerOneShotCoolDown)
 {
 	DL_ASSERT_EXP(myEntity.GetComponent<ActorComponent>() != nullptr
 		, "ControllerComponent wont work without a ActorComponent");
@@ -64,7 +66,7 @@ void ControllerComponent::Update(float aDelta)
 	{
 		return;
 	}
-
+	myRangerOneShotTimer -= aDelta;
 	myAttackTimer -= aDelta;
 
 	if (myEntity.GetState() == eEntityState::IDLE || myBehavior->GetDone())
@@ -104,35 +106,93 @@ void ControllerComponent::Update(float aDelta)
 
 void ControllerComponent::MoveTo(const CU::Vector3<float>& aPosition, bool aClearCommandQueue)
 {
-	if (myEntity.GetUnitType() == eUnitType::GRUNT)
+	if (myEntity.GetOwner() == eOwnerType::PLAYER)
 	{
-		//Prism::Audio::AudioInterface::GetInstance()->PostEvent("Grunt_Move", 0);
-		Prism::Audio::AudioInterface::GetInstance()->PostEvent("Grunt_Move"
-			, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
-	}
-	else if (myEntity.GetUnitType() == eUnitType::RANGER)
-	{
-		Prism::Audio::AudioInterface::GetInstance()->PostEvent("Ranger_Move", 0);
-	}
-	else if (myEntity.GetUnitType() == eUnitType::TANK)
-	{
-		Prism::Audio::AudioInterface::GetInstance()->PostEvent("Tank_Move", 0);
+		if (myEntity.GetUnitType() == eUnitType::GRUNT)
+		{
+			Prism::Audio::AudioInterface::GetInstance()->PostEvent("Grunt_Move"
+				, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+		}
+		else if (myEntity.GetUnitType() == eUnitType::RANGER)
+		{
+			Prism::Audio::AudioInterface::GetInstance()->PostEvent("Ranger_Move"
+				, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+		}
+		else if (myEntity.GetUnitType() == eUnitType::TANK)
+		{
+			Prism::Audio::AudioInterface::GetInstance()->PostEvent("Tank_Move"
+				, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+		}
 	}
 	FillCommandList(eAction::MOVE, aClearCommandQueue, nullptr, { aPosition.x, aPosition.z });
 }
 
 void ControllerComponent::AttackTarget(Entity* aEntity, bool aClearCommandQueue)
 {
+	if (myEntity.GetOwner() == eOwnerType::PLAYER)
+	{
+		if (myEntity.GetUnitType() == eUnitType::GRUNT)
+		{
+			Prism::Audio::AudioInterface::GetInstance()->PostEvent("Grunt_Attack"
+				, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+		}
+		else if (myEntity.GetUnitType() == eUnitType::RANGER)
+		{
+			Prism::Audio::AudioInterface::GetInstance()->PostEvent("Ranger_Attack"
+				, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+		}
+		else if (myEntity.GetUnitType() == eUnitType::TANK)
+		{
+			Prism::Audio::AudioInterface::GetInstance()->PostEvent("Tank_Attack"
+				, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+		}
+	}
 	FillCommandList(eAction::ATTACK_TARGET, aClearCommandQueue, aEntity);
 }
 
 void ControllerComponent::AttackMove(const CU::Vector3<float>& aPosition, bool aClearCommandQueue)
 {
+	if (myEntity.GetOwner() == eOwnerType::PLAYER)
+	{
+		if (myEntity.GetUnitType() == eUnitType::GRUNT)
+		{
+			Prism::Audio::AudioInterface::GetInstance()->PostEvent("Grunt_AttackMove"
+				, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+		}
+		else if (myEntity.GetUnitType() == eUnitType::RANGER)
+		{
+			Prism::Audio::AudioInterface::GetInstance()->PostEvent("Ranger_AttackMove"
+				, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+		}
+		else if (myEntity.GetUnitType() == eUnitType::TANK)
+		{
+			Prism::Audio::AudioInterface::GetInstance()->PostEvent("Tank_AttackMove"
+				, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+		}
+	}
 	FillCommandList(eAction::ATTACK_MOVE, aClearCommandQueue, nullptr, { aPosition.x, aPosition.z });
 }
 
 void ControllerComponent::Stop()
 {
+	if (myEntity.GetOwner() == eOwnerType::PLAYER)
+	{
+		if (myEntity.GetUnitType() == eUnitType::GRUNT)
+		{
+			Prism::Audio::AudioInterface::GetInstance()->PostEvent("Grunt_Stop"
+				, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+		}
+		else if (myEntity.GetUnitType() == eUnitType::RANGER)
+		{
+			Prism::Audio::AudioInterface::GetInstance()->PostEvent("Ranger_Stop"
+				, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+		}
+		else if (myEntity.GetUnitType() == eUnitType::TANK)
+		{
+			Prism::Audio::AudioInterface::GetInstance()->PostEvent("Tank_Stop"
+				, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+		}
+	}
 	myActions.RemoveAll();
 	myCurrentAction.myAction = eAction::IDLE;
 	myCurrentAction.myPosition = myEntity.myPosition;
@@ -141,6 +201,24 @@ void ControllerComponent::Stop()
 
 void ControllerComponent::HoldPosition()
 {
+	if (myEntity.GetOwner() == eOwnerType::PLAYER)
+	{
+		if (myEntity.GetUnitType() == eUnitType::GRUNT)
+		{
+			Prism::Audio::AudioInterface::GetInstance()->PostEvent("Grunt_Hold"
+				, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+		}
+		else if (myEntity.GetUnitType() == eUnitType::RANGER)
+		{
+			Prism::Audio::AudioInterface::GetInstance()->PostEvent("Ranger_Hold"
+				, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+		}
+		else if (myEntity.GetUnitType() == eUnitType::TANK)
+		{
+			Prism::Audio::AudioInterface::GetInstance()->PostEvent("Tank_Hold"
+				, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+		}
+	}
 	myActions.RemoveAll();
 	myCurrentAction.myAction = eAction::HOLD;
 	myCurrentAction.myPosition = myEntity.myPosition;
@@ -313,12 +391,39 @@ void ControllerComponent::AttackTarget()
 					, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
 			}
 		}
+		else if (myEntity.GetUnitType() == eUnitType::RANGER)
+		{
+			if (myRangerOneShotCooldown <= 0.f)
+			{
+				Prism::Audio::AudioInterface::GetInstance()->PostEvent("Ranger_OneShot"
+					, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+			}
+			else
+			{
+				Prism::Audio::AudioInterface::GetInstance()->PostEvent("Ranger_Sniper"
+					, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+			}
+
+		}
+		else if (myEntity.GetUnitType() == eUnitType::TANK)
+		{
+			Prism::Audio::AudioInterface::GetInstance()->PostEvent("Tank_MiniGun"
+				, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+		}
 
 		HealthComponent* targetHealth = myCurrentAction.myEntity->GetComponent<HealthComponent>();
 		bool targetSurvived = false;
 		if (targetHealth != nullptr && myCurrentAction.myEntity->GetAlive())
 		{
-			targetSurvived = targetHealth->TakeDamage(myAttackDamage);
+			if (myEntity.GetUnitType() == eUnitType::RANGER && myRangerOneShotTimer <= 0.f)
+			{
+				myRangerOneShotTimer = myRangerOneShotCooldown;
+				targetSurvived = targetHealth->TakeDamage(targetHealth->GetMaxHealth() * 2.f);
+			}
+			else
+			{
+				targetSurvived = targetHealth->TakeDamage(myAttackDamage);
+			}
 		}
 
 		AnimationComponent* animation = myEntity.GetComponent<AnimationComponent>();

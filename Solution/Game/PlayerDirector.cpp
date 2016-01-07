@@ -205,6 +205,11 @@ void PlayerDirector::ReceiveMessage(const ToggleGUIMessage& aMessage)
 
 void PlayerDirector::ReceiveMessage(const OnClickMessage& aMessage)
 {
+	if (aMessage.myEvent == eOnClickEvent::PLACE_TOTEM)
+	{
+		mySelectedAction = eSelectedAction::PLACE_TOTEM;
+		return;
+	}
 	if (mySelectedUnits.Size() > 0)
 	{
 		switch (aMessage.myEvent)
@@ -227,10 +232,6 @@ void PlayerDirector::ReceiveMessage(const OnClickMessage& aMessage)
 
 		case eOnClickEvent::UNIT_ACTION_STOP:
 			mySelectedAction = eSelectedAction::STOP;
-			break;
-
-		case eOnClickEvent::PLACE_TOTEM:
-			mySelectedAction = eSelectedAction::PLACE_TOTEM;
 			break;
 
 		case eOnClickEvent::ENRAGE:
@@ -270,20 +271,9 @@ void PlayerDirector::ReceiveMessage(const MinimapMoveMessage& aMessage)
 {
 	CU::Vector2<float> position = aMessage.myPosition * 255.f;
 
-	if (mySelectedAction == eSelectedAction::ATTACK_MOVE)
+	for (int i = 0; i < mySelectedUnits.Size(); i++)
 	{
-		for (int i = 0; i < mySelectedUnits.Size(); i++)
-		{
-			mySelectedUnits[i]->GetComponent<ControllerComponent>()->AttackMove({ position.x, 0.f, position.y }, !myShiftPressed);
-		}
-		mySelectedAction = eSelectedAction::NONE;
-	}
-	else
-	{
-		for (int i = 0; i < mySelectedUnits.Size(); i++)
-		{
-			mySelectedUnits[i]->GetComponent<ControllerComponent>()->MoveTo({ position.x, 0.f, position.y }, true);
-		}
+		mySelectedUnits[i]->GetComponent<ControllerComponent>()->MoveTo({ position.x, 0.f, position.y }, true);
 	}
 }
 
@@ -717,4 +707,13 @@ void PlayerDirector::Enrage()
 			enrageComp->Activate();
 		}
 	}
+}
+
+void PlayerDirector::AttackMoveSelectedUnits(const CU::Vector2<float>& aPosition)
+{
+	for (int i = 0; i < mySelectedUnits.Size(); i++)
+	{
+		mySelectedUnits[i]->GetComponent<ControllerComponent>()->AttackMove({ aPosition.x, 0.f, aPosition.y }, !myShiftPressed);
+	}
+	mySelectedAction = eSelectedAction::NONE;
 }

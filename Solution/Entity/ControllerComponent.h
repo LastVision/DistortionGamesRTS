@@ -96,6 +96,9 @@ private:
 	float myAttackTargetPathRefreshTime;
 	float myCurrentAttackTargetPathRefreshTime;
 
+	float myRangerOneShotTimer;
+	float myRangerOneShotCooldown;
+
 	CU::GrowingArray<ActionData> myActions;
 	ActionData myCurrentAction;
 };

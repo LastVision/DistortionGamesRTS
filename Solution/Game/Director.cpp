@@ -10,24 +10,32 @@
 #include <SpawnUnitMessage.h>
 #include <PollingStation.h>
 #include <UpgradeUnitMessage.h>
+#include <XMLReader.h>
 
 Director::Director(eOwnerType aOwnerType, const Prism::Terrain& aTerrain)
 	: myOwner(aOwnerType)
 	, myTerrain(aTerrain)
-	, myUnits(64)
-	, myActiveUnits(64)
 	, myDeadUnits(32)
 	, myTimeMultiplier(1.f)
 	, myVictoryPoints(0)
 	, myTestGold(60)
+	, myUnitCap(0)
 {
+	XMLReader reader;
+	reader.OpenDocument("Data/Setting/SET_game.xml");
+	tinyxml2::XMLElement* rootElement = reader.FindFirstChild("root");
+	reader.ForceReadAttribute(reader.ForceFindFirstChild(rootElement, "unitCap"), "value", myUnitCap);
+	reader.CloseDocument();
+
+	myUnits.Init(myUnitCap);
+	myActiveUnits.Init(myUnitCap);
+
 	PostMaster::GetInstance()->Subscribe(eMessageType::SPAWN_UNIT, this);
 	PostMaster::GetInstance()->Subscribe(eMessageType::RESOURCE, this);
 	PostMaster::GetInstance()->Subscribe(eMessageType::VICTORY, this);
 	PostMaster::GetInstance()->Subscribe(eMessageType::UPGRADE_UNIT, this);
 
 }
-
 
 Director::~Director()
 {
@@ -41,6 +49,8 @@ Director::~Director()
 
 void Director::Update(float aDeltaTime)
 {
+	myUnitCount = myActiveUnits.Size();
+
 	for (int i = 0; i < myDeadUnits.Size(); ++i)
 	{
 		myDeadUnits[i]->Update(aDeltaTime);
@@ -132,7 +142,7 @@ bool Director::UpgradeUnit(eUnitType aUnitType)
 void Director::ReceiveMessage(const SpawnUnitMessage& aMessage)
 {
 	if (static_cast<eOwnerType>(aMessage.myOwnerType) != myOwner) return;
-	if (myActiveUnits.Size() < 64)
+	if (myActiveUnits.Size() < myUnitCap)
 	{
 		Entity* spawnedUnit = nullptr;
 

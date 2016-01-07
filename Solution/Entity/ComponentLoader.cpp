@@ -167,6 +167,12 @@ void ComponentLoader::LoadControllerComponent(XMLReader& aDocument, tinyxml2::XM
 
 	e = aDocument.ForceFindFirstChild(aSourceElement, "ChaseDistanceNeutral");
 	aDocument.ForceReadAttribute(e, "value", aOutputData.myChaseDistanceNeutral);
+
+	e = aDocument.FindFirstChild(aSourceElement, "RangerOneShotCooldown");
+	if (e != nullptr)
+	{
+		aDocument.ForceReadAttribute(e, "value", aOutputData.myRangerOneShotCoolDown);
+	}
 }
 
 void ComponentLoader::LoadGraphicsComponent(XMLReader& aDocument, tinyxml2::XMLElement* aSourceElement, GraphicsComponentData& aOutputData)
