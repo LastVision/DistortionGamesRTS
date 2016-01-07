@@ -338,28 +338,67 @@ void InGameState::UpdateCamera(float aDeltaTime, const CU::Vector3<float>& aCame
 		myCameraOrientation = CU::Matrix44<float>::CreateRotateAroundY(rotationSpeed) * myCameraOrientation;
 	}
 
+	const CU::Vector2<float>& resolution = Prism::Engine::GetInstance()->GetWindowSize();
+	float aspectRatio = resolution.x / resolution.y;
+
+ 	float offsetX = aspectRatio *(-7.844f) + 58.245f;   
+	float offsetZLow = aspectRatio*(-12.714f) + 47.602f;
+	float offsetZHigh = aspectRatio*(-31.851f) + 86.423f;
+
+	//float ratioDiff = aspectRatio / (16.f / 9.f);
+
+
+	//float delta = 0.1f;
+
+	//if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_T) == true)
+	//{
+	//	offsetX -= delta;
+	//}
+
+	//if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_Y) == true)
+	//{
+	//	offsetX += delta;
+	//}
+
+	//if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_U) == true)
+	//{
+	//	offsetZHigh -= delta;
+	//	offsetZLow -= delta;
+	//}
+
+	//if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_J) == true)
+	//{
+	//	offsetZHigh += delta;
+	//	offsetZLow += delta;
+	//}
+
+	DEBUG_PRINT(offsetX);
+	DEBUG_PRINT(offsetZLow);
+	DEBUG_PRINT(offsetZHigh);
+	DEBUG_PRINT(aspectRatio);
+
 	cameraPos = myCameraOrientation.GetPos();
-	if (cameraPos.x < 0.f)
+	if (cameraPos.x < 0.f + offsetX)
 	{
-		cameraPos.x = 0.f;
+		cameraPos.x = 0.f + offsetX;
 		myCameraOrientation.SetPos(cameraPos);
 	}
 
-	if (cameraPos.z < -50.f)
+	if (cameraPos.z < -50.f + offsetZLow)
 	{
-		cameraPos.z = -50.f;
+		cameraPos.z = -50.f + offsetZLow;
 		myCameraOrientation.SetPos(cameraPos);
 	}
 
-	if (cameraPos.x > 255.f)
+	if (cameraPos.x > 255.f - offsetX)
 	{
-		cameraPos.x = 255.f;
+		cameraPos.x = 255.f - offsetX;
 		myCameraOrientation.SetPos(cameraPos);
 	}
 
-	if (cameraPos.z > 205.f)
+	if (cameraPos.z > 205.f - offsetZHigh)
 	{
-		cameraPos.z = 205.f;
+		cameraPos.z = 205.f - offsetZHigh;
 		myCameraOrientation.SetPos(cameraPos);
 	}
 }
