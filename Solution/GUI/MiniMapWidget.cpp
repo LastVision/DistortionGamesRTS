@@ -9,6 +9,7 @@
 #include <MinimapMoveMessage.h>
 #include <MoveCameraMessage.h>
 #include <PostMaster.h>
+#include "../Entity/TriggerComponent.h"
 
 namespace GUI
 {
@@ -172,11 +173,11 @@ namespace GUI
 			CU::Vector2<float> position = (victoryPoints[i]->GetPosition() / 255.f) * mySize;
 			CU::Vector4<float> color = { 0.5f, 0.5f, 0.f, 1.f };
 
-			if (victoryPoints[i]->GetOwner() == eOwnerType::PLAYER)
+			if (victoryPoints[i]->GetComponent<TriggerComponent>()->GetOwnerGainingPoint() == eOwnerType::PLAYER)
 			{
 				color = { 0.f, 0.f, 1.f, 1.f };
 			}
-			else if (victoryPoints[i]->GetOwner() == eOwnerType::ENEMY)
+			else if (victoryPoints[i]->GetComponent<TriggerComponent>()->GetOwnerGainingPoint() == eOwnerType::ENEMY)
 			{
 				color = { 1.f, 0.f, 0.f, 1.f };
 			}
@@ -194,11 +195,11 @@ namespace GUI
 			CU::Vector2<float> position = (resourcePoints[i]->GetPosition() / 255.f) * mySize;
 			CU::Vector4<float> color = { 0.5f, 0.5f, 0.f, 1.f };
 
-			if (resourcePoints[i]->GetOwner() == eOwnerType::PLAYER)
+			if (resourcePoints[i]->GetComponent<TriggerComponent>()->GetOwnerGainingPoint() == eOwnerType::PLAYER)
 			{
 				color = { 0.f, 0.f, 1.f, 1.f };
 			}
-			else if (resourcePoints[i]->GetOwner() == eOwnerType::ENEMY)
+			else if (resourcePoints[i]->GetComponent<TriggerComponent>()->GetOwnerGainingPoint() == eOwnerType::ENEMY)
 			{
 				color = { 1.f, 0.f, 0.f, 1.f };
 			}
