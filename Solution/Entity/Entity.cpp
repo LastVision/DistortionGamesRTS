@@ -215,12 +215,21 @@ void Entity::RemoveFromScene()
 	{
 		myScene.RemoveInstance(GetComponent<AnimationComponent>()->GetInstance());
 	}
-	if (GetComponent<SelectionComponent>() != nullptr)
+	if (GetComponent<SelectionComponent>() != nullptr && GetComponent<SelectionComponent>()->GetIsRemovedFromScene() == false)
 	{
 		myScene.RemoveInstance(GetComponent<SelectionComponent>()->GetInstance());
 	}
 
 	myIsInScene = false;
+}
+
+void Entity::RemoveSelectionRingFromScene()
+{
+	if (GetComponent<SelectionComponent>() != nullptr)
+	{
+		myScene.RemoveInstance(GetComponent<SelectionComponent>()->GetInstance());
+		GetComponent<SelectionComponent>()->SetIsRemovedFromScene(true);
+	}
 }
 
 void Entity::Kill()

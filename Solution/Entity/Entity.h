@@ -41,6 +41,7 @@ public:
 
 	void AddToScene();
 	void RemoveFromScene();
+	void RemoveSelectionRingFromScene();
 
 	const CU::Matrix44<float>& GetOrientation() const;
 	void SetPosition(const CU::Vector3f& aPosition);
