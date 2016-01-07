@@ -121,7 +121,8 @@ private:
 	CU::Vector3<float> myFirstCameraPosition;
 	CU::Vector3<float> myFirstMousePositionInWorld;
 	CU::GrowingArray<CU::Vector3<float>> myDragSelectionPositions;
-	Prism::SpriteProxy* myDragSelectionSprite;
+	Prism::SpriteProxy* myDragSelectionSpriteVertical;
+	Prism::SpriteProxy* myDragSelectionSpriteHorizontal;
 
 	Entity* myTotem;
 

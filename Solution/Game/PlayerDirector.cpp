@@ -55,8 +55,8 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 {
 	myAudioSFXID = Prism::Audio::AudioInterface::GetInstance()->GetUniqueID();
 	myDragSelectionPositions.Reserve(4);
-	myDragSelectionSprite = Prism::ModelLoader::GetInstance()->LoadSprite(
-		"Data/Resource/Texture/T_selection_box.dds", { 0.f, 0.f });
+	myDragSelectionSpriteVertical = Prism::ModelLoader::GetInstance()->LoadSprite("Data/Resource/Texture/UI/T_selection_box_vertical.dds", { 0.f, 0.f });
+	myDragSelectionSpriteHorizontal = Prism::ModelLoader::GetInstance()->LoadSprite("Data/Resource/Texture/UI/T_selection_box_horizontal.dds", { 0.f, 0.f });
 
 	for (int i = 0; i < 64; ++i)
 	{
@@ -97,7 +97,8 @@ PlayerDirector::~PlayerDirector()
 {
 	//myTotem->RemoveFromScene();
 	SAFE_DELETE(myGUIManager);
-	SAFE_DELETE(myDragSelectionSprite);
+	SAFE_DELETE(myDragSelectionSpriteVertical);
+	SAFE_DELETE(myDragSelectionSpriteHorizontal);
 	SAFE_DELETE(myTotem);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::TOGGLE_GUI, this);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::ON_CLICK, this);
@@ -200,10 +201,19 @@ void PlayerDirector::Render(const Prism::Camera& aCamera)
 	aCamera;
 	if (myRenderGUI == true)
 	{
-		if (myLeftMousePressed == true && myRenderDragSelection == true)
+		if (myLeftMousePressed == true && myRenderDragSelection == true) // balck magic numbers, don't change
 		{
-			myDragSelectionSprite->SetSize(mySelectionSpriteSize, mySelectionSpriteHotspot);
-			myDragSelectionSprite->Render(mySelectionSpriteRenderPosition);
+			myDragSelectionSpriteVertical->SetSize({ 10.f, mySelectionSpriteSize.y }, mySelectionSpriteHotspot);
+			myDragSelectionSpriteVertical->Render(mySelectionSpriteRenderPosition);
+
+			myDragSelectionSpriteHorizontal->SetSize({ mySelectionSpriteSize.x, 10.f }, mySelectionSpriteHotspot);
+			myDragSelectionSpriteHorizontal->Render(mySelectionSpriteRenderPosition);
+
+			myDragSelectionSpriteVertical->SetSize({ 10.f, mySelectionSpriteSize.y }, { -mySelectionSpriteSize.x, mySelectionSpriteSize.y });
+			myDragSelectionSpriteVertical->Render(mySelectionSpriteRenderPosition);
+
+			myDragSelectionSpriteHorizontal->SetSize({ mySelectionSpriteSize.x + 10.f, 10.f }, { mySelectionSpriteHotspot.x, mySelectionSpriteHotspot.y - mySelectionSpriteSize.y });
+			myDragSelectionSpriteHorizontal->Render(mySelectionSpriteRenderPosition);
 		}
 		myGUIManager->Render();
 	}
