@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "BarWidget.h"
 #include <Engine.h>
+#include "../Entity/EnrageComponent.h"
 #include "../Entity/BuildingComponent.h"
 #include "../Entity/Entity.h"
 #include "../Game/PlayerDirector.h"
@@ -163,13 +164,25 @@ namespace GUI
 			color = { 1.f, 0.f, 0.f, 1.f };
 		}
 
-
 		std::string currentHealth = std::to_string(int(myUnits[0]->GetComponent<HealthComponent>()->GetCurrentHealth()));
 		Prism::Engine::GetInstance()->PrintText(currentHealth, portraitPosition, Prism::eTextType::RELEASE_TEXT, myTextScale, color);
 
 		std::string maxHealth = "/" + std::to_string(int(myUnits[0]->GetComponent<HealthComponent>()->GetMaxHealth()));
 		Prism::Engine::GetInstance()->PrintText(maxHealth, { portraitPosition.x + 25.f, portraitPosition.y }
 		, Prism::eTextType::RELEASE_TEXT, myTextScale);
+
+		color.x = 1.f;
+		color.y = 1.f;
+		color.z = 1.f;
+		color.w = 1.f;
+		if (myUnits[0]->GetUnitType() == eUnitType::TANK)
+		{
+			if (myUnits[0]->GetComponent<EnrageComponent>()->IsActive() == true)
+			{
+				color.x = 0.f;
+				color.z = 0.f;
+			}
+		}
 
 		CU::Vector2<float> position = { myGruntUnit->GetSize().x / 2.f, myPosition.y };
 		position += aParentPosition + myUnitPosition;
@@ -178,14 +191,14 @@ namespace GUI
 		position.x += myStatsSprite->GetSize().x / 20.f;
 		position.y -= myStatsSprite->GetSize().y / 2.f;
 		Prism::Engine::GetInstance()->PrintText(myUnits[0]->GetComponent<HealthComponent>()->GetArmor()
-			, position, Prism::eTextType::RELEASE_TEXT, myTextScale);
+			, position, Prism::eTextType::RELEASE_TEXT, myTextScale, color);
 
 		position.x += myStatsSprite->GetSize().x / 3.f;
 		Prism::Engine::GetInstance()->PrintText(myUnits[0]->GetComponent<ControllerComponent>()->GetAttackDamage()
-			, position, Prism::eTextType::RELEASE_TEXT, myTextScale);
+			, position, Prism::eTextType::RELEASE_TEXT, myTextScale, color);
 
 		position.x += myStatsSprite->GetSize().x / 3.f;
 		Prism::Engine::GetInstance()->PrintText(myUnits[0]->GetMaxSpeed()
-			, position, Prism::eTextType::RELEASE_TEXT, myTextScale);
+			, position, Prism::eTextType::RELEASE_TEXT, myTextScale, color);
 	}
 }
