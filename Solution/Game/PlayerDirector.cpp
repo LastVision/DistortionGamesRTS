@@ -308,16 +308,26 @@ void PlayerDirector::SelectUnit(Entity* anEntity)
 		}
 	}
 
+	bool shouldAddToSelectedUnits = true;
+
 	for (int i = 0; i < mySelectedUnits.Size(); i++)
 	{
 		if (mySelectedUnits[i] == anEntity)
 		{
-			return;
+			if (anEntity->IsSelected() == true)
+			{
+				return;
+			}
+	
+			shouldAddToSelectedUnits = false;
 		}
 	}
 
 	anEntity->SetSelect(true);
-	mySelectedUnits.Add(anEntity);
+	if (shouldAddToSelectedUnits == true)
+	{
+		mySelectedUnits.Add(anEntity);
+	}
 }
 
 CU::Vector3<float> PlayerDirector::CalcCursorWorldPosition(const CU::Vector2<float>& aMousePosition, const Prism::Camera& aCamera)
@@ -531,10 +541,10 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 	}
 
 
-	if (myMouseIsOverGUI == true)
-	{
-		myRenderDragSelection = false;
-	}
+	//if (myMouseIsOverGUI == true)
+	//{
+	//	myRenderDragSelection = false;
+	//}
 
 	if (myLeftMousePressed == true && myRenderDragSelection == true)
 	{
@@ -667,7 +677,6 @@ void PlayerDirector::SelectOrHoverEntity(Entity* aEntity, bool &aSelected, bool 
 		{
 			SelectUnit(aEntity);
 		}
-		//else if (aHovered == false)
 		else
 		{
 			aEntity->SetHovered(true);
