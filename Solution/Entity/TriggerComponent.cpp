@@ -92,11 +92,11 @@ eOwnerType TriggerComponent::ModifyOwnership(eOwnerType anOwner, float aModifyVa
 			{
 				if (myType == eTriggerType::RESOURCE)
 				{
-					PostMaster::GetInstance()->SendMessage<MinimapEventMessage>(MinimapEventMessage(myEntity.GetPosition(), MinimapEventType::eRESOURCE_POINT));
+					PostMaster::GetInstance()->SendMessage(MinimapEventMessage(myEntity.GetPosition(), MinimapEventType::eRESOURCE_POINT));
 				}
 				else if (myType == eTriggerType::VICTORY)
 				{
-					PostMaster::GetInstance()->SendMessage<MinimapEventMessage>(MinimapEventMessage(myEntity.GetPosition(), MinimapEventType::eVICTORY_POINT));
+					PostMaster::GetInstance()->SendMessage(MinimapEventMessage(myEntity.GetPosition(), MinimapEventType::eVICTORY_POINT));
 				}
 				else
 				{

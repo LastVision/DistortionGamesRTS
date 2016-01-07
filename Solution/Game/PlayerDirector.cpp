@@ -10,12 +10,14 @@
 #include <Entity.h>
 #include <EntityData.h>
 #include <EntityFactory.h>
+#include <EventPositionMessage.h>
 #include <GUIManager.h>
 #include <GraphicsComponent.h>
 #include <HealthComponent.h>
 #include <Intersection.h>
 #include <InputWrapper.h>
 #include <MinimapMoveMessage.h>
+#include <MoveCameraMessage.h>
 #include <OnClickMessage.h>
 #include "PlayerDirector.h"
 #include <PollingStation.h>
@@ -48,6 +50,7 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 	, mySelectionSpriteRenderPosition(0, 0)
 	, mySelectionSpriteHotspot(0, 0)
 	, myAudioSFXID(-1)
+	, myHasEventToGoTo(false)
 {
 	myAudioSFXID = Prism::Audio::AudioInterface::GetInstance()->GetUniqueID();
 	myDragSelectionPositions.Reserve(4);
@@ -69,6 +72,7 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 	PostMaster::GetInstance()->Subscribe(eMessageType::TIME_MULTIPLIER, this);
 	PostMaster::GetInstance()->Subscribe(eMessageType::MOVE_UNITS, this);
 	PostMaster::GetInstance()->Subscribe(eMessageType::TOGGLE_BUILD_TIME, this);
+	PostMaster::GetInstance()->Subscribe(eMessageType::EVENT_POSITION, this);
 
 	EntityData tempData;
 	tempData.myGraphicsData.myExistsInEntity = true;
@@ -99,6 +103,7 @@ PlayerDirector::~PlayerDirector()
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::TIME_MULTIPLIER, this);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::MOVE_UNITS, this);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::TOGGLE_BUILD_TIME, this);
+	PostMaster::GetInstance()->UnSubscribe(eMessageType::EVENT_POSITION, this);
 	Prism::Audio::AudioInterface::GetInstance()->UnRegisterObject(myAudioSFXID);
 }
 
@@ -152,6 +157,15 @@ void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 	}
 
 	UpdateInputs();
+
+	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_SPACE))
+	{
+		if (myHasEventToGoTo == true)
+		{
+			PostMaster::GetInstance()->SendMessage(MoveCameraMessage(myLastEventPosition, eHowToHandleMovement::WORLD_POSITION));
+			myHasEventToGoTo = false;
+		}
+	}
 
 	Director::Update(aDeltaTime);
 	UpdateMouseInteraction(aCamera);
@@ -282,6 +296,12 @@ void PlayerDirector::ReceiveMessage(const MinimapMoveMessage& aMessage)
 void PlayerDirector::ReceiveMessage(const ToggleBuildTimeMessage& aMessage)
 {
 	myBuilding->GetComponent<BuildingComponent>()->SetIgnoreBuildTime(aMessage.myIgnoreBuildTime);
+}
+
+void PlayerDirector::ReceiveMessage(const EventPositionMessage& aMessage)
+{
+	myLastEventPosition = aMessage.myPosition;
+	myHasEventToGoTo = true;
 }
 
 const BuildingComponent& PlayerDirector::GetBuildingComponent() const

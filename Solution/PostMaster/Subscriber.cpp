@@ -23,6 +23,10 @@ void Subscriber::ReceiveMessage(const EmitterMessage&)
 {
 }
 
+void Subscriber::ReceiveMessage(const EventPositionMessage&)
+{
+}
+
 void Subscriber::ReceiveMessage(const GameStateMessage&)
 {
 }

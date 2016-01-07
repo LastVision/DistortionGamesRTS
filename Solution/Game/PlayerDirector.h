@@ -63,6 +63,7 @@ public:
 	void ReceiveMessage(const TimeMultiplierMessage& aMessage) override;
 	void ReceiveMessage(const MinimapMoveMessage& aMessage) override;
 	void ReceiveMessage(const ToggleBuildTimeMessage& aMessage) override;
+	void ReceiveMessage(const EventPositionMessage& aMessage) override;
 
 	const CU::GrowingArray<Entity*>& GetSelectedUnits() const;
 	const BuildingComponent& GetBuildingComponent() const;
@@ -123,6 +124,8 @@ private:
 	Entity* myTotem;
 
 	int myAudioSFXID;
+	CU::Vector2<float> myLastEventPosition;
+	bool myHasEventToGoTo;
 };
 
 inline const CU::GrowingArray<Entity*>& PlayerDirector::GetSelectedUnits() const

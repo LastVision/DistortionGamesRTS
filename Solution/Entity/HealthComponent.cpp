@@ -7,7 +7,7 @@
 #include <Engine.h>
 #include "../GUI/BarWidget.h"
 #include "ModelLoader.h"
-
+#include <MinimapEventMessage.h>
 #include "EntityId.h"
 #include <EmitterMessage.h>
 #include <PostMaster.h>
@@ -53,6 +53,7 @@ bool HealthComponent::TakeDamage(float aDamage)
 	DL_ASSERT_EXP(aDamage >= 0, "Cant take negative damage, use Heal for healing if that was your intention");
 
 	PostMaster::GetInstance()->SendMessage(EmitterMessage(eParticleType::BLOOD, myEntity.GetId()));
+	PostMaster::GetInstance()->SendMessage(MinimapEventMessage(myEntity.GetPosition(), MinimapEventType::eUNIT_ATTACKED));
 
 	float damage = aDamage - myArmor;
 	if (damage <= 0.f)

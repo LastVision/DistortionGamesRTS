@@ -218,7 +218,20 @@ void InGameState::ReceiveMessage(const OnClickMessage& aMessage)
 
 void InGameState::ReceiveMessage(const MoveCameraMessage& aMessage)
 {
-	CU::Vector2<float> position = aMessage.myPosition * 255.f;
+	CU::Vector2<float> position;
+	if (aMessage.myMovementHandle == eHowToHandleMovement::ZERO_TO_ONE)
+	{
+		 position = aMessage.myPosition * 255.f;
+
+	}
+	else if (aMessage.myMovementHandle == eHowToHandleMovement::WORLD_POSITION)
+	{
+		position = aMessage.myPosition;
+	}
+	else
+	{
+		DL_ASSERT("UNKNOWN HANDLINGTYPE OF CAMERAMOVEMENT");
+	}
 	float offset = 50.f;
 
 	if (myLevel->GetPlayer()->GetSelectedAction() == eSelectedAction::ATTACK_MOVE)

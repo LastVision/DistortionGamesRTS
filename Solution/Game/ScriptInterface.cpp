@@ -50,7 +50,7 @@ namespace Script_Interface
 		CU::Normalize(moveAmount);
 		moveAmount *= distance;
 
-		PostMaster::GetInstance()->SendMessage(MoveCameraMessage(moveAmount));
+		PostMaster::GetInstance()->SendMessage(MoveCameraMessage(moveAmount, eHowToHandleMovement::ZERO_TO_ONE));
 
 		return 0;
 	}

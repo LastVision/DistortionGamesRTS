@@ -1,4 +1,6 @@
 #include "stdafx.h"
+
+#include <EventPositionMessage.h>
 #include "../Engine/Camera.h"
 #include "../Entity/Entity.h"
 #include "../Entity/PollingStation.h"
@@ -109,7 +111,7 @@ namespace GUI
 		{
 			CU::Vector2<float> position = aPosition - myPosition;
 			position /= mySize;
-			PostMaster::GetInstance()->SendMessage(MoveCameraMessage(position));
+			PostMaster::GetInstance()->SendMessage(MoveCameraMessage(position,eHowToHandleMovement::ZERO_TO_ONE));
 		}
 	}
 
@@ -139,6 +141,8 @@ namespace GUI
 		myEventPosition = aMessage.myPosition;
 		myEventTimer = 0.f;
 		myShouldRenderEvent = true;
+
+		PostMaster::GetInstance()->SendMessage(EventPositionMessage(myEventPosition));
 	}
 
 	void MiniMapWidget::RenderUnits(const CU::Vector2<float>& aParentPosition)

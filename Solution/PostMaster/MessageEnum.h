@@ -22,5 +22,6 @@ enum class eMessageType
 	UPGRADE_UNIT,
 	TEXT,
 	MINIMAP_EVENT,
+	EVENT_POSITION,
 	COUNT,
 };
