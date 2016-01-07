@@ -20,7 +20,6 @@ namespace GUI
 		UpgradeButtonWidget(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement, const int& aUpgradeLevel);
 		~UpgradeButtonWidget();
 
-		void Update() override;
 		void Render(const CU::Vector2<float>& aParentPosition) override;
 
 		Widget* MouseIsOver(const CU::Vector2<float>& aPosition) override;

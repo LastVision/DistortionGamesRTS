@@ -31,11 +31,6 @@ namespace GUI
 		}
 	}
 
-	void UpgradeButtonWidget::Update()
-	{
-
-	}
-
 	void UpgradeButtonWidget::Render(const CU::Vector2<float>& aParentPosition)
 	{
 		myUpgrades[myUpgradeLevel]->Render(myPosition + aParentPosition);
