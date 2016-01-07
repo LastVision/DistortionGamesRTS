@@ -30,23 +30,35 @@ namespace LUA
 
 	void ScriptSystem::Create()
 	{
-		myInstance = new ScriptSystem();
+		if (myInstance == nullptr)
+		{
+			myInstance = new ScriptSystem();
+		}
+		else
+		{
+			DL_ASSERT("Script system already created.");
+		}
 	}
 
 	ScriptSystem* ScriptSystem::GetInstance()
 	{
+		DL_ASSERT_EXP(myInstance != nullptr, "Script system not created.");
 		return myInstance;
 	}
 
 	void ScriptSystem::Destroy()
 	{
-		delete myInstance;
+		SAFE_DELETE(myInstance);
 	}
 
 	void ScriptSystem::Init(const std::function<void()>& aRegisterFunction)
 	{
 		myOutputFile.open("luaOutput.txt", std::ios::out);
 		myCppRegisterFunction = aRegisterFunction;
+		if (myLuaState != nullptr)
+		{
+			lua_close(myLuaState);
+		}
 		myLuaState = nullptr;
 		myActiveFiles.push_back("Data\\Script\\main.lua");
 		myFileWatcher.WatchFileChange("Data\\Script\\main.lua", std::bind(&ScriptSystem::ReInit, this, std::placeholders::_1));
@@ -433,6 +445,7 @@ namespace LUA
 
 
 	ScriptSystem::ScriptSystem()
+		: myLuaState(nullptr)
 	{
 	}
 
@@ -440,5 +453,9 @@ namespace LUA
 	{
 		myOutputFile.close();
 		PrintDocumentation();
+		if (myLuaState != nullptr)
+		{
+			lua_close(myLuaState);
+		}
 	}
 }

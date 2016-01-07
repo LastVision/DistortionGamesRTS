@@ -130,7 +130,7 @@ const eStateStatus InGameState::Update(const float& aDeltaTime)
 	}
 
 
-
+	LUA::ScriptSystem::GetInstance()->Update();
 	return myStateStatus;
 }
 

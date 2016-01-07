@@ -3,6 +3,7 @@
 #include "AIDirector.h"
 #include <Camera.h>
 #include <CommonHelper.h>
+#include "Console.h"
 #include <DirectionalLight.h>
 #include "dirent.h"
 #include <Defines.h>
@@ -22,6 +23,7 @@
 #include <PollingStation.h>
 #include <PointLight.h>
 #include <PostMaster.h>
+#include "ScriptInterface.h"
 #include <ScriptSystem.h>
 #include <SpotLight.h>
 #include <TimerManager.h>
@@ -201,6 +203,11 @@ void LevelFactory::ReadLevel(const std::string& aLevelPath, std::string& aTutori
 	effectContainer->SetCubeMap(cubeMap);
 
 	reader.ForceReadAttribute(reader.ForceFindFirstChild(levelElement, "tutorial"), "source", aTutorialPathOut);
+
+
+	LUA::ScriptSystem::Create();
+	LUA::ScriptSystem::GetInstance()->Init(ScriptInterface::RegisterFunctions);
+	Console::GetInstance(); // needs to be here to create console.
 
 	LoadLights(reader, levelElement);
 	LoadBases(reader, levelElement);
