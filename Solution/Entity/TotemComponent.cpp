@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+#include <AudioInterface.h>
 #include "CollisionComponent.h"
 #include "MathHelper.h"
 #include "HealthComponent.h"
@@ -7,6 +8,7 @@
 #include "MathHelper.h"
 #include "PollingStation.h"
 #include "PostMaster.h"
+#include "SoundComponent.h"
 #include "TotemComponent.h"
 #include "TotemComponentData.h"
 #include "TriggerMessage.h"
@@ -40,6 +42,8 @@ void TotemComponent::Update(float aDeltaTime)
 
 	if (myDuration >= myEndTime)
 	{
+		Prism::Audio::AudioInterface::GetInstance()->PostEvent("Stop_Totem"
+			, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
 		myActive = false;
 		myEntity.SetPosition(myOriginalPosition);
 	}
@@ -72,6 +76,10 @@ void TotemComponent::Update(float aDeltaTime)
 		//	myActive = false;
 		//	myEntity.SetPosition(myOriginalPosition);
 		//}
+		Prism::Audio::AudioInterface::GetInstance()->PostEvent("Totem_HitGround"
+			, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+		Prism::Audio::AudioInterface::GetInstance()->PostEvent("Play_Totem"
+			, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
 	}
 }
 
