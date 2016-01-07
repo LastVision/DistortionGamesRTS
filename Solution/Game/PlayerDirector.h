@@ -73,6 +73,10 @@ public:
 
 	const CU::StaticArray<CU::GrowingArray<Entity*>, AMOUNT_OF_CONTROL_GROUPS>& GetControlGroups() const;
 
+	eSelectedAction GetSelectedAction() const;
+
+	void AttackMoveSelectedUnits(const CU::Vector2<float>& aPosition);
+
 private:
 	void UpdateInputs();
 	void UpdateControlGroups();
@@ -139,4 +143,9 @@ inline const bool& PlayerDirector::GetRenderDragSelection() const
 inline const CU::StaticArray<CU::GrowingArray<Entity*>, AMOUNT_OF_CONTROL_GROUPS>& PlayerDirector::GetControlGroups() const
 {
 	return myControlGroups;
+}
+
+inline eSelectedAction PlayerDirector::GetSelectedAction() const
+{
+	return mySelectedAction;
 }
