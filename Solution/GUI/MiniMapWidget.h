@@ -1,5 +1,6 @@
 #pragma once
 #include "Widget.h"
+#include <Subscriber.h>
 
 namespace Prism
 {
@@ -16,7 +17,7 @@ class XMLReader;
 
 namespace GUI
 {
-	class MiniMapWidget : public Widget
+	class MiniMapWidget : public Widget, public Subscriber
 	{
 
 	public:
@@ -24,10 +25,14 @@ namespace GUI
 			, const bool& aCantClickOn);
 		~MiniMapWidget();
 
+		void Update(float aDelta) override;
 		void Render(const CU::Vector2<float>& aParentPosition) override;
 		void OnMousePressed(const CU::Vector2<float>& aPosition) override;
 		void OnRightMouseDown(const CU::Vector2<float>& aPosition) override;
 		void OnResize(const CU::Vector2<float>& aNewWindowSize, const CU::Vector2<float>& anOldWindowSize) override;
+
+
+		virtual void ReceiveMessage(const MinimapEventMessage& aMessage) override;
 
 	private:
 		void operator=(MiniMapWidget&) = delete;
@@ -44,6 +49,11 @@ namespace GUI
 		Prism::SpriteProxy* myResourcePointSprite;
 		Prism::SpriteProxy* myVictoryPointSprite;
 		Prism::SpriteProxy* myCameraFrustum;
+		Prism::SpriteProxy* myEventSprite;
+		float myEventTimer;
+		float myEventTime;
+		bool myShouldRenderEvent;
+		CU::Vector2<float> myEventPosition;
 
 		const CU::Matrix44<float>* myCameraOrientation;
 		const bool& myCantClickOn;

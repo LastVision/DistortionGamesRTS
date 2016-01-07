@@ -9,7 +9,7 @@
 #include "Postmaster.h"
 #include "PollingStation.h"
 #include "TriggerMessage.h"
-#include "SoundComponent.h">
+#include "SoundComponent.h"
 
 GrenadeComponent::GrenadeComponent(Entity& anEntity, GrenadeComponentData& aGrenadeData)
 	: Component(anEntity)

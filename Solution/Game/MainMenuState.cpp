@@ -46,7 +46,7 @@ const eStateStatus MainMenuState::Update(const float& aDeltaTime)
 		return eStateStatus::ePopMainState;
 	}
 
-	myGUIManager->Update();
+	myGUIManager->Update(aDeltaTime);
 
 	return myStateStatus;
 }

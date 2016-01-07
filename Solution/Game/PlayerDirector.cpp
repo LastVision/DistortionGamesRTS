@@ -81,6 +81,8 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 	tempData.myTotemData.myCooldown = 30.f;
 	tempData.myTotemData.myDuration = 10.f;
 
+	tempData.mySoundData.myExistsInEntity = true;
+
 	myTotem = new Entity(eOwnerType::PLAYER, Prism::eOctreeType::DYNAMIC, tempData, aScene, { 128.f, 100.f, 128.f },
 		aTerrain, { 0.f, 0.f, 0.f }, { 1.f, 1.f, 1.f });
 	myTotem->AddToScene();
@@ -169,7 +171,7 @@ void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 
 	if (myRenderGUI == true)
 	{
-		myGUIManager->Update();
+		myGUIManager->Update(aDeltaTime);
 	}
 
 	if (myMouseIsOverGUI == false && (myLeftMouseUp == true || myRightClicked == true))
@@ -404,7 +406,7 @@ CU::Vector3<float> PlayerDirector::CalcCursorWorldPosition(const CU::Vector2<flo
 
 	return worldPos;
 }
-
+	
 void PlayerDirector::UpdateInputs()
 {
 	myShiftPressed = CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_LSHIFT)

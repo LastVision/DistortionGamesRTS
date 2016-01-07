@@ -93,7 +93,7 @@ namespace GUI
 		}
 	}
 
-	void UnitActionWidget::Update()
+	void UnitActionWidget::Update(float)
 	{
 		myHasSelectedGrunt = false;
 		myHasSelectedRanger = false;

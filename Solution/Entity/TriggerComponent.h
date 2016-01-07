@@ -34,6 +34,7 @@ private:
 	CU::GrowingArray<Entity*> myPlayerUnits;
 	CU::GrowingArray<Entity*> myEnemyUnits;
 	CU::GrowingArray<Entity*> myNeutralUnits;
+	bool myHasSentEventMessage;
 };
 
 inline eComponentType TriggerComponent::GetTypeStatic()

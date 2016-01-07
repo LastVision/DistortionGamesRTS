@@ -39,11 +39,11 @@ namespace GUI
 		myWidgets->AddWidget(aWidget);
 	}
 
-	void GUIManager::Update()
+	void GUIManager::Update(float aDelta)
 	{
 		myMousePosition = myCursor->GetMousePosition();
 
-		myWidgets->Update();
+		myWidgets->Update(aDelta);
 
 		CheckMouseMoved();
 		CheckMouseExited();

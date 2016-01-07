@@ -22,11 +22,11 @@ namespace GUI
 		myWidgets.Add(aWidget);
 	}
 
-	void WidgetContainer::Update()
+	void WidgetContainer::Update(float aDelta)
 	{
 		for (int i = 0; i < myWidgets.Size(); i++)
 		{
-			myWidgets[i]->Update();
+			myWidgets[i]->Update(aDelta);
 		}
 	}
 
