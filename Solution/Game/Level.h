@@ -40,6 +40,8 @@ public:
 	bool HasAIWon() const;
 
 	CU::Vector3<float> GetCameraMoveVector() const;
+
+	PlayerDirector* GetPlayer();
 private:
 	Prism::Terrain* myTerrain;
 	Prism::DirectionalLight* myLight;
@@ -56,3 +58,8 @@ private:
 
 	bool myRenderNavMeshLines;
 };
+
+inline PlayerDirector* Level::GetPlayer()
+{
+	return myPlayer;
+}

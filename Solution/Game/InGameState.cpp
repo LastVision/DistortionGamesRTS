@@ -17,6 +17,7 @@
 #include "MessageState.h"
 #include <ModelLoader.h>
 #include <OnClickMessage.h>
+#include "PlayerDirector.h"
 #include <PostMaster.h>
 #include <SpawnUnitMessage.h>
 #include <TimerManager.h>
@@ -219,9 +220,16 @@ void InGameState::ReceiveMessage(const MoveCameraMessage& aMessage)
 {
 	CU::Vector2<float> position = aMessage.myPosition * 255.f;
 	float offset = 50.f;
-	position.y -= offset;
 
-	myCamera->SetPosition({ position.x, myCamera->GetOrientation().GetPos().y, position.y });
+	if (myLevel->GetPlayer()->GetSelectedAction() == eSelectedAction::ATTACK_MOVE)
+	{
+		myLevel->GetPlayer()->AttackMoveSelectedUnits(position);
+	}
+	else
+	{
+		position.y -= offset;
+		myCamera->SetPosition({ position.x, myCamera->GetOrientation().GetPos().y, position.y });
+	}
 }
 
 void InGameState::ReceiveMessage(const CinematicMessage& aMessage)
