@@ -25,6 +25,7 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="TextWidget.h" />
     <ClInclude Include="UnitActionWidget.h" />
+    <ClInclude Include="UnitCapWidget.h" />
     <ClInclude Include="UnitInfoWidget.h" />
     <ClInclude Include="Widget.h" />
     <ClInclude Include="WidgetContainer.h" />
@@ -47,6 +48,7 @@
     </ClCompile>
     <ClCompile Include="TextWidget.cpp" />
     <ClCompile Include="UnitActionWidget.cpp" />
+    <ClCompile Include="UnitCapWidget.cpp" />
     <ClCompile Include="UnitInfoWidget.cpp" />
     <ClCompile Include="Widget.cpp" />
     <ClCompile Include="WidgetContainer.cpp" />
