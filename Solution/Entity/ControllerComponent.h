@@ -16,11 +16,11 @@ public:
 
 	void Update(float aDelta) override;
 
-	void MoveTo(const CU::Vector3<float>& aPosition, bool aClearCommandQueue);
-	void AttackTarget(Entity* aEntity, bool aClearCommandQueue);
-	void AttackMove(const CU::Vector3<float>& aPosition, bool aClearCommandQueue);
-	void Stop();
-	void HoldPosition();
+	void MoveTo(const CU::Vector3<float>& aPosition, bool aClearCommandQueue, bool& aHasPlayedSound);
+	void AttackTarget(Entity* aEntity, bool aClearCommandQueue, bool& aHasPlayedSound);
+	void AttackMove(const CU::Vector3<float>& aPosition, bool aClearCommandQueue, bool& aHasPlayedSound);
+	void Stop(bool& aHasPlayedSound);
+	void HoldPosition(bool& aHasPlayedSound);
 
 	const CU::Vector2<float>& GetAcceleration() const;
 	float GetVisionRange2() const;

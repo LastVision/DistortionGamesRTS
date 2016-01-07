@@ -137,14 +137,14 @@ void AIDirector::NotLoseLogic()
 			}
 		}
 	}
-
+	bool shouldBeQuiet = true;
 	switch (action)
 	{
 	case AIDirector::eAction::CAPTURE_POINT:
 	{
 		Entity* unit = myIdleUnits.GetLast();
 		myIdleUnits.RemoveCyclicAtIndex(myIdleUnits.Size() - 1);
-		unit->GetComponent<ControllerComponent>()->AttackMove(capturePos, true);
+		unit->GetComponent<ControllerComponent>()->AttackMove(capturePos, true, shouldBeQuiet);
 		break;
 	}
 	case AIDirector::eAction::SPAWN_GRUNT:
