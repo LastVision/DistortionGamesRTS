@@ -205,6 +205,11 @@ void PlayerDirector::ReceiveMessage(const ToggleGUIMessage& aMessage)
 
 void PlayerDirector::ReceiveMessage(const OnClickMessage& aMessage)
 {
+	if (aMessage.myEvent == eOnClickEvent::PLACE_TOTEM)
+	{
+		mySelectedAction = eSelectedAction::PLACE_TOTEM;
+		return;
+	}
 	if (mySelectedUnits.Size() > 0)
 	{
 		switch (aMessage.myEvent)
@@ -227,10 +232,6 @@ void PlayerDirector::ReceiveMessage(const OnClickMessage& aMessage)
 
 		case eOnClickEvent::UNIT_ACTION_STOP:
 			mySelectedAction = eSelectedAction::STOP;
-			break;
-
-		case eOnClickEvent::PLACE_TOTEM:
-			mySelectedAction = eSelectedAction::PLACE_TOTEM;
 			break;
 
 		case eOnClickEvent::ENRAGE:
