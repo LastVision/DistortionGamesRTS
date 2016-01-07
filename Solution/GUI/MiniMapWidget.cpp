@@ -89,7 +89,7 @@ namespace GUI
 		cameraPosition /= 255.f;
 		cameraPosition *= mySize;
 		cameraPosition.x += myCameraFrustum->GetSize().x / 4.f;
-		cameraPosition.y += myCameraFrustum->GetSize().y;
+		cameraPosition.y += myCameraFrustum->GetSize().y * 1.4f;
 		myCameraFrustum->Render(cameraPosition);
 		
 		if (myShouldRenderEvent == true)
