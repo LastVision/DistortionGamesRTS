@@ -10,6 +10,7 @@
 #include "ResourceBarWidget.h"
 #include "TextWidget.h"
 #include "UnitActionWidget.h"
+#include "UnitCapWidget.h"
 #include "UnitInfoWidget.h"
 #include "WidgetContainer.h"
 
@@ -186,6 +187,11 @@ namespace GUI
 				{
 					TextWidget* textWidget = new TextWidget(&reader, widgetElement);
 					container->AddWidget(textWidget);
+				}
+				else if (type == "unit_cap")
+				{
+					UnitCapWidget* unitCapWidget = new UnitCapWidget(size, myPlayer->GetUnitCap(), myPlayer->GetUnitCount());
+					container->AddWidget(unitCapWidget);
 				}
 			}
 			myWidgets->AddWidget(container);

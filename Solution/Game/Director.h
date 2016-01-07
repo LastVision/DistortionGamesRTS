@@ -23,11 +23,12 @@ public:
 
 	void CleanUp();
 
-	int GetUnitCount() const;
 	bool SpawnUnit(eUnitType aUnitType);
 	bool UpgradeUnit(eUnitType aUnitType);
 
 	const int& GetVictoryPoints() const;
+	const int& GetUnitCap() const;
+	const int& GetUnitCount() const;
 	
 	virtual void ReceiveMessage(const SpawnUnitMessage& aMessage) override;
 	void ReceiveMessage(const ResourceMessage& aMessage) override;
@@ -47,17 +48,24 @@ protected:
 	float myTimeMultiplier;
 	int myTestGold;
 	int myVictoryPoints;
+	int myUnitCap;
+	int myUnitCount;
 
 private:
 	void operator=(Director&) = delete;
 };
 
-inline int Director::GetUnitCount() const
-{
-	return myActiveUnits.Size();
-}
-
 inline const int& Director::GetVictoryPoints() const
 {
 	return myVictoryPoints;
+}
+
+inline const int& Director::GetUnitCap() const
+{
+	return myUnitCap;
+}
+
+inline const int& Director::GetUnitCount() const
+{
+	return myUnitCount;
 }

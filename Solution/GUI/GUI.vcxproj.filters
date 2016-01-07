@@ -44,6 +44,9 @@
     <ClInclude Include="ControlGroupWidget.h">
       <Filter>Widget</Filter>
     </ClInclude>
+    <ClInclude Include="UnitCapWidget.h">
+      <Filter>Widget</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -79,6 +82,9 @@
       <Filter>Widget</Filter>
     </ClCompile>
     <ClCompile Include="ControlGroupWidget.cpp">
+      <Filter>Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitCapWidget.cpp">
       <Filter>Widget</Filter>
     </ClCompile>
   </ItemGroup>
