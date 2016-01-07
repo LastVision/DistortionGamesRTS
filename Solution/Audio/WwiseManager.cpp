@@ -55,7 +55,7 @@ namespace Prism
 
 		WwiseManager::WwiseManager()
 			:myErrorCallbck(nullptr)
-			, myCurrentID(0)
+			, myCurrentID(1)
 		{
 		}
 

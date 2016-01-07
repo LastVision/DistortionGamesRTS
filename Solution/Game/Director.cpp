@@ -1,4 +1,6 @@
 #include "stdafx.h"
+
+#include <AudioInterface.h>
 #include <BuildingComponent.h>
 #include "Console.h"
 #include "Director.h"
@@ -112,6 +114,13 @@ bool Director::SpawnUnit(eUnitType aUnitType)
 		myTestGold -= myBuilding->GetComponent<BuildingComponent>()->GetUnitCost(aUnitType);
 		myBuilding->GetComponent<BuildingComponent>()->BuildUnit(aUnitType);
 		return true;
+	}
+	else
+	{
+		if (myOwner == eOwnerType::PLAYER)
+		{
+			Prism::Audio::AudioInterface::GetInstance()->PostEvent("Not_Enough_Fuel", 0);
+		}
 	}
 	return false;
 }
