@@ -393,8 +393,17 @@ void ControllerComponent::AttackTarget()
 		}
 		else if (myEntity.GetUnitType() == eUnitType::RANGER)
 		{
-			Prism::Audio::AudioInterface::GetInstance()->PostEvent("Ranger_Sniper"
-				, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+			if (myRangerOneShotCooldown <= 0.f)
+			{
+				Prism::Audio::AudioInterface::GetInstance()->PostEvent("Ranger_OneShot"
+					, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+			}
+			else
+			{
+				Prism::Audio::AudioInterface::GetInstance()->PostEvent("Ranger_Sniper"
+					, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+			}
+
 		}
 		else if (myEntity.GetUnitType() == eUnitType::TANK)
 		{
