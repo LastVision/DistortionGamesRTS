@@ -57,6 +57,9 @@
     <ClCompile Include="NeutralDirector.cpp">
       <Filter>Director</Filter>
     </ClCompile>
+    <ClCompile Include="Tutorial.cpp">
+      <Filter>Level</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -125,6 +128,9 @@
       <Filter>Director</Filter>
     </ClInclude>
     <ClInclude Include="GameDefines.h" />
+    <ClInclude Include="Tutorial.h">
+      <Filter>Level</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="PreCompile">
