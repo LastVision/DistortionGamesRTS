@@ -8,5 +8,6 @@ struct ControllerComponentData
 	float myAttackRechargeTime;
 	float myChaseDistance;
 	float myChaseDistanceNeutral;
+	float myRangerOneShotCoolDown = 0.f;
 	bool myExistsInEntity = false;
 };

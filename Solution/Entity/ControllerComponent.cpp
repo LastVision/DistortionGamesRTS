@@ -29,6 +29,8 @@ ControllerComponent::ControllerComponent(Entity& aEntity, ControllerComponentDat
 	, myAttackTargetPathRefreshTime(0.5f)
 	, myCurrentAttackTargetPathRefreshTime(myAttackTargetPathRefreshTime)
 	, myBehavior(new BlendedBehavior(myEntity))
+	, myRangerOneShotTimer(0.f)
+	, myRangerOneShotCooldown(aData.myRangerOneShotCoolDown)
 {
 	DL_ASSERT_EXP(myEntity.GetComponent<ActorComponent>() != nullptr
 		, "ControllerComponent wont work without a ActorComponent");
@@ -64,7 +66,7 @@ void ControllerComponent::Update(float aDelta)
 	{
 		return;
 	}
-
+	myRangerOneShotTimer -= aDelta;
 	myAttackTimer -= aDelta;
 
 	if (myEntity.GetState() == eEntityState::IDLE || myBehavior->GetDone())
@@ -404,7 +406,15 @@ void ControllerComponent::AttackTarget()
 		bool targetSurvived = false;
 		if (targetHealth != nullptr && myCurrentAction.myEntity->GetAlive())
 		{
-			targetSurvived = targetHealth->TakeDamage(myAttackDamage);
+			if (myEntity.GetUnitType() == eUnitType::RANGER && myRangerOneShotTimer <= 0.f)
+			{
+				myRangerOneShotTimer = myRangerOneShotCooldown;
+				targetSurvived = targetHealth->TakeDamage(targetHealth->GetMaxHealth() * 2.f);
+			}
+			else
+			{
+				targetSurvived = targetHealth->TakeDamage(myAttackDamage);
+			}
 		}
 
 		AnimationComponent* animation = myEntity.GetComponent<AnimationComponent>();
