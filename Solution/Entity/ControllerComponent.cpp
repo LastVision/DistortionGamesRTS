@@ -389,6 +389,16 @@ void ControllerComponent::AttackTarget()
 					, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
 			}
 		}
+		else if (myEntity.GetUnitType() == eUnitType::RANGER)
+		{
+			Prism::Audio::AudioInterface::GetInstance()->PostEvent("Ranger_Sniper"
+				, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+		}
+		else if (myEntity.GetUnitType() == eUnitType::TANK)
+		{
+			Prism::Audio::AudioInterface::GetInstance()->PostEvent("Tank_MiniGun"
+				, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+		}
 
 		HealthComponent* targetHealth = myCurrentAction.myEntity->GetComponent<HealthComponent>();
 		bool targetSurvived = false;

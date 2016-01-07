@@ -74,8 +74,24 @@ bool HealthComponent::TakeDamage(float aDamage)
 		myEntity.SetState(eEntityState::DYING);
 		return false;
 	}
-	Prism::Audio::AudioInterface::GetInstance()->PostEvent("Grunt_TakeDamage"
-		, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+
+
+	if (myEntity.GetUnitType() == eUnitType::GRUNT)
+	{
+		Prism::Audio::AudioInterface::GetInstance()->PostEvent("Grunt_TakeDamage"
+			, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+	}
+	else if (myEntity.GetUnitType() == eUnitType::RANGER)
+	{
+		Prism::Audio::AudioInterface::GetInstance()->PostEvent("Ranger_TakeDamage"
+			, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+	}
+	else if (myEntity.GetUnitType() == eUnitType::TANK)
+	{
+		Prism::Audio::AudioInterface::GetInstance()->PostEvent("Tank_TakeDamage"
+			, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+	}
+
 	myHealthBar->Update(); 
 
 	return true;
