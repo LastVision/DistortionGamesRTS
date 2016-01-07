@@ -61,6 +61,7 @@ public:
 private:
 	void UpdateCamera(float aDeltaTime, const CU::Vector3<float>& aCameraMovement);
 	void ShowMessage(const std::string& aBackgroundPath, const CU::Vector2<float>& aSize, std::string aText, GameStateMessage* aMessage = nullptr);
+	void CapCameraToTerrain();
 
 	Level* myLevel;
 	LevelFactory* myLevelFactory;

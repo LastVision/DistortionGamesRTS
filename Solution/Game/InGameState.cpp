@@ -229,6 +229,7 @@ void InGameState::ReceiveMessage(const MoveCameraMessage& aMessage)
 	{
 		position.y -= offset;
 		myCamera->SetPosition({ position.x, myCamera->GetOrientation().GetPos().y, position.y });
+		CapCameraToTerrain();
 	}
 }
 
@@ -346,46 +347,32 @@ void InGameState::UpdateCamera(float aDeltaTime, const CU::Vector3<float>& aCame
 		myCameraOrientation = CU::Matrix44<float>::CreateRotateAroundY(rotationSpeed) * myCameraOrientation;
 	}
 
+	CapCameraToTerrain();
+}
+
+void InGameState::ShowMessage(const std::string& aBackgroundPath,
+	const CU::Vector2<float>& aSize, std::string aText, GameStateMessage* aMessage)
+{
+	bool runtime = Prism::MemoryTracker::GetInstance()->GetRunTime();
+	Prism::MemoryTracker::GetInstance()->SetRunTime(false);
+	myIsActiveState = false;
+	myMessageScreen = new MessageState(aBackgroundPath, aSize);
+	myMessageScreen->SetText(aText);
+	myMessageScreen->SetEvent(aMessage);
+	myStateStack->PushSubGameState(myMessageScreen);
+	Prism::MemoryTracker::GetInstance()->SetRunTime(runtime);
+}
+
+void InGameState::CapCameraToTerrain()
+{
 	const CU::Vector2<float>& resolution = Prism::Engine::GetInstance()->GetWindowSize();
 	float aspectRatio = resolution.x / resolution.y;
 
- 	float offsetX = aspectRatio *(-7.844f) + 58.245f;   
+	float offsetX = aspectRatio *(-7.844f) + 58.245f;
 	float offsetZLow = aspectRatio*(-12.714f) + 47.602f;
 	float offsetZHigh = aspectRatio*(-31.851f) + 86.423f;
 
-	//float ratioDiff = aspectRatio / (16.f / 9.f);
-
-
-	//float delta = 0.1f;
-
-	//if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_T) == true)
-	//{
-	//	offsetX -= delta;
-	//}
-
-	//if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_Y) == true)
-	//{
-	//	offsetX += delta;
-	//}
-
-	//if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_U) == true)
-	//{
-	//	offsetZHigh -= delta;
-	//	offsetZLow -= delta;
-	//}
-
-	//if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_J) == true)
-	//{
-	//	offsetZHigh += delta;
-	//	offsetZLow += delta;
-	//}
-
-	DEBUG_PRINT(offsetX);
-	DEBUG_PRINT(offsetZLow);
-	DEBUG_PRINT(offsetZHigh);
-	DEBUG_PRINT(aspectRatio);
-
-	cameraPos = myCameraOrientation.GetPos();
+	CU::Vector3<float> cameraPos = myCameraOrientation.GetPos();
 	if (cameraPos.x < 0.f + offsetX)
 	{
 		cameraPos.x = 0.f + offsetX;
@@ -409,17 +396,4 @@ void InGameState::UpdateCamera(float aDeltaTime, const CU::Vector3<float>& aCame
 		cameraPos.z = 205.f - offsetZHigh;
 		myCameraOrientation.SetPos(cameraPos);
 	}
-}
-
-void InGameState::ShowMessage(const std::string& aBackgroundPath,
-	const CU::Vector2<float>& aSize, std::string aText, GameStateMessage* aMessage)
-{
-	bool runtime = Prism::MemoryTracker::GetInstance()->GetRunTime();
-	Prism::MemoryTracker::GetInstance()->SetRunTime(false);
-	myIsActiveState = false;
-	myMessageScreen = new MessageState(aBackgroundPath, aSize);
-	myMessageScreen->SetText(aText);
-	myMessageScreen->SetEvent(aMessage);
-	myStateStack->PushSubGameState(myMessageScreen);
-	Prism::MemoryTracker::GetInstance()->SetRunTime(runtime);
 }
