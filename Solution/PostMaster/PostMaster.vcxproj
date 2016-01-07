@@ -121,12 +121,12 @@
   <ItemGroup>
     <ClInclude Include="EmitterMessage.h" />
     <ClInclude Include="MinimapMoveMessage.h" />
+    <ClInclude Include="TextMessage.h" />
     <ClInclude Include="TimeMultiplierMessage.h" />
     <ClInclude Include="FadeMessage.h" />
     <ClInclude Include="GameStateMessage.h" />
-    <ClInclude Include="LUAToggleRenderLinesMessage.h" />
-    <ClInclude Include="LUAMoveCameraMessage.h" />
-    <ClInclude Include="LUARunScriptMessage.h" />
+    <ClInclude Include="ToggleRenderLinesMessage.h" />
+    <ClInclude Include="RunScriptMessage.h" />
     <ClInclude Include="Message.h" />
     <ClInclude Include="MessageEnum.h" />
     <ClInclude Include="MoveCameraMessage.h" />
@@ -135,7 +135,7 @@
     <ClInclude Include="ResizeMessage.h" />
     <ClInclude Include="ResourceMessage.h" />
     <ClInclude Include="SpawnUnitMessage.h" />
-    <ClInclude Include="LUACinematicMessage.h" />
+    <ClInclude Include="CinematicMessage.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Subscriber.h" />
     <ClInclude Include="ToggleBuildTimeMessage.h" />

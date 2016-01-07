@@ -3,7 +3,6 @@
 #include <Camera.h>
 #include "Console.h"
 #include <MoveCameraMessage.h>
-#include <LUAMoveCameraMessage.h>
 #include <ColoursForBG.h>
 #include "ConsoleState.h"
 #include <Engine.h>
@@ -26,8 +25,8 @@
 #include <Vector.h>
 
 #include <ScriptSystem.h>
-#include <LUACinematicMessage.h>
-#include <LUARunScriptMessage.h>
+#include <CinematicMessage.h>
+#include <RunScriptMessage.h>
 
 InGameState::InGameState()
 	: myShouldReOpenConsole(false)
@@ -49,7 +48,6 @@ InGameState::~InGameState()
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::GAME_STATE, this);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::ON_CLICK, this);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::MOVE_CAMERA, this);
-	PostMaster::GetInstance()->UnSubscribe(eMessageType::LUA_MOVE_CAMERA, this);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::TRIGGER, this);
 	SAFE_DELETE(myCamera);
 	SAFE_DELETE(myLevelFactory);
@@ -72,10 +70,9 @@ void InGameState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCur
 	PostMaster::GetInstance()->Subscribe(eMessageType::GAME_STATE, this);
 	PostMaster::GetInstance()->Subscribe(eMessageType::ON_CLICK, this);
 	PostMaster::GetInstance()->Subscribe(eMessageType::MOVE_CAMERA, this);
-	PostMaster::GetInstance()->Subscribe(eMessageType::LUA_MOVE_CAMERA, this);
 	PostMaster::GetInstance()->Subscribe(eMessageType::TRIGGER, this);
 
-	PostMaster::GetInstance()->SendMessage(LUARunScriptMessage("Data/Script/Autorun.script"));
+	PostMaster::GetInstance()->SendMessage(RunScriptMessage("Data/Script/Autorun.script"));
 
 	myIsActiveState = true;
 }
@@ -171,7 +168,7 @@ void InGameState::ReceiveMessage(const GameStateMessage& aMessage)
 		Prism::MemoryTracker::GetInstance()->SetRunTime(false);
 		myLevel = myLevelFactory->LoadCurrentLevel();
 		Prism::MemoryTracker::GetInstance()->SetRunTime(runtime);
-		PostMaster::GetInstance()->SendMessage(LUARunScriptMessage("Data/Script/Autorun.script"));
+		PostMaster::GetInstance()->SendMessage(RunScriptMessage("Data/Script/Autorun.script"));
 		break;
 
 	case eGameState::COMPLETE_LEVEL:
@@ -227,16 +224,7 @@ void InGameState::ReceiveMessage(const MoveCameraMessage& aMessage)
 	myCamera->SetPosition({ position.x, myCamera->GetOrientation().GetPos().y, position.y });
 }
 
-void InGameState::ReceiveMessage(const LUAMoveCameraMessage& aMessage)
-{
-	CU::Vector3<float> position = myCamera->GetOrientation().GetPos();
-	position.x += aMessage.myMoveAmount.x;
-	position.z += aMessage.myMoveAmount.y;
-
-	myCamera->SetPosition(position);
-}
-
-void InGameState::ReceiveMessage(const LUACinematicMessage& aMessage)
+void InGameState::ReceiveMessage(const CinematicMessage& aMessage)
 {
 	if (aMessage.myAction == eCinematicAction::START)
 	{

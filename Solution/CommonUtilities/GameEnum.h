@@ -102,6 +102,7 @@ enum class eComponentType
 	ENRAGE,
 	GRENADE,
 	SELECTION,
+	SOUND,
 	_COUNT,
 };
 

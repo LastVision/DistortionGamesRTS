@@ -4,7 +4,7 @@
 #include "ConsoleHelp.h"
 #include "ConsoleHistoryManager.h"
 #include <InputWrapper.h>
-#include <LUARunScriptMessage.h>
+#include <RunScriptMessage.h>
 #include <ScriptSystem.h>
 #include <PostMaster.h>
 #include <ModelLoader.h>
@@ -32,12 +32,12 @@ Console::Console()
 	myHistory->Load();
 	myBackspace = new ConsoleBackspace(myInput);
 	myHelp = new ConsoleHelp();
-	PostMaster::GetInstance()->Subscribe(eMessageType::LUA_RUN_SCRIPT, this);
+	PostMaster::GetInstance()->Subscribe(eMessageType::RUN_SCRIPT, this);
 }
 
 Console::~Console()
 {
-	PostMaster::GetInstance()->UnSubscribe(eMessageType::LUA_RUN_SCRIPT, this);
+	PostMaster::GetInstance()->UnSubscribe(eMessageType::RUN_SCRIPT, this);
 	SAFE_DELETE(myHistory);
 	SAFE_DELETE(myBackspace);
 	SAFE_DELETE(myHelp);
@@ -72,9 +72,9 @@ void Console::Update()
 	//DEBUG_PRINT(myInput);
 }
 
-void Console::ReceiveMessage(const LUARunScriptMessage& aMessage)
+void Console::ReceiveMessage(const RunScriptMessage& aMessage)
 {
-	if (aMessage.myMessageType == eMessageType::LUA_RUN_SCRIPT)
+	if (aMessage.myMessageType == eMessageType::RUN_SCRIPT)
 	{
 		std::fstream output;
 		output.open(aMessage.myFilePath, std::ios::in);

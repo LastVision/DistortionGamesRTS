@@ -38,7 +38,8 @@
     <ClInclude Include="BarWidget.h">
       <Filter>Widget</Filter>
     </ClInclude>
-    <ClInclude Include="ControlGroupWidget.h">
+    <ClInclude Include="ControlGroupWidget.h" />
+    <ClInclude Include="TextWidget.h">
       <Filter>Widget</Filter>
     </ClInclude>
   </ItemGroup>
@@ -72,7 +73,8 @@
     <ClCompile Include="BarWidget.cpp">
       <Filter>Widget</Filter>
     </ClCompile>
-    <ClCompile Include="ControlGroupWidget.cpp">
+    <ClCompile Include="ControlGroupWidget.cpp" />
+    <ClCompile Include="TextWidget.cpp">
       <Filter>Widget</Filter>
     </ClCompile>
   </ItemGroup>

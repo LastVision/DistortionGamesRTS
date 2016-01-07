@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+#include <AudioInterface.h>
 #include "ActorComponent.h"
 #include "AnimationComponent.h"
 #include "BlendedBehavior.h"
@@ -9,6 +10,7 @@
 #include <PathFinderAStar.h>
 #include <PathFinderFunnel.h>
 #include "PollingStation.h"
+#include "SoundComponent.h"
 #include <Terrain.h>
 
 
@@ -65,7 +67,7 @@ void ControllerComponent::Update(float aDelta)
 
 	myAttackTimer -= aDelta;
 
-	if (myEntity.GetState() == eEntityState::IDLE)
+	if (myEntity.GetState() == eEntityState::IDLE || myBehavior->GetDone())
 	{
 		StartNextAction();
 	}
@@ -102,6 +104,20 @@ void ControllerComponent::Update(float aDelta)
 
 void ControllerComponent::MoveTo(const CU::Vector3<float>& aPosition, bool aClearCommandQueue)
 {
+	if (myEntity.GetUnitType() == eUnitType::GRUNT)
+	{
+		//Prism::Audio::AudioInterface::GetInstance()->PostEvent("Grunt_Move", 0);
+		Prism::Audio::AudioInterface::GetInstance()->PostEvent("Grunt_Move"
+			, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+	}
+	else if (myEntity.GetUnitType() == eUnitType::RANGER)
+	{
+		Prism::Audio::AudioInterface::GetInstance()->PostEvent("Ranger_Move", 0);
+	}
+	else if (myEntity.GetUnitType() == eUnitType::TANK)
+	{
+		Prism::Audio::AudioInterface::GetInstance()->PostEvent("Tank_Move", 0);
+	}
 	FillCommandList(eAction::MOVE, aClearCommandQueue, nullptr, { aPosition.x, aPosition.z });
 }
 
@@ -290,6 +306,11 @@ void ControllerComponent::AttackTarget()
 			if (myEntity.GetComponent<GrenadeComponent>()->GetCooldown() <= 0.f)
 			{
 				myEntity.GetComponent<GrenadeComponent>()->ThrowGrenade(myCurrentAction.myEntity->GetOrientation().GetPos());
+			}
+			else
+			{
+				Prism::Audio::AudioInterface::GetInstance()->PostEvent("Grunt_MachineGun"
+					, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
 			}
 		}
 

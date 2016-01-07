@@ -1,6 +1,7 @@
 #include "stdafx.h"
 
 #include "AnimationComponent.h"
+#include <AudioInterface.h>
 #include "Camera.h"
 #include "HealthComponent.h"
 #include <Engine.h>
@@ -10,6 +11,7 @@
 #include "EntityId.h"
 #include <EmitterMessage.h>
 #include <PostMaster.h>
+#include "SoundComponent.h"
 
 HealthComponent::HealthComponent(Entity& aEntity, HealthComponentData& aData)
 	: Component(aEntity)
@@ -72,8 +74,9 @@ bool HealthComponent::TakeDamage(float aDamage)
 		myEntity.SetState(eEntityState::DYING);
 		return false;
 	}
-
-	myHealthBar->Update();
+	Prism::Audio::AudioInterface::GetInstance()->PostEvent("Grunt_TakeDamage"
+		, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+	myHealthBar->Update(); 
 
 	return true;
 }

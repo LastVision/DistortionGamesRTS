@@ -32,7 +32,7 @@ public:
 
 	void OnResize(int aWidth, int aHeigth);
 
-	void ReceiveMessage(const LUAToggleRenderLinesMessage& aMessage) override;
+	void ReceiveMessage(const ToggleRenderLinesMessage& aMessage) override;
 
 	void SpawnUnit(eUnitType aUnitType);
 

@@ -31,9 +31,11 @@ struct GraphicalParticle
 		, myRotation(0.f)
 	{
 	}
+
 	~GraphicalParticle()
 	{
 	}
+
 	CU::Vector3f myPosition;
 	CU::Vector3f myColor;
 	float myAlpha;

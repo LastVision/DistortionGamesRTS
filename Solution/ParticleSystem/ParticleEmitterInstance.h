@@ -16,11 +16,12 @@ namespace Prism
 		ParticleEmitterInstance(ParticleEmitterData* someData, bool anAllowManyParticles = false);
 		~ParticleEmitterInstance();
 		void ReleaseData();
-		void Render(Camera* aCamera);
+		void Render();
 		void Update(float aDeltaTime, const CU::Matrix44f& aWorldMatrix);
 		void SetPosition(CU::Vector3f aPosition);
 		void Activate();
 		bool IsActive();
+		void SetGPUData(Camera* aCamera);
 	private:
 
 		void CreateVertexBuffer();

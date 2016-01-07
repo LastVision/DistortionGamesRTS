@@ -55,7 +55,6 @@ namespace Prism
 			myVertexWrapper->myVertexBuffer->Release();
 		}
 
-
 		SAFE_DELETE(myVertexWrapper);
 	}
 
@@ -64,20 +63,12 @@ namespace Prism
 		myParticleEmitterData = nullptr;
 	}
 
-	void ParticleEmitterInstance::Render(Camera* aCamera)
+	void ParticleEmitterInstance::Render()
 	{
 		UpdateVertexBuffer();
-
-		myParticleEmitterData->myEffect->SetTexture(
-			TextureContainer::GetInstance()->GetTexture(myParticleEmitterData->myTextureName.c_str()));
-
-
+		myParticleEmitterData->myEffect->SetTexture(TextureContainer::GetInstance()->GetTexture(myParticleEmitterData->myTextureName));
 		myParticleEmitterData->myEffect->SetWorldMatrix(myOrientation);
-		myParticleEmitterData->myEffect->SetViewMatrix(CU::InverseSimple(aCamera->GetOrientation()));
-		myParticleEmitterData->myEffect->SetProjectionMatrix(aCamera->GetProjection());
 
-		Engine::GetInstance()->GetContex()->IASetInputLayout(myParticleEmitterData->myInputLayout);
-		Engine::GetInstance()->GetContex()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
 		Engine::GetInstance()->GetContex()->IASetVertexBuffers(
 			myVertexWrapper->myStartSlot
 			, myVertexWrapper->myNumberOfBuffers
@@ -85,10 +76,8 @@ namespace Prism
 			, &myVertexWrapper->myStride
 			, &myVertexWrapper->myByteOffset);
 
-		D3DX11_TECHNIQUE_DESC techDesc;
-		myParticleEmitterData->myEffect->GetTechnique()->GetDesc(&techDesc);
 
-		for (UINT i = 0; i < techDesc.Passes; ++i)
+		for (UINT i = 0; i < myParticleEmitterData->myTechniqueDesc->Passes; ++i)
 		{
 			myParticleEmitterData->myEffect->GetTechnique()->GetPassByIndex(i)->Apply(0, Engine::GetInstance()->GetContex());
 			Engine::GetInstance()->GetContex()->Draw(myGraphicalParticles.Size(), 0);
@@ -163,12 +152,10 @@ namespace Prism
 			myEmissionTime = myParticleEmitterData->myEmissionRate;
 		}
 
-		if (myEmitterLife <= 0.f && myDeadParticleCount == myLogicalParticles.Size())
+		if (myEmitterLife <= 0.f && myDeadParticleCount >= myLogicalParticles.Size())
 		{
 			myIsActive = false;
-			myEmitterLife = myParticleEmitterData->myEmitterLifeTime;
 		}
-
 	}
 
 	void ParticleEmitterInstance::UpdateParticle(float aDeltaTime)
@@ -193,7 +180,6 @@ namespace Prism
 			myGraphicalParticles[i].myRotation += myLogicalParticles[i].myRotation * aDeltaTime;
 
 			myGraphicalParticles[i].myLifeTime -= aDeltaTime;
-
 
 		}
 	}
@@ -250,8 +236,8 @@ namespace Prism
 	void ParticleEmitterInstance::Activate()
 	{
 		myIsActive = true;
+		myEmitterLife = myParticleEmitterData->myEmitterLifeTime;
 	}
-
 
 }
 

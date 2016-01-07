@@ -12,6 +12,7 @@
 #include "EntityId.h"
 #include <Scene.h>
 #include "SelectionComponent.h"
+#include "SoundComponent.h"
 #include <Terrain.h>
 #include "TotemComponent.h"
 #include "TriggerComponent.h"
@@ -113,6 +114,13 @@ Entity::Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& a
 			myComponents[static_cast<int>(eComponentType::SELECTION)] = new SelectionComponent(*this, aEntityData.mySelectionData);
 		}
 	}
+
+
+	if (aEntityData.mySoundData.myExistsInEntity == true)
+	{
+		myComponents[static_cast<int>(eComponentType::SOUND)] = new SoundComponent(*this);
+	}
+
 	
 	
 }

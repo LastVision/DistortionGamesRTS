@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+#include <AudioInterface.h>
 #include <BuildingComponent.h>
 #include <Camera.h>
 #include <CollisionComponent.h>
@@ -46,7 +47,9 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 	, mySelectionSpriteSize(0, 0)
 	, mySelectionSpriteRenderPosition(0, 0)
 	, mySelectionSpriteHotspot(0, 0)
+	, myAudioSFXID(-1)
 {
+	myAudioSFXID = Prism::Audio::AudioInterface::GetInstance()->GetUniqueID();
 	myDragSelectionPositions.Reserve(4);
 	myDragSelectionSprite = Prism::ModelLoader::GetInstance()->LoadSprite(
 		"Data/Resource/Texture/T_selection_box.dds", { 0.f, 0.f });
@@ -94,6 +97,7 @@ PlayerDirector::~PlayerDirector()
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::TIME_MULTIPLIER, this);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::MOVE_UNITS, this);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::TOGGLE_BUILD_TIME, this);
+	Prism::Audio::AudioInterface::GetInstance()->UnRegisterObject(myAudioSFXID);
 }
 
 void PlayerDirector::InitGUI(const AIDirector* anAI, const Prism::Camera& aCamera)
@@ -106,6 +110,11 @@ void PlayerDirector::InitGUI(const AIDirector* anAI, const Prism::Camera& aCamer
 void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 {
 	aDeltaTime *= myTimeMultiplier;
+
+	//Prism::Audio::AudioInterface::GetInstance()->SetListenerPosition(aCamera.GetOrientation().GetPos().x
+	//	, aCamera.GetOrientation().GetPos().y, aCamera.GetOrientation().GetPos().z);
+	Prism::Audio::AudioInterface::GetInstance()->SetListenerPosition(aCamera.GetOrientation().GetPos().x
+		, 7.5f, aCamera.GetOrientation().GetPos().z + 25.f);
 
 	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_G) == true)
 	{

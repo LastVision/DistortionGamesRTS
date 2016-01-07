@@ -33,6 +33,7 @@ private:
 	const eTriggerType myType;
 	CU::GrowingArray<Entity*> myPlayerUnits;
 	CU::GrowingArray<Entity*> myEnemyUnits;
+	CU::GrowingArray<Entity*> myNeutralUnits;
 };
 
 inline eComponentType TriggerComponent::GetTypeStatic()
