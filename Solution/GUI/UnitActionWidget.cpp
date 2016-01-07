@@ -95,8 +95,6 @@ namespace GUI
 
 	void UnitActionWidget::Update()
 	{
-		Widget::Update();
-
 		myHasSelectedGrunt = false;
 		myHasSelectedRanger = false;
 		myHasSelectedTank = false;

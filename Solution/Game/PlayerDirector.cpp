@@ -212,10 +212,6 @@ void PlayerDirector::ReceiveMessage(const OnClickMessage& aMessage)
 			mySelectedAction = eSelectedAction::MOVE;
 			break;
 
-		case eOnClickEvent::UNIT_ACTION_PATROL:
-			mySelectedAction = eSelectedAction::PATROL;
-			break;
-
 		case eOnClickEvent::UNIT_ACTION_STAND_GROUND:
 			mySelectedAction = eSelectedAction::HOLD_POSITION;
 			break;
@@ -232,9 +228,23 @@ void PlayerDirector::ReceiveMessage(const OnClickMessage& aMessage)
 			mySelectedAction = eSelectedAction::ENRAGE;
 			break;
 
-
 		default:
 			break;
+		}
+	}
+	else if (aMessage.myEvent == eOnClickEvent::SELECT_CONTROL_GROUP)
+	{
+		if (myControlGroups[aMessage.myID].Size() > 0)
+		{
+			for (int i = 0; i < mySelectedUnits.Size(); i++)
+			{
+				mySelectedUnits[i]->SetSelect(false);
+			}
+			mySelectedUnits = myControlGroups[aMessage.myID];
+			for (int i = 0; i < mySelectedUnits.Size(); i++)
+			{
+				mySelectedUnits[i]->SetSelect(true);
+			}
 		}
 	}
 }

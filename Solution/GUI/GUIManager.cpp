@@ -178,7 +178,7 @@ namespace GUI
 				}
 				else if (type == "control_groups")
 				{
-					ControlGroupWidget* controlGroup = new ControlGroupWidget(&reader, widgetElement, myPlayer);
+					ControlGroupWidget* controlGroup = new ControlGroupWidget(&reader, widgetElement, myPlayer, size);
 					container->AddWidget(controlGroup);
 				}
 			}

@@ -149,10 +149,6 @@ namespace GUI
 		{
 			myClickEvent = new OnClickMessage(eOnClickEvent::UNIT_ACTION_STOP);
 		}
-		else if (clickEvent == "action_patrol")
-		{
-			myClickEvent = new OnClickMessage(eOnClickEvent::UNIT_ACTION_PATROL);
-		}
 		else if (clickEvent == "action_place_totem")
 		{
 			myClickEvent = new OnClickMessage(eOnClickEvent::PLACE_TOTEM);
@@ -174,6 +170,12 @@ namespace GUI
 			int ID = -1;
 			aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "onclick"), "id", ID);
 			myClickEvent = new OnClickMessage(eOnClickEvent::SPAWN_UNIT, ID);
+		}
+		else if (clickEvent == "select_control_group")
+		{
+			int index = -1;
+			aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "onclick"), "id", index);
+			myClickEvent = new OnClickMessage(eOnClickEvent::SELECT_CONTROL_GROUP, index);
 		}
 		else
 		{
