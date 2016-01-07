@@ -197,7 +197,7 @@ namespace GUI
 			}
 			else if (type == "upgrade_button")
 			{
-				UpgradeButtonWidget* upgradeButtonWidget = new UpgradeButtonWidget(aReader, widgetElement, myPlayer->GetUnitCount());
+				UpgradeButtonWidget* upgradeButtonWidget = new UpgradeButtonWidget(aReader, widgetElement, myPlayer->GetTestUpgradeLevel());
 				container->AddWidget(upgradeButtonWidget);
 			}
 		}
