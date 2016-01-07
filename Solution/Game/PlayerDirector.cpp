@@ -397,8 +397,10 @@ CU::Vector3<float> PlayerDirector::CalcCursorWorldPosition(const CU::Vector2<flo
 	DEBUG_PRINT(worldPos);
 
 	//Debug:
+#ifndef RELEASE_BUILD
 	Prism::RenderBox(worldPos);
 	Prism::RenderLine3D(worldPos, { 100.f, 100.f, 100.f });
+#endif
 
 	return worldPos;
 }
