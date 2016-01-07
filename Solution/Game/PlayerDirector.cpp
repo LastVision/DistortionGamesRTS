@@ -538,13 +538,12 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 		myFirstMousePosition = CU::InputWrapper::GetInstance()->GetMousePosition();
 		myFirstMousePositionInWorld = CalcCursorWorldPosition(myFirstMousePosition, aCamera);
 		myFirstCameraPosition = aCamera.GetOrientation().GetPos();
+
+		if (myMouseIsOverGUI == true)
+		{
+			myRenderDragSelection = false;
+		}
 	}
-
-
-	//if (myMouseIsOverGUI == true)
-	//{
-	//	myRenderDragSelection = false;
-	//}
 
 	if (myLeftMousePressed == true && myRenderDragSelection == true)
 	{
