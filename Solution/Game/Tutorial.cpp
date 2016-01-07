@@ -29,6 +29,7 @@ Tutorial::Tutorial(const std::string& aXMLPath, const PlayerDirector* aPlayer, c
 
 	tinyxml2::XMLElement* element = reader.ForceFindFirstChild("root");
 	element = reader.ForceFindFirstChild(element, "tutorial");
+	reader.ForceReadAttribute(element, "time", myMaxTime);
 	for (tinyxml2::XMLElement* mission = reader.FindFirstChild(element, "mission"); mission != nullptr
 		; mission = reader.FindNextElement(mission, "mission"))
 	{
