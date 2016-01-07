@@ -66,8 +66,6 @@ Game::~Game()
 	PostMaster::Destroy();
 	myStateStack.Clear();
 	Prism::DebugDrawer::Destroy();
-
-	LUA::ScriptSystem::Destroy();
 }
 
 bool Game::Init(HWND& aHwnd)
@@ -83,10 +81,8 @@ bool Game::Init(HWND& aHwnd)
 
 
 
-	LUA::ScriptSystem::Create();
-	LUA::ScriptSystem::GetInstance()->Init(ScriptInterface::RegisterFunctions);
 
-	Console::GetInstance(); // needed to create console here
+	//Console::GetInstance(); // needed to create console here
 	myStateStack.PushMainGameState(new MainMenuState());
 
 	//PostMaster::GetInstance()->SendMessage(GameStateMessage(eGameState::LOAD_GAME, 1));
@@ -140,17 +136,7 @@ bool Game::Update()
 	CU::TimerManager::GetInstance()->CapFrameRate(100.f);
 	myCursor->Update();
 	myCursor->Render();
-
-	static bool run = true;
-	if (run == false)
-	{
-		//LUA::ScriptSystem::GetInstance()->RunLuaFromString("Print(\"apa\")");
-	}
-	run = false;
-
-	LUA::ScriptSystem::GetInstance()->Update();
-	//Console::GetInstance()->Update();
-
+	
 	return true;
 }
 
