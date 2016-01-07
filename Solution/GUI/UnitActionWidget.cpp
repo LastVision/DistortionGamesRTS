@@ -1,12 +1,15 @@
 #include "stdafx.h"
 #include "ButtonWidget.h"
 #include "../Entity/Entity.h"
+#include "../Game/PlayerDirector.h"
 #include "UnitActionWidget.h"
+#include "UpgradeButtonWidget.h"
 #include "WidgetContainer.h"
 
 namespace GUI
 {
-	UnitActionWidget::UnitActionWidget(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement, const CU::GrowingArray<Entity*>& someUnits)
+	UnitActionWidget::UnitActionWidget(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement, const CU::GrowingArray<Entity*>& someUnits
+		, const PlayerDirector* aPlayer)
 		: myUnits(someUnits)
 		, myUnitActionButtons(nullptr)
 		, myBuildingActionButtons(nullptr)
@@ -15,6 +18,7 @@ namespace GUI
 		, myHasSelectedRanger(false)
 		, myHasSelectedTank(false)
 		, mySelectedType(eEntityType::_COUNT)
+		, myPlayer(aPlayer)
 	{
 		CU::Vector2<float> size;
 		CU::Vector2<float> position;
@@ -190,6 +194,11 @@ namespace GUI
 			{
 				ButtonWidget* button = new ButtonWidget(aReader, widgetElement);
 				container->AddWidget(button);
+			}
+			else if (type == "upgrade_button")
+			{
+				UpgradeButtonWidget* upgradeButtonWidget = new UpgradeButtonWidget(aReader, widgetElement, myPlayer->GetUnitCount());
+				container->AddWidget(upgradeButtonWidget);
 			}
 		}
 		return container;

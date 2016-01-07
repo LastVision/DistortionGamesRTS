@@ -77,6 +77,8 @@ public:
 
 	void AttackMoveSelectedUnits(const CU::Vector2<float>& aPosition);
 
+	const int& GetTestUpgradeLevel() const;
+
 private:
 	void UpdateInputs();
 	void UpdateControlGroups();
@@ -123,6 +125,8 @@ private:
 	Entity* myTotem;
 
 	int myAudioSFXID;
+
+	int myTestUpgradeLevel;
 };
 
 inline const CU::GrowingArray<Entity*>& PlayerDirector::GetSelectedUnits() const
@@ -148,4 +152,9 @@ inline const CU::StaticArray<CU::GrowingArray<Entity*>, AMOUNT_OF_CONTROL_GROUPS
 inline eSelectedAction PlayerDirector::GetSelectedAction() const
 {
 	return mySelectedAction;
+}
+
+inline const int& PlayerDirector::GetTestUpgradeLevel() const
+{
+	return myTestUpgradeLevel;
 }

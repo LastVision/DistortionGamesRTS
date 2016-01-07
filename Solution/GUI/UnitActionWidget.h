@@ -13,7 +13,7 @@ namespace Prism
 
 class XMLReader;
 class Entity;
-
+class PlayerDirector;
 
 namespace GUI
 {
@@ -22,7 +22,8 @@ namespace GUI
 	class UnitActionWidget : public Widget
 	{
 	public:
-		UnitActionWidget(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement, const CU::GrowingArray<Entity*>& someUnits);
+		UnitActionWidget(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement, const CU::GrowingArray<Entity*>& someUnits 
+			, const PlayerDirector* aPlayer);
 		~UnitActionWidget();
 
 		void Render(const CU::Vector2<float>& aParentPosition) override;
@@ -39,6 +40,8 @@ namespace GUI
 		void operator=(UnitActionWidget&) = delete;
 
 		const CU::GrowingArray<Entity*>& myUnits;
+
+		const PlayerDirector* myPlayer;
 
 		WidgetContainer* myUnitActionButtons;
 		WidgetContainer* myBuildingActionButtons;
