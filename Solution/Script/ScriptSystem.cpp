@@ -215,7 +215,7 @@ namespace LUA
 			CheckError(luaL_dofile(myLuaState, myActiveFiles[i].c_str()));
 		}
 
-		PostMaster::GetInstance()->SendMessage(GameStateMessage(eGameState::RELOAD_LEVEL));
+		//PostMaster::GetInstance()->SendMessage(GameStateMessage(eGameState::RELOAD_LEVEL));
 	}
 
 	void ScriptSystem::CheckError(int aCode)

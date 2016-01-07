@@ -19,11 +19,11 @@ namespace GUI
 	class Cursor;
 }
 
-class MainMenuState : public GameState, public Subscriber
+class LevelSelectState : public GameState, public Subscriber
 {
 public:
-	MainMenuState();
-	~MainMenuState();
+	LevelSelectState();
+	~LevelSelectState();
 
 	void InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCursor) override;
 	void EndState() override;
