@@ -7,6 +7,7 @@
 #include <Intersection.h>
 #include "PollingStation.h"
 #include <PostMaster.h>
+#include <MinimapEventMessage.h>
 
 TriggerComponent::TriggerComponent(Entity& aEntity, TriggerComponentData& aData)
 	: Component(aEntity)
@@ -18,6 +19,7 @@ TriggerComponent::TriggerComponent(Entity& aEntity, TriggerComponentData& aData)
 	, myRadiusSquared(aData.myRadius * aData.myRadius)
 	, myOwnershipRatio(0)
 	, myGainingPointsOwner(eOwnerType::NEUTRAL)
+	, myHasSentEventMessage(false)
 {
 	myOriginalPosition = myEntity.GetOrientation().GetPos();
 }
@@ -84,6 +86,25 @@ eOwnerType TriggerComponent::ModifyOwnership(eOwnerType anOwner, float aModifyVa
 	}
 	else if (anOwner == myEntity.GetOwner() || myOwnershipRatio <= 0.f)
 	{
+		if (anOwner == eOwnerType::ENEMY)
+		{
+			if (myHasSentEventMessage == false)
+			{
+				if (myType == eTriggerType::RESOURCE)
+				{
+					PostMaster::GetInstance()->SendMessage<MinimapEventMessage>(MinimapEventMessage(myEntity.GetPosition(), MinimapEventType::eRESOURCE_POINT));
+				}
+				else if (myType == eTriggerType::VICTORY)
+				{
+					PostMaster::GetInstance()->SendMessage<MinimapEventMessage>(MinimapEventMessage(myEntity.GetPosition(), MinimapEventType::eVICTORY_POINT));
+				}
+				else
+				{
+					DL_ASSERT("INVALID TYPE IN TRIGGER");
+				}
+				myHasSentEventMessage = true;
+			}
+		}
 		myOwnershipRatio += aModifyValue;
 		myEntity.SetOwner(anOwner);
 	}
@@ -96,6 +117,7 @@ eOwnerType TriggerComponent::ModifyOwnership(eOwnerType anOwner, float aModifyVa
 
 	if (myOwnershipRatio == 0.f)
 	{
+		myHasSentEventMessage = false;
 		myEntity.SetOwner(eOwnerType::NEUTRAL);
 		myGainingPointsOwner = eOwnerType::NEUTRAL;
 	}

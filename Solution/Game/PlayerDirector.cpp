@@ -171,7 +171,7 @@ void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 
 	if (myRenderGUI == true)
 	{
-		myGUIManager->Update();
+		myGUIManager->Update(aDeltaTime);
 	}
 
 	if (myMouseIsOverGUI == false && (myLeftMouseUp == true || myRightClicked == true))

@@ -71,7 +71,7 @@ namespace GUI
 		SAFE_DELETE(myBuildingTimer);
 	}
 
-	void UnitInfoWidget::Update()
+	void UnitInfoWidget::Update(float)
 	{
 		myIsUnitSelected = myUnits.Size() > 0;
 		if (myIsUnitSelected == true)
@@ -133,7 +133,7 @@ namespace GUI
 
 		if (myBuilding.GetEntityToSpawn() != eEntityType::EMPTY)
 		{
-			myBuildingTimer->Update();
+			myBuildingTimer->Update(0.f);
 			CU::Vector2<float> position = myPosition + aParentPosition + myUnitPosition + (myBuildingTimer->GetSize() / 2.f);
 			myBuildingTimer->Render(position);
 			position.x += myBuildingTimer->GetSize().x + 10.f;

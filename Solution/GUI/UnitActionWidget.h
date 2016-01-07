@@ -26,7 +26,7 @@ namespace GUI
 		~UnitActionWidget();
 
 		void Render(const CU::Vector2<float>& aParentPosition) override;
-		void Update() override;
+		void Update(float aDelta) override;
 
 		Widget* MouseIsOver(const CU::Vector2<float>& aPosition) override;
 

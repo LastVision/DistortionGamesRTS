@@ -27,7 +27,7 @@ namespace GUI
 		UnitInfoWidget(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement, const PlayerDirector* aPlayer);
 		~UnitInfoWidget();
 
-		void Update() override;
+		void Update(float aDelta) override;
 		void Render(const CU::Vector2<float>& aParentPosition) override;
 
 		void OnResize(const CU::Vector2<float>& aNewWindowSize, const CU::Vector2<float>& anOldWindowSize) override;

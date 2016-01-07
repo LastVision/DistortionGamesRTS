@@ -3,6 +3,7 @@
 #include "../Entity/Entity.h"
 #include "../Entity/PollingStation.h"
 #include "MiniMapWidget.h"
+#include <MinimapEventMessage.h>
 #include <MinimapMoveMessage.h>
 #include <MoveCameraMessage.h>
 #include <PostMaster.h>
@@ -12,6 +13,8 @@ namespace GUI
 	MiniMapWidget::MiniMapWidget(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement, const Prism::Camera* aCamera
 		, const bool& aCantClickOn)
 		: myCantClickOn(aCantClickOn)
+		, myShouldRenderEvent(false)
+		, myEventTime(5.f)
 	{
 		CU::Vector2<float> size;
 		CU::Vector2<float> position;
@@ -37,16 +40,37 @@ namespace GUI
 			"Data/Resource/Texture/UI/Minimap/T_minimap_victory_point.dds", { 20.f, 20.f }, { 10.f, 10.f });
 		myCameraFrustum = Prism::ModelLoader::GetInstance()->LoadSprite(
 			"Data/Resource/Texture/UI/Minimap/T_minimap_camera.dds", { 100.f, 50.f }, { 0.f, 0.f });
+
+		myEventSprite = Prism::ModelLoader::GetInstance()->LoadSprite(
+			"Data/Resource/Texture/UI/Minimap/T_minimap_event.dds", { 20.f, 20.f }, { 10.f, 10.f });
+
+		PostMaster::GetInstance()->Subscribe(eMessageType::MINIMAP_EVENT, this);
 	}
 
 	MiniMapWidget::~MiniMapWidget()
 	{
+		PostMaster::GetInstance()->UnSubscribe(eMessageType::MINIMAP_EVENT, this);
 		SAFE_DELETE(myPlaceholderSprite);
 		SAFE_DELETE(myUnitSprite);
 		SAFE_DELETE(myBaseSprite);
 		SAFE_DELETE(myResourcePointSprite);
 		SAFE_DELETE(myVictoryPointSprite);
 		SAFE_DELETE(myCameraFrustum);
+		SAFE_DELETE(myEventSprite);
+	}
+	
+	
+	void MiniMapWidget::Update(float aDelta)
+	{
+		if (myShouldRenderEvent == true)
+		{
+			myEventTimer += aDelta;
+		}
+
+		if (myEventTimer > myEventTime)
+		{
+			myShouldRenderEvent = false;
+		}
 	}
 
 	void MiniMapWidget::Render(const CU::Vector2<float>& aParentPosition)
@@ -64,6 +88,18 @@ namespace GUI
 		cameraPosition.x += myCameraFrustum->GetSize().x / 4.f;
 		cameraPosition.y += myCameraFrustum->GetSize().y;
 		myCameraFrustum->Render(cameraPosition);
+		
+		if (myShouldRenderEvent == true)
+		{
+			if (static_cast<int>(myEventTimer) % 2 == 0)
+			{
+				CU::Vector2<float> position = (myEventPosition / 255.f) * mySize;
+				myEventSprite->Render(aParentPosition + myPosition + position);
+			}
+
+		}
+
+
 	}
 
 	void MiniMapWidget::OnMousePressed(const CU::Vector2<float>& aPosition)
@@ -94,6 +130,14 @@ namespace GUI
 
 		myPlaceholderSprite->SetSize(mySize, { 0.f, 0.f });
 		myCameraFrustum->SetSize(frustumRatio * aNewWindowSize, { 0.f, 0.f });
+	}
+
+	void MiniMapWidget::ReceiveMessage(const MinimapEventMessage& aMessage)
+	{
+		aMessage.myMessageType;
+		myEventPosition = aMessage.myPosition;
+		myEventTimer = 0.f;
+		myShouldRenderEvent = true;
 	}
 
 	void MiniMapWidget::RenderUnits(const CU::Vector2<float>& aParentPosition)
