@@ -1,4 +1,6 @@
 #include "stdafx.h"
+
+#include <EventPositionMessage.h>
 #include "../Engine/Camera.h"
 #include "../Entity/Entity.h"
 #include "../Entity/PollingStation.h"
@@ -7,6 +9,7 @@
 #include <MinimapMoveMessage.h>
 #include <MoveCameraMessage.h>
 #include <PostMaster.h>
+#include "../Entity/TriggerComponent.h"
 
 namespace GUI
 {
@@ -91,10 +94,11 @@ namespace GUI
 		
 		if (myShouldRenderEvent == true)
 		{
-			if (static_cast<int>(myEventTimer) % 2 == 0)
+			//if (static_cast<int>(myEventTimer) % 2 == 0)
 			{
 				CU::Vector2<float> position = (myEventPosition / 255.f) * mySize;
-				myEventSprite->Render(aParentPosition + myPosition + position);
+				float scale = 2 + 5 * log(myEventTimer + 1);
+				myEventSprite->Render(aParentPosition + myPosition + position, { scale, scale }, { 1.f, 1.f, 1.f, 1.f - (myEventTimer * 51.f / 255.f) });
 			}
 
 		}
@@ -108,7 +112,7 @@ namespace GUI
 		{
 			CU::Vector2<float> position = aPosition - myPosition;
 			position /= mySize;
-			PostMaster::GetInstance()->SendMessage(MoveCameraMessage(position));
+			PostMaster::GetInstance()->SendMessage(MoveCameraMessage(position,eHowToHandleMovement::ZERO_TO_ONE));
 		}
 	}
 
@@ -138,6 +142,8 @@ namespace GUI
 		myEventPosition = aMessage.myPosition;
 		myEventTimer = 0.f;
 		myShouldRenderEvent = true;
+
+		PostMaster::GetInstance()->SendMessage(EventPositionMessage(myEventPosition));
 	}
 
 	void MiniMapWidget::RenderUnits(const CU::Vector2<float>& aParentPosition)
@@ -167,11 +173,11 @@ namespace GUI
 			CU::Vector2<float> position = (victoryPoints[i]->GetPosition() / 255.f) * mySize;
 			CU::Vector4<float> color = { 0.5f, 0.5f, 0.f, 1.f };
 
-			if (victoryPoints[i]->GetOwner() == eOwnerType::PLAYER)
+			if (victoryPoints[i]->GetComponent<TriggerComponent>()->GetOwnerGainingPoint() == eOwnerType::PLAYER)
 			{
 				color = { 0.f, 0.f, 1.f, 1.f };
 			}
-			else if (victoryPoints[i]->GetOwner() == eOwnerType::ENEMY)
+			else if (victoryPoints[i]->GetComponent<TriggerComponent>()->GetOwnerGainingPoint() == eOwnerType::ENEMY)
 			{
 				color = { 1.f, 0.f, 0.f, 1.f };
 			}
@@ -189,11 +195,11 @@ namespace GUI
 			CU::Vector2<float> position = (resourcePoints[i]->GetPosition() / 255.f) * mySize;
 			CU::Vector4<float> color = { 0.5f, 0.5f, 0.f, 1.f };
 
-			if (resourcePoints[i]->GetOwner() == eOwnerType::PLAYER)
+			if (resourcePoints[i]->GetComponent<TriggerComponent>()->GetOwnerGainingPoint() == eOwnerType::PLAYER)
 			{
 				color = { 0.f, 0.f, 1.f, 1.f };
 			}
-			else if (resourcePoints[i]->GetOwner() == eOwnerType::ENEMY)
+			else if (resourcePoints[i]->GetComponent<TriggerComponent>()->GetOwnerGainingPoint() == eOwnerType::ENEMY)
 			{
 				color = { 1.f, 0.f, 0.f, 1.f };
 			}

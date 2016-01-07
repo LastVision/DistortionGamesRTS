@@ -10,12 +10,14 @@
 #include <Entity.h>
 #include <EntityData.h>
 #include <EntityFactory.h>
+#include <EventPositionMessage.h>
 #include <GUIManager.h>
 #include <GraphicsComponent.h>
 #include <HealthComponent.h>
 #include <Intersection.h>
 #include <InputWrapper.h>
 #include <MinimapMoveMessage.h>
+#include <MoveCameraMessage.h>
 #include <OnClickMessage.h>
 #include "PlayerDirector.h"
 #include <PollingStation.h>
@@ -48,11 +50,13 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 	, mySelectionSpriteRenderPosition(0, 0)
 	, mySelectionSpriteHotspot(0, 0)
 	, myAudioSFXID(-1)
+	, myHasEventToGoTo(false)
+	, myTestUpgradeLevel(0)
 {
 	myAudioSFXID = Prism::Audio::AudioInterface::GetInstance()->GetUniqueID();
 	myDragSelectionPositions.Reserve(4);
-	myDragSelectionSprite = Prism::ModelLoader::GetInstance()->LoadSprite(
-		"Data/Resource/Texture/T_selection_box.dds", { 0.f, 0.f });
+	myDragSelectionSpriteVertical = Prism::ModelLoader::GetInstance()->LoadSprite("Data/Resource/Texture/UI/T_selection_box_vertical.dds", { 0.f, 0.f });
+	myDragSelectionSpriteHorizontal = Prism::ModelLoader::GetInstance()->LoadSprite("Data/Resource/Texture/UI/T_selection_box_horizontal.dds", { 0.f, 0.f });
 
 	for (int i = 0; i < 64; ++i)
 	{
@@ -69,6 +73,7 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 	PostMaster::GetInstance()->Subscribe(eMessageType::TIME_MULTIPLIER, this);
 	PostMaster::GetInstance()->Subscribe(eMessageType::MOVE_UNITS, this);
 	PostMaster::GetInstance()->Subscribe(eMessageType::TOGGLE_BUILD_TIME, this);
+	PostMaster::GetInstance()->Subscribe(eMessageType::EVENT_POSITION, this);
 
 	EntityData tempData;
 	tempData.myGraphicsData.myExistsInEntity = true;
@@ -92,13 +97,15 @@ PlayerDirector::~PlayerDirector()
 {
 	//myTotem->RemoveFromScene();
 	SAFE_DELETE(myGUIManager);
-	SAFE_DELETE(myDragSelectionSprite);
+	SAFE_DELETE(myDragSelectionSpriteVertical);
+	SAFE_DELETE(myDragSelectionSpriteHorizontal);
 	SAFE_DELETE(myTotem);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::TOGGLE_GUI, this);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::ON_CLICK, this);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::TIME_MULTIPLIER, this);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::MOVE_UNITS, this);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::TOGGLE_BUILD_TIME, this);
+	PostMaster::GetInstance()->UnSubscribe(eMessageType::EVENT_POSITION, this);
 	Prism::Audio::AudioInterface::GetInstance()->UnRegisterObject(myAudioSFXID);
 }
 
@@ -153,6 +160,15 @@ void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 
 	UpdateInputs();
 
+	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_SPACE))
+	{
+		if (myHasEventToGoTo == true)
+		{
+			PostMaster::GetInstance()->SendMessage(MoveCameraMessage(myLastEventPosition, eHowToHandleMovement::WORLD_POSITION));
+			myHasEventToGoTo = false;
+		}
+	}
+
 	Director::Update(aDeltaTime);
 	UpdateMouseInteraction(aCamera);
 	myBuilding->Update(aDeltaTime);
@@ -185,10 +201,19 @@ void PlayerDirector::Render(const Prism::Camera& aCamera)
 	aCamera;
 	if (myRenderGUI == true)
 	{
-		if (myLeftMousePressed == true && myRenderDragSelection == true)
+		if (myLeftMousePressed == true && myRenderDragSelection == true) // balck magic numbers, don't change
 		{
-			myDragSelectionSprite->SetSize(mySelectionSpriteSize, mySelectionSpriteHotspot);
-			myDragSelectionSprite->Render(mySelectionSpriteRenderPosition);
+			myDragSelectionSpriteVertical->SetSize({ 10.f, mySelectionSpriteSize.y }, mySelectionSpriteHotspot);
+			myDragSelectionSpriteVertical->Render(mySelectionSpriteRenderPosition);
+
+			myDragSelectionSpriteHorizontal->SetSize({ mySelectionSpriteSize.x, 10.f }, mySelectionSpriteHotspot);
+			myDragSelectionSpriteHorizontal->Render(mySelectionSpriteRenderPosition);
+
+			myDragSelectionSpriteVertical->SetSize({ 10.f, mySelectionSpriteSize.y }, { -mySelectionSpriteSize.x, mySelectionSpriteSize.y });
+			myDragSelectionSpriteVertical->Render(mySelectionSpriteRenderPosition);
+
+			myDragSelectionSpriteHorizontal->SetSize({ mySelectionSpriteSize.x + 10.f, 10.f }, { mySelectionSpriteHotspot.x, mySelectionSpriteHotspot.y - mySelectionSpriteSize.y });
+			myDragSelectionSpriteHorizontal->Render(mySelectionSpriteRenderPosition);
 		}
 		myGUIManager->Render();
 	}
@@ -282,6 +307,12 @@ void PlayerDirector::ReceiveMessage(const MinimapMoveMessage& aMessage)
 void PlayerDirector::ReceiveMessage(const ToggleBuildTimeMessage& aMessage)
 {
 	myBuilding->GetComponent<BuildingComponent>()->SetIgnoreBuildTime(aMessage.myIgnoreBuildTime);
+}
+
+void PlayerDirector::ReceiveMessage(const EventPositionMessage& aMessage)
+{
+	myLastEventPosition = aMessage.myPosition;
+	myHasEventToGoTo = true;
 }
 
 const BuildingComponent& PlayerDirector::GetBuildingComponent() const

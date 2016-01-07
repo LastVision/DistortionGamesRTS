@@ -63,6 +63,7 @@ public:
 	void ReceiveMessage(const TimeMultiplierMessage& aMessage) override;
 	void ReceiveMessage(const MinimapMoveMessage& aMessage) override;
 	void ReceiveMessage(const ToggleBuildTimeMessage& aMessage) override;
+	void ReceiveMessage(const EventPositionMessage& aMessage) override;
 
 	const CU::GrowingArray<Entity*>& GetSelectedUnits() const;
 	const BuildingComponent& GetBuildingComponent() const;
@@ -76,6 +77,8 @@ public:
 	eSelectedAction GetSelectedAction() const;
 
 	void AttackMoveSelectedUnits(const CU::Vector2<float>& aPosition);
+
+	const int& GetTestUpgradeLevel() const;
 
 private:
 	void UpdateInputs();
@@ -118,11 +121,16 @@ private:
 	CU::Vector3<float> myFirstCameraPosition;
 	CU::Vector3<float> myFirstMousePositionInWorld;
 	CU::GrowingArray<CU::Vector3<float>> myDragSelectionPositions;
-	Prism::SpriteProxy* myDragSelectionSprite;
+	Prism::SpriteProxy* myDragSelectionSpriteVertical;
+	Prism::SpriteProxy* myDragSelectionSpriteHorizontal;
 
 	Entity* myTotem;
 
 	int myAudioSFXID;
+	CU::Vector2<float> myLastEventPosition;
+	bool myHasEventToGoTo;
+
+	int myTestUpgradeLevel;
 };
 
 inline const CU::GrowingArray<Entity*>& PlayerDirector::GetSelectedUnits() const
@@ -148,4 +156,9 @@ inline const CU::StaticArray<CU::GrowingArray<Entity*>, AMOUNT_OF_CONTROL_GROUPS
 inline eSelectedAction PlayerDirector::GetSelectedAction() const
 {
 	return mySelectedAction;
+}
+
+inline const int& PlayerDirector::GetTestUpgradeLevel() const
+{
+	return myTestUpgradeLevel;
 }

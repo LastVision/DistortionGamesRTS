@@ -11,6 +11,7 @@
 #include <VictoryMessage.h>
 #include <SpawnUnitMessage.h>
 #include <PollingStation.h>
+#include <SelectionComponent.h>
 #include <UpgradeUnitMessage.h>
 #include <XMLReader.h>
 
@@ -65,6 +66,7 @@ void Director::Update(float aDeltaTime)
 		if (myActiveUnits[i]->GetAlive() == false)
 		{
 			myDeadUnits.Add(myActiveUnits[i]);
+			myActiveUnits[i]->RemoveSelectionRingFromScene();
 			myActiveUnits.RemoveCyclicAtIndex(i);
 		}
 	}

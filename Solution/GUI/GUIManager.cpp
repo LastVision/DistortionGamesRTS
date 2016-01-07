@@ -12,6 +12,7 @@
 #include "UnitActionWidget.h"
 #include "UnitCapWidget.h"
 #include "UnitInfoWidget.h"
+#include "UpgradeButtonWidget.h"
 #include "WidgetContainer.h"
 
 namespace GUI
@@ -165,7 +166,7 @@ namespace GUI
 				}
 				else if (type == "unit_action")
 				{
-					UnitActionWidget* unitActions = new UnitActionWidget(&reader, widgetElement, myPlayer->GetSelectedUnits());
+					UnitActionWidget* unitActions = new UnitActionWidget(&reader, widgetElement, myPlayer->GetSelectedUnits(), myPlayer);
 					container->AddWidget(unitActions);
 				}
 				else if (type == "minimap")
@@ -192,6 +193,11 @@ namespace GUI
 				{
 					UnitCapWidget* unitCapWidget = new UnitCapWidget(size, myPlayer->GetUnitCap(), myPlayer->GetUnitCount());
 					container->AddWidget(unitCapWidget);
+				}
+				else if (type == "upgrade_button")
+				{
+					UpgradeButtonWidget* upgradeButtonWidget = new UpgradeButtonWidget(&reader, widgetElement, myPlayer->GetTestUpgradeLevel());
+					container->AddWidget(upgradeButtonWidget);
 				}
 			}
 			myWidgets->AddWidget(container);

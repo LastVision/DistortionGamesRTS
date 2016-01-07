@@ -108,5 +108,8 @@
     <ClInclude Include="MinimapEventMessage.h">
       <Filter>Message</Filter>
     </ClInclude>
+    <ClInclude Include="EventPositionMessage.h">
+      <Filter>Message</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

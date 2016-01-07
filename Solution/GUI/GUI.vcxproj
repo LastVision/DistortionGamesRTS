@@ -27,6 +27,7 @@
     <ClInclude Include="UnitActionWidget.h" />
     <ClInclude Include="UnitCapWidget.h" />
     <ClInclude Include="UnitInfoWidget.h" />
+    <ClInclude Include="UpgradeButtonWidget.h" />
     <ClInclude Include="Widget.h" />
     <ClInclude Include="WidgetContainer.h" />
   </ItemGroup>
@@ -50,6 +51,7 @@
     <ClCompile Include="UnitActionWidget.cpp" />
     <ClCompile Include="UnitCapWidget.cpp" />
     <ClCompile Include="UnitInfoWidget.cpp" />
+    <ClCompile Include="UpgradeButtonWidget.cpp" />
     <ClCompile Include="Widget.cpp" />
     <ClCompile Include="WidgetContainer.cpp" />
   </ItemGroup>

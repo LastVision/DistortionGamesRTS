@@ -3,6 +3,7 @@
 struct CinematicMessage;
 struct FadeMessage;
 struct EmitterMessage;
+struct EventPositionMessage;
 struct GameStateMessage;
 struct Message;
 struct MinimapEventMessage;
@@ -31,6 +32,7 @@ public:
 	virtual void ReceiveMessage(const CinematicMessage& aMessage);
 	virtual void ReceiveMessage(const FadeMessage& aMessage);
 	virtual void ReceiveMessage(const EmitterMessage& aMessage);
+	virtual void ReceiveMessage(const EventPositionMessage& aMessage);
 	virtual void ReceiveMessage(const GameStateMessage& aMessage);
 	virtual void ReceiveMessage(const Message& aMessage);
 	virtual void ReceiveMessage(const MinimapEventMessage& aMessage);
