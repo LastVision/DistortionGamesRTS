@@ -581,4 +581,5 @@ void ControllerComponent::Reset()
 	myTerrain.CalcEntityHeight(myEntity.myOrientation);
 	myAcceleration = { 0.f, 0.f };
 	myBehavior->SetTarget({ myEntity.GetPosition().x + CU::Math::RandomRange<float>(-0.1f, 0.1f), myEntity.GetPosition().y - 2.f });
+	myActions.RemoveAll();
 }

@@ -46,6 +46,7 @@ enum class ePropType
 	BUSH_A,
 	BUSH_B,
 	BUSH_C,
+	ELECTRIC_POST_A,
 	ROCK_LARGE,
 	ROCK_MEDIUM,
 	ROCK_SMALL,
@@ -124,6 +125,7 @@ enum class eHistoryType
 
 enum class eParticleType : int
 {
+	NONE = -1,
 	BLOOD,
 	//WEATHER_SNOW,
 	//HEALING,

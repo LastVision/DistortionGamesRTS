@@ -52,11 +52,20 @@ inline void Prism::Sprite::SetSize(const CU::Vector2<float> aTextureSize, const 
 	if (aTextureSize.x != mySize.x || aTextureSize.y != mySize.y
 		|| aHotSpot.x != myHotspot.x || aHotSpot.y != myHotspot.y)
 	{
-		ModelLoader::GetInstance()->Pause();
+		bool shouldPause = !Prism::ModelLoader::GetInstance()->IsPaused();
+
+		if (shouldPause == true)
+		{
+			ModelLoader::GetInstance()->Pause();
+		}
 		myHotspot = aHotSpot;
 		mySize = aTextureSize;
 		CreateVertices();
-		ModelLoader::GetInstance()->UnPause();
+
+		if (shouldPause == true)
+		{
+			ModelLoader::GetInstance()->UnPause();
+		}
 		//Do the resizing on ModelLoader instead? so we dont have to pause
 	}
 

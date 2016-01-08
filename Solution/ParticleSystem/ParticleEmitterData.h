@@ -21,7 +21,7 @@ namespace Prism
 		ParticleEmitterData();
 		~ParticleEmitterData();
 
-		void LoadDataFile(const char* aFilePath);
+		void LoadDataFile(const std::string& aFilePath);
 
 	private:
 
@@ -39,6 +39,7 @@ namespace Prism
 
 		float						myMinRotation;
 		float						myMaxRotation;
+		float						myRotationDelta;
 
 		float						mySpeedMultiplier;
 

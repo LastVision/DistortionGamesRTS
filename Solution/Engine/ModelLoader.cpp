@@ -161,8 +161,14 @@ namespace Prism
 		return myIsLoading;
 	}
 
+	volatile bool ModelLoader::IsPaused() const
+	{
+		return myIsPaused;
+	}
+
 	void ModelLoader::Pause()
 	{
+		DL_ASSERT_EXP(myIsPaused == false, "Can't pause when already paused.");
 		myIsPaused = true;
 
 		while (myIsLoading == true)
@@ -172,6 +178,7 @@ namespace Prism
 
 	void ModelLoader::UnPause()
 	{
+		DL_ASSERT_EXP(myIsPaused == true, "Can't unpause when already unpaused.");
 		myIsPaused = false;
 		if (myBuffers[myInactiveBuffer].Size() == 0)
 		{
@@ -439,7 +446,7 @@ namespace Prism
 		myModelFactory->ConvertToDGFX(someData.myModelPath.c_str(), animOutput.c_str());
 #endif
 
-		Model* model = myDGFXLoader->LoadModel(someData.myModelPath.c_str()
+		Model* model = myDGFXLoader->LoadModel(someData.myModelPath
 			, EffectContainer::GetInstance()->GetEffect(someData.myEffectPath));
 #else
 		Model* model = myModelFactory->LoadModel(someData.myModelPath.c_str(),
@@ -457,7 +464,7 @@ namespace Prism
 		myModelFactory->ConvertToDGFX(someData.myModelPath.c_str(), animOutput.c_str());
 #endif
 
-		ModelAnimated* model = myDGFXLoader->LoadAnimatedModel(someData.myModelPath.c_str()
+		ModelAnimated* model = myDGFXLoader->LoadAnimatedModel(someData.myModelPath
 			, EffectContainer::GetInstance()->GetEffect(someData.myEffectPath));
 #else
 		ModelAnimated* model = myModelFactory->LoadModelAnimated(someData.myModelPath.c_str(),
@@ -474,7 +481,7 @@ namespace Prism
 		myModelFactory->ConvertToDGFX(someData.myModelPath.c_str(), animOutput.c_str());
 #endif
 
-		someData.myAnimationProxy->myAnimation = myDGFXLoader->LoadAnimation(someData.myModelPath.c_str());
+		someData.myAnimationProxy->myAnimation = myDGFXLoader->LoadAnimation(someData.myModelPath);
 #else
 		someData.myAnimationProxy->myAnimation
 			= myModelFactory->LoadAnimation(someData.myModelPath.c_str());

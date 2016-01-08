@@ -1,4 +1,5 @@
 #include "stdafx.h"
+
 #include "Camera.h"
 #include <CommonHelper.h>
 #include <d3dx11effect.h>
@@ -16,7 +17,7 @@ namespace Prism
 		, myEmissionTime(0)
 		, myEmitterLife(0)
 		, myParticleIndex(0)
-		, myDeadParticleCount(0)
+		, myLiveParticleCount(0)
 	{
 		myParticleEmitterData = someData;
 		myEmitterPath = myParticleEmitterData->myFileName;
@@ -76,12 +77,15 @@ namespace Prism
 			, &myVertexWrapper->myStride
 			, &myVertexWrapper->myByteOffset);
 
-
+		DL_DEBUG("Before Particle technique pass");
 		for (UINT i = 0; i < myParticleEmitterData->myTechniqueDesc->Passes; ++i)
 		{
+			DL_DEBUG("Particle technique Pass");
 			myParticleEmitterData->myEffect->GetTechnique()->GetPassByIndex(i)->Apply(0, Engine::GetInstance()->GetContex());
 			Engine::GetInstance()->GetContex()->Draw(myGraphicalParticles.Size(), 0);
 		}
+		DL_DEBUG("After Particle technique pass");
+
 	}
 
 	void ParticleEmitterInstance::Update(float aDeltaTime, const CU::Matrix44f& aWorldMatrix)
@@ -152,7 +156,7 @@ namespace Prism
 			myEmissionTime = myParticleEmitterData->myEmissionRate;
 		}
 
-		if (myEmitterLife <= 0.f && myDeadParticleCount >= myLogicalParticles.Size())
+		if (myEmitterLife <= 0.f && myLiveParticleCount <= 0)
 		{
 			myIsActive = false;
 		}
@@ -164,7 +168,7 @@ namespace Prism
 		{
 			if (myGraphicalParticles[i].myAlpha <= 0.0f)
 			{
-				myDeadParticleCount++;
+				myLiveParticleCount--;
 				myLogicalParticles[i].myIsAlive = false;
 				continue;
 			}
@@ -177,7 +181,7 @@ namespace Prism
 
 			myGraphicalParticles[i].myColor += myDiffColor  * aDeltaTime;
 
-			myGraphicalParticles[i].myRotation += myLogicalParticles[i].myRotation * aDeltaTime;
+			myGraphicalParticles[i].myRotation += myGraphicalParticles[i].myRotation * (myLogicalParticles[i].myRotationDelta * aDeltaTime);
 
 			myGraphicalParticles[i].myLifeTime -= aDeltaTime;
 
@@ -192,9 +196,7 @@ namespace Prism
 			{
 				myParticleIndex = 0;
 			}
-			myDeadParticleCount--;
-			myLogicalParticles[myParticleIndex].myIsAlive = true;
-
+			myLiveParticleCount++;
 
 			myGraphicalParticles[myParticleIndex].myColor = myParticleEmitterData->myData.myStartColor;
 
@@ -204,10 +206,14 @@ namespace Prism
 
 			myGraphicalParticles[myParticleIndex].myLifeTime = myParticleEmitterData->myParticlesLifeTime;
 
+			myGraphicalParticles[myParticleIndex].mySize = 1 * myParticleScaling;
+
+			myGraphicalParticles[myParticleIndex].myAlpha = myParticleEmitterData->myData.myStartAlpha;
+
 			myParticleScaling = CU::Math::RandomRange(myParticleEmitterData->myData.myMinStartSize
 				, myParticleEmitterData->myData.myMaxStartSize);
 
-			myGraphicalParticles[myParticleIndex].mySize = 1 * myParticleScaling;
+			myLogicalParticles[myParticleIndex].myIsAlive = true;
 
 			myLogicalParticles[myParticleIndex].myVelocity.x = CU::Math::RandomRange(myParticleEmitterData->myData.myMinVelocity.x,
 				myParticleEmitterData->myData.myMaxVelocity.x);
@@ -220,9 +226,13 @@ namespace Prism
 
 			myLogicalParticles[myParticleIndex].myRotation = CU::Math::RandomRange(myParticleEmitterData->myMinRotation, myParticleEmitterData->myMaxRotation);
 
+			myGraphicalParticles[myParticleIndex].myRotation = myLogicalParticles[myParticleIndex].myRotation;
+
 			myLogicalParticles[myParticleIndex].mySpeed = myParticleEmitterData->mySpeedMultiplier;
 
-			myGraphicalParticles[myParticleIndex].myAlpha = myParticleEmitterData->myData.myStartAlpha;
+			myLogicalParticles[myParticleIndex].myRotationDelta = myParticleEmitterData->myRotationDelta;
+
+
 
 			myParticleIndex += 1;
 		}

@@ -268,7 +268,12 @@ std::string ConsoleHistoryManager::RemoveTabFromString(const std::string& aComma
 
 void ConsoleHistoryManager::AddHistory(const std::string& aCommand, eHistoryType anEnum)
 {
-	Prism::ModelLoader::GetInstance()->Pause();
+	bool shouldPause = !Prism::ModelLoader::GetInstance()->IsPaused();
+
+	if (shouldPause == true)
+	{
+		Prism::ModelLoader::GetInstance()->Pause();
+	}
 
 	DL_ASSERT_EXP(aCommand.length() > 0, "Should not be able to save empty commands in history");
 	if (aCommand.find_first_of("\n") != -1)
@@ -317,7 +322,10 @@ void ConsoleHistoryManager::AddHistory(const std::string& aCommand, eHistoryType
 
 	myInsertIndex++;
 
-	Prism::ModelLoader::GetInstance()->UnPause();
+	if (shouldPause == true)
+	{
+		Prism::ModelLoader::GetInstance()->UnPause();
+	}
 }
 
 

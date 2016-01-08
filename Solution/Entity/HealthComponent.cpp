@@ -20,9 +20,7 @@ HealthComponent::HealthComponent(Entity& aEntity, HealthComponentData& aData)
 	, myArmor(aData.myArmor)
 	, myIsHealing(false)
 {
-	Prism::ModelLoader::GetInstance()->Pause();
 	myHealthBar = new GUI::BarWidget(myMaxHealth, myCurrentHealth, { 50.f, 10.f });
-	Prism::ModelLoader::GetInstance()->UnPause();
 }
 
 HealthComponent::~HealthComponent()
@@ -53,7 +51,7 @@ bool HealthComponent::TakeDamage(float aDamage)
 {
 	DL_ASSERT_EXP(aDamage >= 0, "Cant take negative damage, use Heal for healing if that was your intention");
 
-	PostMaster::GetInstance()->SendMessage(EmitterMessage(eParticleType::BLOOD, myEntity.GetId()));
+	PostMaster::GetInstance()->SendMessage(EmitterMessage("OnHit", myEntity.GetId()));
 	PostMaster::GetInstance()->SendMessage(MinimapEventMessage(myEntity.GetPosition(), MinimapEventType::eUNIT_ATTACKED));
 
 	float damage = aDamage - myArmor;

@@ -84,7 +84,7 @@ LevelFactory::~LevelFactory()
 	myDirectionalLights.DeleteAll();
 }
 
-Level* LevelFactory::LoadLevel(const int& aID)
+Level* LevelFactory::LoadLevel(const int& aID, bool aPauseModelLoader)
 {
 	if (myLevelPaths.find(aID) == myLevelPaths.end())
 	{
@@ -92,12 +92,16 @@ Level* LevelFactory::LoadLevel(const int& aID)
 	}
 	myCurrentID = aID;
 
-	return LoadCurrentLevel();
+	return LoadCurrentLevel(aPauseModelLoader);
 }
 
-Level* LevelFactory::LoadCurrentLevel()
+Level* LevelFactory::LoadCurrentLevel(bool aPauseModelLoader)
 {
 	myIsLoading = true;
+	if (aPauseModelLoader == true)
+	{
+		Prism::ModelLoader::GetInstance()->Pause();
+	}
 	delete myCurrentLevel;
 	myCurrentLevel = nullptr;
 
@@ -117,9 +121,12 @@ Level* LevelFactory::LoadCurrentLevel()
 	weatherPosition.y += 5;
 	//PostMaster::GetInstance()->SendMessage(EmitterMessage(eParticleType::WEATHER_SNOW, weatherPosition));
 
-	Prism::ModelLoader::GetInstance()->Pause();
 	myCurrentLevel->LoadTutorial(myCamera, tutorialPath); // needs to be after InitGUI
-	Prism::ModelLoader::GetInstance()->UnPause();
+
+	if (aPauseModelLoader == true)
+	{
+		Prism::ModelLoader::GetInstance()->UnPause();
+	}
 	return myCurrentLevel;
 }
 
@@ -180,7 +187,7 @@ void LevelFactory::ReadLevelList(const std::string& aLevelListPath)
 
 void LevelFactory::ReadLevel(const std::string& aLevelPath, std::string& aTutorialPathOut)
 {
-	Prism::ModelLoader* modelLoader = Prism::ModelLoader::GetInstance();
+	//Prism::ModelLoader* modelLoader = Prism::ModelLoader::GetInstance();
 	Prism::EffectContainer* effectContainer = Prism::EffectContainer::GetInstance();
 	//modelLoader->Pause();
 	Prism::Engine::GetInstance()->myIsLoading = true;
@@ -204,9 +211,12 @@ void LevelFactory::ReadLevel(const std::string& aLevelPath, std::string& aTutori
 
 	reader.ForceReadAttribute(reader.ForceFindFirstChild(levelElement, "tutorial"), "source", aTutorialPathOut);
 
+	std::string luaPath;
+	reader.ForceReadAttribute(reader.ForceFindFirstChild(levelElement, "lua"), "source", luaPath);
+
 
 	LUA::ScriptSystem::Create();
-	LUA::ScriptSystem::GetInstance()->Init(ScriptInterface::RegisterFunctions);
+	LUA::ScriptSystem::GetInstance()->Init(luaPath, ScriptInterface::RegisterFunctions);
 	Console::GetInstance(); // needs to be here to create console.
 
 	LoadLights(reader, levelElement);
@@ -219,8 +229,8 @@ void LevelFactory::ReadLevel(const std::string& aLevelPath, std::string& aTutori
 #endif
 	reader.CloseDocument();
 
-	modelLoader->UnPause();
-	modelLoader->WaitUntilFinished();
+	//modelLoader->UnPause();
+	//modelLoader->WaitUntilFinished();
 
 	effectContainer->GetEffect("Data/Resource/Shader/S_effect_pbl.fx")->SetAmbientHue(myAmbientHue);
 
@@ -466,10 +476,10 @@ void LevelFactory::LoadBases(XMLReader& aReader, tinyxml2::XMLElement* aLevelEle
 			}
 		}
 	}
-	DL_ASSERT_EXP(enemyBase <= 1, "Enemy can't have more than one base.");
-	DL_ASSERT_EXP(enemyBase >= 1, "Enemy can't have less than one base.");
-	DL_ASSERT_EXP(playerBase <= 1, "Player can't have more than one base.");
-	DL_ASSERT_EXP(playerBase >= 1, "Player can't have less than one base.");
+	//DL_ASSERT_EXP(enemyBase <= 1, "Enemy can't have more than one base.");
+	//DL_ASSERT_EXP(enemyBase >= 1, "Enemy can't have less than one base.");
+	//DL_ASSERT_EXP(playerBase <= 1, "Player can't have more than one base.");
+	//DL_ASSERT_EXP(playerBase >= 1, "Player can't have less than one base.");
 
 }
 

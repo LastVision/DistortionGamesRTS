@@ -23,6 +23,7 @@ namespace Prism
 		void ClearLoadJobs();
 
 		volatile bool IsLoading() const;
+		volatile bool IsPaused() const;
 		void Pause();
 		void UnPause();
 		void WaitUntilFinished() const;

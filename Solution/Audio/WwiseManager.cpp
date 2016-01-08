@@ -126,7 +126,7 @@ namespace Prism
 			AkBankID bankID; // Not used
 			if (AK::SoundEngine::LoadBank(aBankPath, AK_DEFAULT_POOL_ID, bankID) != AK_Success)
 			{
-				char buffer[50];
+				char buffer[256];
 				sprintf_s(buffer, "Could not find %s!", aBankPath);
 
 				CallError(buffer);

@@ -223,6 +223,10 @@ namespace EntityEnumConverter
 		{
 			return ePropType::WHEELS_B;
 		}
+		else if (aPropType == "sm_electric_post_a")
+		{
+			return ePropType::ELECTRIC_POST_A;
+		}
 		DL_ASSERT("The " + aPropType + " prop type is not supported, please tell Daniel about it.");
 		return ePropType::NOT_A_PROP;
 	}
