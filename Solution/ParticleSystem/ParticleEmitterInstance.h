@@ -12,7 +12,6 @@ namespace Prism
 	class ParticleEmitterInstance
 	{
 	public:
-
 		ParticleEmitterInstance(ParticleEmitterData* someData, bool anAllowManyParticles = false);
 		~ParticleEmitterInstance();
 		void ReleaseData();
@@ -46,7 +45,7 @@ namespace Prism
 		float myParticleScaling;
 
 		int myParticleIndex;
-		int myDeadParticleCount;
+		int myLiveParticleCount;
 
 		bool myIsActive;
 

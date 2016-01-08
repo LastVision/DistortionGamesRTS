@@ -13,15 +13,15 @@ namespace Prism
 		static ParticleDataContainer* GetInstance();
 		static void Destroy();
 
-		ParticleEmitterData*	GetParticleData(const char* aFilePath);
+		ParticleEmitterData*	GetParticleData(const std::string& aFilePath);
 		void SetGPUData(Camera* aCamera);
 
 	private:
 		ParticleDataContainer(){};
 		~ParticleDataContainer();
-		void LoadParticleData(const char* aFilePath);
+		void LoadParticleData(const std::string& aFilePath);
 
-		std::unordered_map<const char*, ParticleEmitterData*> myParticleData;
+		std::unordered_map<std::string, ParticleEmitterData*> myParticleData;
 
 		static ParticleDataContainer* myInstance;
 	};

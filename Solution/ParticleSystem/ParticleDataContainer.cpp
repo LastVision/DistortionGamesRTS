@@ -10,7 +10,6 @@
 #include "Engine.h"
 
 #ifdef DLL_EXPORT
-#include "Engine.h"
 #include "FileWatcher.h"
 #endif
 
@@ -42,7 +41,7 @@ namespace Prism
 		}
 	}
 
-	ParticleEmitterData* ParticleDataContainer::GetParticleData(const char* aFilePath)
+	ParticleEmitterData* ParticleDataContainer::GetParticleData(const std::string& aFilePath)
 	{
 #ifndef DLL_EXPORT
 		auto it = myParticleData.find(aFilePath);
@@ -84,7 +83,7 @@ namespace Prism
 		}
 	}
 
-	void ParticleDataContainer::LoadParticleData(const char* aFilePath)
+	void ParticleDataContainer::LoadParticleData(const std::string& aFilePath)
 	{
 		ParticleEmitterData* newData = new ParticleEmitterData();
 

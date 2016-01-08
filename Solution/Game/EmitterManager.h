@@ -1,6 +1,8 @@
 #pragma once
 #include "Subscriber.h"
 #include <StaticArray.h>
+#include <GrowingArray.h>
+#include <map>
 #define PREALLOCATED_EMITTER_SIZE 128
 class Entity;
 class ParticleEmitterComponent;
@@ -13,15 +15,17 @@ namespace Prism
 
 struct EmitterData
 {
-	EmitterData(std::string aType);
+	EmitterData(const std::string& aType);
 	~EmitterData();
 
-	CU::StaticArray<Prism::ParticleEmitterInstance*, PREALLOCATED_EMITTER_SIZE> myEmitterA;
-	CU::StaticArray<Prism::ParticleEmitterInstance*, PREALLOCATED_EMITTER_SIZE> myEmitterB;
-	CU::StaticArray<Prism::ParticleEmitterInstance*, PREALLOCATED_EMITTER_SIZE> myEmitterC;
+	//CU::StaticArray<Prism::ParticleEmitterInstance*, PREALLOCATED_EMITTER_SIZE> myEmitterA;
+	//CU::StaticArray<Prism::ParticleEmitterInstance*, PREALLOCATED_EMITTER_SIZE> myEmitterB;
+	//CU::StaticArray<Prism::ParticleEmitterInstance*, PREALLOCATED_EMITTER_SIZE> myEmitterC;
+
+	CU::GrowingArray<Prism::ParticleEmitterInstance*> myEmitters;
 
 	std::string myType;
-
+	std::string myIdentifier;
 	int myEmitterIndex;
 };
 
@@ -32,36 +36,24 @@ public:
 	EmitterManager();
 	~EmitterManager();
 
-	//void AddEmitter(ParticleEmitterComponent* anEmitter);
-
-
 	void UpdateEmitters(float aDeltaTime, CU::Matrix44f aWorldMatrix);
 	void RenderEmitters(Prism::Camera* aCamera);
-
-	/*void ReceiveMessage(const DestroyEmitterMessage& aMessage) override;
-	void ReceiveMessage(const SpawnExplosionMessage& aMessage) override;*/
 	void ReceiveMessage(const EmitterMessage& aMessage) override;
 
 private:
+	bool myEmittersLoaded;
 
-	void ReadListOfLists(std::string aPath);
-	void ReadList(std::string aPath);
 
-	CU::GrowingArray<std::string> myXMLPaths;
+	void ReadListOfLists(const std::string& aPath);
+	void ReadList(const std::string& aPath, const std::string& anID);
+	//CU::GrowingArray<std::string> myXMLPaths;
+	//CU::GrowingArray<int> myEmitterCount;
+	//CU::StaticArray<EmitterData*, static_cast<int>(eParticleType::_COUNT)> myEmitters;
+	std::unordered_map<std::string, EmitterData*> myEmitters;
+	//std::unordered_map<std::string, std::string> myXMLPaths;
 
-	CU::StaticArray<EmitterData*, static_cast<int>(eParticleType::_COUNT)> myEmitters;
+	//std::unordered_map<std::string, int> myEmitterCount;
 
-	/*Entity* myPlayer;
 
-	bool myIsCloseToPlayer;
-	*/
-	/*
-	enum class eTYPE
-	{
-		EXPLOSION,
-		SMOKE,
-		SPARK,
-		COUNT
-	};*/
 };
 

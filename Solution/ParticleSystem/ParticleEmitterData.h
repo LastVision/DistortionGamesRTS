@@ -21,7 +21,7 @@ namespace Prism
 		ParticleEmitterData();
 		~ParticleEmitterData();
 
-		void LoadDataFile(const char* aFilePath);
+		void LoadDataFile(const std::string& aFilePath);
 
 	private:
 

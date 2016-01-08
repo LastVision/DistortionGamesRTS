@@ -26,7 +26,7 @@ namespace Prism
 	
 	}
 
-	void ParticleEmitterData::LoadDataFile(const char* aFilePath)
+	void ParticleEmitterData::LoadDataFile(const std::string& aFilePath)
 	{
 		XMLReader read;
 		myFileName = aFilePath;
