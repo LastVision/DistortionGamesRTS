@@ -4,6 +4,7 @@
 //#include "ActorComponentData.h"
 #include "ControllerComponent.h"
 #include <Terrain.h>
+#include "AnimationComponent.h"
 
 ActorComponent::ActorComponent(Entity& aEntity, ActorComponentData& aData, const Prism::Terrain& aTerrain)
 	: Component(aEntity)
@@ -55,6 +56,7 @@ void ActorComponent::Update(float aDelta)
 		}
 		else
 		{
+			myEntity.GetComponent<AnimationComponent>()->PlayAnimation(eEntityState::IDLE);
 			myEntity.SetState(eEntityState::IDLE);
 		}
 		break;
@@ -64,7 +66,7 @@ void ActorComponent::Update(float aDelta)
 			//CU::Normalize(direction);
 			LookInDirection(myEntity.myVelocity);
 			myEntity.SetState(eEntityState::WALKING);
-
+			myEntity.GetComponent<AnimationComponent>()->PlayAnimation(eEntityState::WALKING);
 			CU::Vector2<float> position = myEntity.myPosition;
 
 			position += myEntity.myVelocity * aDelta;

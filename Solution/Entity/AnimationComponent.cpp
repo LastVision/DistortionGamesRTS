@@ -66,20 +66,20 @@ void AnimationComponent::AddAnimation(eEntityState aState, const std::string& aA
 void AnimationComponent::Update(float aDeltaTime)
 {
 #ifndef BOX_MODE
-	AnimationData& data = myAnimations[int(myEntity.GetState())];
-	if (myPrevEntityState != myEntity.GetState())
-	{
-		myInstance->SetAnimation(Prism::AnimationSystem::GetInstance()->GetAnimation(data.myFile.c_str()));
-	
-		if (data.myResetTimeOnRestart == true)
-		{
-			myInstance->ResetAnimationTime(0.f);
-		}
-		else
-		{
-			myInstance->ResetAnimationTime(data.myElapsedTime);
-		}
-	}
+	AnimationData& data = myAnimations[int(myAnimationState)];
+	//if (myPrevEntityState != myEntity.GetState())
+	//{
+	//	myInstance->SetAnimation(Prism::AnimationSystem::GetInstance()->GetAnimation(data.myFile.c_str()));
+	//
+	//	if (data.myResetTimeOnRestart == true)
+	//	{
+	//		myInstance->ResetAnimationTime(0.f);
+	//	}
+	//	else
+	//	{
+	//		myInstance->ResetAnimationTime(data.myElapsedTime);
+	//	}
+	//}
 	
 	if (myInstance->IsAnimationDone() == false || data.myShouldLoop == true)
 	{
@@ -93,7 +93,7 @@ void AnimationComponent::Update(float aDeltaTime)
 	}
 
 	data.myElapsedTime += aDeltaTime;
-	myPrevEntityState = myEntity.GetState();
+	//myPrevEntityState = myEntity.GetState();
 #else
 	CU::Vector3<float> pos = myTerrain.GetHeight(myEntity.GetOrientation().GetPos(), 2.f);
 	Prism::RenderBox(pos, eColorDebug::BLUE, 0.5f);
@@ -112,4 +112,20 @@ bool AnimationComponent::IsCurrentAnimationDone() const
 void AnimationComponent::RestartCurrentAnimation()
 {
 	myInstance->ResetAnimationTime(0.f);
+}
+
+void AnimationComponent::PlayAnimation(eEntityState aAnimationState)
+{
+	myAnimationState = aAnimationState;
+	AnimationData& data = myAnimations[int(myAnimationState)];
+	myInstance->SetAnimation(Prism::AnimationSystem::GetInstance()->GetAnimation(data.myFile.c_str()));
+
+	if (data.myResetTimeOnRestart == true)
+	{
+		myInstance->ResetAnimationTime(0.f);
+	}
+	else
+	{
+		myInstance->ResetAnimationTime(data.myElapsedTime);
+	}
 }
