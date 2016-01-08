@@ -76,7 +76,7 @@ void AIDirector::ReceiveMessage(const SpawnUnitMessage& aMessage)
 	if (aMessage.myOwnerType == static_cast<int>(eOwnerType::ENEMY))
 	{
 		Entity* newEntity = myActiveUnits.GetLast();
-		newEntity->SetState(eEntityState::IDLE);
+		newEntity->SetIntention(eEntityState::IDLE);
 
 		myIdleUnits.Add(newEntity);
 	}

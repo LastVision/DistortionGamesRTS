@@ -54,6 +54,8 @@ public:
 	eUnitType GetUnitType() const;
 	eEntityState GetState() const;
 	void SetState(eEntityState aState);
+	eEntityState GetIntention() const;
+	void SetIntention(eEntityState aIntention);
 	Prism::eOctreeType GetOctreeType() const;
 	bool GetAlive() const;
 	void Kill();
@@ -87,6 +89,7 @@ private:
 	eUnitType myUnitType;
 	eOwnerType myOwner;
 	eEntityState myState;
+	eEntityState myIntention;
 	const Prism::eOctreeType myOctreeType;
 	Prism::Scene& myScene;
 
@@ -165,6 +168,16 @@ inline eEntityState Entity::GetState() const
 inline void Entity::SetState(eEntityState aState)
 {
 	myState = aState;
+}
+
+inline eEntityState Entity::GetIntention() const
+{
+	return myIntention;
+}
+
+inline void Entity::SetIntention(eEntityState aIntention)
+{
+	myIntention = aIntention;
 }
 
 inline Prism::eOctreeType Entity::GetOctreeType() const

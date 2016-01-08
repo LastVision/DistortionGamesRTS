@@ -87,7 +87,7 @@ bool HealthComponent::TakeDamage(float aDamage)
 				, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
 		}
 
-		myEntity.SetState(eEntityState::DYING);
+		myEntity.SetIntention(eEntityState::DYING);
 		return false;
 	}
 

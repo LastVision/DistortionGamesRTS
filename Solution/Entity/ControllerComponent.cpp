@@ -62,14 +62,14 @@ ControllerComponent::~ControllerComponent()
 
 void ControllerComponent::Update(float aDelta)
 {
-	if (myEntity.GetState() == eEntityState::DYING)
+	if (myEntity.GetIntention() == eEntityState::DYING || myEntity.GetState() == eEntityState::DYING)
 	{
 		return;
 	}
 	myRangerOneShotTimer -= aDelta;
 	myAttackTimer -= aDelta;
 
-	if (myEntity.GetState() == eEntityState::IDLE || myBehavior->GetDone())
+	if (myEntity.GetIntention() == eEntityState::IDLE || myBehavior->GetDone())
 	{
 		StartNextAction();
 	}
@@ -243,7 +243,8 @@ void ControllerComponent::HoldPosition(bool& aHasPlayedSound)
 	myCurrentAction.myAction = eAction::HOLD;
 	myCurrentAction.myPosition = myEntity.myPosition;
 	myAcceleration = { 0.f, 0.f };
-	myEntity.SetState(eEntityState::IDLE);
+	//myEntity.SetState(eEntityState::IDLE);
+	myEntity.SetIntention(eEntityState::IDLE);
 }
 
 void ControllerComponent::FillCommandList(eAction aAction, bool aClearCommandQueue, Entity* aEntity
@@ -252,7 +253,8 @@ void ControllerComponent::FillCommandList(eAction aAction, bool aClearCommandQue
 	if (aClearCommandQueue == true)
 	{
 		myActions.RemoveAll();
-		myEntity.SetState(eEntityState::IDLE);
+		//myEntity.SetState(eEntityState::IDLE);
+		myEntity.SetIntention(eEntityState::IDLE);
 	}
 
 	//find path within DoMove, or here later
@@ -322,7 +324,8 @@ void ControllerComponent::FillCommandList(eAction aAction, bool aClearCommandQue
 
 void ControllerComponent::DoIdle()
 {
-	myEntity.SetState(eEntityState::IDLE);
+	myEntity.SetIntention(eEntityState::IDLE);
+	//myEntity.SetState(eEntityState::IDLE);
 
 	Entity* closestTarget = PollingStation::GetInstance()->FindClosestEntity(myEntity.GetOrientation().GetPos()
 		, myTargetType, myVisionRange2);
@@ -336,10 +339,14 @@ void ControllerComponent::DoIdle()
 		action.myEntity = closestTarget;
 		myActions.Add(action);
 	}
+
+
+	
 }
 
 void ControllerComponent::DoMove()
 {
+	myEntity.SetIntention(eEntityState::WALKING);
 	myBehavior->SetTarget(GetPosition(myCurrentAction));
 }
 
@@ -396,13 +403,15 @@ void ControllerComponent::AttackTarget()
 {
 	if (myAttackTimer <= 0.f)
 	{
-		myEntity.SetState(eEntityState::ATTACKING);
+		//myEntity.SetState(eEntityState::ATTACKING);
+		myEntity.SetIntention(eEntityState::ATTACKING);
 		myAttackTimer = myAttackRechargeTime;
 
 		if (myEntity.GetUnitType() == eUnitType::GRUNT)
 		{
 			if (myEntity.GetComponent<GrenadeComponent>()->GetCooldown() <= 0.f)
 			{
+				//myEntity.SetIntention(eEntityState::THROWING);
 				myEntity.GetComponent<GrenadeComponent>()->ThrowGrenade(myCurrentAction.myEntity->GetOrientation().GetPos());
 			}
 			else
@@ -455,7 +464,8 @@ void ControllerComponent::AttackTarget()
 
 		if (targetSurvived == false)
 		{
-			myEntity.SetState(eEntityState::IDLE);
+			//myEntity.SetState(eEntityState::IDLE);
+			myEntity.SetIntention(eEntityState::IDLE);
 			myBehavior->SetTarget(myEntity.GetPosition());
 		}
 	}
