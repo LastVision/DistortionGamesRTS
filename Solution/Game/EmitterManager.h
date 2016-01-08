@@ -1,5 +1,6 @@
 #pragma once
 #include "Subscriber.h"
+#include <GrowingArray.h>
 class Entity;
 class ParticleEmitterComponent;
 
@@ -28,9 +29,9 @@ public:
 	void RenderEmitters(Prism::Camera* aCamera);
 	void ReceiveMessage(const EmitterMessage& aMessage) override;
 private:
-	bool myEmittersLoaded;
 	void ReadListOfLists(const std::string& aPath);
 	void ReadList(const std::string& aPath, const std::string& anID);
 	std::unordered_map<std::string, EmitterData*> myEmitters;
+	CU::GrowingArray<EmitterData*> myEmitterList;
 };
 
