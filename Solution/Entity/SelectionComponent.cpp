@@ -14,6 +14,7 @@ SelectionComponent::SelectionComponent(Entity& aEntity, SelectionComponentData& 
 	: Component(aEntity)
 	, myInstance(nullptr)
 	, myCullingRadius(2.5f)
+	, myIsRemovedFromScene(false)
 {
 	Prism::ModelProxy* model = Prism::ModelLoader::GetInstance()->LoadModel(aComponentData.myModelPath
 		, aComponentData.myEffectPath);

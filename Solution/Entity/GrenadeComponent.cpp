@@ -69,7 +69,9 @@ void GrenadeComponent::CheckUnitsForAdd(const CU::GrowingArray<Entity*>& someUni
 void GrenadeComponent::Update(float aDeltaTime)
 {
 	CheckUnitsForRemove(myUnits);
-	CheckUnitsForAdd(PollingStation::GetInstance()->GetUnits(myEntity.GetOwner()), myUnits);
+	CheckUnitsForAdd(PollingStation::GetInstance()->GetUnits(eOwnerType::PLAYER), myUnits);
+	CheckUnitsForAdd(PollingStation::GetInstance()->GetUnits(eOwnerType::NEUTRAL), myUnits);
+	CheckUnitsForAdd(PollingStation::GetInstance()->GetUnits(eOwnerType::ENEMY), myUnits);
 
 	myCurrentCooldown -= aDeltaTime;
 	myDelay -= aDeltaTime;

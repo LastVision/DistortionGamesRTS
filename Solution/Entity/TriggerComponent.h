@@ -16,6 +16,7 @@ public:
 	static eComponentType GetTypeStatic();
 	eComponentType GetType() override;
 	eOwnerType ModifyOwnership(eOwnerType anOwner, float aModifyValue);
+	eOwnerType GetOwnerGainingPoint() const;
 
 private:
 	void operator=(TriggerComponent&) = delete;
@@ -45,4 +46,9 @@ inline eComponentType TriggerComponent::GetTypeStatic()
 inline eComponentType TriggerComponent::GetType()
 {
 	return GetTypeStatic();
+}
+
+inline eOwnerType TriggerComponent::GetOwnerGainingPoint() const
+{
+	return myGainingPointsOwner;
 }

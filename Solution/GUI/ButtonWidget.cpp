@@ -127,7 +127,13 @@ namespace GUI
 		}
 		else if (clickEvent == "game_start")
 		{
-			myClickEvent = new OnClickMessage(eOnClickEvent::GAME_START);
+			int id = 0;
+			aReader->ReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "onclick"), "id", id);
+			myClickEvent = new OnClickMessage(eOnClickEvent::GAME_START, id);
+		}
+		else if (clickEvent == "game_level_select")
+		{
+			myClickEvent = new OnClickMessage(eOnClickEvent::GAME_LEVEL_SELECT);
 		}
 		else if (clickEvent == "game_restart")
 		{

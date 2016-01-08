@@ -28,12 +28,17 @@ public:
 
 	void SetArmor(float aArmor);
 
+	void SetIsHealing(bool aBool);
+	bool GetIsHealing() const;
+
 private:
 	float myMaxHealth;
 	float myCurrentHealth;
 	float myArmor;
 
 	GUI::BarWidget* myHealthBar;
+
+	bool myIsHealing;
 };
 
 inline eComponentType HealthComponent::GetTypeStatic()
@@ -64,4 +69,14 @@ inline float HealthComponent::GetMaxHealth() const
 inline void HealthComponent::SetArmor(float aArmor)
 {
 	myArmor = aArmor;
+}
+
+inline void HealthComponent::SetIsHealing(bool aBool)
+{
+	myIsHealing = aBool;
+}
+
+inline bool HealthComponent::GetIsHealing() const
+{
+	return myIsHealing;
 }

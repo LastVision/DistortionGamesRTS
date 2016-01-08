@@ -60,6 +60,9 @@
     <ClCompile Include="Tutorial.cpp">
       <Filter>Level</Filter>
     </ClCompile>
+    <ClCompile Include="LevelSelectState.cpp">
+      <Filter>StateStack</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -130,6 +133,9 @@
     <ClInclude Include="GameDefines.h" />
     <ClInclude Include="Tutorial.h">
       <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelSelectState.h">
+      <Filter>StateStack</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

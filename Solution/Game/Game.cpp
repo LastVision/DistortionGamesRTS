@@ -12,8 +12,6 @@
 #include <FadeMessage.h>
 #include <FileWatcher.h>
 #include "Game.h"
-#include <GameStateMessage.h>
-#include "InGameState.h"
 #include <InputWrapper.h>
 #include "MainMenuState.h"
 #include <ModelLoader.h>
@@ -57,7 +55,6 @@ Game::Game()
 
 Game::~Game()
 {
-	PostMaster::GetInstance()->UnSubscribe(eMessageType::GAME_STATE, this);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::FADE, this);
 	SAFE_DELETE(myCursor);
 	Prism::Audio::AudioInterface::Destroy();
@@ -69,8 +66,6 @@ Game::~Game()
 	PostMaster::Destroy();
 	myStateStack.Clear();
 	Prism::DebugDrawer::Destroy();
-
-	LUA::ScriptSystem::Destroy();
 }
 
 bool Game::Init(HWND& aHwnd)
@@ -78,7 +73,6 @@ bool Game::Init(HWND& aHwnd)
 	myWindowHandler = &aHwnd;
 	myIsComplete = false;
 
-	PostMaster::GetInstance()->Subscribe(eMessageType::GAME_STATE, this);
 	PostMaster::GetInstance()->Subscribe(eMessageType::FADE, this);
 
 	Prism::Engine::GetInstance()->SetClearColor({ MAGENTA });
@@ -87,14 +81,11 @@ bool Game::Init(HWND& aHwnd)
 
 
 
-	LUA::ScriptSystem::Create();
-	LUA::ScriptSystem::GetInstance()->Init(ScriptInterface::RegisterFunctions);
 
-	Console::GetInstance();
-	//myMainMenu = new MainMenuState();
-	//myStateStack.PushMainGameState(myMainMenu);
+	//Console::GetInstance(); // needed to create console here
+	myStateStack.PushMainGameState(new MainMenuState());
 
-	PostMaster::GetInstance()->SendMessage(GameStateMessage(eGameState::LOAD_GAME, 1));
+	//PostMaster::GetInstance()->SendMessage(GameStateMessage(eGameState::LOAD_GAME, 1));
 	GAME_LOG("Init Successful");
 	return true;
 }
@@ -145,17 +136,7 @@ bool Game::Update()
 	CU::TimerManager::GetInstance()->CapFrameRate(100.f);
 	myCursor->Update();
 	myCursor->Render();
-
-	static bool run = true;
-	if (run == false)
-	{
-		//LUA::ScriptSystem::GetInstance()->RunLuaFromString("Print(\"apa\")");
-	}
-	run = false;
-
-	LUA::ScriptSystem::GetInstance()->Update();
-	//Console::GetInstance()->Update();
-
+	
 	return true;
 }
 
@@ -176,22 +157,6 @@ void Game::OnResize(int aWidth, int aHeight)
 	myStateStack.OnResize(aWidth, aHeight);
 	myCursor->OnResize(aWidth, aHeight);
 	PostMaster::GetInstance()->SendMessage(ResizeMessage(aWidth, aHeight));
-}
-
-void Game::ReceiveMessage(const GameStateMessage& aMessage)
-{
-	switch (aMessage.myGameState)
-	{
-	case eGameState::LOAD_GAME:
-		Prism::MemoryTracker::GetInstance()->SetRunTime(false);
-		myGame = new InGameState();
-		myStateStack.PushMainGameState(myGame);
-		break;
-	case eGameState::LOAD_MENU:
-		break;
-	default:
-		break;
-	}
 }
 
 void Game::ReceiveMessage(const FadeMessage& aMessage)
