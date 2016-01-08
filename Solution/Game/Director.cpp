@@ -165,22 +165,27 @@ void Director::ReceiveMessage(const SpawnUnitMessage& aMessage)
 				{
 					continue;
 				}
-				myUnits[i]->Spawn(myBuilding->GetOrientation().GetPos() + CU::Vector3f(0.f, 0.f, -15.f));
-				myActiveUnits.Add(myUnits[i]);
-				spawnedUnit = myUnits[i];
-
-				int deadIndex = myDeadUnits.Find(spawnedUnit);
-				if (deadIndex > -1)
+				if (myDeadUnits.Find(myUnits[i]) > -1)
 				{
-					myDeadUnits.RemoveCyclicAtIndex(deadIndex);
+					spawnedUnit = myUnits[i]; // is allowed to spawn dying unit, but not preferred
+					continue;
 				}
-
+				
+				spawnedUnit = myUnits[i];
 				break;
 			}
 		}
 
 		if (spawnedUnit != nullptr)
 		{
+			spawnedUnit->Spawn(myBuilding->GetOrientation().GetPos() + CU::Vector3f(0.f, 0.f, -15.f));
+			myActiveUnits.Add(spawnedUnit);
+
+			int deadIndex = myDeadUnits.Find(spawnedUnit);
+			if (deadIndex > -1)
+			{
+				myDeadUnits.RemoveCyclicAtIndex(deadIndex);
+			}
 			PollingStation::GetInstance()->RegisterEntity(spawnedUnit);
 		}
 		else
