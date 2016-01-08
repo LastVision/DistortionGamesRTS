@@ -16,7 +16,7 @@ namespace Prism
 		, myEmissionTime(0)
 		, myEmitterLife(0)
 		, myParticleIndex(0)
-		, myDeadParticleCount(0)
+		, myLiveParticleCount(0)
 	{
 		myParticleEmitterData = someData;
 		myEmitterPath = myParticleEmitterData->myFileName;
@@ -152,7 +152,7 @@ namespace Prism
 			myEmissionTime = myParticleEmitterData->myEmissionRate;
 		}
 
-		if (myEmitterLife <= 0.f && myDeadParticleCount >= myLogicalParticles.Size())
+		if (myEmitterLife <= 0.f && myLiveParticleCount <= 0)
 		{
 			myIsActive = false;
 		}
@@ -164,7 +164,7 @@ namespace Prism
 		{
 			if (myGraphicalParticles[i].myAlpha <= 0.0f)
 			{
-				myDeadParticleCount++;
+				myLiveParticleCount--;
 				myLogicalParticles[i].myIsAlive = false;
 				continue;
 			}
@@ -192,7 +192,7 @@ namespace Prism
 			{
 				myParticleIndex = 0;
 			}
-			myDeadParticleCount--;
+			myLiveParticleCount++;
 			myLogicalParticles[myParticleIndex].myIsAlive = true;
 
 

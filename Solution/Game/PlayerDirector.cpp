@@ -472,7 +472,7 @@ void PlayerDirector::UpdateInputs()
 	myLeftMouseDown = CU::InputWrapper::GetInstance()->MouseDown(0);
 	myLeftMousePressed = CU::InputWrapper::GetInstance()->MouseIsPressed(0);
 	myLeftMouseUp = CU::InputWrapper::GetInstance()->MouseUp(0);
-	myRightClicked = CU::InputWrapper::GetInstance()->MouseUp(1);
+	myRightClicked = CU::InputWrapper::GetInstance()->MouseDown(1);
 
 	if (myMouseIsOverGUI == false && myLeftMouseUp == true && myShiftPressed == false &&
 		(mySelectedAction == eSelectedAction::NONE || mySelectedAction == eSelectedAction::STOP
@@ -557,6 +557,11 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 	CU::Vector3<float> secondTargetPos;
 	CU::Vector2<float> mousePosition = CU::InputWrapper::GetInstance()->GetMousePosition();
 
+	if ((myLeftMouseDown == true || myRightClicked == true) && myMouseIsOverGUI == true)
+	{
+		myRenderDragSelection = false;
+	}
+
 	if (myLeftMouseDown == true && mySelectedAction == eSelectedAction::PLACE_TOTEM)
 	{
 		PlaceTotem(firstTargetPos);
@@ -569,7 +574,6 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 
 	if (myLeftMouseDown == true)
 	{
-		myRenderDragSelection = true;
 		myFirstMousePosition = CU::InputWrapper::GetInstance()->GetMousePosition();
 		myFirstMousePositionInWorld = CalcCursorWorldPosition(myFirstMousePosition, aCamera);
 		myFirstCameraPosition = aCamera.GetOrientation().GetPos();
@@ -577,6 +581,10 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 		if (myMouseIsOverGUI == true)
 		{
 			myRenderDragSelection = false;
+		}
+		else
+		{
+			myRenderDragSelection = true;
 		}
 	}
 

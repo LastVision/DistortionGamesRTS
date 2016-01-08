@@ -530,8 +530,9 @@ Prism::Model* Prism::FBXFactory::LoadModel(const char* aFilePath, Effect* aEffec
 		modelData = data->myData;
 	}
 #else
+	CU::GrowingArray<std::string> errors(16);
 	FBXData* data = new FBXData();
-	FbxModelData* fbxModelData = myLoader->loadModel(aFilePath);
+	FbxModelData* fbxModelData = myLoader->loadModel(aFilePath,	errors);
 	data->myData = fbxModelData;
 	data->myPath = aFilePath;
 	myFBXData.push_back(data);
@@ -598,8 +599,9 @@ Prism::ModelAnimated* Prism::FBXFactory::LoadModelAnimated(const char* aFilePath
 		modelData = data->myData;
 	}
 #else
+	CU::GrowingArray<std::string> errors(16);
 	FBXData* data = new FBXData();
-	FbxModelData* fbxModelData = myLoader->loadModel(aFilePath);
+	FbxModelData* fbxModelData = myLoader->loadModel(aFilePath, errors);
 	data->myData = fbxModelData;
 	data->myPath = aFilePath;
 	myFBXData.push_back(data);
