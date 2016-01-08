@@ -51,7 +51,7 @@ namespace LUA
 		SAFE_DELETE(myInstance);
 	}
 
-	void ScriptSystem::Init(const std::function<void()>& aRegisterFunction)
+	void ScriptSystem::Init(const std::string& aLuaPath, const std::function<void()>& aRegisterFunction)
 	{
 		myOutputFile.open("luaOutput.txt", std::ios::out);
 		myCppRegisterFunction = aRegisterFunction;
@@ -60,8 +60,8 @@ namespace LUA
 			lua_close(myLuaState);
 		}
 		myLuaState = nullptr;
-		myActiveFiles.push_back("Data\\Script\\main.lua");
-		myFileWatcher.WatchFileChange("Data\\Script\\main.lua", std::bind(&ScriptSystem::ReInit, this, std::placeholders::_1));
+		myActiveFiles.push_back(aLuaPath);
+		myFileWatcher.WatchFileChange(aLuaPath, std::bind(&ScriptSystem::ReInit, this, std::placeholders::_1));
 		ReInit("123");
 	}
 

@@ -32,7 +32,7 @@ namespace LUA
 		static ScriptSystem* GetInstance();
 		static void Destroy();
 
-		void Init(const std::function<void()>& aRegisterFunction);
+		void Init(const std::string& aLuaPath, const std::function<void()>& aRegisterFunction);
 
 		void RegisterFunction(const std::string& aNameInLua, lua_CFunction aFunction
 			, const std::string& aArguments, const std::string& aHelpText);
