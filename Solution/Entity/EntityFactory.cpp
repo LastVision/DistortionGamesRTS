@@ -48,7 +48,8 @@ Entity* EntityFactory::CreateEntity(eOwnerType aOwner, eEntityType aType, Prism:
 	if (myInstance->myLoadedEntityData.find(aType) != myInstance->myLoadedEntityData.end())
 	{
 		EntityData loadedEntityData = myInstance->myLoadedEntityData.find(aType)->second;
-		Entity* newEntity = new Entity(aOwner, aOctreeType, loadedEntityData, aScene, aPostion, aTerrian, aRotation, aScale);
+		Entity* newEntity = new Entity(aOwner, aOctreeType, loadedEntityData, aScene, aPostion, aTerrian, aRotation
+			, aScale, eUnitType::NOT_A_UNIT);
 		return newEntity;
 	}
 	DL_ASSERT("Entity not found.");
@@ -64,7 +65,8 @@ Entity* EntityFactory::CreateEntity(eOwnerType aOwner, eEntityType aType, ePropT
 		if (myInstance->myLoadedPropData.find(aPropType) != myInstance->myLoadedPropData.end())
 		{
 			EntityData loadedEntityData = myInstance->myLoadedPropData.find(aPropType)->second;
-			Entity* newEntity = new Entity(aOwner, aOctreeType, loadedEntityData, aScene, aPostion, aTerrian, aRotation, aScale);
+			Entity* newEntity = new Entity(aOwner, aOctreeType, loadedEntityData, aScene, aPostion, aTerrian, aRotation
+				, aScale, eUnitType::NOT_A_UNIT);
 			newEntity->myPropType = aPropType;
 			return newEntity;
 		}
@@ -83,8 +85,9 @@ Entity* EntityFactory::CreateEntity(eOwnerType aOwner, eEntityType aType, eUnitT
 		if (myInstance->myLoadedUnitData.find(aUnitType) != myInstance->myLoadedUnitData.end())
 		{
 			EntityData loadedEntityData = myInstance->myLoadedUnitData.find(aUnitType)->second;
-			Entity* newEntity = new Entity(aOwner, aOctreeType, loadedEntityData, aScene, aPostion, aTerrian, aRotation, aScale);
-			newEntity->myUnitType = aUnitType;
+			Entity* newEntity = new Entity(aOwner, aOctreeType, loadedEntityData, aScene, aPostion, aTerrian, aRotation
+				, aScale, aUnitType);
+			//newEntity->myUnitType = aUnitType;
 			return newEntity;
 		}
 	}
