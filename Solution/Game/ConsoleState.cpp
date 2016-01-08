@@ -172,7 +172,7 @@ const eStateStatus ConsoleState::Update(const float& aDeltaTime)
 		myRenderTime = 0.f;
 	}
 
-
+	LUA::ScriptSystem::GetInstance()->Update();
 	return myStateStatus;
 }
 

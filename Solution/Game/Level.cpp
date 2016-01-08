@@ -64,6 +64,7 @@ Level::~Level()
 	EntityFactory::Destroy();
 	EntityId::Destroy();
 	PollingStation::Destroy();
+	LUA::ScriptSystem::GetInstance()->Destroy();
 }
 
 void Level::LoadTutorial(const Prism::Camera& aCamera, const std::string& aTutorialPath)
