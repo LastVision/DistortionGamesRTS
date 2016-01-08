@@ -32,6 +32,5 @@ namespace GUI
 		CU::StaticArray<ButtonWidget*, AMOUNT_OF_UPGRADES> myUpgrades;
 
 		const int& myUpgradeLevel;
-
 	};
 }

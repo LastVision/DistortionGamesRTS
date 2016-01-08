@@ -2,6 +2,8 @@
 #include "ButtonWidget.h"
 #include "UpgradeButtonWidget.h"
 
+#include <SpriteProxy.h>
+
 namespace GUI
 {
 	UpgradeButtonWidget::UpgradeButtonWidget(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement
@@ -15,12 +17,12 @@ namespace GUI
 		{
 			myUpgrades[index] = new ButtonWidget(aReader, buttonElement);
 			myPosition = myUpgrades[index]->GetPosition();
-			myUpgrades[index]->SetPosition(myUpgrades[index]->GetSize() / 2.f);
+			myUpgrades[index]->SetPosition({ 0.f, myUpgrades[index]->GetSize().y });
 			index++;
 		}
 
 		mySize = myUpgrades[0]->GetSize();
-		myPosition.x -= myUpgrades[0]->GetSize().x / 2.f;
+		myPosition.y -= myUpgrades[0]->GetSize().y / 2.f;
 	}
 
 	UpgradeButtonWidget::~UpgradeButtonWidget()
