@@ -27,7 +27,7 @@ SelectionComponent::~SelectionComponent()
 	SAFE_DELETE(myInstance);
 }
 
-void SelectionComponent::Update(float aDeltaTime)
+void SelectionComponent::Update(float)
 {
 	if (myEntity.IsSelected() == true)
 	{
