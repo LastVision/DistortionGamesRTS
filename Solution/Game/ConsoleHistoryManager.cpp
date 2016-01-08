@@ -78,7 +78,7 @@ void ConsoleHistoryManager::Load()
 			type = eHistoryType::HISTORY;
 		}
 
-		AddHistory(message, type);
+		AddHistory(message, type, false);
 	}
 	output.close();
 }
@@ -266,9 +266,12 @@ std::string ConsoleHistoryManager::RemoveTabFromString(const std::string& aComma
 	return noTabCommand;
 }
 
-void ConsoleHistoryManager::AddHistory(const std::string& aCommand, eHistoryType anEnum)
+void ConsoleHistoryManager::AddHistory(const std::string& aCommand, eHistoryType anEnum, bool aPauseModelLoader)
 {
-	Prism::ModelLoader::GetInstance()->Pause();
+	if (aPauseModelLoader == true)
+	{
+		Prism::ModelLoader::GetInstance()->Pause();
+	}
 
 	DL_ASSERT_EXP(aCommand.length() > 0, "Should not be able to save empty commands in history");
 	if (aCommand.find_first_of("\n") != -1)
@@ -317,7 +320,10 @@ void ConsoleHistoryManager::AddHistory(const std::string& aCommand, eHistoryType
 
 	myInsertIndex++;
 
-	Prism::ModelLoader::GetInstance()->UnPause();
+	if (aPauseModelLoader == true)
+	{
+		Prism::ModelLoader::GetInstance()->UnPause();
+	}
 }
 
 

@@ -98,6 +98,7 @@ Level* LevelFactory::LoadLevel(const int& aID)
 Level* LevelFactory::LoadCurrentLevel()
 {
 	myIsLoading = true;
+	Prism::ModelLoader::GetInstance()->Pause();
 	delete myCurrentLevel;
 	myCurrentLevel = nullptr;
 
@@ -117,7 +118,6 @@ Level* LevelFactory::LoadCurrentLevel()
 	weatherPosition.y += 5;
 	//PostMaster::GetInstance()->SendMessage(EmitterMessage(eParticleType::WEATHER_SNOW, weatherPosition));
 
-	Prism::ModelLoader::GetInstance()->Pause();
 	myCurrentLevel->LoadTutorial(myCamera, tutorialPath); // needs to be after InitGUI
 	Prism::ModelLoader::GetInstance()->UnPause();
 	return myCurrentLevel;
@@ -180,7 +180,7 @@ void LevelFactory::ReadLevelList(const std::string& aLevelListPath)
 
 void LevelFactory::ReadLevel(const std::string& aLevelPath, std::string& aTutorialPathOut)
 {
-	Prism::ModelLoader* modelLoader = Prism::ModelLoader::GetInstance();
+	//Prism::ModelLoader* modelLoader = Prism::ModelLoader::GetInstance();
 	Prism::EffectContainer* effectContainer = Prism::EffectContainer::GetInstance();
 	//modelLoader->Pause();
 	Prism::Engine::GetInstance()->myIsLoading = true;
@@ -222,8 +222,8 @@ void LevelFactory::ReadLevel(const std::string& aLevelPath, std::string& aTutori
 #endif
 	reader.CloseDocument();
 
-	modelLoader->UnPause();
-	modelLoader->WaitUntilFinished();
+	//modelLoader->UnPause();
+	//modelLoader->WaitUntilFinished();
 
 	effectContainer->GetEffect("Data/Resource/Shader/S_effect_pbl.fx")->SetAmbientHue(myAmbientHue);
 
@@ -469,10 +469,10 @@ void LevelFactory::LoadBases(XMLReader& aReader, tinyxml2::XMLElement* aLevelEle
 			}
 		}
 	}
-	DL_ASSERT_EXP(enemyBase <= 1, "Enemy can't have more than one base.");
-	DL_ASSERT_EXP(enemyBase >= 1, "Enemy can't have less than one base.");
-	DL_ASSERT_EXP(playerBase <= 1, "Player can't have more than one base.");
-	DL_ASSERT_EXP(playerBase >= 1, "Player can't have less than one base.");
+	//DL_ASSERT_EXP(enemyBase <= 1, "Enemy can't have more than one base.");
+	//DL_ASSERT_EXP(enemyBase >= 1, "Enemy can't have less than one base.");
+	//DL_ASSERT_EXP(playerBase <= 1, "Player can't have more than one base.");
+	//DL_ASSERT_EXP(playerBase >= 1, "Player can't have less than one base.");
 
 }
 

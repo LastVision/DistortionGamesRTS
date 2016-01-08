@@ -3,7 +3,7 @@
 #include <thread>
 namespace std
 {
-	class mutex;
+	class recursive_mutex;
 }
 
 namespace Prism
@@ -60,7 +60,7 @@ namespace Prism
 		int myAllocations;
 		bool myRuntime;
 
-		std::mutex* myMutex;
+		std::recursive_mutex* myMutex;
 
 		static MemoryTracker* myInstance;
 		std::thread::id myAllowThread;

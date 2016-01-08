@@ -111,9 +111,7 @@ PlayerDirector::~PlayerDirector()
 
 void PlayerDirector::InitGUI(const AIDirector* anAI, const Prism::Camera& aCamera)
 {
-	Prism::ModelLoader::GetInstance()->Pause();
 	myGUIManager = new GUI::GUIManager(myCursor, "Data/Resource/GUI/GUI_ingame.xml", this, anAI, &aCamera);
-	Prism::ModelLoader::GetInstance()->UnPause();
 }
 
 void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
