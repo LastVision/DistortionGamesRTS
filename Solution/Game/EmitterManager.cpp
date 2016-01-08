@@ -10,10 +10,16 @@
 
 
 EmitterManager::EmitterManager()
+	: myEmitterList(64)
 {
 	PostMaster* postMaster = PostMaster::GetInstance();
 	postMaster->Subscribe(eMessageType::PARTICLE, this);
 	ReadListOfLists("Data/Resource/Particle/LI_emitter_lists.xml");
+
+	for (auto it = myEmitters.begin(); it != myEmitters.end(); ++it)
+	{
+		myEmitterList.Add(it->second);
+	}
 }
 
 EmitterManager::~EmitterManager()
@@ -21,6 +27,7 @@ EmitterManager::~EmitterManager()
 	PostMaster* postMaster = PostMaster::GetInstance();
 	postMaster->UnSubscribe(eMessageType::PARTICLE, this);
 
+	myEmitterList.RemoveAll();
 	for (auto it = myEmitters.begin(); it != myEmitters.end(); ++it)
 	{
 		delete it->second;
@@ -30,13 +37,13 @@ EmitterManager::~EmitterManager()
 
 void EmitterManager::UpdateEmitters(float aDeltaTime, CU::Matrix44f aWorldMatrix)
 {
-	for (auto it = myEmitters.begin(); it != myEmitters.end(); ++it)
+	for (int i = 0; i < myEmitterList.Size(); ++i)
 	{
-		for (int j = 0; j < it->second->myEmitters.Size(); ++j)
+		for (int j = 0; j < myEmitterList[i]->myEmitters.Size(); ++j)
 		{
-			if (it->second->myEmitters[j]->IsActive() == true)
+			if (myEmitterList[i]->myEmitters[j]->IsActive() == true)
 			{
-				it->second->myEmitters[j]->Update(aDeltaTime, aWorldMatrix);
+				myEmitterList[i]->myEmitters[j]->Update(aDeltaTime, aWorldMatrix);
 			}
 		}
 	}
@@ -46,14 +53,13 @@ void EmitterManager::RenderEmitters(Prism::Camera* aCamera)
 {
 
 	Prism::ParticleDataContainer::GetInstance()->SetGPUData(aCamera);
-
-	for (auto it = myEmitters.begin(); it != myEmitters.end(); ++it)
+	for (int i = 0; i < myEmitterList.Size(); ++i)
 	{
-		for (int j = 0; j < it->second->myEmitters.Size(); ++j)
+		for (int j = 0; j < myEmitterList[i]->myEmitters.Size(); ++j)
 		{
-			if (it->second->myEmitters[j]->IsActive() == true)
+			if (myEmitterList[i]->myEmitters[j]->IsActive() == true)
 			{
-				it->second->myEmitters[j]->Render();
+				myEmitterList[i]->myEmitters[j]->Render();
 			}
 		}
 	}
