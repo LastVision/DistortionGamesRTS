@@ -161,7 +161,7 @@ void Director::ReceiveMessage(const SpawnUnitMessage& aMessage)
 		{
 			if (myUnits[i]->GetUnitType() == static_cast<eUnitType>(aMessage.myUnitType) && myUnits[i]->GetAlive() == false)
 			{
-				myUnits[i]->SetIntention(eEntityState::IDLE);
+				myUnits[i]->SetState(eEntityState::IDLE);
 				if (IsAlreadyActive(myUnits[i]) == true)
 				{
 					continue;

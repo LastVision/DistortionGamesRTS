@@ -62,7 +62,7 @@ ControllerComponent::~ControllerComponent()
 
 void ControllerComponent::Update(float aDelta)
 {
-	if (myEntity.GetIntention() == eEntityState::DYING)
+	if (myEntity.GetIntention() == eEntityState::DYING || myEntity.GetState() == eEntityState::DYING)
 	{
 		return;
 	}
@@ -324,6 +324,7 @@ void ControllerComponent::FillCommandList(eAction aAction, bool aClearCommandQue
 
 void ControllerComponent::DoIdle()
 {
+	myEntity.SetIntention(eEntityState::IDLE);
 	//myEntity.SetState(eEntityState::IDLE);
 
 	Entity* closestTarget = PollingStation::GetInstance()->FindClosestEntity(myEntity.GetOrientation().GetPos()
@@ -338,11 +339,9 @@ void ControllerComponent::DoIdle()
 		action.myEntity = closestTarget;
 		myActions.Add(action);
 	}
-	else
-	{
 
-		myEntity.SetIntention(eEntityState::IDLE);
-	}
+
+	
 }
 
 void ControllerComponent::DoMove()
