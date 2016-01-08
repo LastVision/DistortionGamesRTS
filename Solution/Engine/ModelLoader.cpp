@@ -439,7 +439,7 @@ namespace Prism
 		myModelFactory->ConvertToDGFX(someData.myModelPath.c_str(), animOutput.c_str());
 #endif
 
-		Model* model = myDGFXLoader->LoadModel(someData.myModelPath.c_str()
+		Model* model = myDGFXLoader->LoadModel(someData.myModelPath
 			, EffectContainer::GetInstance()->GetEffect(someData.myEffectPath));
 #else
 		Model* model = myModelFactory->LoadModel(someData.myModelPath.c_str(),
@@ -457,7 +457,7 @@ namespace Prism
 		myModelFactory->ConvertToDGFX(someData.myModelPath.c_str(), animOutput.c_str());
 #endif
 
-		ModelAnimated* model = myDGFXLoader->LoadAnimatedModel(someData.myModelPath.c_str()
+		ModelAnimated* model = myDGFXLoader->LoadAnimatedModel(someData.myModelPath
 			, EffectContainer::GetInstance()->GetEffect(someData.myEffectPath));
 #else
 		ModelAnimated* model = myModelFactory->LoadModelAnimated(someData.myModelPath.c_str(),
@@ -474,7 +474,7 @@ namespace Prism
 		myModelFactory->ConvertToDGFX(someData.myModelPath.c_str(), animOutput.c_str());
 #endif
 
-		someData.myAnimationProxy->myAnimation = myDGFXLoader->LoadAnimation(someData.myModelPath.c_str());
+		someData.myAnimationProxy->myAnimation = myDGFXLoader->LoadAnimation(someData.myModelPath);
 #else
 		someData.myAnimationProxy->myAnimation
 			= myModelFactory->LoadAnimation(someData.myModelPath.c_str());
