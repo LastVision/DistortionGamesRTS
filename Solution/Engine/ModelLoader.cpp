@@ -161,8 +161,14 @@ namespace Prism
 		return myIsLoading;
 	}
 
+	volatile bool ModelLoader::IsPaused() const
+	{
+		return myIsPaused;
+	}
+
 	void ModelLoader::Pause()
 	{
+		DL_ASSERT_EXP(myIsPaused == false, "Can't pause when already paused.");
 		myIsPaused = true;
 
 		while (myIsLoading == true)
@@ -172,6 +178,7 @@ namespace Prism
 
 	void ModelLoader::UnPause()
 	{
+		DL_ASSERT_EXP(myIsPaused == true, "Can't unpause when already unpaused.");
 		myIsPaused = false;
 		if (myBuffers[myInactiveBuffer].Size() == 0)
 		{

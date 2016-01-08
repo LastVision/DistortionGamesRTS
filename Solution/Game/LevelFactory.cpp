@@ -84,7 +84,7 @@ LevelFactory::~LevelFactory()
 	myDirectionalLights.DeleteAll();
 }
 
-Level* LevelFactory::LoadLevel(const int& aID)
+Level* LevelFactory::LoadLevel(const int& aID, bool aPauseModelLoader)
 {
 	if (myLevelPaths.find(aID) == myLevelPaths.end())
 	{
@@ -92,13 +92,16 @@ Level* LevelFactory::LoadLevel(const int& aID)
 	}
 	myCurrentID = aID;
 
-	return LoadCurrentLevel();
+	return LoadCurrentLevel(aPauseModelLoader);
 }
 
-Level* LevelFactory::LoadCurrentLevel()
+Level* LevelFactory::LoadCurrentLevel(bool aPauseModelLoader)
 {
 	myIsLoading = true;
-	Prism::ModelLoader::GetInstance()->Pause();
+	if (aPauseModelLoader == true)
+	{
+		Prism::ModelLoader::GetInstance()->Pause();
+	}
 	delete myCurrentLevel;
 	myCurrentLevel = nullptr;
 
@@ -119,7 +122,11 @@ Level* LevelFactory::LoadCurrentLevel()
 	//PostMaster::GetInstance()->SendMessage(EmitterMessage(eParticleType::WEATHER_SNOW, weatherPosition));
 
 	myCurrentLevel->LoadTutorial(myCamera, tutorialPath); // needs to be after InitGUI
-	Prism::ModelLoader::GetInstance()->UnPause();
+
+	if (aPauseModelLoader == true)
+	{
+		Prism::ModelLoader::GetInstance()->UnPause();
+	}
 	return myCurrentLevel;
 }
 

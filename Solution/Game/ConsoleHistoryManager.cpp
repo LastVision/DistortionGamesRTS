@@ -78,7 +78,7 @@ void ConsoleHistoryManager::Load()
 			type = eHistoryType::HISTORY;
 		}
 
-		AddHistory(message, type, false);
+		AddHistory(message, type);
 	}
 	output.close();
 }
@@ -266,9 +266,11 @@ std::string ConsoleHistoryManager::RemoveTabFromString(const std::string& aComma
 	return noTabCommand;
 }
 
-void ConsoleHistoryManager::AddHistory(const std::string& aCommand, eHistoryType anEnum, bool aPauseModelLoader)
+void ConsoleHistoryManager::AddHistory(const std::string& aCommand, eHistoryType anEnum)
 {
-	if (aPauseModelLoader == true)
+	bool shouldPause = !Prism::ModelLoader::GetInstance()->IsPaused();
+
+	if (shouldPause == true)
 	{
 		Prism::ModelLoader::GetInstance()->Pause();
 	}
@@ -320,7 +322,7 @@ void ConsoleHistoryManager::AddHistory(const std::string& aCommand, eHistoryType
 
 	myInsertIndex++;
 
-	if (aPauseModelLoader == true)
+	if (shouldPause == true)
 	{
 		Prism::ModelLoader::GetInstance()->UnPause();
 	}

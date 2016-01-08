@@ -101,9 +101,16 @@ void Console::ReceiveMessage(const RunScriptMessage& aMessage)
 
 void Console::AddHistory(const std::string& aMessage, eHistoryType aType)
 {
-	Prism::ModelLoader::GetInstance()->Pause();
+	bool shouldPause = !Prism::ModelLoader::GetInstance()->IsPaused();
+	if (shouldPause == true)
+	{
+		Prism::ModelLoader::GetInstance()->Pause();
+	}
 	myHistory->AddHistory(aMessage, aType);
-	Prism::ModelLoader::GetInstance()->UnPause();
+	if (shouldPause == true)
+	{
+		Prism::ModelLoader::GetInstance()->UnPause();
+	}
 }
 
 void Console::ReadInput()
