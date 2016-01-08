@@ -14,6 +14,5 @@ public:
 	void ReceiveMessage(const TimeMultiplierMessage& aMessage) override;
 
 private:
-	void ReadCreep(XMLReader& aReader, tinyxml2::XMLElement* aCreepElement);
 };
 
