@@ -408,8 +408,8 @@ Global
 		{F9457655-C0BD-4C0F-A7F9-1197DA5C5C6A}.Debug|Win32.ActiveCfg = Debug|Win32
 		{F9457655-C0BD-4C0F-A7F9-1197DA5C5C6A}.Debug|Win32.Build.0 = Debug|Win32
 		{F9457655-C0BD-4C0F-A7F9-1197DA5C5C6A}.DLL_Release|Any CPU.ActiveCfg = Release|Win32
-		{F9457655-C0BD-4C0F-A7F9-1197DA5C5C6A}.DLL_Release|Mixed Platforms.ActiveCfg = Release|Win32
-		{F9457655-C0BD-4C0F-A7F9-1197DA5C5C6A}.DLL_Release|Mixed Platforms.Build.0 = Release|Win32
+		{F9457655-C0BD-4C0F-A7F9-1197DA5C5C6A}.DLL_Release|Mixed Platforms.ActiveCfg = DLL_Release|Win32
+		{F9457655-C0BD-4C0F-A7F9-1197DA5C5C6A}.DLL_Release|Mixed Platforms.Build.0 = DLL_Release|Win32
 		{F9457655-C0BD-4C0F-A7F9-1197DA5C5C6A}.DLL_Release|Win32.ActiveCfg = Release|Win32
 		{F9457655-C0BD-4C0F-A7F9-1197DA5C5C6A}.DLL_Release|Win32.Build.0 = Release|Win32
 		{F9457655-C0BD-4C0F-A7F9-1197DA5C5C6A}.Internal|Any CPU.ActiveCfg = Release|Win32

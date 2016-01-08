@@ -59,5 +59,6 @@ struct LogicalParticle
 	float mySpeed;
 	CU::Vector3f myVelocity;
 	float myRotation;
+	float myRotationDelta;
 
 };

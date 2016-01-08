@@ -39,6 +39,7 @@ namespace Prism
 
 		float						myMinRotation;
 		float						myMaxRotation;
+		float						myRotationDelta;
 
 		float						mySpeedMultiplier;
 

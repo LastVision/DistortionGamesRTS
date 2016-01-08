@@ -28,6 +28,7 @@ namespace Prism
 
 	void ParticleEmitterData::LoadDataFile(const std::string& aFilePath)
 	{
+		DL_DEBUG("Loading file");
 		XMLReader read;
 		myFileName = aFilePath;
 
@@ -48,6 +49,8 @@ namespace Prism
 		read.ReadAttribute(element, "min", myMinRotation);
 		read.ReadAttribute(element, "max", myMaxRotation);
 
+		element = read.ForceFindFirstChild(emitter, "ParticleRotationDelta");
+		read.ReadAttribute(element, "value", myRotationDelta);
 
 		element = read.ForceFindFirstChild(emitter, "ParticleMaxVelocity");
 		read.ReadAttribute(element, "x", "y", "z", myMaxVelocity);
@@ -103,8 +106,6 @@ namespace Prism
 		element = read.ForceFindFirstChild(emitter, "ActiveAtStart");
 		read.ReadAttribute(element, "value", myIsActiveAtStart);
 
-		
-
 		read.CloseDocument();
 
 		myData.myStartColor /= 255.f;
@@ -128,6 +129,7 @@ namespace Prism
 
 	void ParticleEmitterData::CreateInputLayout()
 	{
+		DL_DEBUG("Creating Input Layout");
 		HRESULT hr;
 
 		D3DX11_PASS_DESC passDesc;

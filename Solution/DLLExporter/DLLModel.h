@@ -1,6 +1,6 @@
 #pragma once
 #include <Matrix.h>
-
+#include <GameEnum.h>
 namespace Prism
 {
 	class Instance;
