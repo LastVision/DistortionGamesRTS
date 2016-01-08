@@ -31,11 +31,6 @@ void MainMenuState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aC
 
 	CU::Vector2<int> windowSize = Prism::Engine::GetInstance()->GetWindowSizeInt();
 	OnResize(windowSize.x, windowSize.y);
-
-
-	// for faster start, remove later:
-	PostMaster::GetInstance()->SendMessage(OnClickMessage(eOnClickEvent::GAME_LEVEL_SELECT));
-	// end debug
 }
 
 void MainMenuState::EndState()
@@ -45,12 +40,6 @@ void MainMenuState::EndState()
 
 const eStateStatus MainMenuState::Update(const float& aDeltaTime)
 {
-	// for faster start, remove later:
-	PostMaster::GetInstance()->SendMessage(OnClickMessage(eOnClickEvent::GAME_QUIT));
-	// end debug
-
-	aDeltaTime;
-
 	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_ESCAPE) == true)
 	{
 		myIsActiveState = false;

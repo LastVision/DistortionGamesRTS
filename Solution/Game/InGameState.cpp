@@ -64,7 +64,7 @@ void InGameState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCur
 	myStateStatus = eStateStatus::eKeepState;
 	myCursor = aCursor;
 	myLevelFactory = new LevelFactory("Data/Level/LI_level.xml", *myCamera, myCursor);
-	myLevel = myLevelFactory->LoadLevel(myStartLevelIndex);
+	myLevel = myLevelFactory->LoadLevel(myStartLevelIndex, false);
 
 	CU::Vector2<int> windowSize = Prism::Engine::GetInstance()->GetWindowSizeInt();
 
@@ -154,9 +154,17 @@ void InGameState::ResumeState()
 
 void InGameState::OnResize(int aWidth, int aHeight)
 {
-	Prism::ModelLoader::GetInstance()->Pause();
+	bool shouldPause = !Prism::ModelLoader::GetInstance()->IsPaused();
+	if (shouldPause == true)
+	{
+		Prism::ModelLoader::GetInstance()->Pause();
+	}
 	myLevel->OnResize(aWidth, aHeight);
-	Prism::ModelLoader::GetInstance()->UnPause();
+
+	if (shouldPause == true)
+	{
+		Prism::ModelLoader::GetInstance()->UnPause();
+	}
 }
 
 void InGameState::ReceiveMessage(const GameStateMessage& aMessage)
