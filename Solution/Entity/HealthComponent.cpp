@@ -20,9 +20,7 @@ HealthComponent::HealthComponent(Entity& aEntity, HealthComponentData& aData)
 	, myArmor(aData.myArmor)
 	, myIsHealing(false)
 {
-	Prism::ModelLoader::GetInstance()->Pause();
 	myHealthBar = new GUI::BarWidget(myMaxHealth, myCurrentHealth, { 50.f, 10.f });
-	Prism::ModelLoader::GetInstance()->UnPause();
 }
 
 HealthComponent::~HealthComponent()

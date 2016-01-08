@@ -4,6 +4,8 @@
 #include <sstream>
 #include <mutex>
 
+#define MAX_ALLOCATIONS 2500000
+
 void* operator new(size_t aBytes)
 {
 	void* address = ::malloc(aBytes);
@@ -49,8 +51,8 @@ namespace Prism
 			myInstance = static_cast<MemoryTracker*>(malloc(sizeof(MemoryTracker)));
 			myInstance = new(myInstance)MemoryTracker();
 
-			myInstance->myMutex = static_cast<std::mutex*>(malloc(sizeof(std::mutex)));
-			myInstance->myMutex = new(myInstance->myMutex)std::mutex();
+			myInstance->myMutex = static_cast<std::recursive_mutex*>(malloc(sizeof(std::recursive_mutex)));
+			myInstance->myMutex = new(myInstance->myMutex)std::recursive_mutex();
 		}
 
 		return myInstance;
@@ -58,6 +60,10 @@ namespace Prism
 
 	void MemoryTracker::Allocate(int aLine, const char* aFile, const char* aFunction)
 	{
+		if (myMutex != nullptr)
+		{
+			myMutex->lock();
+		}
 		if (Prism::MemoryTracker::GetInstance()->myRuntime == true
 			&& std::this_thread::get_id() != myAllowThread)
 		{
@@ -78,6 +84,11 @@ namespace Prism
 		{
 			myTopicalData.myFunctionName = "Unknown";
 		}
+
+		if (myMutex != nullptr)
+		{
+			myMutex->unlock();
+		}
 	}
 
 	void MemoryTracker::Free(void* aAddress)
@@ -92,12 +103,21 @@ namespace Prism
 
 	void MemoryTracker::Add(void* aAddress, size_t aBytes, eMemoryType aMemoryType)
 	{
+		if (myMutex != nullptr)
+		{
+			myMutex->lock();
+		}
 		if (myTopicalData.myLine < 1)
 		{
 			myTopicalData.myFileName = "";
 			myTopicalData.myFunctionName = "";
 			myTopicalData.myLine = -1;
 			myTopicalData.myType = eMemoryType::UNKNOWN;
+
+			if (myMutex != nullptr)
+			{
+				myMutex->unlock();
+			}
 			return;
 		}
 
@@ -105,25 +125,13 @@ namespace Prism
 		myMemoryStatistics.myCurrentMemoryAllocated += aBytes;
 		++myMemoryStatistics.myAccumulatedNumberOfAllocations;
 
-		if (myMutex != nullptr)
-		{
-			myMutex->lock();
-		}
-
 		myTopicalData.myAddress = aAddress;
 		myTopicalData.myBytes = aBytes;
 		myTopicalData.myType = aMemoryType;
 
 		++myAllocations;
-
-		MemoryData* newData = static_cast<MemoryData*>(realloc(myData, myAllocations * sizeof(MemoryData)));
-		if (newData == nullptr)
-		{
-			--myAllocations;
-			return;
-		}
-
-		myData = newData;
+		DL_ASSERT_EXP(myAllocations <= MAX_ALLOCATIONS, "Too many memory allocations, need to increase MAX_ALLOCATIONS in MemoryTracker.cpp?");
+		
 		myData[myAllocations - 1] = myTopicalData;
 
 		myTopicalData.myFileName = "";
@@ -166,7 +174,7 @@ namespace Prism
 		, myAllocations(0)
 		, myRuntime(false)
 	{
-		myData = reinterpret_cast<MemoryData*>(::malloc(sizeof(MemoryData)));
+		myData = reinterpret_cast<MemoryData*>(::malloc(sizeof(MemoryData) * MAX_ALLOCATIONS));
 	}
 
 

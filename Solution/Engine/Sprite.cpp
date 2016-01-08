@@ -32,6 +32,8 @@ Prism::Sprite::Sprite(const std::string& aFileName, const CU::Vector2<float>& aS
 	InitInputLayout(vertexDesc, ARRAYSIZE(vertexDesc), "Sprite::InputLayout");
 	InitVertexBuffer(sizeof(VertexPosUV), D3D11_USAGE_IMMUTABLE, 0);
 	InitIndexBuffer();
+
+	DL_ASSERT_EXP(myFileName.size() > 0, "File name can't be empty.");
 	InitSurface("DiffuseTexture", myFileName);
 	InitBlendState("Sprite::BlendState");
 

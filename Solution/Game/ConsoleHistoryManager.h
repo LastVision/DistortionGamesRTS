@@ -29,7 +29,7 @@ public:
 	const std::string& GetPrevious(eHistoryType aType = eHistoryType::HISTORY);
 	const std::string& GetCurrent(eHistoryType aType = eHistoryType::HISTORY);
 
-	void AddHistory(const std::string& aCommand, eHistoryType anEnum = eHistoryType::HISTORY);
+	void AddHistory(const std::string& aCommand, eHistoryType anEnum = eHistoryType::HISTORY, bool aPauseModelLoader = true);
 	void Save();
 	void Load();
 	const CU::GrowingArray<History*>& GetHistoryArray();
