@@ -1,11 +1,9 @@
 #include "stdafx.h"
 
-#include <CommonHelper.h>
 #include "EmitterManager.h"
 #include <EmitterMessage.h>
-#include <ParticleDataContainer.h>
-#include <Entity.h>
 #include <EntityId.h>
+#include <ParticleDataContainer.h>
 #include <ParticleEmitterInstance.h>
 #include <PostMaster.h>
 #include <XMLReader.h>
