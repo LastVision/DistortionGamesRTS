@@ -60,7 +60,7 @@ void BuildingComponent::Update(float aDeltaTime)
 		}
 		else
 		{
-			PostMaster::GetInstance()->SendMessage(SpawnUnitMessage(currentOrder.myUnit, myEntity.GetOwner()));
+			PostMaster::GetInstance()->SendMessage(SpawnUnitMessage(currentOrder.myUnit, myEntity.GetOwner(), myEntity.GetPosition() + CU::Vector2<float>(0, -15.f)));
 		}
 
 		mySpawnQueue.pop();

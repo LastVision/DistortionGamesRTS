@@ -88,7 +88,8 @@ Entity* EntityFactory::CreateEntity(eOwnerType aOwner, eEntityType aType, eUnitT
 			return newEntity;
 		}
 	}
-	DL_ASSERT("Prop not found.");
+	std::string errorMessage = "Unit " + std::to_string(static_cast<int>(aUnitType)) + " not found.";
+	DL_ASSERT(errorMessage);
 	return nullptr;
 }
 

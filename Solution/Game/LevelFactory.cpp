@@ -25,6 +25,7 @@
 #include <PostMaster.h>
 #include "ScriptInterface.h"
 #include <ScriptSystem.h>
+#include <SpawnUnitMessage.h>
 #include <SpotLight.h>
 #include <TimerManager.h>
 #include <Terrain.h>
@@ -223,7 +224,7 @@ void LevelFactory::ReadLevel(const std::string& aLevelPath, std::string& aTutori
 	LoadBases(reader, levelElement);
 	LoadProps(reader, levelElement);
 	LoadControlPoints(reader, levelElement);
-	LoadCreeps(reader, levelElement);
+	LoadUnits(reader, levelElement);
 #ifndef USE_BINARY_TERRAIN
 	LoadCutBoxes(reader, levelElement);
 #endif
@@ -371,12 +372,41 @@ void LevelFactory::LoadProps(XMLReader& aReader, tinyxml2::XMLElement* aLevelEle
 	}
 }
 
-void LevelFactory::LoadCreeps(XMLReader& aReader, tinyxml2::XMLElement* aLevelElement)
+void LevelFactory::LoadUnits(XMLReader& aReader, tinyxml2::XMLElement* aLevelElement)
 {
-	for (tinyxml2::XMLElement* entityElement = aReader.FindFirstChild(aLevelElement, "creep"); entityElement != nullptr;
-		entityElement = aReader.FindNextElement(entityElement, "creep"))
+	for (tinyxml2::XMLElement* entityElement = aReader.FindFirstChild(aLevelElement, "unit"); entityElement != nullptr;
+		entityElement = aReader.FindNextElement(entityElement, "unit"))
 	{
-		myCurrentLevel->myNeutralDirector->ReadCreep(aReader, entityElement);
+		std::string unitType;
+		aReader.ForceReadAttribute(entityElement, "type", unitType);
+		std::string owner;
+		aReader.ForceReadAttribute(entityElement, "owner", owner);
+		unitType = CU::ToLower(unitType);
+		tinyxml2::XMLElement* element = aReader.ForceFindFirstChild(entityElement, "position");
+		CU::Vector3<float> creepPosition;
+		aReader.ForceReadAttribute(element, "X", creepPosition.x);
+		aReader.ForceReadAttribute(element, "Y", creepPosition.y);
+		aReader.ForceReadAttribute(element, "Z", creepPosition.z);
+
+		element = aReader.ForceFindFirstChild(entityElement, "rotation");
+		CU::Vector3<float> creepRotation;
+		aReader.ForceReadAttribute(element, "X", creepRotation.x);
+		aReader.ForceReadAttribute(element, "Y", creepRotation.y);
+		aReader.ForceReadAttribute(element, "Z", creepRotation.z);
+
+		element = aReader.ForceFindFirstChild(entityElement, "scale");
+		CU::Vector3<float> creepScale;
+		aReader.ForceReadAttribute(element, "X", creepScale.x);
+		aReader.ForceReadAttribute(element, "Y", creepScale.y);
+		aReader.ForceReadAttribute(element, "Z", creepScale.z);
+
+		creepRotation.x = CU::Math::DegreeToRad(creepRotation.x);
+		creepRotation.y = CU::Math::DegreeToRad(creepRotation.y);
+		creepRotation.z = CU::Math::DegreeToRad(creepRotation.z);
+
+		PostMaster::GetInstance()->SendMessage(SpawnUnitMessage(EntityEnumConverter::ConvertStringToUnitType(unitType)
+			, EntityEnumConverter::ConvertStringToOwnerType(owner)
+			, { creepPosition.x, creepPosition.z }));
 	}
 }
 

@@ -179,7 +179,7 @@ void Director::ReceiveMessage(const SpawnUnitMessage& aMessage)
 
 		if (spawnedUnit != nullptr)
 		{
-			spawnedUnit->Spawn(myBuilding->GetOrientation().GetPos() + CU::Vector3f(0.f, 0.f, -15.f));
+			spawnedUnit->Spawn({ aMessage.myPosition.x, 0, aMessage.myPosition.y });
 			myActiveUnits.Add(spawnedUnit);
 
 			int deadIndex = myDeadUnits.Find(spawnedUnit);
