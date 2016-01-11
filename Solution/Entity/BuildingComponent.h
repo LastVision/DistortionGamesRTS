@@ -27,6 +27,7 @@ public:
 	const float& GetMaxBuildTime() const;
 	int GetSpawnQueueSize() const;
 	int GetUnitCost(eUnitType aUnitType);
+	int GetUnitSupplyCost(eUnitType aUnitType);
 	int GetUpgradeCost(eUnitType aUnitType);
 	bool CanUpgrade(eUnitType aUnitType);
 
@@ -48,6 +49,7 @@ private:
 	CU::StaticArray<float, 3> myUnitBuildTimes;
 	CU::StaticArray<CU::StaticArray<Upgrade, 3>, 3> myUnitUpgrades; //3 upgrade-levels for all 3 units
 	CU::StaticArray<int, 3> myUnitUpgradeProgress;
+	CU::StaticArray<int, 3> myUnitSupplyCosts;
 
 	std::queue<BuildInfo> mySpawnQueue;
 

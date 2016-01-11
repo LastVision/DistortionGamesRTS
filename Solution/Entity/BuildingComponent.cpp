@@ -12,6 +12,7 @@ BuildingComponent::BuildingComponent(Entity& aEntity, BuildingComponentData& aDa
 	, myUnitBuildTimes(aData.myUnitBuildTimes)
 	, myIgnoreBuildTime(false)
 	, myUnitUpgrades(aData.myUnitUpgrades)
+	, myUnitSupplyCosts(aData.myUnitSupplyCosts)
 {
 	for (int i = 0; i < 3; ++i)
 	{
@@ -87,10 +88,14 @@ void BuildingComponent::UpgradeUnit(eUnitType aUnitType)
 	}
 }
 
-
 int BuildingComponent::GetUnitCost(eUnitType aUnitType)
 {
 	return myUnitCosts[static_cast<int>(aUnitType)];
+}
+
+int BuildingComponent::GetUnitSupplyCost(eUnitType aUnitType)
+{
+	return myUnitSupplyCosts[static_cast<int>(aUnitType)];
 }
 
 int BuildingComponent::GetUpgradeCost(eUnitType aUnitType)

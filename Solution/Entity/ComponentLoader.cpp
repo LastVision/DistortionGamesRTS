@@ -86,6 +86,10 @@ void ComponentLoader::LoadBuidlingComponent(XMLReader& aDocument, tinyxml2::XMLE
 			aDocument.ForceReadAttribute(e, "buildTime", unitBuildTime);
 			aOutputData.myUnitBuildTimes.Insert(numberOfUnitType, unitBuildTime);
 
+			int supplyCost = 0;
+			aDocument.ForceReadAttribute(e, "supplyCost", supplyCost);
+			aOutputData.myUnitSupplyCosts.Insert(numberOfUnitType, supplyCost);
+
 			eUnitType buildUnitType = EntityEnumConverter::ConvertStringToUnitType(CU::ToLower(unitType));
 			DL_ASSERT_EXP(buildUnitType != eUnitType::NOT_A_UNIT, "The " + unitType + " type is not supported.");
 			aOutputData.myBuildUnitTypes.Insert(numberOfUnitType, buildUnitType);

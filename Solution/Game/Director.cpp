@@ -23,6 +23,7 @@ Director::Director(eOwnerType aOwnerType, const Prism::Terrain& aTerrain)
 	, myVictoryPoints(0)
 	, myTestGold(60)
 	, myUnitCap(0)
+	, myUnitCount(0)
 {
 	XMLReader reader;
 	reader.OpenDocument("Data/Setting/SET_game.xml");
@@ -52,8 +53,6 @@ Director::~Director()
 
 void Director::Update(float aDeltaTime)
 {
-	myUnitCount = myActiveUnits.Size();
-
 	for (int i = 0; i < myDeadUnits.Size(); ++i)
 	{
 		myDeadUnits[i]->Update(aDeltaTime);
@@ -153,7 +152,10 @@ bool Director::UpgradeUnit(eUnitType aUnitType)
 void Director::ReceiveMessage(const SpawnUnitMessage& aMessage)
 {
 	if (static_cast<eOwnerType>(aMessage.myOwnerType) != myOwner) return;
-	if (myActiveUnits.Size() < myUnitCap)
+
+	int unitSupplyCost = myBuilding->GetComponent<BuildingComponent>()->GetUnitSupplyCost(static_cast<eUnitType>(aMessage.myUnitType));
+
+	if (myUnitCount + unitSupplyCost <= myUnitCap)
 	{
 		Entity* spawnedUnit = nullptr;
 
@@ -179,6 +181,7 @@ void Director::ReceiveMessage(const SpawnUnitMessage& aMessage)
 
 		if (spawnedUnit != nullptr)
 		{
+			myUnitCount += unitSupplyCost;
 			spawnedUnit->Spawn({ aMessage.myPosition.x, 0, aMessage.myPosition.y });
 			myActiveUnits.Add(spawnedUnit);
 

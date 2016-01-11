@@ -254,7 +254,7 @@ namespace CU
 
 	inline bool Intersection::SphereVsSphere(Sphere aSphere, Sphere aOtherSphere)
 	{
-		if (CU::Length2(aOtherSphere.myCenterPosition - aSphere.myCenterPosition) 
+		if (CU::Length2(aOtherSphere.myCenterPosition - aSphere.myCenterPosition)
 			< (aSphere.myRadius + aOtherSphere.myRadius) * (aSphere.myRadius + aOtherSphere.myRadius))
 		{
 			return true;
@@ -500,7 +500,7 @@ namespace CU
 	}
 
 	inline double Intersection::perpDot(const CU::Vector2<float>& a, const CU::Vector2<float>& b)
-		{
-			return (a.y*b.x) - (a.x*b.y);
-		}
+	{
+		return (a.y*b.x) - (a.x*b.y);
+	}
 }
