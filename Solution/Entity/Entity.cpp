@@ -30,7 +30,6 @@ Entity::Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& a
 	, mySelected(false)
 	, myHovered(false)
 	, myPosition({aStartPosition.x, aStartPosition.z})
-	, myPropType(ePropType::NOT_A_PROP)
 	, myUnitType(aUnitType)
 	, myDecayFlag(false)
 {
