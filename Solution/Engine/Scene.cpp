@@ -87,6 +87,7 @@ void Prism::Scene::Render(bool aRenderNavMeshLines)
 	myOctree->Update();
 	myInstances.RemoveAll();
 	myOctree->GetOccupantsInAABB(myCamera.GetFrustum(), myInstances);
+	DEBUG_PRINT(myInstances.Size());
 
 	for (int i = 0; i < myDynamicInstances.Size(); ++i)
 	{

@@ -195,16 +195,19 @@ namespace GUI
 			CU::Vector2<float> position = (resourcePoints[i]->GetPosition() / 255.f) * mySize;
 			CU::Vector4<float> color = { 0.5f, 0.5f, 0.f, 1.f };
 
-			if (resourcePoints[i]->GetComponent<TriggerComponent>()->GetOwnerGainingPoint() == eOwnerType::PLAYER)
+			if (resourcePoints[i]->GetComponent<TriggerComponent>() != nullptr)
 			{
-				color = { 0.f, 0.f, 1.f, 1.f };
-			}
-			else if (resourcePoints[i]->GetComponent<TriggerComponent>()->GetOwnerGainingPoint() == eOwnerType::ENEMY)
-			{
-				color = { 1.f, 0.f, 0.f, 1.f };
-			}
+				if (resourcePoints[i]->GetComponent<TriggerComponent>()->GetOwnerGainingPoint() == eOwnerType::PLAYER)
+				{
+					color = { 0.f, 0.f, 1.f, 1.f };
+				}
+				else if (resourcePoints[i]->GetComponent<TriggerComponent>()->GetOwnerGainingPoint() == eOwnerType::ENEMY)
+				{
+					color = { 1.f, 0.f, 0.f, 1.f };
+				}
 
-			myResourcePointSprite->Render(aParentPosition + myPosition + position, { 1.f, 1.f }, color);
+				myResourcePointSprite->Render(aParentPosition + myPosition + position, { 1.f, 1.f }, color);
+			}
 		}
 	}
 
