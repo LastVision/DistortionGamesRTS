@@ -436,6 +436,11 @@ CU::Vector3<float> PlayerDirector::CalcCursorWorldPosition(const CU::Vector2<flo
 	return worldPos;
 }
 	
+const float& PlayerDirector::GetTotemCooldown() const
+{
+	return myTotem->GetComponent<TotemComponent>()->GetCurrentCooldown();
+}
+
 void PlayerDirector::UpdateInputs()
 {
 	myShiftPressed = CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_LSHIFT)

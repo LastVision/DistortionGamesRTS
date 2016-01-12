@@ -13,7 +13,7 @@ public:
 	eComponentType GetType() override;
 	eOwnerType ModifyOwnership(eOwnerType anOwner, float aModifyValue);
 	void SetTargetPosition(const CU::Vector3f& aTargetPosition);
-	float GetCurrentCooldown();
+	const float& GetCurrentCooldown() const;
 private:
 	void operator=(TotemComponent&) = delete;
 
@@ -52,7 +52,7 @@ inline eComponentType TotemComponent::GetType()
 	return GetTypeStatic();
 }
 
-inline float TotemComponent::GetCurrentCooldown()
+inline const float& TotemComponent::GetCurrentCooldown() const
 {
 	return myCurrentCooldown;
 }

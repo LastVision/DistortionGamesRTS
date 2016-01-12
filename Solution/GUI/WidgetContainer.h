@@ -35,6 +35,9 @@ namespace GUI
 
 		Widget* GetFirstWidget();
 
+		Widget* operator[](const int& aIndex);
+		const Widget* operator[](const int& aIndex) const;
+
 	private:
 		CU::GrowingArray<Widget*> myWidgets;
 		Prism::SpriteProxy* myBackground;
@@ -49,5 +52,15 @@ namespace GUI
 	{
 		DL_ASSERT_EXP(myWidgets.Size() > 0, "Trying to get first widget from an empty container");
 		return myWidgets[0];
+	}
+	
+	inline Widget* WidgetContainer::operator[](const int& aIndex)
+	{
+		return myWidgets[aIndex];
+	}
+
+	inline const Widget* WidgetContainer::operator[](const int& aIndex) const
+	{
+		return myWidgets[aIndex];
 	}
 }

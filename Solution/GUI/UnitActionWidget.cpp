@@ -144,7 +144,7 @@ namespace GUI
 					Widget* gruntWidget = myGruntActionButtons->MouseIsOver(aPosition - myPosition);
 					widget = gruntWidget == nullptr ? widget : gruntWidget;
 				}
-				if(myHasSelectedRanger == true)
+				if (myHasSelectedRanger == true)
 				{
 					Widget* rangerWidget = myRangerActionButtons->MouseIsOver(aPosition - myPosition);
 					widget = rangerWidget == nullptr ? widget : rangerWidget;
