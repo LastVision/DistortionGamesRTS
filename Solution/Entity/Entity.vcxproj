@@ -94,6 +94,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <AdditionalIncludeDirectories>$(SolutionDir)Memory;$(SolutionDir)CommonUtilities;$(SolutionDir)DL_Debug;$(SolutionDir)Engine;$(SolutionDir)Audio;$(SolutionDir)PostMaster;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <PreprocessorDefinitions>RELEASE_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

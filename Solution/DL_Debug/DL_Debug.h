@@ -4,7 +4,8 @@
 #ifndef DLL_EXPORT
 #define DL_ASSERT(string)
 #define DL_ASSERT_EXP(expression, string)
-
+#define DL_PRINT_VA(...)
+#define DL_ASSERT_VA(...)
 #define DL_PRINT(string)
 
 #define DL_DEBUG( ... )

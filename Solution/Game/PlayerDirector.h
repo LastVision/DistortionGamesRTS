@@ -80,6 +80,8 @@ public:
 
 	const int& GetTestUpgradeLevel() const;
 
+	const float& GetTotemCooldown() const;
+
 private:
 	void UpdateInputs();
 	void UpdateControlGroups();

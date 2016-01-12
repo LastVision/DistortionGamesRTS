@@ -25,7 +25,7 @@ class Entity
 public:
 	Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& aEntityData,
 		Prism::Scene& aScene, const CU::Vector3<float> aStartPosition, const Prism::Terrain& aTerrain, 
-		const CU::Vector3f& aRotation, const CU::Vector3f& aScale);
+		const CU::Vector3f& aRotation, const CU::Vector3f& aScale, eUnitType aUnitType);
 	~Entity();
 
 	virtual void Update(float aDeltaTime);
@@ -50,7 +50,7 @@ public:
 	eOwnerType GetOwner() const;
 	void SetOwner(eOwnerType anOwner);
 	eEntityType GetType() const;
-	ePropType GetPropType() const;
+	const std::string& GetSubType() const;
 	eUnitType GetUnitType() const;
 	eEntityState GetState() const;
 	void SetState(eEntityState aState);
@@ -85,7 +85,7 @@ private:
 	
 	bool myAlive;
 	const eEntityType myType;
-	ePropType myPropType;
+	std::string mySubType;
 	eUnitType myUnitType;
 	eOwnerType myOwner;
 	eEntityState myState;
@@ -150,9 +150,9 @@ inline eEntityType Entity::GetType() const
 	return myType;
 }
 
-inline ePropType Entity::GetPropType() const
+inline const std::string& Entity::GetSubType() const
 {
-	return myPropType;
+	return mySubType;
 }
 
 inline eUnitType Entity::GetUnitType() const

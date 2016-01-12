@@ -31,9 +31,6 @@ struct EntityData
 	SelectionComponentData mySelectionData;
 	SoundComponentData mySoundData;
 
-	union 
-	{
-		ePropType myPropType;
-		eUnitType myUnitType;
-	};
+	std::string mySubType;
+	eUnitType myUnitType;
 };

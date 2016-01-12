@@ -22,7 +22,7 @@ namespace GUI
 		ButtonWidget(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement);
 		~ButtonWidget();
 
-		void Render(const CU::Vector2<float>& aParentPosition) override;
+		virtual void Render(const CU::Vector2<float>& aParentPosition) override;
 		void OnMousePressed(const CU::Vector2<float>& aPosition) override;
 		void OnMouseUp() override;
 		void OnMouseEnter() override;

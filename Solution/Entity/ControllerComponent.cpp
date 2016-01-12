@@ -346,6 +346,7 @@ void ControllerComponent::DoIdle()
 
 void ControllerComponent::DoMove()
 {
+	
 	myEntity.SetIntention(eEntityState::WALKING);
 	myBehavior->SetTarget(GetPosition(myCurrentAction));
 }
@@ -405,6 +406,7 @@ void ControllerComponent::AttackTarget()
 	{
 		//myEntity.SetState(eEntityState::ATTACKING);
 		myEntity.SetIntention(eEntityState::ATTACKING);
+		myEntity.GetComponent<AnimationComponent>()->PlayAnimation(eEntityState::ATTACKING);
 		myAttackTimer = myAttackRechargeTime;
 
 		if (myEntity.GetUnitType() == eUnitType::GRUNT)

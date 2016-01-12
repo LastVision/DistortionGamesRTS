@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "AbilityButton.h"
 #include "ButtonWidget.h"
 #include "ControlGroupWidget.h"
 #include "Cursor.h"
@@ -198,6 +199,15 @@ namespace GUI
 				{
 					UpgradeButtonWidget* upgradeButtonWidget = new UpgradeButtonWidget(&reader, widgetElement, myPlayer->GetTestUpgradeLevel());
 					container->AddWidget(upgradeButtonWidget);
+				}
+				else if (type == "ability_button")
+				{
+					AbilityButton* upgradeButtonWidget = new AbilityButton(&reader, widgetElement, myPlayer);
+					container->AddWidget(upgradeButtonWidget);
+				}
+				else
+				{
+					// should assert
 				}
 			}
 			myWidgets->AddWidget(container);

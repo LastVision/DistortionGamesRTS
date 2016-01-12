@@ -20,7 +20,7 @@
 
 Entity::Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& aEntityData
 	, Prism::Scene& aScene, const CU::Vector3<float> aStartPosition, const Prism::Terrain& aTerrain
-	,const CU::Vector3f& aRotation, const CU::Vector3f& aScale)
+	, const CU::Vector3f& aRotation, const CU::Vector3f& aScale, eUnitType aUnitType)
 	: myAlive(false)
 	, myOwner(aOwner)
 	, myScene(aScene)
@@ -30,8 +30,7 @@ Entity::Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& a
 	, mySelected(false)
 	, myHovered(false)
 	, myPosition({aStartPosition.x, aStartPosition.z})
-	, myPropType(ePropType::NOT_A_PROP)
-	, myUnitType(eUnitType::NOT_A_UNIT)
+	, myUnitType(aUnitType)
 	, myDecayFlag(false)
 {
 	myId = EntityId::GetInstance()->GetId(this);

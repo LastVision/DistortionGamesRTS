@@ -28,6 +28,9 @@ public:
 	bool IsCurrentAnimationDone() const;
 	void RestartCurrentAnimation();
 
+	void PlayAnimation(eEntityState aAnimationState);
+
+
 private:
 	struct AnimationData
 	{
@@ -41,6 +44,7 @@ private:
 	float myCullingRadius;
 	CU::StaticArray<AnimationData, int(eEntityState::_COUNT)> myAnimations;
 	eEntityState myPrevEntityState;
+	eEntityState myAnimationState;
 
 	const Prism::Terrain& myTerrain;
 };
