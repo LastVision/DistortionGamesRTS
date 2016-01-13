@@ -136,6 +136,13 @@ namespace GUI
 				}
 			}
 		}
+		//else if (mySelectedType == eEntityType::BASE_BUILING)
+		//{
+		//	if ()
+		//	{
+		//
+		//	}
+		//}
 	}
 
 	Widget* UnitActionWidget::MouseIsOver(const CU::Vector2<float>& aPosition)

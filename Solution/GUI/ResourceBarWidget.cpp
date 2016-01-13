@@ -51,6 +51,10 @@ namespace GUI
 		{
 			myValue = &anAI->GetVictoryPoints();
 		}
+		else if (value == "player_artifact")
+		{
+			myValue = &aPlayer->GetArtifact();
+		}
 		else
 		{
 			assert("Wrong type in resourcebar XML");
