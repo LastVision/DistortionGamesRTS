@@ -117,15 +117,15 @@ namespace GUI
 		std::string clickEvent = "";
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "onclick"), "event", clickEvent);
 
-		if (clickEvent == "game_lose")
-		{
-			myClickEvent = new OnClickMessage(eOnClickEvent::GAME_LOSE);
-		}
-		else if (clickEvent == "game_win")
-		{
-			myClickEvent = new OnClickMessage(eOnClickEvent::GAME_WIN);
-		}
-		else if (clickEvent == "game_start")
+		//if (clickEvent == "game_lose")
+		//{
+		//	myClickEvent = new OnClickMessage(eOnClickEvent::GAME_LOSE);
+		//}
+		//else if (clickEvent == "game_win")
+		//{
+		//	myClickEvent = new OnClickMessage(eOnClickEvent::GAME_WIN);
+		//}
+		if (clickEvent == "game_start")
 		{
 			int id = 0;
 			aReader->ReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "onclick"), "id", id);
@@ -182,6 +182,12 @@ namespace GUI
 			int index = -1;
 			aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "onclick"), "id", index);
 			myClickEvent = new OnClickMessage(eOnClickEvent::SELECT_CONTROL_GROUP, index);
+		}
+		else if (clickEvent == "upgrade_unit")
+		{
+			int unitID = -1;
+			aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "onclick"), "id", unitID);
+			myClickEvent = new OnClickMessage(eOnClickEvent::UPGRADE_UNIT, unitID);
 		}
 		else
 		{

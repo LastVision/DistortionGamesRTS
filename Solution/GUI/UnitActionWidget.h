@@ -50,11 +50,15 @@ namespace GUI
 		WidgetContainer* myRangerActionButtons;
 		WidgetContainer* myTankActionButtons;
 
-		bool myIsUnitSelected;
+		const bool& myHasUnlockedRanger;
+		const bool& myHasUnlockedTank;
+
 		eEntityType mySelectedType;
 
+		bool myIsUnitSelected;
 		bool myHasSelectedGrunt;
 		bool myHasSelectedRanger;
 		bool myHasSelectedTank;
+
 	};
 }

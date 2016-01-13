@@ -5,6 +5,7 @@
 #include <Entity.h>
 #include <EntityId.h>
 #include <GameStateMessage.h>
+#include <KillUnitMessage.h>
 #include <MoveCameraMessage.h>
 #include <PostMaster.h>
 #include <ResourceMessage.h>
@@ -330,6 +331,17 @@ namespace Script_Interface
 
 		return 0;
 	}
+
+	int UnlockUnits(lua_State*) // void
+	{
+		//Unlock units
+		PostMaster::GetInstance()->SendMessage(KillUnitMessage(static_cast<int>(eUnitType::RANGER),
+			static_cast<int>(eOwnerType::NEUTRAL)));
+		PostMaster::GetInstance()->SendMessage(KillUnitMessage(static_cast<int>(eUnitType::TANK), 
+			static_cast<int>(eOwnerType::NEUTRAL)));
+
+		return 0;
+	}
 }
 
 void ScriptInterface::RegisterFunctions()
@@ -365,4 +377,5 @@ void ScriptInterface::RegisterFunctions()
 	system->RegisterFunction("NoBuild", Script_Interface::DisableBuildTime, "", "Removes the buildtime on units, instaspawn, only for player.");
 	system->RegisterFunction("Build", Script_Interface::EnableBuildTime, "", "Enables the buildtime on units, not instaspawn, only for player.");
 	system->RegisterFunction("SpawnNeutral", Script_Interface::SpawnNeutral, "aType, aX, aZ", "Spawns a Netural creen of type aType at position aX, aZ.");
+	system->RegisterFunction("UnlockUnits", Script_Interface::UnlockUnits, "", "Unlocks all units so you can build them.");
 }
