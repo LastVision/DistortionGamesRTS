@@ -114,6 +114,8 @@ namespace Prism
 
 
 		myEffect = EffectContainer::GetInstance()->GetEffect("Data/Resource/Shader/S_effect_terrain.fx");
+		myEffect->SetTexture(TextureContainer::GetInstance()->GetTexture(
+			"Data/Resource/Texture/Terrain/T_terrain_normal_map.dds"));
 		//Texture * influence = Prism::TextureContainer::GetInstance()
 		//->GetTexture("Data/Resource/Texture/Terrain/SplatMap/T_InfluenceToSplatMap.dds");
 		//myEffect->SetTexture(influence);
