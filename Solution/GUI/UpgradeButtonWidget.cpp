@@ -1,14 +1,14 @@
 #include "stdafx.h"
 #include "ButtonWidget.h"
-#include "UpgradeButtonWidget.h"
-
+#include "../Game/PlayerDirector.h"
+#include <OnClickMessage.h>
 #include <SpriteProxy.h>
+#include "UpgradeButtonWidget.h"
 
 namespace GUI
 {
 	UpgradeButtonWidget::UpgradeButtonWidget(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement
-		, const int& aUpgradeLevel)
-		: myUpgradeLevel(aUpgradeLevel)
+		, const PlayerDirector* aPlayer)
 	{
 		int index = 0;
 
@@ -20,6 +20,8 @@ namespace GUI
 			myUpgrades[index]->SetPosition({ 0.f, myUpgrades[index]->GetSize().y });
 			index++;
 		}
+
+		myUpgradeLevel = &aPlayer->GetUpgradeLevel(myUpgrades[0]->GetEvent()->myID);
 
 		mySize = myUpgrades[0]->GetSize();
 		myPosition.y -= myUpgrades[0]->GetSize().y / 2.f;
@@ -37,15 +39,15 @@ namespace GUI
 	{
 		if (myIsVisible == true)
 		{
-			myUpgrades[myUpgradeLevel]->Render(myPosition + aParentPosition);
+			myUpgrades[*myUpgradeLevel]->Render(myPosition + aParentPosition);
 		}
 	}
 
 	Widget* UpgradeButtonWidget::MouseIsOver(const CU::Vector2<float>& aPosition)
 	{
-		if (myIsVisible == true && myUpgrades[myUpgradeLevel]->IsInside(aPosition - myPosition) == true)
+		if (myIsVisible == true && myUpgrades[*myUpgradeLevel]->IsInside(aPosition - myPosition) == true)
 		{
-			return myUpgrades[myUpgradeLevel];
+			return myUpgrades[*myUpgradeLevel];
 		}
 		return this;
 	}
