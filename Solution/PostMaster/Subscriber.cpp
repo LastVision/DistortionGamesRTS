@@ -11,6 +11,10 @@ Subscriber::~Subscriber()
 {
 }
 
+void Subscriber::ReceiveMessage(const ArtifactMessage&)
+{
+}
+
 void Subscriber::ReceiveMessage(const CinematicMessage&)
 {
 }

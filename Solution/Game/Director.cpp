@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+#include <ArtifactMessage.h>
 #include <AudioInterface.h>
 #include <BuildingComponent.h>
 #include "Console.h"
@@ -22,6 +23,7 @@ Director::Director(eOwnerType aOwnerType, const Prism::Terrain& aTerrain)
 	, myTimeMultiplier(1.f)
 	, myVictoryPoints(0)
 	, myGunpowder(60)
+	, myArtifacts(0)
 	, myUnitCap(0)
 	, myUnitCount(0)
 {
@@ -264,6 +266,14 @@ void Director::ReceiveMessage(const UpgradeUnitMessage& aMessage)
 				}
 			}
 		}
+	}
+}
+
+void Director::ReceiveMessage(const ArtifactMessage& aMessage)
+{
+	if (aMessage.myOwner == myOwner)
+	{
+		myArtifacts += aMessage.myArtifactModifier;
 	}
 }
 
