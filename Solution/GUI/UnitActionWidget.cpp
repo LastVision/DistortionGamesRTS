@@ -23,6 +23,8 @@ namespace GUI
 		, myHasSelectedTank(false)
 		, mySelectedType(eEntityType::_COUNT)
 		, myPlayer(aPlayer)
+		, myHasUnlockedRanger(aPlayer->HasUnlockedRanger())
+		, myHasUnlockedTank(aPlayer->HasUnlockedTank())
 	{
 		CU::Vector2<float> size;
 		CU::Vector2<float> position;
@@ -96,7 +98,15 @@ namespace GUI
 			}
 			else if (mySelectedType == eEntityType::BASE_BUILING)
 			{
-				myBuildingActionButtons->Render(myPosition + aParentPosition);
+				myBuildingActionButtons->At(0)->Render(myPosition + aParentPosition);
+				if (myHasUnlockedRanger == true)
+				{
+					myBuildingActionButtons->At(1)->Render(myPosition + aParentPosition);
+				}
+				if (myHasUnlockedTank == true)
+				{
+					myBuildingActionButtons->At(2)->Render(myPosition + aParentPosition);
+				}
 			}
 		}
 	}
@@ -136,13 +146,6 @@ namespace GUI
 				}
 			}
 		}
-		//else if (mySelectedType == eEntityType::BASE_BUILING)
-		//{
-		//	if ()
-		//	{
-		//
-		//	}
-		//}
 	}
 
 	Widget* UnitActionWidget::MouseIsOver(const CU::Vector2<float>& aPosition)
@@ -178,7 +181,18 @@ namespace GUI
 			}
 			else if (mySelectedType == eEntityType::BASE_BUILING)
 			{
-				return myBuildingActionButtons->MouseIsOver(aPosition - myPosition);
+				Widget* widget = myBuildingActionButtons->MouseIsOver(aPosition - myPosition);
+
+				if (myHasUnlockedRanger == false && widget == myBuildingActionButtons->At(1))
+				{
+					return nullptr;
+				}
+				else if (myHasUnlockedTank == false && widget == myBuildingActionButtons->At(2))
+				{
+					return nullptr;
+				}
+
+				return widget;
 			}
 		}
 		return nullptr;

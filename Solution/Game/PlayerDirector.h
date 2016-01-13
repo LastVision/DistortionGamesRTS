@@ -83,6 +83,9 @@ public:
 
 	const float& GetTotemCooldown() const;
 
+	const bool& HasUnlockedTank() const;
+	const bool& HasUnlockedRanger() const;
+
 private:
 	void UpdateInputs();
 	void UpdateControlGroups();
@@ -169,4 +172,14 @@ inline eSelectedAction PlayerDirector::GetSelectedAction() const
 inline const int& PlayerDirector::GetTestUpgradeLevel() const
 {
 	return myTestUpgradeLevel;
+}
+
+inline const bool& PlayerDirector::HasUnlockedTank() const
+{
+	return myHasUnlockedTank;
+}
+
+inline const bool& PlayerDirector::HasUnlockedRanger() const
+{
+	return myHasUnlockedRanger;
 }
