@@ -22,7 +22,7 @@ Director::Director(eOwnerType aOwnerType, const Prism::Terrain& aTerrain)
 	, myDeadUnits(32)
 	, myTimeMultiplier(1.f)
 	, myVictoryPoints(0)
-	, myTestGold(60)
+	, myGunpowder(60)
 	, myUnitCap(0)
 	, myUnitCount(0)
 {
@@ -114,9 +114,9 @@ bool Director::SpawnUnit(eUnitType aUnitType)
 		return false;
 	}
 
-	if (myTestGold >= myBuilding->GetComponent<BuildingComponent>()->GetUnitCost(aUnitType))
+	if (myGunpowder >= myBuilding->GetComponent<BuildingComponent>()->GetUnitCost(aUnitType))
 	{
-		myTestGold -= myBuilding->GetComponent<BuildingComponent>()->GetUnitCost(aUnitType);
+		myGunpowder -= myBuilding->GetComponent<BuildingComponent>()->GetUnitCost(aUnitType);
 		myBuilding->GetComponent<BuildingComponent>()->BuildUnit(aUnitType);
 		return true;
 	}
@@ -143,9 +143,9 @@ bool Director::UpgradeUnit(eUnitType aUnitType)
 		return false;
 	}
 
-	if (myTestGold >= building->GetUpgradeCost(aUnitType))
+	if (myGunpowder >= building->GetUpgradeCost(aUnitType))
 	{
-		myTestGold -= building->GetUpgradeCost(aUnitType);
+		myGunpowder -= building->GetUpgradeCost(aUnitType);
 		building->UpgradeUnit(aUnitType);
 		return true;
 	}
@@ -223,10 +223,10 @@ void Director::ReceiveMessage(const ResourceMessage& aMessage)
 {
 	if (aMessage.myOwner == myOwner)
 	{
-		myTestGold += aMessage.myResourceModifier;
-		if (myTestGold < 0)
+		myGunpowder += aMessage.myResourceModifier;
+		if (myGunpowder < 0)
 		{
-			myTestGold = 0;
+			myGunpowder = 0;
 		}
 	}
 }
