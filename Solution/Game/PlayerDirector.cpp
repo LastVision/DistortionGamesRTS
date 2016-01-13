@@ -60,11 +60,11 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 
 	for (int i = 0; i < 64; ++i)
 	{
-		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::PLAYER, eEntityType::UNIT, eUnitType::GRUNT, Prism::eOctreeType::DYNAMIC,
+		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::PLAYER, eEntityType::UNIT, "grunt", Prism::eOctreeType::DYNAMIC,
 			aScene, { 65, 0, 40 }, aTerrain));
-		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::PLAYER, eEntityType::UNIT, eUnitType::RANGER, Prism::eOctreeType::DYNAMIC,
+		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::PLAYER, eEntityType::UNIT, "ranger", Prism::eOctreeType::DYNAMIC,
 			aScene, { 65, 0, 40 }, aTerrain));
-		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::PLAYER, eEntityType::UNIT, eUnitType::TANK, Prism::eOctreeType::DYNAMIC,
+		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::PLAYER, eEntityType::UNIT, "tank", Prism::eOctreeType::DYNAMIC,
 			aScene, { 20.f + i, 0.f, 40.f }, aTerrain));
 	}
 
@@ -436,6 +436,11 @@ CU::Vector3<float> PlayerDirector::CalcCursorWorldPosition(const CU::Vector2<flo
 	return worldPos;
 }
 	
+const float& PlayerDirector::GetTotemCooldown() const
+{
+	return myTotem->GetComponent<TotemComponent>()->GetCurrentCooldown();
+}
+
 void PlayerDirector::UpdateInputs()
 {
 	myShiftPressed = CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_LSHIFT)

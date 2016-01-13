@@ -16,16 +16,16 @@ NeutralDirector::NeutralDirector(const Prism::Terrain& aTerrain, Prism::Scene& a
 	: Director(eOwnerType::NEUTRAL, aTerrain)
 {
 
-	myUnits.Add(EntityFactory::CreateEntity(eOwnerType::NEUTRAL, eEntityType::UNIT, eUnitType::NON_ATTACK_TUTORIAL
+	myUnits.Add(EntityFactory::CreateEntity(eOwnerType::NEUTRAL, eEntityType::UNIT, "non_attack_tutorial"
 		, Prism::eOctreeType::DYNAMIC, aScene, { 20.f, 0.f, 40.f }, aTerrain));
 
 	for (int i = 0; i < 64; ++i)
 	{
-		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::NEUTRAL, eEntityType::UNIT, eUnitType::GRUNT, Prism::eOctreeType::DYNAMIC,
+		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::NEUTRAL, eEntityType::UNIT, "grunt", Prism::eOctreeType::DYNAMIC,
 			aScene, { 20.f + i, 0.f, 40.f }, aTerrain));
-		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::NEUTRAL, eEntityType::UNIT, eUnitType::RANGER, Prism::eOctreeType::DYNAMIC,
+		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::NEUTRAL, eEntityType::UNIT, "ranger", Prism::eOctreeType::DYNAMIC,
 			aScene, { 20.f + i, 0.f, 40.f }, aTerrain));
-		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::NEUTRAL, eEntityType::UNIT, eUnitType::TANK, Prism::eOctreeType::DYNAMIC,
+		myUnits.Add(EntityFactory::CreateEntity(eOwnerType::NEUTRAL, eEntityType::UNIT, "tank", Prism::eOctreeType::DYNAMIC,
 			aScene, { 20.f + i, 0.f, 40.f }, aTerrain));
 	}
 
