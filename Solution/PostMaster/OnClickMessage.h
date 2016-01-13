@@ -17,7 +17,8 @@ enum class eOnClickEvent
 	UNIT_ACTION_STAND_GROUND,
 	PLACE_TOTEM,
 	ENRAGE,
-	SELECT_CONTROL_GROUP
+	SELECT_CONTROL_GROUP,
+	UPGRADE_UNIT
 };
 
 struct OnClickMessage : public Message

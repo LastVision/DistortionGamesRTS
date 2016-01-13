@@ -99,13 +99,18 @@ namespace GUI
 			else if (mySelectedType == eEntityType::BASE_BUILING)
 			{
 				myBuildingActionButtons->At(0)->Render(myPosition + aParentPosition);
+				myBuildingActionButtons->At(3)->Render(myPosition + aParentPosition);
+
 				if (myHasUnlockedRanger == true)
 				{
 					myBuildingActionButtons->At(1)->Render(myPosition + aParentPosition);
+					myBuildingActionButtons->At(4)->Render(myPosition + aParentPosition);
+
 				}
 				if (myHasUnlockedTank == true)
 				{
 					myBuildingActionButtons->At(2)->Render(myPosition + aParentPosition);
+					myBuildingActionButtons->At(5)->Render(myPosition + aParentPosition);
 				}
 			}
 		}
@@ -183,11 +188,11 @@ namespace GUI
 			{
 				Widget* widget = myBuildingActionButtons->MouseIsOver(aPosition - myPosition);
 
-				if (myHasUnlockedRanger == false && widget == myBuildingActionButtons->At(1))
+				if (myHasUnlockedRanger == false && (widget == myBuildingActionButtons->At(1) || widget == myBuildingActionButtons->At(4)))
 				{
 					return nullptr;
 				}
-				else if (myHasUnlockedTank == false && widget == myBuildingActionButtons->At(2))
+				else if (myHasUnlockedTank == false && (widget == myBuildingActionButtons->At(2) || widget == myBuildingActionButtons->At(5)))
 				{
 					return nullptr;
 				}
