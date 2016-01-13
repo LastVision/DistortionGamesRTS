@@ -64,6 +64,7 @@ private:
 	void LoadControlPoints(XMLReader& aReader, tinyxml2::XMLElement* aLevelElement);
 	void LoadBases(XMLReader& aReader, tinyxml2::XMLElement* aLevelElement);
 	void LoadCutBoxes(XMLReader& aReader, tinyxml2::XMLElement* aLevelElement);
+	void LoadArtifacts(XMLReader& aReader, tinyxml2::XMLElement* aLevelElement);
 	void LoadTerrain(const std::string& aLevelPath);
 	Level* myCurrentLevel;
 	Level* myOldLevel;

@@ -41,7 +41,7 @@ namespace GUI
 
 		if (value == "player_gold")
 		{
-			myValue = &aPlayer->GetTestGold();
+			myValue = &aPlayer->GetGunpowder();
 		}
 		else if (value == "player_victory_point")
 		{
@@ -50,6 +50,10 @@ namespace GUI
 		else if (value == "enemy_victory_point")
 		{
 			myValue = &anAI->GetVictoryPoints();
+		}
+		else if (value == "player_artifact")
+		{
+			myValue = &aPlayer->GetArtifact();
 		}
 		else
 		{

@@ -35,12 +35,15 @@ namespace GUI
 
 	void UpgradeButtonWidget::Render(const CU::Vector2<float>& aParentPosition)
 	{
-		myUpgrades[myUpgradeLevel]->Render(myPosition + aParentPosition);
+		if (myIsVisible == true)
+		{
+			myUpgrades[myUpgradeLevel]->Render(myPosition + aParentPosition);
+		}
 	}
 
 	Widget* UpgradeButtonWidget::MouseIsOver(const CU::Vector2<float>& aPosition)
 	{
-		if (myUpgrades[myUpgradeLevel]->IsInside(aPosition - myPosition) == true)
+		if (myIsVisible == true && myUpgrades[myUpgradeLevel]->IsInside(aPosition - myPosition) == true)
 		{
 			return myUpgrades[myUpgradeLevel];
 		}

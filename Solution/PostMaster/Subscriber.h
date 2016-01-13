@@ -1,10 +1,12 @@
 #pragma once
 
+struct ArtifactMessage;
 struct CinematicMessage;
 struct FadeMessage;
 struct EmitterMessage;
 struct EventPositionMessage;
 struct GameStateMessage;
+struct KillUnitMessage;
 struct Message;
 struct MinimapEventMessage;
 struct MinimapMoveMessage;
@@ -29,11 +31,13 @@ public:
 	Subscriber();
 	~Subscriber();
 
+	virtual void ReceiveMessage(const ArtifactMessage& aMessage);
 	virtual void ReceiveMessage(const CinematicMessage& aMessage);
 	virtual void ReceiveMessage(const FadeMessage& aMessage);
 	virtual void ReceiveMessage(const EmitterMessage& aMessage);
 	virtual void ReceiveMessage(const EventPositionMessage& aMessage);
 	virtual void ReceiveMessage(const GameStateMessage& aMessage);
+	virtual void ReceiveMessage(const KillUnitMessage& aMessage);
 	virtual void ReceiveMessage(const Message& aMessage);
 	virtual void ReceiveMessage(const MinimapEventMessage& aMessage);
 	virtual void ReceiveMessage(const MinimapMoveMessage& aMessage);

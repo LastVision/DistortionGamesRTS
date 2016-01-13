@@ -23,6 +23,10 @@ public:
 	//Returns the number of VictoryPoints held by anOwner
 	int GetVictoryPointsCount(eOwnerType anOwner) const;
 
+	void AddArtifact(Entity* aArtifact);
+	void DeleteArtifact(Entity* aArtifact);
+	const CU::GrowingArray<Entity*>& GetArtifacts() const;
+
 	const Entity* GetBase(eOwnerType anOwner) const;
 
 	void CleanUp();
@@ -41,6 +45,7 @@ private:
 	CU::GrowingArray<Entity*> myNeutralUnits;
 	CU::GrowingArray<Entity*> myResourcePoints;
 	CU::GrowingArray<Entity*> myVictoryPoints;
+	CU::GrowingArray<Entity*> myArtifacts;
 
 	Entity* myPlayerBuilding;
 	Entity* myAIBuilding;

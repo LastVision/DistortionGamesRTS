@@ -117,7 +117,8 @@ void PlayerDirector::InitGUI(const AIDirector* anAI, const Prism::Camera& aCamer
 void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 {
 	aDeltaTime *= myTimeMultiplier;
-
+	DEBUG_PRINT(myHasUnlockedRanger);
+	DEBUG_PRINT(myHasUnlockedTank);
 	//Prism::Audio::AudioInterface::GetInstance()->SetListenerPosition(aCamera.GetOrientation().GetPos().x
 	//	, aCamera.GetOrientation().GetPos().y, aCamera.GetOrientation().GetPos().z);
 	Prism::Audio::AudioInterface::GetInstance()->SetListenerPosition(aCamera.GetOrientation().GetPos().x

@@ -1,10 +1,13 @@
 #include "stdafx.h"
 
 #include "ActorComponent.h"
+#include <ArtifactMessage.h>
 //#include "ActorComponentData.h"
 #include "ControllerComponent.h"
 #include <Terrain.h>
 #include "AnimationComponent.h"
+#include "PollingStation.h"
+#include <PostMaster.h>
 
 ActorComponent::ActorComponent(Entity& aEntity, ActorComponentData& aData, const Prism::Terrain& aTerrain)
 	: Component(aEntity)
@@ -95,6 +98,20 @@ void ActorComponent::Update(float aDelta)
 	//{
 	//	myEntity.SetState(eEntityState::IDLE);
 	//}
+
+
+
+	const CU::GrowingArray<Entity*>& artifacts = PollingStation::GetInstance()->GetArtifacts();
+	
+	for (int i = artifacts.Size() -1; i >= 0; --i)
+	{
+		if (CU::Length2(myEntity.GetPosition() - artifacts[i]->GetPosition()) < 5 * 5)
+		{
+			PostMaster::GetInstance()->SendMessage(ArtifactMessage(myEntity.GetOwner(), 1));
+			PollingStation::GetInstance()->DeleteArtifact(artifacts[i]);
+		}
+	}
+
 }
 
 void ActorComponent::LookInDirection(const CU::Vector2<float>& aDirection)

@@ -72,6 +72,8 @@ void AIDirector::Update(float aDeltaTime)
 
 void AIDirector::ReceiveMessage(const SpawnUnitMessage& aMessage)
 {
+	if (static_cast<eUnitType>(aMessage.myUnitType) == eUnitType::RANGER && myHasUnlockedRanger == false) return;
+	if (static_cast<eUnitType>(aMessage.myUnitType) == eUnitType::TANK && myHasUnlockedTank == false) return;
 	Director::ReceiveMessage(aMessage);
 	if (aMessage.myOwnerType == static_cast<int>(eOwnerType::ENEMY))
 	{

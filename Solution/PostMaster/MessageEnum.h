@@ -23,5 +23,7 @@ enum class eMessageType
 	TEXT,
 	MINIMAP_EVENT,
 	EVENT_POSITION,
+	KILL_UNIT,
+	ARTIFACT,
 	COUNT,
 };
