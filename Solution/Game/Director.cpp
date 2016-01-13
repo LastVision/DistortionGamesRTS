@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+#include <ArtifactMessage.h>
 #include <AudioInterface.h>
 #include <BuildingComponent.h>
 #include "Console.h"
@@ -23,6 +24,7 @@ Director::Director(eOwnerType aOwnerType, const Prism::Terrain& aTerrain)
 	, myTimeMultiplier(1.f)
 	, myVictoryPoints(0)
 	, myGunpowder(60)
+	, myArtifacts(0)
 	, myUnitCap(0)
 	, myUnitCount(0)
 	, myHasUnlockedRanger(false)
@@ -74,6 +76,7 @@ void Director::Update(float aDeltaTime)
 		}
 	}
 
+	DEBUG_PRINT(myArtifacts);
 	
 }
 
@@ -147,9 +150,9 @@ bool Director::UpgradeUnit(eUnitType aUnitType)
 		return false;
 	}
 
-	if (myGunpowder >= building->GetUpgradeCost(aUnitType))
+	if (myArtifacts >= building->GetUpgradeCost(aUnitType))
 	{
-		myGunpowder -= building->GetUpgradeCost(aUnitType);
+		myArtifacts -= building->GetUpgradeCost(aUnitType);
 		building->UpgradeUnit(aUnitType);
 		return true;
 	}
@@ -291,6 +294,14 @@ void Director::ReceiveMessage(const KillUnitMessage& aMessage)
 		{
 			myHasUnlockedTank = true;
 		}
+	}
+}
+
+void Director::ReceiveMessage(const ArtifactMessage& aMessage)
+{
+	if (aMessage.myOwner == myOwner)
+	{
+		myArtifacts += aMessage.myArtifactModifier;
 	}
 }
 

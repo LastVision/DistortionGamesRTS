@@ -17,6 +17,7 @@ enum eEntityType
 	RESOURCE_POINT = 8,
 	VICTORY_POINT = 16,
 	TOTEM = 32,
+	ARTIFACT = 64,
 	_COUNT,
 };
 

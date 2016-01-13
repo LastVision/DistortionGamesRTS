@@ -53,13 +53,13 @@ namespace GUI
 		buttonPosition.x -= (buttonSize.x * 0.5f);
 		buttonPosition.y += (buttonSize.y * 0.5f);
 
-		myGruntActionButtons = ReadContainer(aReader, gruntElement, { buttonSize.x, buttonSize.y * 2.f });
-		myRangerActionButtons = ReadContainer(aReader, rangerElement, { buttonSize.x, buttonSize.y * 2.f });
-		myTankActionButtons = ReadContainer(aReader, tankElement, { buttonSize.x, buttonSize.y * 2.f });
+		myGruntActionButtons = ReadContainer(aReader, gruntElement, buttonSize);
+		myRangerActionButtons = ReadContainer(aReader, rangerElement, buttonSize);
+		myTankActionButtons = ReadContainer(aReader, tankElement, buttonSize);
 
-		myGruntActionButtons->SetPosition({ buttonPosition.x + (buttonSize.x * 2.f) + 1.f, (buttonPosition.y - buttonSize.y * 3.f) - 3.f });
-		myRangerActionButtons->SetPosition({ buttonPosition.x + (buttonSize.x * 3.f) + 2.f, (buttonPosition.y - buttonSize.y * 3.f) - 3.f });
-		myTankActionButtons->SetPosition({ buttonPosition.x + (buttonSize.x * 4.f) + 3.f, (buttonPosition.y - buttonSize.y * 3.f) - 3.f });
+		myGruntActionButtons->SetPosition({ buttonPosition.x, (buttonPosition.y - buttonSize.y * 2.f) - 2.f });
+		myRangerActionButtons->SetPosition({ buttonPosition.x + (buttonSize.x * 1.f) + 1.f, (buttonPosition.y - buttonSize.y * 2.f) - 2.f });
+		myTankActionButtons->SetPosition({ buttonPosition.x + (buttonSize.x * 2.f) + 2.f, (buttonPosition.y - buttonSize.y * 2.f) - 2.f });
 	}
 
 	UnitActionWidget::~UnitActionWidget()
@@ -119,23 +119,30 @@ namespace GUI
 			{
 				if (myHasSelectedGrunt == false && myUnits[i]->GetUnitType() == eUnitType::GRUNT)
 				{
-					myGruntActionButtons->At(1)->SetValue(myUnits[i]->GetComponent<GrenadeComponent>()->GetCooldown());
+					myGruntActionButtons->At(0)->SetValue(myUnits[i]->GetComponent<GrenadeComponent>()->GetCooldown());
 					myHasSelectedGrunt = true;
 				}
 
 				if (myHasSelectedRanger == false && myUnits[i]->GetUnitType() == eUnitType::RANGER)
 				{
-					myRangerActionButtons->At(1)->SetValue(myUnits[i]->GetComponent<ControllerComponent>()->GetRangerCooldown());
+					myRangerActionButtons->At(0)->SetValue(myUnits[i]->GetComponent<ControllerComponent>()->GetRangerCooldown());
 					myHasSelectedRanger = true;
 				}
 
 				if (myHasSelectedTank == false && myUnits[i]->GetUnitType() == eUnitType::TANK)
 				{
-					myTankActionButtons->At(1)->SetValue(myUnits[i]->GetComponent<EnrageComponent>()->GetCooldown());
+					myTankActionButtons->At(0)->SetValue(myUnits[i]->GetComponent<EnrageComponent>()->GetCooldown());
 					myHasSelectedTank = true;
 				}
 			}
 		}
+		//else if (mySelectedType == eEntityType::BASE_BUILING)
+		//{
+		//	if ()
+		//	{
+		//
+		//	}
+		//}
 	}
 
 	Widget* UnitActionWidget::MouseIsOver(const CU::Vector2<float>& aPosition)

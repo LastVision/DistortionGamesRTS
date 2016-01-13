@@ -114,5 +114,8 @@
     <ClInclude Include="KillUnitMessage.h">
       <Filter>Message\EntityMessage</Filter>
     </ClInclude>
+    <ClInclude Include="ArtifactMessage.h">
+      <Filter>Message</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

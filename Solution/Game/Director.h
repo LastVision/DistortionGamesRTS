@@ -35,6 +35,7 @@ public:
 	void ReceiveMessage(const VictoryMessage& aMessage) override;
 	void ReceiveMessage(const UpgradeUnitMessage& aMessage) override;
 	void ReceiveMessage(const KillUnitMessage& aMessage) override;
+	void ReceiveMessage(const ArtifactMessage& aMessage) override;
 
 protected:
 	bool IsAlreadyActive(Entity* aUnit);
@@ -48,6 +49,7 @@ protected:
 
 	float myTimeMultiplier;
 	int myGunpowder;
+	int myArtifacts;
 	int myVictoryPoints;
 	int myUnitCap;
 	int myUnitCount;

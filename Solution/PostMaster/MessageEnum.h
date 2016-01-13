@@ -24,5 +24,6 @@ enum class eMessageType
 	MINIMAP_EVENT,
 	EVENT_POSITION,
 	KILL_UNIT,
+	ARTIFACT,
 	COUNT,
 };

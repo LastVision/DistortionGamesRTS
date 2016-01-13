@@ -70,15 +70,15 @@ namespace Prism
 	}
 
 
-	void ParticleDataContainer::SetGPUData(Camera* aCamera)
+	void ParticleDataContainer::SetGPUData(const Camera& aCamera)
 	{
 		DL_DEBUG("Attempting to SetGPUData");
 		for (auto it = myParticleData.begin(); it != myParticleData.end(); ++it)
 		{
 			DL_DEBUG("Inside SetGPUData map");
 			ParticleEmitterData* tempData = it->second;
-			tempData->myEffect->SetViewMatrix(CU::InverseSimple(aCamera->GetOrientation()));
-			tempData->myEffect->SetProjectionMatrix(aCamera->GetProjection());
+			tempData->myEffect->SetViewMatrix(CU::InverseSimple(aCamera.GetOrientation()));
+			tempData->myEffect->SetProjectionMatrix(aCamera.GetProjection());
 
 			Engine::GetInstance()->GetContex()->IASetInputLayout(tempData->myInputLayout);
 			Engine::GetInstance()->GetContex()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);

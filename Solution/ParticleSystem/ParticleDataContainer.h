@@ -14,7 +14,7 @@ namespace Prism
 		static void Destroy();
 
 		ParticleEmitterData*	GetParticleData(const std::string& aFilePath);
-		void SetGPUData(Camera* aCamera);
+		void SetGPUData(const Camera& aCamera);
 
 	private:
 		ParticleDataContainer(){};

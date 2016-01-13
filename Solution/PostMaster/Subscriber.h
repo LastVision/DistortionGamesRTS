@@ -1,5 +1,6 @@
 #pragma once
 
+struct ArtifactMessage;
 struct CinematicMessage;
 struct FadeMessage;
 struct EmitterMessage;
@@ -30,6 +31,7 @@ public:
 	Subscriber();
 	~Subscriber();
 
+	virtual void ReceiveMessage(const ArtifactMessage& aMessage);
 	virtual void ReceiveMessage(const CinematicMessage& aMessage);
 	virtual void ReceiveMessage(const FadeMessage& aMessage);
 	virtual void ReceiveMessage(const EmitterMessage& aMessage);
