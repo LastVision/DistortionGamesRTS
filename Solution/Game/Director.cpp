@@ -74,6 +74,7 @@ void Director::Update(float aDeltaTime)
 		}
 	}
 
+	DEBUG_PRINT(myArtifacts);
 	
 }
 
@@ -145,9 +146,9 @@ bool Director::UpgradeUnit(eUnitType aUnitType)
 		return false;
 	}
 
-	if (myGunpowder >= building->GetUpgradeCost(aUnitType))
+	if (myArtifacts >= building->GetUpgradeCost(aUnitType))
 	{
-		myGunpowder -= building->GetUpgradeCost(aUnitType);
+		myArtifacts -= building->GetUpgradeCost(aUnitType);
 		building->UpgradeUnit(aUnitType);
 		return true;
 	}
