@@ -37,7 +37,7 @@ Level::Level(const Prism::Camera& aCamera, Prism::Terrain* aTerrain, GUI::Cursor
 	, myMaxVictoryPoint(-1)
 {
 	EntityFactory::GetInstance()->LoadEntities("Data/Resource/Entity/LI_entity.xml");
-	myEmitterManager = new EmitterManager();
+	myEmitterManager = new EmitterManager(aCamera);
 	myTerrain = aTerrain;
 
 	myScene = new Prism::Scene(aCamera, *myTerrain);
@@ -115,7 +115,7 @@ void Level::Render(Prism::Camera& aCamera)
 
 	myScene->Render(myRenderNavMeshLines);
 
-	myEmitterManager->RenderEmitters(&aCamera);
+	myEmitterManager->RenderEmitters();
 
 	myPlayer->RenderHealthBars(aCamera);
 	myAI->RenderHealthBars(aCamera);
