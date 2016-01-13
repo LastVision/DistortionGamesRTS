@@ -15,6 +15,8 @@ public:
 	bool IsActive();
 	void Activate();
 
+	const float& GetCooldown() const;
+
 private:
 
 	float myCurrentDuration;
@@ -47,4 +49,9 @@ inline eComponentType EnrageComponent::GetType()
 inline bool EnrageComponent::IsActive()
 {
 	return myIsActive;
+}
+
+inline const float& EnrageComponent::GetCooldown() const
+{
+	return myCurrentCooldown;
 }

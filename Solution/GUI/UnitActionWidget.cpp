@@ -1,10 +1,14 @@
 #include "stdafx.h"
+#include "AbilityButton.h"
 #include "ButtonWidget.h"
 #include "../Entity/Entity.h"
+#include "../Entity/EnrageComponent.h"
+#include "../Entity/GrenadeComponent.h"
 #include "../Game/PlayerDirector.h"
 #include "UnitActionWidget.h"
 #include "UpgradeButtonWidget.h"
 #include "WidgetContainer.h"
+#include "../Entity/ControllerComponent.h"
 
 namespace GUI
 {
@@ -115,16 +119,19 @@ namespace GUI
 			{
 				if (myHasSelectedGrunt == false && myUnits[i]->GetUnitType() == eUnitType::GRUNT)
 				{
+					myGruntActionButtons->At(1)->SetValue(myUnits[i]->GetComponent<GrenadeComponent>()->GetCooldown());
 					myHasSelectedGrunt = true;
 				}
 
 				if (myHasSelectedRanger == false && myUnits[i]->GetUnitType() == eUnitType::RANGER)
 				{
+					myRangerActionButtons->At(1)->SetValue(myUnits[i]->GetComponent<ControllerComponent>()->GetRangerCooldown());
 					myHasSelectedRanger = true;
 				}
 
 				if (myHasSelectedTank == false && myUnits[i]->GetUnitType() == eUnitType::TANK)
 				{
+					myTankActionButtons->At(1)->SetValue(myUnits[i]->GetComponent<EnrageComponent>()->GetCooldown());
 					myHasSelectedTank = true;
 				}
 			}
@@ -198,6 +205,11 @@ namespace GUI
 			else if (type == "upgrade_button")
 			{
 				UpgradeButtonWidget* upgradeButtonWidget = new UpgradeButtonWidget(aReader, widgetElement, myPlayer->GetTestUpgradeLevel());
+				container->AddWidget(upgradeButtonWidget);
+			}
+			else if (type == "ability_button")
+			{
+				AbilityButton* upgradeButtonWidget = new AbilityButton(aReader, widgetElement, myPlayer);
 				container->AddWidget(upgradeButtonWidget);
 			}
 		}

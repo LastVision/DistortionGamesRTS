@@ -18,14 +18,9 @@ namespace GUI
 
 		void Render(const CU::Vector2<float>& aParentPosition) override;
 
-		void SetCooldown(const float* aCooldown);
+		void SetValue(const float& aValue) override;
 
 	private:
 		const float* myCooldown;
 	};
-
-	inline void AbilityButton::SetCooldown(const float* aCooldown)
-	{
-		myCooldown = aCooldown;
-	}
 }
