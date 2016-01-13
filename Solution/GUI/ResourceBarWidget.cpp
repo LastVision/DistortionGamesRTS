@@ -41,7 +41,7 @@ namespace GUI
 
 		if (value == "player_gold")
 		{
-			myValue = &aPlayer->GetTestGold();
+			myValue = &aPlayer->GetGunpowder();
 		}
 		else if (value == "player_victory_point")
 		{

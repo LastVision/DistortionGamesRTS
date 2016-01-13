@@ -69,7 +69,7 @@ public:
 	const BuildingComponent& GetBuildingComponent() const;
 	CU::Vector3<float> GetCameraMoveVector() const;
 
-	const int& GetTestGold() const;
+	const int& GetGunpowder() const;
 	const bool& GetRenderDragSelection() const;
 
 	const CU::StaticArray<CU::GrowingArray<Entity*>, AMOUNT_OF_CONTROL_GROUPS>& GetControlGroups() const;
@@ -140,9 +140,9 @@ inline const CU::GrowingArray<Entity*>& PlayerDirector::GetSelectedUnits() const
 	return mySelectedUnits;
 }
 
-inline const int& PlayerDirector::GetTestGold() const
+inline const int& PlayerDirector::GetGunpowder() const
 {
-	return myTestGold;
+	return myGunpowder;
 }
 
 inline const bool& PlayerDirector::GetRenderDragSelection() const

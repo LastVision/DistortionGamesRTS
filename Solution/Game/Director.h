@@ -46,7 +46,7 @@ protected:
 	const Prism::Terrain& myTerrain;
 
 	float myTimeMultiplier;
-	int myTestGold;
+	int myGunpowder;
 	int myVictoryPoints;
 	int myUnitCap;
 	int myUnitCount;
