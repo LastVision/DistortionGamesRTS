@@ -29,7 +29,7 @@ namespace GUI
 
 	UpgradeButtonWidget::~UpgradeButtonWidget()
 	{
-		for (int i = 0; i < AMOUNT_OF_UPGRADES; i++)
+		for (int i = 0; i < 3; i++)
 		{
 			SAFE_DELETE(myUpgrades[i]);
 		}
@@ -37,7 +37,7 @@ namespace GUI
 
 	void UpgradeButtonWidget::Render(const CU::Vector2<float>& aParentPosition)
 	{
-		if (myIsVisible == true)
+		if (*myUpgradeLevel < AMOUNT_OF_UPGRADES)
 		{
 			myUpgrades[*myUpgradeLevel]->Render(myPosition + aParentPosition);
 		}
@@ -45,7 +45,7 @@ namespace GUI
 
 	Widget* UpgradeButtonWidget::MouseIsOver(const CU::Vector2<float>& aPosition)
 	{
-		if (myIsVisible == true && myUpgrades[*myUpgradeLevel]->IsInside(aPosition - myPosition) == true)
+		if (*myUpgradeLevel < AMOUNT_OF_UPGRADES && myUpgrades[*myUpgradeLevel]->IsInside(aPosition - myPosition) == true)
 		{
 			return myUpgrades[*myUpgradeLevel];
 		}
