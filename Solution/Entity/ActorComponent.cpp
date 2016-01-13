@@ -101,17 +101,19 @@ void ActorComponent::Update(float aDelta)
 
 
 
-	const CU::GrowingArray<Entity*>& artifacts = PollingStation::GetInstance()->GetArtifacts();
-	
-	for (int i = artifacts.Size() -1; i >= 0; --i)
+	if (myEntity.GetOwner() != eOwnerType::NEUTRAL)
 	{
-		if (CU::Length2(myEntity.GetPosition() - artifacts[i]->GetPosition()) < 5 * 5)
+		const CU::GrowingArray<Entity*>& artifacts = PollingStation::GetInstance()->GetArtifacts();
+
+		for (int i = artifacts.Size() - 1; i >= 0; --i)
 		{
-			PostMaster::GetInstance()->SendMessage(ArtifactMessage(myEntity.GetOwner(), 1));
-			PollingStation::GetInstance()->DeleteArtifact(artifacts[i]);
+			if (CU::Length2(myEntity.GetPosition() - artifacts[i]->GetPosition()) < 5 * 5)
+			{
+				PostMaster::GetInstance()->SendMessage(ArtifactMessage(myEntity.GetOwner(), 1));
+				PollingStation::GetInstance()->DeleteArtifact(artifacts[i]);
+			}
 		}
 	}
-
 }
 
 void ActorComponent::LookInDirection(const CU::Vector2<float>& aDirection)
