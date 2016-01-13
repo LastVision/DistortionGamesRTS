@@ -117,7 +117,8 @@ void PlayerDirector::InitGUI(const AIDirector* anAI, const Prism::Camera& aCamer
 void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 {
 	aDeltaTime *= myTimeMultiplier;
-
+	DEBUG_PRINT(myHasUnlockedRanger);
+	DEBUG_PRINT(myHasUnlockedTank);
 	//Prism::Audio::AudioInterface::GetInstance()->SetListenerPosition(aCamera.GetOrientation().GetPos().x
 	//	, aCamera.GetOrientation().GetPos().y, aCamera.GetOrientation().GetPos().z);
 	Prism::Audio::AudioInterface::GetInstance()->SetListenerPosition(aCamera.GetOrientation().GetPos().x
@@ -235,6 +236,12 @@ void PlayerDirector::ReceiveMessage(const OnClickMessage& aMessage)
 		mySelectedAction = eSelectedAction::PLACE_TOTEM;
 		return;
 	}
+	else if (aMessage.myEvent == eOnClickEvent::UPGRADE_UNIT)
+	{
+		UpgradeUnit(static_cast<eUnitType>(aMessage.myID));
+		return;
+	}
+
 	if (mySelectedUnits.Size() > 0)
 	{
 		switch (aMessage.myEvent)
@@ -439,6 +446,11 @@ CU::Vector3<float> PlayerDirector::CalcCursorWorldPosition(const CU::Vector2<flo
 const float& PlayerDirector::GetTotemCooldown() const
 {
 	return myTotem->GetComponent<TotemComponent>()->GetCurrentCooldown();
+}
+
+const int& PlayerDirector::GetUpgradeLevel(int aUnitID) const
+{
+	return myBuilding->GetComponent<BuildingComponent>()->GetUpgradeLevel(aUnitID);
 }
 
 void PlayerDirector::UpdateInputs()

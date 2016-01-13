@@ -11,6 +11,10 @@ Subscriber::~Subscriber()
 {
 }
 
+void Subscriber::ReceiveMessage(const ArtifactMessage&)
+{
+}
+
 void Subscriber::ReceiveMessage(const CinematicMessage&)
 {
 }
@@ -28,6 +32,10 @@ void Subscriber::ReceiveMessage(const EventPositionMessage&)
 }
 
 void Subscriber::ReceiveMessage(const GameStateMessage&)
+{
+}
+
+void Subscriber::ReceiveMessage(const KillUnitMessage&)
 {
 }
 

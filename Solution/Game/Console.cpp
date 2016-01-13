@@ -24,6 +24,7 @@ Console* Console::GetInstance()
 void Console::Destroy()
 {
 	delete myInstance;
+	myInstance = nullptr;
 }
 
 Console::Console()

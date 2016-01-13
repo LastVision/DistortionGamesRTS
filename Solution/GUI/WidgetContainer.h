@@ -35,8 +35,8 @@ namespace GUI
 
 		Widget* GetFirstWidget();
 
-		Widget* operator[](const int& aIndex);
-		const Widget* operator[](const int& aIndex) const;
+		Widget* At(const int& aIndex);
+		const Widget* At(const int& aIndex) const;
 
 	private:
 		CU::GrowingArray<Widget*> myWidgets;
@@ -54,12 +54,12 @@ namespace GUI
 		return myWidgets[0];
 	}
 	
-	inline Widget* WidgetContainer::operator[](const int& aIndex)
+	inline Widget* WidgetContainer::At(const int& aIndex)
 	{
 		return myWidgets[aIndex];
 	}
 
-	inline const Widget* WidgetContainer::operator[](const int& aIndex) const
+	inline const Widget* WidgetContainer::At(const int& aIndex) const
 	{
 		return myWidgets[aIndex];
 	}

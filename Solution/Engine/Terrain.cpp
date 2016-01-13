@@ -19,6 +19,8 @@
 #include "SplatMapContainer.h"
 #include "TextureContainer.h"
 #include "VertexBufferWrapper.h"
+#include "VertexIndexWrapper.h"
+#include "VertexDataWrapper.h"
 
 #include <TimerManager.h>
 
@@ -106,6 +108,8 @@ namespace Prism
 		SAFE_DELETE(myNavMesh);
 		SAFE_DELETE(mySplatMapContainer);
 		SAFE_DELETE(myIce);
+		SAFE_DELETE(myIndexBaseData);
+		SAFE_DELETE(myVertexBaseData);
 	}
 
 	void Terrain::SetupDirectXData(const std::string& aIceInfluence)
@@ -114,6 +118,8 @@ namespace Prism
 
 
 		myEffect = EffectContainer::GetInstance()->GetEffect("Data/Resource/Shader/S_effect_terrain.fx");
+		myEffect->SetTexture(TextureContainer::GetInstance()->GetTexture(
+			"Data/Resource/Texture/Terrain/T_terrain_normal_map.dds"));
 		//Texture * influence = Prism::TextureContainer::GetInstance()
 		//->GetTexture("Data/Resource/Texture/Terrain/SplatMap/T_InfluenceToSplatMap.dds");
 		//myEffect->SetTexture(influence);

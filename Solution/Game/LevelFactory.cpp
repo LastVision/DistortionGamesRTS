@@ -233,6 +233,7 @@ void LevelFactory::ReadLevel(const std::string& aLevelPath, std::string& aTutori
 	LoadProps(reader, levelElement);
 	LoadControlPoints(reader, levelElement);
 	LoadUnits(reader, levelElement);
+	LoadArtifacts(reader, levelElement);
 #ifndef USE_BINARY_TERRAIN
 	LoadCutBoxes(reader, levelElement);
 #endif
@@ -554,6 +555,43 @@ void LevelFactory::LoadCutBoxes(XMLReader& aReader, tinyxml2::XMLElement* aLevel
 			NavmeshCutBox* newCutBox = new NavmeshCutBox(boxPosition, boxScale, boxRotation);
 			myCutBoxes.Add(newCutBox);
 		}
+	}
+}
+
+void LevelFactory::LoadArtifacts(XMLReader& aReader, tinyxml2::XMLElement* aLevelElement)
+{
+	for (tinyxml2::XMLElement* entityElement = aReader.FindFirstChild(aLevelElement, "artifact"); entityElement != nullptr;
+		entityElement = aReader.FindNextElement(entityElement, "artifact"))
+	{
+		tinyxml2::XMLElement* propElement = aReader.ForceFindFirstChild(entityElement, "position");
+		CU::Vector3<float> propPosition;
+		aReader.ForceReadAttribute(propElement, "X", propPosition.x);
+		aReader.ForceReadAttribute(propElement, "Y", propPosition.y);
+		aReader.ForceReadAttribute(propElement, "Z", propPosition.z);
+
+		propElement = aReader.ForceFindFirstChild(entityElement, "rotation");
+		CU::Vector3<float> propRotation;
+		aReader.ForceReadAttribute(propElement, "X", propRotation.x);
+		aReader.ForceReadAttribute(propElement, "Y", propRotation.y);
+		aReader.ForceReadAttribute(propElement, "Z", propRotation.z);
+
+		propElement = aReader.ForceFindFirstChild(entityElement, "scale");
+		CU::Vector3<float> propScale;
+		aReader.ForceReadAttribute(propElement, "X", propScale.x);
+		aReader.ForceReadAttribute(propElement, "Y", propScale.y);
+		aReader.ForceReadAttribute(propElement, "Z", propScale.z);
+
+		propRotation.x = CU::Math::DegreeToRad(propRotation.x);
+		propRotation.y = CU::Math::DegreeToRad(propRotation.y);
+		propRotation.z = CU::Math::DegreeToRad(propRotation.z);
+
+		myCurrentLevel->myEntities.Add(EntityFactory::CreateEntity(eOwnerType::NEUTRAL, eEntityType::ARTIFACT,
+			Prism::eOctreeType::STATIC, *myCurrentLevel->myScene, propPosition, *myCurrentLevel->myTerrain,
+			propRotation, propScale));
+		myCurrentLevel->myEntities.GetLast()->AddToScene();
+		myCurrentLevel->myEntities.GetLast()->Reset();
+
+		PollingStation::GetInstance()->AddArtifact(myCurrentLevel->myEntities.GetLast());
 	}
 }
 

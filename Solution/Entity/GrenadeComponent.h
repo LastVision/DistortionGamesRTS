@@ -11,7 +11,7 @@ public:
 	void ThrowGrenade(const CU::Vector3f& aTargetPosition);
 	static eComponentType GetTypeStatic();
 	eComponentType GetType() override;
-	float GetCooldown() const;
+	const float& GetCooldown() const;
 private:
 	void CheckUnitsForRemove(CU::GrowingArray<Entity*>& someUnits) const;
 	void CheckUnitsForAdd(const CU::GrowingArray<Entity*>& someUnits, CU::GrowingArray<Entity*>& someUnitsOut) const;

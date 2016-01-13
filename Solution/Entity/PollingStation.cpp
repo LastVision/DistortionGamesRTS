@@ -189,6 +189,21 @@ int PollingStation::GetVictoryPointsCount(eOwnerType anOwner) const
 	return count;
 }
 
+void PollingStation::AddArtifact(Entity* aArtifact)
+{
+	myArtifacts.Add(aArtifact);
+}
+
+void PollingStation::DeleteArtifact(Entity* aArtifact)
+{
+	myArtifacts.DeleteCyclic(aArtifact);
+}
+
+const CU::GrowingArray<Entity*>& PollingStation::GetArtifacts() const
+{
+	return myArtifacts;
+}
+
 const Entity* PollingStation::GetBase(eOwnerType anOwner) const
 {
 	if (anOwner == eOwnerType::PLAYER)
@@ -243,11 +258,12 @@ void PollingStation::CleanUp()
 }
 
 PollingStation::PollingStation()
-	: myPlayerUnits(64)
-	, myAIUnits(64)
+	: myPlayerUnits(GC::playerUnitCount)
+	, myAIUnits(GC::enemyUnitCount)
 	, myNeutralUnits(64)
 	, myResourcePoints(GC::resourcePointCount)
 	, myVictoryPoints(GC::victoryPointCount)
+	, myArtifacts(20)
 {
 }
 

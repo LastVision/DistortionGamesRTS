@@ -92,7 +92,7 @@ void GrenadeComponent::ThrowGrenade(const CU::Vector3f& aTargetPosition)
 	myHasExploded = false;
 }
 
-float GrenadeComponent::GetCooldown() const
+const float& GrenadeComponent::GetCooldown() const
 {
 	return myCurrentCooldown;
 }

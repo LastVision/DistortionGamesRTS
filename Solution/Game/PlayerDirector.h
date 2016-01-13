@@ -69,7 +69,8 @@ public:
 	const BuildingComponent& GetBuildingComponent() const;
 	CU::Vector3<float> GetCameraMoveVector() const;
 
-	const int& GetTestGold() const;
+	const int& GetGunpowder() const;
+	const int& GetArtifact() const;
 	const bool& GetRenderDragSelection() const;
 
 	const CU::StaticArray<CU::GrowingArray<Entity*>, AMOUNT_OF_CONTROL_GROUPS>& GetControlGroups() const;
@@ -81,6 +82,10 @@ public:
 	const int& GetTestUpgradeLevel() const;
 
 	const float& GetTotemCooldown() const;
+
+	const bool& HasUnlockedTank() const;
+	const bool& HasUnlockedRanger() const;
+	const int& GetUpgradeLevel(int aUnitID) const;
 
 private:
 	void UpdateInputs();
@@ -140,9 +145,14 @@ inline const CU::GrowingArray<Entity*>& PlayerDirector::GetSelectedUnits() const
 	return mySelectedUnits;
 }
 
-inline const int& PlayerDirector::GetTestGold() const
+inline const int& PlayerDirector::GetGunpowder() const
 {
-	return myTestGold;
+	return myGunpowder;
+}
+
+inline const int& PlayerDirector::GetArtifact() const
+{
+	return myArtifacts;
 }
 
 inline const bool& PlayerDirector::GetRenderDragSelection() const
@@ -163,4 +173,14 @@ inline eSelectedAction PlayerDirector::GetSelectedAction() const
 inline const int& PlayerDirector::GetTestUpgradeLevel() const
 {
 	return myTestUpgradeLevel;
+}
+
+inline const bool& PlayerDirector::HasUnlockedTank() const
+{
+	return myHasUnlockedTank;
+}
+
+inline const bool& PlayerDirector::HasUnlockedRanger() const
+{
+	return myHasUnlockedRanger;
 }

@@ -1,11 +1,13 @@
 #include "stdafx.h"
 
+#include <ArtifactMessage.h>
 #include <AudioInterface.h>
 #include <BuildingComponent.h>
 #include "Console.h"
 #include "Director.h"
 #include <Entity.h>
 #include <HealthComponent.h>
+#include <KillUnitMessage.h>
 #include <PostMaster.h>
 #include <ResourceMessage.h>
 #include <VictoryMessage.h>
@@ -21,9 +23,12 @@ Director::Director(eOwnerType aOwnerType, const Prism::Terrain& aTerrain)
 	, myDeadUnits(32)
 	, myTimeMultiplier(1.f)
 	, myVictoryPoints(0)
-	, myTestGold(60)
+	, myGunpowder(60)
+	, myArtifacts(0)
 	, myUnitCap(0)
 	, myUnitCount(0)
+	, myHasUnlockedRanger(false)
+	, myHasUnlockedTank(false)
 {
 	XMLReader reader;
 	reader.OpenDocument("Data/Setting/SET_game.xml");
@@ -38,7 +43,7 @@ Director::Director(eOwnerType aOwnerType, const Prism::Terrain& aTerrain)
 	PostMaster::GetInstance()->Subscribe(eMessageType::RESOURCE, this);
 	PostMaster::GetInstance()->Subscribe(eMessageType::VICTORY, this);
 	PostMaster::GetInstance()->Subscribe(eMessageType::UPGRADE_UNIT, this);
-
+	PostMaster::GetInstance()->Subscribe(eMessageType::KILL_UNIT, this);
 }
 
 Director::~Director()
@@ -49,6 +54,7 @@ Director::~Director()
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::RESOURCE, this);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::VICTORY, this);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::UPGRADE_UNIT, this);
+	PostMaster::GetInstance()->UnSubscribe(eMessageType::KILL_UNIT, this);
 }
 
 void Director::Update(float aDeltaTime)
@@ -69,6 +75,9 @@ void Director::Update(float aDeltaTime)
 			myActiveUnits.RemoveCyclicAtIndex(i);
 		}
 	}
+
+	DEBUG_PRINT(myArtifacts);
+	
 }
 
 void Director::RenderHealthBars(const Prism::Camera& aCamera)
@@ -105,14 +114,16 @@ void Director::CleanUp()
 
 bool Director::SpawnUnit(eUnitType aUnitType)
 {
+	if (aUnitType == eUnitType::RANGER && myHasUnlockedRanger == false) return false;
+	if (aUnitType == eUnitType::TANK && myHasUnlockedTank == false) return false;
 	if (myBuilding->GetComponent<BuildingComponent>()->IsQueueFull() == true)
 	{
 		return false;
 	}
 
-	if (myTestGold >= myBuilding->GetComponent<BuildingComponent>()->GetUnitCost(aUnitType))
+	if (myGunpowder >= myBuilding->GetComponent<BuildingComponent>()->GetUnitCost(aUnitType))
 	{
-		myTestGold -= myBuilding->GetComponent<BuildingComponent>()->GetUnitCost(aUnitType);
+		myGunpowder -= myBuilding->GetComponent<BuildingComponent>()->GetUnitCost(aUnitType);
 		myBuilding->GetComponent<BuildingComponent>()->BuildUnit(aUnitType);
 		return true;
 	}
@@ -139,9 +150,9 @@ bool Director::UpgradeUnit(eUnitType aUnitType)
 		return false;
 	}
 
-	if (myTestGold >= building->GetUpgradeCost(aUnitType))
+	if (myArtifacts >= building->GetUpgradeCost(aUnitType))
 	{
-		myTestGold -= building->GetUpgradeCost(aUnitType);
+		myArtifacts -= building->GetUpgradeCost(aUnitType);
 		building->UpgradeUnit(aUnitType);
 		return true;
 	}
@@ -152,6 +163,8 @@ bool Director::UpgradeUnit(eUnitType aUnitType)
 void Director::ReceiveMessage(const SpawnUnitMessage& aMessage)
 {
 	if (static_cast<eOwnerType>(aMessage.myOwnerType) != myOwner) return;
+	if (static_cast<eUnitType>(aMessage.myUnitType) == eUnitType::RANGER && myHasUnlockedRanger == false) return;
+	if (static_cast<eUnitType>(aMessage.myUnitType) == eUnitType::TANK && myHasUnlockedTank == false) return;
 
 	int unitSupplyCost = myBuilding->GetComponent<BuildingComponent>()->GetUnitSupplyCost(static_cast<eUnitType>(aMessage.myUnitType));
 
@@ -215,19 +228,17 @@ void Director::ReceiveMessage(const SpawnUnitMessage& aMessage)
 	}
 }
 
-
 void Director::ReceiveMessage(const ResourceMessage& aMessage)
 {
 	if (aMessage.myOwner == myOwner)
 	{
-		myTestGold += aMessage.myResourceModifier;
-		if (myTestGold < 0)
+		myGunpowder += aMessage.myResourceModifier;
+		if (myGunpowder < 0)
 		{
-			myTestGold = 0;
+			myGunpowder = 0;
 		}
 	}
 }
-
 
 void Director::ReceiveMessage(const VictoryMessage& aMessage)
 {
@@ -264,6 +275,33 @@ void Director::ReceiveMessage(const UpgradeUnitMessage& aMessage)
 				}
 			}
 		}
+	}
+}
+
+void Director::ReceiveMessage(const KillUnitMessage& aMessage)
+{
+	if (myHasUnlockedRanger == true && myHasUnlockedTank == true)
+	{
+		return;
+	}
+	if (static_cast<eOwnerType>(aMessage.myOwnerType) != myOwner)
+	{
+		if (myHasUnlockedRanger == false && static_cast<eUnitType>(aMessage.myUnitType) == eUnitType::RANGER)
+		{
+			myHasUnlockedRanger = true;
+		}
+		else if (myHasUnlockedTank == false && static_cast<eUnitType>(aMessage.myUnitType) == eUnitType::TANK)
+		{
+			myHasUnlockedTank = true;
+		}
+	}
+}
+
+void Director::ReceiveMessage(const ArtifactMessage& aMessage)
+{
+	if (aMessage.myOwner == myOwner)
+	{
+		myArtifacts += aMessage.myArtifactModifier;
 	}
 }
 

@@ -96,9 +96,24 @@ namespace Prism
 		Remove(aAddress);
 	}
 
-	void MemoryTracker::SetRunTime(bool aStatus)
+	void MemoryTracker::DumpToFile()
 	{
-		myRuntime = aStatus;
+		DL_PRINT_VA("--- MEMORY LEAKS ---\n");
+		DL_PRINT_VA("Bytes:\tLine:\tFile:\t\t\t\t\t\tFunction:");
+
+		for (int i = 0; i < myAllocations; ++i)
+		{
+			const char* shortPath = strstr(myData[i].myFileName, "solution");
+			shortPath += 9;
+
+			DL_PRINT_VA("%i\t\t%i\t\t%s\t\t%s", myData[i].myBytes, myData[i].myLine, shortPath, myData[i].myFunctionName);
+		}
+
+		const char* shortPath = strstr(myData[0].myFileName, "solution");
+		shortPath += 9;
+
+		DL_ASSERT_VA("\nMEMORYLEAK!\nFile: %s\nFunction: %s\nLine: %i\n\nTotal Leaks: %i"
+			, shortPath, myData[0].myFunctionName, myData[0].myLine, myAllocations);
 	}
 
 	void MemoryTracker::Add(void* aAddress, size_t aBytes, eMemoryType aMemoryType)
@@ -182,22 +197,7 @@ namespace Prism
 	{
 		if (myAllocations > 0)
 		{
-			DL_PRINT_VA("--- MEMORY LEAKS ---\n");
-			DL_PRINT_VA("Bytes:\tLine:\tFile:\t\t\t\t\t\tFunction:");
-
-			for (int i = 0; i < myAllocations; ++i)
-			{
-				const char* shortPath = strstr(myData[i].myFileName, "solution");
-				shortPath += 9;
-
-				DL_PRINT_VA("%i\t\t%i\t\t%s\t\t%s", myData[i].myBytes, myData[i].myLine, shortPath, myData[i].myFunctionName);
-			}
-
-			const char* shortPath = strstr(myData[0].myFileName, "solution");
-			shortPath += 9;
-
-			DL_ASSERT_VA("\nMEMORYLEAK!\nFile: %s\nFunction: %s\nLine: %i\n\nTotal Leaks: %i"
-				, shortPath, myData[0].myFunctionName, myData[0].myLine, myAllocations);
+			DumpToFile();
 			::free(myData);
 		}
 

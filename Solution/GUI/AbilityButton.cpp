@@ -11,16 +11,16 @@ namespace GUI
 	{
 		std::string type = "";
 
-		aReader->ReadAttribute(aReader->FindFirstChild(anXMLElement, "cooldown"), "type", type);
+		tinyxml2::XMLElement* XMLElement = aReader->FindFirstChild(anXMLElement, "cooldown");
 
-		if (type == "totem")
+		if (XMLElement != nullptr)
 		{
-			myCooldown = &aPlayer->GetTotemCooldown();
+			aReader->ReadAttribute(XMLElement, "type", type);
+			if (type == "totem")
+			{
+				myCooldown = &aPlayer->GetTotemCooldown();
+			}
 		}
-		//else
-		//{
-		//	DL_ASSERT("[AbilityButton] Cooldown type wrong");
-		//}
 	}
 
 	AbilityButton::~AbilityButton()
@@ -31,9 +31,14 @@ namespace GUI
 	{
 		ButtonWidget::Render(aParentPosition);
 
-		if (*myCooldown > 0.f)
+		if (myCooldown != nullptr && *myCooldown > 0.f)
 		{
 			Prism::Engine::GetInstance()->PrintText(*myCooldown, aParentPosition, Prism::eTextType::RELEASE_TEXT);
 		}
+	}
+
+	void AbilityButton::SetValue(const float& aValue)
+	{
+		myCooldown = &aValue;
 	}
 }
