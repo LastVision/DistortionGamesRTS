@@ -53,6 +53,8 @@ InGameState::~InGameState()
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::TRIGGER, this);
 	SAFE_DELETE(myCamera);
 	SAFE_DELETE(myLevelFactory);
+
+	Console::Destroy();
 }
 
 void InGameState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCursor)

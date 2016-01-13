@@ -5,7 +5,8 @@
 #include <MathHelper.h>
 #include "Surface.h"
 #include "TextureHelper.h"
-
+#include "VertexIndexWrapper.h"
+#include "VertexDataWrapper.h"
 
 namespace Prism
 {
@@ -98,6 +99,9 @@ namespace Prism
 		//SAFE_RELEASE(myAmbientOcclusionTextures[2]);
 		//SAFE_RELEASE(myAmbientOcclusionTextures[3]);
 		//SAFE_RELEASE(myAmbientOcclusionTextures[4]);
+
+		SAFE_DELETE(myIndexBaseData);
+		SAFE_DELETE(myVertexBaseData);
 	}
 
 	void Ice::Render(const Camera& aCamera)

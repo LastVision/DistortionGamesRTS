@@ -46,6 +46,8 @@ namespace Prism
 		void SetRunTime(bool aStatus);
 		bool GetRunTime() const;
 		void AllowNewDuringRunTime(const std::thread::id& aThreadId);
+		void DumpToFile();
+
 	private:
 		static void Create();
 		MemoryTracker();
@@ -65,6 +67,11 @@ namespace Prism
 		static MemoryTracker* myInstance;
 		std::thread::id myAllowThread;
 	};
+
+	inline void MemoryTracker::SetRunTime(bool aStatus)
+	{
+		myRuntime = aStatus;
+	}
 
 	inline bool MemoryTracker::GetRunTime() const
 	{
