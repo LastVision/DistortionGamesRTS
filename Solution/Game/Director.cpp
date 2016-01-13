@@ -25,6 +25,8 @@ Director::Director(eOwnerType aOwnerType, const Prism::Terrain& aTerrain)
 	, myGunpowder(60)
 	, myUnitCap(0)
 	, myUnitCount(0)
+	, myHasUnlockedRanger(false)
+	, myHasUnlockedTank(false)
 {
 	XMLReader reader;
 	reader.OpenDocument("Data/Setting/SET_game.xml");
@@ -109,6 +111,8 @@ void Director::CleanUp()
 
 bool Director::SpawnUnit(eUnitType aUnitType)
 {
+	if (aUnitType == eUnitType::RANGER && myHasUnlockedRanger == false) return false;
+	if (aUnitType == eUnitType::TANK && myHasUnlockedTank == false) return false;
 	if (myBuilding->GetComponent<BuildingComponent>()->IsQueueFull() == true)
 	{
 		return false;
@@ -156,6 +160,8 @@ bool Director::UpgradeUnit(eUnitType aUnitType)
 void Director::ReceiveMessage(const SpawnUnitMessage& aMessage)
 {
 	if (static_cast<eOwnerType>(aMessage.myOwnerType) != myOwner) return;
+	if (static_cast<eUnitType>(aMessage.myUnitType) == eUnitType::RANGER && myHasUnlockedRanger == false) return;
+	if (static_cast<eUnitType>(aMessage.myUnitType) == eUnitType::TANK && myHasUnlockedTank == false) return;
 
 	int unitSupplyCost = myBuilding->GetComponent<BuildingComponent>()->GetUnitSupplyCost(static_cast<eUnitType>(aMessage.myUnitType));
 
