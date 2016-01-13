@@ -34,6 +34,7 @@ public:
 	void ReceiveMessage(const ResourceMessage& aMessage) override;
 	void ReceiveMessage(const VictoryMessage& aMessage) override;
 	void ReceiveMessage(const UpgradeUnitMessage& aMessage) override;
+	void ReceiveMessage(const KillUnitMessage& aMessage) override;
 
 protected:
 	bool IsAlreadyActive(Entity* aUnit);
@@ -50,6 +51,9 @@ protected:
 	int myVictoryPoints;
 	int myUnitCap;
 	int myUnitCount;
+
+	bool myHasUnlockedRanger;
+	bool myHasUnlockedTank;
 
 private:
 	void operator=(Director&) = delete;

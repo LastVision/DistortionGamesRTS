@@ -111,5 +111,8 @@
     <ClInclude Include="EventPositionMessage.h">
       <Filter>Message</Filter>
     </ClInclude>
+    <ClInclude Include="KillUnitMessage.h">
+      <Filter>Message\EntityMessage</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
