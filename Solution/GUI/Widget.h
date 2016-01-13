@@ -35,6 +35,8 @@ namespace GUI
 
 		const std::string& GetHoverText() const;
 
+		virtual inline void SetValue(const float& aValue);
+
 	protected:
 		CU::Vector2<float> myPosition;
 		CU::Vector2<float> mySize;
@@ -70,5 +72,9 @@ namespace GUI
 	inline const std::string& Widget::GetHoverText() const
 	{
 		return myHoverText;
+	}
+	
+	inline void Widget::SetValue(const float&)
+	{
 	}
 }

@@ -1,10 +1,14 @@
 #include "stdafx.h"
+#include "AbilityButton.h"
 #include "ButtonWidget.h"
 #include "../Entity/Entity.h"
+#include "../Entity/EnrageComponent.h"
+#include "../Entity/GrenadeComponent.h"
 #include "../Game/PlayerDirector.h"
 #include "UnitActionWidget.h"
 #include "UpgradeButtonWidget.h"
 #include "WidgetContainer.h"
+#include "../Entity/ControllerComponent.h"
 
 namespace GUI
 {
@@ -49,13 +53,13 @@ namespace GUI
 		buttonPosition.x -= (buttonSize.x * 0.5f);
 		buttonPosition.y += (buttonSize.y * 0.5f);
 
-		myGruntActionButtons = ReadContainer(aReader, gruntElement, { buttonSize.x, buttonSize.y * 2.f });
-		myRangerActionButtons = ReadContainer(aReader, rangerElement, { buttonSize.x, buttonSize.y * 2.f });
-		myTankActionButtons = ReadContainer(aReader, tankElement, { buttonSize.x, buttonSize.y * 2.f });
+		myGruntActionButtons = ReadContainer(aReader, gruntElement, buttonSize);
+		myRangerActionButtons = ReadContainer(aReader, rangerElement, buttonSize);
+		myTankActionButtons = ReadContainer(aReader, tankElement, buttonSize);
 
-		myGruntActionButtons->SetPosition({ buttonPosition.x + (buttonSize.x * 2.f) + 1.f, (buttonPosition.y - buttonSize.y * 3.f) - 3.f });
-		myRangerActionButtons->SetPosition({ buttonPosition.x + (buttonSize.x * 3.f) + 2.f, (buttonPosition.y - buttonSize.y * 3.f) - 3.f });
-		myTankActionButtons->SetPosition({ buttonPosition.x + (buttonSize.x * 4.f) + 3.f, (buttonPosition.y - buttonSize.y * 3.f) - 3.f });
+		myGruntActionButtons->SetPosition({ buttonPosition.x, (buttonPosition.y - buttonSize.y * 2.f) - 2.f });
+		myRangerActionButtons->SetPosition({ buttonPosition.x + (buttonSize.x * 1.f) + 1.f, (buttonPosition.y - buttonSize.y * 2.f) - 2.f });
+		myTankActionButtons->SetPosition({ buttonPosition.x + (buttonSize.x * 2.f) + 2.f, (buttonPosition.y - buttonSize.y * 2.f) - 2.f });
 	}
 
 	UnitActionWidget::~UnitActionWidget()
@@ -115,16 +119,19 @@ namespace GUI
 			{
 				if (myHasSelectedGrunt == false && myUnits[i]->GetUnitType() == eUnitType::GRUNT)
 				{
+					myGruntActionButtons->At(0)->SetValue(myUnits[i]->GetComponent<GrenadeComponent>()->GetCooldown());
 					myHasSelectedGrunt = true;
 				}
 
 				if (myHasSelectedRanger == false && myUnits[i]->GetUnitType() == eUnitType::RANGER)
 				{
+					myRangerActionButtons->At(0)->SetValue(myUnits[i]->GetComponent<ControllerComponent>()->GetRangerCooldown());
 					myHasSelectedRanger = true;
 				}
 
 				if (myHasSelectedTank == false && myUnits[i]->GetUnitType() == eUnitType::TANK)
 				{
+					myTankActionButtons->At(0)->SetValue(myUnits[i]->GetComponent<EnrageComponent>()->GetCooldown());
 					myHasSelectedTank = true;
 				}
 			}
@@ -198,6 +205,11 @@ namespace GUI
 			else if (type == "upgrade_button")
 			{
 				UpgradeButtonWidget* upgradeButtonWidget = new UpgradeButtonWidget(aReader, widgetElement, myPlayer->GetTestUpgradeLevel());
+				container->AddWidget(upgradeButtonWidget);
+			}
+			else if (type == "ability_button")
+			{
+				AbilityButton* upgradeButtonWidget = new AbilityButton(aReader, widgetElement, myPlayer);
 				container->AddWidget(upgradeButtonWidget);
 			}
 		}

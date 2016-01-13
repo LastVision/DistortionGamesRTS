@@ -7,6 +7,7 @@
 #include "Director.h"
 #include <Entity.h>
 #include <HealthComponent.h>
+#include <KillUnitMessage.h>
 #include <PostMaster.h>
 #include <ResourceMessage.h>
 #include <VictoryMessage.h>
@@ -40,7 +41,7 @@ Director::Director(eOwnerType aOwnerType, const Prism::Terrain& aTerrain)
 	PostMaster::GetInstance()->Subscribe(eMessageType::RESOURCE, this);
 	PostMaster::GetInstance()->Subscribe(eMessageType::VICTORY, this);
 	PostMaster::GetInstance()->Subscribe(eMessageType::UPGRADE_UNIT, this);
-
+	PostMaster::GetInstance()->Subscribe(eMessageType::KILL_UNIT, this);
 }
 
 Director::~Director()
@@ -51,6 +52,7 @@ Director::~Director()
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::RESOURCE, this);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::VICTORY, this);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::UPGRADE_UNIT, this);
+	PostMaster::GetInstance()->UnSubscribe(eMessageType::KILL_UNIT, this);
 }
 
 void Director::Update(float aDeltaTime)
@@ -71,6 +73,8 @@ void Director::Update(float aDeltaTime)
 			myActiveUnits.RemoveCyclicAtIndex(i);
 		}
 	}
+
+	
 }
 
 void Director::RenderHealthBars(const Prism::Camera& aCamera)
@@ -217,7 +221,6 @@ void Director::ReceiveMessage(const SpawnUnitMessage& aMessage)
 	}
 }
 
-
 void Director::ReceiveMessage(const ResourceMessage& aMessage)
 {
 	if (aMessage.myOwner == myOwner)
@@ -229,7 +232,6 @@ void Director::ReceiveMessage(const ResourceMessage& aMessage)
 		}
 	}
 }
-
 
 void Director::ReceiveMessage(const VictoryMessage& aMessage)
 {
@@ -265,6 +267,25 @@ void Director::ReceiveMessage(const UpgradeUnitMessage& aMessage)
 					comp->SetArmor(newArmor);
 				}
 			}
+		}
+	}
+}
+
+void Director::ReceiveMessage(const KillUnitMessage& aMessage)
+{
+	if (myHasUnlockedRanger == true && myHasUnlockedTank == true)
+	{
+		return;
+	}
+	if (static_cast<eOwnerType>(aMessage.myOwnerType) != myOwner)
+	{
+		if (myHasUnlockedRanger == false && static_cast<eUnitType>(aMessage.myUnitType) == eUnitType::RANGER)
+		{
+			myHasUnlockedRanger = true;
+		}
+		else if (myHasUnlockedTank == false && static_cast<eUnitType>(aMessage.myUnitType) == eUnitType::TANK)
+		{
+			myHasUnlockedTank = true;
 		}
 	}
 }

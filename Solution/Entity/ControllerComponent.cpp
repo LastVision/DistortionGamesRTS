@@ -7,9 +7,11 @@
 #include "ControllerComponent.h"
 #include "GrenadeComponent.h"
 #include "HealthComponent.h"
+#include <KillUnitMessage.h>
 #include <PathFinderAStar.h>
 #include <PathFinderFunnel.h>
 #include "PollingStation.h"
+#include <PostMaster.h>
 #include "SoundComponent.h"
 #include <Terrain.h>
 
@@ -469,6 +471,8 @@ void ControllerComponent::AttackTarget()
 			//myEntity.SetState(eEntityState::IDLE);
 			myEntity.SetIntention(eEntityState::IDLE);
 			myBehavior->SetTarget(myEntity.GetPosition());
+			PostMaster::GetInstance()->SendMessage(KillUnitMessage(static_cast<int>(myCurrentAction.myEntity->GetUnitType()), 
+				static_cast<int>(myCurrentAction.myEntity->GetOwner())));
 		}
 	}
 }

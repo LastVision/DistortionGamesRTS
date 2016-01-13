@@ -123,6 +123,7 @@
     <ClInclude Include="ArtifactMessage.h" />
     <ClInclude Include="EmitterMessage.h" />
     <ClInclude Include="EventPositionMessage.h" />
+    <ClInclude Include="KillUnitMessage.h" />
     <ClInclude Include="MinimapEventMessage.h" />
     <ClInclude Include="MinimapMoveMessage.h" />
     <ClInclude Include="TextMessage.h" />

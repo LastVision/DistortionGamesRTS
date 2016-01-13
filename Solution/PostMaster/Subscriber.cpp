@@ -35,6 +35,10 @@ void Subscriber::ReceiveMessage(const GameStateMessage&)
 {
 }
 
+void Subscriber::ReceiveMessage(const KillUnitMessage&)
+{
+}
+
 void Subscriber::ReceiveMessage(const Message&)
 {
 }

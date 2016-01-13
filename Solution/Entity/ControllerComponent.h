@@ -38,6 +38,8 @@ public:
 
 	void Reset() override;
 
+	const float& GetRangerCooldown() const;
+
 private:
 	enum class eAction
 	{
@@ -151,4 +153,9 @@ inline void ControllerComponent::SetRechargeTime(float aRechargeTime)
 inline void ControllerComponent::SetAttackRange2(float aRange2)
 {
 	myAttackRange2 = aRange2;
+}
+
+inline const float& ControllerComponent::GetRangerCooldown() const
+{
+	return myRangerOneShotTimer;
 }
