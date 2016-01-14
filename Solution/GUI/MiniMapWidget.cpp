@@ -19,16 +19,11 @@ namespace GUI
 		, myShouldRenderEvent(false)
 		, myEventTime(5.f)
 	{
-		CU::Vector2<float> size;
-		CU::Vector2<float> position;
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "size"), "x", mySize.x);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "size"), "y", mySize.y);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "position"), "x", myPosition.x);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "position"), "y", myPosition.y);
 
-		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "size"), "x", size.x);
-		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "size"), "y", size.y);
-		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "position"), "x", position.x);
-		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "position"), "y", position.y);
-
-		mySize = size;
-		myPosition = position;
 		myCameraOrientation = &aCamera->GetOrientation();
 
 		myPlaceholderSprite = Prism::ModelLoader::GetInstance()->LoadSprite(
@@ -41,8 +36,11 @@ namespace GUI
 			"Data/Resource/Texture/UI/Minimap/T_minimap_resource_point.dds", { 20.f, 20.f }, { 10.f, 10.f });
 		myVictoryPointSprite = Prism::ModelLoader::GetInstance()->LoadSprite(
 			"Data/Resource/Texture/UI/Minimap/T_minimap_victory_point.dds", { 20.f, 20.f }, { 10.f, 10.f });
+
+		CU::Vector2<float> cameraSize = { mySize.x / 2.f, mySize.y / 4.f };
+		
 		myCameraFrustum = Prism::ModelLoader::GetInstance()->LoadSprite(
-			"Data/Resource/Texture/UI/Minimap/T_minimap_camera.dds", { 100.f, 50.f }, { 0.f, 0.f });
+			"Data/Resource/Texture/UI/Minimap/T_minimap_camera.dds", cameraSize, cameraSize / 2.f);
 
 		myEventSprite = Prism::ModelLoader::GetInstance()->LoadSprite(
 			"Data/Resource/Texture/UI/Minimap/T_minimap_event.dds", { 20.f, 20.f }, { 10.f, 10.f });
@@ -61,7 +59,6 @@ namespace GUI
 		SAFE_DELETE(myCameraFrustum);
 		SAFE_DELETE(myEventSprite);
 	}
-	
 	
 	void MiniMapWidget::Update(float aDelta)
 	{
@@ -100,10 +97,7 @@ namespace GUI
 				float scale = 2 + 5 * log(myEventTimer + 1);
 				myEventSprite->Render(aParentPosition + myPosition + position, { scale, scale }, { 1.f, 1.f, 1.f, 1.f - (myEventTimer * 51.f / 255.f) });
 			}
-
 		}
-
-
 	}
 
 	void MiniMapWidget::OnMousePressed(const CU::Vector2<float>& aPosition)
@@ -133,7 +127,7 @@ namespace GUI
 		CU::Vector2<float> frustumRatio = myCameraFrustum->GetSize() / anOldWindowSize;
 
 		myPlaceholderSprite->SetSize(mySize, { 0.f, 0.f });
-		myCameraFrustum->SetSize(frustumRatio * aNewWindowSize, { 0.f, 0.f });
+		myCameraFrustum->SetSize(frustumRatio * aNewWindowSize, (frustumRatio * aNewWindowSize) / 2.f);
 	}
 
 	void MiniMapWidget::ReceiveMessage(const MinimapEventMessage& aMessage)
