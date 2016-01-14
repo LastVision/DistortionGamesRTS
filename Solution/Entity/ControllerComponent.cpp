@@ -358,18 +358,18 @@ void ControllerComponent::DoMove()
 
 void ControllerComponent::DoAttackTarget(float aDelta)
 {
-	myCurrentAttackTargetPathRefreshTime -= aDelta;
-	if (myCurrentAttackTargetPathRefreshTime <= 0.f)
-	{
-		RefreshPathToAttackTarget();
-	}
-
 	if (myCurrentAction.myEntity != nullptr && CU::Length2(myCurrentAction.myEntity->GetPosition() - myEntity.GetPosition()) < myAttackRange2)
 	{
 		AttackTarget();
 	}
 	else
 	{
+		myCurrentAttackTargetPathRefreshTime -= aDelta;
+		if (myCurrentAttackTargetPathRefreshTime <= 0.f)
+		{
+			RefreshPathToAttackTarget();
+		}
+
 		DoMove();
 	}
 }
