@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+#include <ArtifactMessage.h>
 #include <CinematicMessage.h>
 #include "Console.h"
 #include <Entity.h>
@@ -291,9 +292,16 @@ namespace Script_Interface
 		return 0;
 	}
 
-	int GiveResources(lua_State*)
+	int GiveGunpowder(lua_State*)
 	{
 		PostMaster::GetInstance()->SendMessage(ResourceMessage(eOwnerType::PLAYER, 1000));
+
+		return 0;
+	}
+
+	int GiveArtifacts(lua_State*)
+	{
+		PostMaster::GetInstance()->SendMessage(ArtifactMessage(eOwnerType::PLAYER, 1000));
 
 		return 0;
 	}
@@ -372,7 +380,8 @@ void ScriptInterface::RegisterFunctions()
 	system->RegisterFunction("EnableAI", Script_Interface::EnableAI, "", "Enables AI");
 	system->RegisterFunction("TimeMultiplier", Script_Interface::TimeMultiplier, "aMultiplier", "Modifies the game time. ex: TimeMultiplier(0.1) //this is slow  ");
 	system->RegisterFunction("SkipLevel", Script_Interface::SkipLevel, "", "You skip the current level, and goes to the next in the list. \nIf you are on the last level it will reload that level.");
-	system->RegisterFunction("Gold", Script_Interface::GiveResources, "", "You get 1000 resources.");
+	system->RegisterFunction("Gold", Script_Interface::GiveGunpowder, "", "You get 1000 Gunpowder.");
+	system->RegisterFunction("Artifact", Script_Interface::GiveArtifacts, "", "You get 1000 Artifacts.");
 	system->RegisterFunction("Victory", Script_Interface::GiveVictoryPoints, "", "You get 100 victory points.");
 	system->RegisterFunction("NoBuild", Script_Interface::DisableBuildTime, "", "Removes the buildtime on units, instaspawn, only for player.");
 	system->RegisterFunction("Build", Script_Interface::EnableBuildTime, "", "Enables the buildtime on units, not instaspawn, only for player.");

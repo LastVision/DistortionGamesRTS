@@ -36,6 +36,8 @@ public:
 
 	bool IsQueueFull() const;
 
+	const int& GetUpgradeLevel(int aUnitID) const;
+
 private:
 	struct BuildInfo
 	{
@@ -102,4 +104,9 @@ inline bool BuildingComponent::IsQueueFull() const
 inline void BuildingComponent::SetIgnoreBuildTime(bool anIgnoreBuildTime)
 {
 	myIgnoreBuildTime = anIgnoreBuildTime;
+}
+
+inline const int& BuildingComponent::GetUpgradeLevel(int aUnitID) const
+{
+	return myUnitUpgradeProgress[aUnitID];
 }

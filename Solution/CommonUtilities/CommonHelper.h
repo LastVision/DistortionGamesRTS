@@ -9,6 +9,86 @@
 
 namespace CU
 {
+	const std::string group("/Distortion Games/");
+	//const std::string game("/Patrick of the Caribbean/");
+	const std::string game("");
+
+	static bool canSave;
+
+	inline bool dirExists(const std::string& dirName_in)
+	{
+		DWORD ftyp = GetFileAttributesA(dirName_in.c_str());
+		if (ftyp == INVALID_FILE_ATTRIBUTES)
+			return false;  //something is wrong with your path!
+
+		if (ftyp & FILE_ATTRIBUTE_DIRECTORY)
+			return true;   // this is a directory!
+
+		return false;    // this is not a directory!
+	}
+
+	inline void BuildFoldersInPath(const std::string& aPath)
+	{
+		unsigned int slashIndex = aPath.find_first_of("/");
+
+		while (slashIndex != std::string::npos)
+		{
+			std::string folder(aPath.begin(), aPath.begin() + slashIndex);
+			CreateDirectory(folder.c_str(), NULL);
+			slashIndex = aPath.find_first_of("/", slashIndex + 1);
+		}
+	}
+
+	inline bool FileExists(const std::string& name) {
+		std::ifstream f(name.c_str());
+		if (f.good()) {
+			f.close();
+			return true;
+		}
+		f.close();
+		return false;
+	}
+
+	inline void CreateMyDocumentsFolderPath()
+	{
+		char documents[MAX_PATH];
+		HRESULT hr = SHGetFolderPath(NULL, CSIDL_PERSONAL, NULL, SHGFP_TYPE_CURRENT, documents);
+		if (hr != S_OK)
+		{
+			canSave = false;
+			DL_ASSERT("Can't get document folder!");
+		}
+
+		if (dirExists(documents + group + game) == false)
+		{
+			BuildFoldersInPath(documents + group + game);
+		}
+	}
+
+	inline void CreateFileIfNotExists(const std::string& aFilePath)
+	{
+		if (FileExists(aFilePath) == false)
+		{
+			std::ofstream outFile(aFilePath.c_str());
+			//outFile << "apa";
+			outFile.close();
+		}
+	}
+
+	inline std::string GetMyDocumentFolderPath()
+	{
+		char documents[MAX_PATH];
+		HRESULT hr = SHGetFolderPath(NULL, CSIDL_PERSONAL, NULL, SHGFP_TYPE_CURRENT, documents);
+		if (hr != S_OK)
+		{
+			DL_ASSERT("Can't get document folder!");
+		}
+		std::stringstream ss;
+		ss << documents;
+		ss << group << game;
+		return ss.str();
+	}
+
 	inline std::string ToLower(const std::string& aString)
 	{
 		std::string data = aString;
@@ -65,19 +145,6 @@ namespace CU
 		}
 		return aStringToReadFrom;
 	}
-	inline std::string GetMyDocumentFolderPath()
-	{
-		char documents[MAX_PATH];
-		HRESULT hr = SHGetFolderPath(NULL, CSIDL_PERSONAL, NULL, SHGFP_TYPE_CURRENT, documents);
-		if (hr != S_OK) 
-		{
-			DL_ASSERT("Can't get document folder!");
-		}
-		std::stringstream ss;
-		ss << documents;
-		ss << "\\Distortion Games\\";
-		return ss.str();
-	}
 
 	//If OptionalExtension is blank, the outputstring will have the same extension as the input string
 	//OptionalExtension needs to be entered without a period, "xml", NOT ".xml"
@@ -116,19 +183,7 @@ namespace CU
 
 		return realDataFilePath;
 	}
-
-	inline void BuildFoldersInPath(const std::string& aPath)
-	{
-		unsigned int slashIndex = aPath.find_first_of("/");
-
-		while (slashIndex != std::string::npos)
-		{
-			std::string folder(aPath.begin(), aPath.begin() + slashIndex);
-			CreateDirectory(folder.c_str(), NULL);
-			slashIndex = aPath.find_first_of("/", slashIndex + 1);
-		}
-	}
-
+	
 	inline std::string Concatenate(const char* aFormattedString, ...)
 	{
 		char buffer[1024];

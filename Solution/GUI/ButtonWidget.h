@@ -35,6 +35,8 @@ namespace GUI
 
 		void ReadEvent(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement);
 
+		const OnClickMessage* GetEvent() const;
+
 	private:
 		void Click();
 		
@@ -45,4 +47,9 @@ namespace GUI
 
 		OnClickMessage* myClickEvent;
 	};
+
+	inline const OnClickMessage* ButtonWidget::GetEvent() const
+	{
+		return myClickEvent;
+	}
 }

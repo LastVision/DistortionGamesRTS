@@ -319,8 +319,8 @@ Global
 		{17CEF55E-6AEE-4487-AD02-5940167C2FD0}.DLL_Release|Win32.ActiveCfg = Release|Win32
 		{17CEF55E-6AEE-4487-AD02-5940167C2FD0}.DLL_Release|Win32.Build.0 = Release|Win32
 		{17CEF55E-6AEE-4487-AD02-5940167C2FD0}.Internal|Any CPU.ActiveCfg = Release|Win32
-		{17CEF55E-6AEE-4487-AD02-5940167C2FD0}.Internal|Mixed Platforms.ActiveCfg = Release|Win32
-		{17CEF55E-6AEE-4487-AD02-5940167C2FD0}.Internal|Mixed Platforms.Build.0 = Release|Win32
+		{17CEF55E-6AEE-4487-AD02-5940167C2FD0}.Internal|Mixed Platforms.ActiveCfg = Internal|Win32
+		{17CEF55E-6AEE-4487-AD02-5940167C2FD0}.Internal|Mixed Platforms.Build.0 = Internal|Win32
 		{17CEF55E-6AEE-4487-AD02-5940167C2FD0}.Internal|Win32.ActiveCfg = Release|Win32
 		{17CEF55E-6AEE-4487-AD02-5940167C2FD0}.Internal|Win32.Build.0 = Release|Win32
 		{17CEF55E-6AEE-4487-AD02-5940167C2FD0}.Release|Any CPU.ActiveCfg = Release|Win32
@@ -343,8 +343,8 @@ Global
 		{25945336-03D1-42A6-8764-7EF11DBC42E6}.DLL_Release|Win32.ActiveCfg = Release|Win32
 		{25945336-03D1-42A6-8764-7EF11DBC42E6}.DLL_Release|Win32.Build.0 = Release|Win32
 		{25945336-03D1-42A6-8764-7EF11DBC42E6}.Internal|Any CPU.ActiveCfg = Release|Win32
-		{25945336-03D1-42A6-8764-7EF11DBC42E6}.Internal|Mixed Platforms.ActiveCfg = Release|Win32
-		{25945336-03D1-42A6-8764-7EF11DBC42E6}.Internal|Mixed Platforms.Build.0 = Release|Win32
+		{25945336-03D1-42A6-8764-7EF11DBC42E6}.Internal|Mixed Platforms.ActiveCfg = Internal|Win32
+		{25945336-03D1-42A6-8764-7EF11DBC42E6}.Internal|Mixed Platforms.Build.0 = Internal|Win32
 		{25945336-03D1-42A6-8764-7EF11DBC42E6}.Internal|Win32.ActiveCfg = Release|Win32
 		{25945336-03D1-42A6-8764-7EF11DBC42E6}.Internal|Win32.Build.0 = Release|Win32
 		{25945336-03D1-42A6-8764-7EF11DBC42E6}.Release|Any CPU.ActiveCfg = Release|Win32
@@ -366,8 +366,8 @@ Global
 		{EF362EDC-8FFF-400B-A5FF-05A9BC551D65}.DLL_Release|Win32.ActiveCfg = Release|Win32
 		{EF362EDC-8FFF-400B-A5FF-05A9BC551D65}.DLL_Release|Win32.Build.0 = Release|Win32
 		{EF362EDC-8FFF-400B-A5FF-05A9BC551D65}.Internal|Any CPU.ActiveCfg = Release|Win32
-		{EF362EDC-8FFF-400B-A5FF-05A9BC551D65}.Internal|Mixed Platforms.ActiveCfg = Release|Win32
-		{EF362EDC-8FFF-400B-A5FF-05A9BC551D65}.Internal|Mixed Platforms.Build.0 = Release|Win32
+		{EF362EDC-8FFF-400B-A5FF-05A9BC551D65}.Internal|Mixed Platforms.ActiveCfg = Internal|Win32
+		{EF362EDC-8FFF-400B-A5FF-05A9BC551D65}.Internal|Mixed Platforms.Build.0 = Internal|Win32
 		{EF362EDC-8FFF-400B-A5FF-05A9BC551D65}.Internal|Win32.ActiveCfg = Release|Win32
 		{EF362EDC-8FFF-400B-A5FF-05A9BC551D65}.Internal|Win32.Build.0 = Release|Win32
 		{EF362EDC-8FFF-400B-A5FF-05A9BC551D65}.Release|Any CPU.ActiveCfg = Release|Win32
@@ -389,8 +389,8 @@ Global
 		{9DD8D699-EDB7-44B3-A0DC-1FA57B81FA7A}.DLL_Release|Win32.ActiveCfg = Release|Win32
 		{9DD8D699-EDB7-44B3-A0DC-1FA57B81FA7A}.DLL_Release|Win32.Build.0 = Release|Win32
 		{9DD8D699-EDB7-44B3-A0DC-1FA57B81FA7A}.Internal|Any CPU.ActiveCfg = Release|Win32
-		{9DD8D699-EDB7-44B3-A0DC-1FA57B81FA7A}.Internal|Mixed Platforms.ActiveCfg = Release|Win32
-		{9DD8D699-EDB7-44B3-A0DC-1FA57B81FA7A}.Internal|Mixed Platforms.Build.0 = Release|Win32
+		{9DD8D699-EDB7-44B3-A0DC-1FA57B81FA7A}.Internal|Mixed Platforms.ActiveCfg = Internal|Win32
+		{9DD8D699-EDB7-44B3-A0DC-1FA57B81FA7A}.Internal|Mixed Platforms.Build.0 = Internal|Win32
 		{9DD8D699-EDB7-44B3-A0DC-1FA57B81FA7A}.Internal|Win32.ActiveCfg = Release|Win32
 		{9DD8D699-EDB7-44B3-A0DC-1FA57B81FA7A}.Internal|Win32.Build.0 = Release|Win32
 		{9DD8D699-EDB7-44B3-A0DC-1FA57B81FA7A}.Release|Any CPU.ActiveCfg = Release|Win32
@@ -413,8 +413,8 @@ Global
 		{F9457655-C0BD-4C0F-A7F9-1197DA5C5C6A}.DLL_Release|Win32.ActiveCfg = Release|Win32
 		{F9457655-C0BD-4C0F-A7F9-1197DA5C5C6A}.DLL_Release|Win32.Build.0 = Release|Win32
 		{F9457655-C0BD-4C0F-A7F9-1197DA5C5C6A}.Internal|Any CPU.ActiveCfg = Release|Win32
-		{F9457655-C0BD-4C0F-A7F9-1197DA5C5C6A}.Internal|Mixed Platforms.ActiveCfg = Release|Win32
-		{F9457655-C0BD-4C0F-A7F9-1197DA5C5C6A}.Internal|Mixed Platforms.Build.0 = Release|Win32
+		{F9457655-C0BD-4C0F-A7F9-1197DA5C5C6A}.Internal|Mixed Platforms.ActiveCfg = Internal|Win32
+		{F9457655-C0BD-4C0F-A7F9-1197DA5C5C6A}.Internal|Mixed Platforms.Build.0 = Internal|Win32
 		{F9457655-C0BD-4C0F-A7F9-1197DA5C5C6A}.Internal|Win32.ActiveCfg = Release|Win32
 		{F9457655-C0BD-4C0F-A7F9-1197DA5C5C6A}.Internal|Win32.Build.0 = Release|Win32
 		{F9457655-C0BD-4C0F-A7F9-1197DA5C5C6A}.Release|Any CPU.ActiveCfg = Release|Win32
@@ -436,8 +436,8 @@ Global
 		{1C904C93-25EC-4BF5-AEFC-F324A26F2122}.DLL_Release|Win32.ActiveCfg = Release|Win32
 		{1C904C93-25EC-4BF5-AEFC-F324A26F2122}.DLL_Release|Win32.Build.0 = Release|Win32
 		{1C904C93-25EC-4BF5-AEFC-F324A26F2122}.Internal|Any CPU.ActiveCfg = Release|Win32
-		{1C904C93-25EC-4BF5-AEFC-F324A26F2122}.Internal|Mixed Platforms.ActiveCfg = Release|Win32
-		{1C904C93-25EC-4BF5-AEFC-F324A26F2122}.Internal|Mixed Platforms.Build.0 = Release|Win32
+		{1C904C93-25EC-4BF5-AEFC-F324A26F2122}.Internal|Mixed Platforms.ActiveCfg = Internal|Win32
+		{1C904C93-25EC-4BF5-AEFC-F324A26F2122}.Internal|Mixed Platforms.Build.0 = Internal|Win32
 		{1C904C93-25EC-4BF5-AEFC-F324A26F2122}.Internal|Win32.ActiveCfg = Release|Win32
 		{1C904C93-25EC-4BF5-AEFC-F324A26F2122}.Internal|Win32.Build.0 = Release|Win32
 		{1C904C93-25EC-4BF5-AEFC-F324A26F2122}.Release|Any CPU.ActiveCfg = Release|Win32
@@ -459,8 +459,8 @@ Global
 		{BEDE80BE-C4C8-4F8C-8632-51C0908BFA5E}.DLL_Release|Win32.ActiveCfg = Release|Win32
 		{BEDE80BE-C4C8-4F8C-8632-51C0908BFA5E}.DLL_Release|Win32.Build.0 = Release|Win32
 		{BEDE80BE-C4C8-4F8C-8632-51C0908BFA5E}.Internal|Any CPU.ActiveCfg = Release|Win32
-		{BEDE80BE-C4C8-4F8C-8632-51C0908BFA5E}.Internal|Mixed Platforms.ActiveCfg = Release|Win32
-		{BEDE80BE-C4C8-4F8C-8632-51C0908BFA5E}.Internal|Mixed Platforms.Build.0 = Release|Win32
+		{BEDE80BE-C4C8-4F8C-8632-51C0908BFA5E}.Internal|Mixed Platforms.ActiveCfg = Internal|Win32
+		{BEDE80BE-C4C8-4F8C-8632-51C0908BFA5E}.Internal|Mixed Platforms.Build.0 = Internal|Win32
 		{BEDE80BE-C4C8-4F8C-8632-51C0908BFA5E}.Internal|Win32.ActiveCfg = Release|Win32
 		{BEDE80BE-C4C8-4F8C-8632-51C0908BFA5E}.Internal|Win32.Build.0 = Release|Win32
 		{BEDE80BE-C4C8-4F8C-8632-51C0908BFA5E}.Release|Any CPU.ActiveCfg = Release|Win32
