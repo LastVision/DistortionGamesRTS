@@ -99,6 +99,10 @@ void Subscriber::ReceiveMessage(const TriggerMessage&)
 {
 }
 
+void Subscriber::ReceiveMessage(const TutorialMessage&)
+{
+}
+
 void Subscriber::ReceiveMessage(const VictoryMessage&)
 {
 }

@@ -22,6 +22,7 @@ struct ToggleGUIMessage;
 struct ToggleBuildTimeMessage;
 struct ToggleRenderLinesMessage;
 struct TriggerMessage;
+struct TutorialMessage;
 struct VictoryMessage;
 struct UpgradeUnitMessage;
 
@@ -53,6 +54,7 @@ public:
 	virtual void ReceiveMessage(const ToggleGUIMessage& aMessage);
 	virtual void ReceiveMessage(const ToggleRenderLinesMessage& aMessage);
 	virtual void ReceiveMessage(const TriggerMessage& aMessage);
+	virtual void ReceiveMessage(const TutorialMessage& aMessage);
 	virtual void ReceiveMessage(const VictoryMessage& aMessage);
 	virtual void ReceiveMessage(const UpgradeUnitMessage& aMessage);
 };

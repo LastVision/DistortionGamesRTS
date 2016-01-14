@@ -23,6 +23,13 @@ GameStateMessage::GameStateMessage(eGameState aGameState, const std::string& aFi
 {
 }
 
+GameStateMessage::GameStateMessage(eGameState aGameState, const float& aTime)
+	: myGameState(aGameState)
+	, myTime(aTime)
+	, Message(eMessageType::GAME_STATE)
+{
+}
+
 GameStateMessage::GameStateMessage(eGameState aGameState, const int& anID)
 	: myGameState(aGameState)
 	, myID(anID)

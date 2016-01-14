@@ -167,6 +167,12 @@ void EntityFactory::LoadEntity(const char* aEntityPath)
 
 			myComponentLoader->LoadGrenadeComponent(entityDocument, e, newData.myGrenadeData);
 		}
+		else if (elementName == CU::ToLower("PromotionComponent"))
+		{
+			if (newData.myPromotionData.myExistsInEntity == true) DL_ASSERT("You already have a PromotionComponent");
+
+			myComponentLoader->LoadPromotionComponent(entityDocument, e, newData.myPromotionData);
+		}
 		else if (elementName == CU::ToLower("SelectionComponent"))
 		{
 			if (newData.mySelectionData.myExistsInEntity == true) DL_ASSERT("You already have a SelectionComponent");

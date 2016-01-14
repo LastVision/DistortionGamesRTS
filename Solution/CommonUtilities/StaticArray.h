@@ -61,24 +61,24 @@ namespace CU
 	SA_TEMPLATE
 	inline const Type& SA_TYPE::operator[](const int& aIndex) const
 	{
-		assert(aIndex >= 0 && "Index has to be 0 or more.");
-		assert(aIndex < Size && "a index out of bounds!");
+		DL_ASSERT_EXP(aIndex >= 0, "Index has to be 0 or more.");
+		DL_ASSERT_EXP(aIndex < Size, "a index out of bounds!");
 		return myData[aIndex];
 	}
 
 	SA_TEMPLATE
 	inline Type& SA_TYPE::operator[](const int& aIndex)
 	{
-		assert(aIndex >= 0 && "Index has to be 0 or more.");
-		assert(aIndex < Size && "a index out of bounds!");
+		DL_ASSERT_EXP(aIndex >= 0, "Index has to be 0 or more.");
+		DL_ASSERT_EXP(aIndex < Size, "a index out of bounds!");
 		return myData[aIndex];
 	}
 
 	SA_TEMPLATE
 	inline void SA_TYPE::Insert(int aIndex, Type& aObject)
 	{
-		assert(aIndex >= 0 && "Index has to be 0 or more.");
-		assert(aIndex < Size && "a index out of bounds!");
+		DL_ASSERT_EXP(aIndex >= 0, "Index has to be 0 or more.");
+		DL_ASSERT_EXP(aIndex < Size, "a index out of bounds!");
 		for (int i = Size - 2; i >= aIndex; --i)
 		{
 			myData[i + 1] = myData[i];

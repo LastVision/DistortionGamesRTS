@@ -11,6 +11,7 @@
 #include <PathFinderAStar.h>
 #include <PathFinderFunnel.h>
 #include "PollingStation.h"
+#include "PromotionComponent.h"
 #include <PostMaster.h>
 #include "SoundComponent.h"
 #include <Terrain.h>
@@ -414,7 +415,8 @@ void ControllerComponent::AttackTarget()
 
 		if (myEntity.GetUnitType() == eUnitType::GRUNT)
 		{
-			if (myEntity.GetComponent<GrenadeComponent>()->GetCooldown() <= 0.f)
+			if (myEntity.GetComponent<PromotionComponent>()->GetPromoted() == true
+				&& myEntity.GetComponent<GrenadeComponent>()->GetCooldown() <= 0.f)
 			{
 				//myEntity.SetIntention(eEntityState::THROWING);
 				myEntity.GetComponent<GrenadeComponent>()->ThrowGrenade(myCurrentAction.myEntity->GetOrientation().GetPos());
@@ -446,10 +448,12 @@ void ControllerComponent::AttackTarget()
 		}
 
 		HealthComponent* targetHealth = myCurrentAction.myEntity->GetComponent<HealthComponent>();
-		bool targetSurvived = false;
+		bool targetSurvived = true; // if target is already dead, stay at "true" to not count as a kill
 		if (targetHealth != nullptr && myCurrentAction.myEntity->GetAlive())
 		{
-			if (myEntity.GetUnitType() == eUnitType::RANGER && myRangerOneShotTimer <= 0.f)
+			if (myEntity.GetUnitType() == eUnitType::RANGER
+				&& myEntity.GetComponent<PromotionComponent>()->GetPromoted() == true
+				&& myRangerOneShotTimer <= 0.f)
 			{
 				myRangerOneShotTimer = myRangerOneShotCooldown;
 				targetSurvived = targetHealth->TakeDamageAndCheckSurvive(targetHealth->GetMaxHealth() * 2.f);
@@ -469,6 +473,7 @@ void ControllerComponent::AttackTarget()
 
 		if (targetSurvived == false)
 		{
+			myEntity.GetComponent<PromotionComponent>()->EnemyKilled();
 			//myEntity.SetState(eEntityState::IDLE);
 			myEntity.SetIntention(eEntityState::IDLE);
 			myBehavior->SetTarget(myEntity.GetPosition());

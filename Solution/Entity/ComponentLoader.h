@@ -9,6 +9,7 @@ struct GraphicsComponentData;
 struct HealthComponentData;
 struct TriggerComponentData;
 struct GrenadeComponentData;
+struct PromotionComponentData;
 struct SelectionComponentData;
 struct SoundComponentData;
 
@@ -32,6 +33,7 @@ public:
 	void LoadTriggerComponent(XMLReader& aDocument, tinyxml2::XMLElement* aSourceElement, TriggerComponentData& aOutputData);
 	void LoadEnrageComponent(XMLReader& aDocument, tinyxml2::XMLElement* aSourceElement, EnrageComponentData& aOutputData);
 	void LoadGrenadeComponent(XMLReader& aDocument, tinyxml2::XMLElement* aSourceElement, GrenadeComponentData& aOutputData);
+	void LoadPromotionComponent(XMLReader& aDocument, tinyxml2::XMLElement* aSourceElement, PromotionComponentData& aOutputData);
 	void LoadSelectionComponent(XMLReader& aDocument, tinyxml2::XMLElement* aSourceElement, SelectionComponentData& aOutputData);
 	void LoadSoundComponent(XMLReader& aDocument, tinyxml2::XMLElement* aSourceElement, SoundComponentData& aOutputData);
 private:

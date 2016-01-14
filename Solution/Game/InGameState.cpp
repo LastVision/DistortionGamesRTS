@@ -1,8 +1,8 @@
 #include "stdafx.h"
 
 #include <Camera.h>
+#include "ClickableState.h"
 #include "Console.h"
-#include <MoveCameraMessage.h>
 #include <ColoursForBG.h>
 #include "ConsoleState.h"
 #include <Engine.h>
@@ -16,6 +16,7 @@
 #include <MemoryTracker.h>
 #include "MessageState.h"
 #include <ModelLoader.h>
+#include <MoveCameraMessage.h>
 #include <OnClickMessage.h>
 #include "PlayerDirector.h"
 #include <PostMaster.h>
@@ -200,7 +201,14 @@ void InGameState::ReceiveMessage(const GameStateMessage& aMessage)
 		myLevel = myLevelFactory->LoadNextLevel();
 		Prism::MemoryTracker::GetInstance()->SetRunTime(runtime);
 		break;
+	case eGameState::CLICKABLE_STATE:
+		runtime = Prism::MemoryTracker::GetInstance()->GetRunTime();
+		Prism::MemoryTracker::GetInstance()->SetRunTime(false);
+		myStateStack->PushSubGameState(new ClickableState(aMessage.myTime));
+		Prism::MemoryTracker::GetInstance()->SetRunTime(runtime);
+		break;
 	}
+	
 }
 
 void InGameState::ReceiveMessage(const OnClickMessage& aMessage)
