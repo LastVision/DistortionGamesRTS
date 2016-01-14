@@ -20,6 +20,7 @@ namespace GUI
 	void WidgetContainer::AddWidget(Widget* aWidget)
 	{
 		myWidgets.Add(aWidget);
+		aWidget->SetParent(this);
 	}
 
 	void WidgetContainer::Update(float aDelta)
@@ -32,14 +33,17 @@ namespace GUI
 
 	void WidgetContainer::Render(const CU::Vector2<float>& aParentPosition)
 	{
-		if (myBackground != nullptr)
+		if (myIsVisible == true)
 		{
-			myBackground->Render(myPosition);
-		}
+			if (myBackground != nullptr)
+			{
+				myBackground->Render(myPosition);
+			}
 
-		for (int i = 0; i < myWidgets.Size(); i++)
-		{
-			myWidgets[i]->Render(myPosition + aParentPosition);
+			for (int i = 0; i < myWidgets.Size(); i++)
+			{
+				myWidgets[i]->Render(myPosition + aParentPosition);
+			}
 		}
 	}
 

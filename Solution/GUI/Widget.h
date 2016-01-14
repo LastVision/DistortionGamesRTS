@@ -37,11 +37,14 @@ namespace GUI
 
 		virtual inline void SetValue(const float& aValue);
 
+		inline Widget* GetParent() const;
+		inline void SetParent(Widget* aParent);
 	protected:
 		CU::Vector2<float> myPosition;
 		CU::Vector2<float> mySize;
 		std::string myHoverText;
 		bool myIsVisible;
+		Widget* myParent;
 	};
 
 	inline void Widget::SetPosition(const CU::Vector2<float>& aPosition)
@@ -76,5 +79,15 @@ namespace GUI
 	
 	inline void Widget::SetValue(const float&)
 	{
+	}
+
+	inline Widget* Widget::GetParent() const
+	{
+		return myParent;
+	}
+
+	inline void Widget::SetParent(Widget* aParent)
+	{
+		myParent = aParent;
 	}
 }

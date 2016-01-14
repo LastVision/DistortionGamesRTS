@@ -1,10 +1,21 @@
 #pragma once
 #include "GameState.h"
 
+namespace GUI
+{
+	class GUIManager;
+	class Cursor;
+}
+
+namespace Prism
+{
+	class Text;
+}
+
 class ClickableState : public GameState
 {
 public:
-	ClickableState(float aTimer);
+	ClickableState(const float aTime, Prism::Text* aClickableText);
 	~ClickableState();
 
 	void InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCursor) override;
@@ -18,5 +29,9 @@ public:
 private:
 	float myTimer;
 	float myCurrentTime;
+
+	Prism::Text* myClickableText;
+
+	GUI::GUIManager* myGUIManager;
 };
 
