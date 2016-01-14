@@ -88,6 +88,7 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 		std::string modelPath;
 		std::string effectPath;
 		tempData.myGraphicsData.myExistsInEntity = true;
+		tempData.myTotemData.myExistsInEntity = true;
 
 		tinyxml2::XMLElement* e = reader.ForceFindFirstChild(totemElement, "Model");
 		reader.ForceReadAttribute(e, "modelPath", modelPath);
@@ -95,7 +96,7 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 		reader.ForceReadAttribute(e, "shaderPath", effectPath);
 		tempData.myGraphicsData.myEffectPath = effectPath.c_str();
 
-		int valueToUse = 0;
+		float valueToUse = 0.f;
 
 		e = reader.ForceFindFirstChild(totemElement, "HealPerSecond");
 		reader.ForceReadAttribute(e, "value", valueToUse);
