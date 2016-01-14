@@ -26,11 +26,16 @@ BuildingComponent::~BuildingComponent()
 
 void BuildingComponent::Update(float aDeltaTime)
 {
+	
+
+	UpdateUpgradeCooldown(aDeltaTime, eUnitType::GRUNT);
+	UpdateUpgradeCooldown(aDeltaTime, eUnitType::RANGER);
+	UpdateUpgradeCooldown(aDeltaTime, eUnitType::TANK);
+
 	if (mySpawnQueue.empty() == true)
 	{
 		return;
 	}
-
 
 	const BuildInfo& currentOrder = mySpawnQueue.front();
 	if (currentOrder.myUnit == eUnitType::NOT_A_UNIT)
@@ -115,5 +120,22 @@ bool BuildingComponent::CanUpgrade(eUnitType aUnitType)
 		return false;
 	}
 
+	if (myUnitUpgrades[unitIndex][upgradeIndex].myCooldown > 0.f)
+	{
+		return false;
+	}
+
 	return upgradeIndex < 3;
+}
+
+void BuildingComponent::UpdateUpgradeCooldown(float aDelta, eUnitType aUnit)
+{
+	int unitIndex = static_cast<int>(aUnit);
+	int upgradeIndex = myUnitUpgradeProgress[unitIndex];
+	myUnitUpgrades[unitIndex][upgradeIndex].myCooldown -= aDelta;
+
+	if (myUnitUpgrades[unitIndex][upgradeIndex].myCooldown < 0.f)
+	{
+		myUnitUpgrades[unitIndex][upgradeIndex].myCooldown = 0.f;
+	}
 }

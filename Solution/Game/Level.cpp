@@ -1,11 +1,8 @@
 #include "stdafx.h"
 
 #include "AIDirector.h"
-#include <AnimationComponent.h>
 #include <Camera.h>
-#include <CollisionComponent.h>
 #include <DirectionalLight.h>
-#include <EffectContainer.h>
 #include "EmitterManager.h"
 #include <Engine.h>
 #include <EngineEnums.h>
@@ -13,14 +10,8 @@
 #include <EntityId.h>
 #include <EntityFactory.h>
 #include <GameStateMessage.h>
-#include <GraphicsComponent.h>
 #include <InputWrapper.h>
-#include <Intersection.h>
 #include "Level.h"
-#include <MoveCameraMessage.h>
-#include <ModelLoader.h>
-#include <PathFinderAStar.h>
-#include <PathFinderFunnel.h>
 #include "NeutralDirector.h"
 #include "PlayerDirector.h"
 #include "PollingStation.h"
@@ -104,7 +95,6 @@ bool Level::Update(float aDeltaTime, Prism::Camera& aCamera)
 	myAI->Update(aDeltaTime);
 	myNeutralDirector->Update(aDeltaTime);
 	myEmitterManager->UpdateEmitters(aDeltaTime, CU::Matrix44f());
-
 
 	return true;
 }

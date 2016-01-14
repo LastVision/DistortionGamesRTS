@@ -111,6 +111,7 @@ void ComponentLoader::LoadBuidlingComponent(XMLReader& aDocument, tinyxml2::XMLE
 					Upgrade upgrade;
 					upgrade.myInProgress = false;
 					aDocument.ForceReadAttribute(upgradeElem, "buildTime", upgrade.myBuildTime);
+					aDocument.ForceReadAttribute(upgradeElem, "cooldown", upgrade.myCooldown);
 					aDocument.ForceReadAttribute(upgradeElem, "cost", upgrade.myCost);
 					aDocument.ForceReadAttribute(upgradeElem, "attack", upgrade.myAttackModifier);
 					aDocument.ForceReadAttribute(upgradeElem, "armor", upgrade.myArmorModifier);

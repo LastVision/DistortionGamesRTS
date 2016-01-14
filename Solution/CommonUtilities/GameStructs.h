@@ -8,5 +8,6 @@ struct Upgrade
 	float myArmorModifier;
 	float myAttackSpeedModifier;
 	float myMoveSpeedModifier;
+	float myCooldown;
 	bool myInProgress;
 };
