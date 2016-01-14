@@ -30,6 +30,7 @@
 #include <SpriteProxy.h>
 #include <FadeMessage.h>
 #include <PostMaster.h>
+#include <XMLReader.h>
 
 PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aScene, GUI::Cursor* aCursor)
 	: Director(eOwnerType::PLAYER, aTerrain)
@@ -76,17 +77,48 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 	PostMaster::GetInstance()->Subscribe(eMessageType::EVENT_POSITION, this);
 
 	EntityData tempData;
-	tempData.myGraphicsData.myExistsInEntity = true;
-	tempData.myGraphicsData.myModelPath = "Data/Resource/Model/Prop/Pine_tree/SM_pine_tree_bare_a.fbx";
-	tempData.myGraphicsData.myEffectPath = "Data/Resource/Shader/S_effect_pbl.fx";
 
-	tempData.myTotemData.myExistsInEntity = true;
-	tempData.myTotemData.myHealPerSecond = 5.f;
-	tempData.myTotemData.myRadius = 15.f;
-	tempData.myTotemData.myCooldown = 30.f;
-	tempData.myTotemData.myDuration = 10.f;
+	XMLReader reader;
+	reader.OpenDocument("Data/Resource/Entity/E_totem.xml");
+	tinyxml2::XMLElement* totemElement = reader.ForceFindFirstChild("root");
+	totemElement = reader.ForceFindFirstChild(totemElement, "Totem");
+
+	if (totemElement != nullptr)
+	{
+		std::string modelPath;
+		std::string effectPath;
+		tempData.myGraphicsData.myExistsInEntity = true;
+
+		tinyxml2::XMLElement* e = reader.ForceFindFirstChild(totemElement, "Model");
+		reader.ForceReadAttribute(e, "modelPath", modelPath);
+		tempData.myGraphicsData.myModelPath = modelPath.c_str();
+		reader.ForceReadAttribute(e, "shaderPath", effectPath);
+		tempData.myGraphicsData.myEffectPath = effectPath.c_str();
+
+		int valueToUse = 0;
+
+		e = reader.ForceFindFirstChild(totemElement, "HealPerSecond");
+		reader.ForceReadAttribute(e, "value", valueToUse);
+		tempData.myTotemData.myHealPerSecond = valueToUse;
+
+		e = reader.ForceFindFirstChild(totemElement, "Radius");
+		reader.ForceReadAttribute(e, "value", valueToUse);
+		tempData.myTotemData.myRadius = valueToUse;
+
+		e = reader.ForceFindFirstChild(totemElement, "Cooldown");
+		reader.ForceReadAttribute(e, "value", valueToUse);
+		tempData.myTotemData.myCooldown = valueToUse;
+		
+		e = reader.ForceFindFirstChild(totemElement, "Duration");
+		reader.ForceReadAttribute(e, "value", valueToUse);
+		tempData.myTotemData.myDuration = valueToUse;
+
+		reader.CloseDocument();
+	}
+
 
 	tempData.mySoundData.myExistsInEntity = true;
+
 
 	myTotem = new Entity(eOwnerType::PLAYER, Prism::eOctreeType::DYNAMIC, tempData, aScene, { 128.f, 100.f, 128.f },
 		aTerrain, { 0.f, 0.f, 0.f }, { 1.f, 1.f, 1.f }, eUnitType::NOT_A_UNIT);
