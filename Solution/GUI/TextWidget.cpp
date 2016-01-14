@@ -35,7 +35,7 @@ namespace GUI
 
 	void TextWidget::Render(const CU::Vector2<float>& aParentPosition)
 	{
-		if (myText != nullptr)
+		if (myIsVisible == true)
 		{
 			myText->SetPosition(myPosition + aParentPosition);
 			myBackground->Render(myPosition + aParentPosition);
@@ -59,6 +59,22 @@ namespace GUI
 		if (aMessage.myMessageType == eMessageType::TEXT)
 		{
 			myText = aMessage.myText;
+			if (myText == nullptr && myParent != nullptr)
+			{
+				myParent->SetVisibility(false);
+			}
+			else if (myText == nullptr)
+			{
+				SetVisibility(false);
+			}
+			else if (myText != nullptr && myParent != nullptr)
+			{
+				myParent->SetVisibility(true);
+			}
+			else 
+			{
+				SetVisibility(true);
+			}
 		}
 	}
 }

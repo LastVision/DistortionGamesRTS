@@ -18,6 +18,7 @@ ClickableState::~ClickableState()
 	SAFE_DELETE(myGUIManager);
 	myCursor = nullptr;
 	myClickableText = nullptr;
+	PostMaster::GetInstance()->SendMessage(TextMessage(nullptr));
 }
 
 void ClickableState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCursor)

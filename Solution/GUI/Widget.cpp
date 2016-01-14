@@ -4,6 +4,7 @@
 namespace GUI
 {
 	Widget::Widget()
+		: myParent(nullptr)
 	{
 		myIsVisible = true;
 	}
