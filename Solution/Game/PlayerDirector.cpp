@@ -236,6 +236,12 @@ void PlayerDirector::ReceiveMessage(const OnClickMessage& aMessage)
 		mySelectedAction = eSelectedAction::PLACE_TOTEM;
 		return;
 	}
+	else if (aMessage.myEvent == eOnClickEvent::UPGRADE_UNIT)
+	{
+		UpgradeUnit(static_cast<eUnitType>(aMessage.myID));
+		return;
+	}
+
 	if (mySelectedUnits.Size() > 0)
 	{
 		switch (aMessage.myEvent)
@@ -440,6 +446,11 @@ CU::Vector3<float> PlayerDirector::CalcCursorWorldPosition(const CU::Vector2<flo
 const float& PlayerDirector::GetTotemCooldown() const
 {
 	return myTotem->GetComponent<TotemComponent>()->GetCurrentCooldown();
+}
+
+const int& PlayerDirector::GetUpgradeLevel(int aUnitID) const
+{
+	return myBuilding->GetComponent<BuildingComponent>()->GetUpgradeLevel(aUnitID);
 }
 
 void PlayerDirector::UpdateInputs()

@@ -9,6 +9,7 @@ namespace tinyxml2
 }
 
 class XMLReader;
+class PlayerDirector;
 
 namespace GUI
 {
@@ -17,7 +18,7 @@ namespace GUI
 	class UpgradeButtonWidget : public Widget
 	{
 	public:
-		UpgradeButtonWidget(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement, const int& aUpgradeLevel);
+		UpgradeButtonWidget(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement, const PlayerDirector* aPlayer);
 		~UpgradeButtonWidget();
 
 		void Render(const CU::Vector2<float>& aParentPosition) override;
@@ -31,6 +32,6 @@ namespace GUI
 
 		CU::StaticArray<ButtonWidget*, AMOUNT_OF_UPGRADES> myUpgrades;
 
-		const int& myUpgradeLevel;
+		const int* myUpgradeLevel;
 	};
 }

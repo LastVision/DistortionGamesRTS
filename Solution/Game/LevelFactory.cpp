@@ -206,6 +206,14 @@ void LevelFactory::ReadLevel(const std::string& aLevelPath, std::string& aTutori
 	tinyxml2::XMLElement* levelElement = reader.ForceFindFirstChild("root");
 	levelElement = reader.ForceFindFirstChild(levelElement, "scene");
 
+	tinyxml2::XMLElement* cameraElement = reader.ForceFindFirstChild(levelElement, "camera");
+
+	CU::Vector3<float> cameraPosition(myCamera.GetOrientation().GetPos());
+	reader.ForceReadAttribute(cameraElement, "x", cameraPosition.x);
+	reader.ForceReadAttribute(cameraElement, "z", cameraPosition.z);
+
+	myCamera.SetPosition(cameraPosition);
+
 	std::string cubeMap;
 	reader.ForceReadAttribute(reader.ForceFindFirstChild(levelElement, "cubemap"), "source", cubeMap);
 	effectContainer->SetCubeMap(cubeMap);

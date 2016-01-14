@@ -67,10 +67,10 @@
     <Compile Include="DLLImporter\DLLImporter.cs" />
     <Compile Include="DL_Debug.cs" />
     <Compile Include="Components\PathBrowseComponent.cs" />
-    <Compile Include="MathUtilities.cs" />
+    <Compile Include="Math\MathUtilities.cs" />
     <Compile Include="StringUtilities.cs" />
-    <Compile Include="Vector.cs" />
-    <Compile Include="XMLWrapperRead.cs" />
+    <Compile Include="Math\Vector.cs" />
+    <Compile Include="IO\XMLWrapperRead.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
