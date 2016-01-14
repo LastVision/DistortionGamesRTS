@@ -1,16 +1,18 @@
 #include "stdafx.h"
 
+#include <GameStateMessage.h>
 #include <InputWrapper.h>
 #include "NeutralDirector.h"
 #include "PlayerDirector.h"
 #include <PostMaster.h>
-#include "Tutorial.h"
 #include <Text.h>
 #include <TextMessage.h>
+#include "Tutorial.h"
+#include <TutorialMessage.h>
 #include <XMLReader.h>
 
 Tutorial::Tutorial(const std::string& aXMLPath, const PlayerDirector* aPlayer, const CU::Matrix44<float>& aCameraOrientation
-		, const NeutralDirector* aNeutral)
+	, const NeutralDirector* aNeutral)
 	: myPlayer(aPlayer)
 	, myCameraOrientation(aCameraOrientation)
 	, myNeutral(aNeutral)
@@ -49,10 +51,12 @@ Tutorial::Tutorial(const std::string& aXMLPath, const PlayerDirector* aPlayer, c
 	}
 
 	myCurrentTime = myMaxTime;
+	PostMaster::GetInstance()->Subscribe(eMessageType::TUTORIAL, this);
 }
 
 Tutorial::~Tutorial()
 {
+	PostMaster::GetInstance()->UnSubscribe(eMessageType::TUTORIAL, this);
 	for (int i = 0; i < myMissions.Size(); ++i)
 	{
 		SAFE_DELETE(myMissions[i].myText);
@@ -71,16 +75,14 @@ void Tutorial::Update(float aDeltaTime)
 		switch (myMissions[myCurrentMission].myAction)
 		{
 		case Action::ATTACK:
-			if (myNeutral->GetUnitCount() < myPreviousNeutralCount)
+			if (myNeutral->GetActiveUnitsSize() < myPreviousNeutralCount)
 			{
 				myMissionComplete = true;
 			}
 			break;
 		case Action::CLICK:
-			if (CU::InputWrapper::GetInstance()->MouseUp(0) == true)
-			{
-				myMissionComplete = true;
-			}
+			PostMaster::GetInstance()->SendMessage(GameStateMessage(eGameState::CLICKABLE_STATE, myMaxTime));
+			myMissionComplete = true;
 			break;
 		case Action::MOVE_CAMERA:
 			if (myCameraOrientation.GetPos() != myPreviousCameraPosition)
@@ -106,7 +108,7 @@ void Tutorial::Update(float aDeltaTime)
 			++myCurrentMission;
 			myMissionComplete = false;
 
-			myPreviousNeutralCount = myNeutral->GetUnitCount();
+			myPreviousNeutralCount = myNeutral->GetActiveUnitsSize();
 			myPreviousCameraPosition = myCameraOrientation.GetPos();
 
 			if (myCurrentMission == myMissions.Size())
@@ -122,13 +124,22 @@ void Tutorial::Update(float aDeltaTime)
 	}
 }
 
+void Tutorial::ReceiveMessage(const TutorialMessage& aMessage)
+{
+	if (aMessage.myAction == eTutorialAction::CLICK)
+	{
+		myMissionComplete = true;
+		myCurrentTime = 0;
+	}
+}
+
 Tutorial::Action Tutorial::GetAction(const std::string& anAction) const
 {
 	if (anAction == "click")
 	{
 		return Action::CLICK;
 	}
-	else if(anAction == "select")
+	else if (anAction == "select")
 	{
 		return Action::SELECT;
 	}

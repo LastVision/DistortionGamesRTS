@@ -1,9 +1,10 @@
 #pragma once
+#include <Subscriber.h>
 
 class PlayerDirector;
 class NeutralDirector;
 
-class Tutorial
+class Tutorial : public Subscriber
 {
 public:
 	Tutorial(const std::string& aXMLPath, const PlayerDirector* aPlayer, const CU::Matrix44<float>& aCameraOrientation
@@ -11,6 +12,8 @@ public:
 	~Tutorial();
 
 	void Update(float aDeltaTime);
+
+	void ReceiveMessage(const TutorialMessage& aMessage) override;
 
 private:
 	

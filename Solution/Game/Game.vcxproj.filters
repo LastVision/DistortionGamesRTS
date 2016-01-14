@@ -63,6 +63,9 @@
     <ClCompile Include="LevelSelectState.cpp">
       <Filter>StateStack</Filter>
     </ClCompile>
+    <ClCompile Include="ClickableState.cpp">
+      <Filter>StateStack</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -135,6 +138,9 @@
       <Filter>Level</Filter>
     </ClInclude>
     <ClInclude Include="LevelSelectState.h">
+      <Filter>StateStack</Filter>
+    </ClInclude>
+    <ClInclude Include="ClickableState.h">
       <Filter>StateStack</Filter>
     </ClInclude>
   </ItemGroup>

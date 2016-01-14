@@ -25,5 +25,6 @@ enum class eMessageType
 	EVENT_POSITION,
 	KILL_UNIT,
 	ARTIFACT,
+	TUTORIAL,
 	COUNT,
 };

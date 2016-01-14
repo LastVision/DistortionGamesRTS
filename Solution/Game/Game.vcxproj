@@ -195,6 +195,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ClickableState.h" />
     <ClInclude Include="ConsoleBackspace.h" />
     <ClInclude Include="ConsoleHelp.h" />
     <ClInclude Include="ConsoleHistoryManager.h" />
@@ -223,6 +224,7 @@
     <ClInclude Include="Tutorial.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ClickableState.cpp" />
     <ClCompile Include="ConsoleBackspace.cpp" />
     <ClCompile Include="ConsoleHelp.cpp" />
     <ClCompile Include="ConsoleHistoryManager.cpp" />
