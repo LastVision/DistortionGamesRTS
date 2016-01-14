@@ -160,7 +160,7 @@ namespace Prism
 						if (i == 1)
 						{
 							tToCheck = t->GetOtherTriangle(t->myEdge1);
-							if (tToCheck == nullptr || tToCheck->myArea < 1.f)
+							if (tToCheck == nullptr)// || tToCheck->myArea < 1.f)
 							{
 								continue;
 							}
@@ -168,7 +168,7 @@ namespace Prism
 						else if (i == 2)
 						{
 							tToCheck = t->GetOtherTriangle(t->myEdge2);
-							if (tToCheck == nullptr || tToCheck->myArea < 1.f)
+							if (tToCheck == nullptr)// || tToCheck->myArea < 1.f)
 							{
 								continue;
 							}
@@ -176,7 +176,7 @@ namespace Prism
 						else if (i == 3)
 						{
 							tToCheck = t->GetOtherTriangle(t->myEdge3);
-							if (tToCheck == nullptr || tToCheck->myArea < 1.f)
+							if (tToCheck == nullptr)// || tToCheck->myArea < 1.f)
 							{
 								continue;
 							}
