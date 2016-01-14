@@ -5,6 +5,7 @@
 #include <InputWrapper.h>
 #include <TextMessage.h>
 #include <PostMaster.h>
+#include <FadeMessage.h>
 
 ClickableState::ClickableState(const float aTime, Prism::Text* aClickableText)
 	: myTimer(aTime)
@@ -34,11 +35,12 @@ void ClickableState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* a
 	OnResize(windowSize.x, windowSize.y);
 
 	PostMaster::GetInstance()->SendMessage(TextMessage(myClickableText));
+	PostMaster::GetInstance()->SendMessage(FadeMessage(1.f / 3.f));
 }
 
 void ClickableState::EndState()
 {
-
+	PostMaster::GetInstance()->SendMessage(FadeMessage(1.f / 3.f));
 }
 
 const eStateStatus ClickableState::Update(const float& aDeltaTime)

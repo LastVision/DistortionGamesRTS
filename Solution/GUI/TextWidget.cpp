@@ -6,6 +6,8 @@
 #include <Text.h>
 #include <TextMessage.h>
 
+#include <FadeMessage.h>
+
 namespace GUI
 {
 	TextWidget::TextWidget(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement)
@@ -59,6 +61,7 @@ namespace GUI
 	{
 		if (aMessage.myMessageType == eMessageType::TEXT)
 		{
+			PostMaster::GetInstance()->SendMessage(FadeMessage(1.f / 3.f));
 			myText = aMessage.myText;
 			SetVisibility(aMessage.myVisibleFlag);
 		}
