@@ -115,5 +115,8 @@
       <Filter>Message</Filter>
     </ClInclude>
     <ClInclude Include="KillUnitMessage.h" />
+    <ClInclude Include="TutorialMessage.h">
+      <Filter>Message</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
