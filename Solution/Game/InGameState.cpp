@@ -204,7 +204,7 @@ void InGameState::ReceiveMessage(const GameStateMessage& aMessage)
 	case eGameState::CLICKABLE_STATE:
 		runtime = Prism::MemoryTracker::GetInstance()->GetRunTime();
 		Prism::MemoryTracker::GetInstance()->SetRunTime(false);
-		myStateStack->PushSubGameState(new ClickableState(aMessage.myTime));
+		myStateStack->PushSubGameState(new ClickableState(aMessage.myTime, aMessage.myText));
 		Prism::MemoryTracker::GetInstance()->SetRunTime(runtime);
 		break;
 	}

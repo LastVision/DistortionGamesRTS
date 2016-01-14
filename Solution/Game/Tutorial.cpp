@@ -81,7 +81,8 @@ void Tutorial::Update(float aDeltaTime)
 			}
 			break;
 		case Action::CLICK:
-			PostMaster::GetInstance()->SendMessage(GameStateMessage(eGameState::CLICKABLE_STATE, myMaxTime));
+			PostMaster::GetInstance()->SendMessage(GameStateMessage(eGameState::CLICKABLE_STATE, myMaxTime, 
+				myMissions[myCurrentMission].myText));
 			myMissionComplete = true;
 			break;
 		case Action::MOVE_CAMERA:
