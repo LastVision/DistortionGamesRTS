@@ -38,5 +38,7 @@ public:
 
 private:
 	GUI::GUIManager* myGUIManager;
+
+	bool myHasRunOnce;
 };
 
