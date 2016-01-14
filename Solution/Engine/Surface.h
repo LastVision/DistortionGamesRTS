@@ -44,8 +44,8 @@ namespace Prism{
 		bool VerifyTextures(const std::string& aModelPath);
 
 	private:
-		CU::GrowingArray<Texture*> myTextures;
-		CU::GrowingArray<ID3DX11EffectShaderResourceVariable*> myShaderResourceViews;
+		CU::GrowingArray<ID3D11ShaderResourceView*> myResourceViews;
+		CU::GrowingArray<ID3DX11EffectShaderResourceVariable*> myShaderVariables;
 		CU::GrowingArray<std::string> myShaderResourceNames;
 		CU::GrowingArray<std::string> myFilePaths;
 

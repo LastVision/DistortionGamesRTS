@@ -31,6 +31,9 @@
 #include <ToggleRenderLinesMessage.h>
 #include "Tutorial.h"
 
+
+#include <FadeMessage.h>
+
 Level::Level(const Prism::Camera& aCamera, Prism::Terrain* aTerrain, GUI::Cursor* aCursor)
 	: myEntities(64)
 	, myRenderNavMeshLines(false)
@@ -104,7 +107,6 @@ bool Level::Update(float aDeltaTime, Prism::Camera& aCamera)
 	myAI->Update(aDeltaTime);
 	myNeutralDirector->Update(aDeltaTime);
 	myEmitterManager->UpdateEmitters(aDeltaTime, CU::Matrix44f());
-
 
 	return true;
 }
