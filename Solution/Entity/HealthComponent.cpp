@@ -47,7 +47,7 @@ void HealthComponent::RenderHealthBar(const Prism::Camera& aCamera)
 	myHealthBar->Render({ newRenderPos.x, newRenderPos.y });
 }
 
-bool HealthComponent::TakeDamage(float aDamage)
+bool HealthComponent::TakeDamageAndCheckSurvive(float aDamage)
 {
 	DL_ASSERT_EXP(aDamage >= 0, "Cant take negative damage, use Heal for healing if that was your intention");
 
@@ -57,7 +57,7 @@ bool HealthComponent::TakeDamage(float aDamage)
 	float damage = aDamage - myArmor;
 	if (damage <= 0.f)
 	{
-		return true;
+		damage = 1.f;
 	}
 
 	if (myEntity.GetAlive() == false)

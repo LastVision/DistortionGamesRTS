@@ -563,6 +563,10 @@ void LevelFactory::LoadArtifacts(XMLReader& aReader, tinyxml2::XMLElement* aLeve
 	for (tinyxml2::XMLElement* entityElement = aReader.FindFirstChild(aLevelElement, "artifact"); entityElement != nullptr;
 		entityElement = aReader.FindNextElement(entityElement, "artifact"))
 	{
+		std::string propType;
+		aReader.ForceReadAttribute(entityElement, "type", propType);
+		propType = CU::ToLower(propType);
+
 		tinyxml2::XMLElement* propElement = aReader.ForceFindFirstChild(entityElement, "position");
 		CU::Vector3<float> propPosition;
 		aReader.ForceReadAttribute(propElement, "X", propPosition.x);
@@ -585,7 +589,7 @@ void LevelFactory::LoadArtifacts(XMLReader& aReader, tinyxml2::XMLElement* aLeve
 		propRotation.y = CU::Math::DegreeToRad(propRotation.y);
 		propRotation.z = CU::Math::DegreeToRad(propRotation.z);
 
-		myCurrentLevel->myEntities.Add(EntityFactory::CreateEntity(eOwnerType::NEUTRAL, eEntityType::ARTIFACT,
+		myCurrentLevel->myEntities.Add(EntityFactory::CreateEntity(eOwnerType::NEUTRAL, eEntityType::ARTIFACT, propType,
 			Prism::eOctreeType::STATIC, *myCurrentLevel->myScene, propPosition, *myCurrentLevel->myTerrain,
 			propRotation, propScale));
 		myCurrentLevel->myEntities.GetLast()->AddToScene();
