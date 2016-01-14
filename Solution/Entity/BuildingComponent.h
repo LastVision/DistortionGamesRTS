@@ -37,6 +37,7 @@ public:
 	bool IsQueueFull() const;
 
 	const int& GetUpgradeLevel(int aUnitID) const;
+	float GetUpgradeCooldown(int aUnitID) const;
 
 private:
 	struct BuildInfo
@@ -46,6 +47,8 @@ private:
 		eUnitType myUnit;
 		bool myIsUpgrade;
 	};
+
+	void UpdateUpgradeCooldown(float aDelta, eUnitType aUnit);
 
 	CU::StaticArray<int, 3> myUnitCosts;
 	CU::StaticArray<float, 3> myUnitBuildTimes;
@@ -109,4 +112,10 @@ inline void BuildingComponent::SetIgnoreBuildTime(bool anIgnoreBuildTime)
 inline const int& BuildingComponent::GetUpgradeLevel(int aUnitID) const
 {
 	return myUnitUpgradeProgress[aUnitID];
+}
+
+inline float BuildingComponent::GetUpgradeCooldown(int aUnitID) const
+{
+	int upgradeIndex = myUnitUpgradeProgress[aUnitID];
+	return myUnitUpgrades[aUnitID][upgradeIndex].myCooldown;
 }
