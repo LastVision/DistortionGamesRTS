@@ -87,6 +87,7 @@ enum class eEntityState : int
 	ATTACKING,
 	DYING,
 	_COUNT,
+	STOP, //this is not an animation therefore we placed after count :)
 };
 
 enum class eComponentType

@@ -215,6 +215,10 @@ void ControllerComponent::Stop(bool& aHasPlayedSound)
 	myCurrentAction.myAction = eAction::IDLE;
 	myCurrentAction.myPosition = myEntity.myPosition;
 	myAcceleration = { 0.f, 0.f };
+	myEntity.SetIntention(eEntityState::IDLE);
+	CU::Vector2<float> newTargetPos = { myEntity.myPosition.x + myEntity.GetOrientation().GetForward().x,
+		myEntity.myPosition.y + myEntity.GetOrientation().GetForward().z };
+	myBehavior->SetTarget(newTargetPos);
 }
 
 void ControllerComponent::HoldPosition(bool& aHasPlayedSound)
@@ -245,8 +249,10 @@ void ControllerComponent::HoldPosition(bool& aHasPlayedSound)
 	myCurrentAction.myAction = eAction::HOLD;
 	myCurrentAction.myPosition = myEntity.myPosition;
 	myAcceleration = { 0.f, 0.f };
-	//myEntity.SetState(eEntityState::IDLE);
 	myEntity.SetIntention(eEntityState::IDLE);
+	CU::Vector2<float> newTargetPos = { myEntity.myPosition.x + myEntity.GetOrientation().GetForward().x,
+			myEntity.myPosition.y + myEntity.GetOrientation().GetForward().z };
+	myBehavior->SetTarget(newTargetPos);
 }
 
 void ControllerComponent::FillCommandList(eAction aAction, bool aClearCommandQueue, Entity* aEntity
@@ -341,14 +347,10 @@ void ControllerComponent::DoIdle()
 		action.myEntity = closestTarget;
 		myActions.Add(action);
 	}
-
-
-	
 }
 
 void ControllerComponent::DoMove()
 {
-	
 	myEntity.SetIntention(eEntityState::WALKING);
 	myBehavior->SetTarget(GetPosition(myCurrentAction));
 }
@@ -360,7 +362,6 @@ void ControllerComponent::DoAttackTarget(float aDelta)
 	{
 		RefreshPathToAttackTarget();
 	}
-
 
 	if (myCurrentAction.myEntity != nullptr && CU::Length2(myCurrentAction.myEntity->GetPosition() - myEntity.GetPosition()) < myAttackRange2)
 	{
@@ -379,7 +380,7 @@ void ControllerComponent::DoReturn()
 
 void ControllerComponent::DoHold()
 {
-	DL_ASSERT("Not implemented yet.");
+	//DL_ASSERT("Not implemented yet.");
 }
 
 void ControllerComponent::DoAttackMove()

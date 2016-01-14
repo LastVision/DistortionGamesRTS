@@ -77,6 +77,10 @@ void ActorComponent::Update(float aDelta)
 			myTerrain.CalcEntityHeight(myEntity.myOrientation);
 		}
 		break;
+	case eEntityState::STOP:
+		myEntity.GetComponent<AnimationComponent>()->PlayAnimation(eEntityState::IDLE);
+		myEntity.SetState(eEntityState::IDLE);
+		break;
 	default:
 		DL_ASSERT("Unknown intentionstate!");
 		break;
