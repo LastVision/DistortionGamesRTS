@@ -10,6 +10,7 @@
 #include "GrenadeComponent.h"
 #include "HealthComponent.h"
 #include "EntityId.h"
+#include "PromotionComponent.h"
 #include <Scene.h>
 #include "SelectionComponent.h"
 #include "SoundComponent.h"
@@ -104,6 +105,11 @@ Entity::Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& a
 	if (aEntityData.myGrenadeData.myExistsInEntity == true)
 	{
 		myComponents[static_cast<int>(eComponentType::GRENADE)] = new GrenadeComponent(*this, aEntityData.myGrenadeData);
+	}
+
+	if (aEntityData.myPromotionData.myExistsInEntity == true)
+	{
+		myComponents[static_cast<int>(eComponentType::PROMOTION)] = new PromotionComponent(*this, aEntityData.myPromotionData);
 	}
 
 	if (myOwner == eOwnerType::PLAYER)

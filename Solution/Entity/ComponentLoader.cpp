@@ -302,6 +302,14 @@ void ComponentLoader::LoadGrenadeComponent(XMLReader& aDocument, tinyxml2::XMLEl
 
 }
 
+void ComponentLoader::LoadPromotionComponent(XMLReader& aDocument, tinyxml2::XMLElement* aSourceElement, PromotionComponentData& aOutputData)
+{
+	aOutputData.myExistsInEntity = true;
+
+	tinyxml2::XMLElement* e = aDocument.ForceFindFirstChild(aSourceElement, "KillCount");
+	aDocument.ForceReadAttribute(e, "value", aOutputData.myKillCount);
+}
+
 void ComponentLoader::LoadSelectionComponent(XMLReader& aDocument, tinyxml2::XMLElement* aSourceElement, SelectionComponentData& aOutputData)
 {
 	aOutputData.myExistsInEntity = true;

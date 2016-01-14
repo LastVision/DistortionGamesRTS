@@ -13,6 +13,7 @@
 #include <VictoryMessage.h>
 #include <SpawnUnitMessage.h>
 #include <PollingStation.h>
+#include <PromotionComponent.h>
 #include <SelectionComponent.h>
 #include <UpgradeUnitMessage.h>
 #include <XMLReader.h>
@@ -87,6 +88,10 @@ void Director::RenderHealthBars(const Prism::Camera& aCamera)
 		if (myActiveUnits[i]->GetAlive() == true)
 		{
 			myActiveUnits[i]->GetComponent<HealthComponent>()->RenderHealthBar(aCamera);
+		}
+		if (myActiveUnits[i]->GetAlive() == true)
+		{
+			myActiveUnits[i]->GetComponent<PromotionComponent>()->RenderPromotion(aCamera);
 		}
 	}
 }
