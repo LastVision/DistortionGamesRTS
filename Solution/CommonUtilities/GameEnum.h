@@ -106,6 +106,7 @@ enum class eComponentType
 	GRENADE,
 	SELECTION,
 	SOUND,
+	PROMOTION,
 	_COUNT,
 };
 

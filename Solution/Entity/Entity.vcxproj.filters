@@ -64,6 +64,9 @@
     <Filter Include="Component\Sound">
       <UniqueIdentifier>{b6d0dbce-fc33-490f-b89d-b9fed0911932}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Component\Promotion">
+      <UniqueIdentifier>{38163df0-452c-438d-8f7c-74a71ccd4a0a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -137,6 +140,9 @@
     </ClCompile>
     <ClCompile Include="SoundComponent.cpp">
       <Filter>Component\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="PromotionComponent.cpp">
+      <Filter>Component\Promotion</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -255,6 +261,12 @@
       <Filter>Component\Sound</Filter>
     </ClInclude>
     <ClInclude Include="SoundComponentData.h">
+      <Filter>EntityFactory\EntityData\ComponentData</Filter>
+    </ClInclude>
+    <ClInclude Include="PromotionComponent.h">
+      <Filter>Component\Promotion</Filter>
+    </ClInclude>
+    <ClInclude Include="PromotionComponentData.h">
       <Filter>EntityFactory\EntityData\ComponentData</Filter>
     </ClInclude>
   </ItemGroup>

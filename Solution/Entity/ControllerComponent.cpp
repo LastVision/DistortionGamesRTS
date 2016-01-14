@@ -451,11 +451,11 @@ void ControllerComponent::AttackTarget()
 			if (myEntity.GetUnitType() == eUnitType::RANGER && myRangerOneShotTimer <= 0.f)
 			{
 				myRangerOneShotTimer = myRangerOneShotCooldown;
-				targetSurvived = targetHealth->TakeDamage(targetHealth->GetMaxHealth() * 2.f);
+				targetSurvived = targetHealth->TakeDamageAndCheckSurvive(targetHealth->GetMaxHealth() * 2.f);
 			}
 			else
 			{
-				targetSurvived = targetHealth->TakeDamage(myAttackDamage);
+				targetSurvived = targetHealth->TakeDamageAndCheckSurvive(myAttackDamage);
 			}
 		}
 

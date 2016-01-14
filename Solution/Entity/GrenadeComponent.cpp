@@ -108,7 +108,7 @@ void GrenadeComponent::Explosion()
 		for (int i = 0; i < myUnits.Size(); ++i)
 		{
 //			float length2 = CU::Length2(myUnits[i]->GetPosition() - my2DPosition);
-			myUnits[i]->GetComponent<HealthComponent>()->TakeDamage(myDamage);
+			myUnits[i]->GetComponent<HealthComponent>()->TakeDamageAndCheckSurvive(myDamage);
 		}
 	}
 	myHasExploded = true;
