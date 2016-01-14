@@ -66,6 +66,9 @@ Tools/LogReader/LogReader_temp/obj/
 Tools/ModelViewer/ModelViewer/obj/
 Tools/ParticleEditor/ParticleEditor/obj/
 Tools/CSharpUtilities/CSharpUtilities/obj/
+Tools/ToolBuilder/Workbed/
+Tools/ParticleEditor/Workbed/
+Tools/CSharpUtilities/Workbed/
 /NiklasOctree
 /octreeResearchNumbers.txt
 /NiklasQuadTree
