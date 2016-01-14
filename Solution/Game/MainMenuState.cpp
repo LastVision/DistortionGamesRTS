@@ -45,6 +45,7 @@ const eStateStatus MainMenuState::Update(const float& aDeltaTime)
 {
 	if (myHasRunOnce == false)
 	{
+		PostMaster::GetInstance()->UnSubscribe(eMessageType::ON_CLICK, this);
 		bool runtime = Prism::MemoryTracker::GetInstance()->GetRunTime();
 		Prism::MemoryTracker::GetInstance()->SetRunTime(false);
 		myStateStack->PushSubGameState(new SplashState("Data/Resource/Texture/Menu/Splash/T_logo_other.dds", false));
@@ -75,7 +76,7 @@ void MainMenuState::Render()
 
 void MainMenuState::ResumeState()
 {
-	//PostMaster::GetInstance()->Subscribe(eMessageType::ON_CLICK, this);
+	PostMaster::GetInstance()->Subscribe(eMessageType::ON_CLICK, this);
 }
 
 void MainMenuState::OnResize(int aWidth, int aHeight)
