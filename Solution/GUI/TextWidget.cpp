@@ -14,15 +14,16 @@ namespace GUI
 	{
 		std::string backgroundPath;
 
-
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "size"), "x", mySize.x);
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "size"), "y", mySize.y);
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "position"), "x", myPosition.x);
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "position"), "y", myPosition.y);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "textposition"), "x", myTextPosition.x);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "textposition"), "y", myTextPosition.y);
 
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "background"), "path", backgroundPath);
 
-		myBackground = Prism::ModelLoader::GetInstance()->LoadSprite(backgroundPath, mySize, mySize / 2.f);
+		myBackground = Prism::ModelLoader::GetInstance()->LoadSprite(backgroundPath, { 0.f, 0.f });
 
 		PostMaster::GetInstance()->Subscribe(eMessageType::TEXT, this);
 	}
@@ -35,9 +36,9 @@ namespace GUI
 
 	void TextWidget::Render(const CU::Vector2<float>& aParentPosition)
 	{
-		if (myIsVisible == true)
+		if (myIsVisible == true && myText != nullptr)
 		{
-			myText->SetPosition(myPosition + aParentPosition);
+			myText->SetPosition(myPosition + aParentPosition + myTextPosition);
 			myBackground->Render(myPosition + aParentPosition);
 			myText->Render();
 		}
@@ -46,7 +47,7 @@ namespace GUI
 	void TextWidget::OnResize(const CU::Vector2<float>& aNewSize, const CU::Vector2<float>& anOldSize)
 	{
 		Widget::OnResize(aNewSize, anOldSize);
-		myBackground->SetSize(mySize, mySize / 2.f);
+		myBackground->SetSize(mySize, { 0.f, 0.f });
 	}
 
 	void TextWidget::SetPosition(const CU::Vector2<float>& aPosition)
@@ -59,22 +60,7 @@ namespace GUI
 		if (aMessage.myMessageType == eMessageType::TEXT)
 		{
 			myText = aMessage.myText;
-			if (myText == nullptr && myParent != nullptr)
-			{
-				myParent->SetVisibility(false);
-			}
-			else if (myText == nullptr)
-			{
-				SetVisibility(false);
-			}
-			else if (myText != nullptr && myParent != nullptr)
-			{
-				myParent->SetVisibility(true);
-			}
-			else 
-			{
-				SetVisibility(true);
-			}
+			SetVisibility(aMessage.myVisibleFlag);
 		}
 	}
 }

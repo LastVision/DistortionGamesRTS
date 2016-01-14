@@ -114,7 +114,7 @@ void Tutorial::Update(float aDeltaTime)
 
 			if (myCurrentMission == myMissions.Size())
 			{
-				PostMaster::GetInstance()->SendMessage(TextMessage(nullptr));
+				PostMaster::GetInstance()->SendMessage(TextMessage(nullptr, false));
 				myActive = false;
 			}
 			else
