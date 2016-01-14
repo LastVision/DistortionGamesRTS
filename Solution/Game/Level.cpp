@@ -1,11 +1,8 @@
 #include "stdafx.h"
 
 #include "AIDirector.h"
-#include <AnimationComponent.h>
 #include <Camera.h>
-#include <CollisionComponent.h>
 #include <DirectionalLight.h>
-#include <EffectContainer.h>
 #include "EmitterManager.h"
 #include <Engine.h>
 #include <EngineEnums.h>
@@ -13,14 +10,8 @@
 #include <EntityId.h>
 #include <EntityFactory.h>
 #include <GameStateMessage.h>
-#include <GraphicsComponent.h>
 #include <InputWrapper.h>
-#include <Intersection.h>
 #include "Level.h"
-#include <MoveCameraMessage.h>
-#include <ModelLoader.h>
-#include <PathFinderAStar.h>
-#include <PathFinderFunnel.h>
 #include "NeutralDirector.h"
 #include "PlayerDirector.h"
 #include "PollingStation.h"
@@ -30,9 +21,6 @@
 #include <Terrain.h>
 #include <ToggleRenderLinesMessage.h>
 #include "Tutorial.h"
-
-
-#include <FadeMessage.h>
 
 Level::Level(const Prism::Camera& aCamera, Prism::Terrain* aTerrain, GUI::Cursor* aCursor)
 	: myEntities(64)
