@@ -109,9 +109,10 @@ PlayerDirector::~PlayerDirector()
 	Prism::Audio::AudioInterface::GetInstance()->UnRegisterObject(myAudioSFXID);
 }
 
-void PlayerDirector::InitGUI(const AIDirector* anAI, const Prism::Camera& aCamera)
+void PlayerDirector::InitGUI(const AIDirector* anAI, const Prism::Camera& aCamera, int aLeveID)
 {
-	myGUIManager = new GUI::GUIManager(myCursor, "Data/Resource/GUI/GUI_ingame.xml", this, anAI, &aCamera);
+	myGUIManager = new GUI::GUIManager(myCursor, "Data/Resource/GUI/GUI_ingame.xml", this, anAI, &aCamera, aLeveID);
+
 }
 
 void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
