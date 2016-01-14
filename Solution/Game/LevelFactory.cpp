@@ -610,10 +610,12 @@ void LevelFactory::LoadTerrain(const std::string& aLevelPath)
 	std::string heightMap;
 	std::string texturePath;
 	std::string icePath;
+	std::string normalPath;
 
 	tinyxml2::XMLElement* terrainElement = reader.FindFirstChild(levelElement, "terrain");
 	reader.ForceReadAttribute(terrainElement, "heightmap", heightMap);
 	reader.ForceReadAttribute(terrainElement, "texture", texturePath);
+	reader.ForceReadAttribute(terrainElement, "normalmap", normalPath);
 
 	tinyxml2::XMLElement* iceElement = reader.FindFirstChild(levelElement, "ice");
 	reader.ForceReadAttribute(iceElement, "texture", icePath);
@@ -621,9 +623,9 @@ void LevelFactory::LoadTerrain(const std::string& aLevelPath)
 	reader.CloseDocument();
 
 #ifdef USE_BINARY_TERRAIN
-	myTerrain = new Prism::Terrain(CU::GetGeneratedDataFolderFilePath(aLevelPath, "nav"), texturePath, icePath);
+	myTerrain = new Prism::Terrain(CU::GetGeneratedDataFolderFilePath(aLevelPath, "nav"), texturePath, normalPath, icePath);
 #else
-	myTerrain = new Prism::Terrain(heightMap, texturePath, { 256.f, 256.f }, 10.f, CU::Matrix44<float>(), icePath);
+	myTerrain = new Prism::Terrain(heightMap, texturePath, normalPath, { 256.f, 256.f }, 10.f, CU::Matrix44<float>(), icePath);
 #endif
 
 	int elapsed = static_cast<int>(

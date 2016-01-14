@@ -26,7 +26,7 @@
 
 namespace Prism
 {
-	Terrain::Terrain(const std::string& aHeightMapPath, const std::string& aTexturePath
+	Terrain::Terrain(const std::string& aHeightMapPath, const std::string& aTexturePath, const std::string& aNormalMapPath
 			, const CU::Vector2<float>& aSize, float aHeight, const CU::Matrix44<float>& aOrientation
 			, const std::string& aIceInfluence)
 		: myHeightMap(HeightMapFactory::Create(aHeightMapPath.c_str()))
@@ -41,6 +41,7 @@ namespace Prism
 		DL_ASSERT_EXP(mySize.x == mySize.y, "Can't create non-quad terrain.");
 
 		myFileName = aTexturePath;
+		myNormalMapFilePath = aNormalMapPath;
 		myCellSize = mySize.x / myHeightMap->myWidth;
 
 		CreateVertices();
@@ -59,11 +60,12 @@ namespace Prism
 		CreateVertices();
 	}
 
-	Terrain::Terrain(const std::string& aBinaryPath, const std::string& aTexturePath, const std::string& aIceInfluence)
+	Terrain::Terrain(const std::string& aBinaryPath, const std::string& aTexturePath, const std::string& aNormalMapPath
+		, const std::string& aIceInfluence)
 		: myIceHeight(1.25f)
 	{
 		myFileName = aTexturePath;
-
+		myNormalMapFilePath = aNormalMapPath;
 		std::fstream file;
 		file.open(aBinaryPath, std::ios::in | std::ios::binary);
 
@@ -118,8 +120,7 @@ namespace Prism
 
 
 		myEffect = EffectContainer::GetInstance()->GetEffect("Data/Resource/Shader/S_effect_terrain.fx");
-		myEffect->SetTexture(TextureContainer::GetInstance()->GetTexture(
-			"Data/Resource/Texture/Terrain/T_terrain_normal_map.dds"));
+		myEffect->SetTexture(TextureContainer::GetInstance()->GetTexture(myNormalMapFilePath));
 		//Texture * influence = Prism::TextureContainer::GetInstance()
 		//->GetTexture("Data/Resource/Texture/Terrain/SplatMap/T_InfluenceToSplatMap.dds");
 		//myEffect->SetTexture(influence);

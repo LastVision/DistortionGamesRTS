@@ -26,11 +26,12 @@ namespace Prism
 	{
 		friend class TerrainReader;
 	public:
-		Terrain(const std::string& aHeightMapPath, const std::string& aTexturePath
+		Terrain(const std::string& aHeightMapPath, const std::string& aTexturePath, const std::string& aNormalMapPath
 			, const CU::Vector2<float>& aSize, float aHeight, const CU::Matrix44<float>& aOrientation
 			, const std::string& aIceInfluence);
 		Terrain(const std::string& aHeightMapPath, const CU::Vector2<float>& aSize, float aHeight);
-		Terrain(const std::string& aBinaryPath, const std::string& aTexturePath, const std::string& aIceInfluence);
+		Terrain(const std::string& aBinaryPath, const std::string& aTexturePath, const std::string& aNormalMapPath
+			, const std::string& aIceInfluence);
 		~Terrain();
 
 		void SetupDirectXData(const std::string& aIceInfluence);
@@ -81,6 +82,8 @@ namespace Prism
 
 		SplatMapContainer* mySplatMapContainer;
 		Ice* myIce;
+
+		std::string myNormalMapFilePath;
 	};
 
 	inline Navigation::NavMesh* Terrain::GetNavMesh() const
