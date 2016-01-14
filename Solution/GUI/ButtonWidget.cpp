@@ -1,4 +1,6 @@
 #include "stdafx.h"
+
+#include <AudioInterface.h>
 #include "ButtonWidget.h"
 #include <Engine.h>
 #include <OnClickMessage.h>
@@ -83,6 +85,7 @@ namespace GUI
 
 	void ButtonWidget::OnMouseEnter()
 	{
+		Prism::Audio::AudioInterface::GetInstance()->PostEvent("buttonHover", 0);
 		myImageCurrent = myImageHover;
 	}
 
@@ -198,6 +201,7 @@ namespace GUI
 
 	void ButtonWidget::Click()
 	{
+		Prism::Audio::AudioInterface::GetInstance()->PostEvent("buttonClick", 0);
 		if (myClickEvent != nullptr)
 		{
 			PostMaster::GetInstance()->SendMessage(*myClickEvent);

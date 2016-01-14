@@ -9,7 +9,7 @@ namespace Prism
 class SplashState : public GameState
 {
 public:
-	SplashState(const std::string& aTexturePath, bool aVictoryScreen = false);
+	SplashState(const std::string& aTexturePath, bool aStartSound, bool aVictoryScreen = false);
 	~SplashState();
 
 	void InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCursor) override;
@@ -36,5 +36,7 @@ protected:
 	Prism::SpriteProxy* myBackground;
 
 	bool myVictoryScreen;
+
+	bool myStartSound;
 };
 

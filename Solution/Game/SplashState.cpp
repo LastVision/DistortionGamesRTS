@@ -1,4 +1,6 @@
 #include "stdafx.h"
+
+#include <AudioInterface.h>
 #include "SplashState.h"
 #include <Sprite.h>
 #include <SpriteProxy.h>
@@ -9,8 +11,9 @@
 #include "GameStateMessage.h"
 #include <InputWrapper.h>
 
-SplashState::SplashState(const std::string& aTexturePath, bool aVictoryScreen)
+SplashState::SplashState(const std::string& aTexturePath, bool aStartSound, bool aVictoryScreen)
 	: myVictoryScreen(aVictoryScreen)
+	, myStartSound(aStartSound)
 {
 	CU::Vector2<float> size(1024.f, 1024.f);
 	CU::Vector2<float> windowSize = CU::Vector2<float>(float(Prism::Engine::GetInstance()->GetWindowSize().x)
@@ -46,6 +49,11 @@ void SplashState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCur
 	myFadeOutTime = 1.5f;
 	myDisplayTime = 1.5f;
 
+	if (myStartSound == true)
+	{
+		Prism::Audio::AudioInterface::GetInstance()->PostEvent("PlaySplash", 0);
+	}
+
 	if (myVictoryScreen == true)
 	{
 		myDisplayTime += 3.f;
@@ -58,6 +66,11 @@ void SplashState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCur
 
 void SplashState::EndState()
 {
+
+	if (myStartSound == false)
+	{
+		Prism::Audio::AudioInterface::GetInstance()->PostEvent("StopSplash", 0);
+	}
 	SAFE_DELETE(myLogo);
 	SAFE_DELETE(myBackground);
 	SAFE_DELETE(myCamera);
