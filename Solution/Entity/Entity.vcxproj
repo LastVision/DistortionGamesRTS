@@ -177,6 +177,8 @@
     <ClInclude Include="Formation.h" />
     <ClInclude Include="GrenadeComponent.h" />
     <ClInclude Include="GrenadeComponentData.h" />
+    <ClInclude Include="PromotionComponent.h" />
+    <ClInclude Include="PromotionComponentData.h" />
     <ClInclude Include="SelectionComponent.h" />
     <ClInclude Include="SelectionComponentData.h" />
     <ClInclude Include="SoundComponent.h" />
@@ -214,6 +216,7 @@
     <ClCompile Include="EvadeBehavior.cpp" />
     <ClCompile Include="Formation.cpp" />
     <ClCompile Include="GrenadeComponent.cpp" />
+    <ClCompile Include="PromotionComponent.cpp" />
     <ClCompile Include="SelectionComponent.cpp" />
     <ClCompile Include="SoundComponent.cpp" />
     <ClCompile Include="TotemComponent.cpp" />

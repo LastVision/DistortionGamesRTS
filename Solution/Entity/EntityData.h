@@ -9,6 +9,7 @@
 #include "GraphicsComponentData.h"
 #include "GrenadeComponentData.h"
 #include "HealthComponentData.h"
+#include "PromotionComponentData.h"
 #include "SelectionComponentData.h"
 #include "TriggerComponentData.h"
 #include "TotemComponentData.h"
@@ -30,6 +31,7 @@ struct EntityData
 	GrenadeComponentData myGrenadeData;
 	SelectionComponentData mySelectionData;
 	SoundComponentData mySoundData;
+	PromotionComponentData myPromotionData;
 
 	std::string mySubType;
 	eUnitType myUnitType;
