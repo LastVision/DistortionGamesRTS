@@ -1,13 +1,10 @@
 #pragma once
 #include "GameState.h"
 
-namespace Prism
+namespace Prism 
 {
-	class Sprite;
-	class Camera;
+	class SpriteProxy;
 }
-
-class Menu;
 
 class SplashState : public GameState
 {
@@ -33,9 +30,10 @@ protected:
 	float myFadeOutTime;
 	float myDisplayTime;
 	float myCurrentTime;
-	Prism::Sprite* myBackground;
-	Prism::Sprite* myLogo;
 	Prism::Camera* myCamera;
+
+	Prism::SpriteProxy* myLogo;
+	Prism::SpriteProxy* myBackground;
 
 	bool myVictoryScreen;
 };

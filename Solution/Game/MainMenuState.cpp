@@ -5,8 +5,10 @@
 #include <InputWrapper.h>
 #include "LevelSelectState.h"
 #include "MainMenuState.h"
+#include <ModelLoader.h>
 #include <OnClickMessage.h>
 #include <PostMaster.h>
+#include "SplashState.h"
 #include "StateStackProxy.h"
 
 MainMenuState::MainMenuState()
@@ -31,6 +33,7 @@ void MainMenuState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aC
 
 	CU::Vector2<int> windowSize = Prism::Engine::GetInstance()->GetWindowSizeInt();
 	OnResize(windowSize.x, windowSize.y);
+	myHasRunOnce = false;
 }
 
 void MainMenuState::EndState()
@@ -40,14 +43,28 @@ void MainMenuState::EndState()
 
 const eStateStatus MainMenuState::Update(const float& aDeltaTime)
 {
-	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_ESCAPE) == true)
+	if (myHasRunOnce == false)
 	{
-		myIsActiveState = false;
-		return eStateStatus::ePopMainState;
+		bool runtime = Prism::MemoryTracker::GetInstance()->GetRunTime();
+		Prism::MemoryTracker::GetInstance()->SetRunTime(false);
+		myStateStack->PushSubGameState(new SplashState("Data/Resource/Texture/Menu/Splash/T_logo_other.dds"));
+		Prism::MemoryTracker::GetInstance()->SetRunTime(runtime);
+		runtime = Prism::MemoryTracker::GetInstance()->GetRunTime();
+		Prism::MemoryTracker::GetInstance()->SetRunTime(false);
+		myStateStack->PushSubGameState(new SplashState("Data/Resource/Texture/Menu/Splash/T_logo_our.dds"));
+		Prism::MemoryTracker::GetInstance()->SetRunTime(runtime);
+		myHasRunOnce = true;
 	}
+	else 
+	{
+		if (CU::InputWrapper::GetInstance()->KeyDown(DIK_ESCAPE) == true)
+		{
+			myIsActiveState = false;
+			return eStateStatus::ePopMainState;
+		}
 
-	myGUIManager->Update(aDeltaTime);
-
+		myGUIManager->Update(aDeltaTime);
+	}
 	return myStateStatus;
 }
 
@@ -58,7 +75,7 @@ void MainMenuState::Render()
 
 void MainMenuState::ResumeState()
 {
-	PostMaster::GetInstance()->Subscribe(eMessageType::ON_CLICK, this);
+	//PostMaster::GetInstance()->Subscribe(eMessageType::ON_CLICK, this);
 }
 
 void MainMenuState::OnResize(int aWidth, int aHeight)
