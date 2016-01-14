@@ -37,7 +37,7 @@ public:
 	bool IsQueueFull() const;
 
 	const int& GetUpgradeLevel(int aUnitID) const;
-	float GetUpgradeCooldown(int aUnitID) const;
+	const float& GetUpgradeCooldown(int aUnitID) const;
 
 private:
 	struct BuildInfo
@@ -114,7 +114,7 @@ inline const int& BuildingComponent::GetUpgradeLevel(int aUnitID) const
 	return myUnitUpgradeProgress[aUnitID];
 }
 
-inline float BuildingComponent::GetUpgradeCooldown(int aUnitID) const
+inline const float& BuildingComponent::GetUpgradeCooldown(int aUnitID) const
 {
 	int upgradeIndex = myUnitUpgradeProgress[aUnitID];
 	return myUnitUpgrades[aUnitID][upgradeIndex].myCooldown;

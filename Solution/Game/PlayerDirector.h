@@ -49,7 +49,7 @@ public:
 	PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aScene, GUI::Cursor* aCursor);
 	~PlayerDirector();
 
-	void InitGUI(const AIDirector* anAI, const Prism::Camera& aCamera);
+	void InitGUI(const AIDirector* anAI, const Prism::Camera& aCamera, int aLeveID);
 
 	void Update(float aDeltaTime, const Prism::Camera& aCamera);
 	void Render(const Prism::Camera& aCamera);

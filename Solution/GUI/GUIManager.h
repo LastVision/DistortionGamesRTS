@@ -24,7 +24,7 @@ namespace GUI
 	{
 	public:
 		GUIManager(Cursor* aCursor, const std::string& aXMLPath, const PlayerDirector* aPlayer
-			, const AIDirector* anAI, const Prism::Camera* aCamera);
+			, const AIDirector* anAI, const Prism::Camera* aCamera, int aLeveID);
 		~GUIManager();
 
 		void AddWidget(Widget* aWidget);
@@ -57,5 +57,7 @@ namespace GUI
 
 		CU::Vector2<float> myMousePosition;
 		CU::Vector2<float> myWindowSize;
+
+		int myLevelID;
 	};
 }

@@ -14,36 +14,54 @@
 namespace GUI
 {
 	MiniMapWidget::MiniMapWidget(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement, const Prism::Camera* aCamera
-		, const bool& aCantClickOn)
+		, const bool& aCantClickOn, int aLevelID)
 		: myCantClickOn(aCantClickOn)
 		, myShouldRenderEvent(false)
 		, myEventTime(5.f)
 	{
+		std::string mapPath = "";
+		std::string unitPath = "";
+		std::string basePath = "";
+		std::string resourcePath = "";
+		std::string victoryPath = "";
+		std::string eventPath = "";
+		std::string cameraPath = "";
+		std::string levelID = "tutorial";
+
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "size"), "x", mySize.x);
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "size"), "y", mySize.y);
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "position"), "x", myPosition.x);
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "position"), "y", myPosition.y);
 
+		if (aLevelID == 0)
+		{
+			levelID = "tutorial";
+		}
+		else if (aLevelID == 1)
+		{
+			levelID = "first";
+		}
+
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "mapsprites"), levelID, mapPath);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "unit"), "sprite", unitPath);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "base"), "sprite", basePath);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "resourcepoints"), "sprite", resourcePath);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "victorypoints"), "sprite", victoryPath);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "event"), "sprite", eventPath);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "camera"), "sprite", cameraPath);
+
 		myCameraOrientation = &aCamera->GetOrientation();
 
-		myPlaceholderSprite = Prism::ModelLoader::GetInstance()->LoadSprite(
-			"Data/Resource/Texture/UI/Minimap/T_minimap_placeholder.dds", mySize);
-		myUnitSprite = Prism::ModelLoader::GetInstance()->LoadSprite(
-			"Data/Resource/Texture/UI/Minimap/T_minimap_unit.dds", { 10.f, 10.f }, { 5.f, 5.f });
-		myBaseSprite = Prism::ModelLoader::GetInstance()->LoadSprite(
-			"Data/Resource/Texture/UI/Minimap/T_minimap_base.dds", { 20.f, 20.f }, { 10.f, 10.f });
-		myResourcePointSprite = Prism::ModelLoader::GetInstance()->LoadSprite(
-			"Data/Resource/Texture/UI/Minimap/T_minimap_resource_point.dds", { 20.f, 20.f }, { 10.f, 10.f });
-		myVictoryPointSprite = Prism::ModelLoader::GetInstance()->LoadSprite(
-			"Data/Resource/Texture/UI/Minimap/T_minimap_victory_point.dds", { 20.f, 20.f }, { 10.f, 10.f });
+		myPlaceholderSprite = Prism::ModelLoader::GetInstance()->LoadSprite(mapPath, mySize);
+		myUnitSprite = Prism::ModelLoader::GetInstance()->LoadSprite(unitPath, { 10.f, 10.f }, { 5.f, 5.f });
+		myBaseSprite = Prism::ModelLoader::GetInstance()->LoadSprite(basePath, { 20.f, 20.f }, { 10.f, 10.f });
+		myResourcePointSprite = Prism::ModelLoader::GetInstance()->LoadSprite(resourcePath, { 20.f, 20.f }, { 10.f, 10.f });
+		myVictoryPointSprite = Prism::ModelLoader::GetInstance()->LoadSprite(victoryPath, { 20.f, 20.f }, { 10.f, 10.f });
+		myEventSprite = Prism::ModelLoader::GetInstance()->LoadSprite(eventPath, { 20.f, 20.f }, { 10.f, 10.f });
 
 		CU::Vector2<float> cameraSize = { mySize.x / 2.f, mySize.y / 4.f };
 		
-		myCameraFrustum = Prism::ModelLoader::GetInstance()->LoadSprite(
-			"Data/Resource/Texture/UI/Minimap/T_minimap_camera.dds", cameraSize, cameraSize / 2.f);
-
-		myEventSprite = Prism::ModelLoader::GetInstance()->LoadSprite(
-			"Data/Resource/Texture/UI/Minimap/T_minimap_event.dds", { 20.f, 20.f }, { 10.f, 10.f });
+		myCameraFrustum = Prism::ModelLoader::GetInstance()->LoadSprite(cameraPath, cameraSize, cameraSize / 2.f);
 
 		PostMaster::GetInstance()->Subscribe(eMessageType::MINIMAP_EVENT, this);
 	}

@@ -22,7 +22,7 @@ namespace GUI
 
 	public:
 		MiniMapWidget(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement, const Prism::Camera* aCamera
-			, const bool& aCantClickOn);
+			, const bool& aCantClickOn, int aLevelID);
 		~MiniMapWidget();
 
 		void Update(float aDelta) override;
