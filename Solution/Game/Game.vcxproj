@@ -217,6 +217,7 @@
     <ClInclude Include="NeutralDirector.h" />
     <ClInclude Include="PlayerDirector.h" />
     <ClInclude Include="ScriptInterface.h" />
+    <ClInclude Include="SplashState.h" />
     <ClInclude Include="StateEnums.h" />
     <ClInclude Include="StateStack.h" />
     <ClInclude Include="StateStackProxy.h" />
@@ -243,6 +244,7 @@
     <ClCompile Include="NeutralDirector.cpp" />
     <ClCompile Include="PlayerDirector.cpp" />
     <ClCompile Include="ScriptInterface.cpp" />
+    <ClCompile Include="SplashState.cpp" />
     <ClCompile Include="StateStack.cpp" />
     <ClCompile Include="StateStackProxy.cpp" />
     <ClCompile Include="stdafx.cpp">

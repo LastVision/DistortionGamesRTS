@@ -66,6 +66,9 @@
     <ClCompile Include="ClickableState.cpp">
       <Filter>StateStack</Filter>
     </ClCompile>
+    <ClCompile Include="SplashState.cpp">
+      <Filter>StateStack</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -141,6 +144,9 @@
       <Filter>StateStack</Filter>
     </ClInclude>
     <ClInclude Include="ClickableState.h">
+      <Filter>StateStack</Filter>
+    </ClInclude>
+    <ClInclude Include="SplashState.h">
       <Filter>StateStack</Filter>
     </ClInclude>
   </ItemGroup>
