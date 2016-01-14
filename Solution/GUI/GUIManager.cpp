@@ -192,7 +192,8 @@ namespace GUI
 				}
 				else if (type == "unit_cap")
 				{
-					UnitCapWidget* unitCapWidget = new UnitCapWidget(size, myPlayer->GetUnitCap(), myPlayer->GetUnitCount());
+					UnitCapWidget* unitCapWidget = new UnitCapWidget(&reader, widgetElement, size, myPlayer->GetUnitCap()
+						, myPlayer->GetUnitCount());
 					container->AddWidget(unitCapWidget);
 				}
 				else if (type == "upgrade_button")

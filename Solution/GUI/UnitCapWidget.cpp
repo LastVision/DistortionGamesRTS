@@ -6,12 +6,15 @@
 namespace GUI
 {
 
-	UnitCapWidget::UnitCapWidget(const CU::Vector2<float>& aSize, const int& aUnitCap, const int& aUnitCount)
+	UnitCapWidget::UnitCapWidget(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement
+		, const CU::Vector2<float>& aSize, const int& aUnitCap, const int& aUnitCount)
 		: myUnitCap(aUnitCap)
 		, myUnitCount(aUnitCount)
 	{
-		myPosition = { 0.f, 0.f };
 		mySize = aSize;
+
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "position"), "x", myPosition.x);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "position"), "y", myPosition.y);
 	}
 
 	UnitCapWidget::~UnitCapWidget()
