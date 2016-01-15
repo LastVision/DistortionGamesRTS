@@ -37,7 +37,7 @@ namespace GUI
 
 		const OnClickMessage* GetEvent() const;
 
-	private:
+	protected:
 		void Click();
 		
 		Prism::SpriteProxy* myImageNormal;

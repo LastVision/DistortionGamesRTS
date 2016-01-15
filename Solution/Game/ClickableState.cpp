@@ -28,7 +28,7 @@ void ClickableState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* a
 	myStateStatus = eStateStatus::eKeepState;
 	myStateStack = aStateStackProxy;
 	myCursor = aCursor;
-	myGUIManager = new GUI::GUIManager(myCursor, "Data/Resource/GUI/GUI_tutorial_clickable.xml", nullptr, nullptr, nullptr);
+	myGUIManager = new GUI::GUIManager(myCursor, "Data/Resource/GUI/GUI_tutorial_clickable.xml", nullptr, nullptr, nullptr, -1);
 	myIsLetThrough = true;
 
 	CU::Vector2<int> windowSize = Prism::Engine::GetInstance()->GetWindowSizeInt();

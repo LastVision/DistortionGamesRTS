@@ -36,7 +36,7 @@
 
 NavmeshCutBox::NavmeshCutBox(const CU::Vector3f& aPosition, const CU::Vector3f& aExtend, const CU::Vector3f& aRotation)
 	: myPosition(aPosition)
-	, myExtend(aExtend/2.f)
+	, myExtend(aExtend / 2.f)
 	, myRotation(aRotation)
 {
 }
@@ -114,7 +114,7 @@ Level* LevelFactory::LoadCurrentLevel(bool aPauseModelLoader)
 	std::string tutorialPath;
 	ReadLevel(myLevelPaths[myCurrentID], tutorialPath);
 
-	myCurrentLevel->myPlayer->InitGUI(myCurrentLevel->myAI, myCamera);
+	myCurrentLevel->myPlayer->InitGUI(myCurrentLevel->myAI, myCamera, myCurrentID);
 
 	LUA::ScriptSystem::GetInstance()->CallFunction("Init", {});
 
@@ -237,6 +237,7 @@ void LevelFactory::ReadLevel(const std::string& aLevelPath, std::string& aTutori
 #ifndef USE_BINARY_TERRAIN
 	LoadCutBoxes(reader, levelElement);
 #endif
+	LoadParticles(reader, levelElement); 
 	reader.CloseDocument();
 
 	//modelLoader->UnPause();
@@ -373,8 +374,8 @@ void LevelFactory::LoadProps(XMLReader& aReader, tinyxml2::XMLElement* aLevelEle
 		propRotation.y = CU::Math::DegreeToRad(propRotation.y);
 		propRotation.z = CU::Math::DegreeToRad(propRotation.z);
 
-		myCurrentLevel->myEntities.Add(EntityFactory::CreateEntity(eOwnerType::NEUTRAL, eEntityType::PROP, propType, 
-			Prism::eOctreeType::STATIC, *myCurrentLevel->myScene, propPosition, *myCurrentLevel->myTerrain, 
+		myCurrentLevel->myEntities.Add(EntityFactory::CreateEntity(eOwnerType::NEUTRAL, eEntityType::PROP, propType,
+			Prism::eOctreeType::STATIC, *myCurrentLevel->myScene, propPosition, *myCurrentLevel->myTerrain,
 			propRotation, propScale));
 		myCurrentLevel->myEntities.GetLast()->AddToScene();
 		myCurrentLevel->myEntities.GetLast()->Reset();
@@ -449,8 +450,8 @@ void LevelFactory::LoadControlPoints(XMLReader& aReader, tinyxml2::XMLElement* a
 		propRotation.y = CU::Math::DegreeToRad(propRotation.y);
 		propRotation.z = CU::Math::DegreeToRad(propRotation.z);
 
-		myCurrentLevel->myEntities.Add(EntityFactory::CreateEntity(eOwnerType::NEUTRAL, 
-			EntityEnumConverter::ConvertStringToEntityType(controlPointType), Prism::eOctreeType::STATIC, 
+		myCurrentLevel->myEntities.Add(EntityFactory::CreateEntity(eOwnerType::NEUTRAL,
+			EntityEnumConverter::ConvertStringToEntityType(controlPointType), Prism::eOctreeType::STATIC,
 			*myCurrentLevel->myScene, propPosition, *myCurrentLevel->myTerrain, propRotation, propScale));
 		myCurrentLevel->myEntities.GetLast()->AddToScene();
 		myCurrentLevel->myEntities.GetLast()->Reset();
@@ -495,8 +496,8 @@ void LevelFactory::LoadBases(XMLReader& aReader, tinyxml2::XMLElement* aLevelEle
 
 			if (elementName == "enemybase")
 			{
-				myCurrentLevel->myAI->myBuilding = EntityFactory::CreateEntity(eOwnerType::ENEMY, 
-					EntityEnumConverter::ConvertStringToEntityType(baseType), Prism::eOctreeType::STATIC, 
+				myCurrentLevel->myAI->myBuilding = EntityFactory::CreateEntity(eOwnerType::ENEMY,
+					EntityEnumConverter::ConvertStringToEntityType(baseType), Prism::eOctreeType::STATIC,
 					*myCurrentLevel->myScene, propPosition, *myCurrentLevel->myTerrain, propRotation, propScale);
 				myCurrentLevel->myAI->myBuilding->AddToScene();
 				myCurrentLevel->myAI->myBuilding->Reset();
@@ -631,5 +632,24 @@ void LevelFactory::LoadTerrain(const std::string& aLevelPath)
 	int elapsed = static_cast<int>(
 		CU::TimerManager::GetInstance()->StopTimer("LoadTerrain").GetMilliseconds());
 	RESOURCE_LOG("Loading Terrain took %d ms", elapsed);
+}
+
+void LevelFactory::LoadParticles(XMLReader& aReader, tinyxml2::XMLElement* aLevelElement)
+{
+	for (tinyxml2::XMLElement* entityElement = aReader.FindFirstChild(aLevelElement, "particle"); entityElement != nullptr;
+		entityElement = aReader.FindNextElement(entityElement, "particle"))
+	{
+		std::string particleType;
+		aReader.ForceReadAttribute(entityElement, "type", particleType);
+		particleType = CU::ToLower(particleType);
+
+		tinyxml2::XMLElement* propElement = aReader.ForceFindFirstChild(entityElement, "position");
+		CU::Vector3<float> propPosition;
+		aReader.ForceReadAttribute(propElement, "X", propPosition.x);
+		aReader.ForceReadAttribute(propElement, "Y", propPosition.y);
+		aReader.ForceReadAttribute(propElement, "Z", propPosition.z);
+
+		PostMaster::GetInstance()->SendMessage(EmitterMessage(particleType, propPosition));
+	}
 }
 

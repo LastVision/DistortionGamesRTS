@@ -2,6 +2,7 @@
 #include "AbilityButton.h"
 #include <Engine.h>
 #include "../Game/PlayerDirector.h"
+#include <OnClickMessage.h>
 
 namespace GUI
 {
@@ -19,6 +20,10 @@ namespace GUI
 			if (type == "totem")
 			{
 				myCooldown = &aPlayer->GetTotemCooldown();
+			}
+			else if (type == "upgrade")
+			{
+				myCooldown = &aPlayer->GetUpgradeCooldown(myClickEvent->myID);
 			}
 		}
 	}

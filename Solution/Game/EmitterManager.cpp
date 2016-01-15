@@ -8,6 +8,7 @@
 #include <PostMaster.h>
 #include <XMLReader.h>
 #include <TimerManager.h>
+#include "CommonHelper.h"
 
 #define FINISHED 0
 #define UNFINISHED 1
@@ -117,6 +118,10 @@ void EmitterManager::ReceiveMessage(const EmitterMessage& aMessage)
 
 	std::string particleType = aMessage.myParticleTypeString;
 
+	DL_ASSERT_EXP(myEmitters.find(particleType) != myEmitters.end(), "Effect did not exist!");
+
+
+
 	if (myEmitters[particleType]->myCurrentIndex >= PREALLOCATED_EMITTERGROUP)
 	{
 		myEmitters[particleType]->myCurrentIndex = 0;
@@ -146,6 +151,7 @@ void EmitterManager::ReadListOfLists(const std::string& aPath)
 		rootDocument.ForceReadAttribute(e, "src", entityPath);
 		std::string ID;
 		rootDocument.ForceReadAttribute(e, "ID", ID);
+		ID = CU::ToLower(ID);
 		if (entityPath != "")
 		{
 			EmitterData* newData = new EmitterData(entityPath);
