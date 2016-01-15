@@ -66,7 +66,10 @@ void BuildingComponent::Update(float aDeltaTime)
 				, myEntity.GetOwner()));
 			++myUnitUpgradeProgress[unitIndex];
 			upgradeIndex = myUnitUpgradeProgress[unitIndex];
-			myUpgradeCooldowns[unitIndex] = myUnitUpgrades[unitIndex][upgradeIndex].myCooldown;
+			if (upgradeIndex < 3)
+			{
+				myUpgradeCooldowns[unitIndex] = myUnitUpgrades[unitIndex][upgradeIndex].myCooldown;
+			}
 		}
 		else
 		{
