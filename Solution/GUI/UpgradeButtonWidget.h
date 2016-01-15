@@ -25,7 +25,7 @@ namespace GUI
 
 		Widget* MouseIsOver(const CU::Vector2<float>& aPosition) override;
 
-		void OnResize(const CU::Vector2<float>& aNewSize, const CU::Vector2<float>& anOldSize) override;
+		void OnResize(const CU::Vector2<float>& aNewSize, const CU::Vector2<float>& anOldSize, bool aIsFullScreen) override;
 
 	private:
 		void operator=(UpgradeButtonWidget&) = delete;

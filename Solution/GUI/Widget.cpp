@@ -7,6 +7,7 @@ namespace GUI
 		: myParent(nullptr)
 	{
 		myIsVisible = true;
+		myIsFullscreen = false;
 	}
 
 	Widget::~Widget()
@@ -77,12 +78,23 @@ namespace GUI
 			aPosition.y <= myPosition.y + mySize.y;
 	}
 
-	void Widget::OnResize(const CU::Vector2<float>& aNewWindowSize, const CU::Vector2<float>& anOldWindowSize)
+	void Widget::OnResize(const CU::Vector2<float>& aNewWindowSize, const CU::Vector2<float>& anOldWindowSize, bool aIsFullScreen)
 	{
-		CU::Vector2<float> ratioPostion = myPosition / anOldWindowSize;
-		myPosition = ratioPostion * aNewWindowSize;
+		if (myIsFullscreen == false)
+		{
+			CU::Vector2<float> ratioPostion = myPosition / anOldWindowSize.x;
+			myPosition = ratioPostion * aNewWindowSize.x;
 
-		CU::Vector2<float> ratioSize = mySize / anOldWindowSize;
-		mySize = ratioSize * aNewWindowSize;
+			CU::Vector2<float> ratioSize = mySize / anOldWindowSize.x;
+			mySize = ratioSize * aNewWindowSize.x;
+		}
+		else
+		{
+			CU::Vector2<float> ratioPostion = myPosition / anOldWindowSize;
+			myPosition = ratioPostion * aNewWindowSize;
+
+			CU::Vector2<float> ratioSize = mySize / anOldWindowSize;
+			mySize = ratioSize * aNewWindowSize;
+		}
 	}
 }

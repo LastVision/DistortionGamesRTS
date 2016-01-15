@@ -4,10 +4,12 @@
 
 namespace GUI
 {
-	WidgetContainer::WidgetContainer(Prism::SpriteProxy* aBackgroundSprite, const CU::Vector2<float>& aSize)
-		: myBackground(aBackgroundSprite)
+	WidgetContainer::WidgetContainer(Prism::SpriteProxy* aBackgroundSprite, const CU::Vector2<float>& aSize, bool aIsFullscreen)
+		: Widget()
+		, myBackground(aBackgroundSprite)
 		, myWidgets(8)
 	{
+		myIsFullscreen = aIsFullscreen;
 		mySize = aSize;
 	}
 
@@ -68,18 +70,26 @@ namespace GUI
 		return nullptr;
 	}
 
-	void WidgetContainer::OnResize(const CU::Vector2<float>& aNewSize, const CU::Vector2<float>& anOldSize)
+	void WidgetContainer::OnResize(const CU::Vector2<float>& aNewSize, const CU::Vector2<float>& anOldSize, bool aIsFullScreen)
 	{
-		Widget::OnResize(aNewSize, anOldSize);
+		Widget::OnResize(aNewSize, anOldSize, aIsFullScreen);
 
 		for (int i = 0; i < myWidgets.Size(); i++)
 		{
-			myWidgets[i]->OnResize(aNewSize, anOldSize);
+			myWidgets[i]->OnResize(aNewSize, anOldSize, false);
 		}
 		if (myBackground != nullptr)
 		{
-			CU::Vector2<float> ratio = myBackground->GetSize() / anOldSize;
-			myBackground->SetSize(aNewSize * ratio, { 0.f, 0.f });
+			if (myIsFullscreen == false)
+			{
+				CU::Vector2<float> ratio = myBackground->GetSize() / anOldSize.x;
+				myBackground->SetSize(aNewSize.x * ratio, { 0.f, 0.f });
+			}
+			else
+			{
+				CU::Vector2<float> ratio = myBackground->GetSize() / anOldSize;
+				myBackground->SetSize(aNewSize * ratio, { 0.f, 0.f });
+			}
 		}
 	}
 }

@@ -4,7 +4,8 @@
 namespace GUI
 {
 	BarWidget::BarWidget(const int& aMaxValue, const int& aCurrentValue, CU::Vector2<float> aSize)
-		: myMaxValueInt(&aMaxValue)
+		: Widget()
+		, myMaxValueInt(&aMaxValue)
 		, myCurrentValueInt(&aCurrentValue)
 		, myIsFloat(false)
 	{
@@ -15,9 +16,6 @@ namespace GUI
 
 		myValueSprite = Prism::ModelLoader::GetInstance()->LoadSprite(
 			"Data/Resource/Texture/UI/T_healthbar_value.dds", mySize, mySize / 2.f);
-
-		/*myBackgroundSprite = new Prism::Sprite("Data/Resource/Texture/UI/T_healthbar_background.dds", mySize, mySize / 2.f);
-		myValueSprite = new Prism::Sprite("Data/Resource/Texture/UI/T_healthbar_value.dds", mySize, mySize / 2.f);*/
 	}
 
 	BarWidget::BarWidget(const float& aMaxValue, const float& aCurrentValue, CU::Vector2<float> aSize)
@@ -32,9 +30,6 @@ namespace GUI
 
 		myValueSprite = Prism::ModelLoader::GetInstance()->LoadSprite(
 			"Data/Resource/Texture/UI/T_healthbar_value.dds", mySize, mySize / 2.f);
-
-		/*myBackgroundSprite = new Prism::Sprite("Data/Resource/Texture/UI/T_healthbar_background.dds", mySize, mySize / 2.f);
-		myValueSprite = new Prism::Sprite("Data/Resource/Texture/UI/T_healthbar_value.dds", mySize, mySize / 2.f);*/
 	}
 
 	BarWidget::~BarWidget()
@@ -69,9 +64,9 @@ namespace GUI
 		myValueSprite->Render(myPosition + aParentPosition);
 	}
 
-	void BarWidget::OnResize(const CU::Vector2<float>& aNewWindowSize, const CU::Vector2<float>& anOldWindowSize)
+	void BarWidget::OnResize(const CU::Vector2<float>& aNewWindowSize, const CU::Vector2<float>& anOldWindowSize, bool aIsFullScreen)
 	{
-		Widget::OnResize(aNewWindowSize, anOldWindowSize);
+		Widget::OnResize(aNewWindowSize, anOldWindowSize, aIsFullScreen);
 		float newSize;
 
 		if (myIsFloat == false)

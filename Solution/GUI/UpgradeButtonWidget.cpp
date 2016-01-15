@@ -10,6 +10,7 @@ namespace GUI
 {
 	UpgradeButtonWidget::UpgradeButtonWidget(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement
 		, const PlayerDirector* aPlayer)
+		: Widget()
 	{
 		int index = 0;
 
@@ -60,13 +61,13 @@ namespace GUI
 		return this;
 	}
 
-	void UpgradeButtonWidget::OnResize(const CU::Vector2<float>& aNewSize, const CU::Vector2<float>& anOldSize)
+	void UpgradeButtonWidget::OnResize(const CU::Vector2<float>& aNewSize, const CU::Vector2<float>& anOldSize, bool aIsFullScreen)
 	{
-		Widget::OnResize(aNewSize, anOldSize);
+		Widget::OnResize(aNewSize, anOldSize, aIsFullScreen);
 
 		for (int i = 0; i < AMOUNT_OF_UPGRADES; i++)
 		{
-			myUpgrades[i]->OnResize(aNewSize, anOldSize);
+			myUpgrades[i]->OnResize(aNewSize, anOldSize, aIsFullScreen);
 		}
 	}
 }

@@ -15,7 +15,8 @@ namespace GUI
 {
 	MiniMapWidget::MiniMapWidget(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement, const Prism::Camera* aCamera
 		, const bool& aCantClickOn, int aLevelID)
-		: myCantClickOn(aCantClickOn)
+		: Widget()
+		, myCantClickOn(aCantClickOn)
 		, myShouldRenderEvent(false)
 		, myEventTime(5.f)
 	{
@@ -138,14 +139,22 @@ namespace GUI
 		}
 	}
 
-	void MiniMapWidget::OnResize(const CU::Vector2<float>& aNewWindowSize, const CU::Vector2<float>& anOldWindowSize)
+	void MiniMapWidget::OnResize(const CU::Vector2<float>& aNewWindowSize, const CU::Vector2<float>& anOldWindowSize, bool aIsFullScreen)
 	{
-		Widget::OnResize(aNewWindowSize, anOldWindowSize);
+		Widget::OnResize(aNewWindowSize, anOldWindowSize, aIsFullScreen);
 
 		CU::Vector2<float> frustumRatio = myCameraFrustum->GetSize() / anOldWindowSize;
 
 		myPlaceholderSprite->SetSize(mySize, { 0.f, 0.f });
-		myCameraFrustum->SetSize(frustumRatio * aNewWindowSize, (frustumRatio * aNewWindowSize) / 2.f);
+
+		if (myIsFullscreen == false)
+		{
+			myCameraFrustum->SetSize(frustumRatio * aNewWindowSize.x, (frustumRatio * aNewWindowSize.x) / 2.f);
+		}
+		else
+		{
+			myCameraFrustum->SetSize(frustumRatio * aNewWindowSize, (frustumRatio * aNewWindowSize) / 2.f);
+		}
 	}
 
 	void MiniMapWidget::ReceiveMessage(const MinimapEventMessage& aMessage)

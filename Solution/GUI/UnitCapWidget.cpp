@@ -8,7 +8,8 @@ namespace GUI
 
 	UnitCapWidget::UnitCapWidget(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement
 		, const CU::Vector2<float>& aSize, const int& aUnitCap, const int& aUnitCount)
-		: myUnitCap(aUnitCap)
+		: Widget()
+		, myUnitCap(aUnitCap)
 		, myUnitCount(aUnitCount)
 	{
 		mySize = aSize;
