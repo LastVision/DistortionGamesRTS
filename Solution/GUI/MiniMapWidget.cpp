@@ -143,7 +143,7 @@ namespace GUI
 	{
 		Widget::OnResize(aNewWindowSize, anOldWindowSize, aIsFullScreen);
 
-		CU::Vector2<float> frustumRatio = myCameraFrustum->GetSize() / anOldWindowSize;
+		CU::Vector2<float> frustumRatio = myCameraFrustum->GetSize() / anOldWindowSize.x;
 
 		myPlaceholderSprite->SetSize(mySize, { 0.f, 0.f });
 
