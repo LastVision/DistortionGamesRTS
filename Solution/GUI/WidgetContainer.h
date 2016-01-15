@@ -20,7 +20,7 @@ namespace GUI
 	{
 	public:
 
-		WidgetContainer(Prism::SpriteProxy* aBackgroundSprite, const CU::Vector2<float>& aSize);
+		WidgetContainer(Prism::SpriteProxy* aBackgroundSprite, const CU::Vector2<float>& aSize, bool aIsFullscreen);
 		~WidgetContainer();
 
 		void AddWidget(Widget* aWidget);
@@ -29,7 +29,7 @@ namespace GUI
 
 		Widget* MouseIsOver(const CU::Vector2<float>& aPosition) override;
 
-		void OnResize(const CU::Vector2<float>& aNewSize, const CU::Vector2<float>& anOldSize) override;
+		void OnResize(const CU::Vector2<float>& aNewSize, const CU::Vector2<float>& anOldSize, bool aIsFullScreen) override;
 
 		int GetSize() const;
 

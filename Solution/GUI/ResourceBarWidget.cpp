@@ -7,7 +7,8 @@
 namespace GUI
 {
 	ResourceBarWidget::ResourceBarWidget(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement, const PlayerDirector* aPlayer, const AIDirector* anAI)
-		: myValueSprite(nullptr)
+		: Widget()
+		, myValueSprite(nullptr)
 	{
 		std::string valueSpritePath = "";
 		std::string value = "";
@@ -80,14 +81,25 @@ namespace GUI
 		Prism::Engine::GetInstance()->PrintText(*myValue, myPosition + aParentPosition + myTextPosition, Prism::eTextType::RELEASE_TEXT);
 	}
 
-	void ResourceBarWidget::OnResize(const CU::Vector2<float>& aNewWindowSize, const CU::Vector2<float>& anOldWindowSize)
+	void ResourceBarWidget::OnResize(const CU::Vector2<float>& aNewWindowSize, const CU::Vector2<float>& anOldWindowSize, bool aIsFullScreen)
 	{
-		Widget::OnResize(aNewWindowSize, anOldWindowSize);
+		Widget::OnResize(aNewWindowSize, anOldWindowSize, aIsFullScreen);
 
-		CU::Vector2<float> ratioTextPosition = myTextPosition / anOldWindowSize;
-		myTextPosition = ratioTextPosition * aNewWindowSize;
+		if (myIsFullscreen == false)
+		{
+			CU::Vector2<float> ratioTextPosition = myTextPosition / anOldWindowSize.x;
+			myTextPosition = ratioTextPosition * aNewWindowSize.x;
 
-		CU::Vector2<float> ratioSpritePosition = mySpritePosition / anOldWindowSize;
-		mySpritePosition = ratioSpritePosition * aNewWindowSize;
+			CU::Vector2<float> ratioSpritePosition = mySpritePosition / anOldWindowSize.x;
+			mySpritePosition = ratioSpritePosition * aNewWindowSize.x;
+		}
+		else
+		{
+			CU::Vector2<float> ratioTextPosition = myTextPosition / anOldWindowSize;
+			myTextPosition = ratioTextPosition * aNewWindowSize;
+
+			CU::Vector2<float> ratioSpritePosition = mySpritePosition / anOldWindowSize;
+			mySpritePosition = ratioSpritePosition * aNewWindowSize;
+		}
 	}
 }

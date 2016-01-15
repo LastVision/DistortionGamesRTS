@@ -4,20 +4,29 @@
 #include <OnClickMessage.h>
 #include <SpriteProxy.h>
 #include "UpgradeButtonWidget.h"
+#include "AbilityButton.h"
 
 namespace GUI
 {
 	UpgradeButtonWidget::UpgradeButtonWidget(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement
 		, const PlayerDirector* aPlayer)
+		: Widget()
 	{
 		int index = 0;
 
 		tinyxml2::XMLElement* buttonElement = aReader->ForceFindFirstChild(anXMLElement, "widget");
 		for (; buttonElement != nullptr; buttonElement = aReader->FindNextElement(buttonElement))
 		{
-			myUpgrades[index] = new ButtonWidget(aReader, buttonElement);
-			myPosition = myUpgrades[index]->GetPosition();
-			myUpgrades[index]->SetPosition({ 0.f, myUpgrades[index]->GetSize().y });
+			std::string type = "";
+
+			aReader->ForceReadAttribute(buttonElement, "type", type);
+
+			if (type == "ability_button")
+			{
+				myUpgrades[index] = new AbilityButton(aReader, buttonElement, aPlayer);
+				myPosition = myUpgrades[index]->GetPosition();
+				myUpgrades[index]->SetPosition({ 0.f, myUpgrades[index]->GetSize().y });
+			}
 			index++;
 		}
 
@@ -52,13 +61,13 @@ namespace GUI
 		return this;
 	}
 
-	void UpgradeButtonWidget::OnResize(const CU::Vector2<float>& aNewSize, const CU::Vector2<float>& anOldSize)
+	void UpgradeButtonWidget::OnResize(const CU::Vector2<float>& aNewSize, const CU::Vector2<float>& anOldSize, bool aIsFullScreen)
 	{
-		Widget::OnResize(aNewSize, anOldSize);
+		Widget::OnResize(aNewSize, anOldSize, aIsFullScreen);
 
 		for (int i = 0; i < AMOUNT_OF_UPGRADES; i++)
 		{
-			myUpgrades[i]->OnResize(aNewSize, anOldSize);
+			myUpgrades[i]->OnResize(aNewSize, anOldSize, aIsFullScreen);
 		}
 	}
 }

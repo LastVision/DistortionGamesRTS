@@ -487,6 +487,11 @@ const int& PlayerDirector::GetUpgradeLevel(int aUnitID) const
 	return myBuilding->GetComponent<BuildingComponent>()->GetUpgradeLevel(aUnitID);
 }
 
+const float& PlayerDirector::GetUpgradeCooldown(int aUnitID) const
+{
+	return myBuilding->GetComponent<BuildingComponent>()->GetUpgradeCooldown(aUnitID);
+}
+
 void PlayerDirector::UpdateInputs()
 {
 	myShiftPressed = CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_LSHIFT)

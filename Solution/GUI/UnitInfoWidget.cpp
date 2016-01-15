@@ -14,7 +14,8 @@
 namespace GUI
 {
 	UnitInfoWidget::UnitInfoWidget(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement, const PlayerDirector* aPlayer)
-		: myUnits(aPlayer->GetSelectedUnits())
+		: Widget()
+		, myUnits(aPlayer->GetSelectedUnits())
 		, mySelectedType(eEntityType::_COUNT)
 		, myBuilding(aPlayer->GetBuildingComponent())
 		, myBuildingTimer(nullptr)
@@ -108,24 +109,42 @@ namespace GUI
 		}
 	}
 
-	void UnitInfoWidget::OnResize(const CU::Vector2<float>& aNewWindowSize, const CU::Vector2<float>& anOldWindowSize)
+	void UnitInfoWidget::OnResize(const CU::Vector2<float>& aNewWindowSize, const CU::Vector2<float>& anOldWindowSize, bool aIsFullScreen)
 	{
-		Widget::OnResize(aNewWindowSize, anOldWindowSize);
-		myBuildingTimer->OnResize(aNewWindowSize, anOldWindowSize);
+		Widget::OnResize(aNewWindowSize, anOldWindowSize, aIsFullScreen);
+		myBuildingTimer->OnResize(aNewWindowSize, anOldWindowSize, aIsFullScreen);
 
-		CU::Vector2<float> unitRatioSize = myGruntUnit->GetSize() / anOldWindowSize;
-		CU::Vector2<float> portraitRatioSize = myBuildingPortrait->GetSize() / anOldWindowSize;
-		CU::Vector2<float> ratioUnitPostion = myUnitPosition / anOldWindowSize;
-		CU::Vector2<float> ratioPortraitPostion = myPortraitPosition / anOldWindowSize;
-		CU::Vector2<float> ratioStatsSize = myStatsSprite->GetSize() / anOldWindowSize;
+		if (myIsFullscreen == false)
+		{
+			CU::Vector2<float> unitRatioSize = myGruntUnit->GetSize() / anOldWindowSize.x;
+			CU::Vector2<float> portraitRatioSize = myBuildingPortrait->GetSize() / anOldWindowSize.x;
+			CU::Vector2<float> ratioUnitPostion = myUnitPosition / anOldWindowSize.x;
+			CU::Vector2<float> ratioPortraitPostion = myPortraitPosition / anOldWindowSize.x;
+			CU::Vector2<float> ratioStatsSize = myStatsSprite->GetSize() / anOldWindowSize.x;
 
-		myUnitPosition = ratioUnitPostion * aNewWindowSize;
-		myPortraitPosition = ratioPortraitPostion * aNewWindowSize;
-		myGruntUnit->SetSize(unitRatioSize * aNewWindowSize, { 0.f, 0.f });
-		myGruntPortrait->SetSize(portraitRatioSize * aNewWindowSize, { 0.f, 0.f });
-		myBuildingPortrait->SetSize(portraitRatioSize * aNewWindowSize, { 0.f, 0.f });
-		myStatsSprite->SetSize(ratioStatsSize * aNewWindowSize, { 0.f, 0.f });
-		//myTextScale = myTextScale /;
+			myUnitPosition = ratioUnitPostion * aNewWindowSize.x;
+			myPortraitPosition = ratioPortraitPostion * aNewWindowSize.x;
+			myGruntUnit->SetSize(unitRatioSize * aNewWindowSize.x, { 0.f, 0.f });
+			myGruntPortrait->SetSize(portraitRatioSize * aNewWindowSize.x, { 0.f, 0.f });
+			myBuildingPortrait->SetSize(portraitRatioSize * aNewWindowSize.x, { 0.f, 0.f });
+			myStatsSprite->SetSize(ratioStatsSize * aNewWindowSize.x, { 0.f, 0.f });
+			//myTextScale = myTextScale /;
+		}
+		else
+		{
+			CU::Vector2<float> unitRatioSize = myGruntUnit->GetSize() / anOldWindowSize;
+			CU::Vector2<float> portraitRatioSize = myBuildingPortrait->GetSize() / anOldWindowSize;
+			CU::Vector2<float> ratioUnitPostion = myUnitPosition / anOldWindowSize;
+			CU::Vector2<float> ratioPortraitPostion = myPortraitPosition / anOldWindowSize;
+			CU::Vector2<float> ratioStatsSize = myStatsSprite->GetSize() / anOldWindowSize;
+
+			myUnitPosition = ratioUnitPostion * aNewWindowSize;
+			myPortraitPosition = ratioPortraitPostion * aNewWindowSize;
+			myGruntUnit->SetSize(unitRatioSize * aNewWindowSize, { 0.f, 0.f });
+			myGruntPortrait->SetSize(portraitRatioSize * aNewWindowSize, { 0.f, 0.f });
+			myBuildingPortrait->SetSize(portraitRatioSize * aNewWindowSize, { 0.f, 0.f });
+			myStatsSprite->SetSize(ratioStatsSize * aNewWindowSize, { 0.f, 0.f });
+		}
 	}
 
 	void UnitInfoWidget::RenderBaseInfo(const CU::Vector2<float>& aParentPosition)

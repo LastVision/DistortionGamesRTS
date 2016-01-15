@@ -28,7 +28,7 @@ namespace Prism
 
 	void ParticleEmitterData::LoadDataFile(const std::string& aFilePath)
 	{
-		DL_DEBUG("Loading file");
+		DL_DEBUG("Loading particle file");
 		XMLReader read;
 		myFileName = aFilePath;
 
@@ -129,7 +129,6 @@ namespace Prism
 
 	void ParticleEmitterData::CreateInputLayout()
 	{
-		DL_DEBUG("Creating Input Layout");
 		HRESULT hr;
 
 		D3DX11_PASS_DESC passDesc;

@@ -27,7 +27,7 @@ namespace GUI
 
 		void Render(const CU::Vector2<float>& aParentPosition) override;
 
-		void OnResize(const CU::Vector2<float>& aNewWindowSize, const CU::Vector2<float>& anOldWindowSize) override;
+		void OnResize(const CU::Vector2<float>& aNewWindowSize, const CU::Vector2<float>& anOldWindowSize, bool aIsFullScreen) override;
 
 	private:
 		void operator=(ResourceBarWidget&) = delete;

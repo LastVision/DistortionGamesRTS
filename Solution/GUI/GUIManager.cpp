@@ -65,7 +65,7 @@ namespace GUI
 	void GUIManager::OnResize(int aWidth, int aHeight)
 	{
 		CU::Vector2<float> newSize = { float(aWidth), float(aHeight) };
-		myWidgets->OnResize(newSize, myWindowSize);
+		myWidgets->OnResize(newSize, myWindowSize, true);
 		myWindowSize = newSize;
 	}
 
@@ -113,14 +113,15 @@ namespace GUI
 
 		tinyxml2::XMLElement* rootElement = reader.FindFirstChild("root");
 
-		myWidgets = new WidgetContainer(nullptr, myWindowSize);
+		myWidgets = new WidgetContainer(nullptr, myWindowSize, true);
 		myWidgets->SetPosition({ 0.f, 0.f });
 
 		tinyxml2::XMLElement* containerElement = reader.ForceFindFirstChild(rootElement, "container");
 		for (; containerElement != nullptr; containerElement = reader.FindNextElement(containerElement))
 		{
+			bool isFullscreen = false;
 			Prism::SpriteProxy* backgroundSprite = nullptr;
-		
+
 			reader.ForceReadAttribute(reader.ForceFindFirstChild(containerElement, "size"), "x", size.x);
 			reader.ForceReadAttribute(reader.ForceFindFirstChild(containerElement, "size"), "y", size.y);
 			reader.ForceReadAttribute(reader.ForceFindFirstChild(containerElement, "position"), "x", position.x);
@@ -128,6 +129,7 @@ namespace GUI
 
 			tinyxml2::XMLElement* spriteElement = reader.FindFirstChild(containerElement, "backgroundsprite");
 			tinyxml2::XMLElement* spriteSizeElement = reader.FindFirstChild(containerElement, "backgroundsize");
+			tinyxml2::XMLElement* fullscreenElement = reader.FindFirstChild(containerElement, "isfullscreen");
 
 			if (spriteElement != nullptr)
 			{
@@ -146,7 +148,12 @@ namespace GUI
 				}
 			}
 
-			GUI::WidgetContainer* container = new WidgetContainer(backgroundSprite, size);
+			if (fullscreenElement != nullptr)
+			{
+				reader.ForceReadAttribute(fullscreenElement, "value", isFullscreen);
+			}
+
+			GUI::WidgetContainer* container = new WidgetContainer(backgroundSprite, size, isFullscreen);
 			container->SetPosition(position);
 
 			tinyxml2::XMLElement* widgetElement = reader.FindFirstChild(containerElement, "widget");
@@ -234,7 +241,7 @@ namespace GUI
 			}
 		}
 	}
-	
+
 	void GUIManager::CheckMouseDown()
 	{
 		if (myActiveWidget != nullptr)
@@ -249,7 +256,7 @@ namespace GUI
 			}
 		}
 	}
-	
+
 	void GUIManager::CheckMouseReleased()
 	{
 		if (myActiveWidget != nullptr)
@@ -261,7 +268,7 @@ namespace GUI
 			}
 		}
 	}
-	
+
 	void GUIManager::CheckMouseMoved()
 	{
 		if (myActiveWidget != nullptr)
@@ -272,7 +279,7 @@ namespace GUI
 			}
 		}
 	}
-	
+
 	void GUIManager::CheckMouseEntered()
 	{
 		Widget* activeWidget = myWidgets->MouseIsOver(myMousePosition);
@@ -283,7 +290,7 @@ namespace GUI
 			myActiveWidget = activeWidget;
 		}
 	}
-	
+
 	void GUIManager::CheckMouseExited()
 	{
 		Widget* activeWidget = myWidgets->MouseIsOver(myMousePosition);

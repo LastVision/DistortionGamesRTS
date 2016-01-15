@@ -26,7 +26,7 @@ namespace Prism
 
 
 		DL_DEBUG(("Loading :" + myEmitterPath).c_str());
-		DL_ASSERT_EXP(anAllowManyParticles == true || particleCount <= 201, "Can't have more than 201 particles in an emitter!");
+		//DL_ASSERT_EXP(anAllowManyParticles == true || particleCount <= 201, "Can't have more than 201 particles in an emitter!");
 
 		myGraphicalParticles.Init(particleCount);
 		myLogicalParticles.Init(particleCount);
@@ -77,14 +77,11 @@ namespace Prism
 			, &myVertexWrapper->myStride
 			, &myVertexWrapper->myByteOffset);
 
-		DL_DEBUG("Before Particle technique pass");
 		for (UINT i = 0; i < myParticleEmitterData->myTechniqueDesc->Passes; ++i)
 		{
-			DL_DEBUG("Particle technique Pass");
 			myParticleEmitterData->myEffect->GetTechnique()->GetPassByIndex(i)->Apply(0, Engine::GetInstance()->GetContex());
 			Engine::GetInstance()->GetContex()->Draw(myGraphicalParticles.Size(), 0);
 		}
-		DL_DEBUG("After Particle technique pass");
 
 	}
 
@@ -156,9 +153,12 @@ namespace Prism
 			myEmissionTime = myParticleEmitterData->myEmissionRate;
 		}
 
-		if (myEmitterLife <= 0.f && myLiveParticleCount <= 0)
+		if (myParticleEmitterData->myUseEmitterLifeTime == true)
 		{
-			myIsActive = false;
+			if (myEmitterLife <= 0.f && myLiveParticleCount <= 0)
+			{
+				myIsActive = false;
+			}
 		}
 	}
 
@@ -173,8 +173,7 @@ namespace Prism
 				continue;
 			}
 
-			myGraphicalParticles[i].myPosition = myGraphicalParticles[i].myPosition -
-				(myLogicalParticles[i].myVelocity * myLogicalParticles[i].mySpeed) * aDeltaTime;
+			myGraphicalParticles[i].myPosition += myLogicalParticles[i].myVelocity * aDeltaTime;
 
 			myGraphicalParticles[i].myAlpha += myParticleEmitterData->myData.myAlphaDelta * aDeltaTime;
 			myGraphicalParticles[i].mySize += myParticleEmitterData->myData.mySizeDelta * aDeltaTime;
