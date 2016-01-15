@@ -156,9 +156,12 @@ namespace Prism
 			myEmissionTime = myParticleEmitterData->myEmissionRate;
 		}
 
-		if (myEmitterLife <= 0.f && myLiveParticleCount <= 0)
+		if (myParticleEmitterData->myUseEmitterLifeTime == true)
 		{
-			myIsActive = false;
+			if (myEmitterLife <= 0.f && myLiveParticleCount <= 0)
+			{
+				myIsActive = false;
+			}
 		}
 	}
 
