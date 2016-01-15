@@ -55,6 +55,7 @@ private:
 	CU::StaticArray<CU::StaticArray<Upgrade, 3>, 3> myUnitUpgrades; //3 upgrade-levels for all 3 units
 	CU::StaticArray<int, 3> myUnitUpgradeProgress;
 	CU::StaticArray<int, 3> myUnitSupplyCosts;
+	CU::StaticArray<float, 3> myUpgradeCooldowns;
 
 	std::queue<BuildInfo> mySpawnQueue;
 
@@ -116,6 +117,5 @@ inline const int& BuildingComponent::GetUpgradeLevel(int aUnitID) const
 
 inline const float& BuildingComponent::GetUpgradeCooldown(int aUnitID) const
 {
-	int upgradeIndex = myUnitUpgradeProgress[aUnitID];
-	return myUnitUpgrades[aUnitID][upgradeIndex].myCooldown;
+	return myUpgradeCooldowns[aUnitID];
 }

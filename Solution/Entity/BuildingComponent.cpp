@@ -17,6 +17,8 @@ BuildingComponent::BuildingComponent(Entity& aEntity, BuildingComponentData& aDa
 	for (int i = 0; i < 3; ++i)
 	{
 		myUnitUpgradeProgress[i] = 0;
+
+		myUpgradeCooldowns[i] = myUnitUpgrades[i][0].myCooldown;
 	}
 }
 
@@ -63,6 +65,8 @@ void BuildingComponent::Update(float aDeltaTime)
 			PostMaster::GetInstance()->SendMessage(UpgradeUnitMessage(currentOrder.myUnit, myUnitUpgrades[unitIndex][upgradeIndex]
 				, myEntity.GetOwner()));
 			++myUnitUpgradeProgress[unitIndex];
+			upgradeIndex = myUnitUpgradeProgress[unitIndex];
+			myUpgradeCooldowns[unitIndex] = myUnitUpgrades[unitIndex][upgradeIndex].myCooldown;
 		}
 		else
 		{
@@ -131,11 +135,10 @@ bool BuildingComponent::CanUpgrade(eUnitType aUnitType)
 void BuildingComponent::UpdateUpgradeCooldown(float aDelta, eUnitType aUnit)
 {
 	int unitIndex = static_cast<int>(aUnit);
-	int upgradeIndex = myUnitUpgradeProgress[unitIndex];
-	myUnitUpgrades[unitIndex][upgradeIndex].myCooldown -= aDelta;
 
-	if (myUnitUpgrades[unitIndex][upgradeIndex].myCooldown < 0.f)
+	myUpgradeCooldowns[unitIndex] -= aDelta;
+	if (myUpgradeCooldowns[unitIndex] < 0.f)
 	{
-		myUnitUpgrades[unitIndex][upgradeIndex].myCooldown = 0.f;
+		myUpgradeCooldowns[unitIndex] = 0.f;
 	}
 }
