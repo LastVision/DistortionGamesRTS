@@ -36,15 +36,15 @@ void ActorComponent::Update(float aDelta)
 		CU::Normalize(myEntity.myVelocity);
 		myEntity.myVelocity *= myEntity.myMaxSpeed;
 	}
-	switch (myEntity.GetIntention())
+	switch (myEntity.GetCommand())
 	{
-	case eEntityState::ATTACK:
+	case eEntityCommand::ATTACK_TARGET:
 		myEntity.SetState(eEntityState::ATTACK);
 		break;
-	case eEntityState::DIE:
-		myEntity.SetState(eEntityState::DIE);
-		break;
-	case eEntityState::IDLE:
+	//case eEntityState::DIE:
+	//	myEntity.SetState(eEntityState::DIE);
+	//	break;
+	case eEntityCommand::STOP:
 		if (velocity2 > 1.f || CU::Length2(acceleration) > 1.f)
 		{
 			//CU::Normalize(direction);
@@ -63,7 +63,7 @@ void ActorComponent::Update(float aDelta)
 			myEntity.SetState(eEntityState::IDLE);
 		}
 		break;
-	case eEntityState::WALK:
+	case eEntityCommand::MOVE:
 		if (velocity2 > 1.f || CU::Length2(acceleration) > 1.f)
 		{
 			//CU::Normalize(direction);
