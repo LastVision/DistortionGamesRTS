@@ -87,7 +87,7 @@ bool HealthComponent::TakeDamageAndCheckSurvive(float aDamage)
 				, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
 		}
 		myEntity.GetComponent<AnimationComponent>()->PlayAnimation(eEntityState::DIE);
-		myEntity.SetIntention(eEntityState::DIE);
+		myEntity.SetState(eEntityState::DIE);
 		return false;
 	}
 

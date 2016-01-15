@@ -65,14 +65,14 @@ ControllerComponent::~ControllerComponent()
 
 void ControllerComponent::Update(float aDelta)
 {
-	if (myEntity.GetIntention() == eEntityState::DIE || myEntity.GetState() == eEntityState::DIE)
+	if (myEntity.GetState() == eEntityState::DIE)
 	{
 		return;
 	}
 	myRangerOneShotTimer -= aDelta;
 	myAttackTimer -= aDelta;
 
-	if (myEntity.GetIntention() == eEntityState::IDLE || myBehavior->GetDone())
+	if (myBehavior->GetDone())
 	{
 		StartNextAction();
 	}
@@ -213,7 +213,7 @@ void ControllerComponent::Stop(bool& aHasPlayedSound)
 	myCurrentCommand.myCommand = eEntityCommand::STOP;
 	myCurrentCommand.myPosition = myEntity.myPosition;
 	myAcceleration = { 0.f, 0.f };
-	myEntity.SetIntention(eEntityState::IDLE);
+	myEntity.SetCommand(myCurrentCommand.myCommand);
 	CU::Vector2<float> newTargetPos = { myEntity.myPosition.x + myEntity.GetOrientation().GetForward().x,
 		myEntity.myPosition.y + myEntity.GetOrientation().GetForward().z };
 	myBehavior->SetTarget(newTargetPos);
@@ -247,7 +247,7 @@ void ControllerComponent::HoldPosition(bool& aHasPlayedSound)
 	myCurrentCommand.myCommand = eEntityCommand::HOLD_POSITION;
 	myCurrentCommand.myPosition = myEntity.myPosition;
 	myAcceleration = { 0.f, 0.f };
-	myEntity.SetIntention(eEntityState::IDLE);
+	myEntity.SetCommand(myCurrentCommand.myCommand);
 	CU::Vector2<float> newTargetPos = { myEntity.myPosition.x + myEntity.GetOrientation().GetForward().x,
 			myEntity.myPosition.y + myEntity.GetOrientation().GetForward().z };
 	myBehavior->SetTarget(newTargetPos);
@@ -260,7 +260,7 @@ void ControllerComponent::FillCommandList(eEntityCommand aAction, bool aClearCom
 	{
 		myCommands.RemoveAll();
 		//myEntity.SetState(eEntityState::IDLE);
-		myEntity.SetIntention(eEntityState::IDLE);
+		myEntity.SetCommand(eEntityCommand::STOP);
 	}
 
 	//find path within DoMove, or here later
@@ -330,7 +330,7 @@ void ControllerComponent::FillCommandList(eEntityCommand aAction, bool aClearCom
 
 void ControllerComponent::DoStop()
 {
-	myEntity.SetIntention(eEntityState::IDLE);
+	myEntity.SetCommand(eEntityCommand::STOP);
 	//myEntity.SetState(eEntityState::IDLE);
 
 	Entity* closestTarget = PollingStation::GetInstance()->FindClosestEntity(myEntity.GetOrientation().GetPos()
@@ -349,7 +349,7 @@ void ControllerComponent::DoStop()
 
 void ControllerComponent::DoMove()
 {
-	myEntity.SetIntention(eEntityState::WALK);
+	myEntity.SetCommand(eEntityCommand::MOVE);
 	myBehavior->SetTarget(GetPosition(myCurrentCommand));
 }
 
@@ -403,7 +403,7 @@ void ControllerComponent::AttackTarget()
 	if (myAttackTimer <= 0.f)
 	{
 		//myEntity.SetState(eEntityState::ATTACK);
-		myEntity.SetIntention(eEntityState::ATTACK);
+		myEntity.SetCommand(eEntityCommand::ATTACK_TARGET);
 		myEntity.GetComponent<AnimationComponent>()->PlayAnimation(eEntityState::ATTACK);
 		myAttackTimer = myAttackRechargeTime;
 
@@ -469,7 +469,7 @@ void ControllerComponent::AttackTarget()
 		{
 			myEntity.GetComponent<PromotionComponent>()->EnemyKilled();
 			//myEntity.SetState(eEntityState::IDLE);
-			myEntity.SetIntention(eEntityState::IDLE);
+			myEntity.SetCommand(eEntityCommand::STOP);
 			myBehavior->SetTarget(myEntity.GetPosition());
 			PostMaster::GetInstance()->SendMessage(KillUnitMessage(static_cast<int>(myCurrentCommand.myEntity->GetUnitType()), 
 				static_cast<int>(myCurrentCommand.myEntity->GetOwner())));
@@ -514,7 +514,12 @@ void ControllerComponent::RenderDebugLines() const
 
 	if (myCommands.Size() > 0)
 	{
-		CU::Vector3<float> pointA = myTerrain.GetHeight(GetPosition(myCurrentCommand), 1.f);
+		//CU::Vector3<float> pointA = myTerrain.GetHeight(GetPosition(myCurrentCommand), 1.f);
+		CU::Vector3<float> pointA = myTerrain.GetHeight(myEntity.myOrientation.GetPos(), 1.f);
+		if (myCurrentCommand.myEntity != nullptr || myCurrentCommand.myPosition != CU::Vector2<float>(-1, -1))
+		{
+			CU::Vector3<float> pointA = myTerrain.GetHeight(GetPosition(myCurrentCommand), 1.f);
+		}
 
 		CU::Vector3<float> pointB = myTerrain.GetHeight(GetPosition(myCommands.GetLast()), 1.f);
 		eColorDebug color = GetActionColor(myCommands.GetLast().myCommand);
