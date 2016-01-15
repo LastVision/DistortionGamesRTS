@@ -86,6 +86,7 @@ public:
 	const bool& HasUnlockedTank() const;
 	const bool& HasUnlockedRanger() const;
 	const int& GetUpgradeLevel(int aUnitID) const;
+	const float& GetUpgradeCooldown(int aUnitID) const;
 
 private:
 	void UpdateInputs();
