@@ -171,17 +171,29 @@ namespace GUI
 	{
 		const CU::GrowingArray<Entity*>& playerUnits = PollingStation::GetInstance()->GetUnits(eOwnerType::PLAYER);
 		const CU::GrowingArray<Entity*>& enemyUnits = PollingStation::GetInstance()->GetUnits(eOwnerType::ENEMY);
+		const CU::GrowingArray<Entity*>& neutralUnits = PollingStation::GetInstance()->GetUnits(eOwnerType::NEUTRAL);
 
 		for (int i = 0; i < playerUnits.Size(); i++)
 		{
+			CU::Vector4<float> color = { 0.f, 0.f, 1.f, 1.f };
+			if (playerUnits[i]->IsSelected() == true)
+			{
+				color = { 1.f, 1.f, 1.f, 1.f };
+			}
 			CU::Vector2<float> position = (playerUnits[i]->GetPosition() / 255.f) * mySize;
-			myUnitSprite->Render(aParentPosition + myPosition + position, { 1.f, 1.f }, { 0.f, 0.f, 1.f, 1.f });
+			myUnitSprite->Render(aParentPosition + myPosition + position, { 1.f, 1.f }, color);
 		}
 
 		for (int i = 0; i < enemyUnits.Size(); i++)
 		{
 			CU::Vector2<float> position = (enemyUnits[i]->GetPosition() / 255.f) * mySize;
 			myUnitSprite->Render(aParentPosition + myPosition + position, { 1.f, 1.f }, { 1.f, 0.f, 0.f, 1.f });
+		}
+
+		for (int i = 0; i < neutralUnits.Size(); i++)
+		{
+			CU::Vector2<float> position = (neutralUnits[i]->GetPosition() / 255.f) * mySize;
+			myUnitSprite->Render(aParentPosition + myPosition + position, { 1.f, 1.f }, { 0.5f, 0.5f, 0.f, 1.f });
 		}
 	}
 
