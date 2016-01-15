@@ -53,6 +53,9 @@
     <ClInclude Include="AbilityButton.h">
       <Filter>Widget</Filter>
     </ClInclude>
+    <ClInclude Include="TooltipWidget.h">
+      <Filter>Widget</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -97,6 +100,9 @@
       <Filter>Widget</Filter>
     </ClCompile>
     <ClCompile Include="AbilityButton.cpp">
+      <Filter>Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="TooltipWidget.cpp">
       <Filter>Widget</Filter>
     </ClCompile>
   </ItemGroup>
