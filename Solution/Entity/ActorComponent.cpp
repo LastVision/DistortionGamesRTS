@@ -22,7 +22,7 @@ ActorComponent::~ActorComponent()
 
 void ActorComponent::Update(float aDelta)
 {
-	//if (myEntity.GetAlive() == false || myEntity.GetState() == eEntityState::DYING)
+	//if (myEntity.GetAlive() == false || myEntity.GetState() == eEntityState::DIE)
 	//{
 	//	return;
 	//}
@@ -38,18 +38,18 @@ void ActorComponent::Update(float aDelta)
 	}
 	switch (myEntity.GetIntention())
 	{
-	case eEntityState::ATTACKING:
-		myEntity.SetState(eEntityState::ATTACKING);
+	case eEntityState::ATTACK:
+		myEntity.SetState(eEntityState::ATTACK);
 		break;
-	case eEntityState::DYING:
-		myEntity.SetState(eEntityState::DYING);
+	case eEntityState::DIE:
+		myEntity.SetState(eEntityState::DIE);
 		break;
 	case eEntityState::IDLE:
 		if (velocity2 > 1.f || CU::Length2(acceleration) > 1.f)
 		{
 			//CU::Normalize(direction);
 			LookInDirection(myEntity.myVelocity);
-			myEntity.SetState(eEntityState::WALKING);
+			myEntity.SetState(eEntityState::WALK);
 
 			CU::Vector2<float> position = myEntity.myPosition;
 
@@ -63,13 +63,13 @@ void ActorComponent::Update(float aDelta)
 			myEntity.SetState(eEntityState::IDLE);
 		}
 		break;
-	case eEntityState::WALKING:
+	case eEntityState::WALK:
 		if (velocity2 > 1.f || CU::Length2(acceleration) > 1.f)
 		{
 			//CU::Normalize(direction);
 			LookInDirection(myEntity.myVelocity);
-			myEntity.SetState(eEntityState::WALKING);
-			myEntity.GetComponent<AnimationComponent>()->PlayAnimation(eEntityState::WALKING);
+			myEntity.SetState(eEntityState::WALK);
+			myEntity.GetComponent<AnimationComponent>()->PlayAnimation(eEntityState::WALK);
 			CU::Vector2<float> position = myEntity.myPosition;
 
 			position += myEntity.myVelocity * aDelta;
@@ -77,10 +77,10 @@ void ActorComponent::Update(float aDelta)
 			myTerrain.CalcEntityHeight(myEntity.myOrientation);
 		}
 		break;
-	case eEntityState::STOP:
-		myEntity.GetComponent<AnimationComponent>()->PlayAnimation(eEntityState::IDLE);
-		myEntity.SetState(eEntityState::IDLE);
-		break;
+	//case eEntityState::STOP:
+	//	myEntity.GetComponent<AnimationComponent>()->PlayAnimation(eEntityState::IDLE);
+	//	myEntity.SetState(eEntityState::IDLE);
+	//	break;
 	default:
 		DL_ASSERT("Unknown intentionstate!");
 		break;
@@ -90,7 +90,7 @@ void ActorComponent::Update(float aDelta)
 	//{
 	//	//CU::Normalize(direction);
 	//	LookInDirection(myEntity.myVelocity);
-	//	myEntity.SetState(eEntityState::WALKING);
+	//	myEntity.SetState(eEntityState::WALK);
 	//
 	//	CU::Vector2<float> position = myEntity.myPosition;
 	//
@@ -98,7 +98,7 @@ void ActorComponent::Update(float aDelta)
 	//	myEntity.myOrientation.SetPos({ position.x, 0, position.y });
 	//	myTerrain.CalcEntityHeight(myEntity.myOrientation);
 	//}
-	//else if (myEntity.GetState() != eEntityState::ATTACKING)
+	//else if (myEntity.GetState() != eEntityState::ATTACK)
 	//{
 	//	myEntity.SetState(eEntityState::IDLE);
 	//}

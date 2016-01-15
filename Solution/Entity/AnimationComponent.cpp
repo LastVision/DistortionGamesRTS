@@ -28,7 +28,14 @@ AnimationComponent::AnimationComponent(Entity& aEntity, AnimationComponentData& 
 
 	myInstance = new Prism::Instance(*model, myEntity.myOrientation, myEntity.GetOctreeType(), myCullingRadius);
 
-	for (int i = 0; i < static_cast<int>(eEntityState::_COUNT); ++i)
+	int animations = static_cast<int>(eEntityState::_COUNT);
+
+	if (aEntity.myUnitType != eUnitType::GRUNT)
+	{
+		--animations;
+	}
+
+	for (int i = 0; i < animations; ++i)
 	{
 		AnimationLoadData loadAnimation = aComponentData.myAnimations[i];
 		AddAnimation(loadAnimation.myEntityState, loadAnimation.myAnimationPath, loadAnimation.myLoopFlag, loadAnimation.myResetTimeOnRestart);

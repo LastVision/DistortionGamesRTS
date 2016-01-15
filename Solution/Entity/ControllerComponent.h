@@ -41,43 +41,34 @@ public:
 	const float& GetRangerCooldown() const;
 
 private:
-	enum class eAction
-	{
-		IDLE,
-		MOVE,
-		ATTACK_TARGET,
-		RETURN,
-		HOLD,
-		ATTACK_MOVE
-	};
 
-	struct ActionData
+	struct CommandData
 	{
-		ActionData()
-			: myAction(eAction::IDLE)
+		CommandData()
+			: myCommand(eEntityCommand::STOP)
 			, myPosition(-1.f, -1.f)
 			, myEntity(nullptr)
 		{}
-		eAction myAction;
+		eEntityCommand myCommand;
 		CU::Vector2<float> myPosition;
 		Entity* myEntity;
 	};
 
-	void FillCommandList(eAction aAction, bool aClearCommandQueue, Entity* aEntity = nullptr, const CU::Vector2<float>& aTargetPosition = { -1.f, -1.f });
-	void DoIdle();
+	void FillCommandList(eEntityCommand aAction, bool aClearCommandQueue, Entity* aEntity = nullptr
+		, const CU::Vector2<float>& aTargetPosition = { -1.f, -1.f });
+
+	void DoStop();
 	void DoMove();
 	void DoAttackTarget(float aDelta);
-	void DoReturn();
 	void DoHold();
 	void DoAttackMove();
-
 
 	void AttackTarget();
 	void StartNextAction();
 	void RefreshPathToAttackTarget();
 	void RenderDebugLines() const;
-	const CU::Vector2<float>& GetPosition(const ActionData& anActionData) const;
-	eColorDebug GetActionColor(eAction aAction) const;
+	const CU::Vector2<float>& GetPosition(const CommandData& anCommandData) const;
+	eColorDebug GetActionColor(eEntityCommand aAction) const;
 	
 	CU::Vector2<float> myAcceleration;
 	Behavior* myBehavior;
@@ -101,8 +92,8 @@ private:
 	float myRangerOneShotTimer;
 	float myRangerOneShotCooldown;
 
-	CU::GrowingArray<ActionData> myActions;
-	ActionData myCurrentAction;
+	CU::GrowingArray<CommandData> myCommands;
+	CommandData myCurrentCommand;
 };
 
 inline const CU::Vector2<float>& ControllerComponent::GetAcceleration() const
