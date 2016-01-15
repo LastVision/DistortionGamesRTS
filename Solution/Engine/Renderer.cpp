@@ -19,23 +19,23 @@ namespace Prism
 			mySceneData[i].myScene = new Texture();
 			mySceneData[i].myScene->Init(screenSize.x, screenSize.y
 				, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_DEPTH_STENCIL
-				, DXGI_FORMAT_R32G32B32A32_FLOAT);
+				, DXGI_FORMAT_R16G16B16A16_FLOAT);
 
 			mySceneData[i].myFinished = new Texture();
 			mySceneData[i].myFinished->Init(screenSize.x, screenSize.y
 				, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_DEPTH_STENCIL
-				, DXGI_FORMAT_R32G32B32A32_FLOAT);
+				, DXGI_FORMAT_R16G16B16A16_FLOAT);
 		}
 
 		myFinalTexture = new Texture();
 		myFinalTexture->Init(screenSize.x, screenSize.y
 			, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_DEPTH_STENCIL
-			, DXGI_FORMAT_R32G32B32A32_FLOAT);
+			, DXGI_FORMAT_R16G16B16A16_FLOAT);
 
 		myCombineMiddleMan = new Texture();
 		myCombineMiddleMan->Init(screenSize.x, screenSize.y
 			, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_DEPTH_STENCIL
-			, DXGI_FORMAT_R32G32B32A32_FLOAT);
+			, DXGI_FORMAT_R16G16B16A16_FLOAT);
 
 		myFullScreenHelper = new FullScreenHelper();
 
@@ -50,17 +50,14 @@ namespace Prism
 	
 	Renderer::~Renderer()
 	{
+		SAFE_DELETE(myCombineMiddleMan);
+		SAFE_DELETE(myFinalTexture);
 		for (int i = 0; i < MAX_NUMBER_OF_SCENES; ++i)
 		{
-			delete mySceneData[i].myScene;
-			mySceneData[i].myScene = nullptr;
-
-			delete mySceneData[i].myFinished;
-			mySceneData[i].myFinished = nullptr;
+			SAFE_DELETE(mySceneData[i].myScene);
+			SAFE_DELETE(mySceneData[i].myFinished);
 		}
-
-		delete myFullScreenHelper;
-		myFullScreenHelper = nullptr;
+		SAFE_DELETE(myFullScreenHelper);
 	}
 
 	void Renderer::BeginScene()

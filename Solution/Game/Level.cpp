@@ -16,6 +16,7 @@
 #include "PlayerDirector.h"
 #include "PollingStation.h"
 #include <PostMaster.h>
+#include <Renderer.h>
 #include <Scene.h>
 #include <ScriptSystem.h>
 #include <Terrain.h>
@@ -38,6 +39,8 @@ Level::Level(const Prism::Camera& aCamera, Prism::Terrain* aTerrain, GUI::Cursor
 	myPlayer = new PlayerDirector(*myTerrain, *myScene, aCursor);
 	myAI = new AIDirector(*myTerrain, *myScene);
 	myNeutralDirector = new NeutralDirector(*myTerrain, *myScene);
+
+	myRenderer = new Prism::Renderer();
 }
 
 Level::~Level()
@@ -51,6 +54,7 @@ Level::~Level()
 	SAFE_DELETE(myAI);
 	SAFE_DELETE(myNeutralDirector);
 	SAFE_DELETE(myScene);
+	SAFE_DELETE(myRenderer);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::TOGGLE_RENDER_LINES, this);
 	EntityFactory::Destroy();
 	EntityId::Destroy();
@@ -102,27 +106,20 @@ bool Level::Update(float aDeltaTime, Prism::Camera& aCamera)
 void Level::Render(Prism::Camera& aCamera)
 {
 	Prism::Engine::GetInstance()->SetClearColor({ 0.2f, 0.2f, 0.2f, 1.f });
-
+	myRenderer->BeginScene();
 	myScene->Render(myRenderNavMeshLines);
+	myRenderer->EndScene(Prism::ePostProcessing::BLOOM);
+	myRenderer->FinalRender();
 
 	myEmitterManager->RenderEmitters();
-
+	
 	myPlayer->RenderHealthBars(aCamera);
 	myAI->RenderHealthBars(aCamera);
 	myNeutralDirector->RenderHealthBars(aCamera);
-
+	
 	myPlayer->Render(aCamera);
 
 	
-	//const CU::GrowingArray<Prism::Navigation::Triangle*>& path = myTerrain->GetPathFinder()->GetAStar()->GetLatestPath();
-	//for (int i = 0; i < path.Size() - 1; ++i)
-	//{
-	//	CU::Vector3<float> aStar0 = path[i]->GetCenter();
-	//	CU::Vector3<float> aStar1 = path[i + 1]->GetCenter();
-	//	aStar0 = myTerrain->GetHeight(aStar0, 2.f);
-	//	aStar1 = myTerrain->GetHeight(aStar1, 2.f);
-	//	Prism::RenderLine3D(aStar0, aStar1, eColorDebug::BLACK, eColorDebug::PINK);
-	//}
 }
 
 void Level::OnResize(int aWidth, int aHeigth)

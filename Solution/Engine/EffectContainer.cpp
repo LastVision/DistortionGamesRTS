@@ -118,6 +118,10 @@ namespace Prism
 			|| aFilePath == "Data/Resource/Shader/S_effect_ice.fx"
 			|| aFilePath == "Data/Resource/Shader/S_effect_particle.fx"
 			|| aFilePath == "Data/Resource/Shader/S_effect_selection.fx"
+			|| aFilePath == "Data/Resource/Shader/S_effect_combine.fx"
+			|| aFilePath == "Data/Resource/Shader/S_effect_down_sample.fx"
+			|| aFilePath == "Data/Resource/Shader/S_effect_bloom.fx"
+			|| aFilePath == "Data/Resource/Shader/S_effect_render_to_texture.fx"
 			, CU::Concatenate("Found invalid Shader: %s", aFilePath.c_str()));
 	}
 

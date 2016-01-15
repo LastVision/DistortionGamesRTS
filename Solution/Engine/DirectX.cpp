@@ -261,7 +261,7 @@ bool Prism::DirectX::D3DSwapChainSetup()
 	swapChainDesc.BufferCount = 1;
 	swapChainDesc.BufferDesc.Width = mySetupInfo.myScreenWidth;
 	swapChainDesc.BufferDesc.Height = mySetupInfo.myScreenHeight;
-	swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R16G16B16A16_FLOAT;
 	swapChainDesc.BufferDesc.RefreshRate.Numerator = 60;
 	swapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
 	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT | DXGI_USAGE_SHADER_INPUT;

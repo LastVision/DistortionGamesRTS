@@ -5,6 +5,7 @@ namespace Prism
 {
 	class Camera;
 	class DirectionalLight;
+	class Renderer;
 	class Scene;
 	class Terrain;
 }
@@ -49,6 +50,7 @@ private:
 	Prism::Terrain* myTerrain;
 	Prism::DirectionalLight* myLight;
 	Prism::Scene* myScene;
+	Prism::Renderer* myRenderer;
 	Tutorial* myTutorial;
 
 	EmitterManager* myEmitterManager;
