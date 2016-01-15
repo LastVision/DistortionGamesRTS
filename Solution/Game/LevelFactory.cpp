@@ -114,7 +114,7 @@ Level* LevelFactory::LoadCurrentLevel(bool aPauseModelLoader)
 	std::string tutorialPath;
 	ReadLevel(myLevelPaths[myCurrentID], tutorialPath);
 
-	myCurrentLevel->myPlayer->InitGUI(myCurrentLevel->myAI, myCamera);
+	myCurrentLevel->myPlayer->InitGUI(myCurrentLevel->myAI, myCamera, myCurrentID);
 
 	LUA::ScriptSystem::GetInstance()->CallFunction("Init", {});
 

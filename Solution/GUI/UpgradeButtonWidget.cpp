@@ -4,6 +4,7 @@
 #include <OnClickMessage.h>
 #include <SpriteProxy.h>
 #include "UpgradeButtonWidget.h"
+#include "AbilityButton.h"
 
 namespace GUI
 {
@@ -15,9 +16,16 @@ namespace GUI
 		tinyxml2::XMLElement* buttonElement = aReader->ForceFindFirstChild(anXMLElement, "widget");
 		for (; buttonElement != nullptr; buttonElement = aReader->FindNextElement(buttonElement))
 		{
-			myUpgrades[index] = new ButtonWidget(aReader, buttonElement);
-			myPosition = myUpgrades[index]->GetPosition();
-			myUpgrades[index]->SetPosition({ 0.f, myUpgrades[index]->GetSize().y });
+			std::string type = "";
+
+			aReader->ForceReadAttribute(buttonElement, "type", type);
+
+			if (type == "ability_button")
+			{
+				myUpgrades[index] = new AbilityButton(aReader, buttonElement, aPlayer);
+				myPosition = myUpgrades[index]->GetPosition();
+				myUpgrades[index]->SetPosition({ 0.f, myUpgrades[index]->GetSize().y });
+			}
 			index++;
 		}
 

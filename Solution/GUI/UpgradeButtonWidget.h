@@ -13,7 +13,7 @@ class PlayerDirector;
 
 namespace GUI
 {
-	class ButtonWidget;
+	class AbilityButton;
 
 	class UpgradeButtonWidget : public Widget
 	{
@@ -30,7 +30,7 @@ namespace GUI
 	private:
 		void operator=(UpgradeButtonWidget&) = delete;
 
-		CU::StaticArray<ButtonWidget*, AMOUNT_OF_UPGRADES> myUpgrades;
+		CU::StaticArray<AbilityButton*, AMOUNT_OF_UPGRADES> myUpgrades;
 
 		const int* myUpgradeLevel;
 	};
