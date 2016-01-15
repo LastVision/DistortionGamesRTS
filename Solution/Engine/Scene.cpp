@@ -5,6 +5,7 @@
 #include "Defines.h"
 #include "DirectionalLight.h"
 #include "EngineEnums.h"
+#include "Ice.h"
 #include "Instance.h"
 #include "PointLight.h"
 #include "Scene.h"
@@ -79,6 +80,7 @@ void Prism::Scene::Render(bool aRenderNavMeshLines)
 	}
 
 	myTerrain.GetEffect()->UpdateDirectionalLights(myDirectionalLightData);
+	myTerrain.GetIce()->GetEffect()->UpdateDirectionalLights(myDirectionalLightData);
 	//myTerrain.UpdatePointLights(myPointLightData);
 	//myTerrain.UpdateSpotLights(mySpotLightData);
 	myTerrain.Render(myCamera, aRenderNavMeshLines);
