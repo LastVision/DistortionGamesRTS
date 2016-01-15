@@ -116,8 +116,7 @@ void EmitterManager::ReceiveMessage(const EmitterMessage& aMessage)
 		position.y += 2;
 	}
 
-	std::string particleType = aMessage.myParticleTypeString;
-
+	std::string particleType = CU::ToLower(aMessage.myParticleTypeString);
 	DL_ASSERT_EXP(myEmitters.find(particleType) != myEmitters.end(), "Effect did not exist!");
 
 
@@ -151,7 +150,9 @@ void EmitterManager::ReadListOfLists(const std::string& aPath)
 		rootDocument.ForceReadAttribute(e, "src", entityPath);
 		std::string ID;
 		rootDocument.ForceReadAttribute(e, "ID", ID);
+
 		ID = CU::ToLower(ID);
+
 		if (entityPath != "")
 		{
 			EmitterData* newData = new EmitterData(entityPath);
