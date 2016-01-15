@@ -124,7 +124,7 @@ bool BuildingComponent::CanUpgrade(eUnitType aUnitType)
 		return false;
 	}
 
-	if (myUnitUpgrades[unitIndex][upgradeIndex].myCooldown > 0.f)
+	if (myUpgradeCooldowns[unitIndex] > 0.f)
 	{
 		return false;
 	}
