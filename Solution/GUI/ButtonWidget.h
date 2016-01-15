@@ -28,7 +28,7 @@ namespace GUI
 		void OnMouseEnter() override;
 		void OnMouseExit() override;
 
-		void OnResize(const CU::Vector2<float>& aNewSize, const CU::Vector2<float>& anOldSize) override;
+		void OnResize(const CU::Vector2<float>& aNewSize, const CU::Vector2<float>& anOldSize, bool aIsFullScreen) override;
 
 		bool IsInside(const CU::Vector2<float>& aPosition) const override;
 		void SetPosition(const CU::Vector2<float>& aPosition) override;

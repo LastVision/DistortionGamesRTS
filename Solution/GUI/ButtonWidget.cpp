@@ -9,7 +9,8 @@
 namespace GUI
 {
 	ButtonWidget::ButtonWidget(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement)
-		: myImageNormal(nullptr)
+		: Widget()
+		, myImageNormal(nullptr)
 		, myImagePressed(nullptr)
 		, myImageHover(nullptr)
 		, myImageCurrent(nullptr)
@@ -94,9 +95,9 @@ namespace GUI
 		myImageCurrent = myImageNormal;
 	}
 
-	void ButtonWidget::OnResize(const CU::Vector2<float>& aNewSize, const CU::Vector2<float>& anOldSize)
+	void ButtonWidget::OnResize(const CU::Vector2<float>& aNewSize, const CU::Vector2<float>& anOldSize, bool aIsFullScreen)
 	{
-		Widget::OnResize(aNewSize, anOldSize);
+		Widget::OnResize(aNewSize, anOldSize, aIsFullScreen);
 		myImageNormal->SetSize(mySize, mySize / 2.f);
 		myImagePressed->SetSize(mySize, mySize / 2.f);
 		myImageHover->SetSize(mySize, mySize / 2.f);
@@ -120,14 +121,6 @@ namespace GUI
 		std::string clickEvent = "";
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "onclick"), "event", clickEvent);
 
-		//if (clickEvent == "game_lose")
-		//{
-		//	myClickEvent = new OnClickMessage(eOnClickEvent::GAME_LOSE);
-		//}
-		//else if (clickEvent == "game_win")
-		//{
-		//	myClickEvent = new OnClickMessage(eOnClickEvent::GAME_WIN);
-		//}
 		if (clickEvent == "game_start")
 		{
 			int id = 0;

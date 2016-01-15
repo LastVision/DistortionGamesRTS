@@ -29,7 +29,7 @@ namespace GUI
 		void Render(const CU::Vector2<float>& aParentPosition) override;
 		void OnMousePressed(const CU::Vector2<float>& aPosition) override;
 		void OnRightMouseDown(const CU::Vector2<float>& aPosition) override;
-		void OnResize(const CU::Vector2<float>& aNewWindowSize, const CU::Vector2<float>& anOldWindowSize) override;
+		void OnResize(const CU::Vector2<float>& aNewWindowSize, const CU::Vector2<float>& anOldWindowSize, bool aIsFullScreen) override;
 
 
 		virtual void ReceiveMessage(const MinimapEventMessage& aMessage) override;

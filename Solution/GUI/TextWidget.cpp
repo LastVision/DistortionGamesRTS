@@ -11,7 +11,8 @@
 namespace GUI
 {
 	TextWidget::TextWidget(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement)
-		: myBackground(nullptr)
+		: Widget()
+		, myBackground(nullptr)
 		, myText(nullptr)
 	{
 		std::string backgroundPath;
@@ -46,9 +47,9 @@ namespace GUI
 		}
 	}
 
-	void TextWidget::OnResize(const CU::Vector2<float>& aNewSize, const CU::Vector2<float>& anOldSize)
+	void TextWidget::OnResize(const CU::Vector2<float>& aNewSize, const CU::Vector2<float>& anOldSize, bool aIsFullScreen)
 	{
-		Widget::OnResize(aNewSize, anOldSize);
+		Widget::OnResize(aNewSize, anOldSize, aIsFullScreen);
 		myBackground->SetSize(mySize, { 0.f, 0.f });
 	}
 
