@@ -45,6 +45,7 @@ const eStateStatus MainMenuState::Update(const float& aDeltaTime)
 {
 	if (myHasRunOnce == false)
 	{
+#ifdef RELEASE_BUILD
 		bool runtime = Prism::MemoryTracker::GetInstance()->GetRunTime();
 		Prism::MemoryTracker::GetInstance()->SetRunTime(false);
 		myStateStack->PushSubGameState(new SplashState("Data/Resource/Texture/Menu/Splash/T_logo_other.dds", false));
@@ -53,6 +54,7 @@ const eStateStatus MainMenuState::Update(const float& aDeltaTime)
 		Prism::MemoryTracker::GetInstance()->SetRunTime(false);
 		myStateStack->PushSubGameState(new SplashState("Data/Resource/Texture/Menu/Splash/T_logo_our.dds", true));
 		Prism::MemoryTracker::GetInstance()->SetRunTime(runtime);
+#endif
 		myHasRunOnce = true;
 	}
 	else 

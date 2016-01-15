@@ -34,14 +34,14 @@ SplashState::~SplashState()
 {
 }
 
-void SplashState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCursor)
+void SplashState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor*)
 {
 	myIsLetThrough = false;
 	myStateStack = aStateStackProxy;
 	CU::Matrix44<float> orientation;
 	myCamera = new Prism::Camera(orientation);
 
-	OnResize(Prism::Engine::GetInstance()->GetWindowSize().x, Prism::Engine::GetInstance()->GetWindowSize().y);
+	OnResize(Prism::Engine::GetInstance()->GetWindowSizeInt().x, Prism::Engine::GetInstance()->GetWindowSizeInt().y);
 
 	myLogoAlpha = 0.f;
 
