@@ -106,6 +106,9 @@ namespace Prism
 		element = read.ForceFindFirstChild(emitter, "ActiveAtStart");
 		read.ReadAttribute(element, "value", myIsActiveAtStart);
 
+		element = read.ForceFindFirstChild(emitter, "UseAlphaDelta");
+		read.ReadAttribute(element, "value", myUseAlphaDelta);
+
 		read.CloseDocument();
 
 		myData.myStartColor /= 255.f;

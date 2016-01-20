@@ -27,45 +27,44 @@ namespace Prism
 
 		void CreateInputLayout();
 		
-		Texture*					myTexture;
-		Effect*						myEffect;
-		std::string					myFileName;
-		ParticleData				myData;
+		Texture*				myTexture;
+		Effect*					myEffect;
+		std::string				myFileName;
+		ParticleData			myData;
+		ID3D11InputLayout*		myInputLayout;
+		_D3DX11_TECHNIQUE_DESC*	myTechniqueDesc;
 
-		ID3D11InputLayout*			myInputLayout;
-		_D3DX11_TECHNIQUE_DESC*		myTechniqueDesc;
+		CU::Vector3f			myEmitterSize;
 
-		CU::Vector3f				myEmitterSize;
+		float					myMinRotation;
+		float					myMaxRotation;
+		float					myRotationDelta;
 
-		float						myMinRotation;
-		float						myMaxRotation;
-		float						myRotationDelta;
+		float					mySpeedMultiplier;
 
-		float						mySpeedMultiplier;
-
-		CU::Vector3f				myMaxVelocity;
-		CU::Vector3f				myMinVelocity;
+		CU::Vector3f			myMaxVelocity;
+		CU::Vector3f			myMinVelocity;
 
 
-		std::string					myEffectName;
-		std::string					myTextureName;
+		std::string				myEffectName;
+		std::string				myTextureName;
 
-		float						myParticlesLifeTime;
-		float						myEmitterLifeTime;
+		float					myParticlesLifeTime;
+		float					myEmitterLifeTime;
 
-		float						myEmissionLifeTime;
-		float						myEmissionRate;
-		float						myEmissionRateDelta;
+		float					myEmissionLifeTime;
+		float					myEmissionRate;
+		float					myEmissionRateDelta;
 
-		float						myMinScale;
-		float						myMaxScale;
+		float					myMinScale;
+		float					myMaxScale;
 		
-		int							myParticlesPerEmitt;
-		int							myMaxParticleAmount;
+		int						myParticlesPerEmitt;
+		int						myMaxParticleAmount;
 
-		bool						myIsActiveAtStart;
-		bool						myUseEmitterLifeTime;
-
+		bool					myIsActiveAtStart;
+		bool					myUseEmitterLifeTime;
+		bool					myUseAlphaDelta;
 
 
 

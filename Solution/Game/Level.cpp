@@ -108,10 +108,10 @@ void Level::Render(Prism::Camera& aCamera)
 	Prism::Engine::GetInstance()->SetClearColor({ 0.2f, 0.2f, 0.2f, 1.f });
 	myRenderer->BeginScene();
 	myScene->Render(myRenderNavMeshLines);
+	myEmitterManager->RenderEmitters();
 	myRenderer->EndScene(Prism::ePostProcessing::BLOOM);
 	myRenderer->FinalRender();
 
-	myEmitterManager->RenderEmitters();
 	
 	myPlayer->RenderHealthBars(aCamera);
 	myAI->RenderHealthBars(aCamera);

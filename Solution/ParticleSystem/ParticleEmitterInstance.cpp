@@ -43,6 +43,7 @@ namespace Prism
 			myLogicalParticles.Add(tempLogic);
 		}
 
+		myUseAlphaDelta = myParticleEmitterData->myUseAlphaDelta;
 		myIsActive = myParticleEmitterData->myIsActiveAtStart;
 
 		myEmitterLife = myParticleEmitterData->myEmitterLifeTime;
@@ -175,7 +176,14 @@ namespace Prism
 
 			myGraphicalParticles[i].myPosition += myLogicalParticles[i].myVelocity * aDeltaTime;
 
-			myGraphicalParticles[i].myAlpha += myParticleEmitterData->myData.myAlphaDelta * aDeltaTime;
+		//	if (myUseAlphaDelta == true)
+			{
+				myGraphicalParticles[i].myAlpha += myParticleEmitterData->myData.myAlphaDelta * aDeltaTime;
+			}
+		//	else
+		//	{
+//				myGraphicalParticles[i].myAlpha -= myGraphicalParticles[i].myLifeTime * aDeltaTime;
+		//	}
 			myGraphicalParticles[i].mySize += myParticleEmitterData->myData.mySizeDelta * aDeltaTime;
 
 			myGraphicalParticles[i].myColor += myDiffColor  * aDeltaTime;
