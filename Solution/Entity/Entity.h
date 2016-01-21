@@ -20,6 +20,7 @@ class Entity
 {
 	friend class ActorComponent;
 	friend class AnimationComponent;
+	friend class BuildingComponent;
 	friend class ControllerComponent;
 	friend class GraphicsComponent;
 	friend class EntityFactory;

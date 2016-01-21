@@ -106,7 +106,7 @@ void ActorComponent::Update(float aDelta)
 		DoAttackTarget(aDelta);
 		break;
 	case eEntityCommand::STOP:
-		DoStop(aDelta, velocity2);
+		DoStop(aDelta);
 		break;
 	case eEntityCommand::MOVE:
 		DoMove(aDelta);
@@ -162,7 +162,7 @@ Entity* ActorComponent::FindAttackTarget()
 	return nullptr;
 }
 
-void ActorComponent::DoStop(float aDelta, float aVelocity2)
+void ActorComponent::DoStop(float aDelta)
 {
 	if (CU::Length2(myEntity.GetPosition() - myCurrentCommand.GetPosition()) > myChaseDistance2)
 	{

@@ -15,6 +15,8 @@ public:
 	BuildingComponent(Entity& aEntity, BuildingComponentData& aData);
 	~BuildingComponent();
 
+	void Reset() override;
+
 	void Update(float aDeltaTime) override;
 
 	static eComponentType GetTypeStatic();

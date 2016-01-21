@@ -6,11 +6,9 @@
 
 BuildingComponent::BuildingComponent(Entity& aEntity, BuildingComponentData& aData)
 	: Component(aEntity)
-	, myCurrentBuildTime(0.f)
 	, myMaxBuildTime(2.f)
 	, myUnitCosts(aData.myUnitCosts)
 	, myUnitBuildTimes(aData.myUnitBuildTimes)
-	, myIgnoreBuildTime(false)
 	, myUnitUpgrades(aData.myUnitUpgrades)
 	, myUnitSupplyCosts(aData.myUnitSupplyCosts)
 {
@@ -24,6 +22,13 @@ BuildingComponent::BuildingComponent(Entity& aEntity, BuildingComponentData& aDa
 
 BuildingComponent::~BuildingComponent()
 {
+}
+
+void BuildingComponent::Reset()
+{
+	myCurrentBuildTime = 0.f;
+	myIgnoreBuildTime = false;
+	myEntity.myAlive = true;
 }
 
 void BuildingComponent::Update(float aDeltaTime)

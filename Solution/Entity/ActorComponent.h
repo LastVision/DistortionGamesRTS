@@ -41,7 +41,7 @@ public:
 
 private:
 
-	void DoStop(float aDelta, float aVelocity2);
+	void DoStop(float aDelta);
 	void DoAttackTarget(float aDelta);
 	void DoAttackMove(float aDelta);
 	void DoMove(float aDelta);
