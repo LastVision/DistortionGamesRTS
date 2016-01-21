@@ -115,40 +115,40 @@ namespace Prism
 		float halfDepth = aDepth / 2.f;
 
 		//0 - 3 (Top)
-		vertices.Add({ { -halfWidth, halfHeight, -halfDepth }, aColour });
-		vertices.Add({ { halfWidth, halfHeight, -halfDepth }, aColour });
-		vertices.Add({ { halfWidth, halfHeight, halfDepth }, aColour });
-		vertices.Add({ { -halfWidth, halfHeight, halfDepth }, aColour });
+		vertices.Add({ { -halfWidth, halfHeight, -halfDepth, 0.f }, aColour });
+		vertices.Add({ { halfWidth, halfHeight, -halfDepth, 0.f }, aColour });
+		vertices.Add({ { halfWidth, halfHeight, halfDepth, 0.f }, aColour });
+		vertices.Add({ { -halfWidth, halfHeight, halfDepth, 0.f }, aColour });
 
 		//4 - 7 (Bottom)
-		vertices.Add({ { -halfWidth, -halfHeight, -halfDepth }, aColour });
-		vertices.Add({ { halfWidth, -halfHeight, -halfDepth }, aColour });
-		vertices.Add({ { halfWidth, -halfHeight, halfDepth }, aColour });
-		vertices.Add({ { -halfWidth, -halfHeight, halfDepth }, aColour });
+		vertices.Add({ { -halfWidth, -halfHeight, -halfDepth, 0.f }, aColour });
+		vertices.Add({ { halfWidth, -halfHeight, -halfDepth, 0.f }, aColour });
+		vertices.Add({ { halfWidth, -halfHeight, halfDepth, 0.f }, aColour });
+		vertices.Add({ { -halfWidth, -halfHeight, halfDepth, 0.f }, aColour });
 
 		//8 - 11 (Left)
-		vertices.Add({ { -halfWidth, -halfHeight, halfDepth }, aColour });
-		vertices.Add({ { -halfWidth, -halfHeight, -halfDepth }, aColour });
-		vertices.Add({ { -halfWidth, halfHeight, -halfDepth }, aColour });
-		vertices.Add({ { -halfWidth, halfHeight, halfDepth }, aColour });
+		vertices.Add({ { -halfWidth, -halfHeight, halfDepth, 0.f }, aColour });
+		vertices.Add({ { -halfWidth, -halfHeight, -halfDepth, 0.f }, aColour });
+		vertices.Add({ { -halfWidth, halfHeight, -halfDepth, 0.f }, aColour });
+		vertices.Add({ { -halfWidth, halfHeight, halfDepth, 0.f }, aColour });
 
 		//12 - 15 (Right)
-		vertices.Add({ { halfWidth, -halfHeight, halfDepth }, aColour });
-		vertices.Add({ { halfWidth, -halfHeight, -halfDepth }, aColour });
-		vertices.Add({ { halfWidth, halfHeight, -halfDepth }, aColour });
-		vertices.Add({ { halfWidth, halfHeight, halfDepth }, aColour });
+		vertices.Add({ { halfWidth, -halfHeight, halfDepth, 0.f }, aColour });
+		vertices.Add({ { halfWidth, -halfHeight, -halfDepth, 0.f }, aColour });
+		vertices.Add({ { halfWidth, halfHeight, -halfDepth, 0.f }, aColour });
+		vertices.Add({ { halfWidth, halfHeight, halfDepth, 0.f }, aColour });
 
 		//16 - 19 (Front)
-		vertices.Add({ { -halfWidth, -halfHeight, -halfDepth }, aColour });
-		vertices.Add({ { halfWidth, -halfHeight, -halfDepth }, aColour });
-		vertices.Add({ { halfWidth, halfHeight, -halfDepth }, aColour });
-		vertices.Add({ { -halfWidth, halfHeight, -halfDepth }, aColour });
+		vertices.Add({ { -halfWidth, -halfHeight, -halfDepth, 0.f }, aColour });
+		vertices.Add({ { halfWidth, -halfHeight, -halfDepth, 0.f }, aColour });
+		vertices.Add({ { halfWidth, halfHeight, -halfDepth, 0.f }, aColour });
+		vertices.Add({ { -halfWidth, halfHeight, -halfDepth, 0.f }, aColour });
 
 		//20 - 23 (Back)
-		vertices.Add({ { -halfWidth, -halfHeight, halfDepth }, aColour });
-		vertices.Add({ { halfWidth, -halfHeight, halfDepth }, aColour });
-		vertices.Add({ { halfWidth, halfHeight, halfDepth }, aColour });
-		vertices.Add({ { -halfWidth, halfHeight, halfDepth }, aColour });
+		vertices.Add({ { -halfWidth, -halfHeight, halfDepth, 0.f }, aColour });
+		vertices.Add({ { halfWidth, -halfHeight, halfDepth, 0.f }, aColour });
+		vertices.Add({ { halfWidth, halfHeight, halfDepth, 0.f }, aColour });
+		vertices.Add({ { -halfWidth, halfHeight, halfDepth, 0.f }, aColour });
 #pragma endregion
 
 #pragma region Indices
