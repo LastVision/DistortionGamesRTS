@@ -213,7 +213,7 @@ namespace GUI
 			, position, Prism::eTextType::RELEASE_TEXT, myTextScale, color);
 
 		position.x += myStatsSprite->GetSize().x / 3.f;
-		Prism::Engine::GetInstance()->PrintText(myUnits[0]->GetComponent<ControllerComponent>()->GetAttackDamage()
+		Prism::Engine::GetInstance()->PrintText(myUnits[0]->GetComponent<ActorComponent>()->GetAttackDamage()
 			, position, Prism::eTextType::RELEASE_TEXT, myTextScale, color);
 
 		position.x += myStatsSprite->GetSize().x / 3.f;

@@ -18,6 +18,8 @@ public:
 	AnimationComponent(Entity& aEntity, AnimationComponentData& aComponentData, const Prism::Terrain& aTerrain);
 	~AnimationComponent();
 
+	void Reset() override;
+
 	void AddAnimation(eEntityState aState, const std::string& aAnimationPath, bool aLoopFlag, bool aResetTimeOnRestart);
 
 	void Update(float aDeltaTime);
@@ -28,10 +30,8 @@ public:
 	bool IsCurrentAnimationDone() const;
 	void RestartCurrentAnimation();
 
-	void PlayAnimation(eEntityState aAnimationState);
-
-
 private:
+	void PlayAnimation(eEntityState aAnimationState);
 	struct AnimationData
 	{
 		AnimationData() 
@@ -50,7 +50,6 @@ private:
 	float myCullingRadius;
 	CU::StaticArray<AnimationData, int(eEntityState::_COUNT)> myAnimations;
 	eEntityState myPrevEntityState;
-	eEntityState myAnimationState;
 
 	const Prism::Terrain& myTerrain;
 };

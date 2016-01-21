@@ -164,6 +164,7 @@
     <ClInclude Include="AnimationComponentData.h" />
     <ClInclude Include="ArriveBehavior.h" />
     <ClInclude Include="Behavior.h" />
+    <ClInclude Include="BehaviorNote.h" />
     <ClInclude Include="BlendedBehavior.h" />
     <ClInclude Include="BuildingComponent.h" />
     <ClInclude Include="BuildingComponentData.h" />
@@ -171,6 +172,7 @@
     <ClInclude Include="CollisionComponentData.h" />
     <ClInclude Include="EnrageComponent.h" />
     <ClInclude Include="EnrageComponentData.h" />
+    <ClInclude Include="EntityCommandData.h" />
     <ClInclude Include="EntityEnumConverter.h" />
     <ClInclude Include="EntityId.h" />
     <ClInclude Include="EvadeBehavior.h" />
@@ -211,6 +213,7 @@
     <ClCompile Include="BuildingComponent.cpp" />
     <ClCompile Include="CollisionComponent.cpp" />
     <ClCompile Include="EnrageComponent.cpp" />
+    <ClCompile Include="EntityCommandData.cpp" />
     <ClCompile Include="EntityEnumConverter.cpp" />
     <ClCompile Include="EntityId.cpp" />
     <ClCompile Include="EvadeBehavior.cpp" />

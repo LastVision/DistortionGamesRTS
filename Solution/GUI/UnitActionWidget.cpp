@@ -8,7 +8,7 @@
 #include "UnitActionWidget.h"
 #include "UpgradeButtonWidget.h"
 #include "WidgetContainer.h"
-#include "../Entity/ControllerComponent.h"
+#include "../Entity/ActorComponent.h"
 
 namespace GUI
 {
@@ -141,7 +141,7 @@ namespace GUI
 
 				if (myHasSelectedRanger == false && myUnits[i]->GetUnitType() == eUnitType::RANGER)
 				{
-					myRangerActionButtons->At(0)->SetValue(myUnits[i]->GetComponent<ControllerComponent>()->GetRangerCooldown());
+					myRangerActionButtons->At(0)->SetValue(myUnits[i]->GetComponent<ActorComponent>()->GetRangerCooldown());
 					myHasSelectedRanger = true;
 				}
 

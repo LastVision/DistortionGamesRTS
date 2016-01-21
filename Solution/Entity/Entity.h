@@ -1,6 +1,7 @@
 #pragma once
 #include <Matrix.h>
 #include <StaticArray.h>
+#include "EntityCommandData.h"
 
 namespace Prism
 {
@@ -14,10 +15,12 @@ class Component;
 
 struct EntityData;
 
+
 class Entity
 {
 	friend class ActorComponent;
 	friend class AnimationComponent;
+	friend class BuildingComponent;
 	friend class ControllerComponent;
 	friend class GraphicsComponent;
 	friend class EntityFactory;
@@ -27,6 +30,8 @@ public:
 		Prism::Scene& aScene, const CU::Vector3<float> aStartPosition, const Prism::Terrain& aTerrain, 
 		const CU::Vector3f& aRotation, const CU::Vector3f& aScale, eUnitType aUnitType);
 	~Entity();
+
+	void Reset();
 
 	virtual void Update(float aDeltaTime);
 
@@ -54,13 +59,10 @@ public:
 	eUnitType GetUnitType() const;
 	eEntityState GetState() const;
 	void SetState(eEntityState aState);
-	eEntityCommand GetCommand() const;
-	void SetCommand(eEntityCommand aCommand);
 	Prism::eOctreeType GetOctreeType() const;
 	bool GetAlive() const;
 	void Kill();
 	void Spawn(const CU::Vector3f& aSpawnPosition);
-	void Reset();
 
 	void SetSelect(bool aStatus);
 	bool IsSelected() const;
@@ -89,7 +91,7 @@ private:
 	eUnitType myUnitType;
 	eOwnerType myOwner;
 	eEntityState myState;
-	eEntityCommand myCommand;
+	
 	const Prism::eOctreeType myOctreeType;
 	Prism::Scene& myScene;
 
@@ -108,13 +110,13 @@ private:
 };
 
 template <typename T>
-T* Entity::GetComponent()
+inline T* Entity::GetComponent()
 {
 	return static_cast<T*>(myComponents[static_cast<int>(T::GetTypeStatic())]);
 }
 
 template <typename T>
-void Entity::SendNote(const T& aMessage)
+inline void Entity::SendNote(const T& aMessage)
 {
 	for (int i = 0; i < static_cast<int>(eComponentType::_COUNT); ++i)
 	{
@@ -168,16 +170,6 @@ inline eEntityState Entity::GetState() const
 inline void Entity::SetState(eEntityState aState)
 {
 	myState = aState;
-}
-
-inline eEntityCommand Entity::GetCommand() const
-{
-	return myCommand;
-}
-
-inline void Entity::SetCommand(eEntityCommand aCommand)
-{
-	myCommand = aCommand;
 }
 
 inline Prism::eOctreeType Entity::GetOctreeType() const

@@ -56,6 +56,11 @@ AnimationComponent::~AnimationComponent()
 #endif
 }
 
+void AnimationComponent::Reset()
+{
+	myPrevEntityState = myEntity.GetState();
+}
+
 void AnimationComponent::AddAnimation(eEntityState aState, const std::string& aAnimationPath
 	, bool aLoopFlag, bool aResetTimeOnRestart)
 {
@@ -73,9 +78,12 @@ void AnimationComponent::AddAnimation(eEntityState aState, const std::string& aA
 void AnimationComponent::Update(float aDeltaTime)
 {
 #ifndef BOX_MODE
-	AnimationData& data = myAnimations[int(myAnimationState)];
-	//if (myPrevEntityState != myEntity.GetState())
-	//{
+	AnimationData& data = myAnimations[int(myEntity.GetState())];
+	if (myPrevEntityState != myEntity.GetState())
+	{
+		PlayAnimation(myEntity.GetState());
+		myPrevEntityState = myEntity.GetState();
+	}
 	//	myInstance->SetAnimation(Prism::AnimationSystem::GetInstance()->GetAnimation(data.myFile.c_str()));
 	//
 	//	if (data.myResetTimeOnRestart == true)
@@ -123,8 +131,7 @@ void AnimationComponent::RestartCurrentAnimation()
 
 void AnimationComponent::PlayAnimation(eEntityState aAnimationState)
 {
-	myAnimationState = aAnimationState;
-	AnimationData& data = myAnimations[int(myAnimationState)];
+	AnimationData& data = myAnimations[int(aAnimationState)];
 	myInstance->SetAnimation(Prism::AnimationSystem::GetInstance()->GetAnimation(data.myFile.c_str()));
 
 	if (data.myResetTimeOnRestart == true)
