@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "ActorComponent.h"
 #include <AudioInterface.h>
 #include "ControllerComponent.h"
 #include "EnrageComponent.h"
@@ -30,13 +31,13 @@ void EnrageComponent::Update(float aDeltaTime)
 			myIsActive = false;
 
 			HealthComponent* health = myEntity.GetComponent<HealthComponent>();
-			ControllerComponent* controller = myEntity.GetComponent<ControllerComponent>();
+			ActorComponent* actor = myEntity.GetComponent<ActorComponent>();
 
 			health->SetArmor(myOriginalArmor);
 			myEntity.SetMaxSpeed(myOriginalMovementSpeed);
-			controller->SetAttackDamage(myOriginalAttackDamage);
-			controller->SetAttackRange2(myOriginalAttackRange2);
-			controller->SetRechargeTime(myOriginalRechargeTime);
+			actor->SetAttackDamage(myOriginalAttackDamage);
+			actor->SetAttackRange2(myOriginalAttackRange2);
+			actor->SetRechargeTime(myOriginalRechargeTime);
 
 		}
 	}
@@ -47,7 +48,7 @@ void EnrageComponent::Activate()
 	if (myCurrentCooldown <= 0.f)
 	{
 		HealthComponent* health = myEntity.GetComponent<HealthComponent>();
-		ControllerComponent* controller = myEntity.GetComponent<ControllerComponent>();
+		ActorComponent* actor = myEntity.GetComponent<ActorComponent>();
 
 
 		myIsActive = true;
@@ -56,18 +57,18 @@ void EnrageComponent::Activate()
 
 		myOriginalArmor = health->GetArmor();
 		myOriginalMovementSpeed = myEntity.GetMaxSpeed();
-		myOriginalAttackDamage = controller->GetAttackDamage();
-		myOriginalAttackRange2 = controller->GetAttackRange2();
-		myOriginalRechargeTime = controller->GetAttackSpeed();
+		myOriginalAttackDamage = actor->GetAttackDamage();
+		myOriginalAttackRange2 = actor->GetAttackRange2();
+		myOriginalRechargeTime = actor->GetAttackSpeed();
 
 
 		health->TakeDamageAndCheckSurvive((health->GetMaxHealth() * (myData.myHealthModifier / 100.f)) + myOriginalArmor);
 		health->SetArmor(myOriginalArmor * ((myData.myArmorModifier + 100.f) / 100.f));
 		myEntity.SetMaxSpeed(myOriginalMovementSpeed * ((myData.myMovementSpeedModifier + 100.f) / 100.f));
 
-		controller->SetAttackDamage(myOriginalAttackDamage * ((myData.myAttackDamageModifier + 100.f) / 100.f));
-		controller->SetAttackRange2(myOriginalAttackRange2 * ((myData.myAttackRange2Modifier + 100.f) / 100.f));
-		controller->SetRechargeTime(myOriginalRechargeTime * ((myData.myRechargeTimeModifier + 100.f) / 100.f));
+		actor->SetAttackDamage(myOriginalAttackDamage * ((myData.myAttackDamageModifier + 100.f) / 100.f));
+		actor->SetAttackRange2(myOriginalAttackRange2 * ((myData.myAttackRange2Modifier + 100.f) / 100.f));
+		actor->SetRechargeTime(myOriginalRechargeTime * ((myData.myRechargeTimeModifier + 100.f) / 100.f));
 
 		Prism::Audio::AudioInterface::GetInstance()->PostEvent("Tank_Enrage"
 			, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());

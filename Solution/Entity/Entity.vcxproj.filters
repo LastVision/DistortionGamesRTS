@@ -144,6 +144,7 @@
     <ClCompile Include="PromotionComponent.cpp">
       <Filter>Component\Promotion</Filter>
     </ClCompile>
+    <ClCompile Include="EntityCommandData.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -269,5 +270,9 @@
     <ClInclude Include="PromotionComponentData.h">
       <Filter>EntityFactory\EntityData\ComponentData</Filter>
     </ClInclude>
+    <ClInclude Include="BehaviorNote.h">
+      <Filter>Notes</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityCommandData.h" />
   </ItemGroup>
 </Project>

@@ -3,13 +3,22 @@
 
 class Entity;
 
+struct BehaviorNote;
+
 class Component
 {
 public:
 	Component(Entity& aEntity);
 	virtual ~Component();
 
+	//TODO: Make = 0 ?
+	virtual void Reset();
+
+	virtual void ReceiveNote(const BehaviorNote&) {}
+
+	//TODO: remove?
 	virtual void Init();
+
 	virtual void Update(float aDeltaTime);
 
 	Entity& GetEntity();
@@ -17,7 +26,6 @@ public:
 	static eComponentType GetTypeStatic();
 	virtual eComponentType GetType();
 
-	virtual void Reset();
 
 protected:
 	void operator=(Component&) = delete;

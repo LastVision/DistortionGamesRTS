@@ -20,19 +20,15 @@
 
 
 Entity::Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& aEntityData
-	, Prism::Scene& aScene, const CU::Vector3<float> aStartPosition, const Prism::Terrain& aTerrain
-	, const CU::Vector3f& aRotation, const CU::Vector3f& aScale, eUnitType aUnitType)
-	: myAlive(false)
-	, myOwner(aOwner)
+		, Prism::Scene& aScene, const CU::Vector3<float> aStartPosition, const Prism::Terrain& aTerrain
+		, const CU::Vector3f& aRotation, const CU::Vector3f& aScale, eUnitType aUnitType)
+	: myOwner(aOwner)
 	, myScene(aScene)
 	, myOctreeType(anOctreeType)
 	, myState(eEntityState::IDLE)
 	, myType(aEntityData.myType)
-	, mySelected(false)
-	, myHovered(false)
 	, myPosition({aStartPosition.x, aStartPosition.z})
 	, myUnitType(aUnitType)
-	, myDecayFlag(false)
 {
 	myId = EntityId::GetInstance()->GetId(this);
 	for (int i = 0; i < static_cast<int>(eComponentType::_COUNT); ++i)
@@ -70,20 +66,20 @@ Entity::Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& a
 		myComponents[static_cast<int>(eComponentType::TRIGGER)] = new TriggerComponent(*this, aEntityData.myTriggerData);
 	}
 
-	if (aEntityData.myActorData.myExistsInEntity == true)
-	{
-		myComponents[static_cast<int>(eComponentType::ACTOR)] = new ActorComponent(*this, aEntityData.myActorData, aTerrain);
-	}
-
+	ControllerComponent* controller = nullptr;
 	if (aEntityData.myControllerData.myExistsInEntity == true)
 	{
-		myComponents[static_cast<int>(eComponentType::CONTROLLER)] = new ControllerComponent(*this, aEntityData.myControllerData, aTerrain);
+		controller = new ControllerComponent(*this, aEntityData.myControllerData, aTerrain);
+		myComponents[static_cast<int>(eComponentType::CONTROLLER)] = controller;
 	}
 
 	if (aEntityData.myActorData.myExistsInEntity == true)
 	{
-		DL_ASSERT_EXP(myComponents[static_cast<int>(eComponentType::CONTROLLER)] != nullptr
+		DL_ASSERT_EXP(controller != nullptr
 			, "ActorComponent wont work witout a ControllerComponent");
+
+		myComponents[static_cast<int>(eComponentType::ACTOR)] = new ActorComponent(*this, aEntityData.myActorData, aTerrain
+			, controller->GetCurrentCommand());
 	}
 
 	if (aEntityData.myHealthData.myExistsInEntity == true)
@@ -120,14 +116,12 @@ Entity::Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& a
 		}
 	}
 
-
 	if (aEntityData.mySoundData.myExistsInEntity == true)
 	{
 		myComponents[static_cast<int>(eComponentType::SOUND)] = new SoundComponent(*this);
 	}
-
 	
-	
+	Reset();
 }
 
 Entity::~Entity()
@@ -137,7 +131,22 @@ Entity::~Entity()
 		delete myComponents[i];
 		myComponents[i] = nullptr;
 	}
+}
 
+void Entity::Reset()
+{
+	myState = eEntityState::IDLE;
+	myAlive = false;
+	myDecayFlag = false;
+	myHovered = false;
+	mySelected = false;
+	for (int i = 0; i < static_cast<int>(eComponentType::_COUNT); ++i)
+	{
+		if (myComponents[i] != nullptr)
+		{
+			myComponents[i]->Reset();
+		}
+	}
 }
 
 void Entity::Update(float aDeltaTime)
@@ -246,25 +255,12 @@ void Entity::Kill()
 
 void Entity::Spawn(const CU::Vector3f& aSpawnPosition)
 {
-	myState = eEntityState::IDLE;
-	myDecayFlag = false;
 	myOrientation.SetPos(aSpawnPosition);
 	myPosition.x = aSpawnPosition.x;
 	myPosition.y = aSpawnPosition.z;
 	Reset();
-	AddToScene();
-}
-
-void Entity::Reset()
-{
 	myAlive = true;
-	for (int i = 0; i < static_cast<int>(eComponentType::_COUNT); ++i)
-	{
-		if (myComponents[i] != nullptr)
-		{
-			myComponents[i]->Reset();
-		}
-	}
+	AddToScene();
 }
 
 void Entity::SetSelect(bool aStatus)

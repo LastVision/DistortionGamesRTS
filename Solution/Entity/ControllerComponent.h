@@ -5,7 +5,6 @@ namespace Prism
 	class Terrain;
 }
 
-class Behavior;
 
 struct ControllerComponentData;
 class ControllerComponent : public Component
@@ -13,6 +12,9 @@ class ControllerComponent : public Component
 public:
 	ControllerComponent(Entity& aEntity, ControllerComponentData& aData, const Prism::Terrain& aTerrain);
 	~ControllerComponent();
+	void Reset() override;
+
+	void ReceiveNote(const BehaviorNote& aNote) override;
 
 	void Update(float aDelta) override;
 
@@ -22,38 +24,13 @@ public:
 	void Stop(bool& aHasPlayedSound);
 	void HoldPosition(bool& aHasPlayedSound);
 
-	const CU::Vector2<float>& GetAcceleration() const;
-	float GetVisionRange2() const;
-	float GetAttackRange2() const;
+
 
 	static eComponentType GetTypeStatic();
 	eComponentType GetType() override;
-
-	float GetAttackDamage() const;
-	float GetAttackSpeed() const;
-
-	void SetAttackDamage(float aDamage);
-	void SetRechargeTime(float aRechargeTime);
-	void SetAttackRange2(float aRange2);
-
-	void Reset() override;
-
-	const float& GetRangerCooldown() const;
+	const EntityCommandData& GetCurrentCommand() const;
 
 private:
-
-	struct CommandData
-	{
-		CommandData()
-			: myCommand(eEntityCommand::STOP)
-			, myPosition(-1.f, -1.f)
-			, myEntity(nullptr)
-		{}
-		eEntityCommand myCommand;
-		CU::Vector2<float> myPosition;
-		Entity* myEntity;
-	};
-
 	void FillCommandList(eEntityCommand aAction, bool aClearCommandQueue, Entity* aEntity = nullptr
 		, const CU::Vector2<float>& aTargetPosition = { -1.f, -1.f });
 
@@ -67,49 +44,18 @@ private:
 	void StartNextAction();
 	void RefreshPathToAttackTarget();
 	void RenderDebugLines() const;
-	const CU::Vector2<float>& GetPosition(const CommandData& anCommandData) const;
 	eColorDebug GetActionColor(eEntityCommand aAction) const;
 	
-	CU::Vector2<float> myAcceleration;
-	Behavior* myBehavior;
-
 	CU::Vector2<float> myReturnPosition;
 
 	const Prism::Terrain& myTerrain;
 	eOwnerType myOwnerType;
-	int myTargetType;
 
-	float myVisionRange2;
-	float myAttackRange2;
-	float myAttackDamage;
-	float myAttackRechargeTime;
-	float myAttackTimer;
-	float myChaseDistance2;
-	float myChaseDistanceNeutral2;
-	float myAttackTargetPathRefreshTime;
-	float myCurrentAttackTargetPathRefreshTime;
+	bool myStartNewAction;
 
-	float myRangerOneShotTimer;
-	float myRangerOneShotCooldown;
-
-	CU::GrowingArray<CommandData> myCommands;
-	CommandData myCurrentCommand;
+	CU::GrowingArray<EntityCommandData> myCommands;
+	EntityCommandData myCurrentCommand;
 };
-
-inline const CU::Vector2<float>& ControllerComponent::GetAcceleration() const
-{
-	return myAcceleration;
-}
-
-inline float ControllerComponent::GetVisionRange2() const
-{
-	return myVisionRange2;
-}
-
-inline float ControllerComponent::GetAttackRange2() const
-{
-	return myAttackRange2;
-}
 
 inline eComponentType ControllerComponent::GetTypeStatic()
 {
@@ -121,32 +67,7 @@ inline eComponentType ControllerComponent::GetType()
 	return GetTypeStatic();
 }
 
-inline float ControllerComponent::GetAttackDamage() const
+inline const EntityCommandData& ControllerComponent::GetCurrentCommand() const
 {
-	return myAttackDamage;
-}
-
-inline float ControllerComponent::GetAttackSpeed() const
-{
-	return myAttackRechargeTime;
-}
-
-inline void ControllerComponent::SetAttackDamage(float aDamage)
-{
-	myAttackDamage = aDamage;
-}
-
-inline void ControllerComponent::SetRechargeTime(float aRechargeTime)
-{
-	myAttackRechargeTime = aRechargeTime;
-}
-
-inline void ControllerComponent::SetAttackRange2(float aRange2)
-{
-	myAttackRange2 = aRange2;
-}
-
-inline const float& ControllerComponent::GetRangerCooldown() const
-{
-	return myRangerOneShotTimer;
+	return myCurrentCommand;
 }
