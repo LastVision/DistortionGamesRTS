@@ -184,6 +184,7 @@
       <Filter>Rendering\Sprite</Filter>
     </ClCompile>
     <ClCompile Include="SelectionCircle.cpp" />
+    <ClCompile Include="RenderPlane.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h" />
@@ -414,6 +415,7 @@
       <Filter>Rendering\Sprite</Filter>
     </ClInclude>
     <ClInclude Include="SelectionCircle.h" />
+    <ClInclude Include="RenderPlane.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Precompile">

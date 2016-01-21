@@ -201,6 +201,7 @@
     <ClInclude Include="ConsoleHelp.h" />
     <ClInclude Include="ConsoleHistoryManager.h" />
     <ClInclude Include="ConsoleState.h" />
+    <ClInclude Include="DecisionMap.h" />
     <ClInclude Include="DifferenceMap.h" />
     <ClInclude Include="Director.h" />
     <ClInclude Include="AIDirector.h" />
@@ -237,6 +238,7 @@
     <ClCompile Include="ConsoleHelp.cpp" />
     <ClCompile Include="ConsoleHistoryManager.cpp" />
     <ClCompile Include="ConsoleState.cpp" />
+    <ClCompile Include="DecisionMap.cpp" />
     <ClCompile Include="DifferenceMap.cpp" />
     <ClCompile Include="Director.cpp" />
     <ClCompile Include="AIDirector.cpp" />

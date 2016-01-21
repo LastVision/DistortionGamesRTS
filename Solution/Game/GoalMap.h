@@ -1,7 +1,6 @@
 #pragma once
 #include "AIMap.h"
-class GoalMap :
-	public AIMap
+class GoalMap : public AIMap
 {
 public:
 	GoalMap();

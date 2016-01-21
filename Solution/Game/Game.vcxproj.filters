@@ -87,6 +87,9 @@
     <ClCompile Include="VulnerabilityMap.cpp">
       <Filter>Director\InfluenceMap</Filter>
     </ClCompile>
+    <ClCompile Include="DecisionMap.cpp">
+      <Filter>Director\InfluenceMap</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -183,6 +186,9 @@
       <Filter>Director\InfluenceMap</Filter>
     </ClInclude>
     <ClInclude Include="VulnerabilityMap.h">
+      <Filter>Director\InfluenceMap</Filter>
+    </ClInclude>
+    <ClInclude Include="DecisionMap.h">
       <Filter>Director\InfluenceMap</Filter>
     </ClInclude>
   </ItemGroup>

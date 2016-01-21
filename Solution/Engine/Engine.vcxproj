@@ -297,6 +297,7 @@
     <ClCompile Include="NavMesh.cpp" />
     <ClCompile Include="PathFinderAStar.cpp" />
     <ClCompile Include="PathFinderFunnel.cpp" />
+    <ClCompile Include="RenderPlane.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="SelectionCircle.cpp" />
     <ClCompile Include="SplatMapContainer.cpp" />
@@ -384,6 +385,7 @@
     <ClInclude Include="NavMesh.h" />
     <ClInclude Include="PathFinderAStar.h" />
     <ClInclude Include="PathFinderFunnel.h" />
+    <ClInclude Include="RenderPlane.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="SelectionCircle.h" />
     <ClInclude Include="SplatMapContainer.h" />

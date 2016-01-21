@@ -1,10 +1,17 @@
 #pragma once
 #include "AIMap.h"
-class DifferenceMap :
-	public AIMap
+
+class InfluenceMap;
+class DifferenceMap : public AIMap
 {
 public:
-	DifferenceMap();
+	DifferenceMap(InfluenceMap* aInfluence, InfluenceMap* aOtherInfluence);
 	~DifferenceMap();
+
+	void Update() override;
+
+private:
+	InfluenceMap* myInfluence;
+	InfluenceMap* myOtherInfluence;
 };
 

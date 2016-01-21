@@ -3,6 +3,7 @@
 
 
 GoalMap::GoalMap()
+	: AIMap()
 {
 }
 
