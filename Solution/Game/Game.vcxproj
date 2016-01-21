@@ -195,11 +195,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AIMap.h" />
     <ClInclude Include="ClickableState.h" />
     <ClInclude Include="ConsoleBackspace.h" />
     <ClInclude Include="ConsoleHelp.h" />
     <ClInclude Include="ConsoleHistoryManager.h" />
     <ClInclude Include="ConsoleState.h" />
+    <ClInclude Include="DifferenceMap.h" />
     <ClInclude Include="Director.h" />
     <ClInclude Include="AIDirector.h" />
     <ClInclude Include="Console.h" />
@@ -208,6 +210,8 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameDefines.h" />
     <ClInclude Include="GameState.h" />
+    <ClInclude Include="GoalMap.h" />
+    <ClInclude Include="InfluenceMap.h" />
     <ClInclude Include="InGameState.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="LevelFactory.h" />
@@ -222,19 +226,25 @@
     <ClInclude Include="StateStack.h" />
     <ClInclude Include="StateStackProxy.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="TensionMap.h" />
     <ClInclude Include="Tutorial.h" />
+    <ClInclude Include="VulnerabilityMap.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AIMap.cpp" />
     <ClCompile Include="ClickableState.cpp" />
     <ClCompile Include="ConsoleBackspace.cpp" />
     <ClCompile Include="ConsoleHelp.cpp" />
     <ClCompile Include="ConsoleHistoryManager.cpp" />
     <ClCompile Include="ConsoleState.cpp" />
+    <ClCompile Include="DifferenceMap.cpp" />
     <ClCompile Include="Director.cpp" />
     <ClCompile Include="AIDirector.cpp" />
     <ClCompile Include="Console.cpp" />
     <ClCompile Include="EmitterManager.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GoalMap.cpp" />
+    <ClCompile Include="InfluenceMap.cpp" />
     <ClCompile Include="InGameState.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="LevelFactory.cpp" />
@@ -259,7 +269,9 @@
       <MultiProcessorCompilation Condition="'$(Configuration)|$(Platform)'=='DataExporter|Win32'">false</MultiProcessorCompilation>
       <MultiProcessorCompilation Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</MultiProcessorCompilation>
     </ClCompile>
+    <ClCompile Include="TensionMap.cpp" />
     <ClCompile Include="Tutorial.cpp" />
+    <ClCompile Include="VulnerabilityMap.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Audio\Audio.vcxproj">
