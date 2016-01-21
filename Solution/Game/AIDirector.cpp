@@ -359,13 +359,39 @@ void AIDirector::UpdateInfluences()
 	const CU::GrowingArray<Entity*>& victoryPoint = PollingStation::GetInstance()->GetVictoryPoints();
 	for (int i = 0; i < victoryPoint.Size(); ++i)
 	{
-		myGoalMap->AddValue(1.f, 30.f, victoryPoint[i]->GetPosition());
+		float victoryValue = 1.f;
+		if (victoryPoint[i]->GetOwner() == myOwner)
+		{
+			victoryValue = 0.2f;
+		}
+		else if(victoryPoint[i]->GetOwner() == eOwnerType::NEUTRAL)
+		{
+			victoryValue = 1.f;
+		}
+		else if (victoryPoint[i]->GetOwner() == eOwnerType::PLAYER)
+		{
+			victoryValue = 0.7f;
+		}
+		myGoalMap->AddValue(victoryValue, 30.f, victoryPoint[i]->GetPosition());
 	}
 
 	const CU::GrowingArray<Entity*>& resourcePoints = PollingStation::GetInstance()->GetResourcePoints();
 	for (int i = 0; i < resourcePoints.Size(); ++i)
 	{
-		myGoalMap->AddValue(0.8f, 30.f, resourcePoints[i]->GetPosition());
+		float resourceValue = 0.8f;
+		if (resourcePoints[i]->GetOwner() == myOwner)
+		{
+			resourceValue = 0.1f;
+		}
+		else if (resourcePoints[i]->GetOwner() == eOwnerType::NEUTRAL)
+		{
+			resourceValue = 0.8f;
+		}
+		else if (resourcePoints[i]->GetOwner() == eOwnerType::PLAYER)
+		{
+			resourceValue = 0.35f;
+		}
+		myGoalMap->AddValue(resourceValue, 30.f, resourcePoints[i]->GetPosition());
 	}
 
 	const CU::GrowingArray<Entity*>& artifacts = PollingStation::GetInstance()->GetArtifacts();
