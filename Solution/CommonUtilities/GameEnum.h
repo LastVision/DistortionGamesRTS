@@ -83,11 +83,20 @@ enum class ePropType
 enum class eEntityState : int
 {
 	IDLE,
-	WALKING,
-	ATTACKING,
-	DYING,
+	WALK,
+	ATTACK,
+	DIE,
+	THROW,
 	_COUNT,
-	STOP, //this is not an animation therefore we placed after count :)
+};
+
+enum class eEntityCommand
+{
+	STOP,
+	MOVE,
+	ATTACK_TARGET,
+	HOLD_POSITION,
+	ATTACK_MOVE,
 };
 
 enum class eComponentType

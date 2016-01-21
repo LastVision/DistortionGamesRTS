@@ -31,7 +31,7 @@ namespace GUI
 
 		Widget* MouseIsOver(const CU::Vector2<float>& aPosition) override;
 
-		void OnResize(const CU::Vector2<float>& aNewWindowSize, const CU::Vector2<float>& anOldWindowSize) override;
+		void OnResize(const CU::Vector2<float>& aNewWindowSize, const CU::Vector2<float>& anOldWindowSize, bool aIsFullScreen) override;
 
 	private:
 

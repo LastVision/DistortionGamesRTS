@@ -47,15 +47,15 @@ namespace Prism
 		D3D11_INPUT_ELEMENT_DESC vertexDesc[] =
 		{
 			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-			{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-			{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-			{ "BINORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 28, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-			{ "TANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 40, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 16, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 32, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			{ "BINORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 40, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			{ "TANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 56, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		};
 
 
 		InitInputLayout(vertexDesc, ARRAYSIZE(vertexDesc), "Ice::InputLayout");
-		InitVertexBuffer(sizeof(VertexPosNormUVBiTang), D3D11_USAGE_IMMUTABLE, 0);
+		InitVertexBuffer(sizeof(IceVertex), D3D11_USAGE_IMMUTABLE, 0);
 
 		InitIndexBuffer();
 		InitSurface("AlbedoTexture", aFilePath);
@@ -132,28 +132,28 @@ namespace Prism
 
 	void Ice::CreateVertices()
 	{
-		CU::GrowingArray<VertexPosNormUVBiTang> vertices(4);
+		CU::GrowingArray<IceVertex> vertices(4);
 		CU::GrowingArray<int> indices(6);
 		
 		
-		VertexPosNormUVBiTang vertex;
-		vertex.myPosition = { 0, myHeight, 0 };
-		vertex.myNormal = { 0, 1, 0 };
+		IceVertex vertex;
+		vertex.myPosition = { 0, myHeight, 0, 0 };
+		vertex.myNormal = { 0, 1, 0, 0 };
 		vertex.myUV = { 0, 1 };
 		vertices.Add(vertex);
 
-		vertex.myPosition = { mySize.x, myHeight, 0 };
-		vertex.myNormal = { 0, 1, 0 };
+		vertex.myPosition = { mySize.x, myHeight, 0, 0 };
+		vertex.myNormal = { 0, 1, 0, 0 };
 		vertex.myUV = { 1, 1 };
 		vertices.Add(vertex);
 
-		vertex.myPosition = { mySize.x, myHeight, mySize.y };
-		vertex.myNormal = { 0, 1, 0 };
+		vertex.myPosition = { mySize.x, myHeight, mySize.y, 0 };
+		vertex.myNormal = { 0, 1, 0, 0 };
 		vertex.myUV = { 1, 0 };
 		vertices.Add(vertex);
 
-		vertex.myPosition = { 0, myHeight, mySize.y };
-		vertex.myNormal = { 0, 1, 0 };
+		vertex.myPosition = { 0, myHeight, mySize.y, 0 };
+		vertex.myNormal = { 0, 1, 0, 0 };
 		vertex.myUV = { 0, 0 };
 		vertices.Add(vertex);
 
@@ -164,8 +164,11 @@ namespace Prism
 
 		for (int i = 0; i < vertices.Size(); ++i)
 		{
-			vertices[i].myTangent = CU::GetNormalized(CU::Cross(vertices[i].myNormal, vertices[i].myNormal * rotationMatrix));
-			vertices[i].myBiNormal = CU::GetNormalized(CU::Cross(vertices[i].myTangent, vertices[i].myNormal));
+			//vertices[i].myTangent = CU::GetNormalized(CU::Cross(vertices[i].myNormal, vertices[i].myNormal * rotationMatrix));
+			//vertices[i].myBiNormal = CU::GetNormalized(CU::Cross(vertices[i].myTangent, vertices[i].myNormal));
+
+			vertices[i].myTangent = CU::Vector4<float>(1.f, 0.f, 0.f, 0);
+			vertices[i].myBiNormal = CU::Vector4<float>(0.f, 0.f, 1.f, 0);
 		}
 
 
@@ -177,7 +180,7 @@ namespace Prism
 		indices.Add(1);
 		indices.Add(3);
 
-		SetupVertexBuffer(vertices.Size(), sizeof(VertexPosNormUVBiTang), reinterpret_cast<char*>(&vertices[0])
+		SetupVertexBuffer(vertices.Size(), sizeof(IceVertex), reinterpret_cast<char*>(&vertices[0])
 			, "Ice::VertexBuffer");
 		SetupIndexBuffer(indices.Size(), reinterpret_cast<char*>(&indices[0]), "Ice::IndexBuffer");
 

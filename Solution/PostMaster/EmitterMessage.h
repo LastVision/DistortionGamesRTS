@@ -5,10 +5,7 @@
 
 struct EmitterMessage : public Message
 {
-	EmitterMessage(eParticleType aParticleType, int aEntityID);
 	EmitterMessage(const std::string& aParticleType, int aEntityID);
-
-	EmitterMessage(eParticleType aParticleType, const CU::Vector3f& aPosition);
 	EmitterMessage(const std::string& aParticleType, const CU::Vector3f& aPosition);
 
 
@@ -18,26 +15,11 @@ struct EmitterMessage : public Message
 	const CU::Vector3f myPosition;
 };
 
-inline EmitterMessage::EmitterMessage(eParticleType aParticleType, int aEntityID)
-	: Message(eMessageType::PARTICLE)
-	, myParticleType(aParticleType)
-	, myEntityID(aEntityID)
-{
-}
-
 inline EmitterMessage::EmitterMessage(const std::string& aParticleType, int aEntityID)
 	: Message(eMessageType::PARTICLE)
 	, myParticleType(eParticleType::NONE)
 	, myParticleTypeString(aParticleType)
 	, myEntityID(aEntityID)
-{
-}
-
-inline EmitterMessage::EmitterMessage(eParticleType aParticleType, const CU::Vector3f& aPosition)
-	: Message(eMessageType::PARTICLE)
-	, myParticleType(aParticleType)
-	, myPosition(aPosition)
-	, myEntityID(-1)
 {
 }
 

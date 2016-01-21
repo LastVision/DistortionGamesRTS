@@ -48,6 +48,7 @@ namespace Prism
 		int myLiveParticleCount;
 
 		bool myIsActive;
+		bool myUseAlphaDelta;
 
 		std::string myEmitterPath;
 	};

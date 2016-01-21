@@ -183,6 +183,7 @@
     <ClCompile Include="SpriteProxy.cpp">
       <Filter>Rendering\Sprite</Filter>
     </ClCompile>
+    <ClCompile Include="SelectionCircle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h" />
@@ -412,6 +413,7 @@
     <ClInclude Include="SpriteProxy.h">
       <Filter>Rendering\Sprite</Filter>
     </ClInclude>
+    <ClInclude Include="SelectionCircle.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Precompile">

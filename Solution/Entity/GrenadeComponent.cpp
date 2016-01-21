@@ -36,7 +36,7 @@ void GrenadeComponent::CheckUnitsForRemove(CU::GrowingArray<Entity*>& someUnits)
 		Entity* current = someUnits[i];
 		if (CU::Intersection::CircleVsCircle(myEntity.GetPosition(), myRadius
 			, current->GetPosition(), current->GetComponent<CollisionComponent>()->GetRadius()) == false
-			|| (someUnits[i]->GetState() == eEntityState::DYING && someUnits[i]->GetAlive() == false))
+			|| (someUnits[i]->GetState() == eEntityState::DIE && someUnits[i]->GetAlive() == false))
 		{
 			PostMaster::GetInstance()->SendMessage(
 				TriggerMessage(&myEntity, current, TriggerMessage::eTriggerType::EXIT));

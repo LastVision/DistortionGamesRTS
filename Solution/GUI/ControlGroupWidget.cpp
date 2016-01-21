@@ -8,7 +8,8 @@ namespace GUI
 {
 	ControlGroupWidget::ControlGroupWidget(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement, const PlayerDirector* aPlayer
 		, CU::Vector2<float> aSize)
-		: myControlGroups(aPlayer->GetControlGroups())
+		: Widget()
+		, myControlGroups(aPlayer->GetControlGroups())
 		, myControlGroupButtons(AMOUNT_OF_CONTROL_GROUPS)
 	{
 		myPosition = { 0.f, 0.f };
@@ -50,13 +51,13 @@ namespace GUI
 		}
 	}
 
-	void ControlGroupWidget::OnResize(const CU::Vector2<float>& aNewWindowSize, const CU::Vector2<float>& anOldWindowSize)
+	void ControlGroupWidget::OnResize(const CU::Vector2<float>& aNewWindowSize, const CU::Vector2<float>& anOldWindowSize, bool aIsFullScreen)
 	{
-		Widget::OnResize(aNewWindowSize, anOldWindowSize);
+		Widget::OnResize(aNewWindowSize, anOldWindowSize, aIsFullScreen);
 
 		for (int i = 0; i < myControlGroupButtons.Size(); i++)
 		{
-			myControlGroupButtons[i]->OnResize(aNewWindowSize, anOldWindowSize);
+			myControlGroupButtons[i]->OnResize(aNewWindowSize, anOldWindowSize, aIsFullScreen);
 		}
 	}
 

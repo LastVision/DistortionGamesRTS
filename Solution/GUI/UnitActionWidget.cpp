@@ -14,7 +14,8 @@ namespace GUI
 {
 	UnitActionWidget::UnitActionWidget(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement, const CU::GrowingArray<Entity*>& someUnits
 		, const PlayerDirector* aPlayer)
-		: myUnits(someUnits)
+		: Widget()
+		, myUnits(someUnits)
 		, myUnitActionButtons(nullptr)
 		, myBuildingActionButtons(nullptr)
 		, myIsUnitSelected(false)
@@ -203,19 +204,19 @@ namespace GUI
 		return nullptr;
 	}
 
-	void UnitActionWidget::OnResize(const CU::Vector2<float>& aNewWindowSize, const CU::Vector2<float>& anOldWindowSize)
+	void UnitActionWidget::OnResize(const CU::Vector2<float>& aNewWindowSize, const CU::Vector2<float>& anOldWindowSize, bool aIsFullScreen)
 	{
-		Widget::OnResize(aNewWindowSize, anOldWindowSize);
-		myUnitActionButtons->OnResize(aNewWindowSize, anOldWindowSize);
-		myBuildingActionButtons->OnResize(aNewWindowSize, anOldWindowSize);
-		myGruntActionButtons->OnResize(aNewWindowSize, anOldWindowSize);
-		myRangerActionButtons->OnResize(aNewWindowSize, anOldWindowSize);
-		myTankActionButtons->OnResize(aNewWindowSize, anOldWindowSize);
+		Widget::OnResize(aNewWindowSize, anOldWindowSize, aIsFullScreen);
+		myUnitActionButtons->OnResize(aNewWindowSize, anOldWindowSize, aIsFullScreen);
+		myBuildingActionButtons->OnResize(aNewWindowSize, anOldWindowSize, aIsFullScreen);
+		myGruntActionButtons->OnResize(aNewWindowSize, anOldWindowSize, aIsFullScreen);
+		myRangerActionButtons->OnResize(aNewWindowSize, anOldWindowSize, aIsFullScreen);
+		myTankActionButtons->OnResize(aNewWindowSize, anOldWindowSize, aIsFullScreen);
 	}
 
 	WidgetContainer* UnitActionWidget::ReadContainer(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement, CU::Vector2<float> aSize)
 	{
-		GUI::WidgetContainer* container = new WidgetContainer(nullptr, aSize);
+		GUI::WidgetContainer* container = new WidgetContainer(nullptr, aSize, false);
 		tinyxml2::XMLElement* widgetElement = aReader->FindFirstChild(anXMLElement, "widget");
 		for (; widgetElement != nullptr; widgetElement = aReader->FindNextElement(widgetElement))
 		{

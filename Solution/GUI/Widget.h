@@ -25,7 +25,7 @@ namespace GUI
 
 		virtual bool IsInside(const CU::Vector2<float>& aPosition) const;
 
-		virtual void OnResize(const CU::Vector2<float>& aNewWindowSize, const CU::Vector2<float>& anOldWindowSize);
+		virtual void OnResize(const CU::Vector2<float>& aNewWindowSize, const CU::Vector2<float>& anOldWindowSize, bool aIsFullScreen);
 
 		virtual inline void SetPosition(const CU::Vector2<float>& aPosition);
 		virtual inline void SetVisibility(bool aVisibility);
@@ -39,11 +39,15 @@ namespace GUI
 
 		inline Widget* GetParent() const;
 		inline void SetParent(Widget* aParent);
+
+		inline bool IsFullscreen() const;
+		inline void SetIsFullscreen(bool aIsFullscreen);
 	protected:
 		CU::Vector2<float> myPosition;
 		CU::Vector2<float> mySize;
 		std::string myHoverText;
 		bool myIsVisible;
+		bool myIsFullscreen;
 		Widget* myParent;
 	};
 
@@ -89,5 +93,15 @@ namespace GUI
 	inline void Widget::SetParent(Widget* aParent)
 	{
 		myParent = aParent;
+	}
+
+	inline bool Widget::IsFullscreen() const
+	{
+		return myIsFullscreen;
+	}
+
+	inline void Widget::SetIsFullscreen(bool aIsFullscreen)
+	{
+		myIsFullscreen = aIsFullscreen;
 	}
 }

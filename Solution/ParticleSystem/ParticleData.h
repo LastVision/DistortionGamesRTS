@@ -56,8 +56,8 @@ struct LogicalParticle
 	{
 	}
 	bool myIsAlive;
-	float mySpeed;
 	CU::Vector3f myVelocity;
+	float mySpeed;
 	float myRotation;
 	float myRotationDelta;
 

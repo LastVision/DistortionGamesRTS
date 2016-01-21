@@ -19,7 +19,7 @@ namespace Prism
 		myProcessingTexture = new Texture();
 		myProcessingTexture->Init(screenSize.x, screenSize.y
 			, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_DEPTH_STENCIL
-			, DXGI_FORMAT_R32G32B32A32_FLOAT);
+			, DXGI_FORMAT_R16G16B16A16_FLOAT);
 
 
 		D3D11_INPUT_ELEMENT_DESC vertexDesc[] =
@@ -62,6 +62,11 @@ namespace Prism
 	
 	FullScreenHelper::~FullScreenHelper()
 	{
+		SAFE_DELETE(myProcessingTexture);
+		SAFE_DELETE(myBloomData.myFinalTexture);
+		SAFE_DELETE(myBloomData.myMiddleMan);
+		SAFE_DELETE(myBloomData.myDownSampleTextures[0]);
+		SAFE_DELETE(myBloomData.myDownSampleTextures[1]);
 	}
 
 	void FullScreenHelper::Process(Texture* aSource, Texture* aTarget, int aEffect)
@@ -171,7 +176,7 @@ namespace Prism
 		Engine::GetInstance()->GetContex()->ClearDepthStencilView(depth, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 		Engine::GetInstance()->GetContex()->OMSetRenderTargets(1, &target, depth);
 
-		Render(myCombineData.myEffect, "Depth");
+		Render(myCombineData.myEffect, "NoDepth");
 	}
 
 	void FullScreenHelper::CreateCombineData()
@@ -204,13 +209,13 @@ namespace Prism
 		myBloomData.myFinalTexture->Init(Engine::GetInstance()->GetWindowSize().x / 4.f
 			, Engine::GetInstance()->GetWindowSize().y / 4.f
 			, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_DEPTH_STENCIL
-			, DXGI_FORMAT_R8G8B8A8_UNORM);
+			, DXGI_FORMAT_R16G16B16A16_FLOAT);
 
 		myBloomData.myMiddleMan = new Texture();
 		myBloomData.myMiddleMan->Init(Engine::GetInstance()->GetWindowSize().x / 4.f
 			, Engine::GetInstance()->GetWindowSize().y / 4.f
 			, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_DEPTH_STENCIL
-			, DXGI_FORMAT_R8G8B8A8_UNORM);
+			, DXGI_FORMAT_R16G16B16A16_FLOAT);
 
 		myBloomData.myBloomEffect
 			= EffectContainer::GetInstance()->GetEffect("Data/Resource/Shader/S_effect_bloom.fx");
@@ -234,13 +239,13 @@ namespace Prism
 		myBloomData.myDownSampleTextures[0]->Init(Engine::GetInstance()->GetWindowSize().x / 2.f
 			, Engine::GetInstance()->GetWindowSize().y / 2.f
 			, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_DEPTH_STENCIL
-			, DXGI_FORMAT_R8G8B8A8_UNORM);
+			, DXGI_FORMAT_R16G16B16A16_FLOAT);
 
 		myBloomData.myDownSampleTextures[1] = new Texture();
 		myBloomData.myDownSampleTextures[1]->Init(Engine::GetInstance()->GetWindowSize().x / 4.f
 			, Engine::GetInstance()->GetWindowSize().y / 4.f
 			, D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_DEPTH_STENCIL
-			, DXGI_FORMAT_R8G8B8A8_UNORM);
+			, DXGI_FORMAT_R16G16B16A16_FLOAT);
 	}
 
 	void FullScreenHelper::CreateVertices()
