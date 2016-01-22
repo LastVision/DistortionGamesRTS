@@ -256,7 +256,7 @@ namespace GUI
 				portrait = myTankUnit;
 			}
 
-			CU::Vector2<float> position = { (myPosition.x + portrait->GetSize().x * i) + (i * 5.f), myPosition.y };
+			CU::Vector2<float> position = { (myPosition.x + portrait->GetSize().x * i) + (i * 10.f), myPosition.y };
 			position += aParentPosition + myUnitPosition;
 			portrait->Render(position);
 			position += portrait->GetSize() / 6.f;

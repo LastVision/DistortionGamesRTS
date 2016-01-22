@@ -9,6 +9,7 @@
 #include "../InputWrapper/InputWrapper.h"
 #include "MiniMapWidget.h"
 #include "ResourceBarWidget.h"
+#include "SpriteWidget.h"
 #include "TextWidget.h"
 #include "TooltipWidget.h"
 #include "UnitActionWidget.h"
@@ -219,6 +220,11 @@ namespace GUI
 				{
 					TooltipWidget* tooltipWidget = new TooltipWidget(&reader, widgetElement, this);
 					container->AddWidget(tooltipWidget);
+				}
+				else if (type == "sprite")
+				{
+					SpriteWidget* spriteWidget = new SpriteWidget(&reader, widgetElement);
+					container->AddWidget(spriteWidget);
 				}
 				else
 				{

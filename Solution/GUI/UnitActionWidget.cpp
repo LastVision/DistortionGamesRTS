@@ -31,7 +31,6 @@ namespace GUI
 		CU::Vector2<float> position;
 		CU::Vector2<float> buttonSize;
 		CU::Vector2<float> buttonPosition;
-		std::string path = "";
 
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "size"), "x", size.x);
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "size"), "y", size.y);
