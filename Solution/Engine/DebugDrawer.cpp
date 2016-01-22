@@ -145,6 +145,8 @@ namespace Prism
 
 	void DebugDrawer::Render(const Camera& aCamera)
 	{
+		Engine::GetInstance()->DisableZBuffer();
+
 		myLine3DRenderer->Render(my3DLines, aCamera);
 		myCube3DRenderer->Render(aCamera);
 
@@ -160,6 +162,9 @@ namespace Prism
 		}
 		my3DLines.RemoveAll();
 		myDebugTexts.RemoveAll();
+
+		Engine::GetInstance()->EnableZBuffer();
+
 	}
 
 	DebugDrawer::DebugDrawer()
