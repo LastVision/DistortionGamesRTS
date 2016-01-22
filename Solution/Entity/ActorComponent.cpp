@@ -184,7 +184,7 @@ void ActorComponent::DoStop(float aDelta)
 				}
 				else
 				{
-					HoldPosition();
+					StandStill();
 				}
 			}
 			else
@@ -202,7 +202,7 @@ void ActorComponent::DoStop(float aDelta)
 			}
 			else
 			{
-				HoldPosition();
+				StandStill();
 			}
 		}
 	}
@@ -220,7 +220,7 @@ void ActorComponent::DoAttackTarget(float aDelta)
 		}
 		else
 		{
-			HoldPosition();
+			StandStill();
 		}
 	}
 	else
@@ -241,7 +241,7 @@ void ActorComponent::DoAttackMove(float aDelta)
 		}
 		else
 		{
-			HoldPosition();
+			StandStill();
 		}
 	}
 	else
@@ -274,12 +274,16 @@ void ActorComponent::DoHoldPosition()
 		}
 		else
 		{
-			HoldPosition();
+			StandStill();
 		}
+	}
+	else
+	{
+		StandStill();
 	}
 }
 
-void ActorComponent::HoldPosition()
+void ActorComponent::StandStill()
 {
 	myAcceleration = { 0.f, 0.f };
 	myEntity.myVelocity = { 0.f, 0.f };
