@@ -35,6 +35,11 @@ AnimationComponent::AnimationComponent(Entity& aEntity, AnimationComponentData& 
 		--animations;
 	}
 
+	if (aEntity.GetUnitType() == eUnitType::NOT_A_UNIT)
+	{
+		animations = 1;
+	}
+
 	for (int i = 0; i < animations; ++i)
 	{
 		AnimationLoadData loadAnimation = aComponentData.myAnimations[i];

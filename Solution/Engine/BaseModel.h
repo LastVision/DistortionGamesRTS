@@ -26,6 +26,7 @@ namespace Prism
 		Effect* GetEffect();
 
 	protected:
+		void EvaluateEffectTechnique();
 		void Render();
 
 		void InitInputLayout(D3D11_INPUT_ELEMENT_DESC* aVertexDescArray, int aArraySize, const std::string& aDebugName);
@@ -42,7 +43,7 @@ namespace Prism
 
 		Effect* myEffect;
 		CU::GrowingArray<Surface*> mySurfaces;
-
+		CU::GrowingArray<D3D11_INPUT_ELEMENT_DESC*> myVertexFormat;
 		ID3D11InputLayout* myVertexLayout;
 		ID3D11BlendState* myBlendState;
 		D3D11_BUFFER_DESC* myVertexBufferDesc;

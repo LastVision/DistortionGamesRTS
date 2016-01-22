@@ -48,3 +48,11 @@ void PromotionComponent::RenderPromotion(const Prism::Camera& aCamera)
 		mySprite->Render({ newRenderPos.x, newRenderPos.y });
 	}
 }
+
+void PromotionComponent::RenderPromotion(const CU::Vector2<float>& aPosition, const CU::Vector2<float>& aScale)
+{
+	if (GetPromoted() == true)
+	{
+		mySprite->Render(aPosition, aScale);
+	}
+}

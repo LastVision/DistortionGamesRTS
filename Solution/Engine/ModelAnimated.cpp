@@ -20,7 +20,6 @@ namespace Prism
 		: BaseModel()
 		, myChildren(32)
 		, myChildTransforms(32)
-		, myVertexFormat(8)
 		, myIsNULLObject(true)
 		, myVertexBaseData(nullptr)
 		, myIndexBaseData(nullptr)
@@ -34,7 +33,6 @@ namespace Prism
 	{
 		myChildren.DeleteAll();
 		myChildTransforms.DeleteAll();
-		myVertexFormat.DeleteAll();
 		delete myAnimation;
 		delete myVertexBaseData;
 		delete myIndexBaseData;
@@ -52,7 +50,7 @@ namespace Prism
 			{
 				vertexDesc[i] = *myVertexFormat[i];
 			}
-
+			EvaluateEffectTechnique();
 			InitInputLayout(vertexDesc, size, "ModelAnimated::InputLayout");
 			delete[] vertexDesc;
 			InitVertexBuffer(myVertexBaseData->myStride, D3D11_USAGE_IMMUTABLE, 0);

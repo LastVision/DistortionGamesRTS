@@ -240,21 +240,21 @@ void PollingStation::CleanUp()
 		}
 	}
 
-	for (int i = myResourcePoints.Size() - 1; i >= 0; --i)
-	{
-		if (myResourcePoints[i]->GetAlive() == false)
-		{
-			myResourcePoints.RemoveCyclicAtIndex(i);
-		}
-	}
-
-	for (int i = myVictoryPoints.Size() - 1; i >= 0; --i)
-	{
-		if (myVictoryPoints[i]->GetAlive() == false)
-		{
-			myVictoryPoints.RemoveCyclicAtIndex(i);
-		}
-	}
+	//for (int i = myResourcePoints.Size() - 1; i >= 0; --i)
+	//{
+	//	if (myResourcePoints[i]->GetAlive() == false)
+	//	{
+	//		myResourcePoints.RemoveCyclicAtIndex(i);
+	//	}
+	//}
+	//
+	//for (int i = myVictoryPoints.Size() - 1; i >= 0; --i)
+	//{
+	//	if (myVictoryPoints[i]->GetAlive() == false)
+	//	{
+	//		myVictoryPoints.RemoveCyclicAtIndex(i);
+	//	}
+	//}
 }
 
 PollingStation::PollingStation()

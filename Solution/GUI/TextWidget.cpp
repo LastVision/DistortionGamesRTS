@@ -5,7 +5,6 @@
 #include <PostMaster.h>
 #include <Text.h>
 #include <TextMessage.h>
-
 #include <FadeMessage.h>
 
 namespace GUI
@@ -23,10 +22,9 @@ namespace GUI
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "position"), "y", myPosition.y);
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "textposition"), "x", myTextPosition.x);
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "textposition"), "y", myTextPosition.y);
-
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "background"), "path", backgroundPath);
 
-		myBackground = Prism::ModelLoader::GetInstance()->LoadSprite(backgroundPath, { 0.f, 0.f });
+		myBackground = Prism::ModelLoader::GetInstance()->LoadSprite(backgroundPath, mySize);
 
 		PostMaster::GetInstance()->Subscribe(eMessageType::TEXT, this);
 	}

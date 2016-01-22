@@ -13,6 +13,7 @@ namespace Prism
 
 	BaseModel::BaseModel()
 		: myTechniqueName("Render")
+		, myVertexFormat(8)
 	{
 		myVertexBufferDesc = new D3D11_BUFFER_DESC();
 		myIndexBufferDesc = new D3D11_BUFFER_DESC();
@@ -30,6 +31,7 @@ namespace Prism
 
 	BaseModel::~BaseModel()
 	{
+		myVertexFormat.DeleteAll();
 		if (myVertexBuffer != nullptr && myVertexBuffer->myVertexBuffer != nullptr)
 		{
 			myVertexBuffer->myVertexBuffer->Release();
@@ -63,6 +65,58 @@ namespace Prism
 	Effect* BaseModel::GetEffect()
 	{
 		return myEffect;
+	}
+
+	void BaseModel::EvaluateEffectTechnique()
+	{
+		int uvCount = 0;
+		bool hasVertexColor = false;
+		for (int i = 0; i < myVertexFormat.Size(); ++i)
+		{
+			std::string semanticName(myVertexFormat[i]->SemanticName);
+			if (semanticName == "TEXCOORD")
+			{
+				++uvCount;
+			}
+			if (semanticName == "COLOR")
+			{
+				hasVertexColor = true;
+			}
+		}
+
+		if (hasVertexColor == true)
+		{
+			if (uvCount == 2)
+			{
+				myTechniqueName = "Render_2UVSET_COLOR";
+
+			}
+			else if (uvCount == 1)
+			{
+				myTechniqueName = "Render_1UVSET_COLOR";
+			}
+			else
+			{
+				DL_ASSERT("Model EvaluateTechnique: invalid uv-set-count with vertexcolor.");
+			}
+		}
+		else
+		{
+			if (uvCount == 2)
+			{
+				myTechniqueName = "Render_2UVSET";
+
+			}
+			else if (uvCount == 1)
+			{
+				myTechniqueName = "Render_1UVSET";
+			}
+			else
+			{
+				DL_ASSERT("Model EvaluateTechnique: invalid uv-set-count without vertexcolor.");
+			}
+		}
+
 	}
 
 	void BaseModel::Render()
