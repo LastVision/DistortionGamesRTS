@@ -5,6 +5,7 @@ enum class eOnClickEvent
 {
 	GAME_START,
 	GAME_LEVEL_SELECT,
+	GAME_CREDIT,
 	GAME_QUIT,
 	GAME_RESTART,
 	GAME_WIN,
