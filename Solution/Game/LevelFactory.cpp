@@ -230,7 +230,7 @@ void LevelFactory::ReadLevel(const std::string& aLevelPath, std::string& aTutori
 
 	LoadLights(reader, levelElement);
 	LoadBases(reader, levelElement);
-	//LoadProps(reader, levelElement);
+	LoadProps(reader, levelElement);
 	LoadControlPoints(reader, levelElement);
 	LoadUnits(reader, levelElement);
 	LoadArtifacts(reader, levelElement);
