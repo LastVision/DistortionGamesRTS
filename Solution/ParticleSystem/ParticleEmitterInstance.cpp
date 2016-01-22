@@ -14,7 +14,6 @@ namespace Prism
 	ParticleEmitterInstance::ParticleEmitterInstance(ParticleEmitterData* someData, bool anAllowManyParticles)
 		: myVertexWrapper(nullptr)
 		, myIsActive(false)
-		, myUseAlphaDelta(false)
 		, myEmissionTime(0)
 		, myEmitterLife(0)
 		, myParticleIndex(0)
