@@ -23,7 +23,6 @@ namespace Prism
 		ModelLoader::GetInstance()->UnPause();
 	}
 
-
 	Line3DRenderer::~Line3DRenderer()
 	{
 		SAFE_DELETE(myEffect);

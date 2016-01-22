@@ -110,7 +110,7 @@ namespace Prism
 		read.ReadAttribute(element, "value", myUseAlphaDelta);
 
 		read.CloseDocument();
-
+		//Jag har lagt till en kommentar. Haha
 		myData.myStartColor /= 255.f;
 		myData.myEndColor /= 255.f;
 
