@@ -59,9 +59,7 @@ void NeutralDirector::ReceiveMessage(const SpawnUnitMessage& aMessage)
 				{
 					continue;
 				}
-
-				CU::Vector3<float> position = myTerrain.GetHeight({ aMessage.myPosition.x, 0.f, aMessage.myPosition.y });
-				myUnits[i]->Spawn(position);
+				myUnits[i]->Spawn(aMessage.mySpawnPoint, aMessage.myRallyPoint);
 				myActiveUnits.Add(myUnits[i]);
 				break;
 			}

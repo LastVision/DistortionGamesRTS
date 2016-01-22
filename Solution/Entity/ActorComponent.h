@@ -47,7 +47,7 @@ private:
 	void DoMove(float aDelta);
 	void DoHoldPosition();
 
-	void HoldPosition();
+	void StandStill();
 
 	void CheckAnimationComplete();
 	Entity* FindAttackTarget();

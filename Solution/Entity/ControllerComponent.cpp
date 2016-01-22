@@ -43,7 +43,9 @@ void ControllerComponent::Reset()
 
 void ControllerComponent::ReceiveNote(const BehaviorNote& aNote)
 {
-	if (aNote.myFinished == true)
+	if (aNote.myFinished == true
+		&& myCommands.Size() > 0
+		&& myCurrentCommand.myCommand != eEntityCommand::HOLD_POSITION)
 	{
 		myStartNewAction = true;
 	}
@@ -54,6 +56,13 @@ void ControllerComponent::Update(float aDelta)
 	if (myEntity.GetState() == eEntityState::DIE)
 	{
 		return;
+	}
+
+	if (myCurrentCommand.myCommand == eEntityCommand::ATTACK_TARGET
+		&& myCurrentCommand.myEntity != nullptr
+		&& myCurrentCommand.myEntity->GetAlive() == false)
+	{
+		myStartNewAction = true;
 	}
 
 	if (myStartNewAction == true)

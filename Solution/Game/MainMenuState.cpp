@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include <Camera.h>
+#include "CreditMenuState.h"
 #include <GUIManager.h>
 #include "InGameState.h"
 #include <InputWrapper.h>
@@ -101,6 +102,11 @@ void MainMenuState::ReceiveMessage(const OnClickMessage& aMessage)
 			Prism::MemoryTracker::GetInstance()->SetRunTime(false);
 			PostMaster::GetInstance()->UnSubscribe(eMessageType::ON_CLICK, this);
 			myStateStack->PushMainGameState(new LevelSelectState());
+			break;
+		case eOnClickEvent::GAME_CREDIT:
+			Prism::MemoryTracker::GetInstance()->SetRunTime(false);
+			PostMaster::GetInstance()->UnSubscribe(eMessageType::ON_CLICK, this);
+			myStateStack->PushMainGameState(new CreditMenuState());
 			break;
 		case eOnClickEvent::GAME_QUIT:
 			myStateStatus = eStateStatus::ePopMainState;

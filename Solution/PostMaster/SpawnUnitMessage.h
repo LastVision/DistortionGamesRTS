@@ -8,17 +8,23 @@ namespace Prism
 
 struct SpawnUnitMessage : public Message
 {
-	SpawnUnitMessage(int aUnitType, int aOwner, const CU::Vector2<float>& aPosition = CU::Vector2<float>(-1.f, -1.f));
+	SpawnUnitMessage(int aUnitType, int aOwner, const CU::Vector2<float>& aSpawnPoint
+		, const CU::Vector2<float>& aRallyPoint);
 
-	int myUnitType;
-	int myOwnerType;
-	CU::Vector2<float> myPosition;
+	void operator=(SpawnUnitMessage&) = delete;
+
+	const int myUnitType;
+	const int myOwnerType;
+	const CU::Vector2<float>& mySpawnPoint;
+	const CU::Vector2<float>& myRallyPoint;
 };
 
-inline SpawnUnitMessage::SpawnUnitMessage(int aUnitType, int aOwner, const CU::Vector2<float>& aPosition)
+inline SpawnUnitMessage::SpawnUnitMessage(int aUnitType, int aOwner, const CU::Vector2<float>& aSpawnPoint
+		, const CU::Vector2<float>& aRallyPoint)
 	: Message(eMessageType::SPAWN_UNIT)
 	, myUnitType(aUnitType)
 	, myOwnerType(aOwner)
-	, myPosition(aPosition)
+	, mySpawnPoint(aSpawnPoint)
+	, myRallyPoint(aRallyPoint)
 {
 }

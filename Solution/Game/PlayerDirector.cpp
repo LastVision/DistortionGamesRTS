@@ -51,8 +51,8 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 	, mySelectionSpriteRenderPosition(0, 0)
 	, mySelectionSpriteHotspot(0, 0)
 	, myAudioSFXID(-1)
+	, myMaxSelectedUnits(0)
 	, myHasEventToGoTo(false)
-	, myTestUpgradeLevel(0)
 {
 	myAudioSFXID = Prism::Audio::AudioInterface::GetInstance()->GetUniqueID();
 	myDragSelectionPositions.Reserve(4);
@@ -124,6 +124,11 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 	myTotem = new Entity(eOwnerType::PLAYER, Prism::eOctreeType::DYNAMIC, tempData, aScene, { 128.f, 100.f, 128.f },
 		aTerrain, { 0.f, 0.f, 0.f }, { 1.f, 1.f, 1.f }, eUnitType::NOT_A_UNIT);
 	myTotem->AddToScene();
+
+	reader.OpenDocument("Data/Setting/SET_game.xml");
+	tinyxml2::XMLElement* rootElement = reader.FindFirstChild("root");
+	reader.ForceReadAttribute(reader.ForceFindFirstChild(rootElement, "maxSelected"), "value", myMaxSelectedUnits);
+	reader.CloseDocument();
 }
 
 PlayerDirector::~PlayerDirector()
@@ -161,29 +166,6 @@ void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_G) == true)
 	{
 		PostMaster::GetInstance()->SendMessage(ToggleGUIMessage(!myRenderGUI, 1.f / 3.f));
-	}
-
-	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_H) == true)
-	{
-		for (int i = 0; i < mySelectedUnits.Size(); i++)
-		{
-			mySelectedUnits[i]->GetComponent<HealthComponent>()->TakeDamageAndCheckSurvive(1);
-		}
-	}
-
-	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_NUMPAD1) == true)
-	{
-		UpgradeUnit(eUnitType::GRUNT);
-	}
-
-	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_NUMPAD2) == true)
-	{
-		UpgradeUnit(eUnitType::RANGER);
-	}
-
-	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_NUMPAD3) == true)
-	{
-		UpgradeUnit(eUnitType::TANK);
 	}
 
 	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_F2) == true)
@@ -366,6 +348,13 @@ CU::Vector3<float> PlayerDirector::GetCameraMoveVector() const
 
 void PlayerDirector::SelectUnit(Entity* anEntity)
 {
+	if (mySelectedUnits.Size() >= myMaxSelectedUnits) // max selected
+	{
+		anEntity->SetSelect(false);
+		anEntity->SetHovered(false);
+		return;
+	}
+
 	if (mySelectedUnits.Size() > 0 && mySelectedUnits[0]->GetType() != anEntity->GetType())
 	{
 		if (mySelectedUnits[0]->GetType() == eEntityType::BASE_BUILING)

@@ -21,10 +21,12 @@ namespace GUI
 		, myGuiManager(aGuiManager)
 		, myBackground(nullptr)
 	{
+		mySize = { 0.f, 0.f };
+
 		std::string backgroundPath;
 
-		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "size"), "x", mySize.x);
-		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "size"), "y", mySize.y);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "backgroundsize"), "x", mySize.x);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "backgroundsize"), "y", mySize.y);
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "position"), "x", myPosition.x);
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "position"), "y", myPosition.y);
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "textposition"), "x", myTextPosition.x);

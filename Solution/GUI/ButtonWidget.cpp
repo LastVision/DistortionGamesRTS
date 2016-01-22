@@ -135,6 +135,10 @@ namespace GUI
 		{
 			myClickEvent = new OnClickMessage(eOnClickEvent::GAME_RESTART);
 		}
+		else if (clickEvent == "game_credit")
+		{
+			myClickEvent = new OnClickMessage(eOnClickEvent::GAME_CREDIT);
+		}
 		else if (clickEvent == "game_quit")
 		{
 			myClickEvent = new OnClickMessage(eOnClickEvent::GAME_QUIT);

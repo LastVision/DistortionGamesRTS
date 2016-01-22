@@ -29,6 +29,8 @@ void BuildingComponent::Reset()
 	myCurrentBuildTime = 0.f;
 	myIgnoreBuildTime = false;
 	myEntity.myAlive = true;
+	mySpawnPoint = myEntity.GetPosition() + CU::Vector2<float>(0, -15.f);
+	myRallyPoint = myEntity.GetPosition() + CU::Vector2<float>(1.f, -16.f);
 }
 
 void BuildingComponent::Update(float aDeltaTime)
@@ -76,7 +78,7 @@ void BuildingComponent::Update(float aDeltaTime)
 		}
 		else
 		{
-			PostMaster::GetInstance()->SendMessage(SpawnUnitMessage(currentOrder.myUnit, myEntity.GetOwner(), myEntity.GetPosition() + CU::Vector2<float>(0, -15.f)));
+			PostMaster::GetInstance()->SendMessage(SpawnUnitMessage(currentOrder.myUnit, myEntity.GetOwner(), mySpawnPoint, myRallyPoint));
 		}
 
 		myBuildQueue.pop();

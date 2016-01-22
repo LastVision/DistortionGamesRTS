@@ -79,8 +79,6 @@ public:
 
 	void AttackMoveSelectedUnits(const CU::Vector2<float>& aPosition);
 
-	const int& GetTestUpgradeLevel() const;
-
 	const float& GetTotemCooldown() const;
 
 	const bool& HasUnlockedTank() const;
@@ -135,10 +133,10 @@ private:
 	Entity* myTotem;
 
 	int myAudioSFXID;
+	int myMaxSelectedUnits;
 	CU::Vector2<float> myLastEventPosition;
 	bool myHasEventToGoTo;
 
-	int myTestUpgradeLevel;
 };
 
 inline const CU::GrowingArray<Entity*>& PlayerDirector::GetSelectedUnits() const
@@ -169,11 +167,6 @@ inline const CU::StaticArray<CU::GrowingArray<Entity*>, AMOUNT_OF_CONTROL_GROUPS
 inline eSelectedAction PlayerDirector::GetSelectedAction() const
 {
 	return mySelectedAction;
-}
-
-inline const int& PlayerDirector::GetTestUpgradeLevel() const
-{
-	return myTestUpgradeLevel;
 }
 
 inline const bool& PlayerDirector::HasUnlockedTank() const

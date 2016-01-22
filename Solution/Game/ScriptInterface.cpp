@@ -335,7 +335,7 @@ namespace Script_Interface
 
 		CU::Vector2<float> pos(x, z);
 
-		PostMaster::GetInstance()->SendMessage(SpawnUnitMessage(unitType, eOwnerType::NEUTRAL, pos));
+		PostMaster::GetInstance()->SendMessage(SpawnUnitMessage(unitType, eOwnerType::NEUTRAL, pos, pos));
 
 		return 0;
 	}
