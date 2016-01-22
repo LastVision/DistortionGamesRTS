@@ -41,9 +41,14 @@ namespace GUI
 
 		const CU::GrowingArray<Entity*>& myUnits;
 		const BuildingComponent& myBuilding;
-		Prism::SpriteProxy* myGruntPortrait;
-		Prism::SpriteProxy* myBuildingPortrait;
+
 		Prism::SpriteProxy* myGruntUnit;
+		Prism::SpriteProxy* myRangerUnit;
+		Prism::SpriteProxy* myTankUnit;
+		Prism::SpriteProxy* myGruntPortrait;
+		Prism::SpriteProxy* myRangerPortrait;
+		Prism::SpriteProxy* myTankPortrait;
+		Prism::SpriteProxy* myBuildingPortrait;
 		Prism::SpriteProxy* myStatsSprite;
 		BarWidget* myBuildingTimer;
 
