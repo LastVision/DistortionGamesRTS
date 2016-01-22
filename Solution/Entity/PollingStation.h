@@ -23,6 +23,8 @@ public:
 	//Returns the number of VictoryPoints held by anOwner
 	int GetVictoryPointsCount(eOwnerType anOwner) const;
 
+	CU::Vector2<float> GetClosestNotOwnedResourcePoint(eOwnerType aOwner, const CU::Vector2<float>& aPoint) const;
+
 	void AddArtifact(Entity* aArtifact);
 	void DeleteArtifact(Entity* aArtifact);
 	const CU::GrowingArray<Entity*>& GetArtifacts() const;

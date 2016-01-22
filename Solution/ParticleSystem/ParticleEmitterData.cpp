@@ -28,7 +28,6 @@ namespace Prism
 
 	void ParticleEmitterData::LoadDataFile(const std::string& aFilePath)
 	{
-		DL_DEBUG("Loading particle file");
 		XMLReader read;
 		myFileName = aFilePath;
 

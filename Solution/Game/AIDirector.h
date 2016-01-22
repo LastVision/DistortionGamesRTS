@@ -1,6 +1,11 @@
 #pragma once
 #include "Director.h"
 
+namespace CU
+{
+	class FuzzySet;
+}
+
 namespace Prism
 {
 	class Camera;
@@ -35,6 +40,17 @@ private:
 		SPAWN_TANK,
 		NONE
 	};
+
+
+	void UpdateAdvisors();
+	CU::FuzzySet UpdateAttackAdvisor();
+	CU::FuzzySet UpdateDefendAdvisor();
+	CU::FuzzySet UpdateResourceAdvisor();
+	CU::FuzzySet* myFuzzySet;
+
+	void ExecuteFuzzyAction();
+	bool FuzzyActionDone() const;
+	eFuzzyAI myCurrentFuzzyAction;
 
 	void NotLoseLogic();
 	void WinSlowlyLogic();
