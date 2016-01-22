@@ -530,6 +530,11 @@ namespace Prism
 				desc->SemanticName = "BONES";
 				desc->Format = DXGI_FORMAT_R32G32B32A32_SINT;
 			}
+			else if (type == eVertexLayout::VERTEX_COLOR)
+			{
+				desc->SemanticName = "COLOR";
+				desc->Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+			}
 			else
 			{
 				DL_ASSERT("Found a invalid InputElement while loading DGFX");

@@ -19,7 +19,6 @@ namespace Prism
 		: BaseModel()
 		, myChildren(32)
 		, myChildTransforms(32)
-		, myVertexFormat(8)
 		, myIsNULLObject(true)
 		, myVertexBaseData(nullptr)
 		, myIndexBaseData(nullptr)
@@ -34,7 +33,6 @@ namespace Prism
 	Model::~Model()
 	{
 		myChildren.DeleteAll();
-		myVertexFormat.DeleteAll();
 		delete myVertexBaseData;
 		delete myIndexBaseData;
 	}
@@ -327,56 +325,6 @@ namespace Prism
 		}
 	}
 
-	void Model::EvaluateEffectTechnique()
-	{
-		int uvCount = 0;
-		bool hasVertexColor = false;
-		for (int i = 0; i < myVertexFormat.Size(); ++i)
-		{
-			std::string semanticName(myVertexFormat[i]->SemanticName);
-			if (semanticName == "TEXCOORD")
-			{
-				++uvCount;
-			}
-			if (semanticName == "COLOR")
-			{
-				hasVertexColor = true;
-			}
-		}
-
-		if (hasVertexColor == true)
-		{
-			if (uvCount == 2)
-			{
-				myTechniqueName = "Render_2UVSET_COLOR";
-
-			}
-			else if (uvCount == 1)
-			{
-				myTechniqueName = "Render_1UVSET_COLOR";
-			}
-			else
-			{
-				DL_ASSERT("Model EvaluateTechnique: invalid uv-set-count with vertexcolor.");
-			}
-		}
-		else
-		{
-			if (uvCount == 2)
-			{
-				myTechniqueName = "Render_2UVSET";
-
-			}
-			else if (uvCount == 1)
-			{
-				myTechniqueName = "Render_1UVSET";
-			}
-			else
-			{
-				DL_ASSERT("Model EvaluateTechnique: invalid uv-set-count without vertexcolor.");
-			}
-		}
-
-	}
+	
 
 }

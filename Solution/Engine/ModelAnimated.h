@@ -44,7 +44,6 @@ namespace Prism
 	private:
 		bool myIsNULLObject;
 
-		CU::GrowingArray<D3D11_INPUT_ELEMENT_DESC*> myVertexFormat;
 		VertexIndexWrapper* myIndexBaseData;
 		VertexDataWrapper* myVertexBaseData;
 
