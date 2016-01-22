@@ -18,7 +18,7 @@
 
 
 
-ControllerComponent::ControllerComponent(Entity& aEntity, ControllerComponentData& aData, const Prism::Terrain& aTerrain)
+ControllerComponent::ControllerComponent(Entity& aEntity, ControllerComponentData&, const Prism::Terrain& aTerrain)
 	: Component(aEntity)
 	, myTerrain(aTerrain)
 	, myCommands(16)
@@ -53,7 +53,7 @@ void ControllerComponent::ReceiveNote(const BehaviorNote& aNote)
 	}
 }
 
-void ControllerComponent::Update(float aDelta)
+void ControllerComponent::Update(float)
 {
 	if (myEntity.GetState() == eEntityState::DIE)
 	{

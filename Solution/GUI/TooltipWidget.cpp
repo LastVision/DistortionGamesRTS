@@ -54,6 +54,7 @@ namespace GUI
 
 	Widget* TooltipWidget::MouseIsOver(const CU::Vector2<float>& aPosition)
 	{
+		aPosition;
 		return nullptr;
 	}
 

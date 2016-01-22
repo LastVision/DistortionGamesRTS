@@ -64,7 +64,7 @@ AIDirector::AIDirector(const Prism::Terrain& aTerrain, Prism::Scene& aScene)
 
 	myFuzzySet = new CU::FuzzySet(static_cast<int>(eFuzzyAI::_COUNT));
 
-	myGunpowder = 1000.f;
+	myGunpowder = 1000;
 }
 
 AIDirector::~AIDirector()
