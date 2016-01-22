@@ -90,6 +90,18 @@
     <ClCompile Include="DecisionMap.cpp">
       <Filter>Director\InfluenceMap</Filter>
     </ClCompile>
+    <ClCompile Include="ResourceAdvisor.cpp">
+      <Filter>Director\Advisors</Filter>
+    </ClCompile>
+    <ClCompile Include="DefendAdvisor.cpp">
+      <Filter>Director\Advisors</Filter>
+    </ClCompile>
+    <ClCompile Include="AttackAdvisor.cpp">
+      <Filter>Director\Advisors</Filter>
+    </ClCompile>
+    <ClCompile Include="AIAdvisor.cpp">
+      <Filter>Director\Advisors</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -191,6 +203,18 @@
     <ClInclude Include="DecisionMap.h">
       <Filter>Director\InfluenceMap</Filter>
     </ClInclude>
+    <ClInclude Include="ResourceAdvisor.h">
+      <Filter>Director\Advisors</Filter>
+    </ClInclude>
+    <ClInclude Include="DefendAdvisor.h">
+      <Filter>Director\Advisors</Filter>
+    </ClInclude>
+    <ClInclude Include="AttackAdvisor.h">
+      <Filter>Director\Advisors</Filter>
+    </ClInclude>
+    <ClInclude Include="AIAdvisor.h">
+      <Filter>Director\Advisors</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="PreCompile">
@@ -216,6 +240,9 @@
     </Filter>
     <Filter Include="Director\InfluenceMap">
       <UniqueIdentifier>{6482da2b-0bde-4dd8-9977-8cc0b0040ad8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Director\Advisors">
+      <UniqueIdentifier>{efc4931b-8d6b-42e7-9d31-cebafd14e8e3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

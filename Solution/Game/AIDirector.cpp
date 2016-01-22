@@ -17,6 +17,9 @@
 #include "VulnerabilityMap.h"
 #include "DecisionMap.h"
 
+#include <FuzzySet.h>
+#include <TriggerComponent.h>
+
 AIDirector::AIDirector(const Prism::Terrain& aTerrain, Prism::Scene& aScene)
 	: Director(eOwnerType::ENEMY, aTerrain)
 	, myPlayerHasStarted(false)
@@ -58,6 +61,10 @@ AIDirector::AIDirector(const Prism::Terrain& aTerrain, Prism::Scene& aScene)
 	myDecisionMap->SetVulnerabilityMap(myVulnerabilityMap);
 	myDecisionMap->SetDifferenceMap(myDifferenceMap);
 	PostMaster::GetInstance()->Subscribe(eMessageType::TIME_MULTIPLIER, this);
+
+	myFuzzySet = new CU::FuzzySet(static_cast<int>(eFuzzyAI::_COUNT));
+
+	myGunpowder = 1000.f;
 }
 
 AIDirector::~AIDirector()
@@ -124,6 +131,13 @@ void AIDirector::Update(float aDeltaTime)
 	}
 
 	UpdateInfluences();
+	
+
+	if (FuzzyActionDone())
+	{
+		UpdateAdvisors();
+		ExecuteFuzzyAction();
+	}
 
 	if (mySurviveGatherer != nullptr && mySurviveGatherer->GetAlive() == false)
 	{
@@ -132,10 +146,10 @@ void AIDirector::Update(float aDeltaTime)
 
 	myBuilding->Update(aDeltaTime);
 
-	if (myBuilding->GetComponent<BuildingComponent>()->GetSpawnQueueSize() > 0)
+	/*if (myBuilding->GetComponent<BuildingComponent>()->GetSpawnQueueSize() > 0)
 	{
 		return;
-	}
+	}*/
 
 	myCurrentRedistributeUnitsTimer -= aDeltaTime;
 	if (myCurrentRedistributeUnitsTimer <= 0.f)
@@ -153,7 +167,7 @@ void AIDirector::Update(float aDeltaTime)
 	}
 	
 
-	Director::SpawnUnit(eUnitType::GRUNT);
+	//Director::SpawnUnit(eUnitType::GRUNT);
 	//NotLoseLogic();
 }
 
@@ -183,6 +197,234 @@ void AIDirector::ReceiveMessage(const TimeMultiplierMessage& aMessage)
 		myTimeMultiplier = aMessage.myMultiplier;
 	}
 }
+
+void AIDirector::UpdateAdvisors()
+{
+	myFuzzySet->Reset();
+
+	*myFuzzySet += UpdateAttackAdvisor();
+	*myFuzzySet += UpdateDefendAdvisor();
+	//*myFuzzySet += UpdateResourceAdvisor();
+
+	myFuzzySet->Normalize();
+}
+
+CU::FuzzySet AIDirector::UpdateAttackAdvisor()
+{
+	CU::FuzzySet set(static_cast<int>(eFuzzyAI::_COUNT));
+
+	float gruntCount = 0;
+	float rangerCount = 0;
+	float tankCount = 0;
+	for (int i = 0; i < myActiveUnits.Size(); ++i)
+	{
+		if (myActiveUnits[i]->GetUnitType() == eUnitType::GRUNT)
+		{
+			++gruntCount;
+		}
+		else if (myActiveUnits[i]->GetUnitType() == eUnitType::RANGER)
+		{
+			++rangerCount;
+		}
+		else if (myActiveUnits[i]->GetUnitType() == eUnitType::TANK)
+		{
+			++tankCount;
+		}
+	}
+
+
+	float gruntValue = 1.f;
+	float rangerValue = 0.75f;
+	float tankValue = 0.5f;
+	if (myActiveUnits.Size() > 0)
+	{
+		gruntValue = (1 - (gruntCount / myActiveUnits.Size())) * gruntValue;
+		rangerValue = (1 - (rangerCount / myActiveUnits.Size())) * rangerValue;
+		tankValue = (1 - (tankCount / myActiveUnits.Size())) * tankValue;
+	}
+
+
+	set.AddValue(static_cast<int>(eFuzzyAI::SPAWN_GRUNT), gruntValue);
+	set.AddValue(static_cast<int>(eFuzzyAI::SPAWN_RANGER), rangerValue);
+	set.AddValue(static_cast<int>(eFuzzyAI::SPAWN_TANK), tankValue);
+
+	return set;
+}
+
+CU::FuzzySet AIDirector::UpdateDefendAdvisor()
+{
+	CU::FuzzySet set(static_cast<int>(eFuzzyAI::_COUNT));
+
+	float gruntCount = 0;
+	float rangerCount = 0;
+	float tankCount = 0;
+	for (int i = 0; i < myActiveUnits.Size(); ++i)
+	{
+		if (myActiveUnits[i]->GetUnitType() == eUnitType::GRUNT)
+		{
+			++gruntCount;
+		}
+		else if (myActiveUnits[i]->GetUnitType() == eUnitType::RANGER)
+		{
+			++rangerCount;
+		}
+		else if (myActiveUnits[i]->GetUnitType() == eUnitType::TANK)
+		{
+			++tankCount;
+		}
+	}
+
+	float gruntValue = 0.6f;
+	float rangerValue = 1.f;
+	float tankValue = 1.f;
+	if (myActiveUnits.Size() > 0)
+	{
+		gruntValue = (1-(gruntCount / myActiveUnits.Size())) * gruntValue;
+		rangerValue = (1-(rangerCount / myActiveUnits.Size())) * rangerValue;
+		tankValue = (1-(tankCount / myActiveUnits.Size())) * tankValue;
+	}
+
+
+	set.AddValue(static_cast<int>(eFuzzyAI::SPAWN_GRUNT), gruntValue);
+	set.AddValue(static_cast<int>(eFuzzyAI::SPAWN_RANGER), rangerValue);
+	set.AddValue(static_cast<int>(eFuzzyAI::SPAWN_TANK), tankValue);
+	return set;
+}
+
+CU::FuzzySet AIDirector::UpdateResourceAdvisor()
+{
+	int optimalGunpowderCount = 50;
+	float gunpowderValue = 10.f;
+	float ownedPointsModifier = 2.f;
+
+
+	float threshHold = static_cast<float>(myGunpowder) / static_cast<float>(optimalGunpowderCount);
+
+	int ownedPointsCount = PollingStation::GetInstance()->GetResourcePointsCount(myOwner);
+	float pointModifier = ownedPointsCount * ownedPointsModifier;
+
+	float fuzzyValue = threshHold * gunpowderValue;
+	fuzzyValue /= pointModifier;
+
+	CU::FuzzySet set(static_cast<int>(eFuzzyAI::_COUNT));
+	set.AddValue(static_cast<int>(eFuzzyAI::TAKE_RESOURCE_POINT), fuzzyValue);
+
+	return set;
+}
+
+void AIDirector::ExecuteFuzzyAction()
+{
+	myCurrentFuzzyAction = static_cast<eFuzzyAI>(myFuzzySet->GetHighersMember());
+
+	switch (myCurrentFuzzyAction)
+	{
+	case eFuzzyAI::SPAWN_GRUNT:
+		Director::SpawnUnit(eUnitType::GRUNT);
+		break;
+	case eFuzzyAI::SPAWN_RANGER:
+		Director::SpawnUnit(eUnitType::RANGER);
+		break;
+	case eFuzzyAI::SPAWN_TANK:
+		Director::SpawnUnit(eUnitType::TANK);
+		break;
+	case eFuzzyAI::TAKE_RESOURCE_POINT:
+	{
+		if (myIdleUnits.Size() > 3)
+		{
+			CU::Vector2<float> target = PollingStation::GetInstance()->GetClosestNotOwnedResourcePoint(myOwner
+				, myBuilding->GetPosition());
+
+			for (int i = 0; i < myIdleUnits.Size(); ++i)
+			{
+				CU::Vector3<float> target3d;
+				target3d.x = target.x;
+				target3d.z = target.y;
+				bool quiet = true;
+				myIdleUnits[i]->GetComponent<ControllerComponent>()->AttackMove(target3d, true, quiet);
+			}
+		}
+		else
+		{
+			float grunt = myFuzzySet->GetValue(static_cast<int>(eFuzzyAI::SPAWN_GRUNT));
+			float ranger = myFuzzySet->GetValue(static_cast<int>(eFuzzyAI::SPAWN_RANGER));
+			float tank = myFuzzySet->GetValue(static_cast<int>(eFuzzyAI::SPAWN_TANK));
+
+			if (grunt > ranger && grunt > tank)
+			{
+				Director::SpawnUnit(eUnitType::GRUNT);
+			}
+			else if (ranger > tank)
+			{
+				Director::SpawnUnit(eUnitType::RANGER);
+			}
+			else
+			{
+				Director::SpawnUnit(eUnitType::TANK);
+			}
+		}
+		break;
+	}
+	case eFuzzyAI::TAKE_VICTORY_POINT:
+		DL_ASSERT("eFuzzyAI Case Not Implemented");
+		break;
+	case eFuzzyAI::TAKE_ARTIFACT:
+		DL_ASSERT("eFuzzyAI Case Not Implemented");
+		break;
+	case eFuzzyAI::UPGRADE_GRUNT:
+		DL_ASSERT("eFuzzyAI Case Not Implemented");
+		break;
+	case eFuzzyAI::UPGRADE_RANGER:
+		DL_ASSERT("eFuzzyAI Case Not Implemented");
+		break;
+	case eFuzzyAI::UPGRADE_TANK:
+		DL_ASSERT("eFuzzyAI Case Not Implemented");
+		break;
+	default:
+		break;
+	}
+
+	//DL_ASSERT("eFuzzyAI Case Not Implemented");
+}
+
+bool AIDirector::FuzzyActionDone() const
+{
+	switch (myCurrentFuzzyAction)
+	{
+	case eFuzzyAI::SPAWN_GRUNT:
+		return myBuilding->GetComponent<BuildingComponent>()->GetCurrentBuildTime() <= 0.f;
+		break;
+	case eFuzzyAI::SPAWN_RANGER:
+		return myBuilding->GetComponent<BuildingComponent>()->GetCurrentBuildTime() <= 0.f;
+		break;
+	case eFuzzyAI::SPAWN_TANK:
+		return myBuilding->GetComponent<BuildingComponent>()->GetCurrentBuildTime() <= 0.f;
+		break;
+	case eFuzzyAI::TAKE_RESOURCE_POINT:
+		DL_ASSERT("eFuzzyAI Case Not Implemented");
+		break;
+	case eFuzzyAI::TAKE_VICTORY_POINT:
+		DL_ASSERT("eFuzzyAI Case Not Implemented");
+		break;
+	case eFuzzyAI::TAKE_ARTIFACT:
+		DL_ASSERT("eFuzzyAI Case Not Implemented");
+		break;
+	case eFuzzyAI::UPGRADE_GRUNT:
+		DL_ASSERT("eFuzzyAI Case Not Implemented");
+		break;
+	case eFuzzyAI::UPGRADE_RANGER:
+		DL_ASSERT("eFuzzyAI Case Not Implemented");
+		break;
+	case eFuzzyAI::UPGRADE_TANK:
+		DL_ASSERT("eFuzzyAI Case Not Implemented");
+		break;
+	default:
+		break;
+	}
+
+	DL_ASSERT("eFuzzyAI Case Not Implemented");
+	return true;
+}
+
 
 void AIDirector::NotLoseLogic()
 {
@@ -357,17 +599,18 @@ void AIDirector::UpdateInfluences()
 	myGoalMap->Update();
 	const CU::GrowingArray<Entity*>& victoryPoint = PollingStation::GetInstance()->GetVictoryPoints();
 	for (int i = 0; i < victoryPoint.Size(); ++i)
-	{
+	{ 
+		eOwnerType pointOwner = victoryPoint[i]->GetComponent<TriggerComponent>()->GetOwnerGainingPoint();
 		float victoryValue = 1.f;
-		if (victoryPoint[i]->GetOwner() == myOwner)
+		if (pointOwner == myOwner)
 		{
 			victoryValue = 0.2f;
 		}
-		else if(victoryPoint[i]->GetOwner() == eOwnerType::NEUTRAL)
+		else if (pointOwner == eOwnerType::NEUTRAL)
 		{
 			victoryValue = 1.f;
 		}
-		else if (victoryPoint[i]->GetOwner() == eOwnerType::PLAYER)
+		else if (pointOwner == eOwnerType::PLAYER)
 		{
 			victoryValue = 0.7f;
 		}
@@ -377,16 +620,17 @@ void AIDirector::UpdateInfluences()
 	const CU::GrowingArray<Entity*>& resourcePoints = PollingStation::GetInstance()->GetResourcePoints();
 	for (int i = 0; i < resourcePoints.Size(); ++i)
 	{
+		eOwnerType pointOwner = resourcePoints[i]->GetComponent<TriggerComponent>()->GetOwnerGainingPoint();
 		float resourceValue = 0.8f;
-		if (resourcePoints[i]->GetOwner() == myOwner)
+		if (pointOwner == myOwner)
 		{
 			resourceValue = 0.1f;
 		}
-		else if (resourcePoints[i]->GetOwner() == eOwnerType::NEUTRAL)
+		else if (pointOwner == eOwnerType::NEUTRAL)
 		{
 			resourceValue = 0.8f;
 		}
-		else if (resourcePoints[i]->GetOwner() == eOwnerType::PLAYER)
+		else if (pointOwner == eOwnerType::PLAYER)
 		{
 			resourceValue = 0.35f;
 		}

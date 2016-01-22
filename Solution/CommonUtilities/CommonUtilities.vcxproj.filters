@@ -109,6 +109,7 @@
     <ClInclude Include="GameConstants.h" />
     <ClInclude Include="GameEnum.h" />
     <ClInclude Include="GameStructs.h" />
+    <ClInclude Include="FuzzySet.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Math">
@@ -158,6 +159,7 @@
     <ClCompile Include="tinyxml2.cpp">
       <Filter>TinyXML2</Filter>
     </ClCompile>
+    <ClCompile Include="FuzzySet.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CommonUtilities.rc" />

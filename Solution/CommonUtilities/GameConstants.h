@@ -2,14 +2,14 @@
 
 namespace GC
 {
-	const int playerGruntCount = 10;
-	const int playerRangerCount = 10;
-	const int playerTankCount = 10;
+	const int playerGruntCount = 23;
+	const int playerRangerCount = 23;
+	const int playerTankCount = 23;
 	const int playerUnitCount = playerGruntCount + playerRangerCount + playerTankCount;
 
-	const int enemyGruntCount = 10;
-	const int enemyRangerCount = 10;
-	const int enemyTankCount = 10;
+	const int enemyGruntCount = 23;
+	const int enemyRangerCount = 23;
+	const int enemyTankCount = 23;
 	const int enemyUnitCount = enemyGruntCount + enemyRangerCount + enemyTankCount;
 
 	const int resourcePointCount = 16;

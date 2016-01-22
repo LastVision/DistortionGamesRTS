@@ -213,6 +213,7 @@
     <ClInclude Include="AABB.h" />
     <ClInclude Include="Camera2D.h" />
     <ClInclude Include="CommonHelper.h" />
+    <ClInclude Include="FuzzySet.h" />
     <ClInclude Include="GameEnum.h" />
     <ClInclude Include="Fov90Frustum.h" />
     <ClInclude Include="GameConstants.h" />
@@ -253,6 +254,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera2D.cpp" />
+    <ClCompile Include="FuzzySet.cpp" />
     <ClCompile Include="MathHelper.cpp" />
     <ClCompile Include="stdafx.cpp">
       <MultiProcessorCompilation Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</MultiProcessorCompilation>
