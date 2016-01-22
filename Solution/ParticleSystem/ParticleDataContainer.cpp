@@ -43,7 +43,6 @@ namespace Prism
 
 	ParticleEmitterData* ParticleDataContainer::GetParticleData(const std::string& aFilePath)
 	{
-		DL_DEBUG("Getting Particle Data");
 #ifndef DLL_EXPORT
 		auto it = myParticleData.find(aFilePath);
 
@@ -72,10 +71,8 @@ namespace Prism
 
 	void ParticleDataContainer::SetGPUData(const Camera& aCamera)
 	{
-		DL_DEBUG("Attempting to SetGPUData");
 		for (auto it = myParticleData.begin(); it != myParticleData.end(); ++it)
 		{
-			DL_DEBUG("Inside SetGPUData map");
 			ParticleEmitterData* tempData = it->second;
 			tempData->myEffect->SetViewMatrix(CU::InverseSimple(aCamera.GetOrientation()));
 			tempData->myEffect->SetProjectionMatrix(aCamera.GetProjection());
@@ -85,12 +82,10 @@ namespace Prism
 
 			tempData->myEffect->GetTechnique()->GetDesc(tempData->myTechniqueDesc);
 		}
-		DL_DEBUG("Finished SetGPUData");
 	}
 
 	void ParticleDataContainer::LoadParticleData(const std::string& aFilePath)
 	{
-		DL_DEBUG("Loading particle data");
 		ParticleEmitterData* newData = new ParticleEmitterData();
 
 		newData->LoadDataFile(aFilePath);

@@ -26,7 +26,7 @@ namespace Prism
 
 
 		DL_DEBUG(("Loading :" + myEmitterPath).c_str());
-		//DL_ASSERT_EXP(anAllowManyParticles == true || particleCount <= 201, "Can't have more than 201 particles in an emitter!");
+		DL_ASSERT_EXP(anAllowManyParticles == true || particleCount <= 201, "Can't have more than 201 particles in an emitter!");
 
 		myGraphicalParticles.Init(particleCount);
 		myLogicalParticles.Init(particleCount);
