@@ -52,6 +52,9 @@ private:
 
 	void UpdateUpgradeCooldown(float aDelta, eUnitType aUnit);
 
+	CU::Vector2<float> mySpawnPoint;
+	CU::Vector2<float> myRallyPoint;
+
 	CU::StaticArray<int, 3> myUnitCosts;
 	CU::StaticArray<float, 3> myUnitBuildTimes;
 	CU::StaticArray<CU::StaticArray<Upgrade, 3>, 3> myUnitUpgrades; //3 upgrade-levels for all 3 units

@@ -62,7 +62,7 @@ public:
 	Prism::eOctreeType GetOctreeType() const;
 	bool GetAlive() const;
 	void Kill();
-	void Spawn(const CU::Vector3f& aSpawnPosition);
+	void Spawn(const CU::Vector2<float>& aSpawnPoint, const CU::Vector2<float>& aRallyPoint);
 
 	void SetSelect(bool aStatus);
 	bool IsSelected() const;

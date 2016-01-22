@@ -253,14 +253,15 @@ void Entity::Kill()
 	//RemoveFromScene();
 }
 
-void Entity::Spawn(const CU::Vector3f& aSpawnPosition)
+void Entity::Spawn(const CU::Vector2<float>& aSpawnPoint, const CU::Vector2<float>& aRallyPoint)
 {
-	myOrientation.SetPos(aSpawnPosition);
-	myPosition.x = aSpawnPosition.x;
-	myPosition.y = aSpawnPosition.z;
+	myOrientation.SetPos(CU::Vector3<float>(aSpawnPoint.x, 0, aSpawnPoint.y));
+	myPosition = aSpawnPoint;
 	Reset();
 	myAlive = true;
 	AddToScene();
+	bool hasPlayedSound = false;
+	GetComponent<ControllerComponent>()->MoveTo(CU::Vector3<float>(aRallyPoint.x, 0, aRallyPoint.y), true, hasPlayedSound);
 }
 
 void Entity::SetSelect(bool aStatus)

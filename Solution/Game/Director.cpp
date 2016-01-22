@@ -200,7 +200,7 @@ void Director::ReceiveMessage(const SpawnUnitMessage& aMessage)
 		if (spawnedUnit != nullptr)
 		{
 			myUnitCount += unitSupplyCost;
-			spawnedUnit->Spawn({ aMessage.myPosition.x, 0, aMessage.myPosition.y });
+			spawnedUnit->Spawn(aMessage.mySpawnPoint, aMessage.myRallyPoint);
 			myActiveUnits.Add(spawnedUnit);
 
 			int deadIndex = myDeadUnits.Find(spawnedUnit);

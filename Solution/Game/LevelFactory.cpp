@@ -229,18 +229,10 @@ void LevelFactory::ReadLevel(const std::string& aLevelPath, std::string& aTutori
 	Console::GetInstance(); // needs to be here to create console.
 
 	LoadLights(reader, levelElement);
-	LoadBases(reader, levelElement);
-#ifdef LOAD_PROPS
-	LoadProps(reader, levelElement);
-#endif
-	LoadControlPoints(reader, levelElement);
-	LoadUnits(reader, levelElement);
-	LoadArtifacts(reader, levelElement);
 #ifndef USE_BINARY_TERRAIN
 	LoadCutBoxes(reader, levelElement);
 #endif
 	LoadParticles(reader, levelElement); 
-	reader.CloseDocument();
 
 	//modelLoader->UnPause();
 	//modelLoader->WaitUntilFinished();
@@ -267,6 +259,15 @@ void LevelFactory::ReadLevel(const std::string& aLevelPath, std::string& aTutori
 #endif
 
 	myTerrain->CreatePathFinder();
+
+	LoadBases(reader, levelElement);
+#ifdef LOAD_PROPS
+	LoadProps(reader, levelElement);
+#endif
+	LoadControlPoints(reader, levelElement);
+	LoadUnits(reader, levelElement);
+	LoadArtifacts(reader, levelElement);
+	reader.CloseDocument();
 
 
 	Prism::Engine::GetInstance()->myIsLoading = false;
@@ -418,6 +419,7 @@ void LevelFactory::LoadUnits(XMLReader& aReader, tinyxml2::XMLElement* aLevelEle
 
 		PostMaster::GetInstance()->SendMessage(SpawnUnitMessage(EntityEnumConverter::ConvertStringToUnitType(unitType)
 			, EntityEnumConverter::ConvertStringToOwnerType(owner)
+			, { creepPosition.x, creepPosition.z }
 			, { creepPosition.x, creepPosition.z }));
 	}
 }
