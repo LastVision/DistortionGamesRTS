@@ -39,6 +39,8 @@ namespace GUI
 
 		void ReadXML(const std::string& aXMLPath);
 
+		const Widget* GetActiveWidget() const;
+
 	private:
 
 		void CheckMousePressed();
@@ -60,4 +62,9 @@ namespace GUI
 
 		int myLevelID;
 	};
+
+	inline const Widget* GUIManager::GetActiveWidget() const
+	{
+		return myActiveWidget;
+	}
 }
