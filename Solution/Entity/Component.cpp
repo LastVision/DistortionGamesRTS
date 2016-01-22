@@ -10,14 +10,14 @@ Component::~Component()
 {
 }
 
+void Component::Reset()
+{
+}
+
 void Component::Init()
 {
 }
 
 void Component::Update(float)
-{
-}
-
-void Component::Reset()
 {
 }

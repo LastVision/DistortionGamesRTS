@@ -35,6 +35,7 @@ namespace GUI
 	private:
 		void RenderBaseInfo(const CU::Vector2<float>& aParentPosition);
 		void RenderUnitInfo(const CU::Vector2<float>& aParentPosition);
+		void RenderUnitGroupInfo(const CU::Vector2<float>& aParentPosition);
 
 		void operator=(UnitInfoWidget&) = delete;
 

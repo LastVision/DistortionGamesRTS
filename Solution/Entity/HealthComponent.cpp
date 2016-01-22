@@ -86,7 +86,6 @@ bool HealthComponent::TakeDamageAndCheckSurvive(float aDamage)
 			Prism::Audio::AudioInterface::GetInstance()->PostEvent("Tank_Death"
 				, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
 		}
-		myEntity.GetComponent<AnimationComponent>()->PlayAnimation(eEntityState::DIE);
 		myEntity.SetState(eEntityState::DIE);
 		return false;
 	}

@@ -6,11 +6,9 @@
 
 BuildingComponent::BuildingComponent(Entity& aEntity, BuildingComponentData& aData)
 	: Component(aEntity)
-	, myCurrentBuildTime(0.f)
 	, myMaxBuildTime(2.f)
 	, myUnitCosts(aData.myUnitCosts)
 	, myUnitBuildTimes(aData.myUnitBuildTimes)
-	, myIgnoreBuildTime(false)
 	, myUnitUpgrades(aData.myUnitUpgrades)
 	, myUnitSupplyCosts(aData.myUnitSupplyCosts)
 {
@@ -26,20 +24,25 @@ BuildingComponent::~BuildingComponent()
 {
 }
 
+void BuildingComponent::Reset()
+{
+	myCurrentBuildTime = 0.f;
+	myIgnoreBuildTime = false;
+	myEntity.myAlive = true;
+}
+
 void BuildingComponent::Update(float aDeltaTime)
 {
-	
-
 	UpdateUpgradeCooldown(aDeltaTime, eUnitType::GRUNT);
 	UpdateUpgradeCooldown(aDeltaTime, eUnitType::RANGER);
 	UpdateUpgradeCooldown(aDeltaTime, eUnitType::TANK);
 
-	if (mySpawnQueue.empty() == true)
+	if (myBuildQueue.empty() == true)
 	{
 		return;
 	}
 
-	const BuildInfo& currentOrder = mySpawnQueue.front();
+	const BuildInfo& currentOrder = myBuildQueue.front();
 	if (currentOrder.myUnit == eUnitType::NOT_A_UNIT)
 	{
 		return;
@@ -76,24 +79,24 @@ void BuildingComponent::Update(float aDeltaTime)
 			PostMaster::GetInstance()->SendMessage(SpawnUnitMessage(currentOrder.myUnit, myEntity.GetOwner(), myEntity.GetPosition() + CU::Vector2<float>(0, -15.f)));
 		}
 
-		mySpawnQueue.pop();
+		myBuildQueue.pop();
 		myCurrentBuildTime = 0.f;
 	}
 }
 
 void BuildingComponent::BuildUnit(eUnitType aUnitType)
 {
-	if (mySpawnQueue.size() < BUILD_QUEUE_SIZE)
+	if (myBuildQueue.size() < BUILD_QUEUE_SIZE)
 	{
-		mySpawnQueue.push({ aUnitType, false });
+		myBuildQueue.push({ aUnitType, false });
 	}
 }
 
 void BuildingComponent::UpgradeUnit(eUnitType aUnitType)
 {
-	if (mySpawnQueue.size() < BUILD_QUEUE_SIZE)
+	if (myBuildQueue.size() < BUILD_QUEUE_SIZE)
 	{
-		mySpawnQueue.push({ aUnitType, true });
+		myBuildQueue.push({ aUnitType, true });
 		int unitIndex = static_cast<int>(aUnitType);
 		int upgradeIndex = myUnitUpgradeProgress[unitIndex];
 		myUnitUpgrades[unitIndex][upgradeIndex].myInProgress = true;

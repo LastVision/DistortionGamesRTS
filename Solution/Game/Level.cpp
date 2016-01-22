@@ -109,6 +109,9 @@ void Level::Render(Prism::Camera& aCamera)
 	myRenderer->BeginScene();
 	myScene->Render(myRenderNavMeshLines);
 	myEmitterManager->RenderEmitters();
+
+	myAI->RenderMaps(aCamera);
+
 	myRenderer->EndScene(Prism::ePostProcessing::BLOOM);
 	myRenderer->FinalRender();
 

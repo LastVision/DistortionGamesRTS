@@ -63,14 +63,14 @@ namespace GUI
 	{
 		myImageCurrent->Render(myPosition + aParentPosition);
 
-		if (myImageCurrent == myImageHover && myHoverText != "")
-		{
-			CU::Vector2<float> hoverPosition = { myPosition.x - mySize.x / 2.f
-				, myPosition.y + mySize.y / 2.f };
-			hoverPosition += aParentPosition;
-
-			Prism::Engine::GetInstance()->PrintText(myHoverText, hoverPosition, Prism::eTextType::RELEASE_TEXT);
-		}
+		//if (myImageCurrent == myImageHover && myHoverText != "")
+		//{
+		//	CU::Vector2<float> hoverPosition = { myPosition.x - mySize.x / 2.f
+		//		, myPosition.y + mySize.y / 2.f };
+		//	hoverPosition += aParentPosition;
+		//
+		//	Prism::Engine::GetInstance()->PrintText(myHoverText, hoverPosition, Prism::eTextType::RELEASE_TEXT);
+		//}
 	}
 
 	void ButtonWidget::OnMousePressed(const CU::Vector2<float>&)

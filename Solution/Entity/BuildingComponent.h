@@ -15,6 +15,8 @@ public:
 	BuildingComponent(Entity& aEntity, BuildingComponentData& aData);
 	~BuildingComponent();
 
+	void Reset() override;
+
 	void Update(float aDeltaTime) override;
 
 	static eComponentType GetTypeStatic();
@@ -57,7 +59,7 @@ private:
 	CU::StaticArray<int, 3> myUnitSupplyCosts;
 	CU::StaticArray<float, 3> myUpgradeCooldowns;
 
-	std::queue<BuildInfo> mySpawnQueue;
+	std::queue<BuildInfo> myBuildQueue;
 
 	float myCurrentBuildTime;
 	float myMaxBuildTime;
@@ -77,12 +79,12 @@ inline eComponentType BuildingComponent::GetType()
 
 inline eUnitType BuildingComponent::GetEntityToSpawn() const
 {
-	if (mySpawnQueue.empty() == true)
+	if (myBuildQueue.empty() == true)
 	{
 		return eUnitType::NOT_A_UNIT;
 	}
 
-	return mySpawnQueue.front().myUnit;
+	return myBuildQueue.front().myUnit;
 }
 
 inline const float& BuildingComponent::GetCurrentBuildTime() const
@@ -97,12 +99,12 @@ inline const float& BuildingComponent::GetMaxBuildTime() const
 
 inline int BuildingComponent::GetSpawnQueueSize() const
 {
-	return mySpawnQueue.size();
+	return myBuildQueue.size();
 }
 
 inline bool BuildingComponent::IsQueueFull() const
 {
-	return mySpawnQueue.size() >= BUILD_QUEUE_SIZE;
+	return myBuildQueue.size() >= BUILD_QUEUE_SIZE;
 }
 
 inline void BuildingComponent::SetIgnoreBuildTime(bool anIgnoreBuildTime)

@@ -10,6 +10,7 @@
 #include "MiniMapWidget.h"
 #include "ResourceBarWidget.h"
 #include "TextWidget.h"
+#include "TooltipWidget.h"
 #include "UnitActionWidget.h"
 #include "UnitCapWidget.h"
 #include "UnitInfoWidget.h"
@@ -213,6 +214,11 @@ namespace GUI
 				{
 					AbilityButton* upgradeButtonWidget = new AbilityButton(&reader, widgetElement, myPlayer);
 					container->AddWidget(upgradeButtonWidget);
+				}
+				else if (type == "tool_tip")
+				{
+					TooltipWidget* tooltipWidget = new TooltipWidget(&reader, widgetElement, this);
+					container->AddWidget(tooltipWidget);
 				}
 				else
 				{

@@ -15,6 +15,34 @@ void ComponentLoader::LoadActorComponent(XMLReader& aDocument, tinyxml2::XMLElem
 		{
 			aDocument.ForceReadAttribute(e, "value", aOutputData.myMoveSpeed);
 		}
+		else if (elementName == CU::ToLower("VisionRange"))
+		{
+			aDocument.ForceReadAttribute(e, "value", aOutputData.myVisionRange);
+		}
+		else if (elementName == CU::ToLower("AttackRange"))
+		{
+			aDocument.ForceReadAttribute(e, "value", aOutputData.myAttackRange);
+		}
+		else if (elementName == CU::ToLower("AttackDamage"))
+		{
+			aDocument.ForceReadAttribute(e, "value", aOutputData.myAttackDamage);
+		}
+		else if (elementName == CU::ToLower("AttackSpeed"))
+		{
+			aDocument.ForceReadAttribute(e, "value", aOutputData.myAttackRechargeTime);
+		}
+		else if (elementName == CU::ToLower("ChaseDistance"))
+		{
+			aDocument.ForceReadAttribute(e, "value", aOutputData.myChaseDistance);
+		}
+		else if (elementName == CU::ToLower("ChaseDistanceNeutral"))
+		{
+			aDocument.ForceReadAttribute(e, "value", aOutputData.myChaseDistanceNeutral);
+		}
+		else if (elementName == CU::ToLower("RangerOneShotCooldown"))
+		{
+			aDocument.ForceReadAttribute(e, "value", aOutputData.myRangerOneShotCoolDown);
+		}
 		else
 		{
 			FailedToReadChildElementMessage(e->Name(), aSourceElement->Name());
@@ -154,30 +182,6 @@ void ComponentLoader::LoadCollisionComponent(XMLReader& aDocument, tinyxml2::XML
 void ComponentLoader::LoadControllerComponent(XMLReader& aDocument, tinyxml2::XMLElement* aSourceElement, ControllerComponentData& aOutputData)
 {
 	aOutputData.myExistsInEntity = true;
-
-	tinyxml2::XMLElement* e = aDocument.ForceFindFirstChild(aSourceElement, "VisionRange");
-	aDocument.ForceReadAttribute(e, "value", aOutputData.myVisionRange);
-
-	e = aDocument.ForceFindFirstChild(aSourceElement, "AttackRange");
-	aDocument.ForceReadAttribute(e, "value", aOutputData.myAttackRange);
-
-	e = aDocument.ForceFindFirstChild(aSourceElement, "AttackDamage");
-	aDocument.ForceReadAttribute(e, "value", aOutputData.myAttackDamage);
-
-	e = aDocument.ForceFindFirstChild(aSourceElement, "AttackSpeed");
-	aDocument.ForceReadAttribute(e, "value", aOutputData.myAttackRechargeTime);
-
-	e = aDocument.ForceFindFirstChild(aSourceElement, "ChaseDistance");
-	aDocument.ForceReadAttribute(e, "value", aOutputData.myChaseDistance);
-
-	e = aDocument.ForceFindFirstChild(aSourceElement, "ChaseDistanceNeutral");
-	aDocument.ForceReadAttribute(e, "value", aOutputData.myChaseDistanceNeutral);
-
-	e = aDocument.FindFirstChild(aSourceElement, "RangerOneShotCooldown");
-	if (e != nullptr)
-	{
-		aDocument.ForceReadAttribute(e, "value", aOutputData.myRangerOneShotCoolDown);
-	}
 }
 
 void ComponentLoader::LoadGraphicsComponent(XMLReader& aDocument, tinyxml2::XMLElement* aSourceElement, GraphicsComponentData& aOutputData)

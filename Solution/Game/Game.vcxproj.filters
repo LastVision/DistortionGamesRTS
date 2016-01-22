@@ -69,6 +69,27 @@
     <ClCompile Include="SplashState.cpp">
       <Filter>StateStack</Filter>
     </ClCompile>
+    <ClCompile Include="AIMap.cpp">
+      <Filter>Director\InfluenceMap</Filter>
+    </ClCompile>
+    <ClCompile Include="DifferenceMap.cpp">
+      <Filter>Director\InfluenceMap</Filter>
+    </ClCompile>
+    <ClCompile Include="GoalMap.cpp">
+      <Filter>Director\InfluenceMap</Filter>
+    </ClCompile>
+    <ClCompile Include="InfluenceMap.cpp">
+      <Filter>Director\InfluenceMap</Filter>
+    </ClCompile>
+    <ClCompile Include="TensionMap.cpp">
+      <Filter>Director\InfluenceMap</Filter>
+    </ClCompile>
+    <ClCompile Include="VulnerabilityMap.cpp">
+      <Filter>Director\InfluenceMap</Filter>
+    </ClCompile>
+    <ClCompile Include="DecisionMap.cpp">
+      <Filter>Director\InfluenceMap</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -149,6 +170,27 @@
     <ClInclude Include="SplashState.h">
       <Filter>StateStack</Filter>
     </ClInclude>
+    <ClInclude Include="AIMap.h">
+      <Filter>Director\InfluenceMap</Filter>
+    </ClInclude>
+    <ClInclude Include="DifferenceMap.h">
+      <Filter>Director\InfluenceMap</Filter>
+    </ClInclude>
+    <ClInclude Include="GoalMap.h">
+      <Filter>Director\InfluenceMap</Filter>
+    </ClInclude>
+    <ClInclude Include="InfluenceMap.h">
+      <Filter>Director\InfluenceMap</Filter>
+    </ClInclude>
+    <ClInclude Include="TensionMap.h">
+      <Filter>Director\InfluenceMap</Filter>
+    </ClInclude>
+    <ClInclude Include="VulnerabilityMap.h">
+      <Filter>Director\InfluenceMap</Filter>
+    </ClInclude>
+    <ClInclude Include="DecisionMap.h">
+      <Filter>Director\InfluenceMap</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="PreCompile">
@@ -171,6 +213,9 @@
     </Filter>
     <Filter Include="Managers">
       <UniqueIdentifier>{f085dd4d-badd-48c6-b55c-c3ab8aeb1674}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Director\InfluenceMap">
+      <UniqueIdentifier>{6482da2b-0bde-4dd8-9977-8cc0b0040ad8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

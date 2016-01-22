@@ -176,14 +176,14 @@ namespace Prism
 
 			myGraphicalParticles[i].myPosition += myLogicalParticles[i].myVelocity * aDeltaTime;
 
-		//	if (myUseAlphaDelta == true)
+			if (myUseAlphaDelta == true)
 			{
 				myGraphicalParticles[i].myAlpha += myParticleEmitterData->myData.myAlphaDelta * aDeltaTime;
 			}
-		//	else
-		//	{
-//				myGraphicalParticles[i].myAlpha -= myGraphicalParticles[i].myLifeTime * aDeltaTime;
-		//	}
+			else
+			{
+				myGraphicalParticles[i].myAlpha -= myGraphicalParticles[i].myLifeTime * aDeltaTime;
+			}
 			myGraphicalParticles[i].mySize += myParticleEmitterData->myData.mySizeDelta * aDeltaTime;
 
 			myGraphicalParticles[i].myColor += myDiffColor  * aDeltaTime;
