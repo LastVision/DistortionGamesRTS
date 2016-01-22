@@ -56,6 +56,7 @@ private:
 
 	const Prism::Terrain& myTerrain;
 	CU::Vector2<float> myAcceleration;
+
 	Behavior* myBehavior;
 	const EntityCommandData& myCurrentCommand;
 	EntityCommandData myPreviousCommand;

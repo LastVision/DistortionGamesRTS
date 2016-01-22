@@ -35,6 +35,8 @@ void ControllerComponent::Reset()
 	myTerrain.CalcEntityHeight(myEntity.myOrientation);
 
 	myStartNewAction = true;
+	myFirstFrame = true;
+	mySecondFrame = false;
 
 
 	myCommands.RemoveAll();
@@ -56,6 +58,21 @@ void ControllerComponent::Update(float aDelta)
 	if (myEntity.GetState() == eEntityState::DIE)
 	{
 		return;
+	}
+
+	if (mySecondFrame == true)
+	{
+		mySecondFrame = false;
+		bool sound = false;
+		MoveTo(CU::Vector3<float>(myRallyPoint.x, 0, myRallyPoint.y), true, sound);
+	}
+
+	if (myFirstFrame == true)
+	{
+		myFirstFrame = false;
+		mySecondFrame = true;
+		bool sound;
+		Stop(sound);
 	}
 
 	if (myCurrentCommand.myCommand == eEntityCommand::ATTACK_TARGET

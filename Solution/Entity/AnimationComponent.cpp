@@ -64,6 +64,7 @@ AnimationComponent::~AnimationComponent()
 void AnimationComponent::Reset()
 {
 	myPrevEntityState = myEntity.GetState();
+	PlayAnimation(myEntity.GetState());
 }
 
 void AnimationComponent::AddAnimation(eEntityState aState, const std::string& aAnimationPath
