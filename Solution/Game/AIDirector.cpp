@@ -64,8 +64,6 @@ AIDirector::AIDirector(const Prism::Terrain& aTerrain, Prism::Scene& aScene)
 	PostMaster::GetInstance()->Subscribe(eMessageType::TIME_MULTIPLIER, this);
 
 	myFuzzySet = new CU::FuzzySet(static_cast<int>(eFuzzyAI::_COUNT));
-
-	myGunpowder = 1000;
 }
 
 AIDirector::~AIDirector()

@@ -297,6 +297,14 @@ void LevelFactory::ReadLevelSetting(const std::string& aLevelPath)
 	reader.ForceReadAttribute(victoryElement, "value", maxVictoryPoint);
 	myCurrentLevel->myMaxVictoryPoint = maxVictoryPoint;
 
+	int playerGunpowder = 0;
+	int aiGunpowder = 0;
+
+	reader.ForceReadAttribute(reader.ForceFindFirstChild(rootElement, "gunpowder"), "player", playerGunpowder);
+	reader.ForceReadAttribute(reader.ForceFindFirstChild(rootElement, "gunpowder"), "ai", aiGunpowder);
+
+	myCurrentLevel->myPlayer->SetGunPowder(playerGunpowder);
+	myCurrentLevel->myAI->SetGunPowder(aiGunpowder);
 
 	reader.CloseDocument();
 }
