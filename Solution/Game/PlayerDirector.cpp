@@ -292,18 +292,7 @@ void PlayerDirector::ReceiveMessage(const OnClickMessage& aMessage)
 	}
 	else if (aMessage.myEvent == eOnClickEvent::SELECT_CONTROL_GROUP)
 	{
-		if (myControlGroups[aMessage.myID].Size() > 0)
-		{
-			for (int i = 0; i < mySelectedUnits.Size(); i++)
-			{
-				mySelectedUnits[i]->SetSelect(false);
-			}
-			mySelectedUnits = myControlGroups[aMessage.myID];
-			for (int i = 0; i < mySelectedUnits.Size(); i++)
-			{
-				mySelectedUnits[i]->SetSelect(true);
-			}
-		}
+		SelectControlGroup(aMessage.myID);
 	}
 }
 
@@ -618,19 +607,7 @@ void PlayerDirector::UpdateControlGroups()
 		{
 			index = 8;
 		}
-
-		if (index != -1 && myControlGroups[index].Size() > 0)
-		{
-			for (int i = 0; i < mySelectedUnits.Size(); i++)
-			{
-				mySelectedUnits[i]->SetSelect(false);
-			}
-			mySelectedUnits = myControlGroups[index];
-			for (int i = 0; i < mySelectedUnits.Size(); i++)
-			{
-				mySelectedUnits[i]->SetSelect(true);
-			}
-		}
+		SelectControlGroup(index);
 	}
 }
 
@@ -839,6 +816,22 @@ void PlayerDirector::Enrage()
 		if (enrageComp != nullptr)
 		{
 			enrageComp->Activate();
+		}
+	}
+}
+
+void PlayerDirector::SelectControlGroup(int anIndex)
+{
+	if (anIndex >= 0 && myControlGroups[anIndex].Size() > 0)
+	{
+		for (int i = 0; i < mySelectedUnits.Size(); i++)
+		{
+			mySelectedUnits[i]->SetSelect(false);
+		}
+		mySelectedUnits = myControlGroups[anIndex];
+		for (int i = 0; i < mySelectedUnits.Size(); i++)
+		{
+			mySelectedUnits[i]->SetSelect(true);
 		}
 	}
 }
