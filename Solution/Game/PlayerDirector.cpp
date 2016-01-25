@@ -545,6 +545,26 @@ void PlayerDirector::UpdateControlGroups()
 		{
 			myControlGroups[3] = mySelectedUnits;
 		}
+		else if (CU::InputWrapper::GetInstance()->KeyDown(DIK_5) == true)
+		{
+			myControlGroups[4] = mySelectedUnits;
+		}
+		else if (CU::InputWrapper::GetInstance()->KeyDown(DIK_6) == true)
+		{
+			myControlGroups[5] = mySelectedUnits;
+		}
+		else if (CU::InputWrapper::GetInstance()->KeyDown(DIK_7) == true)
+		{
+			myControlGroups[6] = mySelectedUnits;
+		}
+		else if (CU::InputWrapper::GetInstance()->KeyDown(DIK_8) == true)
+		{
+			myControlGroups[7] = mySelectedUnits;
+		}
+		else if (CU::InputWrapper::GetInstance()->KeyDown(DIK_9) == true)
+		{
+			myControlGroups[8] = mySelectedUnits;
+		}
 	}
 
 	for (int i = 0; i < AMOUNT_OF_CONTROL_GROUPS; i++)
@@ -577,6 +597,26 @@ void PlayerDirector::UpdateControlGroups()
 		else if (CU::InputWrapper::GetInstance()->KeyDown(DIK_4) == true)
 		{
 			index = 3;
+		}
+		else if (CU::InputWrapper::GetInstance()->KeyDown(DIK_5) == true)
+		{
+			index = 4;
+		}
+		else if (CU::InputWrapper::GetInstance()->KeyDown(DIK_6) == true)
+		{
+			index = 5;
+		}
+		else if (CU::InputWrapper::GetInstance()->KeyDown(DIK_7) == true)
+		{
+			index = 6;
+		}
+		else if (CU::InputWrapper::GetInstance()->KeyDown(DIK_8) == true)
+		{
+			index = 7;
+		}
+		else if (CU::InputWrapper::GetInstance()->KeyDown(DIK_9) == true)
+		{
+			index = 8;
 		}
 
 		if (index != -1 && myControlGroups[index].Size() > 0)
