@@ -218,13 +218,13 @@ void PlayerDirector::Render(const Prism::Camera& aCamera)
 	{
 		if (myLeftMousePressed == true && myRenderDragSelection == true) // balck magic numbers, don't change
 		{
-			myDragSelectionSpriteVertical->SetSize({ 10.f, mySelectionSpriteSize.y }, mySelectionSpriteHotspot);
+			myDragSelectionSpriteVertical->SetSize({ 10.f, mySelectionSpriteSize.y + 10.f }, mySelectionSpriteHotspot);
 			myDragSelectionSpriteVertical->Render(mySelectionSpriteRenderPosition);
 
-			myDragSelectionSpriteHorizontal->SetSize({ mySelectionSpriteSize.x, 10.f }, mySelectionSpriteHotspot);
+			myDragSelectionSpriteHorizontal->SetSize({ mySelectionSpriteSize.x + 10.f, 10.f }, mySelectionSpriteHotspot);
 			myDragSelectionSpriteHorizontal->Render(mySelectionSpriteRenderPosition);
 
-			myDragSelectionSpriteVertical->SetSize({ 10.f, mySelectionSpriteSize.y }, { -mySelectionSpriteSize.x, mySelectionSpriteSize.y });
+			myDragSelectionSpriteVertical->SetSize({ 10.f, mySelectionSpriteSize.y + 10.f }, { -mySelectionSpriteSize.x, mySelectionSpriteSize.y });
 			myDragSelectionSpriteVertical->Render(mySelectionSpriteRenderPosition);
 
 			myDragSelectionSpriteHorizontal->SetSize({ mySelectionSpriteSize.x + 10.f, 10.f }, { mySelectionSpriteHotspot.x, mySelectionSpriteHotspot.y - mySelectionSpriteSize.y });
