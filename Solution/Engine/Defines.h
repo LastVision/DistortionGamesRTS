@@ -27,4 +27,3 @@
 #endif
 
 #define USE_BINARY_TERRAIN
-

@@ -31,6 +31,7 @@ public:
 	const EntityCommandData& GetCurrentCommand() const;
 
 	void SetRallyPoint(const CU::Vector2<float>& aRallyPoint);
+	bool IsReady() const;
 
 private:
 	void FillCommandList(eEntityCommand aAction, bool aClearCommandQueue, Entity* aEntity = nullptr
@@ -57,6 +58,7 @@ private:
 	bool myStartNewAction;
 	bool myFirstFrame;
 	bool mySecondFrame;
+	bool myIsReady;
 
 	CU::GrowingArray<EntityCommandData> myCommands;
 	EntityCommandData myCurrentCommand;
@@ -80,4 +82,9 @@ inline const EntityCommandData& ControllerComponent::GetCurrentCommand() const
 inline void ControllerComponent::SetRallyPoint(const CU::Vector2<float>& aRallyPoint)
 {
 	myRallyPoint = aRallyPoint;
+}
+
+inline bool ControllerComponent::IsReady() const
+{
+	return myIsReady;
 }

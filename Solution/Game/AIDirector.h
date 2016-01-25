@@ -37,15 +37,19 @@ private:
 		Action() {}
 		Action(eFuzzyAI aFuzzyAction)
 			: myFuzzyAction(aFuzzyAction)
+			, myIsDone(false)
 		{}
 		Action(eFuzzyAI aFuzzyAction, const CU::Vector2<float>& aPosition)
 			: myFuzzyAction(aFuzzyAction)
 			, myPosition(aPosition)
+			, myIsDone(false)
 		{}
 		eFuzzyAI myFuzzyAction;
 		CU::Vector2<float> myPosition;
+		bool myIsDone;
 	};
 
+	void UpdateUnitLists();
 	void UpdateActionQueue();
 	void UpdateAdvisors();
 	CU::FuzzySet UpdateAttackAdvisor();
@@ -55,8 +59,8 @@ private:
 	CU::GrowingArray<Action> myActionQueue;
 
 	void ExecuteFuzzyAction();
-	bool FuzzyActionDone() const;
-	eFuzzyAI myCurrentFuzzyAction;
+	bool FuzzyActionDone();
+	Action myCurrentAction;
 
 	//void NotLoseLogic();
 	//void WinSlowlyLogic();
@@ -65,6 +69,7 @@ private:
 	bool myPlayerHasStarted;
 
 	CU::GrowingArray<Entity*> myIdleUnits;
+	CU::GrowingArray<Entity*> myUnitsOnMission;
 	Entity* mySurviveGatherer;
 
 	InfluenceMap* myInfluenceMap;

@@ -30,6 +30,7 @@ namespace CU
 		inline void Add(const ObjectType& aObject);
 		inline void AddEmptyObject();
 		inline void Insert(SizeType aIndex, const ObjectType& aObject);
+		inline void InsertFirst(const ObjectType& aObject);
 		inline void DeleteCyclic(ObjectType& aObject);
 		inline void DeleteCyclicAtIndex(SizeType aItemNumber);
 		inline void DeleteNonCyclicAtIndex(SizeType aItemNumber);
@@ -222,6 +223,21 @@ namespace CU
 		}
 		myData[aIndex] = aObject;
 		++myCurrentSize;
+	}
+
+	GA_TEMPLATE
+	inline void GA_TYPE::InsertFirst(const ObjectType& aObject)
+	{
+		DL_ASSERT_EXP(myIsInit == true, "Not initialized, run Init first.");
+		
+		if (myCurrentSize == 0)
+		{
+			Add(aObject);
+		}
+		else
+		{
+			Insert(0, aObject);
+		}
 	}
 
 	GA_TEMPLATE

@@ -19,11 +19,13 @@
 
 #include <FuzzySet.h>
 #include <TriggerComponent.h>
+#include <ActorComponent.h>
 
 AIDirector::AIDirector(const Prism::Terrain& aTerrain, Prism::Scene& aScene)
 	: Director(eOwnerType::ENEMY, aTerrain)
 	, myPlayerHasStarted(false)
 	, myIdleUnits(32)
+	, myUnitsOnMission(32)
 	, mySurviveGatherer(nullptr)
 	, myInfluenceRenderIndex(0)
 	, myRedistributeUnitsTimer(10.f)
@@ -133,6 +135,7 @@ void AIDirector::Update(float aDeltaTime)
 	UpdateInfluences();
 
 
+	UpdateUnitLists();
 
 	if (FuzzyActionDone())
 	{
@@ -156,7 +159,7 @@ void AIDirector::Update(float aDeltaTime)
 	return;
 	}*/
 
-	myCurrentRedistributeUnitsTimer -= aDeltaTime;
+	/*myCurrentRedistributeUnitsTimer -= aDeltaTime;
 	if (myCurrentRedistributeUnitsTimer <= 0.f)
 	{
 		myCurrentRedistributeUnitsTimer = myRedistributeUnitsTimer;
@@ -169,7 +172,7 @@ void AIDirector::Update(float aDeltaTime)
 			myActiveUnits[i]->GetComponent<ControllerComponent>()->AttackMove(pos
 				, true, shouldBeQuiet);
 		}
-	}
+	}*/
 
 
 	//Director::SpawnUnit(eUnitType::GRUNT);
@@ -181,19 +184,19 @@ void AIDirector::ReceiveMessage(const SpawnUnitMessage& aMessage)
 	if (static_cast<eUnitType>(aMessage.myUnitType) == eUnitType::RANGER && myHasUnlockedRanger == false) return;
 	if (static_cast<eUnitType>(aMessage.myUnitType) == eUnitType::TANK && myHasUnlockedTank == false) return;
 	Director::ReceiveMessage(aMessage);
-	if (aMessage.myOwnerType == static_cast<int>(eOwnerType::ENEMY))
-	{
-		Entity* newEntity = myActiveUnits.GetLast();
+	//if (aMessage.myOwnerType == static_cast<int>(eOwnerType::ENEMY))
+	//{
+	//	Entity* newEntity = myActiveUnits.GetLast();
 
-		myIdleUnits.Add(newEntity);
+	//	//myIdleUnits.Add(newEntity);
 
-		bool shouldBeQuiet = true;
-		CU::Vector2<float> targetPos = myDecisionMap->GetOffensivePosition(newEntity->GetPosition());
-		CU::Vector3<float> pos(targetPos.x, 0.f, targetPos.y);
-		newEntity->GetComponent<ControllerComponent>()->AttackMove(pos
-			, true, shouldBeQuiet);
+	//	bool shouldBeQuiet = true;
+	//	CU::Vector2<float> targetPos = myDecisionMap->GetOffensivePosition(newEntity->GetPosition());
+	//	CU::Vector3<float> pos(targetPos.x, 0.f, targetPos.y);
+	//	newEntity->GetComponent<ControllerComponent>()->AttackMove(pos
+	//		, true, shouldBeQuiet);
+	//}
 	}
-}
 
 void AIDirector::ReceiveMessage(const TimeMultiplierMessage& aMessage)
 {
@@ -203,17 +206,46 @@ void AIDirector::ReceiveMessage(const TimeMultiplierMessage& aMessage)
 	}
 }
 
+void AIDirector::UpdateUnitLists()
+{
+	myUnitsOnMission.RemoveAll();
+	myIdleUnits.RemoveAll();
+
+	for (int i = myActiveUnits.Size()-1; i >= 0; --i)
+	{
+		bool ready = myActiveUnits[i]->GetComponent<ControllerComponent>()->IsReady();
+		if (myActiveUnits[i]->GetState() == eEntityState::IDLE && ready == true)
+		{
+			myIdleUnits.Add(myActiveUnits[i]);
+			//myActiveUnits.RemoveCyclicAtIndex(i);
+		}
+		else
+		{
+			myUnitsOnMission.Add(myActiveUnits[i]);
+		}
+	}
+
+	/*for (int i = myIdleUnits.Size() - 1; i >= 0; --i)
+	{
+		if (myIdleUnits[i]->GetState() != eEntityState::IDLE)
+		{
+			myActiveUnits.Add(myIdleUnits[i]);
+			myIdleUnits.RemoveCyclicAtIndex(i);
+		}
+	}*/
+}
+
 void AIDirector::UpdateActionQueue()
 {
 	if (myActionQueue.Size() == 0)
 	{
 		return;
 	}
-	Action action = myActionQueue.GetLast();
-	myActionQueue.RemoveCyclicAtIndex(myActionQueue.Size() - 1);
 
-	myCurrentFuzzyAction = action.myFuzzyAction;
-	switch (myCurrentFuzzyAction)
+	Action action = myActionQueue.GetLast();
+
+	myCurrentAction = action;
+	switch (myCurrentAction.myFuzzyAction)
 	{
 	case eFuzzyAI::SPAWN_GRUNT:
 		Director::SpawnUnit(eUnitType::GRUNT);
@@ -226,6 +258,14 @@ void AIDirector::UpdateActionQueue()
 		break;
 	case eFuzzyAI::TAKE_RESOURCE_POINT:
 	{
+		for (int i = 0; i < myIdleUnits.Size(); ++i)
+		{
+			if (myIdleUnits[i]->GetComponent<ControllerComponent>()->IsReady() == false)
+			{
+				return;
+			}
+		}
+
 		CU::Vector3<float> target;
 		target.x = action.myPosition.x;
 		target.z = action.myPosition.y;
@@ -234,6 +274,7 @@ void AIDirector::UpdateActionQueue()
 		{
 			myIdleUnits[i]->GetComponent<ControllerComponent>()->AttackMove(target, true, quiet);
 		}
+		myCurrentAction.myIsDone = true;
 	}
 		//DL_ASSERT("eFuzzyAI Case Not Implemented");
 		break;
@@ -264,7 +305,7 @@ void AIDirector::UpdateAdvisors()
 
 	*myFuzzySet += UpdateAttackAdvisor();
 	*myFuzzySet += UpdateDefendAdvisor();
-	//*myFuzzySet += UpdateResourceAdvisor();
+	*myFuzzySet += UpdateResourceAdvisor();
 
 	myFuzzySet->Normalize();
 }
@@ -353,18 +394,17 @@ CU::FuzzySet AIDirector::UpdateDefendAdvisor()
 
 CU::FuzzySet AIDirector::UpdateResourceAdvisor()
 {
-	int optimalGunpowderCount = 50;
-	float gunpowderValue = 10.f;
-	float ownedPointsModifier = 2.f;
+	int optimalGunpowderCount = 200;
+	float gunpowderValue = 5.f;
 
-
-	float threshHold = static_cast<float>(myGunpowder) / static_cast<float>(optimalGunpowderCount);
+	float threshHold = 1.f - (static_cast<float>(myGunpowder) / static_cast<float>(optimalGunpowderCount));
 
 	int ownedPointsCount = PollingStation::GetInstance()->GetResourcePointsCount(myOwner);
-	float pointModifier = ownedPointsCount * ownedPointsModifier;
+	int totalPointsCount = PollingStation::GetInstance()->GetResourcePoints().Size();
+	float pointModifier = 1.f - (static_cast<float>(ownedPointsCount) / static_cast<float>(totalPointsCount));
 
 	float fuzzyValue = threshHold * gunpowderValue;
-	fuzzyValue /= (pointModifier + 0.0000001f);
+	fuzzyValue *= pointModifier;
 
 	CU::FuzzySet set(static_cast<int>(eFuzzyAI::_COUNT));
 	set.AddValue(static_cast<int>(eFuzzyAI::TAKE_RESOURCE_POINT), fuzzyValue);
@@ -375,25 +415,25 @@ CU::FuzzySet AIDirector::UpdateResourceAdvisor()
 void AIDirector::ExecuteFuzzyAction()
 {
 	DL_ASSERT_EXP(myActionQueue.Size() == 0, "AIDIRECTOR: Queuesize is more than zero when executing fuzzy action");
-	myCurrentFuzzyAction = static_cast<eFuzzyAI>(myFuzzySet->GetHighersMember());
+	eFuzzyAI action = static_cast<eFuzzyAI>(myFuzzySet->GetHighersMember());
 
-	switch (myCurrentFuzzyAction)
+	switch (action)
 	{
 	case eFuzzyAI::SPAWN_GRUNT:
-		myActionQueue.Add(Action(eFuzzyAI::SPAWN_GRUNT));
+		myActionQueue.InsertFirst(Action(eFuzzyAI::SPAWN_GRUNT));
 		//Director::SpawnUnit(eUnitType::GRUNT);
 		break;
 	case eFuzzyAI::SPAWN_RANGER:
-		myActionQueue.Add(Action(eFuzzyAI::SPAWN_RANGER));
+		myActionQueue.InsertFirst(Action(eFuzzyAI::SPAWN_RANGER));
 		//Director::SpawnUnit(eUnitType::RANGER);
 		break;
 	case eFuzzyAI::SPAWN_TANK:
-		myActionQueue.Add(Action(eFuzzyAI::SPAWN_TANK));
+		myActionQueue.InsertFirst(Action(eFuzzyAI::SPAWN_TANK));
 		//Director::SpawnUnit(eUnitType::TANK);
 		break;
 	case eFuzzyAI::TAKE_RESOURCE_POINT:
 	{
-		if (myIdleUnits.Size() > 3)
+		if (myIdleUnits.Size() >= 3)
 		{
 			CU::Vector2<float> target = PollingStation::GetInstance()->GetClosestNotOwnedResourcePoint(myOwner
 				, myBuilding->GetPosition());
@@ -405,7 +445,7 @@ void AIDirector::ExecuteFuzzyAction()
 				target3d.z = target.y;
 				bool quiet = true;
 				//myIdleUnits[i]->GetComponent<ControllerComponent>()->AttackMove(target3d, true, quiet);
-				myActionQueue.Add(Action(eFuzzyAI::TAKE_RESOURCE_POINT, target));
+				myActionQueue.InsertFirst(Action(eFuzzyAI::TAKE_RESOURCE_POINT, target));
 			}
 		}
 		else
@@ -417,23 +457,23 @@ void AIDirector::ExecuteFuzzyAction()
 			{
 				if (grunt > ranger && grunt > tank)
 				{
-					myActionQueue.Add(Action(eFuzzyAI::SPAWN_GRUNT));
+					myActionQueue.InsertFirst(Action(eFuzzyAI::SPAWN_GRUNT));
 					//Director::SpawnUnit(eUnitType::GRUNT);
 				}
 				else if (ranger > tank)
 				{
-					myActionQueue.Add(Action(eFuzzyAI::SPAWN_RANGER));
+					myActionQueue.InsertFirst(Action(eFuzzyAI::SPAWN_RANGER));
 					//Director::SpawnUnit(eUnitType::RANGER);
 				}
 				else
 				{
-					myActionQueue.Add(Action(eFuzzyAI::SPAWN_TANK));
+					myActionQueue.InsertFirst(Action(eFuzzyAI::SPAWN_TANK));
 					//Director::SpawnUnit(eUnitType::TANK);
 				}
 			}
 			CU::Vector2<float> target = PollingStation::GetInstance()->GetClosestNotOwnedResourcePoint(myOwner
 				, myBuilding->GetPosition());
-			myActionQueue.Add(Action(eFuzzyAI::TAKE_RESOURCE_POINT, target));
+			myActionQueue.InsertFirst(Action(eFuzzyAI::TAKE_RESOURCE_POINT, target));
 		}
 		break;
 	}
@@ -456,25 +496,33 @@ void AIDirector::ExecuteFuzzyAction()
 		break;
 	}
 
+
+	myCurrentAction.myFuzzyAction = eFuzzyAI::FIRST_ACTION;
 	//DL_ASSERT("eFuzzyAI Case Not Implemented");
 }
 
-bool AIDirector::FuzzyActionDone() const
+bool AIDirector::FuzzyActionDone()
 {
-	switch (myCurrentFuzzyAction)
+	bool done = false;
+	bool returnValue = false;
+
+	switch (myCurrentAction.myFuzzyAction)
 	{
 	case eFuzzyAI::SPAWN_GRUNT:
-		return myBuilding->GetComponent<BuildingComponent>()->GetCurrentBuildTime() <= 0.f;
+		done = myBuilding->GetComponent<BuildingComponent>()->GetCurrentBuildTime() <= 0.f;
+		returnValue = done;
 		break;
 	case eFuzzyAI::SPAWN_RANGER:
-		return myBuilding->GetComponent<BuildingComponent>()->GetCurrentBuildTime() <= 0.f;
+		done = myBuilding->GetComponent<BuildingComponent>()->GetCurrentBuildTime() <= 0.f;
+		returnValue = done;
 		break;
 	case eFuzzyAI::SPAWN_TANK:
-		return myBuilding->GetComponent<BuildingComponent>()->GetCurrentBuildTime() <= 0.f;
+		done = myBuilding->GetComponent<BuildingComponent>()->GetCurrentBuildTime() <= 0.f;
+		returnValue = done;
 		break;
 	case eFuzzyAI::TAKE_RESOURCE_POINT:
-		return myActionQueue.Size() == 0;
-		//DL_ASSERT("eFuzzyAI Case Not Implemented");
+		done = myCurrentAction.myIsDone;
+		returnValue = true;
 		break;
 	case eFuzzyAI::TAKE_VICTORY_POINT:
 		DL_ASSERT("eFuzzyAI Case Not Implemented");
@@ -491,12 +539,19 @@ bool AIDirector::FuzzyActionDone() const
 	case eFuzzyAI::UPGRADE_TANK:
 		DL_ASSERT("eFuzzyAI Case Not Implemented");
 		break;
+	case eFuzzyAI::FIRST_ACTION:
+		returnValue = true;
+		break;
 	default:
 		break;
 	}
 
-	DL_ASSERT("eFuzzyAI Case Not Implemented");
-	return true;
+	if (done == true && myActionQueue.Size() > 0)
+	{
+		myActionQueue.RemoveCyclicAtIndex(myActionQueue.Size() - 1);
+	}
+
+	return returnValue;
 }
 
 
