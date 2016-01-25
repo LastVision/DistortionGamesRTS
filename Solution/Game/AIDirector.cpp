@@ -78,6 +78,7 @@ AIDirector::~AIDirector()
 	SAFE_DELETE(myDifferenceMap);
 	SAFE_DELETE(myVulnerabilityMap);
 	SAFE_DELETE(myDecisionMap);
+	SAFE_DELETE(myFuzzySet);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::TIME_MULTIPLIER, this);
 }
 
