@@ -96,7 +96,6 @@ private:
 	void SelectAllUnits();
 	
 	void PlaceTotem(const CU::Vector3f& aPositionInWorld);
-	void Enrage();
 
 	void SelectControlGroup(int anIndex);
 

@@ -293,8 +293,8 @@ void PlayerDirector::ReceiveMessage(const OnClickMessage& aMessage)
 	else if (aMessage.myEvent == eOnClickEvent::SELECT_CONTROL_GROUP)
 	{
 		SelectControlGroup(aMessage.myID);
-	}
-}
+			}
+		}
 
 void PlayerDirector::ReceiveMessage(const TimeMultiplierMessage& aMessage)
 {
@@ -608,8 +608,8 @@ void PlayerDirector::UpdateControlGroups()
 			index = 8;
 		}
 		SelectControlGroup(index);
-	}
-}
+			}
+			}
 
 void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 {
@@ -625,11 +625,6 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 	if (myLeftMouseDown == true && mySelectedAction == eSelectedAction::PLACE_TOTEM)
 	{
 		PlaceTotem(firstTargetPos);
-	}
-
-	if (mySelectedAction == eSelectedAction::ENRAGE)
-	{
-		Enrage();
 	}
 
 	if (myLeftMouseDown == true)
@@ -806,18 +801,6 @@ void PlayerDirector::PlaceTotem(const CU::Vector3f& aPositionInWorld)
 {
 	//myTotem->SetPosition(aPositionInWorld);
 	myTotem->GetComponent<TotemComponent>()->SetTargetPosition(aPositionInWorld);
-}
-
-void PlayerDirector::Enrage()
-{
-	for (int i = 0; i < mySelectedUnits.Size(); ++i)
-	{
-		EnrageComponent* enrageComp = mySelectedUnits[i]->GetComponent<EnrageComponent>();
-		if (enrageComp != nullptr)
-		{
-			enrageComp->Activate();
-		}
-	}
 }
 
 void PlayerDirector::SelectControlGroup(int anIndex)
