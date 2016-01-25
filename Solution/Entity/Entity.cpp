@@ -260,8 +260,10 @@ void Entity::Spawn(const CU::Vector2<float>& aSpawnPoint, const CU::Vector2<floa
 	Reset();
 	myAlive = true;
 	AddToScene();
-	bool hasPlayedSound = false;
-	GetComponent<ControllerComponent>()->MoveTo(CU::Vector3<float>(aRallyPoint.x, 0, aRallyPoint.y), true, hasPlayedSound);
+
+	
+	//bool hasPlayedSound = false;
+	GetComponent<ControllerComponent>()->SetRallyPoint(aRallyPoint);
 }
 
 void Entity::SetSelect(bool aStatus)

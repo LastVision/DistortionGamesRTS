@@ -80,6 +80,7 @@ namespace GUI
 
 	void Widget::OnResize(const CU::Vector2<float>& aNewWindowSize, const CU::Vector2<float>& anOldWindowSize, bool aIsFullScreen)
 	{
+		aIsFullScreen;
 		if (myIsFullscreen == false)
 		{
 			CU::Vector2<float> ratioPostion = myPosition / anOldWindowSize.x;

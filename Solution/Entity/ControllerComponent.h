@@ -30,6 +30,8 @@ public:
 	eComponentType GetType() override;
 	const EntityCommandData& GetCurrentCommand() const;
 
+	void SetRallyPoint(const CU::Vector2<float>& aRallyPoint);
+
 private:
 	void FillCommandList(eEntityCommand aAction, bool aClearCommandQueue, Entity* aEntity = nullptr
 		, const CU::Vector2<float>& aTargetPosition = { -1.f, -1.f });
@@ -47,11 +49,14 @@ private:
 	eColorDebug GetActionColor(eEntityCommand aAction) const;
 	
 	CU::Vector2<float> myReturnPosition;
+	CU::Vector2<float> myRallyPoint;
 
 	const Prism::Terrain& myTerrain;
 	eOwnerType myOwnerType;
 
 	bool myStartNewAction;
+	bool myFirstFrame;
+	bool mySecondFrame;
 
 	CU::GrowingArray<EntityCommandData> myCommands;
 	EntityCommandData myCurrentCommand;
@@ -70,4 +75,9 @@ inline eComponentType ControllerComponent::GetType()
 inline const EntityCommandData& ControllerComponent::GetCurrentCommand() const
 {
 	return myCurrentCommand;
+}
+
+inline void ControllerComponent::SetRallyPoint(const CU::Vector2<float>& aRallyPoint)
+{
+	myRallyPoint = aRallyPoint;
 }

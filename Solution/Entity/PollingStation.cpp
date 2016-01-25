@@ -189,6 +189,32 @@ int PollingStation::GetVictoryPointsCount(eOwnerType anOwner) const
 	return count;
 }
 
+CU::Vector2<float> PollingStation::GetClosestNotOwnedResourcePoint(eOwnerType aOwner, const CU::Vector2<float>& aPoint) const
+{
+	float bestDist = FLT_MAX;
+	Entity* resourcePoint = nullptr;
+
+	for (int i = 0; i < myResourcePoints.Size(); ++i)
+	{
+		if (myResourcePoints[i]->GetOwner() == aOwner)
+		{
+			float distance = CU::Length2(myResourcePoints[i]->GetPosition() - aPoint);
+			if (distance < bestDist)
+			{
+				bestDist = distance;
+				resourcePoint = myResourcePoints[i];
+			}
+		}
+	}
+
+	if (resourcePoint == nullptr)
+	{
+		return aPoint;
+	}
+
+	return resourcePoint->GetPosition();
+}
+
 void PollingStation::AddArtifact(Entity* aArtifact)
 {
 	myArtifacts.Add(aArtifact);

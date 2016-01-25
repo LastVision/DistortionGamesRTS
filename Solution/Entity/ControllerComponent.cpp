@@ -18,7 +18,7 @@
 
 
 
-ControllerComponent::ControllerComponent(Entity& aEntity, ControllerComponentData& aData, const Prism::Terrain& aTerrain)
+ControllerComponent::ControllerComponent(Entity& aEntity, ControllerComponentData&, const Prism::Terrain& aTerrain)
 	: Component(aEntity)
 	, myTerrain(aTerrain)
 	, myCommands(16)
@@ -35,6 +35,8 @@ void ControllerComponent::Reset()
 	myTerrain.CalcEntityHeight(myEntity.myOrientation);
 
 	myStartNewAction = true;
+	myFirstFrame = true;
+	mySecondFrame = false;
 
 
 	myCommands.RemoveAll();
@@ -51,11 +53,26 @@ void ControllerComponent::ReceiveNote(const BehaviorNote& aNote)
 	}
 }
 
-void ControllerComponent::Update(float aDelta)
+void ControllerComponent::Update(float)
 {
 	if (myEntity.GetState() == eEntityState::DIE)
 	{
 		return;
+	}
+
+	if (mySecondFrame == true)
+	{
+		mySecondFrame = false;
+		bool sound = false;
+		MoveTo(CU::Vector3<float>(myRallyPoint.x, 0, myRallyPoint.y), true, sound);
+	}
+
+	if (myFirstFrame == true)
+	{
+		myFirstFrame = false;
+		mySecondFrame = true;
+		bool sound;
+		Stop(sound);
 	}
 
 	if (myCurrentCommand.myCommand == eEntityCommand::ATTACK_TARGET

@@ -64,6 +64,7 @@ void ActorComponent::Reset()
 {
 	myAcceleration = CU::Vector2<float>(0.f, 0.f);
 	myBehavior->SetTarget({ myEntity.GetPosition().x + CU::Math::RandomRange<float>(-0.1f, 0.1f), myEntity.GetPosition().y - 1.f });
+
 }
 
 void ActorComponent::Update(float aDelta)

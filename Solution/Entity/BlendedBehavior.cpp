@@ -6,6 +6,7 @@
 BlendedBehavior::BlendedBehavior(const Entity& anEntity)
 	: Behavior(anEntity)
 	, myBehaviors(8)
+	, myPreviousAcceleration(0, 0)
 {
 	myBehaviors.Add(new ArriveBehavior(myEntity));
 	myBehaviors.Add(new EvadeBehavior(myEntity));
@@ -26,12 +27,23 @@ const CU::Vector2<float>& BlendedBehavior::Update()
 	{
 		myAcceleration += myBehaviors[i]->Update();
 	}
+	//DL_DEBUG("length: %f", CU::Length2(myPreviousAcceleration + myAcceleration));
+
+	//if (CU::Length2(myPreviousAcceleration + myAcceleration) < 1.f)
+	//{
+	//	myDone = true;
+	//}
+
+	myPreviousAcceleration = myAcceleration;
+
 	return myAcceleration;
 }
 
 void BlendedBehavior::SetTarget(const CU::Vector2<float>& aTargetPosition)
 {
 	myTarget = aTargetPosition;
+	myPreviousAcceleration = CU::Vector2<float>(0, 0);
+	myDone = false;
 	for (int i = 0; i < myBehaviors.Size(); ++i)
 	{
 		myBehaviors[i]->SetTarget(aTargetPosition);
@@ -40,6 +52,10 @@ void BlendedBehavior::SetTarget(const CU::Vector2<float>& aTargetPosition)
 
 bool BlendedBehavior::GetDone() const
 {
+	if (myDone == true)
+	{
+		return myDone;
+	}
 	for (int i = 0; i < myBehaviors.Size(); ++i)
 	{
 		if (myBehaviors[i]->GetDone() == true)
