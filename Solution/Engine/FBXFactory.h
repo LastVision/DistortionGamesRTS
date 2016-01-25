@@ -56,6 +56,7 @@ namespace Prism
 		void SaveLodGroupToFile(Prism::LodGroup* aGroup, std::fstream& aStream);
 		void SaveAnimationToFile(FbxModelData* aModeldata, std::fstream& aStream);
 		void SaveBoneHierarchyToFile(Bone& aBone, AnimationData* aAnimationData, std::fstream& aStream);
+		void RemoveExtraVertices(ModelData* aData);
 
 		FBXLoader *myLoader;
 

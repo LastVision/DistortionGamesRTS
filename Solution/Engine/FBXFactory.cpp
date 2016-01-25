@@ -804,6 +804,10 @@ void Prism::FBXFactory::SaveModelToFile(FbxModelData* aModelData, std::fstream& 
 
 void Prism::FBXFactory::SaveModelDataToFile(ModelData* aData, std::fstream& aStream)
 {
+#ifdef DGFX_REMOVE_EXTRA_VERTICES
+	RemoveExtraVertices(aData);
+#endif
+
 	aStream.write((char*)(&aData->myIndexCount), sizeof(int)); //Index count
 	aStream.write((char*)(aData->myIndicies), sizeof(int) * aData->myIndexCount); //All index data
 
@@ -931,4 +935,64 @@ void Prism::FBXFactory::SaveBoneHierarchyToFile(Bone& aBone, AnimationData* aAni
 			SaveBoneHierarchyToFile(aAnimationData->myBones[aBone.myChilds[i]], aAnimationData, aStream);
 		}
 	}
+}
+
+void Prism::FBXFactory::RemoveExtraVertices(ModelData* aData)
+{
+	int indexCount = aData->myIndexCount;
+	unsigned int* indices = aData->myIndicies;
+
+	int vertexCount = aData->myVertexCount;
+	int vertexStride = aData->myVertexStride;
+	float* vertices = aData->myVertexBuffer;
+	int newVertexCount = 0;
+	float* newVertices = new float[vertexCount*vertexStride];
+
+	int* indexTranslater = new int[indexCount];
+	unsigned int* newIndices = new unsigned int[indexCount];
+
+	for (int i = 0; i < indexCount; ++i)
+	{
+		bool doCopy = true;
+		int index = indices[i];
+		float* vertex = vertices + (index * vertexStride);
+
+		for (int j = 0; j < newVertexCount; ++j)
+		{
+			float* newVertex = newVertices + (j * vertexStride);
+			if (memcmp(newVertex, vertex, vertexStride * sizeof(float)) == 0)
+			{
+				indexTranslater[i] = j;
+				doCopy = false;
+				break;
+			}
+		}
+
+		if (doCopy == true)
+		{
+			indexTranslater[i] = newVertexCount;
+
+			float* newDest = newVertices + (newVertexCount * vertexStride);
+			memcpy(newDest, vertex, vertexStride * sizeof(float));
+			++newVertexCount;
+		}
+	}
+
+
+	for (int i = 0; i < indexCount; ++i)
+	{
+		int oldIndex = indices[i];
+		int translatedIndex = indexTranslater[oldIndex];
+
+		newIndices[i] = translatedIndex;
+	}
+
+	delete[] indices;
+	delete[] vertices;
+	delete[] indexTranslater;
+
+	aData->myIndicies = newIndices;
+
+	aData->myVertexCount = newVertexCount;
+	aData->myVertexBuffer = newVertices;
 }
