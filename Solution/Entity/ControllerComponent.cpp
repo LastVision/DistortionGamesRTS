@@ -37,6 +37,7 @@ void ControllerComponent::Reset()
 	myStartNewAction = true;
 	myFirstFrame = true;
 	mySecondFrame = false;
+	myIsReady = false;
 
 
 	myCommands.RemoveAll();
@@ -63,6 +64,7 @@ void ControllerComponent::Update(float)
 	if (mySecondFrame == true)
 	{
 		mySecondFrame = false;
+		myIsReady = true;
 		bool sound = false;
 		MoveTo(CU::Vector3<float>(myRallyPoint.x, 0, myRallyPoint.y), true, sound);
 	}

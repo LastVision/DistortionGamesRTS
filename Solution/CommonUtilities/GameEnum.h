@@ -94,6 +94,7 @@ enum class eEntityCommand
 {
 	STOP,
 	MOVE,
+	SPAWN_MOVE,
 	ATTACK_TARGET,
 	HOLD_POSITION,
 	ATTACK_MOVE,
@@ -156,5 +157,6 @@ enum class eFuzzyAI
 	UPGRADE_GRUNT,
 	UPGRADE_RANGER,
 	UPGRADE_TANK,
+	FIRST_ACTION,
 	_COUNT,
 };
