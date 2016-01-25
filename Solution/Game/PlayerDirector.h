@@ -96,7 +96,6 @@ private:
 	void SelectAllUnits();
 	
 	void PlaceTotem(const CU::Vector3f& aPositionInWorld);
-	void Enrage();
 
 	CU::StaticArray<CU::GrowingArray<Entity*>, AMOUNT_OF_CONTROL_GROUPS> myControlGroups;
 

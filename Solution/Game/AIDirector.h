@@ -32,28 +32,34 @@ public:
 	void ReceiveMessage(const TimeMultiplierMessage& aMessage) override;
 
 private:
-	enum class eAction
+	struct Action
 	{
-		CAPTURE_POINT,
-		SPAWN_GRUNT,
-		SPAWN_RANGER,
-		SPAWN_TANK,
-		NONE
+		Action() {}
+		Action(eFuzzyAI aFuzzyAction)
+			: myFuzzyAction(aFuzzyAction)
+		{}
+		Action(eFuzzyAI aFuzzyAction, const CU::Vector2<float>& aPosition)
+			: myFuzzyAction(aFuzzyAction)
+			, myPosition(aPosition)
+		{}
+		eFuzzyAI myFuzzyAction;
+		CU::Vector2<float> myPosition;
 	};
 
-
+	void UpdateActionQueue();
 	void UpdateAdvisors();
 	CU::FuzzySet UpdateAttackAdvisor();
 	CU::FuzzySet UpdateDefendAdvisor();
 	CU::FuzzySet UpdateResourceAdvisor();
 	CU::FuzzySet* myFuzzySet;
+	CU::GrowingArray<Action> myActionQueue;
 
 	void ExecuteFuzzyAction();
 	bool FuzzyActionDone() const;
 	eFuzzyAI myCurrentFuzzyAction;
 
-	void NotLoseLogic();
-	void WinSlowlyLogic();
+	//void NotLoseLogic();
+	//void WinSlowlyLogic();
 	void UpdateInfluences();
 
 	bool myPlayerHasStarted;
