@@ -28,6 +28,7 @@ AIDirector::AIDirector(const Prism::Terrain& aTerrain, Prism::Scene& aScene)
 	, myInfluenceRenderIndex(0)
 	, myRedistributeUnitsTimer(10.f)
 	, myCurrentRedistributeUnitsTimer(10.f)
+	, myActionQueue(8)
 {
 	for (int i = 0; i < GC::enemyGruntCount; ++i)
 	{
@@ -78,6 +79,7 @@ AIDirector::~AIDirector()
 	SAFE_DELETE(myDifferenceMap);
 	SAFE_DELETE(myVulnerabilityMap);
 	SAFE_DELETE(myDecisionMap);
+	SAFE_DELETE(myFuzzySet);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::TIME_MULTIPLIER, this);
 }
 
@@ -122,7 +124,7 @@ void AIDirector::Update(float aDeltaTime)
 	aDeltaTime *= myTimeMultiplier;
 
 	Director::Update(aDeltaTime);
-	
+
 
 	if (myPlayerHasStarted == false)
 	{
@@ -131,12 +133,17 @@ void AIDirector::Update(float aDeltaTime)
 	}
 
 	UpdateInfluences();
-	
+
+
 
 	if (FuzzyActionDone())
 	{
-		UpdateAdvisors();
-		ExecuteFuzzyAction();
+		UpdateActionQueue();
+		if (myActionQueue.Size() == 0)
+		{
+			UpdateAdvisors();
+			ExecuteFuzzyAction();
+		}
 	}
 
 	if (mySurviveGatherer != nullptr && mySurviveGatherer->GetAlive() == false)
@@ -148,7 +155,7 @@ void AIDirector::Update(float aDeltaTime)
 
 	/*if (myBuilding->GetComponent<BuildingComponent>()->GetSpawnQueueSize() > 0)
 	{
-		return;
+	return;
 	}*/
 
 	myCurrentRedistributeUnitsTimer -= aDeltaTime;
@@ -165,7 +172,7 @@ void AIDirector::Update(float aDeltaTime)
 				, true, shouldBeQuiet);
 		}
 	}
-	
+
 
 	//Director::SpawnUnit(eUnitType::GRUNT);
 	//NotLoseLogic();
@@ -195,6 +202,61 @@ void AIDirector::ReceiveMessage(const TimeMultiplierMessage& aMessage)
 	if (aMessage.myOwner == eOwnerType::ENEMY)
 	{
 		myTimeMultiplier = aMessage.myMultiplier;
+	}
+}
+
+void AIDirector::UpdateActionQueue()
+{
+	if (myActionQueue.Size() == 0)
+	{
+		return;
+	}
+	Action action = myActionQueue.GetLast();
+	myActionQueue.RemoveCyclicAtIndex(myActionQueue.Size() - 1);
+
+	myCurrentFuzzyAction = action.myFuzzyAction;
+	switch (myCurrentFuzzyAction)
+	{
+	case eFuzzyAI::SPAWN_GRUNT:
+		Director::SpawnUnit(eUnitType::GRUNT);
+		break;
+	case eFuzzyAI::SPAWN_RANGER:
+		Director::SpawnUnit(eUnitType::RANGER);
+		break;
+	case eFuzzyAI::SPAWN_TANK:
+		Director::SpawnUnit(eUnitType::TANK);
+		break;
+	case eFuzzyAI::TAKE_RESOURCE_POINT:
+	{
+		CU::Vector3<float> target;
+		target.x = action.myPosition.x;
+		target.z = action.myPosition.y;
+		bool quiet = true;
+		for (int i = 0; i < myIdleUnits.Size(); ++i)
+		{
+			myIdleUnits[i]->GetComponent<ControllerComponent>()->AttackMove(target, true, quiet);
+		}
+	}
+		//DL_ASSERT("eFuzzyAI Case Not Implemented");
+		break;
+
+	case eFuzzyAI::TAKE_VICTORY_POINT:
+		DL_ASSERT("eFuzzyAI Case Not Implemented");
+		break;
+	case eFuzzyAI::TAKE_ARTIFACT:
+		DL_ASSERT("eFuzzyAI Case Not Implemented");
+		break;
+	case eFuzzyAI::UPGRADE_GRUNT:
+		DL_ASSERT("eFuzzyAI Case Not Implemented");
+		break;
+	case eFuzzyAI::UPGRADE_RANGER:
+		DL_ASSERT("eFuzzyAI Case Not Implemented");
+		break;
+	case eFuzzyAI::UPGRADE_TANK:
+		DL_ASSERT("eFuzzyAI Case Not Implemented");
+		break;
+	default:
+		break;
 	}
 }
 
@@ -279,9 +341,9 @@ CU::FuzzySet AIDirector::UpdateDefendAdvisor()
 	float tankValue = 1.f;
 	if (myActiveUnits.Size() > 0)
 	{
-		gruntValue = (1-(gruntCount / myActiveUnits.Size())) * gruntValue;
-		rangerValue = (1-(rangerCount / myActiveUnits.Size())) * rangerValue;
-		tankValue = (1-(tankCount / myActiveUnits.Size())) * tankValue;
+		gruntValue = (1 - (gruntCount / myActiveUnits.Size())) * gruntValue;
+		rangerValue = (1 - (rangerCount / myActiveUnits.Size())) * rangerValue;
+		tankValue = (1 - (tankCount / myActiveUnits.Size())) * tankValue;
 	}
 
 
@@ -304,7 +366,7 @@ CU::FuzzySet AIDirector::UpdateResourceAdvisor()
 	float pointModifier = ownedPointsCount * ownedPointsModifier;
 
 	float fuzzyValue = threshHold * gunpowderValue;
-	fuzzyValue /= pointModifier;
+	fuzzyValue /= (pointModifier + 0.0000001f);
 
 	CU::FuzzySet set(static_cast<int>(eFuzzyAI::_COUNT));
 	set.AddValue(static_cast<int>(eFuzzyAI::TAKE_RESOURCE_POINT), fuzzyValue);
@@ -314,18 +376,22 @@ CU::FuzzySet AIDirector::UpdateResourceAdvisor()
 
 void AIDirector::ExecuteFuzzyAction()
 {
+	DL_ASSERT_EXP(myActionQueue.Size() == 0, "AIDIRECTOR: Queuesize is more than zero when executing fuzzy action");
 	myCurrentFuzzyAction = static_cast<eFuzzyAI>(myFuzzySet->GetHighersMember());
 
 	switch (myCurrentFuzzyAction)
 	{
 	case eFuzzyAI::SPAWN_GRUNT:
-		Director::SpawnUnit(eUnitType::GRUNT);
+		myActionQueue.Add(Action(eFuzzyAI::SPAWN_GRUNT));
+		//Director::SpawnUnit(eUnitType::GRUNT);
 		break;
 	case eFuzzyAI::SPAWN_RANGER:
-		Director::SpawnUnit(eUnitType::RANGER);
+		myActionQueue.Add(Action(eFuzzyAI::SPAWN_RANGER));
+		//Director::SpawnUnit(eUnitType::RANGER);
 		break;
 	case eFuzzyAI::SPAWN_TANK:
-		Director::SpawnUnit(eUnitType::TANK);
+		myActionQueue.Add(Action(eFuzzyAI::SPAWN_TANK));
+		//Director::SpawnUnit(eUnitType::TANK);
 		break;
 	case eFuzzyAI::TAKE_RESOURCE_POINT:
 	{
@@ -334,13 +400,14 @@ void AIDirector::ExecuteFuzzyAction()
 			CU::Vector2<float> target = PollingStation::GetInstance()->GetClosestNotOwnedResourcePoint(myOwner
 				, myBuilding->GetPosition());
 
-			for (int i = 0; i < myIdleUnits.Size(); ++i)
+			//for (int i = 0; i < myIdleUnits.Size(); ++i)
 			{
 				CU::Vector3<float> target3d;
 				target3d.x = target.x;
 				target3d.z = target.y;
 				bool quiet = true;
-				myIdleUnits[i]->GetComponent<ControllerComponent>()->AttackMove(target3d, true, quiet);
+				//myIdleUnits[i]->GetComponent<ControllerComponent>()->AttackMove(target3d, true, quiet);
+				myActionQueue.Add(Action(eFuzzyAI::TAKE_RESOURCE_POINT, target));
 			}
 		}
 		else
@@ -348,19 +415,27 @@ void AIDirector::ExecuteFuzzyAction()
 			float grunt = myFuzzySet->GetValue(static_cast<int>(eFuzzyAI::SPAWN_GRUNT));
 			float ranger = myFuzzySet->GetValue(static_cast<int>(eFuzzyAI::SPAWN_RANGER));
 			float tank = myFuzzySet->GetValue(static_cast<int>(eFuzzyAI::SPAWN_TANK));
-
-			if (grunt > ranger && grunt > tank)
+			for (int i = 0; i < 3 - myIdleUnits.Size(); ++i)
 			{
-				Director::SpawnUnit(eUnitType::GRUNT);
+				if (grunt > ranger && grunt > tank)
+				{
+					myActionQueue.Add(Action(eFuzzyAI::SPAWN_GRUNT));
+					//Director::SpawnUnit(eUnitType::GRUNT);
+				}
+				else if (ranger > tank)
+				{
+					myActionQueue.Add(Action(eFuzzyAI::SPAWN_RANGER));
+					//Director::SpawnUnit(eUnitType::RANGER);
+				}
+				else
+				{
+					myActionQueue.Add(Action(eFuzzyAI::SPAWN_TANK));
+					//Director::SpawnUnit(eUnitType::TANK);
+				}
 			}
-			else if (ranger > tank)
-			{
-				Director::SpawnUnit(eUnitType::RANGER);
-			}
-			else
-			{
-				Director::SpawnUnit(eUnitType::TANK);
-			}
+			CU::Vector2<float> target = PollingStation::GetInstance()->GetClosestNotOwnedResourcePoint(myOwner
+				, myBuilding->GetPosition());
+			myActionQueue.Add(Action(eFuzzyAI::TAKE_RESOURCE_POINT, target));
 		}
 		break;
 	}
@@ -400,7 +475,8 @@ bool AIDirector::FuzzyActionDone() const
 		return myBuilding->GetComponent<BuildingComponent>()->GetCurrentBuildTime() <= 0.f;
 		break;
 	case eFuzzyAI::TAKE_RESOURCE_POINT:
-		DL_ASSERT("eFuzzyAI Case Not Implemented");
+		return myActionQueue.Size() == 0;
+		//DL_ASSERT("eFuzzyAI Case Not Implemented");
 		break;
 	case eFuzzyAI::TAKE_VICTORY_POINT:
 		DL_ASSERT("eFuzzyAI Case Not Implemented");
@@ -426,95 +502,95 @@ bool AIDirector::FuzzyActionDone() const
 }
 
 
-void AIDirector::NotLoseLogic()
-{
-	const PollingStation* pollingStation = PollingStation::GetInstance();
+//void AIDirector::NotLoseLogic()
+//{
+//	const PollingStation* pollingStation = PollingStation::GetInstance();
+//
+//	eAction action = eAction::NONE;
+//	CU::Vector3<float> capturePos;
+//
+//	if (pollingStation->GetResourcePointsCount(eOwnerType::ENEMY) < 1 && mySurviveGatherer == nullptr)
+//	{
+//		if (myIdleUnits.Size() == 0)
+//		{
+//			action = eAction::SPAWN_GRUNT;
+//		}
+//		else
+//		{
+//			const CU::GrowingArray<Entity*> resources = pollingStation->GetResourcePoints();
+//			capturePos.x = resources[0]->GetPosition().x;
+//			capturePos.z = resources[0]->GetPosition().y;
+//			action = eAction::CAPTURE_POINT;
+//			mySurviveGatherer = myIdleUnits.GetLast();
+//		}
+//	}
+//
+//
+//	int playerVictoryPoints = pollingStation->GetVictoryPointsCount(eOwnerType::PLAYER);
+//	if (playerVictoryPoints > 0)
+//	{
+//		int playerCount = pollingStation->GetUnits(eOwnerType::PLAYER).Size();
+//		if (myIdleUnits.Size() == 0 && playerCount > myActiveUnits.Size()-1)
+//		{
+//			action = eAction::SPAWN_GRUNT;
+//		}
+//		else if (myIdleUnits.Size() > 0)
+//		{
+//			const CU::GrowingArray<Entity*> victoryPoints = pollingStation->GetVictoryPoints();
+//			for (int i = 0; i < victoryPoints.Size(); ++i)
+//			{
+//				if (victoryPoints[i]->GetOwner() == eOwnerType::PLAYER)
+//				{
+//					capturePos.x = victoryPoints[i]->GetPosition().x;
+//					capturePos.z = victoryPoints[i]->GetPosition().y;
+//					action = eAction::CAPTURE_POINT;
+//					break;
+//				}
+//			}
+//		}
+//	}
+//	bool shouldBeQuiet = true;
+//	switch (action)
+//	{
+//	case AIDirector::eAction::CAPTURE_POINT:
+//	{
+//		Entity* unit = myIdleUnits.GetLast();
+//		myIdleUnits.RemoveCyclicAtIndex(myIdleUnits.Size() - 1);
+//		unit->GetComponent<ControllerComponent>()->AttackMove(capturePos, true, shouldBeQuiet);
+//		break;
+//	}
+//	case AIDirector::eAction::SPAWN_GRUNT:
+//		Director::SpawnUnit(eUnitType::GRUNT);
+//		break;
+//	case AIDirector::eAction::SPAWN_RANGER:
+//		Director::SpawnUnit(eUnitType::RANGER);
+//		break;
+//	case AIDirector::eAction::SPAWN_TANK:
+//		Director::SpawnUnit(eUnitType::TANK);
+//		break;
+//	case AIDirector::eAction::NONE:
+//		break;
+//	default:
+//		break;
+//	}
+//}
 
-	eAction action = eAction::NONE;
-	CU::Vector3<float> capturePos;
-
-	if (pollingStation->GetResourcePointsCount(eOwnerType::ENEMY) < 1 && mySurviveGatherer == nullptr)
-	{
-		if (myIdleUnits.Size() == 0)
-		{
-			action = eAction::SPAWN_GRUNT;
-		}
-		else
-		{
-			const CU::GrowingArray<Entity*> resources = pollingStation->GetResourcePoints();
-			capturePos.x = resources[0]->GetPosition().x;
-			capturePos.z = resources[0]->GetPosition().y;
-			action = eAction::CAPTURE_POINT;
-			mySurviveGatherer = myIdleUnits.GetLast();
-		}
-	}
-
-
-	int playerVictoryPoints = pollingStation->GetVictoryPointsCount(eOwnerType::PLAYER);
-	if (playerVictoryPoints > 0)
-	{
-		int playerCount = pollingStation->GetUnits(eOwnerType::PLAYER).Size();
-		if (myIdleUnits.Size() == 0 && playerCount > myActiveUnits.Size()-1)
-		{
-			action = eAction::SPAWN_GRUNT;
-		}
-		else if (myIdleUnits.Size() > 0)
-		{
-			const CU::GrowingArray<Entity*> victoryPoints = pollingStation->GetVictoryPoints();
-			for (int i = 0; i < victoryPoints.Size(); ++i)
-			{
-				if (victoryPoints[i]->GetOwner() == eOwnerType::PLAYER)
-				{
-					capturePos.x = victoryPoints[i]->GetPosition().x;
-					capturePos.z = victoryPoints[i]->GetPosition().y;
-					action = eAction::CAPTURE_POINT;
-					break;
-				}
-			}
-		}
-	}
-	bool shouldBeQuiet = true;
-	switch (action)
-	{
-	case AIDirector::eAction::CAPTURE_POINT:
-	{
-		Entity* unit = myIdleUnits.GetLast();
-		myIdleUnits.RemoveCyclicAtIndex(myIdleUnits.Size() - 1);
-		unit->GetComponent<ControllerComponent>()->AttackMove(capturePos, true, shouldBeQuiet);
-		break;
-	}
-	case AIDirector::eAction::SPAWN_GRUNT:
-		Director::SpawnUnit(eUnitType::GRUNT);
-		break;
-	case AIDirector::eAction::SPAWN_RANGER:
-		Director::SpawnUnit(eUnitType::RANGER);
-		break;
-	case AIDirector::eAction::SPAWN_TANK:
-		Director::SpawnUnit(eUnitType::TANK);
-		break;
-	case AIDirector::eAction::NONE:
-		break;
-	default:
-		break;
-	}
-}
-
-void AIDirector::WinSlowlyLogic()
-{
-	const PollingStation* pollingStation = PollingStation::GetInstance();
-
-	int victoryPoints = pollingStation->GetVictoryPointsCount(eOwnerType::ENEMY);
-	int totalVictoryPoints = pollingStation->GetVictoryPoints().Size();
-
-	if ((totalVictoryPoints / 2) > victoryPoints)
-	{
-		//I dont have more than 50% of VictoryPoints?!?!? CAPTURE MOAR
-	}
-
-	//If the player has more than 2 resourcepoints I need to do something about it
-
-	//If I have less than 2 resourcepoints I need to do something about it
-}
+//void AIDirector::WinSlowlyLogic()
+//{
+//	const PollingStation* pollingStation = PollingStation::GetInstance();
+//
+//	int victoryPoints = pollingStation->GetVictoryPointsCount(eOwnerType::ENEMY);
+//	int totalVictoryPoints = pollingStation->GetVictoryPoints().Size();
+//
+//	if ((totalVictoryPoints / 2) > victoryPoints)
+//	{
+//		//I dont have more than 50% of VictoryPoints?!?!? CAPTURE MOAR
+//	}
+//
+//	//If the player has more than 2 resourcepoints I need to do something about it
+//
+//	//If I have less than 2 resourcepoints I need to do something about it
+//}
 
 void AIDirector::UpdateInfluences()
 {
@@ -566,7 +642,7 @@ void AIDirector::UpdateInfluences()
 			myInfluenceRenderIndex = 4;
 		}
 	}
-	
+
 
 
 
@@ -599,7 +675,7 @@ void AIDirector::UpdateInfluences()
 	myGoalMap->Update();
 	const CU::GrowingArray<Entity*>& victoryPoint = PollingStation::GetInstance()->GetVictoryPoints();
 	for (int i = 0; i < victoryPoint.Size(); ++i)
-	{ 
+	{
 		eOwnerType pointOwner = victoryPoint[i]->GetComponent<TriggerComponent>()->GetOwnerGainingPoint();
 		float victoryValue = 1.f;
 		if (pointOwner == myOwner)
