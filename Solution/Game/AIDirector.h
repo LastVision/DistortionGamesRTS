@@ -30,6 +30,7 @@ public:
 
 	void ReceiveMessage(const SpawnUnitMessage& aMessage) override;
 	void ReceiveMessage(const TimeMultiplierMessage& aMessage) override;
+	void ReceiveMessage(const BlockMapMessage& aMessage) override;
 
 private:
 	struct Action
@@ -49,41 +50,44 @@ private:
 		bool myIsDone;
 	};
 
+	struct AIMaps
+	{
+		AIMaps();
+		~AIMaps();
+		InfluenceMap* myInfluenceMap;
+		InfluenceMap* myPlayerInfluenceMap;
+		InfluenceMap* myNeutralInfluenceMap;
+		InfluenceMap* myPlayerNeutralCombinedInfluence;
+		InfluenceMap* myGoalMap;
+		InfluenceMap* myBlockMap;
+		TensionMap* myTensionMap;
+		DifferenceMap* myDifferenceMap;
+		VulnerabilityMap* myVulnerabilityMap;
+		DecisionMap* myDecisionMap;
+		int myInfluenceRenderIndex;
+	};
+
+	void UpdateInfluences();
 	void UpdateUnitLists();
-	void UpdateActionQueue();
 	void UpdateAdvisors();
 	CU::FuzzySet UpdateAttackAdvisor();
 	CU::FuzzySet UpdateDefendAdvisor();
 	CU::FuzzySet UpdateResourceAdvisor();
 	CU::FuzzySet* myFuzzySet;
-	CU::GrowingArray<Action> myActionQueue;
+	
 
-	void ExecuteFuzzyAction();
-	bool FuzzyActionDone();
+	bool UpdateCurrentAction();
+	bool FuzzyDecisionDone();
+	void InterpretFuzzySet();
+	void StartNextAction();
 	Action myCurrentAction;
-
-	//void NotLoseLogic();
-	//void WinSlowlyLogic();
-	void UpdateInfluences();
+	CU::GrowingArray<Action> myActionQueue;
 
 	bool myPlayerHasStarted;
 
 	CU::GrowingArray<Entity*> myIdleUnits;
 	CU::GrowingArray<Entity*> myUnitsOnMission;
-	Entity* mySurviveGatherer;
 
-	InfluenceMap* myInfluenceMap;
-	InfluenceMap* myPlayerInfluenceMap;
-	InfluenceMap* myNeutralInfluenceMap;
-	InfluenceMap* myPlayerNeutralCombinedInfluence;
-	InfluenceMap* myGoalMap;
-	TensionMap* myTensionMap;
-	DifferenceMap* myDifferenceMap;
-	VulnerabilityMap* myVulnerabilityMap;
-	DecisionMap* myDecisionMap;
-	int myInfluenceRenderIndex;
-
-	float myRedistributeUnitsTimer;
-	float myCurrentRedistributeUnitsTimer;
+	AIMaps myMaps;
 };
 

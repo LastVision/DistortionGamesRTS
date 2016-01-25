@@ -159,6 +159,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="ArtifactMessage.h" />
+    <ClInclude Include="BlockMapMessage.h" />
     <ClInclude Include="EmitterMessage.h" />
     <ClInclude Include="EventPositionMessage.h" />
     <ClInclude Include="KillUnitMessage.h" />

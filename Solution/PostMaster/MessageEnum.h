@@ -26,5 +26,6 @@ enum class eMessageType
 	KILL_UNIT,
 	ARTIFACT,
 	TUTORIAL,
+	BLOCK_MAP,
 	COUNT,
 };

@@ -15,6 +15,7 @@
 #include <PostMaster.h>
 #include "SoundComponent.h"
 #include <Terrain.h>
+#include <BlockMapMessage.h>
 
 
 
@@ -320,6 +321,12 @@ void ControllerComponent::FillCommandList(eEntityCommand aAction, bool aClearCom
 			}
 			myCommands[0] = EntityCommandData(eEntityCommand::STOP, nullptr, position);
 		}
+	}
+
+	if (myEntity.GetOwner() == eOwnerType::ENEMY
+		&& aAction == eEntityCommand::ATTACK_MOVE || aAction == eEntityCommand::MOVE)
+	{
+		PostMaster::GetInstance()->SendMessage(BlockMapMessage(GetTargetPosition(), true));
 	}
 }
 

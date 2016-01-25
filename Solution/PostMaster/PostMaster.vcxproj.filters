@@ -118,5 +118,8 @@
     <ClInclude Include="TutorialMessage.h">
       <Filter>Message</Filter>
     </ClInclude>
+    <ClInclude Include="BlockMapMessage.h">
+      <Filter>Message</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

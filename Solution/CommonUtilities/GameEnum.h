@@ -94,7 +94,6 @@ enum class eEntityCommand
 {
 	STOP,
 	MOVE,
-	SPAWN_MOVE,
 	ATTACK_TARGET,
 	HOLD_POSITION,
 	ATTACK_MOVE,

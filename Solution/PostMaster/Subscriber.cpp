@@ -15,6 +15,10 @@ void Subscriber::ReceiveMessage(const ArtifactMessage&)
 {
 }
 
+void Subscriber::ReceiveMessage(const BlockMapMessage&)
+{
+}
+
 void Subscriber::ReceiveMessage(const CinematicMessage&)
 {
 }

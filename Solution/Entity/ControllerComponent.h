@@ -33,6 +33,8 @@ public:
 	void SetRallyPoint(const CU::Vector2<float>& aRallyPoint);
 	bool IsReady() const;
 
+	CU::Vector2<float> GetTargetPosition() const;
+
 private:
 	void FillCommandList(eEntityCommand aAction, bool aClearCommandQueue, Entity* aEntity = nullptr
 		, const CU::Vector2<float>& aTargetPosition = { -1.f, -1.f });
@@ -87,4 +89,14 @@ inline void ControllerComponent::SetRallyPoint(const CU::Vector2<float>& aRallyP
 inline bool ControllerComponent::IsReady() const
 {
 	return myIsReady;
+}
+
+inline CU::Vector2<float> ControllerComponent::GetTargetPosition() const
+{
+	if (myCommands.Size() > 0)
+	{
+		return myCommands[0].myPosition;
+	}
+	
+	return myReturnPosition;
 }
