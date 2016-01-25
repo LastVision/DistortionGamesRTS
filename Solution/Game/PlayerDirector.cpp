@@ -218,13 +218,13 @@ void PlayerDirector::Render(const Prism::Camera& aCamera)
 	{
 		if (myLeftMousePressed == true && myRenderDragSelection == true) // balck magic numbers, don't change
 		{
-			myDragSelectionSpriteVertical->SetSize({ 10.f, mySelectionSpriteSize.y }, mySelectionSpriteHotspot);
+			myDragSelectionSpriteVertical->SetSize({ 10.f, mySelectionSpriteSize.y + 10.f }, mySelectionSpriteHotspot);
 			myDragSelectionSpriteVertical->Render(mySelectionSpriteRenderPosition);
 
-			myDragSelectionSpriteHorizontal->SetSize({ mySelectionSpriteSize.x, 10.f }, mySelectionSpriteHotspot);
+			myDragSelectionSpriteHorizontal->SetSize({ mySelectionSpriteSize.x + 10.f, 10.f }, mySelectionSpriteHotspot);
 			myDragSelectionSpriteHorizontal->Render(mySelectionSpriteRenderPosition);
 
-			myDragSelectionSpriteVertical->SetSize({ 10.f, mySelectionSpriteSize.y }, { -mySelectionSpriteSize.x, mySelectionSpriteSize.y });
+			myDragSelectionSpriteVertical->SetSize({ 10.f, mySelectionSpriteSize.y + 10.f }, { -mySelectionSpriteSize.x, mySelectionSpriteSize.y });
 			myDragSelectionSpriteVertical->Render(mySelectionSpriteRenderPosition);
 
 			myDragSelectionSpriteHorizontal->SetSize({ mySelectionSpriteSize.x + 10.f, 10.f }, { mySelectionSpriteHotspot.x, mySelectionSpriteHotspot.y - mySelectionSpriteSize.y });
@@ -292,20 +292,9 @@ void PlayerDirector::ReceiveMessage(const OnClickMessage& aMessage)
 	}
 	else if (aMessage.myEvent == eOnClickEvent::SELECT_CONTROL_GROUP)
 	{
-		if (myControlGroups[aMessage.myID].Size() > 0)
-		{
-			for (int i = 0; i < mySelectedUnits.Size(); i++)
-			{
-				mySelectedUnits[i]->SetSelect(false);
-			}
-			mySelectedUnits = myControlGroups[aMessage.myID];
-			for (int i = 0; i < mySelectedUnits.Size(); i++)
-			{
-				mySelectedUnits[i]->SetSelect(true);
+		SelectControlGroup(aMessage.myID);
 			}
 		}
-	}
-}
 
 void PlayerDirector::ReceiveMessage(const TimeMultiplierMessage& aMessage)
 {
@@ -618,21 +607,9 @@ void PlayerDirector::UpdateControlGroups()
 		{
 			index = 8;
 		}
-
-		if (index != -1 && myControlGroups[index].Size() > 0)
-		{
-			for (int i = 0; i < mySelectedUnits.Size(); i++)
-			{
-				mySelectedUnits[i]->SetSelect(false);
+		SelectControlGroup(index);
 			}
-			mySelectedUnits = myControlGroups[index];
-			for (int i = 0; i < mySelectedUnits.Size(); i++)
-			{
-				mySelectedUnits[i]->SetSelect(true);
 			}
-		}
-	}
-}
 
 void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 {
@@ -824,6 +801,22 @@ void PlayerDirector::PlaceTotem(const CU::Vector3f& aPositionInWorld)
 {
 	//myTotem->SetPosition(aPositionInWorld);
 	myTotem->GetComponent<TotemComponent>()->SetTargetPosition(aPositionInWorld);
+}
+
+void PlayerDirector::SelectControlGroup(int anIndex)
+{
+	if (anIndex >= 0 && myControlGroups[anIndex].Size() > 0)
+	{
+		for (int i = 0; i < mySelectedUnits.Size(); i++)
+		{
+			mySelectedUnits[i]->SetSelect(false);
+		}
+		mySelectedUnits = myControlGroups[anIndex];
+		for (int i = 0; i < mySelectedUnits.Size(); i++)
+		{
+			mySelectedUnits[i]->SetSelect(true);
+		}
+	}
 }
 
 void PlayerDirector::AttackMoveSelectedUnits(const CU::Vector2<float>& aPosition)
