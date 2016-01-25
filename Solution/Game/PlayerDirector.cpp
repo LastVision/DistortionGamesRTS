@@ -610,11 +610,6 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 		PlaceTotem(firstTargetPos);
 	}
 
-	if (mySelectedAction == eSelectedAction::ENRAGE)
-	{
-		Enrage();
-	}
-
 	if (myLeftMouseDown == true)
 	{
 		myFirstMousePosition = CU::InputWrapper::GetInstance()->GetMousePosition();
@@ -789,18 +784,6 @@ void PlayerDirector::PlaceTotem(const CU::Vector3f& aPositionInWorld)
 {
 	//myTotem->SetPosition(aPositionInWorld);
 	myTotem->GetComponent<TotemComponent>()->SetTargetPosition(aPositionInWorld);
-}
-
-void PlayerDirector::Enrage()
-{
-	for (int i = 0; i < mySelectedUnits.Size(); ++i)
-	{
-		EnrageComponent* enrageComp = mySelectedUnits[i]->GetComponent<EnrageComponent>();
-		if (enrageComp != nullptr)
-		{
-			enrageComp->Activate();
-		}
-	}
 }
 
 void PlayerDirector::AttackMoveSelectedUnits(const CU::Vector2<float>& aPosition)

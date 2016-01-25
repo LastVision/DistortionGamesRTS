@@ -258,7 +258,13 @@ void ComponentLoader::LoadEnrageComponent(XMLReader& aDocument, tinyxml2::XMLEle
 {
 	aOutputData.myExistsInEntity = true;
 
-	tinyxml2::XMLElement* e = aDocument.ForceFindFirstChild(aSourceElement, "Duration");
+	tinyxml2::XMLElement* e = aDocument.ForceFindFirstChild(aSourceElement, "Radius");
+	aDocument.ForceReadAttribute(e, "value", aOutputData.myRadius);
+
+	e = aDocument.ForceFindFirstChild(aSourceElement, "ActivationUnitsCount");
+	aDocument.ForceReadAttribute(e, "value", aOutputData.myActivationUnitCount);
+
+	e = aDocument.ForceFindFirstChild(aSourceElement, "Duration");
 	aDocument.ForceReadAttribute(e, "value", aOutputData.myDuration);
 
 	e = aDocument.ForceFindFirstChild(aSourceElement, "Cooldown");
