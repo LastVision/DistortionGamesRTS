@@ -70,6 +70,6 @@ namespace GUI
 				return myControlGroupButtons[i];
 			}
 		}
-		return this;
+		return nullptr;
 	}
 }

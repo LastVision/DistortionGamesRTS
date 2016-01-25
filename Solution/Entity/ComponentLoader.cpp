@@ -181,6 +181,8 @@ void ComponentLoader::LoadCollisionComponent(XMLReader& aDocument, tinyxml2::XML
 
 void ComponentLoader::LoadControllerComponent(XMLReader& aDocument, tinyxml2::XMLElement* aSourceElement, ControllerComponentData& aOutputData)
 {
+	aDocument;
+	aSourceElement;
 	aOutputData.myExistsInEntity = true;
 }
 
