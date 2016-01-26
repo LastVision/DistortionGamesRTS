@@ -36,7 +36,7 @@ namespace Prism
 		, myVertexFormat(4)
 		, myPathFinder(nullptr)
 		, myNavMesh(nullptr)
-		, myIceHeight(1.25f)
+		, myIceHeight(0.9f)
 	{
 		DL_ASSERT_EXP(mySize.x == mySize.y, "Can't create non-quad terrain.");
 
@@ -52,7 +52,7 @@ namespace Prism
 	Terrain::Terrain(const std::string& aHeightMapPath, const CU::Vector2<float>& aSize, float aHeight)
 		: mySize(aSize)
 		, myHeight(aHeight)
-		, myIceHeight(1.25f)
+		, myIceHeight(0.9f)
 	{
 		myHeightMap = HeightMapFactory::Create(aHeightMapPath.c_str());
 
@@ -62,7 +62,7 @@ namespace Prism
 
 	Terrain::Terrain(const std::string& aBinaryPath, const std::string& aTexturePath, const std::string& aNormalMapPath
 		, const std::string& aIceInfluence)
-		: myIceHeight(1.25f)
+		: myIceHeight(0.9f)
 	{
 		myFileName = aTexturePath;
 		myNormalMapFilePath = aNormalMapPath;
