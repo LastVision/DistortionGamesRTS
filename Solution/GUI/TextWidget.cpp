@@ -51,11 +51,6 @@ namespace GUI
 		myBackground->SetSize(mySize, { 0.f, 0.f });
 	}
 
-	void TextWidget::SetPosition(const CU::Vector2<float>& aPosition)
-	{
-		myPosition = { aPosition.x + myBackground->GetHotspot().x, aPosition.y - myBackground->GetHotspot().y };
-	}
-
 	void TextWidget::ReceiveMessage(const TextMessage& aMessage)
 	{
 		if (aMessage.myMessageType == eMessageType::TEXT)

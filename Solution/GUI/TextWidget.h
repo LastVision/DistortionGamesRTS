@@ -27,8 +27,6 @@ namespace GUI
 
 		void OnResize(const CU::Vector2<float>& aNewSize, const CU::Vector2<float>& anOldSize, bool aIsFullScreen) override;
 
-		void SetPosition(const CU::Vector2<float>& aPosition) override;
-
 		void ReceiveMessage(const TextMessage& aMessage) override;
 
 	private:
@@ -36,6 +34,5 @@ namespace GUI
 		CU::Vector2<float> myTextPosition;
 		Prism::SpriteProxy* myBackground;
 		Prism::Text* myText;
-
 	};
 }
