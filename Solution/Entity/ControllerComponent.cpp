@@ -354,23 +354,26 @@ void ControllerComponent::StartNextAction()
 
 void ControllerComponent::RenderDebugLines() const
 {
+	CU::Vector3<float> pointA;
+	CU::Vector3<float> pointB;
+
 	if (myCurrentCommand.myCommand != eEntityCommand::STOP)
 	{
-		CU::Vector3<float> pointA = myTerrain.GetHeight(myEntity.myOrientation.GetPos(), 1.f);
-		CU::Vector3<float> pointB = myTerrain.GetHeight(myCurrentCommand.GetPosition(), 1.f);
+		pointA = myTerrain.GetHeight(myEntity.myOrientation.GetPos(), 1.f);
+		pointB = myTerrain.GetHeight(myCurrentCommand.GetPosition(), 1.f);
 
 		Prism::RenderLine3D(pointA, pointB, GetActionColor(myCurrentCommand.myCommand));
 	}
 
 	if (myCommands.Size() > 0)
 	{
-		CU::Vector3<float> pointA = myTerrain.GetHeight(myEntity.myOrientation.GetPos(), 1.f);
-		if (myCurrentCommand.myEntity != nullptr || myCurrentCommand.myPosition != CU::Vector2<float>(-1, -1))
+		pointA = myTerrain.GetHeight(myEntity.myOrientation.GetPos(), 1.f);
+		if ((myCurrentCommand.myPosition != CU::Vector2<float>(-1, -1) || myCurrentCommand.myEntity != nullptr) == true)
 		{
-			CU::Vector3<float> pointA = myTerrain.GetHeight(myCurrentCommand.GetPosition(), 1.f);
+			pointA = myTerrain.GetHeight(myCurrentCommand.GetPosition(), 1.f);
 		}
 
-		CU::Vector3<float> pointB = myTerrain.GetHeight(myCommands.GetLast().GetPosition(), 1.f);
+		pointB = myTerrain.GetHeight(myCommands.GetLast().GetPosition(), 1.f);
 		eColorDebug color = GetActionColor(myCommands.GetLast().myCommand);
 
 		Prism::RenderLine3D(pointA, pointB, color);
