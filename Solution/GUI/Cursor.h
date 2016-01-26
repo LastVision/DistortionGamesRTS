@@ -30,6 +30,7 @@ namespace GUI
 		void ClipCursor(); // for software cursor
 
 		void SetCurrentCursor(eCursorType aType);
+		eCursorType GetCurrentCursor() const;
 
 	private:
 		CU::Vector2<float> myPosition;
@@ -43,5 +44,10 @@ namespace GUI
 	inline void Cursor::SetCurrentCursor(eCursorType aType)
 	{
 		myCurrentType = aType;
+	}
+
+	inline eCursorType Cursor::GetCurrentCursor() const
+	{
+		return myCurrentType;
 	}
 }

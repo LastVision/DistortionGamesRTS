@@ -139,7 +139,7 @@ enum class eParticleType : int
 {
 	NONE = -1,
 	BLOOD,
-	//WEATHER_SNOW,
+	WEATHER_SNOW,
 	//HEALING,
 	GRENADE_EXPLOSION,
 	_COUNT

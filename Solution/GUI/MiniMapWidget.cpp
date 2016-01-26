@@ -25,6 +25,7 @@ namespace GUI
 		std::string basePath = "";
 		std::string resourcePath = "";
 		std::string victoryPath = "";
+		std::string artifactPath = "";
 		std::string eventPath = "";
 		std::string cameraPath = "";
 		std::string levelID = "tutorial";
@@ -48,6 +49,7 @@ namespace GUI
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "base"), "sprite", basePath);
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "resourcepoints"), "sprite", resourcePath);
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "victorypoints"), "sprite", victoryPath);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "artifacts"), "sprite", artifactPath);
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "event"), "sprite", eventPath);
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "camera"), "sprite", cameraPath);
 
@@ -58,6 +60,7 @@ namespace GUI
 		myBaseSprite = Prism::ModelLoader::GetInstance()->LoadSprite(basePath, { 20.f, 20.f }, { 10.f, 10.f });
 		myResourcePointSprite = Prism::ModelLoader::GetInstance()->LoadSprite(resourcePath, { 20.f, 20.f }, { 10.f, 10.f });
 		myVictoryPointSprite = Prism::ModelLoader::GetInstance()->LoadSprite(victoryPath, { 20.f, 20.f }, { 10.f, 10.f });
+		myArtifactSprite = Prism::ModelLoader::GetInstance()->LoadSprite(artifactPath, { 15.f, 15.f }, { 7.5f, 7.5f });
 		myEventSprite = Prism::ModelLoader::GetInstance()->LoadSprite(eventPath, { 20.f, 20.f }, { 10.f, 10.f });
 
 		CU::Vector2<float> cameraSize = { mySize.x / 2.f, mySize.y / 4.f };
@@ -75,6 +78,7 @@ namespace GUI
 		SAFE_DELETE(myBaseSprite);
 		SAFE_DELETE(myResourcePointSprite);
 		SAFE_DELETE(myVictoryPointSprite);
+		SAFE_DELETE(myArtifactSprite);
 		SAFE_DELETE(myCameraFrustum);
 		SAFE_DELETE(myEventSprite);
 	}
@@ -100,6 +104,7 @@ namespace GUI
 		RenderResourcePoints(aParentPosition);
 		RenderVictoryPoints(aParentPosition);
 		RenderBases(aParentPosition);
+		RenderArtifacts(aParentPosition);
 		
 		CU::Vector2<float> cameraPosition = { myCameraOrientation->GetPos().x, myCameraOrientation->GetPos().z };
 		cameraPosition /= 255.f;
@@ -254,5 +259,17 @@ namespace GUI
 
 		basePosition = (playerBase->GetPosition() / 255.f) * mySize;
 		myBaseSprite->Render(aParentPosition + myPosition + basePosition, { 1.f, 1.f }, { 0.f, 0.f, 1.f, 1.f });
+	}
+
+	void MiniMapWidget::RenderArtifacts(const CU::Vector2<float>& aParentPosition)
+	{
+		const CU::GrowingArray<Entity*>& artifacts = PollingStation::GetInstance()->GetArtifacts();
+
+		for (int i = 0; i < artifacts.Size(); i++)
+		{
+			CU::Vector2<float> position = (artifacts[i]->GetPosition() / 255.f) * mySize;
+
+			myArtifactSprite->Render(aParentPosition + myPosition + position);
+		}
 	}
 }

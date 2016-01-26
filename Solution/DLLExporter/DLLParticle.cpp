@@ -73,6 +73,6 @@ void DLLParticle::Render(Prism::Camera* aCamera)
 {
 	if (myIsLoaded == false) return;
 	DL_DEBUG("Render");
-	Prism::ParticleDataContainer::GetInstance()->SetGPUData(aCamera);
+	Prism::ParticleDataContainer::GetInstance()->SetGPUData(*aCamera);
 	myCurrentParticle->Render();
 }

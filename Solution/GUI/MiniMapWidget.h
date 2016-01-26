@@ -41,6 +41,7 @@ namespace GUI
 		void RenderVictoryPoints(const CU::Vector2<float>& aParentPosition);
 		void RenderResourcePoints(const CU::Vector2<float>& aParentPosition);
 		void RenderBases(const CU::Vector2<float>& aParentPosition);
+		void RenderArtifacts(const CU::Vector2<float>& aParentPosition);
 
 		Prism::SpriteProxy* myPlaceholderSprite;
 
@@ -48,8 +49,10 @@ namespace GUI
 		Prism::SpriteProxy* myBaseSprite;
 		Prism::SpriteProxy* myResourcePointSprite;
 		Prism::SpriteProxy* myVictoryPointSprite;
+		Prism::SpriteProxy* myArtifactSprite;
 		Prism::SpriteProxy* myCameraFrustum;
 		Prism::SpriteProxy* myEventSprite;
+
 		float myEventTimer;
 		float myEventTime;
 		bool myShouldRenderEvent;
