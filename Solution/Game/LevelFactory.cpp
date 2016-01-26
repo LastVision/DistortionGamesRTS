@@ -118,9 +118,9 @@ Level* LevelFactory::LoadCurrentLevel(bool aPauseModelLoader)
 
 	LUA::ScriptSystem::GetInstance()->CallFunction("Init", {});
 
-	CU::Vector3f weatherPosition = myCamera.GetOrientation().GetPos();
-	weatherPosition.y += 5;
-	//PostMaster::GetInstance()->SendMessage(EmitterMessage(eParticleType::WEATHER_SNOW, weatherPosition));
+	/*CU::Vector3f weatherPosition = myCamera.GetOrientation().GetPos();
+	weatherPosition.z += 10.f;*/
+	PostMaster::GetInstance()->SendMessage(EmitterMessage("weather_snow", &myCamera, CU::Vector3f(0.f, 0.f, 5.f)));
 
 	myCurrentLevel->LoadTutorial(myCamera, tutorialPath); // needs to be after InitGUI
 
