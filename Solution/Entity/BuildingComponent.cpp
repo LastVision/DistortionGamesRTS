@@ -127,14 +127,17 @@ bool BuildingComponent::CanUpgrade(eUnitType aUnitType)
 	int unitIndex = static_cast<int>(aUnitType);
 	int upgradeIndex = myUnitUpgradeProgress[unitIndex];
 
-	if (myUnitUpgrades[unitIndex][upgradeIndex].myInProgress == true)
+	if (upgradeIndex < 3)
 	{
-		return false;
-	}
+		if (myUnitUpgrades[unitIndex][upgradeIndex].myInProgress == true)
+		{
+			return false;
+		}
 
-	if (myUpgradeCooldowns[unitIndex] > 0.f)
-	{
-		return false;
+		if (myUpgradeCooldowns[unitIndex] > 0.f)
+		{
+			return false;
+		}
 	}
 
 	return upgradeIndex < 3;

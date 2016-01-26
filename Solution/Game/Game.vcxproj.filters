@@ -93,6 +93,9 @@
     <ClCompile Include="CreditMenuState.cpp">
       <Filter>StateStack</Filter>
     </ClCompile>
+    <ClCompile Include="BlockMap.cpp">
+      <Filter>Director\InfluenceMap</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -196,6 +199,9 @@
     </ClInclude>
     <ClInclude Include="CreditMenuState.h">
       <Filter>StateStack</Filter>
+    </ClInclude>
+    <ClInclude Include="BlockMap.h">
+      <Filter>Director\InfluenceMap</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

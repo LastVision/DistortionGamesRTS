@@ -250,6 +250,7 @@ void Entity::Kill()
 {
 	DL_ASSERT_EXP(myAlive == true, "Tried to kill an Entity multiple times");
 	myAlive = false;
+	
 	//RemoveFromScene();
 }
 

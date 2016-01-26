@@ -238,6 +238,11 @@ void ControllerComponent::HoldPosition(bool& aHasPlayedSound)
 void ControllerComponent::FillCommandList(eEntityCommand aAction, bool aClearCommandQueue, Entity* aEntity
 	, const CU::Vector2<float>& aTargetPosition)
 {
+	if (myEntity.GetOwner() == eOwnerType::ENEMY)
+	{
+		PostMaster::GetInstance()->SendMessage(BlockMapMessage(GetTargetPosition(), false));
+	}
+
 	if (aClearCommandQueue == true)
 	{
 		myCommands.RemoveAll();
