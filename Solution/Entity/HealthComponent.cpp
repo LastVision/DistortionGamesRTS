@@ -20,7 +20,24 @@ HealthComponent::HealthComponent(Entity& aEntity, HealthComponentData& aData)
 	, myArmor(aData.myArmor)
 	, myIsHealing(false)
 {
-	myHealthBar = new GUI::BarWidget(myMaxHealth, myCurrentHealth, { 50.f, 10.f });
+	CU::Vector4<float> color = { 1.f, 1.f, 1.f, 1.f };
+
+	switch (myEntity.GetOwner())
+	{
+	case eOwnerType::PLAYER:
+		color = { 0.f, 0.f, 1.f, 1.f };
+		break;
+	case eOwnerType::ENEMY:
+		color = { 1.f, 0.f, 0.f, 1.f };
+		break;
+	case eOwnerType::NEUTRAL:
+		color = { 0.5f, 0.5f, 0.f, 1.f };
+		break;
+	default:
+		break;
+	}
+	
+	myHealthBar = new GUI::BarWidget(myMaxHealth, myCurrentHealth, { 50.f, 10.f }, color);
 }
 
 HealthComponent::~HealthComponent()

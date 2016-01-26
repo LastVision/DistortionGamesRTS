@@ -64,7 +64,7 @@ namespace GUI
 		myTankPortrait = Prism::ModelLoader::GetInstance()->LoadSprite(tankPortraitPath, portraitSize);
 		myBuildingPortrait = Prism::ModelLoader::GetInstance()->LoadSprite(buildingPortraitPath, portraitSize);
 		myStatsSprite = Prism::ModelLoader::GetInstance()->LoadSprite(statsSpritePath, statsSize);
-		myBuildingTimer = new BarWidget(myBuilding.GetMaxBuildTime(), myBuilding.GetCurrentBuildTime(), { unitSize.x * 4.f, unitSize.y / 2.f });
+		myBuildingTimer = new BarWidget(myBuilding.GetMaxBuildTime(), myBuilding.GetCurrentBuildTime(), { unitSize.x * 4.f, unitSize.y / 2.f }, { 0.f, 0.f, 1.f, 1.f });
 	}
 
 	UnitInfoWidget::~UnitInfoWidget()
