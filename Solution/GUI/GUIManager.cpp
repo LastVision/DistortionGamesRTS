@@ -122,6 +122,7 @@ namespace GUI
 		for (; containerElement != nullptr; containerElement = reader.FindNextElement(containerElement))
 		{
 			bool isFullscreen = false;
+			bool isClickable = true;
 			Prism::SpriteProxy* backgroundSprite = nullptr;
 
 			reader.ForceReadAttribute(reader.ForceFindFirstChild(containerElement, "size"), "x", size.x);
@@ -132,6 +133,7 @@ namespace GUI
 			tinyxml2::XMLElement* spriteElement = reader.FindFirstChild(containerElement, "backgroundsprite");
 			tinyxml2::XMLElement* spriteSizeElement = reader.FindFirstChild(containerElement, "backgroundsize");
 			tinyxml2::XMLElement* fullscreenElement = reader.FindFirstChild(containerElement, "isfullscreen");
+			tinyxml2::XMLElement* clickableElement = reader.FindFirstChild(containerElement, "isclickable");
 
 			if (spriteElement != nullptr)
 			{
@@ -153,6 +155,11 @@ namespace GUI
 			if (fullscreenElement != nullptr)
 			{
 				reader.ForceReadAttribute(fullscreenElement, "value", isFullscreen);
+			}
+
+			if (clickableElement != nullptr)
+			{
+				reader.ForceReadAttribute(clickableElement, "value", isClickable);
 			}
 
 			GUI::WidgetContainer* container = new WidgetContainer(backgroundSprite, size, isFullscreen);
@@ -228,9 +235,10 @@ namespace GUI
 				}
 				else
 				{
-					// should assert
+					// should assert when all widgets are in
 				}
 			}
+			container->SetIsClickable(isClickable);
 			myWidgets->AddWidget(container);
 		}
 
@@ -295,6 +303,11 @@ namespace GUI
 	void GUIManager::CheckMouseEntered()
 	{
 		Widget* activeWidget = myWidgets->MouseIsOver(myMousePosition);
+
+		if (activeWidget != nullptr && activeWidget->IsClickable() == false)
+		{
+			return;
+		}
 
 		if (activeWidget != nullptr && activeWidget != myActiveWidget)
 		{
