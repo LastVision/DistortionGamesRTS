@@ -511,6 +511,11 @@ void PlayerDirector::UpdateInputs()
 			mySelectedAction = eSelectedAction::HOLD_POSITION;
 		}
 	}
+	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_F1) == true)
+	{
+		mySelectedUnits.RemoveAll();
+		mySelectedUnits.Add(myBuilding);
+	}
 
 	myLeftMouseDown = CU::InputWrapper::GetInstance()->MouseDown(0);
 	myLeftMousePressed = CU::InputWrapper::GetInstance()->MouseIsPressed(0);
