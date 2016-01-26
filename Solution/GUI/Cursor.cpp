@@ -6,14 +6,28 @@
 namespace GUI
 {
 	Cursor::Cursor(const CU::Vector2<int>& aWindowSize)
-		: mySprite(nullptr)
+		: myCurrentType(eCursorType::NORMAL)
+		, mySprites(8)
 	{
 		myWindowSize.x = float(aWindowSize.x);
 		myWindowSize.y = float(aWindowSize.y);
 		
-		mySprite = Prism::ModelLoader::GetInstance()->LoadSprite(
-			"Data/Resource/Texture/UI/T_crosshair_default.dds", { 70.f, 70.f }, { 35.f, 35.f });
-		//mySprite = new Prism::Sprite("Data/Resource/Texture/UI/T_crosshair_default.dds", { 70.f, 70.f }, { 35.f, 35.f });
+		Prism::SpriteProxy* normalSprite = Prism::ModelLoader::GetInstance()->LoadSprite(
+			"Data/Resource/Texture/UI/Crosshair/T_crosshair_default.dds", { 70.f, 70.f }, { 35.f, 35.f });
+		mySprites.Add(normalSprite);
+
+		Prism::SpriteProxy* attackSprite = Prism::ModelLoader::GetInstance()->LoadSprite(
+			"Data/Resource/Texture/UI/Crosshair/T_crosshair_attack.dds", { 70.f, 70.f }, { 35.f, 35.f });
+		mySprites.Add(attackSprite);
+
+		Prism::SpriteProxy* attackMoveSprite = Prism::ModelLoader::GetInstance()->LoadSprite(
+			"Data/Resource/Texture/UI/Crosshair/T_crosshair_attack_move.dds", { 70.f, 70.f }, { 35.f, 35.f });
+		mySprites.Add(attackMoveSprite);
+
+		Prism::SpriteProxy* totemSprite = Prism::ModelLoader::GetInstance()->LoadSprite(
+			"Data/Resource/Texture/UI/Crosshair/T_crosshair_totem.dds", { 70.f, 70.f }, { 35.f, 35.f });
+		mySprites.Add(totemSprite);
+
 		myPosition = myWindowSize / 2.f;
 
 		myPositionZeroToOne = myPosition / myWindowSize;
@@ -22,8 +36,7 @@ namespace GUI
 
 	Cursor::~Cursor()
 	{
-		delete mySprite;
-		mySprite = nullptr;
+		mySprites.DeleteAll();
 	}
 
 	void Cursor::Update()
@@ -42,7 +55,7 @@ namespace GUI
 
 	void Cursor::Render()
 	{
-		mySprite->Render(myPosition);
+		mySprites[static_cast<int>(myCurrentType)]->Render(myPosition);
 	}
 
 	const CU::Vector2<float>& Cursor::GetMousePosition() const

@@ -1,5 +1,6 @@
 #pragma once
 #include <Vector2.h>
+#include <GameEnum.h>
 
 namespace Prism
 {
@@ -28,10 +29,19 @@ namespace GUI
 
 		void ClipCursor(); // for software cursor
 
+		void SetCurrentCursor(eCursorType aType);
+
 	private:
 		CU::Vector2<float> myPosition;
 		CU::Vector2<float> myPositionZeroToOne;
 		CU::Vector2<float> myWindowSize;
-		Prism::SpriteProxy* mySprite;
+		CU::GrowingArray<Prism::SpriteProxy*> mySprites;
+
+		eCursorType myCurrentType;
 	};
+
+	inline void Cursor::SetCurrentCursor(eCursorType aType)
+	{
+		myCurrentType = aType;
+	}
 }

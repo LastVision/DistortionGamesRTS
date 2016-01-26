@@ -5,12 +5,14 @@
 #include <Camera.h>
 #include <CollisionComponent.h>
 #include <ControllerComponent.h>
+#include <Cursor.h>
 #include <TimeMultiplierMessage.h>
 #include <EnrageComponent.h>
 #include <Entity.h>
 #include <EntityData.h>
 #include <EntityFactory.h>
 #include <EventPositionMessage.h>
+#include <GameEnum.h>
 #include <GUIManager.h>
 #include <GraphicsComponent.h>
 #include <HealthComponent.h>
@@ -133,7 +135,8 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 
 PlayerDirector::~PlayerDirector()
 {
-	//myTotem->RemoveFromScene();
+	myCursor->SetCurrentCursor(eCursorType::NORMAL); 
+
 	SAFE_DELETE(myGUIManager);
 	SAFE_DELETE(myDragSelectionSpriteVertical);
 	SAFE_DELETE(myDragSelectionSpriteHorizontal);
@@ -250,6 +253,7 @@ void PlayerDirector::ReceiveMessage(const OnClickMessage& aMessage)
 	if (aMessage.myEvent == eOnClickEvent::PLACE_TOTEM)
 	{
 		mySelectedAction = eSelectedAction::PLACE_TOTEM;
+		myCursor->SetCurrentCursor(eCursorType::TOTEM);
 		return;
 	}
 	else if (aMessage.myEvent == eOnClickEvent::UPGRADE_UNIT)
@@ -268,6 +272,7 @@ void PlayerDirector::ReceiveMessage(const OnClickMessage& aMessage)
 
 		case eOnClickEvent::UNIT_ACTION_ATTACK_MOVE:
 			mySelectedAction = eSelectedAction::ATTACK_MOVE;
+			myCursor->SetCurrentCursor(eCursorType::ATTACK_MOVE);
 			break;
 
 		case eOnClickEvent::UNIT_ACTION_MOVE:
@@ -483,6 +488,7 @@ void PlayerDirector::UpdateInputs()
 		if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_A) == true)
 		{
 			mySelectedAction = eSelectedAction::ATTACK_MOVE;
+			myCursor->SetCurrentCursor(eCursorType::ATTACK_MOVE);
 		}
 
 		if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_S) == true)
@@ -624,6 +630,7 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 
 	if (myLeftMouseDown == true && mySelectedAction == eSelectedAction::PLACE_TOTEM)
 	{
+		myCursor->SetCurrentCursor(eCursorType::NORMAL);
 		PlaceTotem(firstTargetPos);
 	}
 
@@ -723,6 +730,7 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 	if (hasDoneAction == true)
 	{
 		mySelectedAction = eSelectedAction::NONE;
+		myCursor->SetCurrentCursor(eCursorType::NORMAL);
 	}
 
 	SelectOrHoverEntity(myBuilding, hasSelected, hasHovered, line);
