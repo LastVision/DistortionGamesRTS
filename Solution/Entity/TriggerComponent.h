@@ -18,6 +18,8 @@ public:
 	eOwnerType ModifyOwnership(eOwnerType anOwner, float aModifyValue);
 	eOwnerType GetOwnerGainingPoint() const;
 
+	float GetRadiusSquared() const;
+
 private:
 	void operator=(TriggerComponent&) = delete;
 
@@ -51,4 +53,9 @@ inline eComponentType TriggerComponent::GetType()
 inline eOwnerType TriggerComponent::GetOwnerGainingPoint() const
 {
 	return myGainingPointsOwner;
+}
+
+inline float TriggerComponent::GetRadiusSquared() const
+{
+	return myRadiusSquared;
 }

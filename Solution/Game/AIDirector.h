@@ -83,6 +83,14 @@ private:
 	Action myCurrentAction;
 	CU::GrowingArray<Action> myActionQueue;
 
+
+	void HandleControlPoints(eFuzzyAI aAction);
+	void UpdateTakeControlPoints();
+
+
+
+
+
 	bool myPlayerHasStarted;
 
 	CU::GrowingArray<Entity*> myIdleUnits;
