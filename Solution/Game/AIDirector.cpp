@@ -1,26 +1,27 @@
 #include "stdafx.h"
+
+#include <ActorComponent.h>
 #include "AIDirector.h"
+#include <BlockMapMessage.h>
 #include <BuildingComponent.h>
 #include <ControllerComponent.h>
+#include "DecisionMap.h"
+#include "DifferenceMap.h"
 #include <Entity.h>
 #include <EntityFactory.h>
+#include <FuzzySet.h>
 #include <GameConstants.h>
+#include "InfluenceMap.h"
+#include <InputWrapper.h>
 #include <PollingStation.h>
 #include <PostMaster.h>
 #include <SpawnUnitMessage.h>
-#include <TimeMultiplierMessage.h>
-#include <InputWrapper.h>
-
-#include "InfluenceMap.h"
 #include "TensionMap.h"
-#include "DifferenceMap.h"
-#include "VulnerabilityMap.h"
-#include "DecisionMap.h"
-
-#include <FuzzySet.h>
+#include <TimeMultiplierMessage.h>
 #include <TriggerComponent.h>
-#include <ActorComponent.h>
-#include <BlockMapMessage.h>
+#include "VulnerabilityMap.h"
+#include <XMLReader.h>
+
 
 AIDirector::AIMaps::AIMaps()
 {
@@ -204,6 +205,34 @@ void AIDirector::ReceiveMessage(const BlockMapMessage& aMessage)
 	{
 		myMaps.myBlockMap->RemoveValue(1.f, 5.f, aMessage.myPosition);
 	}
+}
+
+void AIDirector::LoadAISettings(const std::string& aFilePath)
+{
+	XMLReader reader;
+	reader.OpenDocument(aFilePath);
+
+	tinyxml2::XMLElement* root = reader.ForceFindFirstChild("root");
+	tinyxml2::XMLElement* controlPointAdvisor = reader.ForceFindFirstChild(root, "ControlPointAdvisor");
+	
+	tinyxml2::XMLElement* resourcePoint = reader.ForceFindFirstChild(controlPointAdvisor, "ResourcePoint");
+	reader.ForceReadAttribute(reader.ForceFindFirstChild(resourcePoint, "squadsize")
+		, "value", myResourceData.myResourceSquadSize);
+	reader.ForceReadAttribute(reader.ForceFindFirstChild(resourcePoint, "optimalgunpowder")
+		, "value", myResourceData.myOptimalGunpowerCount);
+	reader.ForceReadAttribute(reader.ForceFindFirstChild(resourcePoint, "gunpowdervalue")
+		, "value", myResourceData.myGunpowderValue);
+
+	tinyxml2::XMLElement* victoryPoint = reader.ForceFindFirstChild(controlPointAdvisor, "VictoryPoint");
+	reader.ForceReadAttribute(reader.ForceFindFirstChild(victoryPoint, "squadsize")
+		, "value", myResourceData.myVictorySquadSize);
+	reader.ForceReadAttribute(reader.ForceFindFirstChild(victoryPoint, "optimalowningpercentage")
+		, "value", myResourceData.myOptimalVictoryPoints);
+	reader.ForceReadAttribute(reader.ForceFindFirstChild(victoryPoint, "victorypointvalue")
+		, "value", myResourceData.myVictoryPointValue);
+
+	myResourceData.myOptimalVictoryPoints /= 100.f;
+	reader.CloseDocument();
 }
 
 void AIDirector::UpdateInfluences()
@@ -471,16 +500,16 @@ CU::FuzzySet AIDirector::UpdateDefendAdvisor()
 
 CU::FuzzySet AIDirector::UpdateResourceAdvisor()
 {
-	int optimalGunpowderCount = 200;
-	float gunpowderValue = 5.f;
+	//int optimalGunpowderCount = 200;
+	//float gunpowderValue = 5.f;
 
-	float threshHold = 1.f - (static_cast<float>(myGunpowder) / static_cast<float>(optimalGunpowderCount));
+	float threshHold = 1.f - (static_cast<float>(myGunpowder) / static_cast<float>(myResourceData.myOptimalGunpowerCount));
 
 	int ownedPointsCount = PollingStation::GetInstance()->GetResourcePointsCount(myOwner);
 	int totalPointsCount = PollingStation::GetInstance()->GetResourcePoints().Size();
 	float pointModifier = 1.f - (static_cast<float>(ownedPointsCount) / static_cast<float>(totalPointsCount));
 
-	float fuzzyValue = threshHold * gunpowderValue;
+	float fuzzyValue = threshHold * myResourceData.myGunpowderValue;
 	fuzzyValue *= pointModifier;
 
 	CU::FuzzySet set(static_cast<int>(eFuzzyAI::_COUNT));
@@ -490,15 +519,15 @@ CU::FuzzySet AIDirector::UpdateResourceAdvisor()
 
 
 
-	float victoryPointValue = 5.f;
-	float optimalVictoryPointsCount = 0.75f;
+	//float victoryPointValue = 5.f;
+	//float optimalVictoryPointsCount = 0.75f;
 
 	int ownedVictoryPointsCount = PollingStation::GetInstance()->GetVictoryPointsCount(myOwner);
 	int totalVictoryPointsCount = PollingStation::GetInstance()->GetVictoryPoints().Size();
 	float ownedVictoryPoints = (static_cast<float>(ownedVictoryPointsCount) / static_cast<float>(totalVictoryPointsCount));
 
-	float victoryPointModifier = 1.f - ownedVictoryPoints / optimalVictoryPointsCount;
-	fuzzyValue = victoryPointModifier * victoryPointValue;
+	float victoryPointModifier = 1.f - ownedVictoryPoints / myResourceData.myOptimalVictoryPoints;
+	fuzzyValue = victoryPointModifier * myResourceData.myVictoryPointValue;
 	set.AddValue(static_cast<int>(eFuzzyAI::TAKE_VICTORY_POINT), fuzzyValue);
 
 	return set;
@@ -633,7 +662,21 @@ void AIDirector::StartNextAction()
 
 void AIDirector::HandleControlPoints(eFuzzyAI aAction)
 {
-	if (myIdleUnits.Size() >= 3)
+	int squadSize;
+	if (aAction == eFuzzyAI::TAKE_RESOURCE_POINT)
+	{
+		squadSize = myResourceData.myResourceSquadSize;
+	}
+	else if (aAction == eFuzzyAI::TAKE_VICTORY_POINT)
+	{
+		squadSize = myResourceData.myVictoryPointValue;
+	}
+	else
+	{
+		DL_ASSERT("Invalid eFuzzyAction in HandleControlPoints");
+	}
+
+	if (myIdleUnits.Size() >= squadSize)
 	{
 		float maxDist = sqrt(256.f * 256.f + 256.f * 256.f);
 		float distWeight = 10.f;
@@ -709,7 +752,7 @@ void AIDirector::HandleControlPoints(eFuzzyAI aAction)
 		float grunt = myFuzzySet->GetValue(static_cast<int>(eFuzzyAI::SPAWN_GRUNT));
 		float ranger = myFuzzySet->GetValue(static_cast<int>(eFuzzyAI::SPAWN_RANGER));
 		float tank = myFuzzySet->GetValue(static_cast<int>(eFuzzyAI::SPAWN_TANK));
-		for (int i = 0; i < 3 - myIdleUnits.Size(); ++i)
+		for (int i = 0; i < squadSize - myIdleUnits.Size(); ++i)
 		{
 			if (myHasUnlockedTank == true && tank > ranger && tank > grunt)
 			{
