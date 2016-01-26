@@ -168,28 +168,6 @@ namespace GUI
 		CU::Vector2<float> portraitPosition = myPosition + aParentPosition + myPortraitPosition;
 		CU::Vector2<float> upgradePosition = portraitPosition;
 
-		if (myUnits[0]->GetUnitType() == eUnitType::GRUNT)
-		{
-			myGruntPortrait->Render(portraitPosition);
-		}
-		else if (myUnits[0]->GetUnitType() == eUnitType::RANGER)
-		{
-			myRangerPortrait->Render(portraitPosition);
-		}
-		else
-		{
-			myTankPortrait->Render(portraitPosition);
-		}
-
-		upgradePosition.x += myGruntPortrait->GetSize().y * 0.9f;
-
-		myUnits[0]->GetComponent<PromotionComponent>()->RenderPromotion(portraitPosition);
-
-		Prism::Engine::GetInstance()->PrintText(myBuilding.GetUpgradeLevel(myUnits[0]->GetUnitType()), upgradePosition, Prism::eTextType::RELEASE_TEXT);
-
-		portraitPosition.y -= myGruntPortrait->GetSize().y / 3.5f;
-		portraitPosition.x += myGruntPortrait->GetSize().x / 3.f;
-
 		CU::Vector4<float> color(1.f, 1.f, 1.f, 1.f);
 		HealthComponent* toCheck = myUnits[0]->GetComponent<HealthComponent>();
 		if (toCheck->GetIsHealing() == true && toCheck->GetCurrentHealth() < toCheck->GetMaxHealth())
@@ -200,6 +178,36 @@ namespace GUI
 		{
 			color = { 1.f, 0.f, 0.f, 1.f };
 		}
+		else if (toCheck->GetCurrentHealth() < toCheck->GetMaxHealth() * 0.5f)
+		{
+			color = { 1.f, 0.4f, 0.4f, 1.f };
+		}
+		else if (toCheck->GetCurrentHealth() < toCheck->GetMaxHealth() * 0.7f)
+		{
+			color = { 1.f, 0.7f, 0.7f, 1.f };
+		}
+
+		if (myUnits[0]->GetUnitType() == eUnitType::GRUNT)
+		{
+			myGruntPortrait->Render(portraitPosition, { 1.f, 1.f }, color);
+		}
+		else if (myUnits[0]->GetUnitType() == eUnitType::RANGER)
+		{
+			myRangerPortrait->Render(portraitPosition, { 1.f, 1.f }, color);
+		}
+		else
+		{
+			myTankPortrait->Render(portraitPosition, { 1.f, 1.f }, color);
+		}
+
+		upgradePosition.x += myGruntPortrait->GetSize().y * 0.9f;
+
+		myUnits[0]->GetComponent<PromotionComponent>()->RenderPromotion(portraitPosition);
+
+		Prism::Engine::GetInstance()->PrintText(myBuilding.GetUpgradeLevel(myUnits[0]->GetUnitType()), upgradePosition, Prism::eTextType::RELEASE_TEXT);
+
+		portraitPosition.y -= myGruntPortrait->GetSize().y / 3.5f;
+		portraitPosition.x += myGruntPortrait->GetSize().x / 3.f;
 
 		std::string currentHealth = std::to_string(int(myUnits[0]->GetComponent<HealthComponent>()->GetCurrentHealth()));
 		Prism::Engine::GetInstance()->PrintText(currentHealth, portraitPosition, Prism::eTextType::RELEASE_TEXT, myTextScale, color);
@@ -212,6 +220,7 @@ namespace GUI
 		color.y = 1.f;
 		color.z = 1.f;
 		color.w = 1.f;
+
 		if (myUnits[0]->GetUnitType() == eUnitType::TANK)
 		{
 			if (myUnits[0]->GetComponent<EnrageComponent>()->IsActive() == true)
@@ -264,14 +273,17 @@ namespace GUI
 			{
 				color = { 0.f, 1.f, 0.f, 1.f };
 			}
+			else if (toCheck->GetCurrentHealth() < toCheck->GetMaxHealth() * 0.3f)
+			{
+				color = { 1.f, 0.f, 0.f, 1.f };
+			}
 			else if (toCheck->GetCurrentHealth() < toCheck->GetMaxHealth() * 0.5f)
 			{
 				color = { 1.f, 0.4f, 0.4f, 1.f };
 			}
-			else if (toCheck->GetCurrentHealth() < toCheck->GetMaxHealth() * 0.3f)
+			else if (toCheck->GetCurrentHealth() < toCheck->GetMaxHealth() * 0.7f)
 			{
-				color = { 1.f, 0.f, 0.f, 1.f };
-
+				color = { 1.f, 0.7f, 0.7f, 1.f };
 			}
 
 			CU::Vector2<float> position = { (myPosition.x + portrait->GetSize().x * i) + (i * 10.f), myPosition.y };
