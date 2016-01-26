@@ -158,6 +158,11 @@ void PlayerDirector::InitGUI(const AIDirector* anAI, const Prism::Camera& aCamer
 
 void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 {
+	if (myCursor->GetCurrentCursor() == eCursorType::ATTACK) // prevent cursor getting stuck after hovering enemy
+	{
+		myCursor->SetCurrentCursor(eCursorType::NORMAL);
+	}
+
 	aDeltaTime *= myTimeMultiplier;
 	DEBUG_PRINT(myHasUnlockedRanger);
 	DEBUG_PRINT(myHasUnlockedTank);
@@ -680,9 +685,9 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 	}
 
 	Entity* hoveredEnemy = PollingStation::GetInstance()->FindEntityAtPosition(firstTargetPos, eOwnerType::ENEMY | eOwnerType::NEUTRAL);
-	if (hoveredEnemy != nullptr)
+	if (hoveredEnemy != nullptr && mySelectedAction == eSelectedAction::NONE)
 	{
-		Prism::RenderBox(hoveredEnemy->GetOrientation().GetPos(), eColorDebug::RED);
+		myCursor->SetCurrentCursor(eCursorType::ATTACK);
 	}
 
 	bool hasSelected = false;
