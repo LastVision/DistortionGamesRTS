@@ -45,9 +45,11 @@ void PollingStation::RegisterEntity(Entity* aEntity)
 	}
 	case eEntityType::RESOURCE_POINT:
 		myResourcePoints.Add(aEntity);
+		myVictoryAndResourcePoints.Add(aEntity);
 		break;
 	case eEntityType::VICTORY_POINT:
 		myVictoryPoints.Add(aEntity);
+		myVictoryAndResourcePoints.Add(aEntity);
 		break;
 	case eEntityType::BASE_BUILING:
 		switch (aEntity->GetOwner())
@@ -160,6 +162,11 @@ const CU::GrowingArray<Entity*>& PollingStation::GetVictoryPoints() const
 	return myVictoryPoints;
 }
 
+const CU::GrowingArray<Entity*>& PollingStation::GetVictoryAndResourcePoints() const
+{
+	return myVictoryAndResourcePoints;
+}
+
 int PollingStation::GetResourcePointsCount(eOwnerType anOwner) const
 {
 	int count = 0;
@@ -204,6 +211,32 @@ CU::Vector2<float> PollingStation::GetClosestNotOwnedResourcePoint(eOwnerType aO
 			{
 				bestDist = distance;
 				resourcePoint = myResourcePoints[i];
+			}
+		}
+	}
+
+	if (resourcePoint == nullptr)
+	{
+		return aPoint;
+	}
+
+	return resourcePoint->GetPosition();
+}
+
+CU::Vector2<float> PollingStation::GetClosestNotOwnedVictoryPoint(eOwnerType aOwner, const CU::Vector2<float>& aPoint) const
+{
+	float bestDist = FLT_MAX;
+	Entity* resourcePoint = nullptr;
+
+	for (int i = 0; i < myVictoryPoints.Size(); ++i)
+	{
+		if (myVictoryPoints[i]->GetComponent<TriggerComponent>()->GetOwnerGainingPoint() != aOwner)
+		{
+			float distance = CU::Length2(myVictoryPoints[i]->GetPosition() - aPoint);
+			if (distance < bestDist)
+			{
+				bestDist = distance;
+				resourcePoint = myVictoryPoints[i];
 			}
 		}
 	}
@@ -291,6 +324,7 @@ PollingStation::PollingStation()
 	, myResourcePoints(GC::resourcePointCount)
 	, myVictoryPoints(GC::victoryPointCount)
 	, myArtifacts(20)
+	, myVictoryAndResourcePoints(20)
 {
 }
 

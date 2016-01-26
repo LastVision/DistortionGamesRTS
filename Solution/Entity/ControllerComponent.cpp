@@ -324,7 +324,7 @@ void ControllerComponent::FillCommandList(eEntityCommand aAction, bool aClearCom
 	}
 
 	if (myEntity.GetOwner() == eOwnerType::ENEMY
-		&& aAction == eEntityCommand::ATTACK_MOVE || aAction == eEntityCommand::MOVE)
+		&& (aAction == eEntityCommand::ATTACK_MOVE || aAction == eEntityCommand::MOVE))
 	{
 		PostMaster::GetInstance()->SendMessage(BlockMapMessage(GetTargetPosition(), true));
 	}

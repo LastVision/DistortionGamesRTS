@@ -345,8 +345,27 @@ void AIDirector::UpdateUnitLists()
 
 	for (int i = myActiveUnits.Size()-1; i >= 0; --i)
 	{
+		bool idle = true;
+
+		const CU::GrowingArray<Entity*>& points = PollingStation::GetInstance()->GetVictoryAndResourcePoints();
+		for (int j = 0; j < points.Size(); ++j)
+		{
+			TriggerComponent* trigger = points[j]->GetComponent<TriggerComponent>();
+			if (trigger->GetOwnerGainingPoint() != myOwner)
+			{
+				float radius2 = trigger->GetRadiusSquared();
+				float dist2 = CU::Length2(points[j]->GetPosition() - myActiveUnits[i]->GetPosition());
+				if (dist2 < radius2)
+				{
+					idle = false;
+				}
+			}
+		}
+
+
 		bool ready = myActiveUnits[i]->GetComponent<ControllerComponent>()->IsReady();
-		if (myActiveUnits[i]->GetState() == eEntityState::IDLE && ready == true)
+		idle = idle && myActiveUnits[i]->GetState() == eEntityState::IDLE;
+		if (idle == true && ready == true)
 		{
 			myIdleUnits.Add(myActiveUnits[i]);
 		}
@@ -467,6 +486,21 @@ CU::FuzzySet AIDirector::UpdateResourceAdvisor()
 	CU::FuzzySet set(static_cast<int>(eFuzzyAI::_COUNT));
 	set.AddValue(static_cast<int>(eFuzzyAI::TAKE_RESOURCE_POINT), fuzzyValue);
 
+
+
+
+
+	float victoryPointValue = 5.f;
+	float optimalVictoryPointsCount = 0.75f;
+
+	int ownedVictoryPointsCount = PollingStation::GetInstance()->GetVictoryPointsCount(myOwner);
+	int totalVictoryPointsCount = PollingStation::GetInstance()->GetVictoryPoints().Size();
+	float ownedVictoryPoints = (static_cast<float>(ownedVictoryPointsCount) / static_cast<float>(totalVictoryPointsCount));
+
+	float victoryPointModifier = 1.f - ownedVictoryPoints / optimalVictoryPointsCount;
+	fuzzyValue = victoryPointModifier * victoryPointValue;
+	set.AddValue(static_cast<int>(eFuzzyAI::TAKE_VICTORY_POINT), fuzzyValue);
+
 	return set;
 }
 
@@ -484,52 +518,10 @@ bool AIDirector::UpdateCurrentAction()
 		myCurrentAction.myIsDone = myBuilding->GetComponent<BuildingComponent>()->GetCurrentBuildTime() <= 0.f;
 		break;
 	case eFuzzyAI::TAKE_RESOURCE_POINT:
-	{
-		bool shouldMove = true;
-		float blockWeight = 23.f;
-		float playerInfluenceWeight = 6.f;
-		float blockMapValue = myMaps.myBlockMap->GetValue(myCurrentAction.myPosition) * blockWeight;
-		float playerInfluenceMapValue = myMaps.myPlayerInfluenceMap->GetValue(myCurrentAction.myPosition) * playerInfluenceWeight;
-
-		if (blockMapValue - playerInfluenceMapValue > 0.f)
-		{
-			myCurrentAction.myIsDone = true;
-			shouldMove = false;
-		}
-
-		if (myIdleUnits.Size() < 3)
-		{
-			myCurrentAction.myIsDone = false;
-			shouldMove = false;
-		}
-
-		for (int i = 0; i < myIdleUnits.Size(); ++i)
-		{
-			if (myIdleUnits[i]->GetComponent<ControllerComponent>()->IsReady() == false)
-			{
-				myCurrentAction.myIsDone = false;
-				shouldMove = false;
-			}
-		}
-
-		if (shouldMove == true)
-		{
-			CU::Vector3<float> target;
-			target.x = myCurrentAction.myPosition.x;
-			target.z = myCurrentAction.myPosition.y;
-			bool quiet = true;
-			for (int i = 0; i < myIdleUnits.Size(); ++i)
-			{
-				CU::Vector2<float> oldTarget = myIdleUnits[i]->GetComponent<ControllerComponent>()->GetTargetPosition();
-				ReceiveMessage(BlockMapMessage(oldTarget, false));
-				myIdleUnits[i]->GetComponent<ControllerComponent>()->AttackMove(target, true, quiet);
-			}
-			myCurrentAction.myIsDone = true;
-		}
+		UpdateTakeControlPoints();
 		break;
-	}
 	case eFuzzyAI::TAKE_VICTORY_POINT:
-		DL_ASSERT("eFuzzyAI Case Not Implemented");
+		UpdateTakeControlPoints();
 		break;
 	case eFuzzyAI::TAKE_ARTIFACT:
 		DL_ASSERT("eFuzzyAI Case Not Implemented");
@@ -575,87 +567,10 @@ void AIDirector::InterpretFuzzySet()
 		myActionQueue.InsertFirst(Action(eFuzzyAI::SPAWN_TANK));
 		break;
 	case eFuzzyAI::TAKE_RESOURCE_POINT:
-	{
-		if (myIdleUnits.Size() >= 3)
-		{
-			float maxDist = sqrt(256.f * 256.f + 256.f * 256.f);
-			float distWeight = 10.f;
-			float blockWeight = 23.f;
-			float playerInfluenceWeight = 6.f;
-
-			float bestResult = FLT_MAX;
-			Entity* bestPoint = nullptr;
-
-			const CU::GrowingArray<Entity*>& points = PollingStation::GetInstance()->GetResourcePoints();
-			for (int i = 0; i < points.Size(); ++i)
-			{
-				if (points[i]->GetComponent<TriggerComponent>()->GetOwnerGainingPoint() ==
-					myOwner)
-				{
-					continue;
-				}
-
-				CU::Vector2<float> pos = points[i]->GetPosition();
-
-				float dist = (CU::Length(pos - myBuilding->GetPosition()) + 0.000001f) / maxDist;
-				float blockMapValue = myMaps.myBlockMap->GetValue(pos) * blockWeight;
-				float playerInfluenceMapValue = myMaps.myPlayerInfluenceMap->GetValue(pos) * playerInfluenceWeight;
-
-				float result = (blockMapValue) - (playerInfluenceMapValue);
-				if (result > 0.f)
-				{
-					int apa = 5;
-				}
-				if (result <= 0.f)
-				{
-					result = abs(result);
-					result += dist * distWeight;
-
-					if (result < bestResult)
-					{
-						bestResult = result;
-						bestPoint = points[i];
-					}
-				}
-			}
-
-			if (bestPoint != nullptr)
-			{
-				myActionQueue.InsertFirst(Action(eFuzzyAI::TAKE_RESOURCE_POINT, bestPoint->GetPosition()));
-			}
-			else
-			{
-				myActionQueue.InsertFirst(Action(eFuzzyAI::FIRST_ACTION));
-			}
-		}
-		else
-		{
-			float grunt = myFuzzySet->GetValue(static_cast<int>(eFuzzyAI::SPAWN_GRUNT));
-			float ranger = myFuzzySet->GetValue(static_cast<int>(eFuzzyAI::SPAWN_RANGER));
-			float tank = myFuzzySet->GetValue(static_cast<int>(eFuzzyAI::SPAWN_TANK));
-			for (int i = 0; i < 3 - myIdleUnits.Size(); ++i)
-			{
-				if (grunt > ranger && grunt > tank)
-				{
-					myActionQueue.InsertFirst(Action(eFuzzyAI::SPAWN_GRUNT));
-				}
-				else if (ranger > tank)
-				{
-					myActionQueue.InsertFirst(Action(eFuzzyAI::SPAWN_RANGER));
-				}
-				else
-				{
-					myActionQueue.InsertFirst(Action(eFuzzyAI::SPAWN_TANK));
-				}
-			}
-			CU::Vector2<float> target = PollingStation::GetInstance()->GetClosestNotOwnedResourcePoint(myOwner
-				, myBuilding->GetPosition());
-			myActionQueue.InsertFirst(Action(eFuzzyAI::TAKE_RESOURCE_POINT, target));
-		}
+		HandleControlPoints(action);
 		break;
-	}
 	case eFuzzyAI::TAKE_VICTORY_POINT:
-		DL_ASSERT("eFuzzyAI Case Not Implemented");
+		HandleControlPoints(action);
 		break;
 	case eFuzzyAI::TAKE_ARTIFACT:
 		DL_ASSERT("eFuzzyAI Case Not Implemented");
@@ -697,7 +612,7 @@ void AIDirector::StartNextAction()
 		//Does not need to do anything here, everything is handled in UpdateCurrentAction
 		break;
 	case eFuzzyAI::TAKE_VICTORY_POINT:
-		DL_ASSERT("eFuzzyAI Case Not Implemented");
+		//Does not need to do anything here, everything is handled in UpdateCurrentAction
 		break;
 	case eFuzzyAI::TAKE_ARTIFACT:
 		DL_ASSERT("eFuzzyAI Case Not Implemented");
@@ -713,5 +628,173 @@ void AIDirector::StartNextAction()
 		break;
 	default:
 		break;
+	}
+}
+
+void AIDirector::HandleControlPoints(eFuzzyAI aAction)
+{
+	if (myIdleUnits.Size() >= 3)
+	{
+		float maxDist = sqrt(256.f * 256.f + 256.f * 256.f);
+		float distWeight = 10.f;
+		float blockWeight = 23.f;
+		float playerInfluenceWeight = 6.f;
+
+		float bestResult = FLT_MAX;
+		Entity* bestPoint = nullptr;
+
+
+
+		const CU::GrowingArray<Entity*>* points = nullptr;
+
+		if (aAction == eFuzzyAI::TAKE_RESOURCE_POINT)
+		{
+			points = &PollingStation::GetInstance()->GetResourcePoints();
+		}
+		else if (aAction == eFuzzyAI::TAKE_VICTORY_POINT)
+		{
+			points = &PollingStation::GetInstance()->GetVictoryPoints();
+		}
+		else
+		{
+			DL_ASSERT("Invalid eFuzzyAction in HandleControlPoints");
+			points = &PollingStation::GetInstance()->GetVictoryPoints();
+		}
+		
+		for (int i = 0; i < points->Size(); ++i)
+		{
+			Entity* point = (*points)[i];
+
+			if (point->GetComponent<TriggerComponent>()->GetOwnerGainingPoint() ==
+				myOwner)
+			{
+				continue;
+			}
+
+			CU::Vector2<float> pos = point->GetPosition();
+
+			float dist = (CU::Length(pos - myBuilding->GetPosition()) + 0.000001f) / maxDist;
+			float blockMapValue = myMaps.myBlockMap->GetValue(pos) * blockWeight;
+			float playerInfluenceMapValue = myMaps.myPlayerInfluenceMap->GetValue(pos) * playerInfluenceWeight;
+
+			float result = (blockMapValue)-(playerInfluenceMapValue);
+			if (result > 0.f)
+			{
+				int apa = 5;
+			}
+			if (result <= 0.f)
+			{
+				result = abs(result);
+				result += dist * distWeight;
+
+				if (result < bestResult)
+				{
+					bestResult = result;
+					bestPoint = point;
+				}
+			}
+		}
+
+		if (bestPoint != nullptr)
+		{
+			myActionQueue.InsertFirst(Action(aAction, bestPoint->GetPosition()));
+		}
+		else
+		{
+			myActionQueue.InsertFirst(Action(eFuzzyAI::FIRST_ACTION));
+		}
+	}
+	else
+	{
+		float grunt = myFuzzySet->GetValue(static_cast<int>(eFuzzyAI::SPAWN_GRUNT));
+		float ranger = myFuzzySet->GetValue(static_cast<int>(eFuzzyAI::SPAWN_RANGER));
+		float tank = myFuzzySet->GetValue(static_cast<int>(eFuzzyAI::SPAWN_TANK));
+		for (int i = 0; i < 3 - myIdleUnits.Size(); ++i)
+		{
+			if (myHasUnlockedTank == true && tank > ranger && tank > grunt)
+			{
+				myActionQueue.InsertFirst(Action(eFuzzyAI::SPAWN_TANK));
+			}
+			else if (myHasUnlockedRanger == true && ranger > grunt)
+			{
+				myActionQueue.InsertFirst(Action(eFuzzyAI::SPAWN_RANGER));
+			}
+			else
+			{
+				myActionQueue.InsertFirst(Action(eFuzzyAI::SPAWN_GRUNT));
+			}
+		}
+
+		CU::Vector2<float> target;
+
+		if (aAction == eFuzzyAI::TAKE_RESOURCE_POINT)
+		{
+			target = PollingStation::GetInstance()->GetClosestNotOwnedResourcePoint(myOwner
+				, myBuilding->GetPosition());
+		}
+		else if (aAction == eFuzzyAI::TAKE_VICTORY_POINT)
+		{
+			target = PollingStation::GetInstance()->GetClosestNotOwnedVictoryPoint(myOwner
+				, myBuilding->GetPosition());
+		}
+		else
+		{
+			DL_ASSERT("Invalid eFuzzyAction in HandleControlPoints");
+			target = myBuilding->GetPosition();
+		}
+
+		myActionQueue.InsertFirst(Action(aAction, target));
+	}
+}
+
+void AIDirector::UpdateTakeControlPoints()
+{
+	if (myActiveUnits.Size() == 0)
+	{
+		myCurrentAction.myIsDone = true;
+		return;
+	}
+
+	myCurrentAction.myIsDone = true;
+	bool shouldMove = true;
+	float blockWeight = 23.f;
+	float playerInfluenceWeight = 6.f;
+	float blockMapValue = myMaps.myBlockMap->GetValue(myCurrentAction.myPosition) * blockWeight;
+	float playerInfluenceMapValue = myMaps.myPlayerInfluenceMap->GetValue(myCurrentAction.myPosition) * playerInfluenceWeight;
+
+	if (blockMapValue - playerInfluenceMapValue > 0.f)
+	{
+		myCurrentAction.myIsDone = true;
+		shouldMove = false;
+	}
+
+	/*if (myIdleUnits.Size() < 3)
+	{
+		myCurrentAction.myIsDone = false;
+		shouldMove = false;
+	}*/
+
+	for (int i = 0; i < myIdleUnits.Size(); ++i)
+	{
+		if (myIdleUnits[i]->GetComponent<ControllerComponent>()->IsReady() == false)
+		{
+			myCurrentAction.myIsDone = false;
+			shouldMove = false;
+		}
+	}
+
+	if (shouldMove == true)
+	{
+		CU::Vector3<float> target;
+		target.x = myCurrentAction.myPosition.x;
+		target.z = myCurrentAction.myPosition.y;
+		bool quiet = true;
+		for (int i = 0; i < myIdleUnits.Size(); ++i)
+		{
+			CU::Vector2<float> oldTarget = myIdleUnits[i]->GetComponent<ControllerComponent>()->GetTargetPosition();
+			ReceiveMessage(BlockMapMessage(oldTarget, false));
+			myIdleUnits[i]->GetComponent<ControllerComponent>()->AttackMove(target, true, quiet);
+		}
+		myCurrentAction.myIsDone = true;
 	}
 }
