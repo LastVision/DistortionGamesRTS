@@ -166,6 +166,7 @@ namespace GUI
 	void UnitInfoWidget::RenderUnitInfo(const CU::Vector2<float>& aParentPosition)
 	{
 		CU::Vector2<float> portraitPosition = myPosition + aParentPosition + myPortraitPosition;
+		CU::Vector2<float> upgradePosition = portraitPosition;
 
 		if (myUnits[0]->GetUnitType() == eUnitType::GRUNT)
 		{
@@ -180,7 +181,12 @@ namespace GUI
 			myTankPortrait->Render(portraitPosition);
 		}
 
+		upgradePosition.x += myGruntPortrait->GetSize().y * 0.9f;
+
 		myUnits[0]->GetComponent<PromotionComponent>()->RenderPromotion(portraitPosition);
+
+		Prism::Engine::GetInstance()->PrintText(myBuilding.GetUpgradeLevel(myUnits[0]->GetUnitType()), upgradePosition, Prism::eTextType::RELEASE_TEXT);
+
 		portraitPosition.y -= myGruntPortrait->GetSize().y / 3.5f;
 		portraitPosition.x += myGruntPortrait->GetSize().x / 3.f;
 
@@ -270,9 +276,15 @@ namespace GUI
 
 			CU::Vector2<float> position = { (myPosition.x + portrait->GetSize().x * i) + (i * 10.f), myPosition.y };
 			position += aParentPosition + myUnitPosition;
+
+			CU::Vector2<float> upgradePosition = position;
+			upgradePosition.x += portrait->GetSize().x * 0.7f;
+			upgradePosition.y += portrait->GetSize().y * 0.15f;
+
 			portrait->Render(position, { 1.f, 1.f }, color);
-			position += portrait->GetSize() / 6.f;
+			position += portrait->GetSize() * 0.2f;
 			myUnits[i]->GetComponent<PromotionComponent>()->RenderPromotion(position, { 0.7f, 0.7f });
+			Prism::Engine::GetInstance()->PrintText(myBuilding.GetUpgradeLevel(myUnits[i]->GetUnitType()), upgradePosition, Prism::eTextType::RELEASE_TEXT, 0.8f);
 		}
 	}
 }
