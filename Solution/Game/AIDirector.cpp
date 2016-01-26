@@ -92,6 +92,9 @@ AIDirector::AIDirector(const Prism::Terrain& aTerrain, Prism::Scene& aScene)
 
 	myCurrentAction.myFuzzyAction = eFuzzyAI::DO_NOTHING;
 	myCurrentAction.myIsDone = true;
+
+	myDecisionTimer.myMinTime = 5.f;
+	myDecisionTimer.myMaxTime = 20.f;
 }
 
 AIDirector::~AIDirector()
@@ -155,13 +158,14 @@ void AIDirector::Update(float aDeltaTime)
 	UpdateInfluences();
 	UpdateUnitLists();
 
-
+	myDecisionTimer.Update(aDeltaTime);
 	if (UpdateCurrentAction() == true)
 	{
 		if (FuzzyDecisionDone() == true)
 		{
 			UpdateAdvisors();
 			InterpretFuzzySet();
+			myDecisionTimer.Reset();
 		}
 
 		StartNextAction();
@@ -267,6 +271,23 @@ void AIDirector::LoadAISettings(const std::string& aFilePath)
 	myUpgradeData.myGruntKillCount = 0;
 	myUpgradeData.myRangerKillCount = 0;
 	myUpgradeData.myTankKillCount = 0;
+
+
+	tinyxml2::XMLElement* spawnAdvisor = reader.ForceFindFirstChild(root, "SpawnAdvisor");
+
+	reader.ForceReadAttribute(reader.ForceFindFirstChild(spawnAdvisor, "gruntvalue")
+		, "value", mySpawnData.myGruntValue);
+	reader.ForceReadAttribute(reader.ForceFindFirstChild(spawnAdvisor, "rangervalue")
+		, "value", mySpawnData.myRangerValue);
+	reader.ForceReadAttribute(reader.ForceFindFirstChild(spawnAdvisor, "tankvalue")
+		, "value", mySpawnData.myTankValue);
+
+
+	tinyxml2::XMLElement* decisionTime = reader.ForceFindFirstChild(root, "DecisionTime");
+	reader.ForceReadAttribute(reader.ForceFindFirstChild(decisionTime, "min")
+		, "value", myDecisionTimer.myMinTime);
+	reader.ForceReadAttribute(reader.ForceFindFirstChild(decisionTime, "max")
+		, "value", myDecisionTimer.myMaxTime);
 
 	reader.CloseDocument();
 }
@@ -459,6 +480,7 @@ void AIDirector::UpdateAdvisors()
 
 	*myFuzzySet += UpdateResourceAdvisor();
 	*myFuzzySet += UpdateUpgradeAdvisor();
+	*myFuzzySet += UpdateSpawningAdvisor();
 
 	myFuzzySet->Normalize();
 }
@@ -494,9 +516,16 @@ CU::FuzzySet AIDirector::UpdateUpgradeAdvisor()
 	CU::FuzzySet set(static_cast<int>(eFuzzyAI::_COUNT));
 	BuildingComponent* building = myBuilding->GetComponent<BuildingComponent>();
 
+	int mapArtifactCount = PollingStation::GetInstance()->GetArtifacts().Size();
+	float artifactModifier = 0.f;
+	if (mapArtifactCount > 0)
+	{
+		artifactModifier = 1.f;
+	}
+
 	//GRUNT
 	float gruntValue = static_cast<float>(myUpgradeData.myGruntKillCount) / static_cast<float>(myUpgradeData.myGruntsKilledBeforeUpgrade);
-	gruntValue = gruntValue * myUpgradeData.myUpgradeValue;
+	gruntValue = gruntValue * myUpgradeData.myUpgradeValue * artifactModifier;
 
 	if (building->CanUpgrade(eUnitType::GRUNT) == false)
 	{
@@ -506,7 +535,7 @@ CU::FuzzySet AIDirector::UpdateUpgradeAdvisor()
 
 	//RANGER
 	float rangerValue = static_cast<float>(myUpgradeData.myRangerKillCount) / static_cast<float>(myUpgradeData.myRangersKilledBeforeUpgrade);
-	rangerValue = rangerValue * myUpgradeData.myUpgradeValue;
+	rangerValue = rangerValue * myUpgradeData.myUpgradeValue * artifactModifier;
 
 	if (building->CanUpgrade(eUnitType::RANGER) == false)
 	{
@@ -516,7 +545,7 @@ CU::FuzzySet AIDirector::UpdateUpgradeAdvisor()
 
 	//TANK
 	float tankValue = static_cast<float>(myUpgradeData.myTankKillCount) / static_cast<float>(myUpgradeData.myTanksKilledBeforeUpgrade);
-	tankValue = tankValue * myUpgradeData.myUpgradeValue;
+	tankValue = tankValue * myUpgradeData.myUpgradeValue * artifactModifier;
 
 	if (building->CanUpgrade(eUnitType::TANK) == false)
 	{
@@ -527,8 +556,64 @@ CU::FuzzySet AIDirector::UpdateUpgradeAdvisor()
 	return set;
 }
 
+CU::FuzzySet AIDirector::UpdateSpawningAdvisor()
+{
+	CU::FuzzySet set(static_cast<int>(eFuzzyAI::_COUNT));
+
+	float gruntCount = 0;
+	float rangerCount = 0;
+	float tankCount = 0;
+	for (int i = 0; i < myActiveUnits.Size(); ++i)
+	{
+		if (myActiveUnits[i]->GetUnitType() == eUnitType::GRUNT)
+		{
+			++gruntCount;
+		}
+		else if (myActiveUnits[i]->GetUnitType() == eUnitType::RANGER)
+		{
+			++rangerCount;
+		}
+		else if (myActiveUnits[i]->GetUnitType() == eUnitType::TANK)
+		{
+			++tankCount;
+		}
+	}
+
+
+	float gruntValue = 0.f;
+	float rangerValue = 0.f;
+	float tankValue = 0.f;
+	if (myActiveUnits.Size() > 0)
+	{
+		gruntValue = (1 - (gruntCount / myActiveUnits.Size())) * mySpawnData.myGruntValue;
+		rangerValue = (1 - (rangerCount / myActiveUnits.Size())) * mySpawnData.myRangerValue;
+		tankValue = (1 - (tankCount / myActiveUnits.Size())) * mySpawnData.myTankValue;
+	}
+
+	if (myHasUnlockedRanger == false)
+	{
+		rangerValue = 0.f;
+	}
+	if (myHasUnlockedTank == false)
+	{
+		tankValue = 0.f;
+	}
+
+	set.AddValue(static_cast<int>(eFuzzyAI::SPAWN_GRUNT), gruntValue);
+	set.AddValue(static_cast<int>(eFuzzyAI::SPAWN_RANGER), rangerValue);
+	set.AddValue(static_cast<int>(eFuzzyAI::SPAWN_TANK), tankValue);
+
+	return set;
+}
+
 bool AIDirector::UpdateCurrentAction()
 {
+	if (myDecisionTimer.ReachedMax())
+	{
+		myCurrentAction.myIsDone = true;
+		return myCurrentAction.myIsDone;
+	}
+
 	switch (myCurrentAction.myFuzzyAction)
 	{
 	case eFuzzyAI::SPAWN_GRUNT:
@@ -566,6 +651,12 @@ bool AIDirector::UpdateCurrentAction()
 		break;
 	default:
 		break;
+	}
+
+
+	if (myCurrentAction.myIsDone == true && myDecisionTimer.ReachedMin() == false)
+	{
+		myCurrentAction.myIsDone = false;
 	}
 
 	return myCurrentAction.myIsDone;

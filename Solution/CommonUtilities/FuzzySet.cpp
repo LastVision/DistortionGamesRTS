@@ -22,7 +22,7 @@ namespace CU
 		DL_ASSERT_EXP(aIndex >= 0, "FuzzySet index below 0");
 		DL_ASSERT_EXP(aIndex < mySet.Size(), "FuzzySet index too high");
 
-		mySet[aIndex] += aValue;
+		mySet[aIndex] += fmaxf(aValue, 0.f);
 	}
 
 	float FuzzySet::GetValue(int aIndex) const

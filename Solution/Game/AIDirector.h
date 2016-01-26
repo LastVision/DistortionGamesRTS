@@ -95,12 +95,32 @@ private:
 
 		CU::GrowingArray<Entity*> myArtifactHunters;
 	};
+	struct SpawnAdvisorData
+	{
+		float myGruntValue;
+		float myRangerValue;
+		float myTankValue;
+	};
+	struct DecisionTimer
+	{
+		DecisionTimer(): myCurrentTime(0.f), myMinTime(0.f), myMaxTime(0.f){}
+
+		void Update(float aDelta) { myCurrentTime += aDelta; }
+		bool ReachedMin(){ return myCurrentTime > myMinTime; }
+		bool ReachedMax(){ return myCurrentTime > myMaxTime; }
+		void Reset() { myCurrentTime = 0.f; }
+
+		float myCurrentTime;
+		float myMinTime;
+		float myMaxTime;
+	};
 
 	void UpdateInfluences();
 	void UpdateUnitLists();
 	void UpdateAdvisors();
 	CU::FuzzySet UpdateResourceAdvisor();
 	CU::FuzzySet UpdateUpgradeAdvisor();
+	CU::FuzzySet UpdateSpawningAdvisor();
 	CU::FuzzySet* myFuzzySet;
 	
 
@@ -117,6 +137,9 @@ private:
 	void UpdateTakeControlPoints();
 	ControlPointAdvisorData myResourceData;
 	UpgradeAdvisorData myUpgradeData;
+	SpawnAdvisorData mySpawnData;
+
+	DecisionTimer myDecisionTimer;
 
 
 
