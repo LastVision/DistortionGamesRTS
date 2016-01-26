@@ -170,15 +170,15 @@ void Entity::Update(float aDeltaTime)
 		}
 	}
 
-	if (mySelected == true)
-	{
-		Prism::RenderBox(myOrientation.GetPos());
-		//mySelectionCircle.Render(myOrientation.GetPos());
-	}
-	else if (myHovered == true)
-	{
-		Prism::RenderBox(myOrientation.GetPos(), eColorDebug::WHITE);
-	}
+	//if (mySelected == true)
+	//{
+	//	Prism::RenderBox(myOrientation.GetPos());
+	//	//mySelectionCircle.Render(myOrientation.GetPos());
+	//}
+	//else if (myHovered == true)
+	//{
+	//	Prism::RenderBox(myOrientation.GetPos(), eColorDebug::WHITE);
+	//}
 	if (myComponents[static_cast<int>(eComponentType::ANIMATION)] != nullptr && myAlive == false && myState == eEntityState::DIE &&
 		static_cast<AnimationComponent*>(myComponents[static_cast<int>(eComponentType::ANIMATION)])->IsCurrentAnimationDone() 
 		&& myDecayFlag == false)
@@ -250,6 +250,7 @@ void Entity::Kill()
 {
 	DL_ASSERT_EXP(myAlive == true, "Tried to kill an Entity multiple times");
 	myAlive = false;
+	
 	//RemoveFromScene();
 }
 

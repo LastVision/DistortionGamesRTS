@@ -2,6 +2,7 @@
 
 #include <ActorComponent.h>
 #include "AIDirector.h"
+#include "BlockMap.h"
 #include <BlockMapMessage.h>
 #include <BuildingComponent.h>
 #include <ControllerComponent.h>
@@ -11,6 +12,7 @@
 #include <EntityFactory.h>
 #include <FuzzySet.h>
 #include <GameConstants.h>
+#include <KillUnitMessage.h>
 #include "InfluenceMap.h"
 #include <InputWrapper.h>
 #include <PollingStation.h>
@@ -30,7 +32,7 @@ AIDirector::AIMaps::AIMaps()
 	myNeutralInfluenceMap = new InfluenceMap();
 	myPlayerNeutralCombinedInfluence = new InfluenceMap();
 	myGoalMap = new InfluenceMap();
-	myBlockMap = new InfluenceMap();
+	myBlockMap = new BlockMap();
 	myTensionMap = new TensionMap(myInfluenceMap, myPlayerInfluenceMap, myNeutralInfluenceMap
 		, myGoalMap);
 	myDifferenceMap = new DifferenceMap(myInfluenceMap, myPlayerNeutralCombinedInfluence);
@@ -88,7 +90,7 @@ AIDirector::AIDirector(const Prism::Terrain& aTerrain, Prism::Scene& aScene)
 
 	myFuzzySet = new CU::FuzzySet(static_cast<int>(eFuzzyAI::_COUNT));
 
-	myCurrentAction.myFuzzyAction = eFuzzyAI::FIRST_ACTION;
+	myCurrentAction.myFuzzyAction = eFuzzyAI::DO_NOTHING;
 	myCurrentAction.myIsDone = true;
 }
 
@@ -166,6 +168,10 @@ void AIDirector::Update(float aDeltaTime)
 	}
 
 	myBuilding->Update(aDeltaTime);
+	BuildingComponent* aiBuilding = myBuilding->GetComponent<BuildingComponent>();
+	DEBUG_PRINT(aiBuilding->GetUpgradeLevel(0));
+	DEBUG_PRINT(aiBuilding->GetUpgradeLevel(1));
+	DEBUG_PRINT(aiBuilding->GetUpgradeLevel(2));
 }
 
 void AIDirector::ReceiveMessage(const SpawnUnitMessage& aMessage)
@@ -173,19 +179,7 @@ void AIDirector::ReceiveMessage(const SpawnUnitMessage& aMessage)
 	if (static_cast<eUnitType>(aMessage.myUnitType) == eUnitType::RANGER && myHasUnlockedRanger == false) return;
 	if (static_cast<eUnitType>(aMessage.myUnitType) == eUnitType::TANK && myHasUnlockedTank == false) return;
 	Director::ReceiveMessage(aMessage);
-	//if (aMessage.myOwnerType == static_cast<int>(eOwnerType::ENEMY))
-	//{
-	//	Entity* newEntity = myActiveUnits.GetLast();
-
-	//	//myIdleUnits.Add(newEntity);
-
-	//	bool shouldBeQuiet = true;
-	//	CU::Vector2<float> targetPos = myDecisionMap->GetOffensivePosition(newEntity->GetPosition());
-	//	CU::Vector3<float> pos(targetPos.x, 0.f, targetPos.y);
-	//	newEntity->GetComponent<ControllerComponent>()->AttackMove(pos
-	//		, true, shouldBeQuiet);
-	//}
-	}
+}
 
 void AIDirector::ReceiveMessage(const TimeMultiplierMessage& aMessage)
 {
@@ -204,6 +198,30 @@ void AIDirector::ReceiveMessage(const BlockMapMessage& aMessage)
 	else
 	{
 		myMaps.myBlockMap->RemoveValue(1.f, 5.f, aMessage.myPosition);
+	}
+}
+
+void AIDirector::ReceiveMessage(const KillUnitMessage& aMessage)
+{
+	Director::ReceiveMessage(aMessage);
+
+	if (aMessage.myOwnerType == myOwner)
+	{
+		eUnitType unitType = static_cast<eUnitType>(aMessage.myUnitType);
+		switch (unitType)
+		{
+		case GRUNT:
+			++myUpgradeData.myGruntKillCount;
+			break;
+		case RANGER:
+			++myUpgradeData.myRangerKillCount;
+			break;
+		case TANK:
+			++myUpgradeData.myTankKillCount;
+			break;
+		}
+
+		ReceiveMessage(BlockMapMessage(aMessage.myTargetPosition, false));
 	}
 }
 
@@ -232,6 +250,24 @@ void AIDirector::LoadAISettings(const std::string& aFilePath)
 		, "value", myResourceData.myVictoryPointValue);
 
 	myResourceData.myOptimalVictoryPoints /= 100.f;
+
+
+
+	tinyxml2::XMLElement* upgradeAdvisor = reader.ForceFindFirstChild(root, "UpgradeAdvisor");
+
+	reader.ForceReadAttribute(reader.ForceFindFirstChild(upgradeAdvisor, "gruntskilledbeforeupgrade")
+		, "value", myUpgradeData.myGruntsKilledBeforeUpgrade);
+	reader.ForceReadAttribute(reader.ForceFindFirstChild(upgradeAdvisor, "rangerskilledbeforeupgrade")
+		, "value", myUpgradeData.myRangersKilledBeforeUpgrade);
+	reader.ForceReadAttribute(reader.ForceFindFirstChild(upgradeAdvisor, "tankskilledbeforeupgrade")
+		, "value", myUpgradeData.myTanksKilledBeforeUpgrade);
+	reader.ForceReadAttribute(reader.ForceFindFirstChild(upgradeAdvisor, "upgradevalue")
+		, "value", myUpgradeData.myUpgradeValue);
+
+	myUpgradeData.myGruntKillCount = 0;
+	myUpgradeData.myRangerKillCount = 0;
+	myUpgradeData.myTankKillCount = 0;
+
 	reader.CloseDocument();
 }
 
@@ -403,106 +439,32 @@ void AIDirector::UpdateUnitLists()
 			myUnitsOnMission.Add(myActiveUnits[i]);
 		}
 	}
+
+	for (int i = myUpgradeData.myArtifactHunters.Size() - 1; i >= 0; --i)
+	{
+		Entity* unit = myUpgradeData.myArtifactHunters[i];
+		bool ready = unit->GetComponent<ControllerComponent>()->IsReady();
+		bool idle = unit->GetState() == eEntityState::IDLE;
+		if (idle == true && ready == true || unit->GetAlive() == false)
+		{
+			myUpgradeData.myArtifactHunters.RemoveCyclicAtIndex(i);
+		}
+	}
 }
+
 
 void AIDirector::UpdateAdvisors()
 {
 	myFuzzySet->Reset();
 
-	*myFuzzySet += UpdateAttackAdvisor();
-	*myFuzzySet += UpdateDefendAdvisor();
 	*myFuzzySet += UpdateResourceAdvisor();
+	*myFuzzySet += UpdateUpgradeAdvisor();
 
 	myFuzzySet->Normalize();
 }
 
-CU::FuzzySet AIDirector::UpdateAttackAdvisor()
-{
-	CU::FuzzySet set(static_cast<int>(eFuzzyAI::_COUNT));
-
-	float gruntCount = 0;
-	float rangerCount = 0;
-	float tankCount = 0;
-	for (int i = 0; i < myActiveUnits.Size(); ++i)
-	{
-		if (myActiveUnits[i]->GetUnitType() == eUnitType::GRUNT)
-		{
-			++gruntCount;
-		}
-		else if (myActiveUnits[i]->GetUnitType() == eUnitType::RANGER)
-		{
-			++rangerCount;
-		}
-		else if (myActiveUnits[i]->GetUnitType() == eUnitType::TANK)
-		{
-			++tankCount;
-		}
-	}
-
-
-	float gruntValue = 1.f;
-	float rangerValue = 0.75f;
-	float tankValue = 0.5f;
-	if (myActiveUnits.Size() > 0)
-	{
-		gruntValue = (1 - (gruntCount / myActiveUnits.Size())) * gruntValue;
-		rangerValue = (1 - (rangerCount / myActiveUnits.Size())) * rangerValue;
-		tankValue = (1 - (tankCount / myActiveUnits.Size())) * tankValue;
-	}
-
-
-	set.AddValue(static_cast<int>(eFuzzyAI::SPAWN_GRUNT), gruntValue);
-	set.AddValue(static_cast<int>(eFuzzyAI::SPAWN_RANGER), rangerValue);
-	set.AddValue(static_cast<int>(eFuzzyAI::SPAWN_TANK), tankValue);
-
-	return set;
-}
-
-CU::FuzzySet AIDirector::UpdateDefendAdvisor()
-{
-	CU::FuzzySet set(static_cast<int>(eFuzzyAI::_COUNT));
-
-	float gruntCount = 0;
-	float rangerCount = 0;
-	float tankCount = 0;
-	for (int i = 0; i < myActiveUnits.Size(); ++i)
-	{
-		if (myActiveUnits[i]->GetUnitType() == eUnitType::GRUNT)
-		{
-			++gruntCount;
-		}
-		else if (myActiveUnits[i]->GetUnitType() == eUnitType::RANGER)
-		{
-			++rangerCount;
-		}
-		else if (myActiveUnits[i]->GetUnitType() == eUnitType::TANK)
-		{
-			++tankCount;
-		}
-	}
-
-	float gruntValue = 0.6f;
-	float rangerValue = 1.f;
-	float tankValue = 1.f;
-	if (myActiveUnits.Size() > 0)
-	{
-		gruntValue = (1 - (gruntCount / myActiveUnits.Size())) * gruntValue;
-		rangerValue = (1 - (rangerCount / myActiveUnits.Size())) * rangerValue;
-		tankValue = (1 - (tankCount / myActiveUnits.Size())) * tankValue;
-	}
-
-
-	set.AddValue(static_cast<int>(eFuzzyAI::SPAWN_GRUNT), gruntValue);
-	set.AddValue(static_cast<int>(eFuzzyAI::SPAWN_RANGER), rangerValue);
-	set.AddValue(static_cast<int>(eFuzzyAI::SPAWN_TANK), tankValue);
-	return set;
-}
-
 CU::FuzzySet AIDirector::UpdateResourceAdvisor()
 {
-	//int optimalGunpowderCount = 200;
-	//float gunpowderValue = 5.f;
-
 	float threshHold = 1.f - (static_cast<float>(myGunpowder) / static_cast<float>(myResourceData.myOptimalGunpowerCount));
 
 	int ownedPointsCount = PollingStation::GetInstance()->GetResourcePointsCount(myOwner);
@@ -516,12 +478,6 @@ CU::FuzzySet AIDirector::UpdateResourceAdvisor()
 	set.AddValue(static_cast<int>(eFuzzyAI::TAKE_RESOURCE_POINT), fuzzyValue);
 
 
-
-
-
-	//float victoryPointValue = 5.f;
-	//float optimalVictoryPointsCount = 0.75f;
-
 	int ownedVictoryPointsCount = PollingStation::GetInstance()->GetVictoryPointsCount(myOwner);
 	int totalVictoryPointsCount = PollingStation::GetInstance()->GetVictoryPoints().Size();
 	float ownedVictoryPoints = (static_cast<float>(ownedVictoryPointsCount) / static_cast<float>(totalVictoryPointsCount));
@@ -529,6 +485,44 @@ CU::FuzzySet AIDirector::UpdateResourceAdvisor()
 	float victoryPointModifier = 1.f - ownedVictoryPoints / myResourceData.myOptimalVictoryPoints;
 	fuzzyValue = victoryPointModifier * myResourceData.myVictoryPointValue;
 	set.AddValue(static_cast<int>(eFuzzyAI::TAKE_VICTORY_POINT), fuzzyValue);
+
+	return set;
+}
+
+CU::FuzzySet AIDirector::UpdateUpgradeAdvisor()
+{
+	CU::FuzzySet set(static_cast<int>(eFuzzyAI::_COUNT));
+	BuildingComponent* building = myBuilding->GetComponent<BuildingComponent>();
+
+	//GRUNT
+	float gruntValue = static_cast<float>(myUpgradeData.myGruntKillCount) / static_cast<float>(myUpgradeData.myGruntsKilledBeforeUpgrade);
+	gruntValue = gruntValue * myUpgradeData.myUpgradeValue;
+
+	if (building->CanUpgrade(eUnitType::GRUNT) == false)
+	{
+		gruntValue = 0.f;
+	}
+	set.AddValue(static_cast<int>(eFuzzyAI::UPGRADE_GRUNT), gruntValue);
+
+	//RANGER
+	float rangerValue = static_cast<float>(myUpgradeData.myRangerKillCount) / static_cast<float>(myUpgradeData.myRangersKilledBeforeUpgrade);
+	rangerValue = rangerValue * myUpgradeData.myUpgradeValue;
+
+	if (building->CanUpgrade(eUnitType::RANGER) == false)
+	{
+		rangerValue = 0.f;
+	}
+	set.AddValue(static_cast<int>(eFuzzyAI::UPGRADE_RANGER), rangerValue);
+
+	//TANK
+	float tankValue = static_cast<float>(myUpgradeData.myTankKillCount) / static_cast<float>(myUpgradeData.myTanksKilledBeforeUpgrade);
+	tankValue = tankValue * myUpgradeData.myUpgradeValue;
+
+	if (building->CanUpgrade(eUnitType::TANK) == false)
+	{
+		tankValue = 0.f;
+	}
+	set.AddValue(static_cast<int>(eFuzzyAI::UPGRADE_TANK), tankValue);
 
 	return set;
 }
@@ -553,18 +547,21 @@ bool AIDirector::UpdateCurrentAction()
 		UpdateTakeControlPoints();
 		break;
 	case eFuzzyAI::TAKE_ARTIFACT:
-		DL_ASSERT("eFuzzyAI Case Not Implemented");
+		myCurrentAction.myIsDone = myUpgradeData.myArtifactHunters.Size() == 0;
 		break;
 	case eFuzzyAI::UPGRADE_GRUNT:
-		DL_ASSERT("eFuzzyAI Case Not Implemented");
+		myUpgradeData.myGruntKillCount = 0;
+		myCurrentAction.myIsDone = true;
 		break;
 	case eFuzzyAI::UPGRADE_RANGER:
-		DL_ASSERT("eFuzzyAI Case Not Implemented");
+		myUpgradeData.myRangerKillCount = 0;
+		myCurrentAction.myIsDone = true;
 		break;
 	case eFuzzyAI::UPGRADE_TANK:
-		DL_ASSERT("eFuzzyAI Case Not Implemented");
+		myUpgradeData.myTankKillCount = 0;
+		myCurrentAction.myIsDone = true;
 		break;
-	case eFuzzyAI::FIRST_ACTION:
+	case eFuzzyAI::DO_NOTHING:
 		myCurrentAction.myIsDone = true;
 		break;
 	default:
@@ -587,13 +584,13 @@ void AIDirector::InterpretFuzzySet()
 	switch (action)
 	{
 	case eFuzzyAI::SPAWN_GRUNT:
-		myActionQueue.InsertFirst(Action(eFuzzyAI::SPAWN_GRUNT));
+		myActionQueue.InsertFirst(Action(action));
 		break;
 	case eFuzzyAI::SPAWN_RANGER:
-		myActionQueue.InsertFirst(Action(eFuzzyAI::SPAWN_RANGER));
+		myActionQueue.InsertFirst(Action(action));
 		break;
 	case eFuzzyAI::SPAWN_TANK:
-		myActionQueue.InsertFirst(Action(eFuzzyAI::SPAWN_TANK));
+		myActionQueue.InsertFirst(Action(action));
 		break;
 	case eFuzzyAI::TAKE_RESOURCE_POINT:
 		HandleControlPoints(action);
@@ -605,19 +602,19 @@ void AIDirector::InterpretFuzzySet()
 		DL_ASSERT("eFuzzyAI Case Not Implemented");
 		break;
 	case eFuzzyAI::UPGRADE_GRUNT:
-		DL_ASSERT("eFuzzyAI Case Not Implemented");
+		HandleUpgrades(action);
 		break;
 	case eFuzzyAI::UPGRADE_RANGER:
-		DL_ASSERT("eFuzzyAI Case Not Implemented");
+		HandleUpgrades(action);
 		break;
 	case eFuzzyAI::UPGRADE_TANK:
-		DL_ASSERT("eFuzzyAI Case Not Implemented");
+		HandleUpgrades(action);
 		break;
 	default:
 		break;
 	}
 
-	myCurrentAction.myFuzzyAction = eFuzzyAI::FIRST_ACTION;
+	myCurrentAction.myFuzzyAction = eFuzzyAI::DO_NOTHING;
 	myCurrentAction.myIsDone = true;
 }
 
@@ -644,16 +641,50 @@ void AIDirector::StartNextAction()
 		//Does not need to do anything here, everything is handled in UpdateCurrentAction
 		break;
 	case eFuzzyAI::TAKE_ARTIFACT:
-		DL_ASSERT("eFuzzyAI Case Not Implemented");
+	{
+		if (myIdleUnits.Size() > 0)
+		{
+			Entity* unit = myIdleUnits[0];
+
+			float closest = FLT_MAX;
+			CU::Vector2<float> target = unit->GetPosition();
+
+			const CU::GrowingArray<Entity*> artifacts = PollingStation::GetInstance()->GetArtifacts();
+			for (int i = 0; i < artifacts.Size(); ++i)
+			{
+				float blockValue = myMaps.myBlockMap->GetValue(artifacts[i]->GetPosition());
+				if (blockValue > 0)
+				{
+					continue;
+				}
+
+				float distance2 = CU::Length2(unit->GetPosition() - artifacts[i]->GetPosition());
+				if (distance2 < closest)
+				{
+					closest = distance2;
+					target = artifacts[i]->GetPosition();
+				}
+			}
+
+			CU::Vector3<float> target3d;
+			target3d.x = target.x;
+			target3d.z = target.y;
+			bool quiet = true;
+			unit->GetComponent<ControllerComponent>()->AttackMove(target3d, true, quiet);
+
+			myUpgradeData.myArtifactHunters.Add(unit);
+		}
+
 		break;
+	}
 	case eFuzzyAI::UPGRADE_GRUNT:
-		DL_ASSERT("eFuzzyAI Case Not Implemented");
+		Director::UpgradeUnit(eUnitType::GRUNT);
 		break;
 	case eFuzzyAI::UPGRADE_RANGER:
-		DL_ASSERT("eFuzzyAI Case Not Implemented");
+		Director::UpgradeUnit(eUnitType::RANGER);
 		break;
 	case eFuzzyAI::UPGRADE_TANK:
-		DL_ASSERT("eFuzzyAI Case Not Implemented");
+		Director::UpgradeUnit(eUnitType::TANK);
 		break;
 	default:
 		break;
@@ -662,14 +693,14 @@ void AIDirector::StartNextAction()
 
 void AIDirector::HandleControlPoints(eFuzzyAI aAction)
 {
-	int squadSize;
+	int squadSize = 3;
 	if (aAction == eFuzzyAI::TAKE_RESOURCE_POINT)
 	{
 		squadSize = myResourceData.myResourceSquadSize;
 	}
 	else if (aAction == eFuzzyAI::TAKE_VICTORY_POINT)
 	{
-		squadSize = myResourceData.myVictoryPointValue;
+		squadSize = myResourceData.myVictorySquadSize;
 	}
 	else
 	{
@@ -721,11 +752,7 @@ void AIDirector::HandleControlPoints(eFuzzyAI aAction)
 			float playerInfluenceMapValue = myMaps.myPlayerInfluenceMap->GetValue(pos) * playerInfluenceWeight;
 
 			float result = (blockMapValue)-(playerInfluenceMapValue);
-			if (result > 0.f)
-			{
-				int apa = 5;
-			}
-			if (result <= 0.f)
+			if (result <= 0.001f)
 			{
 				result = abs(result);
 				result += dist * distWeight;
@@ -744,7 +771,7 @@ void AIDirector::HandleControlPoints(eFuzzyAI aAction)
 		}
 		else
 		{
-			myActionQueue.InsertFirst(Action(eFuzzyAI::FIRST_ACTION));
+			myActionQueue.InsertFirst(Action(eFuzzyAI::DO_NOTHING));
 		}
 	}
 	else
@@ -790,6 +817,52 @@ void AIDirector::HandleControlPoints(eFuzzyAI aAction)
 	}
 }
 
+void AIDirector::HandleUpgrades(eFuzzyAI aAction)
+{
+	BuildingComponent* building = myBuilding->GetComponent<BuildingComponent>();
+
+	int cost = -1;
+	switch (aAction)
+	{
+	case eFuzzyAI::UPGRADE_GRUNT:
+		cost = building->GetUpgradeCost(eUnitType::GRUNT);
+		break;
+	case eFuzzyAI::UPGRADE_RANGER:
+		cost = building->GetUpgradeCost(eUnitType::RANGER);
+		break;
+	case eFuzzyAI::UPGRADE_TANK:
+		cost = building->GetUpgradeCost(eUnitType::TANK);
+		break;
+	default:
+		DL_ASSERT("Invalid Action in AIDirector::HandleUpgrades");
+		cost = building->GetUpgradeCost(eUnitType::GRUNT);
+		break;
+	}
+
+	if (myArtifacts >= cost)
+	{
+		myActionQueue.InsertFirst(Action(aAction));
+	}
+	else
+	{
+		int artifactDiff = cost - myArtifacts;
+
+		if (myIdleUnits.Size() < artifactDiff)
+		{
+			int neededUnits = artifactDiff - myIdleUnits.Size();
+			for (int i = 0; i < neededUnits; ++i)
+			{
+				myActionQueue.InsertFirst(Action(eFuzzyAI::SPAWN_GRUNT));
+			}
+		}
+
+		for (int i = 0; i < artifactDiff; ++i)
+		{
+			myActionQueue.InsertFirst(Action(eFuzzyAI::TAKE_ARTIFACT));
+		}
+	}
+}
+
 void AIDirector::UpdateTakeControlPoints()
 {
 	if (myActiveUnits.Size() == 0)
@@ -800,22 +873,16 @@ void AIDirector::UpdateTakeControlPoints()
 
 	myCurrentAction.myIsDone = true;
 	bool shouldMove = true;
-	float blockWeight = 23.f;
-	float playerInfluenceWeight = 6.f;
+	float blockWeight = 5.f;
+	float playerInfluenceWeight = 3.f;
 	float blockMapValue = myMaps.myBlockMap->GetValue(myCurrentAction.myPosition) * blockWeight;
 	float playerInfluenceMapValue = myMaps.myPlayerInfluenceMap->GetValue(myCurrentAction.myPosition) * playerInfluenceWeight;
 
-	if (blockMapValue - playerInfluenceMapValue > 0.f)
+	if (blockMapValue - playerInfluenceMapValue > 0.001f)
 	{
 		myCurrentAction.myIsDone = true;
 		shouldMove = false;
 	}
-
-	/*if (myIdleUnits.Size() < 3)
-	{
-		myCurrentAction.myIsDone = false;
-		shouldMove = false;
-	}*/
 
 	for (int i = 0; i < myIdleUnits.Size(); ++i)
 	{
@@ -834,8 +901,6 @@ void AIDirector::UpdateTakeControlPoints()
 		bool quiet = true;
 		for (int i = 0; i < myIdleUnits.Size(); ++i)
 		{
-			CU::Vector2<float> oldTarget = myIdleUnits[i]->GetComponent<ControllerComponent>()->GetTargetPosition();
-			ReceiveMessage(BlockMapMessage(oldTarget, false));
 			myIdleUnits[i]->GetComponent<ControllerComponent>()->AttackMove(target, true, quiet);
 		}
 		myCurrentAction.myIsDone = true;

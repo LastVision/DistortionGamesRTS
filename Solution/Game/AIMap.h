@@ -21,7 +21,6 @@ public:
 	CU::Vector2<float> GetPosition(int aX, int aY) const;
 	int GetIndex(const CU::Vector2<float>& aPosition) const;
 	void AddValue(float aValue, float aRadius, const CU::Vector2<float>& aPosition);
-	void RemoveValue(float aValue, float aRadius, const CU::Vector2<float>& aPosition);
 	void SetValue(int aIndex, float aValue);
 	const CU::GrowingArray<float>& GetGrid() const;
 

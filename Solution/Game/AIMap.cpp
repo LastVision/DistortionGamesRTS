@@ -100,32 +100,6 @@ void AIMap::AddValue(float aValue, float aRadius, const CU::Vector2<float>& aPos
 	}
 }
 
-void AIMap::RemoveValue(float aValue, float aRadius, const CU::Vector2<float>& aPosition)
-{
-	CU::Vector2<int> topLeft(GetIntPosition(aPosition - aRadius));
-	CU::Vector2<int> botRight(GetIntPosition(aPosition + aRadius));
-
-	for (int y = topLeft.y; y < botRight.y; ++y)
-	{
-		for (int x = topLeft.x; x < botRight.x; ++x)
-		{
-			float distance = CU::Length(GetPosition(x, y) - aPosition);
-			if (distance < aRadius && ValidIndex(x, y))
-			{
-				int index = x + y * mySide;
-				myGrid[index] -= aValue / (distance / myTileSize);
-				myGrid[index] = fmaxf(myGrid[index], -myMaxValue);
-			}
-		}
-	}
-
-	int index = GetIndex(aPosition);
-	if (index >= 0 && index < myGrid.Size())
-	{
-		myGrid[index] -= aValue;
-	}
-}
-
 void AIMap::SetValue(int aIndex, float aValue)
 {
 	myGrid[aIndex] = aValue;

@@ -196,6 +196,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AIMap.h" />
+    <ClInclude Include="BlockMap.h" />
     <ClInclude Include="ClickableState.h" />
     <ClInclude Include="ConsoleBackspace.h" />
     <ClInclude Include="ConsoleHelp.h" />
@@ -234,6 +235,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AIMap.cpp" />
+    <ClCompile Include="BlockMap.cpp" />
     <ClCompile Include="ClickableState.cpp" />
     <ClCompile Include="ConsoleBackspace.cpp" />
     <ClCompile Include="ConsoleHelp.cpp" />

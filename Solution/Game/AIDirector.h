@@ -13,11 +13,12 @@ namespace Prism
 	class Scene;
 }
 
+class BlockMap;
 class DifferenceMap;
+class DecisionMap;
 class InfluenceMap;
 class TensionMap;
 class VulnerabilityMap;
-class DecisionMap;
 
 class AIDirector : public Director
 {
@@ -31,6 +32,7 @@ public:
 	void ReceiveMessage(const SpawnUnitMessage& aMessage) override;
 	void ReceiveMessage(const TimeMultiplierMessage& aMessage) override;
 	void ReceiveMessage(const BlockMapMessage& aMessage) override;
+	void ReceiveMessage(const KillUnitMessage& aMessage) override;
 
 	void LoadAISettings(const std::string& aFilePath);
 
@@ -60,7 +62,7 @@ private:
 		InfluenceMap* myNeutralInfluenceMap;
 		InfluenceMap* myPlayerNeutralCombinedInfluence;
 		InfluenceMap* myGoalMap;
-		InfluenceMap* myBlockMap;
+		BlockMap* myBlockMap;
 		TensionMap* myTensionMap;
 		DifferenceMap* myDifferenceMap;
 		VulnerabilityMap* myVulnerabilityMap;
@@ -77,13 +79,28 @@ private:
 		float myOptimalVictoryPoints;
 		float myVictoryPointValue;
 	};
+	struct UpgradeAdvisorData
+	{
+		UpgradeAdvisorData():myArtifactHunters(8){}
+
+		int myGruntsKilledBeforeUpgrade;
+		int myRangersKilledBeforeUpgrade;
+		int myTanksKilledBeforeUpgrade;
+
+		int myGruntKillCount;
+		int myRangerKillCount;
+		int myTankKillCount;
+
+		float myUpgradeValue;
+
+		CU::GrowingArray<Entity*> myArtifactHunters;
+	};
 
 	void UpdateInfluences();
 	void UpdateUnitLists();
 	void UpdateAdvisors();
-	CU::FuzzySet UpdateAttackAdvisor();
-	CU::FuzzySet UpdateDefendAdvisor();
 	CU::FuzzySet UpdateResourceAdvisor();
+	CU::FuzzySet UpdateUpgradeAdvisor();
 	CU::FuzzySet* myFuzzySet;
 	
 
@@ -96,9 +113,10 @@ private:
 
 
 	void HandleControlPoints(eFuzzyAI aAction);
+	void HandleUpgrades(eFuzzyAI aAction);
 	void UpdateTakeControlPoints();
 	ControlPointAdvisorData myResourceData;
-
+	UpgradeAdvisorData myUpgradeData;
 
 
 

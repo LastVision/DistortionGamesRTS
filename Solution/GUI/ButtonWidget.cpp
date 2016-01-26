@@ -121,7 +121,10 @@ namespace GUI
 		std::string clickEvent = "";
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "onclick"), "event", clickEvent);
 
-		if (clickEvent == "game_start")
+		if (clickEvent == "none") // for passive ability buttons
+		{
+		}
+		else if (clickEvent == "game_start")
 		{
 			int id = 0;
 			aReader->ReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "onclick"), "id", id);
@@ -198,9 +201,9 @@ namespace GUI
 
 	void ButtonWidget::Click()
 	{
-		Prism::Audio::AudioInterface::GetInstance()->PostEvent("buttonClick", 0);
 		if (myClickEvent != nullptr)
 		{
+			Prism::Audio::AudioInterface::GetInstance()->PostEvent("buttonClick", 0);
 			PostMaster::GetInstance()->SendMessage(*myClickEvent);
 		}
 	}
