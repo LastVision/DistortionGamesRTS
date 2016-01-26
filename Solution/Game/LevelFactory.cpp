@@ -222,10 +222,14 @@ void LevelFactory::ReadLevel(const std::string& aLevelPath, std::string& aTutori
 
 	std::string luaPath;
 	reader.ForceReadAttribute(reader.ForceFindFirstChild(levelElement, "lua"), "source", luaPath);
-
-
 	LUA::ScriptSystem::Create();
 	LUA::ScriptSystem::GetInstance()->Init(luaPath, ScriptInterface::RegisterFunctions);
+
+
+	std::string aiPath;
+	reader.ForceReadAttribute(reader.ForceFindFirstChild(levelElement, "ai"), "source", aiPath);
+	myCurrentLevel->myAI->LoadAISettings(aiPath);
+
 	Console::GetInstance(); // needs to be here to create console.
 
 	LoadLights(reader, levelElement);

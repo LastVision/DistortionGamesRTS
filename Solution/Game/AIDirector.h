@@ -32,6 +32,8 @@ public:
 	void ReceiveMessage(const TimeMultiplierMessage& aMessage) override;
 	void ReceiveMessage(const BlockMapMessage& aMessage) override;
 
+	void LoadAISettings(const std::string& aFilePath);
+
 private:
 	struct Action
 	{
@@ -49,7 +51,6 @@ private:
 		CU::Vector2<float> myPosition;
 		bool myIsDone;
 	};
-
 	struct AIMaps
 	{
 		AIMaps();
@@ -65,6 +66,16 @@ private:
 		VulnerabilityMap* myVulnerabilityMap;
 		DecisionMap* myDecisionMap;
 		int myInfluenceRenderIndex;
+	};
+	struct ControlPointAdvisorData
+	{
+		int myResourceSquadSize;
+		int myOptimalGunpowerCount;
+		float myGunpowderValue;
+
+		int myVictorySquadSize;
+		float myOptimalVictoryPoints;
+		float myVictoryPointValue;
 	};
 
 	void UpdateInfluences();
@@ -86,7 +97,7 @@ private:
 
 	void HandleControlPoints(eFuzzyAI aAction);
 	void UpdateTakeControlPoints();
-
+	ControlPointAdvisorData myResourceData;
 
 
 
