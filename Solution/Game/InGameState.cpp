@@ -117,7 +117,14 @@ const eStateStatus InGameState::Update(const float& aDeltaTime)
 
 		if (myLevel->HasPlayerWon())
 		{
-			CompleteLevel();
+			if (myLevelFactory->IsLastLevel() == false)
+			{
+				CompleteLevel();
+			}
+			else
+			{
+				CompleteGame();
+			}
 		}
 		else if (myLevel->HasAIWon())
 		{
@@ -196,10 +203,17 @@ void InGameState::ReceiveMessage(const GameStateMessage& aMessage)
 		break;
 
 	case eGameState::LOAD_NEXT_LEVEL:
-		runtime = Prism::MemoryTracker::GetInstance()->GetRunTime();
-		Prism::MemoryTracker::GetInstance()->SetRunTime(false);
-		myLevel = myLevelFactory->LoadNextLevel();
-		Prism::MemoryTracker::GetInstance()->SetRunTime(runtime);
+		if (myLevelFactory->IsLastLevel() == true)
+		{
+			PostMaster::GetInstance()->SendMessage(OnClickMessage(eOnClickEvent::GAME_WIN));
+		}
+		else 
+		{
+			runtime = Prism::MemoryTracker::GetInstance()->GetRunTime();
+			Prism::MemoryTracker::GetInstance()->SetRunTime(false);
+			myLevel = myLevelFactory->LoadNextLevel();
+			Prism::MemoryTracker::GetInstance()->SetRunTime(runtime);
+		}
 		break;
 	case eGameState::CLICKABLE_STATE:
 		runtime = Prism::MemoryTracker::GetInstance()->GetRunTime();

@@ -52,7 +52,7 @@ void GrenadeComponent::CheckUnitsForAdd(const CU::GrowingArray<Entity*>& someUni
 	for (int i = 0; i < someUnits.Size(); ++i)
 	{
 		Entity* current = someUnits[i];
-		if (CU::Intersection::CircleVsCircle(myEntity.GetPosition(), myRadius
+		if (CU::Intersection::CircleVsCircle({ myPosition.x, myPosition.z }, myRadius
 			, current->GetPosition(), current->GetComponent<CollisionComponent>()->GetRadius()))
 		{
 			if (someUnitsOut.Find(current) < 0)
@@ -108,7 +108,10 @@ void GrenadeComponent::Explosion()
 		for (int i = 0; i < myUnits.Size(); ++i)
 		{
 //			float length2 = CU::Length2(myUnits[i]->GetPosition() - my2DPosition);
-			myUnits[i]->GetComponent<HealthComponent>()->TakeDamageAndCheckSurvive(myDamage);
+			if (myUnits[i]->GetOwner() != myEntity.GetOwner())
+			{
+				myUnits[i]->GetComponent<HealthComponent>()->TakeDamageAndCheckSurvive(myDamage);
+			}
 		}
 	}
 	myHasExploded = true;

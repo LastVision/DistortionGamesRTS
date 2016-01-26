@@ -56,9 +56,9 @@ namespace GUI
 		eEntityType mySelectedType;
 
 		bool myIsUnitSelected;
-		bool myHasSelectedGrunt;
-		bool myHasSelectedRanger;
-		bool myHasSelectedTank;
 
+		Entity* myFirstSelectedGrunt;
+		Entity* myFirstSelectedRanger;
+		Entity* myFirstSelectedTank;
 	};
 }
