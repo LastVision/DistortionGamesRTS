@@ -17,6 +17,7 @@ public:
 	const CU::GrowingArray<Entity*>& GetUnits(eOwnerType anOwner) const;
 	const CU::GrowingArray<Entity*>& GetResourcePoints() const;
 	const CU::GrowingArray<Entity*>& GetVictoryPoints() const;
+	const CU::GrowingArray<Entity*>& GetVictoryAndResourcePoints() const;
 
 	//Returns the number of ResourcePoints held by anOwner
 	int GetResourcePointsCount(eOwnerType anOwner) const;
@@ -25,6 +26,7 @@ public:
 	int GetVictoryPointsCount(eOwnerType anOwner) const;
 
 	CU::Vector2<float> GetClosestNotOwnedResourcePoint(eOwnerType aOwner, const CU::Vector2<float>& aPoint) const;
+	CU::Vector2<float> GetClosestNotOwnedVictoryPoint(eOwnerType aOwner, const CU::Vector2<float>& aPoint) const;
 
 	void AddArtifact(Entity* aArtifact);
 	void DeleteArtifact(Entity* aArtifact);
@@ -48,6 +50,7 @@ private:
 	CU::GrowingArray<Entity*> myNeutralUnits;
 	CU::GrowingArray<Entity*> myResourcePoints;
 	CU::GrowingArray<Entity*> myVictoryPoints;
+	CU::GrowingArray<Entity*> myVictoryAndResourcePoints;
 	CU::GrowingArray<Entity*> myArtifacts;
 
 	Entity* myPlayerBuilding;
