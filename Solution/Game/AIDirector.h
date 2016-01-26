@@ -30,49 +30,64 @@ public:
 
 	void ReceiveMessage(const SpawnUnitMessage& aMessage) override;
 	void ReceiveMessage(const TimeMultiplierMessage& aMessage) override;
+	void ReceiveMessage(const BlockMapMessage& aMessage) override;
 
 private:
-	enum class eAction
+	struct Action
 	{
-		CAPTURE_POINT,
-		SPAWN_GRUNT,
-		SPAWN_RANGER,
-		SPAWN_TANK,
-		NONE
+		Action() {}
+		Action(eFuzzyAI aFuzzyAction)
+			: myFuzzyAction(aFuzzyAction)
+			, myIsDone(false)
+		{}
+		Action(eFuzzyAI aFuzzyAction, const CU::Vector2<float>& aPosition)
+			: myFuzzyAction(aFuzzyAction)
+			, myPosition(aPosition)
+			, myIsDone(false)
+		{}
+		eFuzzyAI myFuzzyAction;
+		CU::Vector2<float> myPosition;
+		bool myIsDone;
 	};
 
+	struct AIMaps
+	{
+		AIMaps();
+		~AIMaps();
+		InfluenceMap* myInfluenceMap;
+		InfluenceMap* myPlayerInfluenceMap;
+		InfluenceMap* myNeutralInfluenceMap;
+		InfluenceMap* myPlayerNeutralCombinedInfluence;
+		InfluenceMap* myGoalMap;
+		InfluenceMap* myBlockMap;
+		TensionMap* myTensionMap;
+		DifferenceMap* myDifferenceMap;
+		VulnerabilityMap* myVulnerabilityMap;
+		DecisionMap* myDecisionMap;
+		int myInfluenceRenderIndex;
+	};
 
+	void UpdateInfluences();
+	void UpdateUnitLists();
 	void UpdateAdvisors();
 	CU::FuzzySet UpdateAttackAdvisor();
 	CU::FuzzySet UpdateDefendAdvisor();
 	CU::FuzzySet UpdateResourceAdvisor();
 	CU::FuzzySet* myFuzzySet;
+	
 
-	void ExecuteFuzzyAction();
-	bool FuzzyActionDone() const;
-	eFuzzyAI myCurrentFuzzyAction;
-
-	void NotLoseLogic();
-	void WinSlowlyLogic();
-	void UpdateInfluences();
+	bool UpdateCurrentAction();
+	bool FuzzyDecisionDone();
+	void InterpretFuzzySet();
+	void StartNextAction();
+	Action myCurrentAction;
+	CU::GrowingArray<Action> myActionQueue;
 
 	bool myPlayerHasStarted;
 
 	CU::GrowingArray<Entity*> myIdleUnits;
-	Entity* mySurviveGatherer;
+	CU::GrowingArray<Entity*> myUnitsOnMission;
 
-	InfluenceMap* myInfluenceMap;
-	InfluenceMap* myPlayerInfluenceMap;
-	InfluenceMap* myNeutralInfluenceMap;
-	InfluenceMap* myPlayerNeutralCombinedInfluence;
-	InfluenceMap* myGoalMap;
-	TensionMap* myTensionMap;
-	DifferenceMap* myDifferenceMap;
-	VulnerabilityMap* myVulnerabilityMap;
-	DecisionMap* myDecisionMap;
-	int myInfluenceRenderIndex;
-
-	float myRedistributeUnitsTimer;
-	float myCurrentRedistributeUnitsTimer;
+	AIMaps myMaps;
 };
 

@@ -13,14 +13,18 @@ public:
 	static eComponentType GetTypeStatic();
 	virtual eComponentType GetType();
 	bool IsActive();
-	void Activate();
 
 	const float& GetCooldown() const;
 
 private:
+	void Activate();
+	void CheckUnitsForRemove(CU::GrowingArray<Entity*>& someUnits) const;
+	void CheckUnitsForAdd(const CU::GrowingArray<Entity*>& someUnits, CU::GrowingArray<Entity*>& someUnitsOut) const;
+	CU::GrowingArray<Entity*> myUnits;
+	float myRadius;
+	int myUnitActivationCount;
 
 	float myCurrentDuration;
-
 	float myCurrentCooldown;
 
 	bool myIsActive;

@@ -24,7 +24,7 @@ Director::Director(eOwnerType aOwnerType, const Prism::Terrain& aTerrain)
 	, myDeadUnits(32)
 	, myTimeMultiplier(1.f)
 	, myVictoryPoints(0)
-	, myGunpowder(60)
+	, myGunpowder(0)
 	, myArtifacts(0)
 	, myUnitCap(0)
 	, myUnitCount(0)
@@ -285,10 +285,6 @@ void Director::ReceiveMessage(const UpgradeUnitMessage& aMessage)
 
 void Director::ReceiveMessage(const KillUnitMessage& aMessage)
 {
-	if (myHasUnlockedRanger == true && myHasUnlockedTank == true)
-	{
-		return;
-	}
 	if (static_cast<eOwnerType>(aMessage.myOwnerType) != myOwner)
 	{
 		if (myHasUnlockedRanger == false && static_cast<eUnitType>(aMessage.myUnitType) == eUnitType::RANGER)
@@ -299,6 +295,12 @@ void Director::ReceiveMessage(const KillUnitMessage& aMessage)
 		{
 			myHasUnlockedTank = true;
 		}
+	}
+	else if (myOwner != eOwnerType::NEUTRAL)
+	{
+		myUnitCount -= myBuilding->GetComponent<BuildingComponent>()->GetUnitSupplyCost(static_cast<eUnitType>(aMessage.myUnitType));
+
+		DL_ASSERT_EXP(myUnitCount >= 0, "[Director] Current unit count is negative");
 	}
 }
 

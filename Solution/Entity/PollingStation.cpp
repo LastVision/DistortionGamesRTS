@@ -2,6 +2,7 @@
 
 //#include "CollisionComponent.h"
 #include "PollingStation.h"
+#include "TriggerComponent.h"
 
 PollingStation* PollingStation::myInstance = nullptr;
 PollingStation* PollingStation::GetInstance()
@@ -229,7 +230,7 @@ CU::Vector2<float> PollingStation::GetClosestNotOwnedResourcePoint(eOwnerType aO
 
 	for (int i = 0; i < myResourcePoints.Size(); ++i)
 	{
-		if (myResourcePoints[i]->GetOwner() == aOwner)
+		if (myResourcePoints[i]->GetComponent<TriggerComponent>()->GetOwnerGainingPoint() != aOwner)
 		{
 			float distance = CU::Length2(myResourcePoints[i]->GetPosition() - aPoint);
 			if (distance < bestDist)

@@ -2,9 +2,15 @@
 #include "ActorComponent.h"
 #include <AudioInterface.h>
 #include "ControllerComponent.h"
+#include "CollisionComponent.h"
 #include "EnrageComponent.h"
 #include "HealthComponent.h"
+#include "Intersection.h"
+#include "Postmaster.h"
+#include "PollingStation.h"
+#include "PromotionComponent.h"
 #include "SoundComponent.h"
+#include <TriggerMessage.h>
 
 EnrageComponent::EnrageComponent(Entity& anEntity, EnrageComponentData& aData)
 	: Component(anEntity)
@@ -12,6 +18,9 @@ EnrageComponent::EnrageComponent(Entity& anEntity, EnrageComponentData& aData)
 	, myCurrentDuration(0.f)
 	, myIsActive(false)
 	, myData(aData)
+	, myUnits(8)
+	, myRadius(aData.myRadius)
+	, myUnitActivationCount(aData.myActivationUnitCount)
 {
 }
 
@@ -21,7 +30,34 @@ EnrageComponent::~EnrageComponent()
 
 void EnrageComponent::Update(float aDeltaTime)
 {
+	if (myEntity.GetComponent<PromotionComponent>()->GetPromoted() == false)
+	{
+		return;
+	}
 	myCurrentCooldown -= aDeltaTime;
+
+	CheckUnitsForRemove(myUnits);
+	if (myEntity.GetOwner() == eOwnerType::PLAYER)
+	{
+		CheckUnitsForAdd(PollingStation::GetInstance()->GetUnits(eOwnerType::NEUTRAL), myUnits);
+		CheckUnitsForAdd(PollingStation::GetInstance()->GetUnits(eOwnerType::ENEMY), myUnits);
+	}
+	else if (myEntity.GetOwner() == eOwnerType::ENEMY)
+	{
+		CheckUnitsForAdd(PollingStation::GetInstance()->GetUnits(eOwnerType::PLAYER), myUnits);
+		CheckUnitsForAdd(PollingStation::GetInstance()->GetUnits(eOwnerType::NEUTRAL), myUnits);
+	}
+	else if (myEntity.GetOwner() == eOwnerType::NEUTRAL)
+	{
+		CheckUnitsForAdd(PollingStation::GetInstance()->GetUnits(eOwnerType::PLAYER), myUnits);
+		CheckUnitsForAdd(PollingStation::GetInstance()->GetUnits(eOwnerType::ENEMY), myUnits);
+	}
+
+	if (myUnits.Size() >= myUnitActivationCount && myIsActive == false)
+	{
+		Activate();
+	}
+
 	if (myIsActive == true)
 	{
 		myCurrentDuration -= aDeltaTime;
@@ -73,5 +109,41 @@ void EnrageComponent::Activate()
 		Prism::Audio::AudioInterface::GetInstance()->PostEvent("Tank_Enrage"
 			, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
 
+	}
+}
+
+void EnrageComponent::CheckUnitsForAdd(const CU::GrowingArray<Entity*>& someUnits, CU::GrowingArray<Entity*>& someUnitsOut) const
+{
+	for (int i = 0; i < someUnits.Size(); ++i)
+	{
+		Entity* current = someUnits[i];
+		if (CU::Intersection::CircleVsCircle(myEntity.GetPosition(), myRadius
+			, current->GetPosition(), current->GetComponent<CollisionComponent>()->GetRadius()))
+		{
+			if (someUnitsOut.Find(current) < 0)
+			{
+				PostMaster::GetInstance()->SendMessage(
+					TriggerMessage(&myEntity, current, TriggerMessage::eTriggerType::ENTER));
+
+				someUnitsOut.Add(current);
+			}
+		}
+	}
+}
+
+void EnrageComponent::CheckUnitsForRemove(CU::GrowingArray<Entity*>& someUnits) const
+{
+	for (int i = someUnits.Size() - 1; i >= 0; --i)
+	{
+		Entity* current = someUnits[i];
+		if (CU::Intersection::CircleVsCircle(myEntity.GetPosition(), myRadius
+			, current->GetPosition(), current->GetComponent<CollisionComponent>()->GetRadius()) == false
+			|| (someUnits[i]->GetState() == eEntityState::DIE && someUnits[i]->GetAlive() == false))
+		{
+			PostMaster::GetInstance()->SendMessage(
+				TriggerMessage(&myEntity, current, TriggerMessage::eTriggerType::EXIT));
+
+			someUnits.RemoveCyclicAtIndex(i);
+		}
 	}
 }

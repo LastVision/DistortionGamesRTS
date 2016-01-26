@@ -39,6 +39,8 @@ public:
 	void ReceiveMessage(const KillUnitMessage& aMessage) override;
 	void ReceiveMessage(const ArtifactMessage& aMessage) override;
 
+	void SetGunPowder(int anAmount);
+
 protected:
 	bool IsAlreadyActive(Entity* aUnit);
 
@@ -81,4 +83,9 @@ inline const int& Director::GetUnitCount() const
 inline const int Director::GetActiveUnitsSize() const
 {
 	return myActiveUnits.Size();
+}
+
+inline void Director::SetGunPowder(int anAmount)
+{
+	myGunpowder = anAmount;
 }

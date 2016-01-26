@@ -89,7 +89,6 @@ void AIMap::AddValue(float aValue, float aRadius, const CU::Vector2<float>& aPos
 				int index = x + y * mySide;
 				myGrid[index] += aValue / (distance/myTileSize);
 				myGrid[index] = fminf(myGrid[index], myMaxValue);
-				//myGrid[index] = fmaxf(myGrid[index], -1.f);
 			}
 		}
 	}
@@ -101,9 +100,47 @@ void AIMap::AddValue(float aValue, float aRadius, const CU::Vector2<float>& aPos
 	}
 }
 
+void AIMap::RemoveValue(float aValue, float aRadius, const CU::Vector2<float>& aPosition)
+{
+	CU::Vector2<int> topLeft(GetIntPosition(aPosition - aRadius));
+	CU::Vector2<int> botRight(GetIntPosition(aPosition + aRadius));
+
+	for (int y = topLeft.y; y < botRight.y; ++y)
+	{
+		for (int x = topLeft.x; x < botRight.x; ++x)
+		{
+			float distance = CU::Length(GetPosition(x, y) - aPosition);
+			if (distance < aRadius && ValidIndex(x, y))
+			{
+				int index = x + y * mySide;
+				myGrid[index] -= aValue / (distance / myTileSize);
+				myGrid[index] = fmaxf(myGrid[index], -myMaxValue);
+			}
+		}
+	}
+
+	int index = GetIndex(aPosition);
+	if (index >= 0 && index < myGrid.Size())
+	{
+		myGrid[index] -= aValue;
+	}
+}
+
 void AIMap::SetValue(int aIndex, float aValue)
 {
 	myGrid[aIndex] = aValue;
+}
+
+float AIMap::GetValue(const CU::Vector2<float>& aPosition) const
+{
+	int index = GetIndex(aPosition);
+	if (index >= 0 && index < myGrid.Size())
+	{
+		return myGrid[index];
+	}
+
+	DL_ASSERT("AIMap::GetValue, Invalid position given");
+	return 0.f;
 }
 
 CU::Vector4<float> AIMap::GetColor(float aValue) const

@@ -37,7 +37,7 @@ Entity::Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& a
 	}
 
 	myOrientation.SetPos(aStartPosition);
-	aTerrain.CalcEntityHeight(myOrientation);
+	//aTerrain.CalcEntityHeight(myOrientation);
 
 	if (aEntityData.myAnimationData.myExistsInEntity == true)
 	{

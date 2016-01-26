@@ -14,5 +14,8 @@ struct EnrageComponentData
 
 	float myMovementSpeedModifier;
 
+	float myRadius;
+	int myActivationUnitCount;
+
 	bool myExistsInEntity = false;
 };
