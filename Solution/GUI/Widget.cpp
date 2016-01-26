@@ -8,6 +8,7 @@ namespace GUI
 	{
 		myIsVisible = true;
 		myIsFullscreen = false;
+		myIsClickable = true;
 	}
 
 	Widget::~Widget()

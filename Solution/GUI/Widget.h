@@ -42,11 +42,15 @@ namespace GUI
 
 		inline bool IsFullscreen() const;
 		inline void SetIsFullscreen(bool aIsFullscreen);
+
+		inline bool IsClickable() const;
+		inline void SetIsClickable(bool aIsClickable);
 	protected:
 		CU::Vector2<float> myPosition;
 		CU::Vector2<float> mySize;
 		std::string myHoverText;
 		bool myIsVisible;
+		bool myIsClickable;
 		bool myIsFullscreen;
 		Widget* myParent;
 	};
@@ -103,5 +107,15 @@ namespace GUI
 	inline void Widget::SetIsFullscreen(bool aIsFullscreen)
 	{
 		myIsFullscreen = aIsFullscreen;
+	}
+
+	inline bool Widget::IsClickable() const
+	{
+		return myIsClickable;
+	}
+
+	inline void Widget::SetIsClickable(bool aIsClickable)
+	{
+		myIsClickable = aIsClickable;
 	}
 }
