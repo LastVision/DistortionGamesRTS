@@ -309,6 +309,11 @@ void ActorComponent::AttackTarget(Entity* aTarget)
 		myEntity.SetState(eEntityState::IDLE);
 		return;
 	}
+	if (myEntity.GetUnitType() == eUnitType::GRUNT && myEntity.GetState() == eEntityState::THROW &&
+		myEntity.GetComponent<AnimationComponent>()->IsCurrentAnimationDone() == false)
+	{
+		return;
+	}
 	myEntity.SetState(eEntityState::ATTACK);
 	LookInDirection(aTarget->GetPosition() - myEntity.GetPosition());
 	
