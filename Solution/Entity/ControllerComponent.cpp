@@ -309,6 +309,11 @@ void ControllerComponent::FillCommandList(eEntityCommand aAction, bool aClearCom
 			}
 		}
 	}
+	else
+	{
+		myCommands.RemoveAll();
+		myCommands.Add(EntityCommandData(eEntityCommand::STOP, nullptr, myEntity.GetPosition()));
+	}
 
 	if (aClearCommandQueue == false)
 	{
