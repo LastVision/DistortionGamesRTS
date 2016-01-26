@@ -120,7 +120,9 @@ Level* LevelFactory::LoadCurrentLevel(bool aPauseModelLoader)
 
 	/*CU::Vector3f weatherPosition = myCamera.GetOrientation().GetPos();
 	weatherPosition.z += 10.f;*/
+#ifdef USE_WEATHER
 	PostMaster::GetInstance()->SendMessage(EmitterMessage("weather_snow", &myCamera, CU::Vector3f(0.f, 0.f, 5.f)));
+#endif
 
 	myCurrentLevel->LoadTutorial(myCamera, tutorialPath); // needs to be after InitGUI
 
