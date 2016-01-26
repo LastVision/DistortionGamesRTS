@@ -159,3 +159,11 @@ enum class eFuzzyAI
 	FIRST_ACTION,
 	_COUNT,
 };
+
+enum class eCursorType
+{
+	NORMAL,
+	ATTACK,
+	ATTACK_MOVE,
+	TOTEM
+};
