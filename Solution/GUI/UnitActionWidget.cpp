@@ -4,6 +4,7 @@
 #include "../Entity/Entity.h"
 #include "../Entity/EnrageComponent.h"
 #include "../Entity/GrenadeComponent.h"
+#include "../Entity/PromotionComponent.h"
 #include "../Game/PlayerDirector.h"
 #include "UnitActionWidget.h"
 #include "UpgradeButtonWidget.h"
@@ -19,13 +20,13 @@ namespace GUI
 		, myUnitActionButtons(nullptr)
 		, myBuildingActionButtons(nullptr)
 		, myIsUnitSelected(false)
-		, myHasSelectedGrunt(false)
-		, myHasSelectedRanger(false)
-		, myHasSelectedTank(false)
 		, mySelectedType(eEntityType::_COUNT)
 		, myPlayer(aPlayer)
 		, myHasUnlockedRanger(aPlayer->HasUnlockedRanger())
 		, myHasUnlockedTank(aPlayer->HasUnlockedTank())
+		, myFirstSelectedGrunt(nullptr)
+		, myFirstSelectedRanger(nullptr)
+		, myFirstSelectedTank(nullptr)
 	{
 		CU::Vector2<float> size;
 		CU::Vector2<float> position;
@@ -81,17 +82,17 @@ namespace GUI
 			{
 				myUnitActionButtons->Render(myPosition + aParentPosition);
 
-				if (myHasSelectedGrunt == true)
+				if (myFirstSelectedGrunt != nullptr && myFirstSelectedGrunt->GetComponent<PromotionComponent>()->GetPromoted() == true)
 				{
 					myGruntActionButtons->Render(myPosition + aParentPosition);
 				}
 
-				if (myHasSelectedRanger == true)
+				if (myFirstSelectedRanger != nullptr && myFirstSelectedRanger->GetComponent<PromotionComponent>()->GetPromoted() == true)
 				{
 					myRangerActionButtons->Render(myPosition + aParentPosition);
 				}
 
-				if (myHasSelectedTank == true)
+				if (myFirstSelectedTank != nullptr && myFirstSelectedTank->GetComponent<PromotionComponent>()->GetPromoted() == true)
 				{
 					myTankActionButtons->Render(myPosition + aParentPosition);
 				}
@@ -118,9 +119,9 @@ namespace GUI
 
 	void UnitActionWidget::Update(float)
 	{
-		myHasSelectedGrunt = false;
-		myHasSelectedRanger = false;
-		myHasSelectedTank = false;
+		myFirstSelectedGrunt = nullptr;
+		myFirstSelectedRanger = nullptr;
+		myFirstSelectedTank = nullptr;
 
 		myIsUnitSelected = myUnits.Size() > 0;
 		if (myIsUnitSelected == true)
@@ -132,22 +133,22 @@ namespace GUI
 		{
 			for (int i = 0; i < myUnits.Size(); i++)
 			{
-				if (myHasSelectedGrunt == false && myUnits[i]->GetUnitType() == eUnitType::GRUNT)
+				if (myFirstSelectedGrunt == nullptr && myUnits[i]->GetUnitType() == eUnitType::GRUNT)
 				{
 					myGruntActionButtons->At(0)->SetValue(myUnits[i]->GetComponent<GrenadeComponent>()->GetCooldown());
-					myHasSelectedGrunt = true;
+					myFirstSelectedGrunt = myUnits[i];
 				}
 
-				if (myHasSelectedRanger == false && myUnits[i]->GetUnitType() == eUnitType::RANGER)
+				if (myFirstSelectedRanger == nullptr && myUnits[i]->GetUnitType() == eUnitType::RANGER)
 				{
 					myRangerActionButtons->At(0)->SetValue(myUnits[i]->GetComponent<ActorComponent>()->GetRangerCooldown());
-					myHasSelectedRanger = true;
+					myFirstSelectedRanger = myUnits[i];
 				}
 
-				if (myHasSelectedTank == false && myUnits[i]->GetUnitType() == eUnitType::TANK)
+				if (myFirstSelectedTank == nullptr && myUnits[i]->GetUnitType() == eUnitType::TANK)
 				{
 					myTankActionButtons->At(0)->SetValue(myUnits[i]->GetComponent<EnrageComponent>()->GetCooldown());
-					myHasSelectedTank = true;
+					myFirstSelectedTank = myUnits[i];
 				}
 			}
 		}
@@ -161,17 +162,17 @@ namespace GUI
 			{
 				Widget* widget = nullptr;
 
-				if (myHasSelectedGrunt == true)
+				if (myFirstSelectedGrunt != nullptr)
 				{
 					Widget* gruntWidget = myGruntActionButtons->MouseIsOver(aPosition - myPosition);
 					widget = gruntWidget == nullptr ? widget : gruntWidget;
 				}
-				if (myHasSelectedRanger == true)
+				if (myFirstSelectedRanger != nullptr)
 				{
 					Widget* rangerWidget = myRangerActionButtons->MouseIsOver(aPosition - myPosition);
 					widget = rangerWidget == nullptr ? widget : rangerWidget;
 				}
-				if (myHasSelectedTank == true)
+				if (myFirstSelectedTank != nullptr)
 				{
 					Widget* tankWidget = myTankActionButtons->MouseIsOver(aPosition - myPosition);
 					widget = tankWidget == nullptr ? widget : tankWidget;
