@@ -14,5 +14,6 @@ public:
 private:
 	CU::GrowingArray<Behavior*> myBehaviors;
 	CU::Vector2<float> myPreviousAcceleration;
+	float myMaxAcceleration;
 };
 

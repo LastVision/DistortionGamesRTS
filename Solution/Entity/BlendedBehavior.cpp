@@ -7,6 +7,7 @@ BlendedBehavior::BlendedBehavior(const Entity& anEntity)
 	: Behavior(anEntity)
 	, myBehaviors(8)
 	, myPreviousAcceleration(0, 0)
+	, myMaxAcceleration(100000.f)
 {
 	myBehaviors.Add(new ArriveBehavior(myEntity));
 	myBehaviors.Add(new EvadeBehavior(myEntity));
@@ -29,10 +30,16 @@ const CU::Vector2<float>& BlendedBehavior::Update()
 	}
 	//DL_DEBUG("length: %f", CU::Length2(myPreviousAcceleration + myAcceleration));
 
-	//if (CU::Length2(myPreviousAcceleration + myAcceleration) < 1.f)
-	//{
-	//	myDone = true;
-	//}
+	/*if (CU::Length2(myPreviousAcceleration + myAcceleration) < 1.f)
+	{
+		myDone = true;
+	}*/
+
+	if (CU::Length2(myAcceleration) > myMaxAcceleration)
+	{
+		CU::Normalize(myAcceleration);
+		myAcceleration *= myMaxAcceleration;
+	}
 
 	myPreviousAcceleration = myAcceleration;
 

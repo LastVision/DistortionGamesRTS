@@ -10,6 +10,7 @@ public:
 	void RegisterEntity(Entity* aEntity);
 
 	Entity* FindClosestEntity(const CU::Vector3<float>& aPosition, int aEntityOwner, float aMaxDistance2 = FLT_MAX);
+	CU::GrowingArray<Entity*> FindClosestEntities(const CU::Vector3<float>& aPosition, int aEntityOwner, float aMaxDistance2 = FLT_MAX);
 	Entity* FindEntityAtPosition(const CU::Vector3<float>& aPosition, int aEntityOwner);
 	void FindAllEntitiesCloseToEntity(const Entity* anEntity, float aRadius, CU::GrowingArray<Entity*>& someEntitiesOut);
 	

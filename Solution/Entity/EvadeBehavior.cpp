@@ -18,7 +18,7 @@ EvadeBehavior::~EvadeBehavior()
 const CU::Vector2<float>& EvadeBehavior::Update()
 {
 	myEntitiesToEvade.RemoveAll();
-	PollingStation::GetInstance()->FindAllEntitiesCloseToEntity(&myEntity, 3.f, myEntitiesToEvade);
+	PollingStation::GetInstance()->FindAllEntitiesCloseToEntity(&myEntity, 4.f, myEntitiesToEvade);
 
 	myAcceleration.x = 0;
 	myAcceleration.y = 0;
@@ -28,7 +28,7 @@ const CU::Vector2<float>& EvadeBehavior::Update()
 		CU::Vector2<float> toTarget = myEntity.GetPosition() - myEntitiesToEvade[i]->GetPosition();
 		float distToTarget2 = CU::Length2(toTarget);
 		toTarget /= (distToTarget2 + 0.00001f);
-		toTarget *= 2.f;
+		toTarget *= 3.f;
 		myAcceleration += toTarget;
 	}
 
@@ -43,5 +43,5 @@ const CU::Vector2<float>& EvadeBehavior::Update()
 		myAcceleration *= myMaxAcceleration;
 	}
 
-	return myAcceleration;
+	return myAcceleration * 0.75f;
 }

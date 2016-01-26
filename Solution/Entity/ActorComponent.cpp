@@ -63,6 +63,7 @@ ActorComponent::~ActorComponent()
 void ActorComponent::Reset()
 {
 	myAcceleration = CU::Vector2<float>(0.f, 0.f);
+	myIsDone = false;
 	myBehavior->SetTarget({ myEntity.GetPosition().x + CU::Math::RandomRange<float>(-0.1f, 0.1f), myEntity.GetPosition().y - 1.f });
 
 }
@@ -87,9 +88,10 @@ void ActorComponent::Update(float aDelta)
 
 	myAcceleration = myBehavior->Update();
 
-	if (myBehavior->GetDone())
+	if (myBehavior->GetDone() || myIsDone == true)
 	{
 		myEntity.SendNote<BehaviorNote>(true);
+		myIsDone = false;
 	}
 
 	myEntity.myVelocity += myAcceleration * aDelta;
@@ -196,7 +198,9 @@ void ActorComponent::DoStop(float aDelta)
 		}
 		else
 		{
-			if (CU::Length2(myEntity.GetPosition() - myCurrentCommand.GetPosition()) > 1.f)
+			/*int nearbyFriends = PollingStation::GetInstance()->FindClosestEntities(myEntity.GetOrientation().GetPos(), 
+				myEntity.GetOwner(), myVisionRange2).Size();*/
+			if (myBehavior->GetDone() == false/* || CU::Length2(myEntity.GetPosition() - myCurrentCommand.GetPosition()) > 1.f * nearbyFriends*/)
 			{
 				myBehavior->SetTarget(myCurrentCommand.GetPosition());
 				DoMove(aDelta);
@@ -204,6 +208,7 @@ void ActorComponent::DoStop(float aDelta)
 			else
 			{
 				StandStill();
+				myIsDone = true;
 			}
 		}
 	}

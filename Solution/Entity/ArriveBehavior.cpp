@@ -5,8 +5,8 @@
 ArriveBehavior::ArriveBehavior(const Entity& anEntity)
 	: Behavior(anEntity)
 	, myTimeToTarget(0.1f)
-	, mySlowRadius(3.0f)
-	, myTargetRadius(2.25f)
+	, mySlowRadius(4.0f)
+	, myTargetRadius(3.f)
 	, myMaxAcceleration(100000.f)
 	, myActive(false)
 {
