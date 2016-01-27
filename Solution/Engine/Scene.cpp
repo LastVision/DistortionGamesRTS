@@ -12,6 +12,7 @@
 #include "SpotLight.h"
 #include "Terrain.h"
 #include <XMLReader.h>
+#include "InstancingHelper.h"
 
 #ifdef SCENE_USE_OCTREE
 #include "Octree.h"
@@ -34,7 +35,8 @@ Prism::Scene::Scene(const Camera& aCamera, Terrain& aTerrain)
 	memset(&myPointLightData[0], 0, sizeof(PointLightData) * NUMBER_OF_POINT_LIGHTS);
 	memset(&mySpotLightData[0], 0, sizeof(SpotLightData) * NUMBER_OF_SPOT_LIGHTS);
 
-	
+	myInstancingHelper = new InstancingHelper();
+	myInstancingHelper->SetCamera(&myCamera);
 }
 
 Prism::Scene::~Scene()
@@ -47,6 +49,8 @@ Prism::Scene::~Scene()
 #else
 	myInstances.DeleteAll();
 #endif
+
+	SAFE_DELETE(myInstancingHelper);
 }
 
 void Prism::Scene::Render(bool aRenderNavMeshLines)
@@ -102,13 +106,20 @@ void Prism::Scene::Render(bool aRenderNavMeshLines)
 	Engine::GetInstance()->PrintText(myInstances.Size(), { 600.f, -600.f });
 #endif
 #endif
-	for (int i = 0; i < myInstances.Size(); ++i)
+	/*for (int i = 0; i < myInstances.Size(); ++i)
 	{
 		myInstances[i]->UpdateDirectionalLights(myDirectionalLightData);
 		myInstances[i]->UpdatePointLights(myPointLightData);
 		myInstances[i]->UpdateSpotLights(mySpotLightData);
 		myInstances[i]->Render(myCamera);
+	}*/
+
+	for (int i = 0; i < myInstances.Size(); ++i)
+	{
+		myInstances[i]->Render(myCamera, *myInstancingHelper);
 	}
+
+	myInstancingHelper->Render();
 }
 
 void Prism::Scene::AddInstance(Instance* aInstance)

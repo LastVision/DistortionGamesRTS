@@ -16,9 +16,9 @@ SelectionComponent::SelectionComponent(Entity& aEntity, SelectionComponentData& 
 	, myCullingRadius(2.5f)
 	, myIsRemovedFromScene(false)
 {
-	Prism::ModelProxy* model = Prism::ModelLoader::GetInstance()->LoadModel(aComponentData.myModelPath
-		, aComponentData.myEffectPath);
-	myInstance = new Prism::Instance(*model, myEntity.GetOrientation(), myEntity.GetOctreeType(), myCullingRadius);
+	//Prism::ModelProxy* model = Prism::ModelLoader::GetInstance()->LoadModel(aComponentData.myModelPath
+	//	, aComponentData.myEffectPath);
+	//myInstance = new Prism::Instance(*model, myEntity.GetOrientation(), myEntity.GetOctreeType(), myCullingRadius);
 }
 
 
@@ -29,7 +29,7 @@ SelectionComponent::~SelectionComponent()
 
 void SelectionComponent::Update(float)
 {
-	if (myEntity.IsSelected() == true)
+	/*if (myEntity.IsSelected() == true)
 	{
 		myInstance->SetSelected(true);
 	}
@@ -42,6 +42,6 @@ void SelectionComponent::Update(float)
 	{
 		myInstance->SetHovered(false);
 		myInstance->SetSelected(false);
-	}
+	}*/
 	
 }

@@ -8,7 +8,7 @@
 #include "Model.h"
 #include "ModelAnimated.h"
 #include "ModelProxy.h"
-
+#include "InstancingHelper.h"
 
 Prism::Instance::Instance(ModelProxy& aModel, const CU::Matrix44<float>& anOrientation, eOctreeType anOctreeType
 		, const float& aObjectCullingRadius)
@@ -87,6 +87,27 @@ void Prism::Instance::Render(const Camera& aCamera)
 			myProxy.myModel->GetEffect()->SetAmbientHue(mySelectionColor);
 			myProxy.myModel->ActivateAlbedo(myOwnerType);
 			myProxy.Render(myOrientation, aCamera.GetOrientation().GetPos());
+		}
+	}
+}
+
+void Prism::Instance::Render(const Camera& aCamera, InstancingHelper& aInstancingHelper)
+{
+	if (myProxy.IsLoaded())
+	{
+		if (myProxy.IsAnimated() == true)
+		{
+			myProxy.GetEffect()->SetViewProjectionMatrix(aCamera.GetViewProjection());
+			myProxy.GetEffect()->SetScaleVector(myScale);
+			myProxy.GetEffect()->SetCameraPosition(aCamera.GetOrientation().GetPos());
+
+			myProxy.myModelAnimated->ActivateAlbedo(myOwnerType);
+			myProxy.GetEffect()->SetBones(myBones);
+			RenderModelAnimated(myProxy.myModelAnimated, myOrientation, aCamera, myHierarchy);
+		}
+		else
+		{
+			aInstancingHelper.AddModel(myOwnerType, myProxy.myModel, myOrientation, myScale);
 		}
 	}
 }

@@ -40,6 +40,7 @@ public:
 
 	const int& GetUpgradeLevel(int aUnitID) const;
 	const float& GetUpgradeCooldown(int aUnitID) const;
+	const float& GetUpgradeMaxCooldown(int aUnitID) const;
 
 private:
 	struct BuildInfo
@@ -61,6 +62,7 @@ private:
 	CU::StaticArray<int, 3> myUnitUpgradeProgress;
 	CU::StaticArray<int, 3> myUnitSupplyCosts;
 	CU::StaticArray<float, 3> myUpgradeCooldowns;
+	CU::StaticArray<float, 3> myUpgradeMaxCooldowns;
 
 	std::queue<BuildInfo> myBuildQueue;
 
@@ -123,4 +125,9 @@ inline const int& BuildingComponent::GetUpgradeLevel(int aUnitID) const
 inline const float& BuildingComponent::GetUpgradeCooldown(int aUnitID) const
 {
 	return myUpgradeCooldowns[aUnitID];
+}
+
+inline const float& BuildingComponent::GetUpgradeMaxCooldown(int aUnitID) const
+{
+	return myUpgradeMaxCooldowns[aUnitID];
 }

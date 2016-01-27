@@ -12,6 +12,7 @@ public:
 	static eComponentType GetTypeStatic();
 	eComponentType GetType() override;
 	const float& GetCooldown() const;
+	const float& GetMaxCooldown() const;
 private:
 	void CheckUnitsForRemove(CU::GrowingArray<Entity*>& someUnits) const;
 	void CheckUnitsForAdd(const CU::GrowingArray<Entity*>& someUnits, CU::GrowingArray<Entity*>& someUnitsOut) const;

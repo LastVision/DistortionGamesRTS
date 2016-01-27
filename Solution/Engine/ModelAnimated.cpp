@@ -50,7 +50,7 @@ namespace Prism
 			{
 				vertexDesc[i] = *myVertexFormat[i];
 			}
-			EvaluateEffectTechnique();
+			EvaluateEffectTechnique(false);
 			InitInputLayout(vertexDesc, size, "ModelAnimated::InputLayout");
 			delete[] vertexDesc;
 			InitVertexBuffer(myVertexBaseData->myStride, D3D11_USAGE_IMMUTABLE, 0);

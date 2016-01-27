@@ -290,6 +290,7 @@
     <ClCompile Include="HierarchyBone.cpp" />
     <ClCompile Include="Ice.cpp" />
     <ClCompile Include="Instance.cpp" />
+    <ClCompile Include="InstancingHelper.cpp" />
     <ClCompile Include="Line3D.cpp" />
     <ClCompile Include="Line3DRenderer.cpp" />
     <ClCompile Include="Model.cpp" />
@@ -375,6 +376,7 @@
     <ClInclude Include="IndexBufferWrapper.h" />
     <ClInclude Include="Instance.h" />
     <ClInclude Include="DirectionalLight.h" />
+    <ClInclude Include="InstancingHelper.h" />
     <ClInclude Include="LesserTriangle.h" />
     <ClInclude Include="LightStructs.h" />
     <ClInclude Include="Line3D.h" />

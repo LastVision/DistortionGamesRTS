@@ -496,6 +496,11 @@ const float& PlayerDirector::GetTotemCooldown() const
 	return myTotem->GetComponent<TotemComponent>()->GetCurrentCooldown();
 }
 
+const float& PlayerDirector::GetTotemMaxCooldown() const
+{
+	return myTotem->GetComponent<TotemComponent>()->GetMaxCooldown();
+}
+
 const int& PlayerDirector::GetUpgradeLevel(int aUnitID) const
 {
 	return myBuilding->GetComponent<BuildingComponent>()->GetUpgradeLevel(aUnitID);
@@ -504,6 +509,11 @@ const int& PlayerDirector::GetUpgradeLevel(int aUnitID) const
 const float& PlayerDirector::GetUpgradeCooldown(int aUnitID) const
 {
 	return myBuilding->GetComponent<BuildingComponent>()->GetUpgradeCooldown(aUnitID);
+}
+
+const float& PlayerDirector::GetUpgradeMaxCooldown(int aUnitID) const
+{
+	return myBuilding->GetComponent<BuildingComponent>()->GetUpgradeMaxCooldown(aUnitID);
 }
 
 void PlayerDirector::UpdateInputs()
