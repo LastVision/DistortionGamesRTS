@@ -13,6 +13,7 @@ namespace GUI
 		: Widget()
 		, myBackground(nullptr)
 		, myText(nullptr)
+		, myTextScale(1.f)
 	{
 		std::string backgroundPath;
 
@@ -23,6 +24,7 @@ namespace GUI
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "textposition"), "x", myTextPosition.x);
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "textposition"), "y", myTextPosition.y);
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "background"), "path", backgroundPath);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "textscale"), "value", myTextScale);
 
 		myBackground = Prism::ModelLoader::GetInstance()->LoadSprite(backgroundPath, mySize);
 
@@ -39,6 +41,7 @@ namespace GUI
 	{
 		if (myIsVisible == true && myText != nullptr)
 		{
+			myText->SetScale({ myTextScale, myTextScale });
 			myText->SetPosition(myPosition + aParentPosition + myTextPosition);
 			myBackground->Render(myPosition + aParentPosition);
 			myText->Render();
@@ -49,6 +52,7 @@ namespace GUI
 	{
 		Widget::OnResize(aNewSize, anOldSize, aIsFullScreen);
 		myBackground->SetSize(mySize, { 0.f, 0.f });
+		myTextScale = (myTextScale / anOldSize.x) * aNewSize.x;
 	}
 
 	void TextWidget::ReceiveMessage(const TextMessage& aMessage)

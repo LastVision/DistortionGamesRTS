@@ -11,11 +11,13 @@ namespace GUI
 		: Widget()
 		, myUnitCap(aUnitCap)
 		, myUnitCount(aUnitCount)
+		, myTextScale(1.f)
 	{
 		mySize = aSize;
 
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "position"), "x", myPosition.x);
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "position"), "y", myPosition.y);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "textscale"), "value", myTextScale);
 	}
 
 	UnitCapWidget::~UnitCapWidget()
@@ -28,6 +30,13 @@ namespace GUI
 
 		ss << myUnitCount << "/" << myUnitCap;
 
-		Prism::Engine::GetInstance()->PrintText(ss.str(), myPosition + aParentPosition, Prism::eTextType::RELEASE_TEXT);
+		Prism::Engine::GetInstance()->PrintText(ss.str(), myPosition + aParentPosition, Prism::eTextType::RELEASE_TEXT, myTextScale);
+	}
+
+	void UnitCapWidget::OnResize(const CU::Vector2<float>& aNewWindowSize, const CU::Vector2<float>& anOldWindowSize, bool aIsFullScreen)
+	{
+		Widget::OnResize(aNewWindowSize, anOldWindowSize, aIsFullScreen);
+
+		myTextScale = (myTextScale / anOldWindowSize.x) * aNewWindowSize.x;
 	}
 }

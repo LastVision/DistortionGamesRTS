@@ -5,7 +5,7 @@
 
 struct TooltipInfo
 {
-	std::string myName;
+	std::string myHeadline;
 	std::string myText;
 	int myGoldCost;
 	int myArftifactCost;
@@ -20,6 +20,7 @@ namespace GUI
 		: Widget()
 		, myGuiManager(aGuiManager)
 		, myBackground(nullptr)
+		, myTextScale(1.f)
 	{
 		mySize = { 0.f, 0.f };
 
@@ -32,6 +33,7 @@ namespace GUI
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "textposition"), "x", myTextPosition.x);
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "textposition"), "y", myTextPosition.y);
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "backgroundsprite"), "path", backgroundPath);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "textscale"), "value", myTextScale);
 
 		myBackground = Prism::ModelLoader::GetInstance()->LoadSprite(backgroundPath, mySize);
 	}
@@ -48,7 +50,8 @@ namespace GUI
 		if (myActiveWidget != nullptr && myActiveWidget->GetHoverText() != "")
 		{
 			myBackground->Render(myPosition + aParentPosition);
-			Prism::Engine::GetInstance()->PrintText(myActiveWidget->GetHoverText(), myTextPosition + myPosition + aParentPosition, Prism::eTextType::RELEASE_TEXT);
+			Prism::Engine::GetInstance()->PrintText(myActiveWidget->GetHoverText(), myTextPosition + myPosition + aParentPosition
+				, Prism::eTextType::RELEASE_TEXT, myTextScale);
 		}
 	}
 
@@ -61,5 +64,7 @@ namespace GUI
 	void TooltipWidget::OnResize(const CU::Vector2<float>& aNewWindowSize, const CU::Vector2<float>& anOldWindowSize, bool aIsFullScreen)
 	{
 		Widget::OnResize(aNewWindowSize, anOldWindowSize, aIsFullScreen);
+
+		myTextScale = (myTextScale / anOldWindowSize.x) * aNewWindowSize.x;
 	}
 }
