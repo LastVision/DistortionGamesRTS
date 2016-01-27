@@ -323,7 +323,8 @@ void PlayerDirector::ReceiveMessage(const OnClickMessage& aMessage)
 			break;
 		}
 	}
-	else if (aMessage.myEvent == eOnClickEvent::SELECT_CONTROL_GROUP)
+
+	if (aMessage.myEvent == eOnClickEvent::SELECT_CONTROL_GROUP)
 	{
 		SelectControlGroup(aMessage.myID);
 	}
