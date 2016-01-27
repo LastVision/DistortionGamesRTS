@@ -54,9 +54,9 @@ namespace Prism
 					currEffect->SetCameraPosition(myCamera->GetOrientation().GetPos());
 				}
 
-				if (currModel->SetGPUState(matrices, scales))
+				if (currModel->SetGPUState(matrices, scales, it->first))
 				{
-					currModel->ActivateAlbedo(it->first);
+					//currModel->ActivateAlbedo(it->first);
 
 					D3DX11_TECHNIQUE_DESC techDesc;
 					ID3DX11EffectTechnique* tech = currEffect->GetTechnique(currModel->GetTechniqueName());

@@ -349,7 +349,7 @@ namespace Prism
 	}
 
 	bool Model::SetGPUState(const CU::GrowingArray<CU::Matrix44<float>>& someWorldMatrices
-		, const CU::GrowingArray<CU::Vector3<float>>& someScales)
+		, const CU::GrowingArray<CU::Vector3<float>>& someScales, eOwnerType aOwner)
 	{
 		DL_ASSERT_EXP(mySurfaces.Size() < 2, "We do not support several surfaces yet");
 
@@ -359,7 +359,7 @@ namespace Prism
 			{
 				return false;
 			}
-			return myChildren[0]->SetGPUState(someWorldMatrices, someScales);
+			return myChildren[0]->SetGPUState(someWorldMatrices, someScales, aOwner);
 		}
 		else
 		{
@@ -424,6 +424,8 @@ namespace Prism
 				, myIndexBuffer->myIndexBufferFormat, myIndexBuffer->myByteOffset);
 			context->IASetInputLayout(myVertexLayout);
 
+
+			ActivateAlbedo(aOwner);
 			mySurfaces[0]->Activate();
 
 			return true;
