@@ -116,7 +116,7 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 		e = reader.ForceFindFirstChild(totemElement, "Cooldown");
 		reader.ForceReadAttribute(e, "value", valueToUse);
 		tempData.myTotemData.myCooldown = valueToUse;
-
+		
 		e = reader.ForceFindFirstChild(totemElement, "Duration");
 		reader.ForceReadAttribute(e, "value", valueToUse);
 		tempData.myTotemData.myDuration = valueToUse;
@@ -140,7 +140,7 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 
 PlayerDirector::~PlayerDirector()
 {
-	myCursor->SetCurrentCursor(eCursorType::NORMAL);
+	myCursor->SetCurrentCursor(eCursorType::NORMAL); 
 
 	SAFE_DELETE(myGUIManager);
 	SAFE_DELETE(myDragSelectionSpriteVertical);
@@ -315,8 +315,8 @@ void PlayerDirector::ReceiveMessage(const OnClickMessage& aMessage)
 	else if (aMessage.myEvent == eOnClickEvent::SELECT_CONTROL_GROUP)
 	{
 		SelectControlGroup(aMessage.myID);
-	}
-}
+			}
+		}
 
 void PlayerDirector::ReceiveMessage(const TimeMultiplierMessage& aMessage)
 {
@@ -328,12 +328,15 @@ void PlayerDirector::ReceiveMessage(const TimeMultiplierMessage& aMessage)
 
 void PlayerDirector::ReceiveMessage(const MinimapMoveMessage& aMessage)
 {
+	if (mySelectedUnits.Size() > 0 && mySelectedUnits[0]->GetType() == eEntityType::UNIT)
+	{
 	CU::Vector2<float> position = aMessage.myPosition * 255.f;
 	bool myHasPlayedSound = false;
 	for (int i = 0; i < mySelectedUnits.Size(); i++)
 	{
 		mySelectedUnits[i]->GetComponent<ControllerComponent>()->MoveTo({ position.x, 0.f, position.y }, true, myHasPlayedSound);
 	}
+}
 }
 
 void PlayerDirector::ReceiveMessage(const ToggleBuildTimeMessage& aMessage)
@@ -390,7 +393,7 @@ void PlayerDirector::SelectUnit(Entity* anEntity)
 			{
 				return;
 			}
-
+	
 			shouldAddToSelectedUnits = false;
 		}
 	}
@@ -476,7 +479,7 @@ CU::Vector3<float> PlayerDirector::CalcCursorWorldPosition(const CU::Vector2<flo
 
 	return worldPos;
 }
-
+	
 const float& PlayerDirector::GetTotemCooldown() const
 {
 	return myTotem->GetComponent<TotemComponent>()->GetCurrentCooldown();
@@ -673,9 +676,9 @@ void PlayerDirector::CameraFocusOnControlGroup(int aIndex)
 		{
 			averagePosition /= static_cast<float>(myControlGroups[aIndex].Size());
 		}
-	}
+			}
 	PostMaster::GetInstance()->SendMessage(MoveCameraMessage(averagePosition, eHowToHandleMovement::WORLD_POSITION));
-}
+			}
 
 void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 {
