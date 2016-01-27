@@ -372,10 +372,14 @@ namespace Prism
 			if (mappedResource.pData != nullptr)
 			{
 				CU::Matrix44<float>* data = (CU::Matrix44<float>*)mappedResource.pData;
-				for (int i = 0; i < someWorldMatrices.Size(); ++i)
+				if (someWorldMatrices.Size() > 0)
+				{
+					memcpy(data, &someWorldMatrices[0], sizeof(CU::Matrix44<float>) * someWorldMatrices.Size());
+				}
+				/*for (int i = 0; i < someWorldMatrices.Size(); ++i)
 				{
 					data[i] = someWorldMatrices[i];
-				}
+				}*/
 
 				context->Unmap(myInstancingMatrixBuffer->myVertexBuffer, 0);
 			}
@@ -389,10 +393,15 @@ namespace Prism
 			if (mappedResource.pData != nullptr)
 			{
 				CU::Vector3<float>* data = (CU::Vector3<float>*)mappedResource.pData;
-				for (int i = 0; i < someScales.Size(); ++i)
+				if (someScales.Size() > 0)
+				{
+					memcpy(data, &someScales[0], sizeof(CU::Vector3<float>) * someScales.Size());
+				}
+				
+				/*for (int i = 0; i < someScales.Size(); ++i)
 				{
 					data[i] = someScales[i];
-				}
+				}*/
 
 				context->Unmap(myInstancingScaleBuffer->myVertexBuffer, 0);
 			}
