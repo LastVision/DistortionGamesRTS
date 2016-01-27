@@ -13,6 +13,7 @@ namespace Prism
 	class Light;
 	class ModelAnimated;
 	class ModelProxy;
+	class InstancingHelper;
 	enum class eOctreeType;
 
 	class Instance
@@ -24,6 +25,7 @@ namespace Prism
 
 		void Update(float aDelta);
 		void Render(const Camera& aCamera);
+		void Render(const Camera& aCamera, InstancingHelper& aInstancingHelper);
 
 		CU::Vector3<float> GetPosition() const;
 
