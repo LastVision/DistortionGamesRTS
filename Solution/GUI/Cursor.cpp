@@ -11,7 +11,7 @@ namespace GUI
 	{
 		myWindowSize.x = float(aWindowSize.x);
 		myWindowSize.y = float(aWindowSize.y);
-		
+
 		Prism::SpriteProxy* normalSprite = Prism::ModelLoader::GetInstance()->LoadSprite(
 			"Data/Resource/Texture/UI/Crosshair/T_crosshair_default.dds", { 70.f, 70.f }, { 35.f, 35.f });
 		mySprites.Add(normalSprite);
@@ -27,6 +27,10 @@ namespace GUI
 		Prism::SpriteProxy* totemSprite = Prism::ModelLoader::GetInstance()->LoadSprite(
 			"Data/Resource/Texture/UI/Crosshair/T_crosshair_totem.dds", { 70.f, 70.f }, { 35.f, 35.f });
 		mySprites.Add(totemSprite);
+
+		Prism::SpriteProxy* cancelSprite = Prism::ModelLoader::GetInstance()->LoadSprite(
+			"Data/Resource/Texture/UI/Crosshair/T_crosshair_cancel.dds", { 70.f, 70.f }, { 35.f, 35.f });
+		mySprites.Add(cancelSprite);
 
 		myPosition = myWindowSize / 2.f;
 

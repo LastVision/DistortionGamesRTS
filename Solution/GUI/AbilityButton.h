@@ -25,5 +25,7 @@ namespace GUI
 		const float* myMaxCooldown;
 		Prism::SpriteProxy* myCooldownIndicator;
 		Prism::SpriteProxy* myHasCooldownSprite;
+
+		float myPercentageMultiplier;
 	};
 }

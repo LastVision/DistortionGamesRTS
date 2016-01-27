@@ -97,7 +97,7 @@ private:
 	void SelectOrHoverEntity(Entity* aEntity, bool &aSelected, bool &aHovered
 		, const CU::Intersection::LineSegment3D& aMouseRay);
 	void SelectAllUnits();
-	
+
 	void PlaceTotem(const CU::Vector3f& aPositionInWorld);
 
 	void SelectControlGroup(int anIndex);
@@ -128,6 +128,9 @@ private:
 
 	float myTweakValueX;
 	float myTweakValueY;
+
+	float myCurrentCancleCursorTime;
+	float myCancleCursorTime;
 
 	CU::Vector2<float> mySelectionSpriteSize;
 	CU::Vector2<float> mySelectionSpriteRenderPosition;

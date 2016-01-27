@@ -12,14 +12,16 @@ namespace GUI
 		, myMaxCooldown(nullptr)
 		, myCooldownIndicator(nullptr)
 		, myHasCooldownSprite(nullptr)
+		, myPercentageMultiplier(0.f)
 	{
 		std::string type = "";
+		std::string outline = "";
 
-		tinyxml2::XMLElement* XMLElement = aReader->FindFirstChild(anXMLElement, "cooldown");
+		tinyxml2::XMLElement* cooldownElement = aReader->FindFirstChild(anXMLElement, "cooldown");
 
-		if (XMLElement != nullptr)
+		if (cooldownElement != nullptr)
 		{
-			aReader->ReadAttribute(XMLElement, "type", type);
+			aReader->ReadAttribute(cooldownElement, "type", type);
 			if (type == "totem")
 			{
 				myCooldown = &aPlayer->GetTotemCooldown();
@@ -32,8 +34,11 @@ namespace GUI
 			}
 		}
 
-		myCooldownIndicator = Prism::ModelLoader::GetInstance()->LoadSprite("Data/Resource/Texture/UI/T_outline_button.dds", mySize);
-		myHasCooldownSprite = Prism::ModelLoader::GetInstance()->LoadSprite("Data/Resource/Texture/UI/T_outline_button.dds", mySize);
+		aReader->ReadAttribute(aReader->FindFirstChild(anXMLElement, "outlinesprite"), "path", outline);
+		aReader->ReadAttribute(aReader->FindFirstChild(anXMLElement, "outlinesprite"), "percentagemultiplier", myPercentageMultiplier);
+
+		myCooldownIndicator = Prism::ModelLoader::GetInstance()->LoadSprite(outline, mySize);
+		myHasCooldownSprite = Prism::ModelLoader::GetInstance()->LoadSprite(outline, mySize);
 	}
 
 	AbilityButton::~AbilityButton()
@@ -51,7 +56,7 @@ namespace GUI
 			CU::Vector2<float> size = mySize;
 			CU::Vector2<float> position = aParentPosition;
 			float percentage = (*myCooldown / *myMaxCooldown);
-			percentage += (1.f - percentage) * 0.1f;
+			percentage += (1.f - percentage) * myPercentageMultiplier;
 			size.y *= percentage;
 
 

@@ -34,6 +34,7 @@ public:
 	bool IsReady() const;
 
 	CU::Vector2<float> GetTargetPosition() const;
+	bool HasFoundPath() const;
 
 private:
 	void FillCommandList(eEntityCommand aAction, bool aClearCommandQueue, Entity* aEntity = nullptr
@@ -61,6 +62,7 @@ private:
 	bool myFirstFrame;
 	bool mySecondFrame;
 	bool myIsReady;
+	bool myFoundPath;
 
 	CU::GrowingArray<EntityCommandData> myCommands;
 	EntityCommandData myCurrentCommand;
@@ -99,4 +101,9 @@ inline CU::Vector2<float> ControllerComponent::GetTargetPosition() const
 	}
 	
 	return myReturnPosition;
+}
+
+inline bool ControllerComponent::HasFoundPath() const
+{
+	return myFoundPath;
 }
