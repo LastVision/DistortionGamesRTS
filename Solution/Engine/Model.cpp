@@ -468,6 +468,39 @@ namespace Prism
 		}
 	}
 
+	Model* Model::GetRealModel(const CU::Vector3<float>& aModelPosition, const CU::Vector3<float>& aCameraPosition)
+	{
+		if (myIsLodGroup == true)
+		{
+			float lengthBetweenCameraAndModel = CU::Length(aCameraPosition - aModelPosition);
+			int level = 0;
+
+			Model* toRender = nullptr;
+			for (int i = myChildren.Size() - 1; i >= 0; i--)
+			{
+				LodGroup* group = myLodGroup;
+				double threshold = group->myThreshHolds[i];
+				threshold /= 100;
+				if (threshold <= lengthBetweenCameraAndModel)
+				{
+					toRender = myChildren[i];
+					level = i;
+					break;
+				}
+			}
+
+			if (toRender)
+			{
+				return toRender->GetRealModel(aModelPosition, aCameraPosition);
+			}
+
+		}
+		else
+		{
+			return this;
+		}
+	}
+
 	void Model::InitInstancingBuffers()
 	{
 		ZeroMemory(myInstancingBufferDesc, sizeof(myInstancingBufferDesc));

@@ -48,6 +48,7 @@ namespace Prism
 		int GetVertexStart();
 
 		const std::string& GetTechniqueName() const override;
+		Model* GetRealModel(const CU::Vector3<float>& aModelPosition, const CU::Vector3<float>& aCameraPosition);
 
 	private:
 		

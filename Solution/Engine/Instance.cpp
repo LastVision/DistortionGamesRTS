@@ -107,7 +107,8 @@ void Prism::Instance::Render(const Camera& aCamera, InstancingHelper& aInstancin
 		}
 		else
 		{
-			aInstancingHelper.AddModel(myOwnerType, myProxy.myModel, myOrientation, myScale);
+			Model* toRender = myProxy.myModel->GetRealModel(myOrientation.GetPos(), aCamera.GetOrientation().GetPos());
+			aInstancingHelper.AddModel(myOwnerType, toRender, myOrientation, myScale);
 		}
 	}
 }
