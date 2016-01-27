@@ -57,7 +57,7 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 	, myMaxSelectedUnits(0)
 	, myHasEventToGoTo(false)
 	, mySelectedControlGroup(-1)
-	, myDoubleClickTime(0.5f)
+	, myDoubleClickTime(0.75f)
 	, myCurrentDoubleClickTimer(0.f)
 	, myHasDoubleClicked(false)
 	, myHasClicked(false)
@@ -547,10 +547,10 @@ void PlayerDirector::UpdateInputs()
 			mySelectedAction = eSelectedAction::HOLD_POSITION;
 		}
 	}
-	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_F1) == true)
+	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_F1) == true)
 	{
 		mySelectedUnits.RemoveAll();
-		mySelectedUnits.Add(myBuilding);
+		mySelectedUnits.Add(myBuilding);	
 	}
 
 	myLeftMouseDown = CU::InputWrapper::GetInstance()->MouseDown(0);
@@ -622,7 +622,6 @@ void PlayerDirector::UpdateControlGroups()
 	if (myControlPressed == false)
 	{
 		int index = -1;
-		myHasClicked = false;
 
 		if (CU::InputWrapper::GetInstance()->KeyDown(DIK_1) == true)
 		{
@@ -670,16 +669,19 @@ void PlayerDirector::UpdateControlGroups()
 			myHasClicked = true;
 		}
 		SelectControlGroup(index);
-		if (myHasClicked == true && mySelectedControlGroup == index && index > -1 && myCurrentDoubleClickTimer <= 0.f)
+		if (myHasClicked == true && mySelectedControlGroup == index && index > -1 && myCurrentDoubleClickTimer > 0.f)
 		{
 			CameraFocusOnControlGroup(index);
 			mySelectedControlGroup = -1;
 			myHasClicked = false;
 			myHasDoubleClicked = true;
 		}
+		
 		if (myHasClicked == true)
 		{
 			mySelectedControlGroup = index;
+			myHasClicked = false;
+			myCurrentDoubleClickTimer = myDoubleClickTime;
 		}
 	}
 }
