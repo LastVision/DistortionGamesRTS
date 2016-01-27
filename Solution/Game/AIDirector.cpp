@@ -711,6 +711,13 @@ void AIDirector::InterpretFuzzySet()
 
 void AIDirector::StartNextAction()
 {
+	if (myActionQueue.Size() == 0)
+	{
+		myCurrentAction.myFuzzyAction = eFuzzyAI::DO_NOTHING;
+		myCurrentAction.myIsDone = true;
+		return;
+	}
+
 	myCurrentAction = myActionQueue.GetLast();
 	myActionQueue.RemoveCyclicAtIndex(myActionQueue.Size() - 1);
 

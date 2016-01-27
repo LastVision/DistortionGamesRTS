@@ -119,7 +119,7 @@ void Prism::Scene::Render(bool aRenderNavMeshLines)
 		myInstances[i]->Render(myCamera, *myInstancingHelper);
 	}
 
-	myInstancingHelper->Render();
+	myInstancingHelper->Render(myDirectionalLightData);
 }
 
 void Prism::Scene::AddInstance(Instance* aInstance)

@@ -43,11 +43,12 @@ namespace Prism
 		void ActivateAlbedo(eOwnerType aOwner);
 		
 		bool SetGPUState(const CU::GrowingArray<CU::Matrix44<float>>& someWorldMatrices
-			, const CU::GrowingArray<CU::Vector3<float>>& someScales);
+			, const CU::GrowingArray<CU::Vector3<float>>& someScales, eOwnerType aOwner);
 		int GetIndexCount();
 		int GetVertexStart();
 
 		const std::string& GetTechniqueName() const override;
+		Model* GetRealModel(const CU::Vector3<float>& aModelPosition, const CU::Vector3<float>& aCameraPosition);
 
 	private:
 		

@@ -27,7 +27,7 @@ namespace Prism
 		void AddModel(eOwnerType aOwner, Model* aModel, const CU::Matrix44<float>& aWorldMatrix
 			, const CU::Vector3<float>& aScale);
 
-		void Render();
+		void Render(CU::StaticArray<DirectionalLightData, NUMBER_OF_DIRECTIONAL_LIGHTS>& someLights);
 
 	private:
 		const Camera* myCamera;

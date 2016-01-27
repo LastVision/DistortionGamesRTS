@@ -75,6 +75,10 @@ void Subscriber::ReceiveMessage(const RunScriptMessage&)
 {
 }
 
+void Subscriber::ReceiveMessage(const SelectUnitMessage&)
+{
+}
+
 void Subscriber::ReceiveMessage(const SpawnUnitMessage&)
 {
 }

@@ -24,6 +24,7 @@
 #include <PathFinderFunnel.h>
 #include "PlayerDirector.h"
 #include <PollingStation.h>
+#include <SelectUnitMessage.h>
 #include <Terrain.h>
 #include <ToggleGUIMessage.h>
 #include <ToggleBuildTimeMessage.h>
@@ -85,6 +86,7 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 	PostMaster::GetInstance()->Subscribe(eMessageType::MOVE_UNITS, this);
 	PostMaster::GetInstance()->Subscribe(eMessageType::TOGGLE_BUILD_TIME, this);
 	PostMaster::GetInstance()->Subscribe(eMessageType::EVENT_POSITION, this);
+	PostMaster::GetInstance()->Subscribe(eMessageType::SELECT_UNIT, this);
 
 	EntityData tempData;
 
@@ -155,6 +157,8 @@ PlayerDirector::~PlayerDirector()
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::MOVE_UNITS, this);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::TOGGLE_BUILD_TIME, this);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::EVENT_POSITION, this);
+	PostMaster::GetInstance()->UnSubscribe(eMessageType::SELECT_UNIT, this);
+
 	Prism::Audio::AudioInterface::GetInstance()->UnRegisterObject(myAudioSFXID);
 }
 
@@ -323,7 +327,8 @@ void PlayerDirector::ReceiveMessage(const OnClickMessage& aMessage)
 			break;
 		}
 	}
-	else if (aMessage.myEvent == eOnClickEvent::SELECT_CONTROL_GROUP)
+
+	if (aMessage.myEvent == eOnClickEvent::SELECT_CONTROL_GROUP)
 	{
 		SelectControlGroup(aMessage.myID);
 	}
@@ -359,6 +364,19 @@ void PlayerDirector::ReceiveMessage(const EventPositionMessage& aMessage)
 {
 	myLastEventPosition = aMessage.myPosition;
 	myHasEventToGoTo = true;
+}
+
+void PlayerDirector::ReceiveMessage(const SelectUnitMessage& aMessage)
+{
+	for (int i = mySelectedUnits.Size() - 1; i >= 0; --i)
+	{
+		if (i != aMessage.myUnitIndex)
+		{
+			mySelectedUnits[i]->SetSelect(false);
+			mySelectedUnits[i]->SetHovered(false);
+			mySelectedUnits.RemoveCyclicAtIndex(i);
+		}
+	}
 }
 
 const BuildingComponent& PlayerDirector::GetBuildingComponent() const

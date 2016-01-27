@@ -270,6 +270,7 @@
     <ClCompile Include="Edge.cpp" />
     <ClCompile Include="Effect.cpp" />
     <ClCompile Include="EffectContainer.cpp" />
+    <ClCompile Include="FogOfWarHelper.cpp" />
     <ClCompile Include="HeightMapFactory.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="FBXFactory.cpp" />
@@ -358,6 +359,7 @@
     <ClInclude Include="Effect.h" />
     <ClInclude Include="EffectContainer.h" />
     <ClInclude Include="EffectListener.h" />
+    <ClInclude Include="FogOfWarHelper.h" />
     <ClInclude Include="HeightMap.h" />
     <ClInclude Include="HeightMapFactory.h" />
     <ClInclude Include="Engine.h" />
