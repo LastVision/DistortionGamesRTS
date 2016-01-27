@@ -27,5 +27,6 @@ enum class eMessageType
 	ARTIFACT,
 	TUTORIAL,
 	BLOCK_MAP,
+	SELECT_UNIT,
 	COUNT,
 };

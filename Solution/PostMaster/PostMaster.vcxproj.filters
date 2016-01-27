@@ -121,5 +121,8 @@
     <ClInclude Include="BlockMapMessage.h">
       <Filter>Message</Filter>
     </ClInclude>
+    <ClInclude Include="SelectUnitMessage.h">
+      <Filter>Message</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
