@@ -17,6 +17,7 @@ BuildingComponent::BuildingComponent(Entity& aEntity, BuildingComponentData& aDa
 		myUnitUpgradeProgress[i] = 0;
 
 		myUpgradeCooldowns[i] = myUnitUpgrades[i][0].myCooldown;
+		myUpgradeMaxCooldowns[i] = myUnitUpgrades[i][0].myCooldown;
 	}
 }
 

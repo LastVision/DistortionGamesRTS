@@ -40,6 +40,7 @@ public:
 	void SetAttackRange2(float aRange2);
 
 	const float& GetRangerCooldown() const;
+	const float& GetRangerMaxCooldown() const;
 
 private:
 
@@ -130,4 +131,9 @@ inline void ActorComponent::SetAttackRange2(float aRange2)
 inline const float& ActorComponent::GetRangerCooldown() const
 {
 	return myRangerOneShotTimer;
+}
+
+inline const float& ActorComponent::GetRangerMaxCooldown() const
+{
+	return myRangerOneShotCooldown;
 }

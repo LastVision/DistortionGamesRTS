@@ -15,6 +15,7 @@ public:
 	bool IsActive();
 
 	const float& GetCooldown() const;
+	const float& GetMaxCooldown() const;
 
 private:
 	void Activate();
@@ -58,4 +59,9 @@ inline bool EnrageComponent::IsActive()
 inline const float& EnrageComponent::GetCooldown() const
 {
 	return myCurrentCooldown;
+}
+
+inline const float& EnrageComponent::GetMaxCooldown() const
+{
+	return myData.myCooldown;
 }

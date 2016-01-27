@@ -18,9 +18,12 @@ namespace GUI
 
 		void Render(const CU::Vector2<float>& aParentPosition) override;
 
-		void SetValue(const float& aValue) override;
+		void SetValue(const float& aFirstValue, const float& aSecondValue) override;
 
 	private:
 		const float* myCooldown;
+		const float* myMaxCooldown;
+		Prism::SpriteProxy* myCooldownIndicator;
+		Prism::SpriteProxy* myHasCooldownSprite;
 	};
 }

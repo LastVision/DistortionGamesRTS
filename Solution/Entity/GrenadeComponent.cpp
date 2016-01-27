@@ -97,6 +97,11 @@ const float& GrenadeComponent::GetCooldown() const
 	return myCurrentCooldown;
 }
 
+const float& GrenadeComponent::GetMaxCooldown() const
+{
+	return myOriginalCooldown;
+}
+
 void GrenadeComponent::Explosion()
 {
 	CU::Vector2<float> my2DPosition = { myPosition.x, myPosition.z };

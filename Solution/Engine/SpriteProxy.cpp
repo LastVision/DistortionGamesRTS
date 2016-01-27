@@ -5,6 +5,8 @@ namespace Prism
 {
 	SpriteProxy::SpriteProxy()
 		: mySprite(nullptr)
+		, myTopLeftUV(0.f, 0.f)
+		, myRightBottomUV(1.f, 1.f)
 	{
 	}
 
@@ -13,6 +15,7 @@ namespace Prism
 		if (mySprite != nullptr)
 		{
 			mySprite->SetSize(mySize, myHotspot);
+			mySprite->SetUVZeroToOne(myTopLeftUV, myRightBottomUV);
 			mySprite->Render(aPosition, aScale, aColor);
 		}
 	}
@@ -31,6 +34,18 @@ namespace Prism
 		}*/
 
 		return mySize;
+	}
+
+	void SpriteProxy::SetUVZeroToOne(const CU::Vector2<float> aTopLeft, const CU::Vector2<float>& aRightBottom)
+	{
+		if (aTopLeft.x < 0.f || aTopLeft.x > 1.f || aTopLeft.y < 0.f || aTopLeft.y > 1.f ||
+			aRightBottom.x < 0.f || aRightBottom.x > 1.f || aRightBottom.y < 0.f || aRightBottom.y > 1.f)
+		{
+			DL_ASSERT("[Sprite] UV coordinates are set wrong. Has to be in a zero to one space.");
+		}
+
+		myTopLeftUV = aTopLeft;
+		myRightBottomUV = aRightBottom;
 	}
 
 	void SpriteProxy::ResizeTexture(ID3D11Texture2D* aSrcTexture)

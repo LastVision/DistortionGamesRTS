@@ -14,6 +14,7 @@ public:
 	eOwnerType ModifyOwnership(eOwnerType anOwner, float aModifyValue);
 	void SetTargetPosition(const CU::Vector3f& aTargetPosition);
 	const float& GetCurrentCooldown() const;
+	const float& GetMaxCooldown() const;
 private:
 	void operator=(TotemComponent&) = delete;
 
@@ -55,4 +56,9 @@ inline eComponentType TotemComponent::GetType()
 inline const float& TotemComponent::GetCurrentCooldown() const
 {
 	return myCurrentCooldown;
+}
+
+inline const float& TotemComponent::GetMaxCooldown() const
+{
+	return myOriginalCooldown;
 }
