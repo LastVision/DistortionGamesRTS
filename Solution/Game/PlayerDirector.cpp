@@ -55,6 +55,11 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 	, myAudioSFXID(-1)
 	, myMaxSelectedUnits(0)
 	, myHasEventToGoTo(false)
+	, mySelectedControlGroup(-1)
+	, myDoubleClickTime(0.5f)
+	, myCurrentDoubleClickTimer(0.f)
+	, myHasDoubleClicked(false)
+	, myHasClicked(false)
 {
 	myAudioSFXID = Prism::Audio::AudioInterface::GetInstance()->GetUniqueID();
 	myDragSelectionPositions.Reserve(4);
@@ -111,7 +116,7 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 		e = reader.ForceFindFirstChild(totemElement, "Cooldown");
 		reader.ForceReadAttribute(e, "value", valueToUse);
 		tempData.myTotemData.myCooldown = valueToUse;
-		
+
 		e = reader.ForceFindFirstChild(totemElement, "Duration");
 		reader.ForceReadAttribute(e, "value", valueToUse);
 		tempData.myTotemData.myDuration = valueToUse;
@@ -135,7 +140,7 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 
 PlayerDirector::~PlayerDirector()
 {
-	myCursor->SetCurrentCursor(eCursorType::NORMAL); 
+	myCursor->SetCurrentCursor(eCursorType::NORMAL);
 
 	SAFE_DELETE(myGUIManager);
 	SAFE_DELETE(myDragSelectionSpriteVertical);
@@ -161,6 +166,13 @@ void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 	if (myCursor->GetCurrentCursor() == eCursorType::ATTACK) // prevent cursor getting stuck after hovering enemy
 	{
 		myCursor->SetCurrentCursor(eCursorType::NORMAL);
+	}
+
+	myCurrentDoubleClickTimer -= aDeltaTime;
+	if (myCurrentDoubleClickTimer <= 0 && myHasDoubleClicked == true)
+	{
+		myCurrentDoubleClickTimer = myDoubleClickTime;
+		myHasDoubleClicked = false;
 	}
 
 	aDeltaTime *= myTimeMultiplier;
@@ -303,8 +315,8 @@ void PlayerDirector::ReceiveMessage(const OnClickMessage& aMessage)
 	else if (aMessage.myEvent == eOnClickEvent::SELECT_CONTROL_GROUP)
 	{
 		SelectControlGroup(aMessage.myID);
-			}
-		}
+	}
+}
 
 void PlayerDirector::ReceiveMessage(const TimeMultiplierMessage& aMessage)
 {
@@ -378,7 +390,7 @@ void PlayerDirector::SelectUnit(Entity* anEntity)
 			{
 				return;
 			}
-	
+
 			shouldAddToSelectedUnits = false;
 		}
 	}
@@ -464,7 +476,7 @@ CU::Vector3<float> PlayerDirector::CalcCursorWorldPosition(const CU::Vector2<flo
 
 	return worldPos;
 }
-	
+
 const float& PlayerDirector::GetTotemCooldown() const
 {
 	return myTotem->GetComponent<TotemComponent>()->GetCurrentCooldown();
@@ -586,46 +598,84 @@ void PlayerDirector::UpdateControlGroups()
 	if (myControlPressed == false)
 	{
 		int index = -1;
+		myHasClicked = false;
 
 		if (CU::InputWrapper::GetInstance()->KeyDown(DIK_1) == true)
 		{
 			index = 0;
+			myHasClicked = true;
 		}
 		else if (CU::InputWrapper::GetInstance()->KeyDown(DIK_2) == true)
 		{
 			index = 1;
+			myHasClicked = true;
 		}
 		else if (CU::InputWrapper::GetInstance()->KeyDown(DIK_3) == true)
 		{
 			index = 2;
+			myHasClicked = true;
 		}
 		else if (CU::InputWrapper::GetInstance()->KeyDown(DIK_4) == true)
 		{
 			index = 3;
+			myHasClicked = true;
 		}
 		else if (CU::InputWrapper::GetInstance()->KeyDown(DIK_5) == true)
 		{
 			index = 4;
+			myHasClicked = true;
 		}
 		else if (CU::InputWrapper::GetInstance()->KeyDown(DIK_6) == true)
 		{
 			index = 5;
+			myHasClicked = true;
 		}
 		else if (CU::InputWrapper::GetInstance()->KeyDown(DIK_7) == true)
 		{
 			index = 6;
+			myHasClicked = true;
 		}
 		else if (CU::InputWrapper::GetInstance()->KeyDown(DIK_8) == true)
 		{
 			index = 7;
+			myHasClicked = true;
 		}
 		else if (CU::InputWrapper::GetInstance()->KeyDown(DIK_9) == true)
 		{
 			index = 8;
+			myHasClicked = true;
 		}
 		SelectControlGroup(index);
-			}
-			}
+		if (myHasClicked == true && mySelectedControlGroup == index && index > -1 && myCurrentDoubleClickTimer <= 0.f)
+		{
+			CameraFocusOnControlGroup(index);
+			mySelectedControlGroup = -1;
+			myHasClicked = false;
+			myHasDoubleClicked = true;
+		}
+		if (myHasClicked == true)
+		{
+			mySelectedControlGroup = index;
+		}
+	}
+}
+
+void PlayerDirector::CameraFocusOnControlGroup(int aIndex)
+{
+	CU::Vector2<float> averagePosition;
+	if (aIndex >= 0 && myControlGroups[aIndex].Size() > 0)
+	{
+		for (int i = 0; i < myControlGroups[aIndex].Size(); ++i)
+		{
+			averagePosition += myControlGroups[aIndex][i]->GetPosition();
+		}
+		if (myControlGroups[aIndex].Size() > 0)
+		{
+			averagePosition /= static_cast<float>(myControlGroups[aIndex].Size());
+		}
+	}
+	PostMaster::GetInstance()->SendMessage(MoveCameraMessage(averagePosition, eHowToHandleMovement::WORLD_POSITION));
+}
 
 void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 {
