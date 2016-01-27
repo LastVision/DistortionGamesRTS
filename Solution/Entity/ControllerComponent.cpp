@@ -317,7 +317,17 @@ void ControllerComponent::FillCommandList(eEntityCommand aAction, bool aClearCom
 	else
 	{
 		myCommands.RemoveAll();
-		myCommands.Add(EntityCommandData(eEntityCommand::STOP, nullptr, myEntity.GetPosition()));
+		
+		//TODO: if outside navmesh go in else if inside navmesh gives feedback that the unit can't go here either by sound or gui or both
+		if (myTerrain.GetPathFinder()->IsOutside(myEntity.GetPosition()) == true)
+		{
+			myCommands.Add(EntityCommandData(eEntityCommand::MOVE, aEntity, aTargetPosition));
+		}
+		else
+		{
+			myCommands.Add(EntityCommandData(eEntityCommand::STOP, nullptr, myEntity.GetPosition()));
+			//TODO: Play Can't go here effects
+		}
 	}
 
 	if (aClearCommandQueue == false)

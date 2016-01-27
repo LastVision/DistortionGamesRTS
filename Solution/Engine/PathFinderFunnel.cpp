@@ -52,6 +52,11 @@ namespace Prism
 			return false;
 		}
 
+		bool PathFinderFunnel::IsOutside(const CU::Vector2<float>& aPosition)
+		{
+			return myAStar->IsOutside(aPosition);
+		}
+
 		void PathFinderFunnel::CalcFunneledPath(const CU::Vector2<float>& aStart, const CU::Vector2<float>& anEnd
 			, const CU::GrowingArray<Prism::Navigation::Triangle*>& someTriangles
 			, CU::GrowingArray<CU::Vector2<float>>& someFunneledPointsOut) const
