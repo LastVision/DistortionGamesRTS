@@ -9,6 +9,8 @@
 #include "../Entity/ControllerComponent.h"
 #include "../Entity/HealthComponent.h"
 #include "../Entity/PromotionComponent.h"
+#include <PostMaster.h>
+#include <SelectUnitMessage.h>
 #include "UnitInfoWidget.h"
 #include "WidgetContainer.h"
 
@@ -33,7 +35,7 @@ namespace GUI
 		CU::Vector2<float> unitSize;
 		CU::Vector2<float> portraitSize;
 		CU::Vector2<float> statsSize;
-		
+
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "size"), "x", mySize.x);
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "size"), "y", mySize.y);
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "unitsize"), "x", unitSize.x);
@@ -107,6 +109,26 @@ namespace GUI
 			else if (mySelectedType == eEntityType::BASE_BUILING)
 			{
 				RenderBaseInfo(aParentPosition);
+			}
+		}
+	}
+
+	void UnitInfoWidget::OnMousePressed(const CU::Vector2<float>& aPosition)
+	{
+		if (myUnits.Size() > 1)
+		{
+			for (int i = 0; i < myUnits.Size(); i++)
+			{
+				CU::Vector2<float> position = { (myGruntUnit->GetSize().x * i) + (i * 10.f), 0.f };
+				position += myUnitPosition + myParent->GetPosition();
+
+				if (aPosition.x >= position.x &&
+					aPosition.y >= position.y &&
+					aPosition.x <= position.x + myGruntUnit->GetSize().x &&
+					aPosition.y <= position.y + myGruntUnit->GetSize().y)
+				{
+					PostMaster::GetInstance()->SendMessage(SelectUnitMessage(i));
+				}
 			}
 		}
 	}
