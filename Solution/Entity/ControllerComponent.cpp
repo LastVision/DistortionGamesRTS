@@ -57,7 +57,7 @@ void ControllerComponent::ReceiveNote(const BehaviorNote& aNote)
 
 void ControllerComponent::Update(float)
 {
-	if (myEntity.GetState() == eEntityState::DIE)
+	if (myEntity.GetAlive() == false || myEntity.GetState() == eEntityState::DIE)
 	{
 		return;
 	}
