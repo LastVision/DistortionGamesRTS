@@ -165,6 +165,7 @@
     <ClInclude Include="KillUnitMessage.h" />
     <ClInclude Include="MinimapEventMessage.h" />
     <ClInclude Include="MinimapMoveMessage.h" />
+    <ClInclude Include="SelectUnitMessage.h" />
     <ClInclude Include="TextMessage.h" />
     <ClInclude Include="TimeMultiplierMessage.h" />
     <ClInclude Include="FadeMessage.h" />
