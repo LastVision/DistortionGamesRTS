@@ -26,6 +26,7 @@ namespace Prism
 
 			const CU::GrowingArray<Triangle*>& GetLatestPath();
 
+			bool IsOutside(const CU::Vector2<float>& aPosition);
 		private:
 			void operator=(PathFinderAStar&) = delete;
 			bool FindStartAndEnd(const CU::Vector2<float>& aStart, const CU::Vector2<float>& anEnd);
