@@ -188,6 +188,9 @@
     <ClCompile Include="InstancingHelper.cpp">
       <Filter>Rendering</Filter>
     </ClCompile>
+    <ClCompile Include="FogOfWarHelper.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h" />
@@ -420,6 +423,9 @@
     <ClInclude Include="SelectionCircle.h" />
     <ClInclude Include="RenderPlane.h" />
     <ClInclude Include="InstancingHelper.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="FogOfWarHelper.h">
       <Filter>Rendering</Filter>
     </ClInclude>
   </ItemGroup>
