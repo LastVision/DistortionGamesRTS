@@ -9,6 +9,7 @@ namespace GUI
 	ResourceBarWidget::ResourceBarWidget(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement, const PlayerDirector* aPlayer, const AIDirector* anAI)
 		: Widget()
 		, myValueSprite(nullptr)
+		, myTextScale(1.f)
 	{
 		std::string valueSpritePath = "";
 		std::string value = "";
@@ -25,6 +26,7 @@ namespace GUI
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "value"), "type", value);
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "value"), "positionx", textposition.x);
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "value"), "positiony", textposition.y);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "textscale"), "value", myTextScale);
 
 		tinyxml2::XMLElement* spriteElement = aReader->FindFirstChild(anXMLElement, "valuesprite");
 		if (spriteElement != nullptr)
@@ -78,7 +80,7 @@ namespace GUI
 			myValueSprite->Render(myPosition + aParentPosition + mySpritePosition);
 		}
 
-		Prism::Engine::GetInstance()->PrintText(*myValue, myPosition + aParentPosition + myTextPosition, Prism::eTextType::RELEASE_TEXT);
+		Prism::Engine::GetInstance()->PrintText(*myValue, myPosition + aParentPosition + myTextPosition, Prism::eTextType::RELEASE_TEXT, myTextScale);
 	}
 
 	void ResourceBarWidget::OnResize(const CU::Vector2<float>& aNewWindowSize, const CU::Vector2<float>& anOldWindowSize, bool aIsFullScreen)
@@ -101,5 +103,7 @@ namespace GUI
 			CU::Vector2<float> ratioSpritePosition = mySpritePosition / anOldWindowSize;
 			mySpritePosition = ratioSpritePosition * aNewWindowSize;
 		}
+
+		myTextScale = (myTextScale / anOldWindowSize.x) * aNewWindowSize.x; 
 	}
 }

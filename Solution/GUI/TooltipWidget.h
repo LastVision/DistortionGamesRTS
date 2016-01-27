@@ -38,5 +38,6 @@ namespace GUI
 
 		Prism::SpriteProxy* myBackground;
 
+		float myTextScale;
 	};
 }

@@ -120,7 +120,7 @@ namespace GUI
 			for (int i = 0; i < myUnits.Size(); i++)
 			{
 				CU::Vector2<float> position = { (myGruntUnit->GetSize().x * i) + (i * 10.f), 0.f };
-				position += myUnitPosition + myParent->GetPosition();
+				position += myUnitPosition + myParent->GetPosition(); // hitta bättre lösning för detta
 
 				if (aPosition.x >= position.x &&
 					aPosition.y >= position.y &&
@@ -137,37 +137,39 @@ namespace GUI
 	{
 		Widget::OnResize(aNewWindowSize, anOldWindowSize, aIsFullScreen);
 		myBuildingTimer->OnResize(aNewWindowSize, anOldWindowSize, aIsFullScreen);
+		myTextScale = (myTextScale / anOldWindowSize.x) * aNewWindowSize.x;
 
 		if (myIsFullscreen == false)
 		{
 			CU::Vector2<float> unitRatioSize = myGruntUnit->GetSize() / anOldWindowSize.x;
 			CU::Vector2<float> portraitRatioSize = myBuildingPortrait->GetSize() / anOldWindowSize.x;
-			CU::Vector2<float> ratioUnitPostion = myUnitPosition / anOldWindowSize.x;
-			CU::Vector2<float> ratioPortraitPostion = myPortraitPosition / anOldWindowSize.x;
-			CU::Vector2<float> ratioStatsSize = myStatsSprite->GetSize() / anOldWindowSize.x;
 
-			myUnitPosition = ratioUnitPostion * aNewWindowSize.x;
-			myPortraitPosition = ratioPortraitPostion * aNewWindowSize.x;
 			myGruntUnit->SetSize(unitRatioSize * aNewWindowSize.x, { 0.f, 0.f });
+			myRangerUnit->SetSize(unitRatioSize * aNewWindowSize.x, { 0.f, 0.f });
+			myTankUnit->SetSize(unitRatioSize * aNewWindowSize.x, { 0.f, 0.f });
 			myGruntPortrait->SetSize(portraitRatioSize * aNewWindowSize.x, { 0.f, 0.f });
+			myRangerPortrait->SetSize(portraitRatioSize * aNewWindowSize.x, { 0.f, 0.f });
+			myTankPortrait->SetSize(portraitRatioSize * aNewWindowSize.x, { 0.f, 0.f });
 			myBuildingPortrait->SetSize(portraitRatioSize * aNewWindowSize.x, { 0.f, 0.f });
-			myStatsSprite->SetSize(ratioStatsSize * aNewWindowSize.x, { 0.f, 0.f });
-			//myTextScale = myTextScale /;
+			myUnitPosition = (myUnitPosition / anOldWindowSize.x) * aNewWindowSize.x;
+			myPortraitPosition = (myPortraitPosition / anOldWindowSize.x) * aNewWindowSize.x;
+			myStatsSprite->SetSize((myStatsSprite->GetSize() / anOldWindowSize.x) * aNewWindowSize.x, { 0.f, 0.f });
 		}
 		else
 		{
 			CU::Vector2<float> unitRatioSize = myGruntUnit->GetSize() / anOldWindowSize;
 			CU::Vector2<float> portraitRatioSize = myBuildingPortrait->GetSize() / anOldWindowSize;
-			CU::Vector2<float> ratioUnitPostion = myUnitPosition / anOldWindowSize;
-			CU::Vector2<float> ratioPortraitPostion = myPortraitPosition / anOldWindowSize;
-			CU::Vector2<float> ratioStatsSize = myStatsSprite->GetSize() / anOldWindowSize;
 
-			myUnitPosition = ratioUnitPostion * aNewWindowSize;
-			myPortraitPosition = ratioPortraitPostion * aNewWindowSize;
 			myGruntUnit->SetSize(unitRatioSize * aNewWindowSize, { 0.f, 0.f });
+			myRangerUnit->SetSize(unitRatioSize * aNewWindowSize, { 0.f, 0.f });
+			myTankUnit->SetSize(unitRatioSize * aNewWindowSize, { 0.f, 0.f });
 			myGruntPortrait->SetSize(portraitRatioSize * aNewWindowSize, { 0.f, 0.f });
+			myRangerPortrait->SetSize(portraitRatioSize * aNewWindowSize, { 0.f, 0.f });
+			myTankPortrait->SetSize(portraitRatioSize * aNewWindowSize, { 0.f, 0.f });
 			myBuildingPortrait->SetSize(portraitRatioSize * aNewWindowSize, { 0.f, 0.f });
-			myStatsSprite->SetSize(ratioStatsSize * aNewWindowSize, { 0.f, 0.f });
+			myUnitPosition = (myUnitPosition / anOldWindowSize) * aNewWindowSize;
+			myPortraitPosition = (myPortraitPosition / anOldWindowSize) * aNewWindowSize;
+			myStatsSprite->SetSize((myStatsSprite->GetSize() / anOldWindowSize) * aNewWindowSize, { 0.f, 0.f });
 		}
 	}
 
