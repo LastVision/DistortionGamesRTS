@@ -2,6 +2,7 @@
 
 #include "AIDirector.h"
 #include <Camera.h>
+#include <CollisionComponent.h>
 #include <CommonHelper.h>
 #include "Console.h"
 #include <DirectionalLight.h>
@@ -396,6 +397,10 @@ void LevelFactory::LoadProps(XMLReader& aReader, tinyxml2::XMLElement* aLevelEle
 			propRotation, propScale));
 		myCurrentLevel->myEntities.GetLast()->AddToScene();
 		myCurrentLevel->myEntities.GetLast()->Reset();
+		if (myCurrentLevel->myEntities.GetLast()->GetComponent<CollisionComponent>() != nullptr)
+		{
+			PollingStation::GetInstance()->RegisterEntity(myCurrentLevel->myEntities.GetLast());
+		}
 	}
 }
 
