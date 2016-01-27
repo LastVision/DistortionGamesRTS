@@ -135,19 +135,19 @@ namespace GUI
 			{
 				if (myFirstSelectedGrunt == nullptr && myUnits[i]->GetUnitType() == eUnitType::GRUNT)
 				{
-					myGruntActionButtons->At(0)->SetValue(myUnits[i]->GetComponent<GrenadeComponent>()->GetCooldown());
+					myGruntActionButtons->At(0)->SetValue(myUnits[i]->GetComponent<GrenadeComponent>()->GetCooldown(), myUnits[i]->GetComponent<GrenadeComponent>()->GetMaxCooldown());
 					myFirstSelectedGrunt = myUnits[i];
 				}
 
 				if (myFirstSelectedRanger == nullptr && myUnits[i]->GetUnitType() == eUnitType::RANGER)
 				{
-					myRangerActionButtons->At(0)->SetValue(myUnits[i]->GetComponent<ActorComponent>()->GetRangerCooldown());
+					myRangerActionButtons->At(0)->SetValue(myUnits[i]->GetComponent<ActorComponent>()->GetRangerCooldown(), myUnits[i]->GetComponent<ActorComponent>()->GetRangerMaxCooldown());
 					myFirstSelectedRanger = myUnits[i];
 				}
 
 				if (myFirstSelectedTank == nullptr && myUnits[i]->GetUnitType() == eUnitType::TANK)
 				{
-					myTankActionButtons->At(0)->SetValue(myUnits[i]->GetComponent<EnrageComponent>()->GetCooldown());
+					myTankActionButtons->At(0)->SetValue(myUnits[i]->GetComponent<EnrageComponent>()->GetCooldown(), myUnits[i]->GetComponent<EnrageComponent>()->GetMaxCooldown());
 					myFirstSelectedTank = myUnits[i];
 				}
 			}

@@ -14,10 +14,12 @@ namespace Prism
 		friend class ModelLoader;
 	public:
 		void Render(const CU::Vector2<float>& aPosition, const CU::Vector2<float>& aScale = { 1.f, 1.f }
-			, const CU::Vector4<float>& aColor = { 1.f, 1.f, 1.f, 1.f });
+		, const CU::Vector4<float>& aColor = { 1.f, 1.f, 1.f, 1.f });
 
 		void SetSize(const CU::Vector2<float> aTextureSize, const CU::Vector2<float>& aHotSpot);
 		const CU::Vector2<float>& GetSize() const;
+
+		void SetUVZeroToOne(const CU::Vector2<float> aTopLeft, const CU::Vector2<float>& aRightBottom);
 
 		void ResizeTexture(ID3D11Texture2D* aSrcTexture);
 
@@ -44,6 +46,9 @@ namespace Prism
 		CU::Vector2<float> myHotspot;
 		CU::Vector2<float> myNewSize;
 		CU::Vector2<float> myNewHotSpot;
+
+		CU::Vector2<float> myTopLeftUV;
+		CU::Vector2<float> myRightBottomUV;
 	};
 }
 
@@ -78,6 +83,31 @@ inline void Prism::Sprite::SetSize(const CU::Vector2<float> aTextureSize, const 
 	//CreateVertices();
 	//ModelLoader::GetInstance()->UnPause();
 	////Do the resizing on ModelLoader instead? so we dont have to pause
+}
+
+inline void Prism::Sprite::SetUVZeroToOne(const CU::Vector2<float> aTopLeft, const CU::Vector2<float>& aRightBottom)
+{
+	if (myTopLeftUV == aTopLeft && myRightBottomUV == aRightBottom)
+	{
+		return;
+	}
+
+	bool shouldPause = !Prism::ModelLoader::GetInstance()->IsPaused();
+
+	if (shouldPause == true)
+	{
+		ModelLoader::GetInstance()->Pause();
+	}
+
+	myTopLeftUV = aTopLeft;
+	myRightBottomUV = aRightBottom;
+
+	CreateVertices();
+
+	if (shouldPause == true)
+	{
+		ModelLoader::GetInstance()->UnPause();
+	}
 }
 
 inline const CU::Vector2<float>& Prism::Sprite::GetSize() const

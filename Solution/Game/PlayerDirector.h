@@ -80,11 +80,13 @@ public:
 	void AttackMoveSelectedUnits(const CU::Vector2<float>& aPosition);
 
 	const float& GetTotemCooldown() const;
+	const float& GetTotemMaxCooldown() const;
 
 	const bool& HasUnlockedTank() const;
 	const bool& HasUnlockedRanger() const;
 	const int& GetUpgradeLevel(int aUnitID) const;
 	const float& GetUpgradeCooldown(int aUnitID) const;
+	const float& GetUpgradeMaxCooldown(int aUnitID) const;
 
 private:
 	void UpdateInputs();

@@ -36,6 +36,7 @@ namespace GUI
 		const std::string& GetHoverText() const;
 
 		virtual inline void SetValue(const float& aValue);
+		virtual inline void SetValue(const float& aFirstValue, const float& aSecondValue);
 
 		inline Widget* GetParent() const;
 		inline void SetParent(Widget* aParent);
@@ -86,6 +87,10 @@ namespace GUI
 	}
 	
 	inline void Widget::SetValue(const float&)
+	{
+	}
+
+	inline void Widget::SetValue(const float&, const float&)
 	{
 	}
 

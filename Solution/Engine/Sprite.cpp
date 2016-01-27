@@ -17,6 +17,8 @@ Prism::Sprite::Sprite(const std::string& aFileName, const CU::Vector2<float>& aS
 	, myHotspot(aHotSpot)
 	, myTexture(nullptr)
 	, myShaderView(nullptr)
+	, myTopLeftUV(0.f, 0.f)
+	, myRightBottomUV(1.f, 1.f)
 {
 	myFileName = aFileName;
 
@@ -48,6 +50,8 @@ Prism::Sprite::Sprite(ID3D11Texture2D* aTexture, const CU::Vector2<float>& aSpri
 	, myHotspot(aHotSpot)
 	, myTexture(nullptr)
 	, myShaderView(nullptr)
+	, myTopLeftUV(0.f, 0.f)
+	, myRightBottomUV(1.f, 1.f)
 {
 	myFileName = "Inited from ID3D11Texture";
 
@@ -130,19 +134,19 @@ void Prism::Sprite::CreateVertices()
 
 	VertexPosUV vert;
 	vert.myPos = { left, top, 0.0f };
-	vert.myUV = { 0.0f, 0.0f };
+	vert.myUV = { myTopLeftUV.x, myTopLeftUV.y };
 	vertices.Add(vert);
 
 	vert.myPos = { right, bottom, 0.0f };
-	vert.myUV = { 1.0f, 1.0f };
+	vert.myUV = { myRightBottomUV.x, myRightBottomUV.y };
 	vertices.Add(vert);
 
 	vert.myPos = { left, bottom, 0.0f };
-	vert.myUV = { 0.0f, 1.0f };
+	vert.myUV = { myTopLeftUV.x, myRightBottomUV.y };
 	vertices.Add(vert);
 
 	vert.myPos = { right, top, 0.0f };
-	vert.myUV = { 1.0f, 0.0f };
+	vert.myUV = { myRightBottomUV.x, myTopLeftUV.y };
 	vertices.Add(vert);
 
 
