@@ -185,6 +185,9 @@
     </ClCompile>
     <ClCompile Include="SelectionCircle.cpp" />
     <ClCompile Include="RenderPlane.cpp" />
+    <ClCompile Include="InstancingHelper.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h" />
@@ -416,6 +419,9 @@
     </ClInclude>
     <ClInclude Include="SelectionCircle.h" />
     <ClInclude Include="RenderPlane.h" />
+    <ClInclude Include="InstancingHelper.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Precompile">

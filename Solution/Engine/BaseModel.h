@@ -25,8 +25,10 @@ namespace Prism
 		virtual ~BaseModel();
 		Effect* GetEffect();
 
+		virtual const std::string& GetTechniqueName() const;
+
 	protected:
-		void EvaluateEffectTechnique();
+		void EvaluateEffectTechnique(bool aInstanced);
 		void Render();
 
 		void InitInputLayout(D3D11_INPUT_ELEMENT_DESC* aVertexDescArray, int aArraySize, const std::string& aDebugName);
@@ -59,4 +61,9 @@ namespace Prism
 		std::string myFileName;
 		std::string myTechniqueName;
 	};
+
+	inline const std::string& BaseModel::GetTechniqueName() const
+	{
+		return myTechniqueName;
+	}
 }

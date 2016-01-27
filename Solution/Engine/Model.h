@@ -42,9 +42,18 @@ namespace Prism
 
 		void ActivateAlbedo(eOwnerType aOwner);
 		
+		bool SetGPUState(const CU::GrowingArray<CU::Matrix44<float>>& someWorldMatrices
+			, const CU::GrowingArray<CU::Vector3<float>>& someScales);
+		int GetIndexCount();
+		int GetVertexStart();
+
+		const std::string& GetTechniqueName() const override;
 
 	private:
 		
+		void InitInstancingBuffers();
+		void SetupInstancingBuffers();
+
 		bool myIsNULLObject;
 
 		
@@ -60,5 +69,11 @@ namespace Prism
 		bool myInited;
 		bool myIsLodGroup;
 		LodGroup* myLodGroup;
+
+		D3D11_BUFFER_DESC* myInstancingBufferDesc;
+		VertexBufferWrapper* myInstancingMatrixBuffer;
+		VertexBufferWrapper* myInstancingScaleBuffer;
+		ID3D11Buffer* myVertexBuffers[3];
+		const int myMaxInstances;
 	};
 }

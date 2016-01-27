@@ -67,7 +67,7 @@ namespace Prism
 		return myEffect;
 	}
 
-	void BaseModel::EvaluateEffectTechnique()
+	void BaseModel::EvaluateEffectTechnique(bool aInstanced)
 	{
 		int uvCount = 0;
 		bool hasVertexColor = false;
@@ -117,6 +117,11 @@ namespace Prism
 			}
 		}
 
+		
+		if (aInstanced == true)
+		{
+			myTechniqueName += "_INSTANCED";
+		}
 	}
 
 	void BaseModel::Render()

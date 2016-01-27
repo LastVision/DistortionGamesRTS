@@ -91,6 +91,7 @@ public:
 private:
 	void UpdateInputs();
 	void UpdateControlGroups();
+	void CameraFocusOnControlGroup(int aIndex);
 	CU::Vector3<float> CalcCursorWorldPosition(const CU::Vector2<float>& aMousePosition, const Prism::Camera& aCamera);
 	void UpdateMouseInteraction(const Prism::Camera& aCamera);
 	void SelectOrHoverEntity(Entity* aEntity, bool &aSelected, bool &aHovered
@@ -102,6 +103,7 @@ private:
 	void SelectControlGroup(int anIndex);
 
 	CU::StaticArray<CU::GrowingArray<Entity*>, AMOUNT_OF_CONTROL_GROUPS> myControlGroups;
+	int mySelectedControlGroup;
 
 	CU::GrowingArray<Entity*> mySelectedUnits;
 	GUI::GUIManager* myGUIManager;
@@ -118,6 +120,11 @@ private:
 	eSelectedAction mySelectedAction;
 
 	bool myRenderGUI;
+
+	bool myHasDoubleClicked;
+	bool myHasClicked;
+	float myCurrentDoubleClickTimer;
+	float myDoubleClickTime;
 
 	float myTweakValueX;
 	float myTweakValueY;

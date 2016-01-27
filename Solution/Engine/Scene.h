@@ -12,6 +12,7 @@ namespace Prism
 	class PointLight;
 	class SpotLight;
 	class Terrain;
+	class InstancingHelper;
 #ifdef SCENE_USE_OCTREE
 	class Octree;
 #endif
@@ -41,6 +42,7 @@ namespace Prism
 		CU::GrowingArray<DirectionalLight*> myDirectionalLights;
 		CU::GrowingArray<PointLight*> myPointLights;
 		CU::GrowingArray<SpotLight*> mySpotLights;
+		InstancingHelper* myInstancingHelper;
 
 		const Camera& myCamera;
 		Terrain& myTerrain;
