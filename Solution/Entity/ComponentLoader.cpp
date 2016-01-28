@@ -146,18 +146,6 @@ void ComponentLoader::LoadBuidlingComponent(XMLReader& aDocument, tinyxml2::XMLE
 					aDocument.ForceReadAttribute(upgradeElem, "attackspeed", upgrade.myAttackSpeedModifier);
 					aDocument.ForceReadAttribute(upgradeElem, "movespeed", upgrade.myMoveSpeedModifier);
 
-					upgrade.myAttackModifier += 100.f;
-					upgrade.myAttackModifier /= 100.f;
-
-					upgrade.myArmorModifier += 100.f;
-					upgrade.myArmorModifier /= 100.f;
-
-					upgrade.myAttackSpeedModifier += 100.f;
-					upgrade.myAttackSpeedModifier /= 100.f;
-
-					upgrade.myMoveSpeedModifier += 100.f;
-					upgrade.myMoveSpeedModifier /= 100.f;
-
 					aOutputData.myUnitUpgrades[unitIndex][upgradeIndex] = upgrade;
 
 					++upgradeIndex;

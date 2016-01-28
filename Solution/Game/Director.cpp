@@ -76,7 +76,6 @@ void Director::Update(float aDeltaTime)
 		if (myActiveUnits[i]->GetAlive() == false)
 		{
 			myDeadUnits.Add(myActiveUnits[i]);
-			//myActiveUnits[i]->RemoveSelectionRingFromScene();
 			myActiveUnits.RemoveCyclicAtIndex(i);
 		}
 	}
