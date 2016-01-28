@@ -36,6 +36,8 @@ namespace GUI
 		myWidgets->SetPosition({ 0.f, 0.f });
 
 		ReadXML(aXMLPath);
+
+		OnResize(Prism::Engine::GetInstance()->GetWindowSizeInt().x, Prism::Engine::GetInstance()->GetWindowSizeInt().y);
 	}
 
 	GUIManager::~GUIManager()
@@ -120,8 +122,6 @@ namespace GUI
 		ReadFiles(reader, XMLPathElement);
 
 		reader.CloseDocument();
-
-		OnResize(Prism::Engine::GetInstance()->GetWindowSizeInt().x, Prism::Engine::GetInstance()->GetWindowSizeInt().y);
 	}
 
 	void GUIManager::ReadContainers(XMLReader& aReader, tinyxml2::XMLElement* aContainerElement)
