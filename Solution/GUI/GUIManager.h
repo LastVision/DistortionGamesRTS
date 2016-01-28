@@ -14,6 +14,13 @@ namespace Prism
 	class Camera;
 }
 
+namespace tinyxml2
+{
+	class XMLElement;
+}
+
+class XMLReader;
+
 namespace GUI
 {
 	class WidgetContainer;
@@ -42,6 +49,9 @@ namespace GUI
 		const Widget* GetActiveWidget() const;
 
 	private:
+
+		void ReadContainers(XMLReader& aReader, tinyxml2::XMLElement* aContainerElement);
+		void ReadFiles(XMLReader& aReader, tinyxml2::XMLElement* aFilePathElement);
 
 		void CheckMousePressed();
 		void CheckMouseDown();
