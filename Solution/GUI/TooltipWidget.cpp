@@ -101,17 +101,35 @@ namespace GUI
 		{
 			myHeadlinePosition = (myHeadlinePosition / anOldWindowSize.x) * aNewWindowSize.x;
 			myTextPosition = (myTextPosition / anOldWindowSize.x) * aNewWindowSize.x;
+			myCostTextOffset = (myCostTextOffset / anOldWindowSize.x) * aNewWindowSize.x;
+			myCooldownPosition = (myCooldownPosition / anOldWindowSize.x) * aNewWindowSize.x;
+			myGunpowderPosition = (myGunpowderPosition / anOldWindowSize.x) * aNewWindowSize.x;
+			mySupplyPosition = (mySupplyPosition / anOldWindowSize.x) * aNewWindowSize.x;
+			myArtifactPosition = (myArtifactPosition / anOldWindowSize.x) * aNewWindowSize.x;
+			myBackground->SetSize((myBackground->GetSize() / anOldWindowSize.x) * aNewWindowSize.x, { 0.f, 0.f });
 
-			CU::Vector2<float> backgroundSize = myBackground->GetSize() / anOldWindowSize.x;
-			myBackground->SetSize(backgroundSize * aNewWindowSize.x, { 0.f, 0.f });
+			CU::Vector2<float> costSize = (myCooldownSprite->GetSize() / anOldWindowSize.x) * aNewWindowSize.x;
+			myCooldownSprite->SetSize(costSize, { 0.f, 0.f });
+			myGunpowderSprite->SetSize(costSize, { 0.f, 0.f });
+			mySupplySprite->SetSize(costSize, { 0.f, 0.f });
+			myArtifactSprite->SetSize(costSize, { 0.f, 0.f });
 		}
 		else
 		{
 			myHeadlinePosition = (myHeadlinePosition / anOldWindowSize) * aNewWindowSize;
 			myTextPosition = (myTextPosition / anOldWindowSize) * aNewWindowSize;
+			myCostTextOffset = (myCostTextOffset / anOldWindowSize) * aNewWindowSize;
+			myCooldownPosition = (myCooldownPosition / anOldWindowSize) * aNewWindowSize;
+			myGunpowderPosition = (myGunpowderPosition / anOldWindowSize) * aNewWindowSize;
+			mySupplyPosition = (mySupplyPosition / anOldWindowSize) * aNewWindowSize;
+			myArtifactPosition = (myArtifactPosition / anOldWindowSize) * aNewWindowSize;
+			myBackground->SetSize((myBackground->GetSize() / anOldWindowSize) * aNewWindowSize, { 0.f, 0.f });
 
-			CU::Vector2<float> backgroundSize = myBackground->GetSize() / anOldWindowSize;
-			myBackground->SetSize(backgroundSize * aNewWindowSize, { 0.f, 0.f });
+			CU::Vector2<float> costSize = (myCooldownSprite->GetSize() / anOldWindowSize) * aNewWindowSize;
+			myCooldownSprite->SetSize(costSize, { 0.f, 0.f });
+			myGunpowderSprite->SetSize(costSize, { 0.f, 0.f });
+			mySupplySprite->SetSize(costSize, { 0.f, 0.f });
+			myArtifactSprite->SetSize(costSize, { 0.f, 0.f });
 		}
 
 		myTextScale = (myTextScale / anOldWindowSize.x) * aNewWindowSize.x;
