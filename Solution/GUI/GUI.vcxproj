@@ -30,6 +30,7 @@
     <ClInclude Include="SpriteWidget.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="TextWidget.h" />
+    <ClInclude Include="TooltipInfo.h" />
     <ClInclude Include="TooltipWidget.h" />
     <ClInclude Include="UnitActionWidget.h" />
     <ClInclude Include="UnitCapWidget.h" />

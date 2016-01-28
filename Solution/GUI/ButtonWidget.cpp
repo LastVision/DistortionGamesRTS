@@ -19,30 +19,38 @@ namespace GUI
 		std::string spritePathNormal = "";
 		std::string spritePathHover = "";
 		std::string spritePathPressed = "";
-		std::string hoverText = "";
 
-		CU::Vector2<float> size;
-		CU::Vector2<float> position;
-
-		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "size"), "x", size.x);
-		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "size"), "y", size.y);
-		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "position"), "x", position.x);
-		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "position"), "y", position.y);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "size"), "x", mySize.x);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "size"), "y", mySize.y);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "position"), "x", myPosition.x);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "position"), "y", myPosition.y);
 
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "spritenormal"), "path", spritePathNormal);
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "spritehover"), "path", spritePathHover);
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "spritepressed"), "path", spritePathPressed);
 
-		if (aReader->FindFirstChild(anXMLElement, "hover") != nullptr)
+		if (aReader->FindFirstChild(anXMLElement, "tooltip") != nullptr)
 		{
-			aReader->ReadAttribute(aReader->FindFirstChild(anXMLElement, "hover"), "text", hoverText);
+			std::string headline = "";
+			std::string text = "";
+			float cooldown = -1;
+			int gunpowder = -1;
+			int supply = -1;
+
+			aReader->ReadAttribute(aReader->FindFirstChild(anXMLElement, "tooltip"), "headline", headline);
+			aReader->ReadAttribute(aReader->FindFirstChild(anXMLElement, "tooltip"), "text", text);
+			aReader->ReadAttribute(aReader->FindFirstChild(anXMLElement, "tooltip"), "cooldown", cooldown);
+			aReader->ReadAttribute(aReader->FindFirstChild(anXMLElement, "tooltip"), "gunpowder", gunpowder);
+			aReader->ReadAttribute(aReader->FindFirstChild(anXMLElement, "tooltip"), "supply", supply);
+
+			myTooltipInfo = new TooltipInfo(headline, text);
+
+			myTooltipInfo->myCooldown = cooldown;
+			myTooltipInfo->myGunpowderCost = gunpowder;
+			myTooltipInfo->mySupplyCost = supply;
 		}
 
 		ReadEvent(aReader, anXMLElement);
-
-		mySize = size;
-		myPosition = position;
-		myHoverText = hoverText;
 
 		myImageNormal = Prism::ModelLoader::GetInstance()->LoadSprite(spritePathNormal, mySize, mySize / 2.f);
 		myImageHover = Prism::ModelLoader::GetInstance()->LoadSprite(spritePathHover, mySize, mySize / 2.f);
@@ -56,6 +64,7 @@ namespace GUI
 		SAFE_DELETE(myImagePressed);
 		SAFE_DELETE(myImageHover);
 		SAFE_DELETE(myClickEvent);
+		SAFE_DELETE(myTooltipInfo);
 		myImageCurrent = nullptr;
 	}
 

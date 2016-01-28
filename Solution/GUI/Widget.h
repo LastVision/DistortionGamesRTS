@@ -1,5 +1,6 @@
 #pragma once
 #include <Vector.h>
+#include "TooltipInfo.h"
 
 namespace GUI
 {
@@ -33,7 +34,7 @@ namespace GUI
 		inline const CU::Vector2<float>& GetPosition() const;
 		inline bool IsVisible() const;
 
-		const std::string& GetHoverText() const;
+		const TooltipInfo* GetTooltipInfo() const;
 
 		virtual inline void SetValue(const float& aValue);
 		virtual inline void SetValue(const float& aFirstValue, const float& aSecondValue);
@@ -49,7 +50,9 @@ namespace GUI
 	protected:
 		CU::Vector2<float> myPosition;
 		CU::Vector2<float> mySize;
-		std::string myHoverText;
+
+		TooltipInfo* myTooltipInfo;
+
 		bool myIsVisible;
 		bool myIsClickable;
 		bool myIsFullscreen;
@@ -81,9 +84,9 @@ namespace GUI
 		return myIsVisible;
 	}
 
-	inline const std::string& Widget::GetHoverText() const
+	inline const TooltipInfo* Widget::GetTooltipInfo() const
 	{
-		return myHoverText;
+		return myTooltipInfo;
 	}
 	
 	inline void Widget::SetValue(const float&)
