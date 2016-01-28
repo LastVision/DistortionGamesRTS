@@ -28,7 +28,7 @@ namespace GUI
 
 		virtual void OnResize(const CU::Vector2<float>& aNewWindowSize, const CU::Vector2<float>& anOldWindowSize, bool aIsFullScreen);
 
-		virtual inline void SetPosition(const CU::Vector2<float>& aPosition);
+		virtual inline void SetPosition(const CU::Vector2<float>& aPosition, bool aIsHotspot = true);
 		virtual inline void SetVisibility(bool aVisibility);
 		inline const CU::Vector2<float>& GetSize() const;
 		inline const CU::Vector2<float>& GetPosition() const;
@@ -59,7 +59,7 @@ namespace GUI
 		Widget* myParent;
 	};
 
-	inline void Widget::SetPosition(const CU::Vector2<float>& aPosition)
+	inline void Widget::SetPosition(const CU::Vector2<float>& aPosition, bool)
 	{
 		myPosition = aPosition;
 	}

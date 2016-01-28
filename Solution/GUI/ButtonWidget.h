@@ -32,7 +32,7 @@ namespace GUI
 		void OnResize(const CU::Vector2<float>& aNewSize, const CU::Vector2<float>& anOldSize, bool aIsFullScreen) override;
 
 		bool IsInside(const CU::Vector2<float>& aPosition) const override;
-		void SetPosition(const CU::Vector2<float>& aPosition) override;
+		void SetPosition(const CU::Vector2<float>& aPosition, bool aIsHotspot = true) override;
 
 		void ReadTooltip(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement, const PlayerDirector* aPlayer);
 		void ReadEvent(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement);

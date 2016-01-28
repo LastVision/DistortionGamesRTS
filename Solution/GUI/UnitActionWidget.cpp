@@ -61,13 +61,13 @@ namespace GUI
 		myTankActionButtons = ReadContainer(aReader, tankElement, buttonSize);
 
 		myGruntActionButtons->SetPosition(myGruntActionButtons->At(0)->GetPosition() - myGruntActionButtons->At(0)->GetSize() / 2.f);
-		myGruntActionButtons->At(0)->SetPosition(myGruntActionButtons->At(0)->GetSize() / 2.f);
+		myGruntActionButtons->At(0)->SetPosition(myGruntActionButtons->At(0)->GetSize() / 2.f, false);
 		
 		myRangerActionButtons->SetPosition(myRangerActionButtons->At(0)->GetPosition() - myRangerActionButtons->At(0)->GetSize() / 2.f);
-		myRangerActionButtons->At(0)->SetPosition(myRangerActionButtons->At(0)->GetSize() / 2.f);
+		myRangerActionButtons->At(0)->SetPosition(myRangerActionButtons->At(0)->GetSize() / 2.f, false);
 
 		myTankActionButtons->SetPosition(myTankActionButtons->At(0)->GetPosition() - myTankActionButtons->At(0)->GetSize() / 2.f);
-		myTankActionButtons->At(0)->SetPosition(myTankActionButtons->At(0)->GetSize() / 2.f);
+		myTankActionButtons->At(0)->SetPosition(myTankActionButtons->At(0)->GetSize() / 2.f, false);
 	}
 
 	UnitActionWidget::~UnitActionWidget()
