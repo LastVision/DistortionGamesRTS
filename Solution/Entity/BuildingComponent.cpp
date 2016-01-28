@@ -11,6 +11,7 @@ BuildingComponent::BuildingComponent(Entity& aEntity, BuildingComponentData& aDa
 	, myUnitBuildTimes(aData.myUnitBuildTimes)
 	, myUnitUpgrades(aData.myUnitUpgrades)
 	, myUnitSupplyCosts(aData.myUnitSupplyCosts)
+	, myMaxQueue(aData.myMaxQueue)
 {
 	for (int i = 0; i < 3; ++i)
 	{
@@ -92,7 +93,7 @@ void BuildingComponent::Update(float aDeltaTime)
 
 void BuildingComponent::BuildUnit(eUnitType aUnitType)
 {
-	if (myBuildQueue.size() < BUILD_QUEUE_SIZE)
+	if (myBuildQueue.size() < myMaxQueue)
 	{
 		myBuildQueue.push({ aUnitType, false });
 	}
@@ -100,7 +101,7 @@ void BuildingComponent::BuildUnit(eUnitType aUnitType)
 
 void BuildingComponent::UpgradeUnit(eUnitType aUnitType)
 {
-	if (myBuildQueue.size() < BUILD_QUEUE_SIZE)
+	if (myBuildQueue.size() < myMaxQueue)
 	{
 		myBuildQueue.push({ aUnitType, true });
 		int unitIndex = static_cast<int>(aUnitType);

@@ -9,4 +9,5 @@ struct BuildingComponentData
 	CU::StaticArray<float, 3> myUnitBuildTimes;
 	CU::StaticArray<CU::StaticArray<Upgrade, 3>, 3> myUnitUpgrades;
 	CU::StaticArray<int, 3> myUnitSupplyCosts;
+	int myMaxQueue;
 };
