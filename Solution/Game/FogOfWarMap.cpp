@@ -18,7 +18,7 @@ void FogOfWarMap::Update()
 {
 	for (int i = 0; i < myGrid.Size(); ++i)
 	{
-		myGrid[i] = 0.1f;
+		myGrid[i] = 0.25f;
 	}
 
 	AddValue(1.f, 20.f, PollingStation::GetInstance()->GetBase(eOwnerType::PLAYER)->GetPosition());

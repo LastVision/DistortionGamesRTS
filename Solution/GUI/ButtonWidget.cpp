@@ -102,7 +102,8 @@ namespace GUI
 
 	void ButtonWidget::SetPosition(const CU::Vector2<float>& aPosition)
 	{
-		myPosition = { aPosition.x + myImageCurrent->GetHotspot().x, aPosition.y - myImageCurrent->GetHotspot().y };
+		//myPosition = { aPosition.x + myImageCurrent->GetHotspot().x, aPosition.y - myImageCurrent->GetHotspot().y };
+		myPosition = aPosition;
 	}
 
 	void ButtonWidget::ReadTooltip(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement, const PlayerDirector* aPlayer)
