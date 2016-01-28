@@ -98,13 +98,13 @@ void EnrageComponent::Activate()
 		myOriginalRechargeTime = actor->GetAttackSpeed();
 
 
-		health->TakeDamageAndCheckSurvive((health->GetMaxHealth() * (myData.myHealthModifier / 100.f)) + myOriginalArmor);
-		health->SetArmor(myOriginalArmor * ((myData.myArmorModifier + 100.f) / 100.f));
-		myEntity.SetMaxSpeed(myOriginalMovementSpeed * ((myData.myMovementSpeedModifier + 100.f) / 100.f));
+		health->TakeDamageAndCheckSurvive(myData.myHealthModifier);
+		health->SetArmor(myOriginalArmor + myData.myArmorModifier);
+		myEntity.SetMaxSpeed(myOriginalMovementSpeed + myData.myMovementSpeedModifier);
 
-		actor->SetAttackDamage(myOriginalAttackDamage * ((myData.myAttackDamageModifier + 100.f) / 100.f));
-		actor->SetAttackRange2(myOriginalAttackRange2 * ((myData.myAttackRange2Modifier + 100.f) / 100.f));
-		actor->SetRechargeTime(myOriginalRechargeTime * ((myData.myRechargeTimeModifier + 100.f) / 100.f));
+		actor->SetAttackDamage(myOriginalAttackDamage + myData.myAttackDamageModifier);
+		actor->SetAttackRange2(myOriginalAttackRange2 + myData.myAttackRange2Modifier);
+		actor->SetRechargeTime(myOriginalRechargeTime + myData.myRechargeTimeModifier);
 
 		Prism::Audio::AudioInterface::GetInstance()->PostEvent("Tank_Enrage"
 			, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());

@@ -53,6 +53,15 @@ namespace GUI
 		Widget::OnResize(aNewSize, anOldSize, aIsFullScreen);
 		myBackground->SetSize(mySize, { 0.f, 0.f });
 		myTextScale = (myTextScale / anOldSize.x) * aNewSize.x;
+
+		if (myIsFullscreen == false)
+		{
+			myTextPosition = (myTextPosition / anOldSize.x) * aNewSize.x;
+		}
+		else
+		{
+			myTextPosition = (myTextPosition / anOldSize) * aNewSize;
+		}
 	}
 
 	void TextWidget::ReceiveMessage(const TextMessage& aMessage)
