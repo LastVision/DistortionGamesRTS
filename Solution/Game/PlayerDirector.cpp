@@ -571,6 +571,56 @@ const float& PlayerDirector::GetUpgradeMaxCooldown(int aUnitID) const
 	return myBuilding->GetComponent<BuildingComponent>()->GetUpgradeMaxCooldown(aUnitID);
 }
 
+const int& PlayerDirector::GetUnitCost(int aUnitID) const
+{
+	return myBuilding->GetComponent<BuildingComponent>()->GetUnitCost(static_cast<eUnitType>(aUnitID));
+}
+
+const int& PlayerDirector::GetUnitSupplyCost(int aUnitID) const
+{
+	return myBuilding->GetComponent<BuildingComponent>()->GetUnitSupplyCost(static_cast<eUnitType>(aUnitID));
+}
+
+const int& PlayerDirector::GetUpgradeCost(int aUnitID, int aUpgradeLevel) const
+{
+	return myBuilding->GetComponent<BuildingComponent>()->GetUpgradeCost(static_cast<eUnitType>(aUnitID), aUpgradeLevel);
+}
+
+bool PlayerDirector::CanUpgrade(int aUnitType) const
+{
+	return myBuilding->GetComponent<BuildingComponent>()->CanUpgrade(static_cast<eUnitType>(aUnitType));
+}
+
+bool PlayerDirector::CanAffordSupply(int aSupplyCost) const
+{
+	if (aSupplyCost + myUnitCount > myUnitCap)
+	{
+		return false;
+	}
+
+	return true;
+}
+
+bool PlayerDirector::CanAffordGunpowder(int aCost) const
+{
+	if (aCost > myGunpowder)
+	{
+		return false;
+	}
+
+	return true;
+}
+
+bool PlayerDirector::CanAffordArtifact(int aCost) const
+{
+	if (aCost > myArtifacts)
+	{
+		return false;
+	}
+
+	return true;
+}
+
 void PlayerDirector::UpdateInputs()
 {
 	myShiftPressed = CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_LSHIFT)
@@ -950,7 +1000,6 @@ void PlayerDirector::SelectAllUnits()
 
 void PlayerDirector::PlaceTotem(const CU::Vector3f& aPositionInWorld)
 {
-	//myTotem->SetPosition(aPositionInWorld);
 	myTotem->GetComponent<TotemComponent>()->SetTargetPosition(aPositionInWorld);
 }
 

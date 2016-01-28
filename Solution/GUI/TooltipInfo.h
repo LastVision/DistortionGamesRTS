@@ -8,10 +8,10 @@ struct TooltipInfo
 	const std::string myHeadline;
 	const std::string myText;
 
-	int myGunpowderCost;
-	int myArftifactCost;
-	int mySupplyCost;
-	float myCooldown;
+	const int* myGunpowderCost;
+	const int* myArftifactCost;
+	const int* mySupplyCost;
+	const float* myCooldown;
 
 	void operator=(TooltipInfo&) = delete;
 };
@@ -20,8 +20,8 @@ inline TooltipInfo::TooltipInfo(std::string aHeadline, std::string aText)
 	: myHeadline(aHeadline)
 	, myText(aText)
 {
-	myGunpowderCost = -1;
-	myArftifactCost = -1;
-	mySupplyCost = -1;
-	myCooldown = -1.f;
+	myGunpowderCost = nullptr;
+	myArftifactCost = nullptr;
+	mySupplyCost = nullptr;
+	myCooldown = nullptr;
 }

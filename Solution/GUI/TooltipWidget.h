@@ -12,6 +12,7 @@ namespace tinyxml2
 }
 
 class XMLReader;
+class PlayerDirector;
 
 namespace GUI
 {
@@ -20,7 +21,7 @@ namespace GUI
 	class TooltipWidget : public Widget
 	{
 	public:
-		TooltipWidget(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement, const GUIManager* aGuiManager);
+		TooltipWidget(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement, const GUIManager* aGuiManager, const PlayerDirector* aPlayer);
 		~TooltipWidget();
 
 		void Render(const CU::Vector2<float>& aParentPosition) override;
@@ -28,6 +29,8 @@ namespace GUI
 		void OnResize(const CU::Vector2<float>& aNewWindowSize, const CU::Vector2<float>& anOldWindowSize, bool aIsFullScreen) override;
 
 	private:
+
+		void RenderCost(const CU::Vector2<float>& aParentPosition, const TooltipInfo* aTooltipInfo);
 
 		CU::Vector2<float> myTextPosition;
 		CU::Vector2<float> myHeadlinePosition;
@@ -50,5 +53,7 @@ namespace GUI
 
 		float myHeadlineScale;
 		float myTextScale;
+
+		const PlayerDirector* myPlayer;
 	};
 }

@@ -23,7 +23,7 @@ namespace GUI
 
 			if (type == "button")
 			{
-				ButtonWidget* button = new ButtonWidget(aReader, widgetElement);
+				ButtonWidget* button = new ButtonWidget(aReader, widgetElement, aPlayer);
 				myControlGroupButtons.Add(button);
 			}
 			else

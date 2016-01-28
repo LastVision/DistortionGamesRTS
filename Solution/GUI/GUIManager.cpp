@@ -185,7 +185,7 @@ namespace GUI
 
 				if (type == "button")
 				{
-					ButtonWidget* button = new ButtonWidget(&aReader, widgetElement);
+					ButtonWidget* button = new ButtonWidget(&aReader, widgetElement, myPlayer);
 					container->AddWidget(button);
 				}
 				else if (type == "unit_info")
@@ -236,7 +236,7 @@ namespace GUI
 				}
 				else if (type == "tool_tip")
 				{
-					TooltipWidget* tooltipWidget = new TooltipWidget(&aReader, widgetElement, this);
+					TooltipWidget* tooltipWidget = new TooltipWidget(&aReader, widgetElement, this, myPlayer);
 					container->AddWidget(tooltipWidget);
 				}
 				else if (type == "sprite")

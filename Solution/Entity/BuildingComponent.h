@@ -28,11 +28,11 @@ public:
 	const float& GetCurrentBuildTime() const;
 	const float& GetMaxBuildTime() const;
 	int GetSpawnQueueSize() const;
-	int GetUnitCost(eUnitType aUnitType);
-	int GetUnitSupplyCost(eUnitType aUnitType);
+	const int& GetUnitCost(eUnitType aUnitType) const;
+	const int& GetUnitSupplyCost(eUnitType aUnitType) const;
 	int GetUpgradeCost(eUnitType aUnitType);
-	bool CanUpgrade(eUnitType aUnitType);
-
+	const int& GetUpgradeCost(eUnitType aUnitType, int aUpgradeLevel) const;
+	bool CanUpgrade(eUnitType aUnitType) const;
 
 	void SetIgnoreBuildTime(bool anIgnoreBuildTime); // enables instabuilding
 
