@@ -4,10 +4,7 @@
 #include <queue>
 #include <GameStructs.h>
 
-#define BUILD_QUEUE_SIZE 5
 struct BuildingComponentData;
-
-
 
 class BuildingComponent : public Component
 {
@@ -70,6 +67,8 @@ private:
 	float myMaxBuildTime;
 
 	bool myIgnoreBuildTime;
+
+	unsigned int myMaxQueue;
 };
 
 inline eComponentType BuildingComponent::GetTypeStatic()
@@ -109,7 +108,7 @@ inline int BuildingComponent::GetSpawnQueueSize() const
 
 inline bool BuildingComponent::IsQueueFull() const
 {
-	return myBuildQueue.size() >= BUILD_QUEUE_SIZE;
+	return myBuildQueue.size() >= myMaxQueue;
 }
 
 inline void BuildingComponent::SetIgnoreBuildTime(bool anIgnoreBuildTime)

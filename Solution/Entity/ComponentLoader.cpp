@@ -100,7 +100,11 @@ void ComponentLoader::LoadBuidlingComponent(XMLReader& aDocument, tinyxml2::XMLE
 	for (tinyxml2::XMLElement* e = aDocument.FindFirstChild(aSourceElement); e != nullptr; e = aDocument.FindNextElement(e))
 	{
 		std::string elementName = CU::ToLower(e->Name());
-		if (elementName == CU::ToLower("Unit"))
+		if (elementName == CU::ToLower("MaxQueue"))
+		{
+			aDocument.ForceReadAttribute(e, "value", aOutputData.myMaxQueue);
+		}
+		else if (elementName == CU::ToLower("Unit"))
 		{
 			DL_ASSERT_EXP(numberOfUnitType <= 3, "You can't assign more than three unit types in a building.");
 			std::string unitType;
