@@ -40,6 +40,7 @@ public:
 	void ReceiveMessage(const ArtifactMessage& aMessage) override;
 
 	void SetGunPowder(int anAmount);
+	void SetBaseIncome(int anAmount);
 
 protected:
 	bool IsAlreadyActive(Entity* aUnit);
@@ -57,9 +58,13 @@ protected:
 	int myVictoryPoints;
 	int myUnitCap;
 	int myUnitCount;
+	int myBaseIncome;
 
 	bool myHasUnlockedRanger;
 	bool myHasUnlockedTank;
+
+	float myIncomeTimer;
+	float myCurrentIncomeTimer;
 
 private:
 	void operator=(Director&) = delete;
@@ -88,4 +93,9 @@ inline const int Director::GetActiveUnitsSize() const
 inline void Director::SetGunPowder(int anAmount)
 {
 	myGunpowder = anAmount;
+}
+
+inline void Director::SetBaseIncome(int anAmount)
+{
+	myBaseIncome = anAmount;
 }

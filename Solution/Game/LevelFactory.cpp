@@ -313,6 +313,16 @@ void LevelFactory::ReadLevelSetting(const std::string& aLevelPath)
 	myCurrentLevel->myPlayer->SetGunPowder(playerGunpowder);
 	myCurrentLevel->myAI->SetGunPowder(aiGunpowder);
 
+
+	int playerBaseincome = 0;
+	int aiBaseincome = 0;
+
+	reader.ForceReadAttribute(reader.ForceFindFirstChild(rootElement, "baseincome"), "player", playerBaseincome);
+	reader.ForceReadAttribute(reader.ForceFindFirstChild(rootElement, "baseincome"), "ai", aiBaseincome);
+
+	myCurrentLevel->myPlayer->SetBaseIncome(playerBaseincome);
+	myCurrentLevel->myAI->SetBaseIncome(aiBaseincome);
+
 	reader.CloseDocument();
 }
 

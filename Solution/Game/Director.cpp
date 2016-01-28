@@ -30,6 +30,9 @@ Director::Director(eOwnerType aOwnerType, const Prism::Terrain& aTerrain)
 	, myUnitCount(0)
 	, myHasUnlockedRanger(false)
 	, myHasUnlockedTank(false)
+	, myIncomeTimer(1.f)
+	, myCurrentIncomeTimer(1.f)
+	, myBaseIncome(0)
 {
 	XMLReader reader;
 	reader.OpenDocument("Data/Setting/SET_game.xml");
@@ -77,8 +80,13 @@ void Director::Update(float aDeltaTime)
 		}
 	}
 
+	myCurrentIncomeTimer -= aDeltaTime;
+	if (myCurrentIncomeTimer <= 0.f)
+	{
+		myCurrentIncomeTimer = myIncomeTimer;
+		myGunpowder += myBaseIncome;
+	}
 	DEBUG_PRINT(myArtifacts);
-	
 }
 
 void Director::RenderHealthBars(const Prism::Camera& aCamera)
