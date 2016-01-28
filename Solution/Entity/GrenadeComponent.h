@@ -18,6 +18,7 @@ private:
 	void CheckUnitsForAdd(const CU::GrowingArray<Entity*>& someUnits, CU::GrowingArray<Entity*>& someUnitsOut) const;
 
 	void Explosion();
+	void AutoCast();
 
 
 	const float myOriginalDelay;
