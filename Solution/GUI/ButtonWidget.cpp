@@ -100,9 +100,16 @@ namespace GUI
 			aPosition.y <= myPosition.y + mySize.y - myImageCurrent->GetHotspot().y;
 	}
 
-	void ButtonWidget::SetPosition(const CU::Vector2<float>& aPosition)
+	void ButtonWidget::SetPosition(const CU::Vector2<float>& aPosition, bool aIsHotspot)
 	{
-		myPosition = { aPosition.x + myImageCurrent->GetHotspot().x, aPosition.y - myImageCurrent->GetHotspot().y };
+		if (aIsHotspot == true)
+		{
+			myPosition = { aPosition.x + myImageCurrent->GetHotspot().x, aPosition.y - myImageCurrent->GetHotspot().y };
+		}
+		else
+		{
+			myPosition = aPosition;
+		}
 	}
 
 	void ButtonWidget::ReadTooltip(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement, const PlayerDirector* aPlayer)
