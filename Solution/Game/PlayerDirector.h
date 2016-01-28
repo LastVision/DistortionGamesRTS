@@ -124,6 +124,7 @@ private:
 
 	bool myHasDoubleClicked;
 	bool myHasClicked;
+	bool myHasClickedF1;
 	float myCurrentDoubleClickTimer;
 	float myDoubleClickTime;
 

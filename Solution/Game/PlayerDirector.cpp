@@ -58,10 +58,11 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 	, myMaxSelectedUnits(0)
 	, myHasEventToGoTo(false)
 	, mySelectedControlGroup(-1)
-	, myDoubleClickTime(0.75f)
+	, myDoubleClickTime(1.f)
 	, myCurrentDoubleClickTimer(0.f)
 	, myHasDoubleClicked(false)
 	, myHasClicked(false)
+	, myHasClickedF1(false)
 	, myCurrentCancleCursorTime(0.f)
 	, myCancleCursorTime(0.5f)
 {
@@ -204,6 +205,27 @@ void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_F2) == true)
 	{
 		SelectAllUnits();
+	}
+	else if (CU::InputWrapper::GetInstance()->KeyDown(DIK_F1) == true)
+	{
+		mySelectedUnits.RemoveAll();
+		mySelectedUnits.Add(myBuilding);
+		myHasClicked = true;
+
+		if (myHasClicked == true && myHasClickedF1 == true && myCurrentDoubleClickTimer > 0.f)
+		{
+			PostMaster::GetInstance()->SendMessage(MoveCameraMessage(myBuilding->GetPosition(),
+				eHowToHandleMovement::WORLD_POSITION));
+			myHasClicked = false;
+			myHasClickedF1 = false;
+			myHasDoubleClicked = true;
+		}
+		if (myHasClicked == true)
+		{
+			myHasClicked = false;
+			myHasClickedF1 = true;
+			myCurrentDoubleClickTimer = myDoubleClickTime;
+		}
 	}
 
 	UpdateInputs();
@@ -565,11 +587,7 @@ void PlayerDirector::UpdateInputs()
 			mySelectedAction = eSelectedAction::HOLD_POSITION;
 		}
 	}
-	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_F1) == true)
-	{
-		mySelectedUnits.RemoveAll();
-		mySelectedUnits.Add(myBuilding);	
-	}
+
 
 	myLeftMouseDown = CU::InputWrapper::GetInstance()->MouseDown(0);
 	myLeftMousePressed = CU::InputWrapper::GetInstance()->MouseIsPressed(0);
@@ -694,7 +712,7 @@ void PlayerDirector::UpdateControlGroups()
 			myHasClicked = false;
 			myHasDoubleClicked = true;
 		}
-		
+
 		if (myHasClicked == true)
 		{
 			mySelectedControlGroup = index;
