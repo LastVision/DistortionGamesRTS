@@ -5,6 +5,7 @@ namespace GUI
 {
 	Widget::Widget()
 		: myParent(nullptr)
+		, myTooltipInfo(nullptr)
 	{
 		myIsVisible = true;
 		myIsFullscreen = false;
