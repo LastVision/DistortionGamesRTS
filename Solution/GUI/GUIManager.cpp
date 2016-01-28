@@ -30,6 +30,11 @@ namespace GUI
 		, myCamera(aCamera)
 		, myLevelID(aLeveID)
 	{
+		myWindowSize = { 1920.f, 1080.f }; // XML coordinates respond to this resolution, will be resized
+
+		myWidgets = new WidgetContainer(nullptr, myWindowSize, true);
+		myWidgets->SetPosition({ 0.f, 0.f });
+
 		ReadXML(aXMLPath);
 	}
 
@@ -104,46 +109,52 @@ namespace GUI
 
 	void GUIManager::ReadXML(const std::string& aXMLPath)
 	{
-		myWindowSize = { 1920.f, 1080.f }; // XML coordinates respond to this resolution, will be resized
-
-		std::string path = "";
-		CU::Vector2<float> size;
-		CU::Vector2<float> position;
-
 		XMLReader reader;
 		reader.OpenDocument(aXMLPath);
 
 		tinyxml2::XMLElement* rootElement = reader.FindFirstChild("root");
+		tinyxml2::XMLElement* containerElement = reader.FindFirstChild(rootElement, "container");
+		tinyxml2::XMLElement* XMLPathElement = reader.FindFirstChild(rootElement, "file");
 
-		myWidgets = new WidgetContainer(nullptr, myWindowSize, true);
-		myWidgets->SetPosition({ 0.f, 0.f });
+		ReadContainers(reader, containerElement);
+		ReadFiles(reader, XMLPathElement);
 
-		tinyxml2::XMLElement* containerElement = reader.ForceFindFirstChild(rootElement, "container");
-		for (; containerElement != nullptr; containerElement = reader.FindNextElement(containerElement))
+		reader.CloseDocument();
+
+		OnResize(Prism::Engine::GetInstance()->GetWindowSizeInt().x, Prism::Engine::GetInstance()->GetWindowSizeInt().y);
+	}
+
+	void GUIManager::ReadContainers(XMLReader& aReader, tinyxml2::XMLElement* aContainerElement)
+	{
+		std::string path = "";
+		CU::Vector2<float> size;
+		CU::Vector2<float> position;
+
+		for (; aContainerElement != nullptr; aContainerElement = aReader.FindNextElement(aContainerElement, "container"))
 		{
 			bool isFullscreen = false;
 			bool isClickable = true;
 			Prism::SpriteProxy* backgroundSprite = nullptr;
 
-			reader.ForceReadAttribute(reader.ForceFindFirstChild(containerElement, "size"), "x", size.x);
-			reader.ForceReadAttribute(reader.ForceFindFirstChild(containerElement, "size"), "y", size.y);
-			reader.ForceReadAttribute(reader.ForceFindFirstChild(containerElement, "position"), "x", position.x);
-			reader.ForceReadAttribute(reader.ForceFindFirstChild(containerElement, "position"), "y", position.y);
+			aReader.ForceReadAttribute(aReader.ForceFindFirstChild(aContainerElement, "size"), "x", size.x);
+			aReader.ForceReadAttribute(aReader.ForceFindFirstChild(aContainerElement, "size"), "y", size.y);
+			aReader.ForceReadAttribute(aReader.ForceFindFirstChild(aContainerElement, "position"), "x", position.x);
+			aReader.ForceReadAttribute(aReader.ForceFindFirstChild(aContainerElement, "position"), "y", position.y);
 
-			tinyxml2::XMLElement* spriteElement = reader.FindFirstChild(containerElement, "backgroundsprite");
-			tinyxml2::XMLElement* spriteSizeElement = reader.FindFirstChild(containerElement, "backgroundsize");
-			tinyxml2::XMLElement* fullscreenElement = reader.FindFirstChild(containerElement, "isfullscreen");
-			tinyxml2::XMLElement* clickableElement = reader.FindFirstChild(containerElement, "isclickable");
+			tinyxml2::XMLElement* spriteElement = aReader.FindFirstChild(aContainerElement, "backgroundsprite");
+			tinyxml2::XMLElement* spriteSizeElement = aReader.FindFirstChild(aContainerElement, "backgroundsize");
+			tinyxml2::XMLElement* fullscreenElement = aReader.FindFirstChild(aContainerElement, "isfullscreen");
+			tinyxml2::XMLElement* clickableElement = aReader.FindFirstChild(aContainerElement, "isclickable");
 
 			if (spriteElement != nullptr)
 			{
-				reader.ForceReadAttribute(spriteElement, "path", path);
+				aReader.ForceReadAttribute(spriteElement, "path", path);
 
 				if (spriteSizeElement != nullptr)
 				{
 					CU::Vector2<float> spriteSize;
-					reader.ForceReadAttribute(spriteSizeElement, "x", spriteSize.x);
-					reader.ForceReadAttribute(spriteSizeElement, "y", spriteSize.y);
+					aReader.ForceReadAttribute(spriteSizeElement, "x", spriteSize.x);
+					aReader.ForceReadAttribute(spriteSizeElement, "y", spriteSize.y);
 					backgroundSprite = Prism::ModelLoader::GetInstance()->LoadSprite(path, spriteSize);
 				}
 				else
@@ -154,83 +165,83 @@ namespace GUI
 
 			if (fullscreenElement != nullptr)
 			{
-				reader.ForceReadAttribute(fullscreenElement, "value", isFullscreen);
+				aReader.ForceReadAttribute(fullscreenElement, "value", isFullscreen);
 			}
 
 			if (clickableElement != nullptr)
 			{
-				reader.ForceReadAttribute(clickableElement, "value", isClickable);
+				aReader.ForceReadAttribute(clickableElement, "value", isClickable);
 			}
 
 			GUI::WidgetContainer* container = new WidgetContainer(backgroundSprite, size, isFullscreen);
 			container->SetPosition(position);
 
-			tinyxml2::XMLElement* widgetElement = reader.FindFirstChild(containerElement, "widget");
-			for (; widgetElement != nullptr; widgetElement = reader.FindNextElement(widgetElement))
+			tinyxml2::XMLElement* widgetElement = aReader.FindFirstChild(aContainerElement, "widget");
+			for (; widgetElement != nullptr; widgetElement = aReader.FindNextElement(widgetElement))
 			{
 				std::string type = "";
 
-				reader.ForceReadAttribute(widgetElement, "type", type);
+				aReader.ForceReadAttribute(widgetElement, "type", type);
 
 				if (type == "button")
 				{
-					ButtonWidget* button = new ButtonWidget(&reader, widgetElement);
+					ButtonWidget* button = new ButtonWidget(&aReader, widgetElement);
 					container->AddWidget(button);
 				}
 				else if (type == "unit_info")
 				{
-					UnitInfoWidget* unitInfo = new UnitInfoWidget(&reader, widgetElement, myPlayer);
+					UnitInfoWidget* unitInfo = new UnitInfoWidget(&aReader, widgetElement, myPlayer);
 					container->AddWidget(unitInfo);
 				}
 				else if (type == "unit_action")
 				{
-					UnitActionWidget* unitActions = new UnitActionWidget(&reader, widgetElement, myPlayer->GetSelectedUnits(), myPlayer);
+					UnitActionWidget* unitActions = new UnitActionWidget(&aReader, widgetElement, myPlayer->GetSelectedUnits(), myPlayer);
 					container->AddWidget(unitActions);
 				}
 				else if (type == "minimap")
 				{
-					MiniMapWidget* minimap = new MiniMapWidget(&reader, widgetElement, myCamera, myPlayer->GetRenderDragSelection(), myLevelID);
+					MiniMapWidget* minimap = new MiniMapWidget(&aReader, widgetElement, myCamera, myPlayer->GetRenderDragSelection(), myLevelID);
 					container->AddWidget(minimap);
 				}
 				else if (type == "resourcebar")
 				{
-					ResourceBarWidget* resourceBar = new ResourceBarWidget(&reader, widgetElement, myPlayer, myAI);
+					ResourceBarWidget* resourceBar = new ResourceBarWidget(&aReader, widgetElement, myPlayer, myAI);
 					container->AddWidget(resourceBar);
 				}
 				else if (type == "control_groups")
 				{
-					ControlGroupWidget* controlGroup = new ControlGroupWidget(&reader, widgetElement, myPlayer, size);
+					ControlGroupWidget* controlGroup = new ControlGroupWidget(&aReader, widgetElement, myPlayer, size);
 					container->AddWidget(controlGroup);
 				}
 				else if (type == "text")
 				{
-					TextWidget* textWidget = new TextWidget(&reader, widgetElement);
+					TextWidget* textWidget = new TextWidget(&aReader, widgetElement);
 					container->AddWidget(textWidget);
 				}
 				else if (type == "unit_cap")
 				{
-					UnitCapWidget* unitCapWidget = new UnitCapWidget(&reader, widgetElement, size, myPlayer->GetUnitCap()
+					UnitCapWidget* unitCapWidget = new UnitCapWidget(&aReader, widgetElement, size, myPlayer->GetUnitCap()
 						, myPlayer->GetUnitCount());
 					container->AddWidget(unitCapWidget);
 				}
 				else if (type == "upgrade_button")
 				{
-					UpgradeButtonWidget* upgradeButtonWidget = new UpgradeButtonWidget(&reader, widgetElement, myPlayer);
+					UpgradeButtonWidget* upgradeButtonWidget = new UpgradeButtonWidget(&aReader, widgetElement, myPlayer);
 					container->AddWidget(upgradeButtonWidget);
 				}
 				else if (type == "ability_button")
 				{
-					AbilityButton* upgradeButtonWidget = new AbilityButton(&reader, widgetElement, myPlayer);
+					AbilityButton* upgradeButtonWidget = new AbilityButton(&aReader, widgetElement, myPlayer);
 					container->AddWidget(upgradeButtonWidget);
 				}
 				else if (type == "tool_tip")
 				{
-					TooltipWidget* tooltipWidget = new TooltipWidget(&reader, widgetElement, this);
+					TooltipWidget* tooltipWidget = new TooltipWidget(&aReader, widgetElement, this);
 					container->AddWidget(tooltipWidget);
 				}
 				else if (type == "sprite")
 				{
-					SpriteWidget* spriteWidget = new SpriteWidget(&reader, widgetElement);
+					SpriteWidget* spriteWidget = new SpriteWidget(&aReader, widgetElement);
 					container->AddWidget(spriteWidget);
 				}
 				else
@@ -241,10 +252,18 @@ namespace GUI
 			container->SetIsClickable(isClickable);
 			myWidgets->AddWidget(container);
 		}
+	}
 
-		reader.CloseDocument();
+	void GUIManager::ReadFiles(XMLReader& aReader, tinyxml2::XMLElement* aFilePathElement)
+	{
+		for (; aFilePathElement != nullptr; aFilePathElement = aReader.FindNextElement(aFilePathElement, "file"))
+		{
+			std::string filePath = "";
 
-		OnResize(Prism::Engine::GetInstance()->GetWindowSizeInt().x, Prism::Engine::GetInstance()->GetWindowSizeInt().y);
+			aReader.ForceReadAttribute(aFilePathElement, "path", filePath);
+
+			ReadXML(filePath);
+		}
 	}
 
 	void GUIManager::CheckMousePressed()
