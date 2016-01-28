@@ -170,6 +170,7 @@
     <ClInclude Include="TimeMultiplierMessage.h" />
     <ClInclude Include="FadeMessage.h" />
     <ClInclude Include="GameStateMessage.h" />
+    <ClInclude Include="ToggleFogOfWarMessage.h" />
     <ClInclude Include="ToggleRenderLinesMessage.h" />
     <ClInclude Include="RunScriptMessage.h" />
     <ClInclude Include="Message.h" />

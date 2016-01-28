@@ -39,6 +39,7 @@ public:
 	void OnResize(int aWidth, int aHeigth);
 
 	void ReceiveMessage(const ToggleRenderLinesMessage& aMessage) override;
+	void ReceiveMessage(const ToggleFogOfWarMessage& aMessage) override;
 
 	void SpawnUnit(eUnitType aUnitType);
 
@@ -68,6 +69,7 @@ private:
 	int myMaxVictoryPoint;
 
 	bool myRenderNavMeshLines;
+	bool myShowFogOfWar;
 };
 
 inline PlayerDirector* Level::GetPlayer()

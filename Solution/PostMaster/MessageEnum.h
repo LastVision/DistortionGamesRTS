@@ -28,5 +28,6 @@ enum class eMessageType
 	TUTORIAL,
 	BLOCK_MAP,
 	SELECT_UNIT,
+	TOGGLE_FOG_OF_WAR,
 	COUNT,
 };

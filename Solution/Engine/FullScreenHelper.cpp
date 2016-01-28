@@ -98,9 +98,19 @@ namespace Prism
 			Engine::GetInstance()->RestoreViewPort();
 			CombineTextures(myBloomData.myFinalTexture, aSource, myProcessingTexture, false);
 		}
-		DoFogOfWar(aSource, aFogOfWarTexture, myProcessingTexture);
+
+		if (aEffect & ePostProcessing::FOG_OF_WAR)
+		{
+			Engine::GetInstance()->GetContex()->ClearRenderTargetView(
+				myBloomData.myFinalTexture->GetRenderTargetView(), myClearColor);
+			DoFogOfWar(myProcessingTexture, aFogOfWarTexture, aTarget);
+		}
+		else
+		{
+			CopyTexture(myProcessingTexture, aTarget);
+		}
+
 		
-		CopyTexture(myProcessingTexture, aTarget);
 		Engine::GetInstance()->EnableZBuffer();
 	}
 

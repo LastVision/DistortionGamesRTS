@@ -19,6 +19,7 @@
 #include <TriggerComponent.h>
 #include <ToggleBuildTimeMessage.h>
 #include <ToggleGUIMessage.h>
+#include <ToggleFogOfWarMessage.h>
 #include <ToggleRenderLinesMessage.h>
 #include <VictoryMessage.h>
 
@@ -350,6 +351,13 @@ namespace Script_Interface
 
 		return 0;
 	}
+
+	int ToggleFogOfWar(lua_State*) // void
+	{
+		PostMaster::GetInstance()->SendMessage(ToggleFogOfWarMessage());
+		return 0;
+	}
+
 }
 
 void ScriptInterface::RegisterFunctions()
@@ -387,4 +395,5 @@ void ScriptInterface::RegisterFunctions()
 	system->RegisterFunction("Build", Script_Interface::EnableBuildTime, "", "Enables the buildtime on units, not instaspawn, only for player.");
 	system->RegisterFunction("SpawnNeutral", Script_Interface::SpawnNeutral, "aType, aX, aZ", "Spawns a Netural creen of type aType at position aX, aZ.");
 	system->RegisterFunction("UnlockUnits", Script_Interface::UnlockUnits, "", "Unlocks all units so you can build them.");
+	system->RegisterFunction("Fog", Script_Interface::ToggleFogOfWar, "", "Toggles the Fog Of War.");
 }

@@ -28,6 +28,7 @@
 Level::Level(const Prism::Camera& aCamera, Prism::Terrain* aTerrain, GUI::Cursor* aCursor)
 	: myEntities(64)
 	, myRenderNavMeshLines(false)
+	, myShowFogOfWar(true)
 	, myMaxVictoryPoint(-1)
 {
 	EntityFactory::GetInstance()->LoadEntities("Data/Resource/Entity/LI_entity.xml");
@@ -37,6 +38,7 @@ Level::Level(const Prism::Camera& aCamera, Prism::Terrain* aTerrain, GUI::Cursor
 	myScene = new Prism::Scene(aCamera, *myTerrain);
 
 	PostMaster::GetInstance()->Subscribe(eMessageType::TOGGLE_RENDER_LINES, this);
+	PostMaster::GetInstance()->Subscribe(eMessageType::TOGGLE_FOG_OF_WAR, this);
 
 	myPlayer = new PlayerDirector(*myTerrain, *myScene, aCursor);
 	myAI = new AIDirector(*myTerrain, *myScene);
@@ -64,6 +66,7 @@ Level::~Level()
 	SAFE_DELETE(myFogOfWarMap);
 	SAFE_DELETE(myFogOfWarHelper);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::TOGGLE_RENDER_LINES, this);
+	PostMaster::GetInstance()->UnSubscribe(eMessageType::TOGGLE_FOG_OF_WAR, this);
 	EntityFactory::Destroy();
 	EntityId::Destroy();
 	PollingStation::Destroy();
@@ -117,9 +120,11 @@ void Level::Render(Prism::Camera& aCamera)
 {
 	Prism::Engine::GetInstance()->SetClearColor({ 0.2f, 0.2f, 0.2f, 1.f });
 
-	myFogOfWarMap->UpdateRenderPlane();
-
-	myFogOfWarHelper->Render(aCamera, myFogOfWarMap->GetRenderPlane());
+	if (myShowFogOfWar == true)
+	{
+		myFogOfWarMap->UpdateRenderPlane();
+		myFogOfWarHelper->Render(aCamera, myFogOfWarMap->GetRenderPlane());
+	}
 
 	myRenderer->BeginScene();
 	myScene->Render(myRenderNavMeshLines, myFogOfWarHelper->GetTexture());
@@ -127,7 +132,14 @@ void Level::Render(Prism::Camera& aCamera)
 
 	myAI->RenderMaps(aCamera);
 
-	myRenderer->EndScene(Prism::ePostProcessing::BLOOM, myFogOfWarHelper->GetTexture());
+	if (myShowFogOfWar == true)
+	{
+		myRenderer->EndScene(Prism::ePostProcessing::BLOOM | Prism::ePostProcessing::FOG_OF_WAR, myFogOfWarHelper->GetTexture());
+	}
+	else
+	{
+		myRenderer->EndScene(Prism::ePostProcessing::BLOOM, myFogOfWarHelper->GetTexture());
+	}
 	myRenderer->FinalRender();
 
 	
@@ -151,6 +163,11 @@ void Level::ReceiveMessage(const ToggleRenderLinesMessage& aMessage)
 	{
 		myRenderNavMeshLines = aMessage.myToggleFlag;
 	}
+}
+
+void Level::ReceiveMessage(const ToggleFogOfWarMessage& aMessage)
+{
+	myShowFogOfWar = !myShowFogOfWar;
 }
 
 void Level::SpawnUnit(eUnitType aUnitType)

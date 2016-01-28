@@ -22,6 +22,7 @@ struct TextMessage;
 struct TimeMultiplierMessage;
 struct ToggleGUIMessage;
 struct ToggleBuildTimeMessage;
+struct ToggleFogOfWarMessage;
 struct ToggleRenderLinesMessage;
 struct TriggerMessage;
 struct TutorialMessage;
@@ -56,6 +57,7 @@ public:
 	virtual void ReceiveMessage(const TimeMultiplierMessage& aMessage);
 	virtual void ReceiveMessage(const ToggleBuildTimeMessage& aMessage);
 	virtual void ReceiveMessage(const ToggleGUIMessage& aMessage);
+	virtual void ReceiveMessage(const ToggleFogOfWarMessage& aMessage);
 	virtual void ReceiveMessage(const ToggleRenderLinesMessage& aMessage);
 	virtual void ReceiveMessage(const TriggerMessage& aMessage);
 	virtual void ReceiveMessage(const TutorialMessage& aMessage);

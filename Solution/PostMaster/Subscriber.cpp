@@ -99,6 +99,10 @@ void Subscriber::ReceiveMessage(const ToggleGUIMessage&)
 {
 }
 
+void Subscriber::ReceiveMessage(const ToggleFogOfWarMessage&)
+{
+}
+
 void Subscriber::ReceiveMessage(const ToggleRenderLinesMessage&)
 {
 }

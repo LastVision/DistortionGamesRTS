@@ -124,5 +124,8 @@
     <ClInclude Include="SelectUnitMessage.h">
       <Filter>Message</Filter>
     </ClInclude>
+    <ClInclude Include="ToggleFogOfWarMessage.h">
+      <Filter>Message\ScriptMessage</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
