@@ -122,6 +122,78 @@ void Prism::Scene::Render(bool aRenderNavMeshLines)
 	myInstancingHelper->Render(myDirectionalLightData);
 }
 
+void Prism::Scene::Render(bool aRenderNavMeshLines, Texture* aFogOfWarTexture)
+{
+	for (int i = 0; i < myDirectionalLights.Size(); ++i)
+	{
+		myDirectionalLights[i]->Update();
+
+		myDirectionalLightData[i].myDirection = myDirectionalLights[i]->GetCurrentDir();
+		myDirectionalLightData[i].myColor = myDirectionalLights[i]->GetColor();
+	}
+
+	for (int i = 0; i < myPointLights.Size(); ++i)
+	{
+		myPointLights[i]->Update();
+
+		myPointLightData[i].myColor = myPointLights[i]->GetColor();
+		myPointLightData[i].myPosition = myPointLights[i]->GetPosition();
+		myPointLightData[i].myRange = myPointLights[i]->GetRange();
+	}
+
+	for (int i = 0; i < mySpotLights.Size(); ++i)
+	{
+		mySpotLights[i]->Update();
+
+		mySpotLightData[i].myPosition = mySpotLights[i]->GetPosition();
+		mySpotLightData[i].myDirection = mySpotLights[i]->GetDir();
+		mySpotLightData[i].myColor = mySpotLights[i]->GetColor();
+		mySpotLightData[i].myRange = mySpotLights[i]->GetRange();
+		mySpotLightData[i].myCone = mySpotLights[i]->GetCone();
+	}
+
+	myTerrain.GetEffect()->UpdateDirectionalLights(myDirectionalLightData);
+	myTerrain.GetIce()->GetEffect()->UpdateDirectionalLights(myDirectionalLightData);
+
+	myTerrain.GetEffect()->SetFogOfWarTexture(aFogOfWarTexture);
+	myTerrain.GetIce()->GetEffect()->SetFogOfWarTexture(aFogOfWarTexture);
+	//myTerrain.UpdatePointLights(myPointLightData);
+	//myTerrain.UpdateSpotLights(mySpotLightData);
+	myTerrain.Render(myCamera, aRenderNavMeshLines);
+
+#ifdef SCENE_USE_OCTREE
+	myOctree->Update();
+	myInstances.RemoveAll();
+	myOctree->GetOccupantsInAABB(myCamera.GetFrustum(), myInstances);
+	DEBUG_PRINT(myInstances.Size());
+
+	for (int i = 0; i < myDynamicInstances.Size(); ++i)
+	{
+		myDynamicInstances[i]->UpdateDirectionalLights(myDirectionalLightData);
+		myDynamicInstances[i]->UpdatePointLights(myPointLightData);
+		myDynamicInstances[i]->UpdateSpotLights(mySpotLightData);
+		myDynamicInstances[i]->Render(myCamera);
+	}
+#ifdef SHOW_OCTREE_DEBUG
+	Engine::GetInstance()->PrintText(myInstances.Size(), { 600.f, -600.f });
+#endif
+#endif
+	/*for (int i = 0; i < myInstances.Size(); ++i)
+	{
+	myInstances[i]->UpdateDirectionalLights(myDirectionalLightData);
+	myInstances[i]->UpdatePointLights(myPointLightData);
+	myInstances[i]->UpdateSpotLights(mySpotLightData);
+	myInstances[i]->Render(myCamera);
+	}*/
+
+	for (int i = 0; i < myInstances.Size(); ++i)
+	{
+		myInstances[i]->Render(myCamera, *myInstancingHelper);
+	}
+
+	myInstancingHelper->Render(myDirectionalLightData);
+}
+
 void Prism::Scene::AddInstance(Instance* aInstance)
 {
 #ifdef SCENE_USE_OCTREE

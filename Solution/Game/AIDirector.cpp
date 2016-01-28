@@ -27,36 +27,16 @@
 
 AIDirector::AIMaps::AIMaps()
 {
-	myInfluenceMap = new InfluenceMap();
 	myPlayerInfluenceMap = new InfluenceMap();
-	myNeutralInfluenceMap = new InfluenceMap();
-	myPlayerNeutralCombinedInfluence = new InfluenceMap();
-	myGoalMap = new InfluenceMap();
 	myBlockMap = new BlockMap();
-	myTensionMap = new TensionMap(myInfluenceMap, myPlayerInfluenceMap, myNeutralInfluenceMap
-		, myGoalMap);
-	myDifferenceMap = new DifferenceMap(myInfluenceMap, myPlayerNeutralCombinedInfluence);
-	myVulnerabilityMap = new VulnerabilityMap(myDifferenceMap, myTensionMap);
-
-	myDecisionMap = new DecisionMap();
-	myDecisionMap->SetVulnerabilityMap(myVulnerabilityMap);
-	myDecisionMap->SetDifferenceMap(myDifferenceMap);
 
 	myInfluenceRenderIndex = 0;
 }
 
 AIDirector::AIMaps::~AIMaps()
 {
-	SAFE_DELETE(myInfluenceMap);
 	SAFE_DELETE(myPlayerInfluenceMap);
-	SAFE_DELETE(myNeutralInfluenceMap);
-	SAFE_DELETE(myPlayerNeutralCombinedInfluence);
-	SAFE_DELETE(myGoalMap);
 	SAFE_DELETE(myBlockMap);
-	SAFE_DELETE(myTensionMap);
-	SAFE_DELETE(myDifferenceMap);
-	SAFE_DELETE(myVulnerabilityMap);
-	SAFE_DELETE(myDecisionMap);
 }
 
 AIDirector::AIDirector(const Prism::Terrain& aTerrain, Prism::Scene& aScene)
@@ -111,28 +91,21 @@ void AIDirector::RenderMaps(const Prism::Camera& aCamera)
 	case 0:
 		break;
 	case 1:
-		myMaps.myInfluenceMap->Render(aCamera);
 		break;
 	case 2:
 		myMaps.myPlayerInfluenceMap->Render(aCamera);
 		break;
 	case 3:
-		myMaps.myNeutralInfluenceMap->Render(aCamera);
 		break;
 	case 4:
-		myMaps.myGoalMap->Render(aCamera);
 		break;
 	case 5:
-		myMaps.myTensionMap->Render(aCamera);
 		break;
 	case 6:
-		myMaps.myDifferenceMap->Render(aCamera);
 		break;
 	case 7:
-		myMaps.myPlayerNeutralCombinedInfluence->Render(aCamera);
 		break;
 	case 8:
-		myMaps.myVulnerabilityMap->Render(aCamera);
 		break;
 	case 9:
 		myMaps.myBlockMap->Render(aCamera);
@@ -291,6 +264,10 @@ void AIDirector::LoadAISettings(const std::string& aFilePath)
 
 	reader.CloseDocument();
 }
+ InfluenceMap* AIDirector::GetPlayerInfluenceMap()
+{
+	return myMaps.myPlayerInfluenceMap;
+}
 
 void AIDirector::UpdateInfluences()
 {
@@ -343,85 +320,14 @@ void AIDirector::UpdateInfluences()
 		}
 	}
 
-
-
-
-
-	myMaps.myInfluenceMap->Update();
-	for (int i = 0; i < myActiveUnits.Size(); ++i)
-	{
-		myMaps.myInfluenceMap->AddValue(1.f, 30.f, myActiveUnits[i]->GetPosition());
-	}
-
 	myMaps.myPlayerInfluenceMap->Update();
 	const CU::GrowingArray<Entity*>& playerUnits = PollingStation::GetInstance()->GetUnits(eOwnerType::PLAYER);
 	for (int i = 0; i < playerUnits.Size(); ++i)
 	{
-		myMaps.myPlayerInfluenceMap->AddValue(1.f, 30.f, playerUnits[i]->GetPosition());
+		myMaps.myPlayerInfluenceMap->AddValue(20.f, 30.f, playerUnits[i]->GetPosition());
 	}
 
-	myMaps.myNeutralInfluenceMap->Update();
-	const CU::GrowingArray<Entity*>& neutralUnits = PollingStation::GetInstance()->GetUnits(eOwnerType::NEUTRAL);
-	for (int i = 0; i < neutralUnits.Size(); ++i)
-	{
-		myMaps.myNeutralInfluenceMap->AddValue(1.f, 30.f, neutralUnits[i]->GetPosition());
-	}
 
-	for (int i = 0; i < myMaps.myPlayerNeutralCombinedInfluence->GetGrid().Size(); ++i)
-	{
-		myMaps.myPlayerNeutralCombinedInfluence->SetValue(i, myMaps.myPlayerInfluenceMap->GetGrid()[i] + myMaps.myNeutralInfluenceMap->GetGrid()[i]);
-	}
-
-	myMaps.myGoalMap->Update();
-	const CU::GrowingArray<Entity*>& victoryPoint = PollingStation::GetInstance()->GetVictoryPoints();
-	for (int i = 0; i < victoryPoint.Size(); ++i)
-	{
-		eOwnerType pointOwner = victoryPoint[i]->GetComponent<TriggerComponent>()->GetOwnerGainingPoint();
-		float victoryValue = 1.f;
-		if (pointOwner == myOwner)
-		{
-			victoryValue = 0.2f;
-		}
-		else if (pointOwner == eOwnerType::NEUTRAL)
-		{
-			victoryValue = 1.f;
-		}
-		else if (pointOwner == eOwnerType::PLAYER)
-		{
-			victoryValue = 0.7f;
-		}
-		myMaps.myGoalMap->AddValue(victoryValue, 30.f, victoryPoint[i]->GetPosition());
-	}
-
-	const CU::GrowingArray<Entity*>& resourcePoints = PollingStation::GetInstance()->GetResourcePoints();
-	for (int i = 0; i < resourcePoints.Size(); ++i)
-	{
-		eOwnerType pointOwner = resourcePoints[i]->GetComponent<TriggerComponent>()->GetOwnerGainingPoint();
-		float resourceValue = 0.8f;
-		if (pointOwner == myOwner)
-		{
-			resourceValue = 0.1f;
-		}
-		else if (pointOwner == eOwnerType::NEUTRAL)
-		{
-			resourceValue = 0.8f;
-		}
-		else if (pointOwner == eOwnerType::PLAYER)
-		{
-			resourceValue = 0.35f;
-		}
-		myMaps.myGoalMap->AddValue(resourceValue, 30.f, resourcePoints[i]->GetPosition());
-	}
-
-	const CU::GrowingArray<Entity*>& artifacts = PollingStation::GetInstance()->GetArtifacts();
-	for (int i = 0; i < artifacts.Size(); ++i)
-	{
-		myMaps.myGoalMap->AddValue(0.3f, 5.f, artifacts[i]->GetPosition());
-	}
-
-	myMaps.myDifferenceMap->Update();
-	myMaps.myTensionMap->Update();
-	myMaps.myVulnerabilityMap->Update();
 }
 
 void AIDirector::UpdateUnitLists()

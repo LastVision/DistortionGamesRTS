@@ -96,6 +96,9 @@
     <ClCompile Include="BlockMap.cpp">
       <Filter>Director\InfluenceMap</Filter>
     </ClCompile>
+    <ClCompile Include="FogOfWarMap.cpp">
+      <Filter>Director\InfluenceMap</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -201,6 +204,9 @@
       <Filter>StateStack</Filter>
     </ClInclude>
     <ClInclude Include="BlockMap.h">
+      <Filter>Director\InfluenceMap</Filter>
+    </ClInclude>
+    <ClInclude Include="FogOfWarMap.h">
       <Filter>Director\InfluenceMap</Filter>
     </ClInclude>
   </ItemGroup>

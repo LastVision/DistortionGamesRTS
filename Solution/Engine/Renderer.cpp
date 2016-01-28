@@ -73,7 +73,7 @@ namespace Prism
 		myEngine->GetContex()->OMSetRenderTargets(1, &renderTarget, depth);
 	}
 
-	void Renderer::EndScene(int aEffect)
+	void Renderer::EndScene(int aEffect, Texture* aFogOfWarTexture)
 	{
 		DL_ASSERT_EXP(mySceneIndex < MAX_NUMBER_OF_SCENES, "Tried to Begin to many Scenes");
 
@@ -82,7 +82,7 @@ namespace Prism
 		ID3D11RenderTargetView* renderTarget = data.myFinished->GetRenderTargetView();
 		myEngine->GetContex()->ClearRenderTargetView(renderTarget, myClearColor);
 
-		myFullScreenHelper->Process(data.myScene, data.myFinished, aEffect);
+		myFullScreenHelper->Process(data.myScene, data.myFinished, aEffect, aFogOfWarTexture);
 
 		++mySceneIndex;
 	}

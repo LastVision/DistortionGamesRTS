@@ -64,6 +64,8 @@ namespace Prism
 		void SetAmbientHue(CU::Vector4f aVector);
 		void SetBones(const CU::StaticArray<CU::Matrix44<float>, MAX_NR_OF_BONES>& someBones);
 
+		void SetFogOfWarTexture(Texture* aFogOfWarTexture);
+
 	private:
 		ID3DX11Effect* myEffect;
 		ID3DX11EffectTechnique* myTechnique;
@@ -88,6 +90,7 @@ namespace Prism
 		ID3DX11EffectVariable* mySpotLight;
 
 		ID3DX11EffectShaderResourceVariable* myTexture;
+		ID3DX11EffectShaderResourceVariable* myFogOfWarTexture;
 
 		ID3DX11EffectVectorVariable* mySpritePosAndScale;
 		ID3DX11EffectMatrixVariable* mySpriteOrientation;

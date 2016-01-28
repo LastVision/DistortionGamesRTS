@@ -32,16 +32,21 @@ AIMap::~AIMap()
 
 void AIMap::Render(const Prism::Camera& aCamera)
 {
+	UpdateRenderPlane();
+
+	myPlane->Render(aCamera, myOrientation);
+}
+
+void AIMap::UpdateRenderPlane()
+{
 	myPlane->StartModify();
 
 	for (int i = 0; i < myGrid.Size(); ++i)
 	{
-		myPlane->SetVertexColor(i, GetColor(myGrid[i]/40.f));
+		myPlane->SetVertexColor(i, GetColor(myGrid[i] / 40.f));
 	}
 
 	myPlane->EndModify();
-
-	myPlane->Render(aCamera, myOrientation);
 }
 
 CU::Vector2<float> AIMap::GetPosition(int aIndex) const
@@ -117,6 +122,11 @@ float AIMap::GetValue(const CU::Vector2<float>& aPosition) const
 	return 0.f;
 }
 
+Prism::RenderPlane* AIMap::GetRenderPlane()
+{
+	return myPlane;
+}
+
 CU::Vector4<float> AIMap::GetColor(float aValue) const
 {
 	if (aValue < 0.f)
@@ -124,7 +134,7 @@ CU::Vector4<float> AIMap::GetColor(float aValue) const
 		return{ 0.f, 0.f, fabsf(aValue), 1.f };
 	}
 
-	return{ aValue, 0.f, 0.f, 1.f };
+	return{ aValue, aValue, aValue, 1.f };
 }
 
 bool AIMap::ValidIndex(int aX, int aY) const

@@ -10,6 +10,7 @@ namespace Prism
 {
 	FullScreenHelper::FullScreenHelper()
 	{
+		myFogOfWarEffect = EffectContainer::GetInstance()->GetEffect("Data/Resource/Shader/S_effect_fog_of_war.fx");
 		CreateCombineData();
 		CreateRenderToTextureData();
 		CreateBloomData();
@@ -69,7 +70,7 @@ namespace Prism
 		SAFE_DELETE(myBloomData.myDownSampleTextures[1]);
 	}
 
-	void FullScreenHelper::Process(Texture* aSource, Texture* aTarget, int aEffect)
+	void FullScreenHelper::Process(Texture* aSource, Texture* aTarget, int aEffect, Texture* aFogOfWarTexture)
 	{
 		ActivateBuffers();
 		Engine::GetInstance()->DisableZBuffer();
@@ -83,7 +84,6 @@ namespace Prism
 
 		Engine::GetInstance()->GetContex()->ClearRenderTargetView(myProcessingTexture->GetRenderTargetView(), myClearColor);
 		CopyTexture(aSource, myProcessingTexture);
-
 		if (aEffect & ePostProcessing::BLOOM)
 		{
 			Engine::GetInstance()->GetContex()->ClearRenderTargetView(
@@ -98,6 +98,7 @@ namespace Prism
 			Engine::GetInstance()->RestoreViewPort();
 			CombineTextures(myBloomData.myFinalTexture, aSource, myProcessingTexture, false);
 		}
+		DoFogOfWar(aSource, aFogOfWarTexture, myProcessingTexture);
 		
 		CopyTexture(myProcessingTexture, aTarget);
 		Engine::GetInstance()->EnableZBuffer();
@@ -373,5 +374,17 @@ namespace Prism
 		myBloomData.myDownSampleTextures[1]->Resize(aWidth/4.f, aHeight/4.f);
 
 		myProcessingTexture->Resize(aWidth, aHeight);
+	}
+
+	void FullScreenHelper::DoFogOfWar(Texture* aWorldTexture, Texture* aFogOfWarTexture, Texture* aTarget)
+	{
+		ID3D11RenderTargetView* target = aTarget->GetRenderTargetView();
+		ID3D11DepthStencilView* depth = aTarget->GetDepthStencilView();
+		Engine::GetInstance()->GetContex()->ClearRenderTargetView(target, myClearColor);
+		Engine::GetInstance()->GetContex()->OMSetRenderTargets(1, &target, depth);
+		myFogOfWarEffect->SetFogOfWarTexture(aFogOfWarTexture);
+		myFogOfWarEffect->SetTexture(aWorldTexture);
+
+		Render(myFogOfWarEffect, "Render");
 	}
 }

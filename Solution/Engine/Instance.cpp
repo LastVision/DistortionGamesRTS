@@ -113,6 +113,7 @@ void Prism::Instance::Render(const Camera& aCamera, InstancingHelper& aInstancin
 	}
 }
 
+
 void Prism::Instance::RenderModelAnimated(ModelAnimated* aModel, const CU::Matrix44<float>& aParent
 	, const Camera& aCamera, TransformationNodeInstance& aHierarchy)
 {

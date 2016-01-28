@@ -100,6 +100,11 @@ namespace Prism
 		myBonesArray->SetMatrixArray(&someBones[0].myMatrix[0], 0, MAX_NR_OF_BONES);
 	}
 
+	void Effect::SetFogOfWarTexture(Texture* aFogOfWarTexture)
+	{
+		myFogOfWarTexture->SetResource(aFogOfWarTexture->GetShaderView());
+	}
+
 	void Effect::SetPosAndScale(const CU::Vector2<float>& aPos
 		, const CU::Vector2<float>& aScale)
 	{
@@ -323,6 +328,12 @@ namespace Prism
 		if (myTexture->IsValid() == false)
 		{
 			myTexture = nullptr;
+		}
+
+		myFogOfWarTexture = myEffect->GetVariableByName("FogOfWarTexture")->AsShaderResource();
+		if (myFogOfWarTexture->IsValid() == false)
+		{
+			myFogOfWarTexture = nullptr;
 		}
 
 		mySpritePosAndScale = myEffect->GetVariableByName("SpritePositionAndScale")->AsVector();

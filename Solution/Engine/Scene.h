@@ -24,6 +24,7 @@ namespace Prism
 		~Scene();
 
 		void Render(bool aRenderNavMeshLines);
+		void Render(bool aRenderNavMeshLines, Texture* aFogOfWarTexture);
 
 		void AddInstance(Instance* aInstance);
 		void AddLight(DirectionalLight* aLight);

@@ -18,7 +18,7 @@ namespace Prism
 		FullScreenHelper();
 		~FullScreenHelper();
 
-		void Process(Texture* aSource, Texture* aTarget, int aEffect);
+		void Process(Texture* aSource, Texture* aTarget, int aEffect, Texture* aFogOfWarTexture);
 		void CopyTexture(Texture* aSource, Texture* aTarget);
 		void CombineTextures(Texture* aSourceA, Texture* aSourceB, Texture* aTarget, bool aUseDepth);
 		void FullScreenHelper::CombineTextures(Texture* aSourceA, Texture* aDepthA
@@ -57,7 +57,8 @@ namespace Prism
 
 			Texture* myDownSampleTextures[2];
 		};
-
+		void DoFogOfWar(Texture* aWorldTexture, Texture* aFogOfWarTexture, Texture* aTarget);
+		Effect* myFogOfWarEffect;
 		
 		
 		void CreateCombineData();

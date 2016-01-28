@@ -8,6 +8,7 @@ namespace Prism
 	class Renderer;
 	class Scene;
 	class Terrain;
+	class FogOfWarHelper;
 }
 
 namespace GUI
@@ -20,6 +21,7 @@ class Entity;
 class EmitterManager;
 class NeutralDirector;
 class PlayerDirector;
+class FogOfWarMap;
 class Tutorial;
 
 class Level : public Subscriber
@@ -59,6 +61,9 @@ private:
 	PlayerDirector* myPlayer;
 	AIDirector* myAI;
 	NeutralDirector* myNeutralDirector;
+
+	FogOfWarMap* myFogOfWarMap;
+	Prism::FogOfWarHelper* myFogOfWarHelper;
 
 	int myMaxVictoryPoint;
 

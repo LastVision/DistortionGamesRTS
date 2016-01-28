@@ -9,6 +9,8 @@
 #include <Entity.h>
 #include <EntityId.h>
 #include <EntityFactory.h>
+#include <FogOfWarHelper.h>
+#include "FogOfWarMap.h"
 #include <GameStateMessage.h>
 #include <InputWrapper.h>
 #include "Level.h"
@@ -38,9 +40,13 @@ Level::Level(const Prism::Camera& aCamera, Prism::Terrain* aTerrain, GUI::Cursor
 
 	myPlayer = new PlayerDirector(*myTerrain, *myScene, aCursor);
 	myAI = new AIDirector(*myTerrain, *myScene);
+
 	myNeutralDirector = new NeutralDirector(*myTerrain, *myScene);
 
 	myRenderer = new Prism::Renderer();
+
+	myFogOfWarMap = new FogOfWarMap();
+	myFogOfWarHelper = new Prism::FogOfWarHelper();
 }
 
 Level::~Level()
@@ -55,6 +61,8 @@ Level::~Level()
 	SAFE_DELETE(myNeutralDirector);
 	SAFE_DELETE(myScene);
 	SAFE_DELETE(myRenderer);
+	SAFE_DELETE(myFogOfWarMap);
+	SAFE_DELETE(myFogOfWarHelper);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::TOGGLE_RENDER_LINES, this);
 	EntityFactory::Destroy();
 	EntityId::Destroy();
@@ -98,6 +106,8 @@ bool Level::Update(float aDeltaTime, Prism::Camera& aCamera)
 	myPlayer->Update(aDeltaTime, aCamera);
 	myAI->Update(aDeltaTime);
 	myNeutralDirector->Update(aDeltaTime);
+	myFogOfWarMap->Update();
+
 	myEmitterManager->UpdateEmitters(aDeltaTime, CU::Matrix44f());
 
 	return true;
@@ -106,13 +116,18 @@ bool Level::Update(float aDeltaTime, Prism::Camera& aCamera)
 void Level::Render(Prism::Camera& aCamera)
 {
 	Prism::Engine::GetInstance()->SetClearColor({ 0.2f, 0.2f, 0.2f, 1.f });
+
+	myFogOfWarMap->UpdateRenderPlane();
+
+	myFogOfWarHelper->Render(aCamera, myFogOfWarMap->GetRenderPlane());
+
 	myRenderer->BeginScene();
-	myScene->Render(myRenderNavMeshLines);
+	myScene->Render(myRenderNavMeshLines, myFogOfWarHelper->GetTexture());
 	myEmitterManager->RenderEmitters();
 
 	myAI->RenderMaps(aCamera);
 
-	myRenderer->EndScene(Prism::ePostProcessing::BLOOM);
+	myRenderer->EndScene(Prism::ePostProcessing::BLOOM, myFogOfWarHelper->GetTexture());
 	myRenderer->FinalRender();
 
 	

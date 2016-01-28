@@ -4,7 +4,7 @@
 
 InfluenceMap::InfluenceMap()
 	: AIMap()
-	, myForgetSpeed(0.99f)
+	, myForgetSpeed(0.01f)
 {
 }
 

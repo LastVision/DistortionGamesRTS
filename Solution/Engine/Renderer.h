@@ -20,7 +20,7 @@ namespace Prism
 		~Renderer();
 
 		void BeginScene();
-		void EndScene(int aEffect);
+		void EndScene(int aEffect, Texture* aFogOfWarTexture);
 
 		void FinalRender();
 

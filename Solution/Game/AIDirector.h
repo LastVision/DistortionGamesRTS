@@ -36,6 +36,8 @@ public:
 
 	void LoadAISettings(const std::string& aFilePath);
 
+	InfluenceMap* GetPlayerInfluenceMap();
+
 private:
 	struct Action
 	{
@@ -57,16 +59,8 @@ private:
 	{
 		AIMaps();
 		~AIMaps();
-		InfluenceMap* myInfluenceMap;
 		InfluenceMap* myPlayerInfluenceMap;
-		InfluenceMap* myNeutralInfluenceMap;
-		InfluenceMap* myPlayerNeutralCombinedInfluence;
-		InfluenceMap* myGoalMap;
 		BlockMap* myBlockMap;
-		TensionMap* myTensionMap;
-		DifferenceMap* myDifferenceMap;
-		VulnerabilityMap* myVulnerabilityMap;
-		DecisionMap* myDecisionMap;
 		int myInfluenceRenderIndex;
 	};
 	struct ControlPointAdvisorData
