@@ -39,6 +39,8 @@ public:
 	const float& GetUpgradeCooldown(int aUnitID) const;
 	const float& GetUpgradeMaxCooldown(int aUnitID) const;
 
+	void SetRallyPoint(const CU::Vector2<float>& aPoint);
+
 private:
 	struct BuildInfo
 	{
@@ -129,4 +131,9 @@ inline const float& BuildingComponent::GetUpgradeCooldown(int aUnitID) const
 inline const float& BuildingComponent::GetUpgradeMaxCooldown(int aUnitID) const
 {
 	return myUpgradeMaxCooldowns[aUnitID];
+}
+
+inline void BuildingComponent::SetRallyPoint(const CU::Vector2<float>& aPoint)
+{
+	myRallyPoint = aPoint;
 }
