@@ -353,6 +353,21 @@ void PlayerDirector::ReceiveMessage(const OnClickMessage& aMessage)
 	if (aMessage.myEvent == eOnClickEvent::SELECT_CONTROL_GROUP)
 	{
 		SelectControlGroup(aMessage.myID);
+		myHasClicked = true;
+		if (myHasClicked == true && mySelectedControlGroup == aMessage.myID && mySelectedControlGroup > -1 && myCurrentDoubleClickTimer > 0)
+		{
+			CameraFocusOnControlGroup(aMessage.myID);
+			myHasDoubleClicked = true;
+			mySelectedControlGroup = -1;
+			myHasClicked = false;
+		}
+		if (myHasClicked == true)
+		{
+			myHasClicked = false;
+			mySelectedControlGroup = aMessage.myID;
+			myCurrentDoubleClickTimer = myDoubleClickTime;
+		}
+		
 	}
 }
 

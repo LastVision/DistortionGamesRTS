@@ -189,6 +189,7 @@ namespace GUI
 
 	void UnitInfoWidget::RenderUnitInfo(const CU::Vector2<float>& aParentPosition)
 	{
+		if (myUnits[0]->GetType() != eEntityType::UNIT) return;
 		CU::Vector2<float> portraitPosition = myPosition + aParentPosition + myPortraitPosition;
 		CU::Vector2<float> upgradePosition = portraitPosition;
 
