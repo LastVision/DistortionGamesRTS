@@ -7,7 +7,7 @@
 namespace GUI
 {
 	AbilityButton::AbilityButton(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement, const PlayerDirector* aPlayer)
-		: ButtonWidget(aReader, anXMLElement)
+		: ButtonWidget(aReader, anXMLElement, aPlayer)
 		, myCooldown(nullptr)
 		, myMaxCooldown(nullptr)
 		, myCooldownIndicator(nullptr)

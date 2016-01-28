@@ -3,10 +3,12 @@
 #include "TooltipInfo.h"
 #include "TooltipWidget.h"
 #include "GUIManager.h"
+#include "../Game/PlayerDirector.h"
 
 namespace GUI
 {
-	TooltipWidget::TooltipWidget(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement, const GUIManager* aGuiManager)
+	TooltipWidget::TooltipWidget(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement
+		, const GUIManager* aGuiManager, const PlayerDirector* aPlayer)
 		: Widget()
 		, myGuiManager(aGuiManager)
 		, myBackground(nullptr)
@@ -15,6 +17,7 @@ namespace GUI
 		, mySupplySprite(nullptr)
 		, myHeadlineScale(1.f)
 		, myTextScale(1.f)
+		, myPlayer(aPlayer)
 	{
 		mySize = { 0.f, 0.f};
 		myPosition = { 0.f, 0.f };
@@ -38,15 +41,12 @@ namespace GUI
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "costspritesize"), "y", costSpriteSize.y);
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "costtextoffset"), "x", myCostTextOffset.x);
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "costtextoffset"), "y", myCostTextOffset.y);
-
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "cooldownsprite"), "path", cooldownPath);
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "gunpowdersprite"), "path", gunpowderPath);
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "supplysprite"), "path", supplyPath);
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "artifactsprite"), "path", artifactPath);
-
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "headlinescale"), "value", myHeadlineScale);
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "textscale"), "value", myTextScale);
-
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "cooldownsprite"), "positionx", myCooldownPosition.x);
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "cooldownsprite"), "positiony", myCooldownPosition.y);
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "gunpowdersprite"), "positionx", myGunpowderPosition.x);
@@ -89,15 +89,7 @@ namespace GUI
 			Prism::Engine::GetInstance()->PrintText(tooltipInfo->myText, myTextPosition + position
 				, Prism::eTextType::RELEASE_TEXT, myTextScale);
 
-			//if (tooltipInfo->myCooldown != -1)
-			//{
-				myCooldownSprite->Render(position + myCooldownPosition);
-			//	Prism::Engine::GetInstance()->PrintText(tooltipInfo->myCooldown, position + myCooldownPosition + myCostTextOffset
-			//		, Prism::eTextType::RELEASE_TEXT, myTextScale);
-			//}
-				myGunpowderSprite->Render(position + myGunpowderPosition);
-				mySupplySprite->Render(position + mySupplyPosition);
-				myArtifactSprite->Render(position + myArtifactPosition);
+			RenderCost(position, tooltipInfo);
 		}
 	}
 
@@ -124,5 +116,54 @@ namespace GUI
 
 		myTextScale = (myTextScale / anOldWindowSize.x) * aNewWindowSize.x;
 		myHeadlineScale = (myHeadlineScale / anOldWindowSize.x) * aNewWindowSize.x;
+	}
+
+	void TooltipWidget::RenderCost(const CU::Vector2<float>& aParentPosition, const TooltipInfo* aTooltipInfo)
+	{
+		if (aTooltipInfo->myCooldown != nullptr)
+		{
+			myCooldownSprite->Render(aParentPosition + myCooldownPosition);
+			Prism::Engine::GetInstance()->PrintText(*aTooltipInfo->myCooldown, aParentPosition + myCooldownPosition + myCostTextOffset
+				, Prism::eTextType::RELEASE_TEXT, myTextScale);
+		}
+
+		if (aTooltipInfo->myGunpowderCost != nullptr)
+		{
+			CU::Vector4<float> color(1.f, 1.f, 1.f, 1.f);
+			if (myPlayer->CanAffordGunpowder(*aTooltipInfo->myGunpowderCost) == false)
+			{
+				color = { 1.f, 0.f, 0.f, 1.f };
+			}
+
+			myGunpowderSprite->Render(aParentPosition + myGunpowderPosition, { 1.f, 1.f }, color);
+			Prism::Engine::GetInstance()->PrintText(*aTooltipInfo->myGunpowderCost, aParentPosition + myGunpowderPosition + myCostTextOffset
+				, Prism::eTextType::RELEASE_TEXT, myTextScale, color);
+		}
+
+		if (aTooltipInfo->mySupplyCost != nullptr)
+		{
+			CU::Vector4<float> color(1.f, 1.f, 1.f, 1.f);
+			if (myPlayer->CanAffordSupply(*aTooltipInfo->mySupplyCost) == false)
+			{
+				color = { 1.f, 0.f, 0.f, 1.f };
+			}
+
+			mySupplySprite->Render(aParentPosition + mySupplyPosition, { 1.f, 1.f }, color);
+			Prism::Engine::GetInstance()->PrintText(*aTooltipInfo->mySupplyCost, aParentPosition + mySupplyPosition + myCostTextOffset
+				, Prism::eTextType::RELEASE_TEXT, myTextScale, color);
+		}
+
+		if (aTooltipInfo->myArftifactCost != nullptr)
+		{
+			CU::Vector4<float> color(1.f, 1.f, 1.f, 1.f);
+			if (myPlayer->CanAffordArtifact(*aTooltipInfo->myArftifactCost) == false)
+			{
+				color = { 1.f, 0.f, 0.f, 1.f };
+			}
+
+			myArtifactSprite->Render(aParentPosition + myArtifactPosition, { 1.f, 1.f }, color);
+			Prism::Engine::GetInstance()->PrintText(*aTooltipInfo->myArftifactCost, aParentPosition + myArtifactPosition + myCostTextOffset
+				, Prism::eTextType::RELEASE_TEXT, myTextScale, color);
+		}
 	}
 }

@@ -1,14 +1,14 @@
 #include "stdafx.h"
-
 #include <AudioInterface.h>
 #include "ButtonWidget.h"
 #include <Engine.h>
 #include <OnClickMessage.h>
 #include <PostMaster.h>
+#include "../Game/PlayerDirector.h"
 
 namespace GUI
 {
-	ButtonWidget::ButtonWidget(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement)
+	ButtonWidget::ButtonWidget(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement, const PlayerDirector* aPlayer)
 		: Widget()
 		, myImageNormal(nullptr)
 		, myImagePressed(nullptr)
@@ -29,27 +29,7 @@ namespace GUI
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "spritehover"), "path", spritePathHover);
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "spritepressed"), "path", spritePathPressed);
 
-		if (aReader->FindFirstChild(anXMLElement, "tooltip") != nullptr)
-		{
-			std::string headline = "";
-			std::string text = "";
-			float cooldown = -1;
-			int gunpowder = -1;
-			int supply = -1;
-
-			aReader->ReadAttribute(aReader->FindFirstChild(anXMLElement, "tooltip"), "headline", headline);
-			aReader->ReadAttribute(aReader->FindFirstChild(anXMLElement, "tooltip"), "text", text);
-			aReader->ReadAttribute(aReader->FindFirstChild(anXMLElement, "tooltip"), "cooldown", cooldown);
-			aReader->ReadAttribute(aReader->FindFirstChild(anXMLElement, "tooltip"), "gunpowder", gunpowder);
-			aReader->ReadAttribute(aReader->FindFirstChild(anXMLElement, "tooltip"), "supply", supply);
-
-			myTooltipInfo = new TooltipInfo(headline, text);
-
-			myTooltipInfo->myCooldown = cooldown;
-			myTooltipInfo->myGunpowderCost = gunpowder;
-			myTooltipInfo->mySupplyCost = supply;
-		}
-
+		ReadTooltip(aReader, anXMLElement, aPlayer);
 		ReadEvent(aReader, anXMLElement);
 
 		myImageNormal = Prism::ModelLoader::GetInstance()->LoadSprite(spritePathNormal, mySize, mySize / 2.f);
@@ -123,6 +103,59 @@ namespace GUI
 	void ButtonWidget::SetPosition(const CU::Vector2<float>& aPosition)
 	{
 		myPosition = { aPosition.x + myImageCurrent->GetHotspot().x, aPosition.y - myImageCurrent->GetHotspot().y };
+	}
+
+	void ButtonWidget::ReadTooltip(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement, const PlayerDirector* aPlayer)
+	{
+		if (aReader->FindFirstChild(anXMLElement, "tooltip") != nullptr)
+		{
+			std::string headline = "";
+			std::string text = "";
+			std::string action = "";
+			int upgradeLevel = -1;
+
+			aReader->ReadAttribute(aReader->FindFirstChild(anXMLElement, "tooltip"), "headline", headline);
+			aReader->ReadAttribute(aReader->FindFirstChild(anXMLElement, "tooltip"), "text", text);
+			aReader->ReadAttribute(aReader->FindFirstChild(anXMLElement, "tooltip"), "action", action);
+			aReader->ReadAttribute(aReader->FindFirstChild(anXMLElement, "tooltip"), "upgradelevel", upgradeLevel);
+
+			myTooltipInfo = new TooltipInfo(headline, text);
+
+			if (action == "totem")
+			{
+				myTooltipInfo->myCooldown = &aPlayer->GetTotemMaxCooldown();
+			}
+			else if (action == "spawn_grunt")
+			{
+				myTooltipInfo->myGunpowderCost = &aPlayer->GetUnitCost(0);
+				myTooltipInfo->mySupplyCost = &aPlayer->GetUnitSupplyCost(0);
+			}
+			else if (action == "spawn_ranger")
+			{
+				myTooltipInfo->myGunpowderCost = &aPlayer->GetUnitCost(1);
+				myTooltipInfo->mySupplyCost = &aPlayer->GetUnitSupplyCost(1);
+			}
+			else if (action == "spawn_tank")
+			{
+				myTooltipInfo->myGunpowderCost = &aPlayer->GetUnitCost(2);
+				myTooltipInfo->mySupplyCost = &aPlayer->GetUnitSupplyCost(2);
+			}
+			else if (action == "upgrade_grunt")
+			{
+				myTooltipInfo->myCooldown = &aPlayer->GetUpgradeMaxCooldown(0);
+				myTooltipInfo->myArftifactCost = &aPlayer->GetUpgradeCost(0, upgradeLevel);
+			}
+			else if (action == "upgrade_ranger")
+			{
+				myTooltipInfo->myCooldown = &aPlayer->GetUpgradeMaxCooldown(1);
+				myTooltipInfo->myArftifactCost = &aPlayer->GetUpgradeCost(1, upgradeLevel);
+			}
+			else if (action == "upgrade_tank")
+			{
+				myTooltipInfo->myCooldown = &aPlayer->GetUpgradeMaxCooldown(2);
+				myTooltipInfo->myArftifactCost = &aPlayer->GetUpgradeCost(2, upgradeLevel);
+			}
+		}
 	}
 
 	void ButtonWidget::ReadEvent(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement)

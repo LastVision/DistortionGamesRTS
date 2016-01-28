@@ -106,12 +106,12 @@ void BuildingComponent::UpgradeUnit(eUnitType aUnitType)
 	}
 }
 
-int BuildingComponent::GetUnitCost(eUnitType aUnitType)
+const int& BuildingComponent::GetUnitCost(eUnitType aUnitType) const
 {
 	return myUnitCosts[static_cast<int>(aUnitType)];
 }
 
-int BuildingComponent::GetUnitSupplyCost(eUnitType aUnitType)
+const int& BuildingComponent::GetUnitSupplyCost(eUnitType aUnitType) const
 {
 	return myUnitSupplyCosts[static_cast<int>(aUnitType)];
 }
@@ -123,7 +123,12 @@ int BuildingComponent::GetUpgradeCost(eUnitType aUnitType)
 	return myUnitUpgrades[unitIndex][upgradeIndex].myCost;
 }
 
-bool BuildingComponent::CanUpgrade(eUnitType aUnitType)
+const int& BuildingComponent::GetUpgradeCost(eUnitType aUnitType, int aUpgradeLevel) const
+{
+	return myUnitUpgrades[static_cast<int>(aUnitType)][aUpgradeLevel].myCost;
+}
+
+bool BuildingComponent::CanUpgrade(eUnitType aUnitType) const
 {
 	int unitIndex = static_cast<int>(aUnitType);
 	int upgradeIndex = myUnitUpgradeProgress[unitIndex];

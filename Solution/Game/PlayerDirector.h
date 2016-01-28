@@ -88,6 +88,14 @@ public:
 	const int& GetUpgradeLevel(int aUnitID) const;
 	const float& GetUpgradeCooldown(int aUnitID) const;
 	const float& GetUpgradeMaxCooldown(int aUnitID) const;
+	const int& GetUnitCost(int aUnitID) const;
+	const int& GetUnitSupplyCost(int aUnitID) const;
+	const int& GetUpgradeCost(int aUnitID, int aUpgradeLevel) const;
+
+	bool CanUpgrade(int aUnitType) const;
+	bool CanAffordSupply(int aSupplyCost) const;
+	bool CanAffordGunpowder(int aCost) const;
+	bool CanAffordArtifact(int aCost) const;
 
 private:
 	void UpdateInputs();

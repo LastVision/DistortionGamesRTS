@@ -12,6 +12,7 @@ namespace tinyxml2
 }
 
 class XMLReader;
+class PlayerDirector;
 struct OnClickMessage;
 
 namespace GUI
@@ -19,7 +20,7 @@ namespace GUI
 	class ButtonWidget : public Widget
 	{
 	public:
-		ButtonWidget(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement);
+		ButtonWidget(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement, const PlayerDirector* aPlayer);
 		~ButtonWidget();
 
 		virtual void Render(const CU::Vector2<float>& aParentPosition) override;
@@ -33,6 +34,7 @@ namespace GUI
 		bool IsInside(const CU::Vector2<float>& aPosition) const override;
 		void SetPosition(const CU::Vector2<float>& aPosition) override;
 
+		void ReadTooltip(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement, const PlayerDirector* aPlayer);
 		void ReadEvent(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement);
 
 		const OnClickMessage* GetEvent() const;
