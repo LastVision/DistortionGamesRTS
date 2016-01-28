@@ -30,8 +30,10 @@ void BuildingComponent::Reset()
 	myCurrentBuildTime = 0.f;
 	myIgnoreBuildTime = false;
 	myEntity.myAlive = true;
-	mySpawnPoint = myEntity.GetPosition() + CU::Vector2<float>(0, -15.f);
-	myRallyPoint = myEntity.GetPosition() + CU::Vector2<float>(1.f, -16.5f);
+
+	CU::Vector2<float> forward(myEntity.GetOrientation().GetForward().x, myEntity.GetOrientation().GetForward().z);
+	mySpawnPoint = myEntity.GetPosition() + (-forward * 14.f);
+	myRallyPoint = myEntity.GetPosition() + (-forward * 15.f);
 }
 
 void BuildingComponent::Update(float aDeltaTime)

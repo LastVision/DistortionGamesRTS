@@ -914,6 +914,12 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 		}
 	}
 
+	if (mySelectedUnits.Size() == 1 && mySelectedUnits[0]->GetType() == eEntityType::BASE_BUILING
+		&& myRightClicked == true)
+	{
+		myBuilding->GetComponent<BuildingComponent>()->SetRallyPoint({ firstTargetPos.x, firstTargetPos.z });
+	}
+
 	if (hasDoneAction == true)
 	{
 		mySelectedAction = eSelectedAction::NONE;
