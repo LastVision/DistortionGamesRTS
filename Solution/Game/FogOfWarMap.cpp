@@ -3,10 +3,12 @@
 #include <PollingStation.h>
 #include <Entity.h>
 #include <RenderPlane.h>
+#include <TriggerComponent.h>
 
 FogOfWarMap::FogOfWarMap()
 	: AIMap(256)
 {
+	myMaxValue = 1.f;
 }
 
 
@@ -28,6 +30,15 @@ void FogOfWarMap::Update()
 	{
 		AddValue(1.f, 20.f, playerUnits[j]->GetPosition());
 	}
+
+	const CU::GrowingArray<Entity*>& playerPoints = PollingStation::GetInstance()->GetVictoryAndResourcePoints();
+	for (int i = 0; i < playerPoints.Size(); ++i)
+	{
+		if (playerPoints[i]->GetComponent<TriggerComponent>()->GetOwnerGainingPoint() == eOwnerType::PLAYER)
+		{
+			AddValue(1.f, 20.f, playerPoints[i]->GetPosition());
+		}
+	}
 }
 
 void FogOfWarMap::AddValue(float aValue, float aRadius, const CU::Vector2<float>& aPosition)
@@ -40,11 +51,27 @@ void FogOfWarMap::AddValue(float aValue, float aRadius, const CU::Vector2<float>
 		for (int x = topLeft.x; x < botRight.x; ++x)
 		{
 			float distance = CU::Length(GetPosition(x, y) - aPosition);
-			if (distance < aRadius && ValidIndex(x, y))
+			if (distance < aRadius - 5.f && ValidIndex(x, y))
 			{
 				int index = x + y * mySide;
 				myGrid[index] = aValue;
 			}
+			else if (distance >= aRadius - 5.f && distance <= aRadius)
+			{
+				int index = x + y * mySide;
+				//myGrid[index] = aValue;
+				float rest = aRadius - 5.f;
+				float parts = 0.75f / 5.f;
+				float toPoint = (distance - rest) * parts;
+				float divider = (rest / myTileSize);
+				float value = aValue - toPoint;
+				myGrid[index] += value;
+				myGrid[index] = fminf(myGrid[index], myMaxValue);
+				myGrid[index] = fmaxf(myGrid[index], 0.25f);
+
+
+			}
+
 		}
 	}
 

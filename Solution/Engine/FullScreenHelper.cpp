@@ -101,6 +101,15 @@ namespace Prism
 
 		if (aEffect & ePostProcessing::FOG_OF_WAR)
 		{
+			//Engine::GetInstance()->GetContex()->ClearRenderTargetView(
+			//	myBloomData.myDownSampleTextures[0]->GetRenderTargetView(), myClearColor);
+			//Engine::GetInstance()->GetContex()->ClearRenderTargetView(
+			//	myBloomData.myDownSampleTextures[1]->GetRenderTargetView(), myClearColor);
+			//Engine::GetInstance()->GetContex()->ClearRenderTargetView(
+			//	myBloomData.myFinalTexture->GetRenderTargetView(), myClearColor);
+			//
+			//BloomEffect(myProcessingTexture, "BLOOM_HDR");
+
 			Engine::GetInstance()->GetContex()->ClearRenderTargetView(
 				myBloomData.myFinalTexture->GetRenderTargetView(), myClearColor);
 			DoFogOfWar(myProcessingTexture, aFogOfWarTexture, aTarget);

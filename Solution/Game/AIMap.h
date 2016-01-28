@@ -40,7 +40,7 @@ protected:
 	const int myLevelWidth;
 	float myTileSize;
 	float myLevelCellSize;
-	const float myMaxValue;
+	float myMaxValue;
 	CU::GrowingArray<float> myGrid;
 
 	Prism::RenderPlane* myPlane;
