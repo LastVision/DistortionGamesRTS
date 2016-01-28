@@ -65,6 +65,8 @@ void PollingStation::RegisterEntity(Entity* aEntity)
 			break;
 		}
 		break;
+	case eEntityType::PROP:
+		myProps.Add(aEntity);
 		break;
 	default:
 		DL_ASSERT("PollingStation tried to Register an Entity with invalid Type");
@@ -140,6 +142,7 @@ void PollingStation::FindAllEntitiesCloseToEntity(const Entity* anEntity, float 
 	FindAllEntitiesCloseToEntity(myPlayerUnits, anEntity, aRadius, someEntitiesOut);
 	FindAllEntitiesCloseToEntity(myNeutralUnits, anEntity, aRadius, someEntitiesOut);
 	FindAllEntitiesCloseToEntity(myAIUnits, anEntity, aRadius, someEntitiesOut);
+	FindAllEntitiesCloseToEntity(myProps, anEntity, aRadius, someEntitiesOut);
 }
 
 void PollingStation::FindAllEntitiesCloseToEntity(const CU::GrowingArray<Entity*>& someEntitiesIn
@@ -149,7 +152,7 @@ void PollingStation::FindAllEntitiesCloseToEntity(const CU::GrowingArray<Entity*
 	for (int i = 0; i < someEntitiesIn.Size(); ++i)
 	{
 		Entity* current = someEntitiesIn[i];
-		if (current->GetAlive() == true && current != anEntity)
+		if ((current->GetAlive() == true || current->GetType() == eEntityType::PROP) && current != anEntity)
 		{
 			dist2 = CU::Length2(current->GetPosition() - anEntity->GetPosition());
 
@@ -358,6 +361,7 @@ PollingStation::PollingStation()
 	, myVictoryPoints(GC::victoryPointCount)
 	, myArtifacts(20)
 	, myVictoryAndResourcePoints(20)
+	, myProps(128)
 {
 }
 

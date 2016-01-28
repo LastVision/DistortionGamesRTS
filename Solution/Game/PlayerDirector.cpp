@@ -24,6 +24,7 @@
 #include <PathFinderFunnel.h>
 #include "PlayerDirector.h"
 #include <PollingStation.h>
+#include <SelectUnitMessage.h>
 #include <Terrain.h>
 #include <ToggleGUIMessage.h>
 #include <ToggleBuildTimeMessage.h>
@@ -57,10 +58,11 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 	, myMaxSelectedUnits(0)
 	, myHasEventToGoTo(false)
 	, mySelectedControlGroup(-1)
-	, myDoubleClickTime(0.5f)
+	, myDoubleClickTime(1.f)
 	, myCurrentDoubleClickTimer(0.f)
 	, myHasDoubleClicked(false)
 	, myHasClicked(false)
+	, myHasClickedF1(false)
 	, myCurrentCancleCursorTime(0.f)
 	, myCancleCursorTime(0.5f)
 {
@@ -85,6 +87,7 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 	PostMaster::GetInstance()->Subscribe(eMessageType::MOVE_UNITS, this);
 	PostMaster::GetInstance()->Subscribe(eMessageType::TOGGLE_BUILD_TIME, this);
 	PostMaster::GetInstance()->Subscribe(eMessageType::EVENT_POSITION, this);
+	PostMaster::GetInstance()->Subscribe(eMessageType::SELECT_UNIT, this);
 
 	EntityData tempData;
 
@@ -155,6 +158,8 @@ PlayerDirector::~PlayerDirector()
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::MOVE_UNITS, this);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::TOGGLE_BUILD_TIME, this);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::EVENT_POSITION, this);
+	PostMaster::GetInstance()->UnSubscribe(eMessageType::SELECT_UNIT, this);
+
 	Prism::Audio::AudioInterface::GetInstance()->UnRegisterObject(myAudioSFXID);
 }
 
@@ -200,6 +205,27 @@ void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_F2) == true)
 	{
 		SelectAllUnits();
+	}
+	else if (CU::InputWrapper::GetInstance()->KeyDown(DIK_F1) == true)
+	{
+		mySelectedUnits.RemoveAll();
+		mySelectedUnits.Add(myBuilding);
+		myHasClicked = true;
+
+		if (myHasClicked == true && myHasClickedF1 == true && myCurrentDoubleClickTimer > 0.f)
+		{
+			PostMaster::GetInstance()->SendMessage(MoveCameraMessage(myBuilding->GetPosition(),
+				eHowToHandleMovement::WORLD_POSITION));
+			myHasClicked = false;
+			myHasClickedF1 = false;
+			myHasDoubleClicked = true;
+		}
+		if (myHasClicked == true)
+		{
+			myHasClicked = false;
+			myHasClickedF1 = true;
+			myCurrentDoubleClickTimer = myDoubleClickTime;
+		}
 	}
 
 	UpdateInputs();
@@ -327,6 +353,21 @@ void PlayerDirector::ReceiveMessage(const OnClickMessage& aMessage)
 	if (aMessage.myEvent == eOnClickEvent::SELECT_CONTROL_GROUP)
 	{
 		SelectControlGroup(aMessage.myID);
+		myHasClicked = true;
+		if (myHasClicked == true && mySelectedControlGroup == aMessage.myID && mySelectedControlGroup > -1 && myCurrentDoubleClickTimer > 0)
+		{
+			CameraFocusOnControlGroup(aMessage.myID);
+			myHasDoubleClicked = true;
+			mySelectedControlGroup = -1;
+			myHasClicked = false;
+		}
+		if (myHasClicked == true)
+		{
+			myHasClicked = false;
+			mySelectedControlGroup = aMessage.myID;
+			myCurrentDoubleClickTimer = myDoubleClickTime;
+		}
+		
 	}
 }
 
@@ -360,6 +401,19 @@ void PlayerDirector::ReceiveMessage(const EventPositionMessage& aMessage)
 {
 	myLastEventPosition = aMessage.myPosition;
 	myHasEventToGoTo = true;
+}
+
+void PlayerDirector::ReceiveMessage(const SelectUnitMessage& aMessage)
+{
+	for (int i = mySelectedUnits.Size() - 1; i >= 0; --i)
+	{
+		if (i != aMessage.myUnitIndex)
+		{
+			mySelectedUnits[i]->SetSelect(false);
+			mySelectedUnits[i]->SetHovered(false);
+			mySelectedUnits.RemoveCyclicAtIndex(i);
+		}
+	}
 }
 
 const BuildingComponent& PlayerDirector::GetBuildingComponent() const
@@ -517,6 +571,56 @@ const float& PlayerDirector::GetUpgradeMaxCooldown(int aUnitID) const
 	return myBuilding->GetComponent<BuildingComponent>()->GetUpgradeMaxCooldown(aUnitID);
 }
 
+const int& PlayerDirector::GetUnitCost(int aUnitID) const
+{
+	return myBuilding->GetComponent<BuildingComponent>()->GetUnitCost(static_cast<eUnitType>(aUnitID));
+}
+
+const int& PlayerDirector::GetUnitSupplyCost(int aUnitID) const
+{
+	return myBuilding->GetComponent<BuildingComponent>()->GetUnitSupplyCost(static_cast<eUnitType>(aUnitID));
+}
+
+const int& PlayerDirector::GetUpgradeCost(int aUnitID, int aUpgradeLevel) const
+{
+	return myBuilding->GetComponent<BuildingComponent>()->GetUpgradeCost(static_cast<eUnitType>(aUnitID), aUpgradeLevel);
+}
+
+bool PlayerDirector::CanUpgrade(int aUnitType) const
+{
+	return myBuilding->GetComponent<BuildingComponent>()->CanUpgrade(static_cast<eUnitType>(aUnitType));
+}
+
+bool PlayerDirector::CanAffordSupply(int aSupplyCost) const
+{
+	if (aSupplyCost + myUnitCount > myUnitCap)
+	{
+		return false;
+	}
+
+	return true;
+}
+
+bool PlayerDirector::CanAffordGunpowder(int aCost) const
+{
+	if (aCost > myGunpowder)
+	{
+		return false;
+	}
+
+	return true;
+}
+
+bool PlayerDirector::CanAffordArtifact(int aCost) const
+{
+	if (aCost > myArtifacts)
+	{
+		return false;
+	}
+
+	return true;
+}
+
 void PlayerDirector::UpdateInputs()
 {
 	myShiftPressed = CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_LSHIFT)
@@ -548,11 +652,7 @@ void PlayerDirector::UpdateInputs()
 			mySelectedAction = eSelectedAction::HOLD_POSITION;
 		}
 	}
-	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_F1) == true)
-	{
-		mySelectedUnits.RemoveAll();
-		mySelectedUnits.Add(myBuilding);
-	}
+
 
 	myLeftMouseDown = CU::InputWrapper::GetInstance()->MouseDown(0);
 	myLeftMousePressed = CU::InputWrapper::GetInstance()->MouseIsPressed(0);
@@ -623,7 +723,6 @@ void PlayerDirector::UpdateControlGroups()
 	if (myControlPressed == false)
 	{
 		int index = -1;
-		myHasClicked = false;
 
 		if (CU::InputWrapper::GetInstance()->KeyDown(DIK_1) == true)
 		{
@@ -671,16 +770,19 @@ void PlayerDirector::UpdateControlGroups()
 			myHasClicked = true;
 		}
 		SelectControlGroup(index);
-		if (myHasClicked == true && mySelectedControlGroup == index && index > -1 && myCurrentDoubleClickTimer <= 0.f)
+		if (myHasClicked == true && mySelectedControlGroup == index && index > -1 && myCurrentDoubleClickTimer > 0.f)
 		{
 			CameraFocusOnControlGroup(index);
 			mySelectedControlGroup = -1;
 			myHasClicked = false;
 			myHasDoubleClicked = true;
 		}
+
 		if (myHasClicked == true)
 		{
 			mySelectedControlGroup = index;
+			myHasClicked = false;
+			myCurrentDoubleClickTimer = myDoubleClickTime;
 		}
 	}
 }
@@ -898,7 +1000,6 @@ void PlayerDirector::SelectAllUnits()
 
 void PlayerDirector::PlaceTotem(const CU::Vector3f& aPositionInWorld)
 {
-	//myTotem->SetPosition(aPositionInWorld);
 	myTotem->GetComponent<TotemComponent>()->SetTargetPosition(aPositionInWorld);
 }
 

@@ -52,6 +52,7 @@ private:
 	CU::GrowingArray<Entity*> myVictoryPoints;
 	CU::GrowingArray<Entity*> myVictoryAndResourcePoints;
 	CU::GrowingArray<Entity*> myArtifacts;
+	CU::GrowingArray<Entity*> myProps;
 
 	Entity* myPlayerBuilding;
 	Entity* myAIBuilding;

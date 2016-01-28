@@ -16,6 +16,7 @@ struct OnClickMessage;
 struct ResizeMessage;
 struct ResourceMessage;
 struct RunScriptMessage;
+struct SelectUnitMessage;
 struct SpawnUnitMessage;
 struct TextMessage;
 struct TimeMultiplierMessage;
@@ -49,6 +50,7 @@ public:
 	virtual void ReceiveMessage(const ResizeMessage& aMessage);
 	virtual void ReceiveMessage(const ResourceMessage& aMessage);
 	virtual void ReceiveMessage(const RunScriptMessage& aMessage);
+	virtual void ReceiveMessage(const SelectUnitMessage& aMessage);
 	virtual void ReceiveMessage(const SpawnUnitMessage& aMessage);
 	virtual void ReceiveMessage(const TextMessage& aMessage);
 	virtual void ReceiveMessage(const TimeMultiplierMessage& aMessage);

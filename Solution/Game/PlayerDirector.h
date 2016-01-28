@@ -64,6 +64,7 @@ public:
 	void ReceiveMessage(const MinimapMoveMessage& aMessage) override;
 	void ReceiveMessage(const ToggleBuildTimeMessage& aMessage) override;
 	void ReceiveMessage(const EventPositionMessage& aMessage) override;
+	void ReceiveMessage(const SelectUnitMessage& aMessage) override;
 
 	const CU::GrowingArray<Entity*>& GetSelectedUnits() const;
 	const BuildingComponent& GetBuildingComponent() const;
@@ -87,6 +88,14 @@ public:
 	const int& GetUpgradeLevel(int aUnitID) const;
 	const float& GetUpgradeCooldown(int aUnitID) const;
 	const float& GetUpgradeMaxCooldown(int aUnitID) const;
+	const int& GetUnitCost(int aUnitID) const;
+	const int& GetUnitSupplyCost(int aUnitID) const;
+	const int& GetUpgradeCost(int aUnitID, int aUpgradeLevel) const;
+
+	bool CanUpgrade(int aUnitType) const;
+	bool CanAffordSupply(int aSupplyCost) const;
+	bool CanAffordGunpowder(int aCost) const;
+	bool CanAffordArtifact(int aCost) const;
 
 private:
 	void UpdateInputs();
@@ -123,6 +132,7 @@ private:
 
 	bool myHasDoubleClicked;
 	bool myHasClicked;
+	bool myHasClickedF1;
 	float myCurrentDoubleClickTimer;
 	float myDoubleClickTime;
 

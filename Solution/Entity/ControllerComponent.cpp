@@ -244,6 +244,17 @@ void ControllerComponent::FillCommandList(eEntityCommand aAction, bool aClearCom
 		PostMaster::GetInstance()->SendMessage(BlockMapMessage(GetTargetPosition(), false));
 	}
 
+	CU::Vector2<float> checkTargetPosition(aTargetPosition);
+	if (aEntity != nullptr)
+	{
+		checkTargetPosition = aEntity->GetPosition();
+	}
+	if (myTerrain.GetPathFinder()->IsOutside(checkTargetPosition) == true)
+	{
+		myFoundPath = false;
+		return;
+	}
+
 	if (aClearCommandQueue == true)
 	{
 		myCommands.RemoveAll();

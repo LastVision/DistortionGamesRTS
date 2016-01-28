@@ -18,6 +18,7 @@ namespace Launcher
         private string myConfigPath = "Data\\Setting\\SET_config.bin";
         private string myExePath = "Application_Release.exe";
         private string myLogo = "bin\\Data\\Resource\\Texture\\Logo\\T_launcher_logo.png";
+        private string myGameName = "Raven";
 
         enum eResolutions
         {
@@ -39,14 +40,14 @@ namespace Launcher
 
             InitializeComponent();
 
-            string releaseConfig = myDocumentFolder + "\\Distortion Games\\Raven\\" + myConfigPath;
+            string releaseConfig = myDocumentFolder + "\\Distortion Games\\" + myGameName + "\\" + myConfigPath;
             myConfigPath = releaseConfig;
             string subString = myDocumentFolder + "\\Distortion Games";
             if (Directory.Exists(subString) == false)
             {
                 Directory.CreateDirectory(subString);
             }
-            subString += "\\Raven";
+            subString += "\\" + myGameName;
             if (Directory.Exists(subString) == false)
             {
                 Directory.CreateDirectory(subString);
@@ -122,7 +123,7 @@ namespace Launcher
             {
                 if (IsProcessOpen("Application_Release") == true)
                 {
-                    MessageBox.Show("A instance of the game Raven is already running.");
+                    MessageBox.Show("A instance of the game " + myGameName + " is already running.");
                 }
                 else
                 {

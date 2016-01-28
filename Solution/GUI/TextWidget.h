@@ -34,5 +34,7 @@ namespace GUI
 		CU::Vector2<float> myTextPosition;
 		Prism::SpriteProxy* myBackground;
 		Prism::Text* myText;
+
+		float myTextScale;
 	};
 }

@@ -2,6 +2,7 @@
 
 #include "AIDirector.h"
 #include <Camera.h>
+#include <CollisionComponent.h>
 #include <CommonHelper.h>
 #include "Console.h"
 #include <DirectionalLight.h>
@@ -121,7 +122,7 @@ Level* LevelFactory::LoadCurrentLevel(bool aPauseModelLoader)
 	/*CU::Vector3f weatherPosition = myCamera.GetOrientation().GetPos();
 	weatherPosition.z += 10.f;*/
 #ifdef USE_WEATHER
-	PostMaster::GetInstance()->SendMessage(EmitterMessage("weather_snow", &myCamera, CU::Vector3f(0.f, 0.f, 1.f)));
+	PostMaster::GetInstance()->SendMessage(EmitterMessage("weather_snow", &myCamera, CU::Vector3f(0.f, -0.5f, 1.f)));
 #endif
 
 	myCurrentLevel->LoadTutorial(myCamera, tutorialPath); // needs to be after InitGUI
@@ -396,6 +397,10 @@ void LevelFactory::LoadProps(XMLReader& aReader, tinyxml2::XMLElement* aLevelEle
 			propRotation, propScale));
 		myCurrentLevel->myEntities.GetLast()->AddToScene();
 		myCurrentLevel->myEntities.GetLast()->Reset();
+		if (myCurrentLevel->myEntities.GetLast()->GetComponent<CollisionComponent>() != nullptr)
+		{
+			PollingStation::GetInstance()->RegisterEntity(myCurrentLevel->myEntities.GetLast());
+		}
 	}
 }
 

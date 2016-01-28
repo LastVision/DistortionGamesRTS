@@ -226,7 +226,7 @@ namespace GUI
 
 			if (type == "button")
 			{
-				ButtonWidget* button = new ButtonWidget(aReader, widgetElement);
+				ButtonWidget* button = new ButtonWidget(aReader, widgetElement, myPlayer);
 				container->AddWidget(button);
 			}
 			else if (type == "upgrade_button")

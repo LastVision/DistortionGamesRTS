@@ -38,5 +38,7 @@ namespace GUI
 
 		CU::Vector2<float> mySpritePosition;
 		CU::Vector2<float> myTextPosition;
+
+		float myTextScale;
 	};
 }
