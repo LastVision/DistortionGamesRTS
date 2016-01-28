@@ -46,8 +46,7 @@ namespace Prism
 
 		void ActivateAlbedo(eOwnerType aOwner);
 
-		void SetHovered(bool aBool);
-		void SetSelected(bool aBool);
+		void SetShouldRender(bool aStatus);
 
 		ModelProxy& GetModel();
 		const CU::Matrix44f& GetOrientation() const;
@@ -72,20 +71,10 @@ namespace Prism
 		CU::StaticArray<CU::Matrix44<float>, MAX_NR_OF_BONES> myBones;
 		eOwnerType myOwnerType;
 
-		bool myIsHovered;
-		bool myIsSelected;
 		CU::Vector4<float> mySelectionColor;
+
+		bool myShouldRender;
 	};
-
-	inline void Instance::SetHovered(bool aBool)
-	{
-		myIsHovered = aBool;
-	}
-
-	inline void Instance::SetSelected(bool aBool)
-	{
-		myIsSelected = aBool;
-	}
 
 	inline float Instance::GetObjectCullingRadius() const
 	{

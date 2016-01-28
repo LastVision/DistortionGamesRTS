@@ -12,36 +12,37 @@
 
 SelectionComponent::SelectionComponent(Entity& aEntity, SelectionComponentData& aComponentData)
 	: Component(aEntity)
-	, myInstance(nullptr)
+	, mySelectedInstance(nullptr)
+	, myHoveredInstance(nullptr)
 	, myCullingRadius(2.5f)
-	, myIsRemovedFromScene(false)
 {
-	//Prism::ModelProxy* model = Prism::ModelLoader::GetInstance()->LoadModel(aComponentData.myModelPath
-	//	, aComponentData.myEffectPath);
-	//myInstance = new Prism::Instance(*model, myEntity.GetOrientation(), myEntity.GetOctreeType(), myCullingRadius);
+	Prism::ModelProxy* selected = Prism::ModelLoader::GetInstance()->LoadModel(aComponentData.mySelectedPath
+		, aComponentData.myEffectPath);
+	mySelectedInstance = new Prism::Instance(*selected, myEntity.GetOrientation(), myEntity.GetOctreeType(), myCullingRadius);
+
+	Prism::ModelProxy* hovered = Prism::ModelLoader::GetInstance()->LoadModel(aComponentData.myHoveredPath
+		, aComponentData.myEffectPath);
+	myHoveredInstance = new Prism::Instance(*hovered, myEntity.GetOrientation(), myEntity.GetOctreeType(), myCullingRadius);
 }
 
 
 SelectionComponent::~SelectionComponent()
 {
-	SAFE_DELETE(myInstance);
+	SAFE_DELETE(mySelectedInstance);
+	SAFE_DELETE(myHoveredInstance);
 }
 
 void SelectionComponent::Update(float)
 {
-	/*if (myEntity.IsSelected() == true)
+	mySelectedInstance->SetShouldRender(false);
+	myHoveredInstance->SetShouldRender(false);
+
+	if (myEntity.IsSelected() == true)
 	{
-		myInstance->SetSelected(true);
+		mySelectedInstance->SetShouldRender(true);
 	}
 	else if (myEntity.IsHovered() == true)
 	{
-		myInstance->SetHovered(true);
-
+		myHoveredInstance->SetShouldRender(true);
 	}
-	else
-	{
-		myInstance->SetHovered(false);
-		myInstance->SetSelected(false);
-	}*/
-	
 }

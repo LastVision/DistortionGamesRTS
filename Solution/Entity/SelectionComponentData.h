@@ -3,6 +3,7 @@
 struct SelectionComponentData
 {
 	bool myExistsInEntity = false;
-	const char* myModelPath;
+	const char* mySelectedPath;
+	const char* myHoveredPath;
 	const char* myEffectPath;
 };

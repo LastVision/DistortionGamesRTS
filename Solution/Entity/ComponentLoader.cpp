@@ -332,11 +332,14 @@ void ComponentLoader::LoadSelectionComponent(XMLReader& aDocument, tinyxml2::XML
 		std::string elementName = CU::ToLower(e->Name());
 		if (elementName == CU::ToLower("Hover"))
 		{
-			std::string modelPath;
+			std::string selectedPath;
+			std::string hoveredPath;
 			std::string effectPath;
-			aDocument.ForceReadAttribute(e, "modelPath", modelPath);
+			aDocument.ForceReadAttribute(e, "selectedPath", selectedPath);
+			aDocument.ForceReadAttribute(e, "hoveredPath", hoveredPath);
 			aDocument.ForceReadAttribute(e, "shaderPath", effectPath);
-			aOutputData.myModelPath = modelPath.c_str();
+			aOutputData.mySelectedPath = selectedPath.c_str();
+			aOutputData.myHoveredPath = hoveredPath.c_str();
 			aOutputData.myEffectPath = effectPath.c_str();
 		}
 		else

@@ -18,8 +18,7 @@ Prism::Instance::Instance(ModelProxy& aModel, const CU::Matrix44<float>& anOrien
 	, myScale({1,1,1})
 	, myObjectCullingRadius(aObjectCullingRadius)
 	, myHierarchyIsBuilt(false)
-	, myIsHovered(false)
-	, myIsSelected(false)
+	, myShouldRender(true)
 	, mySelectionColor(0.f, 0.f, 1.f, 0.1f)
 {
 }
@@ -56,6 +55,11 @@ void Prism::Instance::Update(float aDelta)
 
 void Prism::Instance::Render(const Camera& aCamera)
 {
+	if (myShouldRender == false)
+	{
+		return;
+	}
+
 	if (myProxy.IsLoaded())
 	{
 
@@ -71,20 +75,6 @@ void Prism::Instance::Render(const Camera& aCamera)
 		}
 		else
 		{
-			
-			if (myIsSelected == true)
-			{
-				mySelectionColor.w = 1.f;
-			}
-			else if (myIsHovered == true)
-			{
-				mySelectionColor.w = 0.5f;
-			}
-			else
-			{
-				mySelectionColor.w = 0.1f;
-			}
-			myProxy.myModel->GetEffect()->SetAmbientHue(mySelectionColor);
 			myProxy.myModel->ActivateAlbedo(myOwnerType);
 			myProxy.Render(myOrientation, aCamera.GetOrientation().GetPos());
 		}
@@ -93,6 +83,11 @@ void Prism::Instance::Render(const Camera& aCamera)
 
 void Prism::Instance::Render(const Camera& aCamera, InstancingHelper& aInstancingHelper)
 {
+	if (myShouldRender == false)
+	{
+		return;
+	}
+
 	if (myProxy.IsLoaded())
 	{
 		if (myProxy.IsAnimated() == true)
@@ -198,6 +193,11 @@ void Prism::Instance::ResetAnimationTime(float aTime)
 void Prism::Instance::ActivateAlbedo(eOwnerType aOwner)
 {
 	myOwnerType = aOwner;
+}
+
+void Prism::Instance::SetShouldRender(bool aStatus)
+{
+	myShouldRender = aStatus;
 }
 
 Prism::ModelProxy& Prism::Instance::GetModel()

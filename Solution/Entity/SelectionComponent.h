@@ -18,16 +18,14 @@ public:
 	static eComponentType GetTypeStatic();
 	eComponentType GetType() override;
 
-	Prism::Instance* GetInstance();
-
-	bool GetIsRemovedFromScene() const;
-	void SetIsRemovedFromScene(bool aIsRemoved);
+	Prism::Instance* GetSelectedInstance();
+	Prism::Instance* GetHoveredInstance();
 
 private:
-	Prism::Instance* myInstance;
+	Prism::Instance* mySelectedInstance;
+	Prism::Instance* myHoveredInstance;
 	bool myPreviousHover;
 	float myCullingRadius;
-	bool myIsRemovedFromScene;
 };
 
 inline eComponentType SelectionComponent::GetTypeStatic()
@@ -40,17 +38,12 @@ inline eComponentType SelectionComponent::GetType()
 	return GetTypeStatic();
 }
 
-inline Prism::Instance* SelectionComponent::GetInstance()
+inline Prism::Instance* SelectionComponent::GetSelectedInstance()
 {
-	return myInstance;
+	return mySelectedInstance;
 }
 
-inline bool SelectionComponent::GetIsRemovedFromScene() const
+inline Prism::Instance* SelectionComponent::GetHoveredInstance()
 {
-	return myIsRemovedFromScene;
-}
-
-inline void SelectionComponent::SetIsRemovedFromScene(bool aIsRemoved)
-{
-	myIsRemovedFromScene = aIsRemoved;
+	return myHoveredInstance;
 }

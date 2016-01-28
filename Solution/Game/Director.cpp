@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+#include <ActorComponent.h>
 #include <ArtifactMessage.h>
 #include <AudioInterface.h>
 #include <BuildingComponent.h>
@@ -75,7 +76,7 @@ void Director::Update(float aDeltaTime)
 		if (myActiveUnits[i]->GetAlive() == false)
 		{
 			myDeadUnits.Add(myActiveUnits[i]);
-			myActiveUnits[i]->RemoveSelectionRingFromScene();
+			//myActiveUnits[i]->RemoveSelectionRingFromScene();
 			myActiveUnits.RemoveCyclicAtIndex(i);
 		}
 	}
@@ -277,14 +278,14 @@ void Director::ReceiveMessage(const UpgradeUnitMessage& aMessage)
 				HealthComponent* comp = myUnits[i]->GetComponent<HealthComponent>();
 				if (comp != nullptr)
 				{
-					float oldArmor = comp->GetArmor();
-					float newArmor = oldArmor * upgrade.myArmorModifier;
-					if (int(oldArmor) == int(newArmor))
-					{
-						newArmor = oldArmor + 1.f;
-					}
+					comp->SetArmor(comp->GetArmor() + upgrade.myArmorModifier);
+				}
 
-					comp->SetArmor(newArmor);
+				ActorComponent* actor = myUnits[i]->GetComponent<ActorComponent>();
+				if (actor != nullptr)
+				{
+					actor->SetAttackDamage(actor->GetAttackDamage() + upgrade.myAttackModifier);
+					actor->SetRechargeTime(actor->GetAttackSpeed() + upgrade.myAttackSpeedModifier);
 				}
 			}
 		}
