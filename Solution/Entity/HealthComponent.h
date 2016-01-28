@@ -68,7 +68,7 @@ inline float HealthComponent::GetMaxHealth() const
 
 inline void HealthComponent::SetArmor(float aArmor)
 {
-	myArmor = aArmor;
+	myArmor = static_cast<float>(static_cast<int>(aArmor));
 }
 
 inline void HealthComponent::SetIsHealing(bool aBool)

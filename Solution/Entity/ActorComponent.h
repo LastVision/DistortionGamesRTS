@@ -115,12 +115,12 @@ inline float ActorComponent::GetAttackSpeed() const
 
 inline void ActorComponent::SetAttackDamage(float aDamage)
 {
-	myAttackDamage = aDamage;
+	myAttackDamage = static_cast<float>(static_cast<int>(aDamage));
 }
 
 inline void ActorComponent::SetRechargeTime(float aRechargeTime)
 {
-	myAttackRechargeTime = aRechargeTime;
+	myAttackRechargeTime = static_cast<float>(static_cast<int>(aRechargeTime));
 }
 
 inline void ActorComponent::SetAttackRange2(float aRange2)
