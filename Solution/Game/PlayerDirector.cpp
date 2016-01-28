@@ -183,7 +183,7 @@ void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 		myHasDoubleClicked = false;
 	}
 	myCurrentCancleCursorTime -= aDeltaTime;
-	if (myCurrentCancleCursorTime <= 0)
+	if (myCursor->GetCurrentCursor() == eCursorType::CANCEL && myCurrentCancleCursorTime <= 0)
 	{
 		myCursor->SetCurrentCursor(eCursorType::NORMAL);
 		myCurrentCancleCursorTime = 0.f;
