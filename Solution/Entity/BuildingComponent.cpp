@@ -17,7 +17,7 @@ BuildingComponent::BuildingComponent(Entity& aEntity, BuildingComponentData& aDa
 		myUnitUpgradeProgress[i] = 0;
 
 		myUpgradeCooldowns[i] = myUnitUpgrades[i][0].myCooldown;
-		myUpgradeMaxCooldowns[i] = myUnitUpgrades[i][0].myCooldown;
+		myUpgradeMaxCooldowns[i] = myUpgradeCooldowns[i];
 	}
 }
 
@@ -75,6 +75,7 @@ void BuildingComponent::Update(float aDeltaTime)
 			if (upgradeIndex < 3)
 			{
 				myUpgradeCooldowns[unitIndex] = myUnitUpgrades[unitIndex][upgradeIndex].myCooldown;
+				myUpgradeMaxCooldowns[unitIndex] = myUpgradeCooldowns[unitIndex];
 			}
 		}
 		else
@@ -152,6 +153,12 @@ bool BuildingComponent::CanUpgrade(eUnitType aUnitType) const
 void BuildingComponent::UpdateUpgradeCooldown(float aDelta, eUnitType aUnit)
 {
 	int unitIndex = static_cast<int>(aUnit);
+	
+	if (myIgnoreBuildTime == true)
+	{
+		myUpgradeCooldowns[unitIndex] = 0.f;
+		return;
+	}
 
 	myUpgradeCooldowns[unitIndex] -= aDelta;
 	if (myUpgradeCooldowns[unitIndex] < 0.f)
