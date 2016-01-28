@@ -60,9 +60,17 @@ namespace GUI
 		myRangerActionButtons = ReadContainer(aReader, rangerElement, buttonSize);
 		myTankActionButtons = ReadContainer(aReader, tankElement, buttonSize);
 
-		myGruntActionButtons->SetPosition({ buttonPosition.x, (buttonPosition.y - buttonSize.y * 2.f) - 2.f });
-		myRangerActionButtons->SetPosition({ buttonPosition.x + (buttonSize.x * 1.f) + 1.f, (buttonPosition.y - buttonSize.y * 2.f) - 2.f });
-		myTankActionButtons->SetPosition({ buttonPosition.x + (buttonSize.x * 2.f) + 2.f, (buttonPosition.y - buttonSize.y * 2.f) - 2.f });
+		myGruntActionButtons->SetPosition(myGruntActionButtons->At(0)->GetPosition());
+		myGruntActionButtons->At(0)->SetPosition(myGruntActionButtons->At(0)->GetSize() / 2.f);
+		//myGruntActionButtons->At(0)->SetPosition({ 0.f, 0.f });
+		
+		myRangerActionButtons->SetPosition(myRangerActionButtons->At(0)->GetPosition());
+		myRangerActionButtons->At(0)->SetPosition(myRangerActionButtons->At(0)->GetSize() / 2.f);
+		//myRangerActionButtons->At(0)->SetPosition({ 0.f, 0.f });
+
+		myTankActionButtons->SetPosition(myTankActionButtons->At(0)->GetPosition());
+		myTankActionButtons->At(0)->SetPosition(myTankActionButtons->At(0)->GetSize() / 2.f);
+		//myTankActionButtons->At(0)->SetPosition({ 0.f, 0.f });
 	}
 
 	UnitActionWidget::~UnitActionWidget()
