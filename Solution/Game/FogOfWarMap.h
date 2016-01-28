@@ -11,5 +11,7 @@ public:
 	void AddValue(float aValue, float aRadius, const CU::Vector2<float>& aPosition) override;
 
 	void UpdateRenderPlane() override;
+
+private:
 };
 
