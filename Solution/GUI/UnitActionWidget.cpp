@@ -162,17 +162,17 @@ namespace GUI
 			{
 				Widget* widget = nullptr;
 
-				if (myFirstSelectedGrunt != nullptr)
+				if (myFirstSelectedGrunt != nullptr && myFirstSelectedGrunt->GetComponent<PromotionComponent>()->GetPromoted() == true)
 				{
 					Widget* gruntWidget = myGruntActionButtons->MouseIsOver(aPosition - myPosition);
 					widget = gruntWidget == nullptr ? widget : gruntWidget;
 				}
-				if (myFirstSelectedRanger != nullptr)
+				if (myFirstSelectedRanger != nullptr && myFirstSelectedRanger->GetComponent<PromotionComponent>()->GetPromoted() == true)
 				{
 					Widget* rangerWidget = myRangerActionButtons->MouseIsOver(aPosition - myPosition);
 					widget = rangerWidget == nullptr ? widget : rangerWidget;
 				}
-				if (myFirstSelectedTank != nullptr)
+				if (myFirstSelectedTank != nullptr && myFirstSelectedTank->GetComponent<PromotionComponent>()->GetPromoted() == true)
 				{
 					Widget* tankWidget = myTankActionButtons->MouseIsOver(aPosition - myPosition);
 					widget = tankWidget == nullptr ? widget : tankWidget;
