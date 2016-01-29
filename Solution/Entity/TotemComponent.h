@@ -15,6 +15,9 @@ public:
 	void SetTargetPosition(const CU::Vector3f& aTargetPosition);
 	const float& GetCurrentCooldown() const;
 	const float& GetMaxCooldown() const;
+
+	bool CanActivate() const;
+
 private:
 	void operator=(TotemComponent&) = delete;
 
@@ -61,4 +64,9 @@ inline const float& TotemComponent::GetCurrentCooldown() const
 inline const float& TotemComponent::GetMaxCooldown() const
 {
 	return myOriginalCooldown;
+}
+
+inline bool TotemComponent::CanActivate() const
+{
+	return myCurrentCooldown <= 0.f;
 }

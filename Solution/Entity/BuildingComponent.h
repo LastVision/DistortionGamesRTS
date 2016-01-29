@@ -69,6 +69,7 @@ private:
 	float myMaxBuildTime;
 
 	bool myIgnoreBuildTime;
+	bool myUpgradesInQueue;
 
 	unsigned int myMaxQueue;
 

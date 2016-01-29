@@ -25,6 +25,10 @@ namespace CSharpUtilities.Components
 
         abstract public void Show();
         abstract public void Hide();
+        virtual public void Update()
+        {
+
+        }
 
         abstract public void BindToPanel(Panel aPanel);
     }

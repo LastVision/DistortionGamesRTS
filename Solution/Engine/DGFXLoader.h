@@ -211,7 +211,7 @@ namespace Prism
 		ModelAnimated* LoadAnimatedModel(const std::string& aFilePath, Effect* aEffect);
 		Animation* LoadAnimation(const std::string& aFilePath);
 		
-
+		bool CheckIfFbxIsNewer(const std::string& aDGFXPath);
 	private:
 		enum eVertexLayout
 		{
@@ -246,7 +246,7 @@ namespace Prism
 		Animation* LoadAnimation(ModelAnimated* aOutData, std::fstream& aStream);
 		void LoadBoneHierarchy(HierarchyBone& aOutBone, std::fstream& aStream);
 
-		bool CheckIfFbxIsNewer(const std::string& aDGFXPath);
+	
 
 		std::unordered_map<std::string, Model*> myModels;
 		std::unordered_map<std::string, ModelAnimated*> myModelsAnimated;

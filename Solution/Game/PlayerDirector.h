@@ -107,6 +107,7 @@ private:
 	void SelectOrHoverEntity(Entity* aEntity, bool &aSelected, bool &aHovered
 		, const CU::Intersection::LineSegment3D& aMouseRay);
 	void SelectAllUnits();
+	void PlaceRallyPoint(CU::Vector2<float> aWorldPosition);
 
 	void PlaceTotem(const CU::Vector3f& aPositionInWorld);
 
