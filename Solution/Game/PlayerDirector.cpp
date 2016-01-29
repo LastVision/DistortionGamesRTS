@@ -315,8 +315,11 @@ void PlayerDirector::ReceiveMessage(const OnClickMessage& aMessage)
 {
 	if (aMessage.myEvent == eOnClickEvent::PLACE_TOTEM)
 	{
-		mySelectedAction = eSelectedAction::PLACE_TOTEM;
-		myCursor->SetCurrentCursor(eCursorType::TOTEM);
+		if (myTotem->GetComponent<TotemComponent>()->CanActivate() == true)
+		{
+			mySelectedAction = eSelectedAction::PLACE_TOTEM;
+			myCursor->SetCurrentCursor(eCursorType::TOTEM);
+		}
 		return;
 	}
 	else if (aMessage.myEvent == eOnClickEvent::UPGRADE_UNIT)
