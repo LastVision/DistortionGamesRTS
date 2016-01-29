@@ -80,6 +80,8 @@ private:
 	int myCinematicIndex;
 
 	int myStartLevelIndex;
+
+	bool myIsFirstFrame;
 };
 
 inline bool InGameState::IsComplete() const

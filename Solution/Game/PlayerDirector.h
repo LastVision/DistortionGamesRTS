@@ -36,7 +36,6 @@ enum class eSelectedAction
 	STOP,
 	ATTACK_MOVE,
 	HOLD_POSITION,
-	PATROL,
 	PLACE_TOTEM,
 	ENRAGE
 };
@@ -101,6 +100,7 @@ public:
 private:
 	void UpdateInputs();
 	void UpdateControlGroups();
+	void UpdateConfirmationAnimation(float aDeltaTime, const Prism::Camera& aCamera);
 	void CameraFocusOnControlGroup(int aIndex);
 	CU::Vector3<float> CalcCursorWorldPosition(const CU::Vector2<float>& aMousePosition, const Prism::Camera& aCamera);
 	void UpdateMouseInteraction(const Prism::Camera& aCamera);
@@ -163,7 +163,7 @@ private:
 
 	Prism::SpriteAnimator* myConfimrationAnimation;
 	CU::Vector2<float> myConfirmationPosition;
-
+	CU::Vector3<float> myConfimrationCameraPosition;
 };
 
 inline const CU::GrowingArray<Entity*>& PlayerDirector::GetSelectedUnits() const

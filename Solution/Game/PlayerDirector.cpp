@@ -12,6 +12,7 @@
 #include <EntityData.h>
 #include <EntityFactory.h>
 #include <EventPositionMessage.h>
+#include "FogOfWarMap.h"
 #include <GameEnum.h>
 #include <GUIManager.h>
 #include <GraphicsComponent.h>
@@ -245,8 +246,6 @@ void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 		}
 	}
 
-
-
 	Director::Update(aDeltaTime);
 	UpdateMouseInteraction(aCamera);
 	myBuilding->Update(aDeltaTime);
@@ -273,7 +272,7 @@ void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 		mySelectedAction = eSelectedAction::NONE;
 	}
 
-	myConfimrationAnimation->Update(aDeltaTime);
+	UpdateConfirmationAnimation(aDeltaTime, aCamera);
 }
 
 void PlayerDirector::Render(const Prism::Camera& aCamera)
@@ -377,7 +376,6 @@ void PlayerDirector::ReceiveMessage(const OnClickMessage& aMessage)
 			mySelectedControlGroup = aMessage.myID;
 			myCurrentDoubleClickTimer = myDoubleClickTime;
 		}
-		
 	}
 }
 
@@ -797,6 +795,31 @@ void PlayerDirector::UpdateControlGroups()
 	}
 }
 
+void PlayerDirector::UpdateConfirmationAnimation(float aDeltaTime, const Prism::Camera& aCamera)
+{
+	if (myConfimrationAnimation->IsPlayingAnimation() == true &&
+		myConfimrationCameraPosition != aCamera.GetOrientation().GetPos())
+	{
+		CU::Vector2<float> difference;
+		difference.x = (aCamera.GetOrientation().GetPos().x - myConfimrationCameraPosition.x) * 25.f;
+		difference.y = (aCamera.GetOrientation().GetPos().z - myConfimrationCameraPosition.z) * 20.f;
+		myConfirmationPosition.x -= difference.x;
+		myConfirmationPosition.y -= difference.y;
+
+		myConfimrationCameraPosition = aCamera.GetOrientation().GetPos();
+	}
+
+	if (myMouseIsOverGUI == false && myRightClicked == true && mySelectedUnits.Size() > 0 
+		&& mySelectedUnits[0]->GetType() == eEntityType::UNIT)
+	{
+		myConfirmationPosition = myCursor->GetMousePosition();
+		myConfimrationAnimation->RestartAnimation();
+		myConfimrationCameraPosition = aCamera.GetOrientation().GetPos();
+	}
+
+	myConfimrationAnimation->Update(aDeltaTime);
+}
+
 void PlayerDirector::CameraFocusOnControlGroup(int aIndex)
 {
 	CU::Vector2<float> averagePosition;
@@ -829,13 +852,6 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 	{
 		myCursor->SetCurrentCursor(eCursorType::NORMAL);
 		PlaceTotem(firstTargetPos);
-	}
-
-	if (myRightClicked == true && mySelectedUnits.Size() > 0 && mySelectedUnits[0]->GetType() == eEntityType::UNIT)
-	{
-		myConfimrationAnimation->ResetAnimation();
-		myConfirmationPosition = myCursor->GetMousePosition();
-		myConfimrationAnimation->StartAnimation("confirmation");
 	}
 
 	if (myLeftMouseDown == true)
@@ -884,7 +900,8 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 	}
 
 	Entity* hoveredEnemy = PollingStation::GetInstance()->FindEntityAtPosition(firstTargetPos, eOwnerType::ENEMY | eOwnerType::NEUTRAL);
-	if (hoveredEnemy != nullptr && mySelectedAction == eSelectedAction::NONE)
+	if (hoveredEnemy != nullptr && FogOfWarMap::GetInstance()->IsVisible(hoveredEnemy->GetPosition())
+		&& mySelectedAction == eSelectedAction::NONE)
 	{
 		myCursor->SetCurrentCursor(eCursorType::ATTACK);
 	}
@@ -899,26 +916,30 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 	{
 		SelectOrHoverEntity(myActiveUnits[i], hasSelected, hasHovered, line);
 
-		if (myMouseIsOverGUI == false && myActiveUnits[i]->IsSelected())
+		if ( myActiveUnits[i]->IsSelected())
 		{
 			ControllerComponent* controller = myActiveUnits[i]->GetComponent<ControllerComponent>();
-			if ((mySelectedAction == eSelectedAction::ATTACK_TAGRET && hoveredEnemy != nullptr && myLeftMouseUp == true)
-				|| (hoveredEnemy != nullptr && myRightClicked == true))
+
+			if (myMouseIsOverGUI == false)
 			{
-				controller->AttackTarget(hoveredEnemy, !myShiftPressed, myHasPlayedSound);
-				hasDoneAction = true;
+				if ((mySelectedAction == eSelectedAction::ATTACK_TAGRET && hoveredEnemy != nullptr && myLeftMouseUp == true)
+					|| (hoveredEnemy != nullptr && myRightClicked == true))
+				{
+					controller->AttackTarget(hoveredEnemy, !myShiftPressed, myHasPlayedSound);
+					hasDoneAction = true;
+				}
+				else if (mySelectedAction == eSelectedAction::ATTACK_MOVE && myLeftMouseUp == true)
+				{
+					controller->AttackMove(firstTargetPos, !myShiftPressed, myHasPlayedSound);
+					hasDoneAction = true;
+				}
+				else if ((mySelectedAction == eSelectedAction::MOVE && myLeftMouseUp) || myRightClicked)
+				{
+					controller->MoveTo(firstTargetPos, !myShiftPressed, myHasPlayedSound);
+					hasDoneAction = true;
+				}
 			}
-			else if (mySelectedAction == eSelectedAction::ATTACK_MOVE && myLeftMouseUp == true)
-			{
-				controller->AttackMove(firstTargetPos, !myShiftPressed, myHasPlayedSound);
-				hasDoneAction = true;
-			}
-			else if ((mySelectedAction == eSelectedAction::MOVE && myLeftMouseUp) || myRightClicked)
-			{
-				controller->MoveTo(firstTargetPos, !myShiftPressed, myHasPlayedSound);
-				hasDoneAction = true;
-			}
-			else if (mySelectedAction == eSelectedAction::STOP)
+			if (mySelectedAction == eSelectedAction::STOP)
 			{
 				controller->Stop(myHasPlayedSound);
 				hasDoneAction = true;

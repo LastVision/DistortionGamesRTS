@@ -197,6 +197,7 @@
   <ItemGroup>
     <ClInclude Include="AIMap.h" />
     <ClInclude Include="BlockMap.h" />
+    <ClInclude Include="CinematicState.h" />
     <ClInclude Include="ClickableState.h" />
     <ClInclude Include="ConsoleBackspace.h" />
     <ClInclude Include="ConsoleHelp.h" />
@@ -220,6 +221,7 @@
     <ClInclude Include="Level.h" />
     <ClInclude Include="LevelFactory.h" />
     <ClInclude Include="LevelSelectState.h" />
+    <ClInclude Include="LoadingState.h" />
     <ClInclude Include="MainMenuState.h" />
     <ClInclude Include="MessageState.h" />
     <ClInclude Include="NeutralDirector.h" />
@@ -237,6 +239,7 @@
   <ItemGroup>
     <ClCompile Include="AIMap.cpp" />
     <ClCompile Include="BlockMap.cpp" />
+    <ClCompile Include="CinematicState.cpp" />
     <ClCompile Include="ClickableState.cpp" />
     <ClCompile Include="ConsoleBackspace.cpp" />
     <ClCompile Include="ConsoleHelp.cpp" />
@@ -257,6 +260,7 @@
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="LevelFactory.cpp" />
     <ClCompile Include="LevelSelectState.cpp" />
+    <ClCompile Include="LoadingState.cpp" />
     <ClCompile Include="MainMenuState.cpp" />
     <ClCompile Include="MessageState.cpp" />
     <ClCompile Include="NeutralDirector.cpp" />
