@@ -13,5 +13,6 @@ public:
 private:
 	Prism::FBXFactory myFactory;
 	CU::GrowingArray<std::string> myErrors;
+	CU::GrowingArray<std::string> myConvertedFiles;
 };
 

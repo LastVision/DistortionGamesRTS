@@ -4,12 +4,21 @@
 
 DGFXReader::DGFXReader()
 	: myErrors(64)
+	, myConvertedFiles(64)
 {
 }
 
 
 DGFXReader::~DGFXReader()
 {
+	std::ofstream file;
+	file.open("GeneratedData/modellist.bin");
+	for (int i = 0; i < myConvertedFiles.Size(); ++i)
+	{
+		file << myConvertedFiles[i] << std::endl;
+	}
+	file.close();
+
 	if (myErrors.Size() > 0)
 	{
 		std::cout << "\n-----------------" << std::endl;
