@@ -14,6 +14,7 @@
 #include <XMLReader.h>
 
 #include "DGFXLoader.h"
+#include <istream>
 
 namespace Prism
 {
@@ -50,6 +51,8 @@ namespace Prism
 		myLoadArray.Init(8192);
 		myActiveBuffer = 0;
 		myInactiveBuffer = 1;
+
+		StartPrefetching();
 	}
 
 	ModelLoader::~ModelLoader()
@@ -71,6 +74,38 @@ namespace Prism
 			SAFE_DELETE(it->second);
 		}
 		mySprites.clear();
+	}
+
+	void ModelLoader::StartPrefetching()
+	{
+#ifdef USE_DGFX
+		std::ifstream file;
+		file.open("GeneratedData/modellist.bin");
+		DL_ASSERT_EXP(file.is_open(), "Failed to open modellist.bin, did you run DGFX-Tool?");
+		if (file.is_open())
+		{
+			std::string filePath;
+			while (std::getline(file, filePath))
+			{
+				std::string dgfxPath = CU::GetGeneratedDataFolderFilePath(filePath, "dgfx");
+#ifndef RELEASE_BUILD
+				if (myDGFXLoader->CheckIfFbxIsNewer(dgfxPath) == true)
+				{
+					DL_MESSAGE_BOX("Found a FBX-File thats newer than the DGFX-File, did you forget to run the tool?", "Old DGFX", MB_ICONQUESTION);
+				}
+#endif
+				std::fstream file2;
+				file2.open(dgfxPath.c_str(), std::ios::in | std::ios::binary);
+				DL_ASSERT_EXP(file2.fail() == false, CU::Concatenate("Failed to open %s, did you forget to run the tool?", dgfxPath.c_str()));
+				if (file2.fail() == true)
+				{
+					assert(false && "FAILED TO OPEN DGFX-FILE");
+				}
+				file2.close();
+			}
+			file.close();
+		}
+#endif
 	}
 
 	void ModelLoader::Run()

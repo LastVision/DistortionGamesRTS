@@ -71,6 +71,8 @@ namespace Prism
 		ModelLoader();
 		~ModelLoader();
 
+		void StartPrefetching();
+
 		bool CheckIfWorking();
 		void WaitUntilCopyIsAllowed();
 		void WaitUntilAddIsAllowed();
