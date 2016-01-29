@@ -32,6 +32,7 @@
 #include <ModelLoader.h>
 #include <SpawnUnitMessage.h>
 #include <SpriteProxy.h>
+#include <SpriteAnimator.h>
 #include <FadeMessage.h>
 #include <PostMaster.h>
 #include <XMLReader.h>
@@ -65,6 +66,7 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 	, myHasClickedF1(false)
 	, myCurrentCancleCursorTime(0.f)
 	, myCancleCursorTime(0.5f)
+	, myConfimrationAnimation(nullptr)
 {
 	myAudioSFXID = Prism::Audio::AudioInterface::GetInstance()->GetUniqueID();
 	myDragSelectionPositions.Reserve(4);
@@ -142,6 +144,8 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 	tinyxml2::XMLElement* rootElement = reader.FindFirstChild("root");
 	reader.ForceReadAttribute(reader.ForceFindFirstChild(rootElement, "maxSelected"), "value", myMaxSelectedUnits);
 	reader.CloseDocument();
+
+	myConfimrationAnimation = new Prism::SpriteAnimator("Data/Resource/Animation.xml");
 }
 
 PlayerDirector::~PlayerDirector()
@@ -152,6 +156,8 @@ PlayerDirector::~PlayerDirector()
 	SAFE_DELETE(myDragSelectionSpriteVertical);
 	SAFE_DELETE(myDragSelectionSpriteHorizontal);
 	SAFE_DELETE(myTotem);
+	SAFE_DELETE(myConfimrationAnimation);
+
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::TOGGLE_GUI, this);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::ON_CLICK, this);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::TIME_MULTIPLIER, this);
@@ -266,6 +272,8 @@ void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 	{
 		mySelectedAction = eSelectedAction::NONE;
 	}
+
+	myConfimrationAnimation->Update(aDeltaTime);
 }
 
 void PlayerDirector::Render(const Prism::Camera& aCamera)
@@ -287,6 +295,8 @@ void PlayerDirector::Render(const Prism::Camera& aCamera)
 			myDragSelectionSpriteHorizontal->SetSize({ mySelectionSpriteSize.x + 10.f, 10.f }, { mySelectionSpriteHotspot.x, mySelectionSpriteHotspot.y - mySelectionSpriteSize.y });
 			myDragSelectionSpriteHorizontal->Render(mySelectionSpriteRenderPosition);
 		}
+
+		myConfimrationAnimation->Render(myConfirmationPosition);
 		myGUIManager->Render();
 	}
 }
@@ -819,6 +829,13 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 	{
 		myCursor->SetCurrentCursor(eCursorType::NORMAL);
 		PlaceTotem(firstTargetPos);
+	}
+
+	if (myRightClicked == true && mySelectedUnits.Size() > 0 && mySelectedUnits[0]->GetType() == eEntityType::UNIT)
+	{
+		myConfimrationAnimation->ResetAnimation();
+		myConfirmationPosition = myCursor->GetMousePosition();
+		myConfimrationAnimation->StartAnimation("confirmation");
 	}
 
 	if (myLeftMouseDown == true)

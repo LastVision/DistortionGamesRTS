@@ -4,6 +4,9 @@
 #include <Entity.h>
 #include <RenderPlane.h>
 #include <TriggerComponent.h>
+#include <SpriteProxy.h>
+#include <ModelLoader.h>
+#include <Texture.h>
 
 #define OUTER_RING 10.f
 #define MIN_DARKNESS 0.3f
@@ -22,32 +25,40 @@ FogOfWarMap* FogOfWarMap::GetInstance()
 void FogOfWarMap::Destroy()
 {
 	SAFE_DELETE(myInstance);
+	
 }
 
 FogOfWarMap::FogOfWarMap()
 	: AIMap(256)
 	, myFogEnabled(true)
+	, mySprite(nullptr)
+	, myLearnSpeed(1.5f)
 {
 	myMaxValue = 1.f;
 }
 
 FogOfWarMap::~FogOfWarMap()
 {
+	SAFE_DELETE(mySprite);
 }
 
-void FogOfWarMap::Update()
+void FogOfWarMap::Update(float aDelta)
 {
 	for (int i = 0; i < myGrid.Size(); ++i)
 	{
-		myGrid[i] = MIN_DARKNESS;
+		//myGrid[i] = MIN_DARKNESS;
+		//myGrid[i] -= 0.5f * aDelta;
+		//myGrid[i] -= (myGrid[i] * 0.5f) * aDelta;
+		myGrid[i] *= 0.99f;
+		myGrid[i] = fmaxf(myGrid[i], MIN_DARKNESS);
 	}
 
-	AddValue(1.f, 20.f, PollingStation::GetInstance()->GetBase(eOwnerType::PLAYER)->GetPosition());
+	AddValue(myLearnSpeed*aDelta, 20.f, PollingStation::GetInstance()->GetBase(eOwnerType::PLAYER)->GetPosition());
 
 	const CU::GrowingArray<Entity*>& playerUnits = PollingStation::GetInstance()->GetUnits(eOwnerType::PLAYER);
 	for (int j = 0; j < playerUnits.Size(); ++j)
 	{
-		AddValue(1.f, 20.f, playerUnits[j]->GetPosition());
+		AddValue(myLearnSpeed*aDelta, 20.f, playerUnits[j]->GetPosition());
 	}
 
 	const CU::GrowingArray<Entity*>& playerPoints = PollingStation::GetInstance()->GetVictoryAndResourcePoints();
@@ -55,7 +66,7 @@ void FogOfWarMap::Update()
 	{
 		if (playerPoints[i]->GetComponent<TriggerComponent>()->GetOwnerGainingPoint() == eOwnerType::PLAYER)
 		{
-			AddValue(1.f, 20.f, playerPoints[i]->GetPosition());
+			AddValue(myLearnSpeed*aDelta, 20.f, playerPoints[i]->GetPosition());
 		}
 	}
 }
@@ -70,40 +81,25 @@ void FogOfWarMap::AddValue(float aValue, float aRadius, const CU::Vector2<float>
 		for (int x = topLeft.x; x < botRight.x; ++x)
 		{
 			float distance = CU::Length(GetPosition(x, y) - aPosition);
+
 			if (distance < aRadius - OUTER_RING && ValidIndex(x, y))
 			{
 				int index = x + y * mySide;
-				myGrid[index] = aValue;
+				myGrid[index] += aValue;
 			}
 			else if (distance >= aRadius - OUTER_RING && distance <= aRadius)
 			{
 				int index = x + y * mySide;
-				//myGrid[index] = aValue;
-				/*float rest = aRadius - OUTER_RING;
-				float parts = 1.f / OUTER_RING;
-				float toPoint = (distance - rest) * parts;
-				float divider = (rest / myTileSize);
-				float value = aValue - toPoint;*/
-
 				float inner = aRadius - (OUTER_RING);
 				float newDist = distance - inner;
 				float newMax = aRadius - inner;
-				float value = 1.f - (newDist / newMax);
+				float value = aValue * (1.f - (newDist / newMax));
 
 				myGrid[index] += value;
 				myGrid[index] = fminf(myGrid[index], myMaxValue);
 				myGrid[index] = fmaxf(myGrid[index], MIN_DARKNESS);
-
-
 			}
-
 		}
-	}
-
-	int index = GetIndex(aPosition);
-	if (index >= 0 && index < myGrid.Size())
-	{
-		myGrid[index] = aValue;;
 	}
 }
 
@@ -113,7 +109,7 @@ void FogOfWarMap::UpdateRenderPlane()
 
 	for (int i = 0; i < myGrid.Size(); ++i)
 	{
-		myPlane->SetVertexColor(i, GetColor(myGrid[i]));
+		myPlane->SetVertexColor(i, GetColor(myGrid[i]/myMaxValue));
 	}
 
 	myPlane->EndModify();
@@ -132,4 +128,16 @@ bool FogOfWarMap::IsVisible(const CU::Vector2<float>& aPosition)
 void FogOfWarMap::ToggleFogOfWar()
 {
 	myFogEnabled = !myFogEnabled;
+}
+
+void FogOfWarMap::SetFogOfWarHelperTexture(Prism::Texture* aTexture)
+{
+	//myFogOfWarHelperTexture = aTexture;
+	//mySprite = Prism::ModelLoader::GetInstance()->LoadSprite(myFogOfWarHelperTexture->GetTexture(), { 600.f, 300.f }, { 0.f, 0.f });
+}
+
+void FogOfWarMap::RenderSprite()
+{
+	//mySprite->CopyFromD3DTexture(myFogOfWarHelperTexture->GetTexture());
+	//mySprite->Render({ 500.f, 500.f });
 }
