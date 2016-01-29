@@ -310,6 +310,8 @@
     <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SpotLight.cpp" />
+    <ClCompile Include="SpriteAnimation.cpp" />
+    <ClCompile Include="SpriteAnimator.cpp" />
     <ClCompile Include="SpriteProxy.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -401,6 +403,8 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SetupInfo.h" />
     <ClInclude Include="SpotLight.h" />
+    <ClInclude Include="SpriteAnimation.h" />
+    <ClInclude Include="SpriteAnimator.h" />
     <ClInclude Include="SpriteProxy.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Surface.h" />
