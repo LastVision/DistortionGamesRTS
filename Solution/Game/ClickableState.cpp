@@ -35,12 +35,12 @@ void ClickableState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* a
 	OnResize(windowSize.x, windowSize.y);
 
 	PostMaster::GetInstance()->SendMessage(TextMessage(myClickableText));
-	PostMaster::GetInstance()->SendMessage(FadeMessage(1.f / 3.f));
+	//PostMaster::GetInstance()->SendMessage(FadeMessage(1.f / 3.f));
 }
 
 void ClickableState::EndState()
 {
-	PostMaster::GetInstance()->SendMessage(FadeMessage(1.f / 3.f));
+	//PostMaster::GetInstance()->SendMessage(FadeMessage(1.f / 3.f));
 }
 
 const eStateStatus ClickableState::Update(const float& aDeltaTime)
