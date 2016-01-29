@@ -13,6 +13,7 @@
 #include <InputWrapper.h>
 #include "Level.h"
 #include "LevelFactory.h"
+#include "LoadingState.h"
 #include <MemoryTracker.h>
 #include "MessageState.h"
 #include <ModelLoader.h>
@@ -33,6 +34,7 @@
 InGameState::InGameState(int aLevelIndex)
 	: myShouldReOpenConsole(false)
 	, myStartLevelIndex(aLevelIndex)
+	, myIsFirstFrame(true)
 {
 	myIsActiveState = false;
 	myIsPlayerCinematic = false;
@@ -68,6 +70,8 @@ void InGameState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCur
 	myCursor = aCursor;
 	myLevelFactory = new LevelFactory("Data/Level/LI_level.xml", *myCamera, myCursor);
 	myLevel = myLevelFactory->LoadLevel(myStartLevelIndex, false);
+	
+	
 
 	CU::Vector2<int> windowSize = Prism::Engine::GetInstance()->GetWindowSizeInt();
 
@@ -80,6 +84,7 @@ void InGameState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCur
 	PostMaster::GetInstance()->SendMessage(RunScriptMessage("Data/Script/Autorun.script"));
 
 	myIsActiveState = true;
+
 }
 
 void InGameState::EndState()
@@ -89,6 +94,16 @@ void InGameState::EndState()
 
 const eStateStatus InGameState::Update(const float& aDeltaTime)
 {
+#ifndef _DEBUG
+	if (myIsFirstFrame == true)
+	{
+		Prism::MemoryTracker::GetInstance()->SetRunTime(false);
+		myStateStack->PushSubGameState(new LoadingState());
+		Prism::MemoryTracker::GetInstance()->SetRunTime(true);
+		myIsFirstFrame = false;
+		return eStateStatus::eKeepState;
+	}
+#endif
 	UpdateCamera(aDeltaTime, myLevel->GetCameraMoveVector());
 
 	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_ESCAPE) || myIsShuttingDown == true || myIsComplete == true)
