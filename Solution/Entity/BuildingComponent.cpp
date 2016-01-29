@@ -18,6 +18,7 @@ BuildingComponent::BuildingComponent(Entity& aEntity, BuildingComponentData& aDa
 	, myMaxQueue(aData.myMaxQueue)
 	, myMineFieldRadius(aData.myMineFieldRadius)
 	, myUnitsInMineField(8)
+	, myUpgradesInQueue(aData.myUpgradesInQueue)
 {
 	for (int i = 0; i < 3; ++i)
 	{
@@ -108,12 +109,27 @@ void BuildingComponent::BuildUnit(eUnitType aUnitType)
 
 void BuildingComponent::UpgradeUnit(eUnitType aUnitType)
 {
-	if (myBuildQueue.size() < myMaxQueue)
+	if (myUpgradesInQueue == true &&myBuildQueue.size() < myMaxQueue)
 	{
 		myBuildQueue.push({ aUnitType, true });
 		int unitIndex = static_cast<int>(aUnitType);
 		int upgradeIndex = myUnitUpgradeProgress[unitIndex];
 		myUnitUpgrades[unitIndex][upgradeIndex].myInProgress = true;
+	}
+	else if (myUpgradesInQueue == false)
+	{
+		int unitIndex = static_cast<int>(aUnitType);
+		int upgradeIndex = myUnitUpgradeProgress[unitIndex];
+
+		PostMaster::GetInstance()->SendMessage(UpgradeUnitMessage(aUnitType, myUnitUpgrades[unitIndex][upgradeIndex]
+			, myEntity.GetOwner()));
+		++myUnitUpgradeProgress[unitIndex];
+		upgradeIndex = myUnitUpgradeProgress[unitIndex];
+		if (upgradeIndex < 3)
+		{
+			myUpgradeCooldowns[unitIndex] = myUnitUpgrades[unitIndex][upgradeIndex].myCooldown;
+			myUpgradeMaxCooldowns[unitIndex] = myUpgradeCooldowns[unitIndex];
+		}
 	}
 }
 

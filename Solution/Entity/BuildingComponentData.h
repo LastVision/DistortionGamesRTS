@@ -4,6 +4,7 @@
 struct BuildingComponentData
 {
 	bool myExistsInEntity = false;
+	bool myUpgradesInQueue;
 	float myMineFieldRadius;
 	CU::StaticArray<eUnitType, 3> myBuildUnitTypes;
 	CU::StaticArray<int, 3> myUnitCosts;

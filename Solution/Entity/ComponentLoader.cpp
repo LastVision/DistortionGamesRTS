@@ -161,6 +161,10 @@ void ComponentLoader::LoadBuidlingComponent(XMLReader& aDocument, tinyxml2::XMLE
 		{
 			aDocument.ForceReadAttribute(e, "value", aOutputData.myMineFieldRadius);
 		}
+		else if (elementName == CU::ToLower("UpgradesInQueue"))
+		{
+			aDocument.ForceReadAttribute(e, "value", aOutputData.myUpgradesInQueue);
+		}
 		else 
 		{
 			FailedToReadChildElementMessage(e->Name(), aSourceElement->Name());

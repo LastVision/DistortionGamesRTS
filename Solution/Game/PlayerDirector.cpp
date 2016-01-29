@@ -389,14 +389,19 @@ void PlayerDirector::ReceiveMessage(const TimeMultiplierMessage& aMessage)
 
 void PlayerDirector::ReceiveMessage(const MinimapMoveMessage& aMessage)
 {
+	CU::Vector2<float> position = aMessage.myPosition * 255.f;
+
 	if (mySelectedUnits.Size() > 0 && mySelectedUnits[0]->GetType() == eEntityType::UNIT)
 	{
-		CU::Vector2<float> position = aMessage.myPosition * 255.f;
 		bool myHasPlayedSound = false;
 		for (int i = 0; i < mySelectedUnits.Size(); i++)
 		{
 			mySelectedUnits[i]->GetComponent<ControllerComponent>()->MoveTo({ position.x, 0.f, position.y }, true, myHasPlayedSound);
 		}
+	}
+	else if (mySelectedUnits.Size() == 1 && mySelectedUnits[0]->GetType() == eEntityType::BASE_BUILING)
+	{
+		PlaceRallyPoint(position);
 	}
 }
 
@@ -955,7 +960,7 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 	if (mySelectedUnits.Size() == 1 && mySelectedUnits[0]->GetType() == eEntityType::BASE_BUILING
 		&& myRightClicked == true)
 	{
-		myBuilding->GetComponent<BuildingComponent>()->SetRallyPoint({ firstTargetPos.x, firstTargetPos.z });
+		PlaceRallyPoint({ firstTargetPos.x, firstTargetPos.z });
 	}
 
 	if (hasDoneAction == true)
@@ -1040,6 +1045,13 @@ void PlayerDirector::SelectAllUnits()
 			SelectUnit(myUnits[i]);
 		}
 	}
+}
+
+void PlayerDirector::PlaceRallyPoint(CU::Vector2<float> aWorldPosition)
+{
+	// check if inside navmesh 
+
+	myBuilding->GetComponent<BuildingComponent>()->SetRallyPoint(aWorldPosition);
 }
 
 void PlayerDirector::PlaceTotem(const CU::Vector3f& aPositionInWorld)
