@@ -1,6 +1,10 @@
 #include "stdafx.h"
 #include "BuildingComponent.h"
+#include "CollisionComponent.h"
+#include "GrenadeComponent.h"
+#include <Intersection.h>
 #include <PostMaster.h>
+#include "PollingStation.h"
 #include <SpawnUnitMessage.h>
 #include <UpgradeUnitMessage.h>
 
@@ -12,6 +16,8 @@ BuildingComponent::BuildingComponent(Entity& aEntity, BuildingComponentData& aDa
 	, myUnitUpgrades(aData.myUnitUpgrades)
 	, myUnitSupplyCosts(aData.myUnitSupplyCosts)
 	, myMaxQueue(aData.myMaxQueue)
+	, myMineFieldRadius(aData.myMineFieldRadius)
+	, myUnitsInMineField(8)
 {
 	for (int i = 0; i < 3; ++i)
 	{
@@ -39,6 +45,7 @@ void BuildingComponent::Reset()
 
 void BuildingComponent::Update(float aDeltaTime)
 {
+	HandleMineField();
 	UpdateUpgradeCooldown(aDeltaTime, eUnitType::GRUNT);
 	UpdateUpgradeCooldown(aDeltaTime, eUnitType::RANGER);
 	UpdateUpgradeCooldown(aDeltaTime, eUnitType::TANK);
@@ -167,5 +174,59 @@ void BuildingComponent::UpdateUpgradeCooldown(float aDelta, eUnitType aUnit)
 	if (myUpgradeCooldowns[unitIndex] < 0.f)
 	{
 		myUpgradeCooldowns[unitIndex] = 0.f;
+	}
+}
+
+void BuildingComponent::HandleMineField()
+{
+	CheckUnitsForRemove(myUnitsInMineField);
+	if (myEntity.GetOwner() == eOwnerType::PLAYER)
+	{
+		CheckUnitsForAdd(PollingStation::GetInstance()->GetUnits(eOwnerType::NEUTRAL), myUnitsInMineField);
+		CheckUnitsForAdd(PollingStation::GetInstance()->GetUnits(eOwnerType::ENEMY), myUnitsInMineField);
+	}
+	else if (myEntity.GetOwner() == eOwnerType::ENEMY)
+	{
+		CheckUnitsForAdd(PollingStation::GetInstance()->GetUnits(eOwnerType::PLAYER), myUnitsInMineField);
+		CheckUnitsForAdd(PollingStation::GetInstance()->GetUnits(eOwnerType::NEUTRAL), myUnitsInMineField);
+	}
+	
+	if (myUnitsInMineField.Size() > 0)
+	{
+		Entity* toThrowAt = myUnitsInMineField[rand() % myUnitsInMineField.Size()];
+		CU::Vector3<float> throwPos(toThrowAt->GetPosition().x, 1.f, toThrowAt->GetPosition().y);
+		myEntity.GetComponent<GrenadeComponent>()->ThrowGrenade(throwPos);
+	}
+
+}
+
+void BuildingComponent::CheckUnitsForRemove(CU::GrowingArray<Entity*>& someUnits) const
+{
+	for (int i = someUnits.Size() - 1; i >= 0; --i)
+	{
+		Entity* current = someUnits[i];
+		if (CU::Intersection::CircleVsCircle(myEntity.GetPosition(), myMineFieldRadius
+			, current->GetPosition(), current->GetComponent<CollisionComponent>()->GetRadius()) == false
+			|| (someUnits[i]->GetState() == eEntityState::DIE && someUnits[i]->GetAlive() == false))
+		{
+			someUnits.RemoveCyclicAtIndex(i);
+		}
+	}
+}
+
+void BuildingComponent::CheckUnitsForAdd(const CU::GrowingArray<Entity*>& someUnits
+	, CU::GrowingArray<Entity*>& someUnitsOut) const
+{
+	for (int i = 0; i < someUnits.Size(); ++i)
+	{
+		Entity* current = someUnits[i];
+		if (CU::Intersection::CircleVsCircle(myEntity.GetPosition(), myMineFieldRadius
+			, current->GetPosition(), current->GetComponent<CollisionComponent>()->GetRadius()))
+		{
+			if (someUnitsOut.Find(current) < 0)
+			{
+				someUnitsOut.Add(current);
+			}
+		}
 	}
 }

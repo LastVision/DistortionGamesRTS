@@ -71,6 +71,12 @@ private:
 	bool myIgnoreBuildTime;
 
 	unsigned int myMaxQueue;
+
+	void HandleMineField();
+	void CheckUnitsForRemove(CU::GrowingArray<Entity*>& someUnits) const;
+	void CheckUnitsForAdd(const CU::GrowingArray<Entity*>& someUnits, CU::GrowingArray<Entity*>& someUnitsOut) const;
+	const float myMineFieldRadius;
+	CU::GrowingArray<Entity*> myUnitsInMineField;
 };
 
 inline eComponentType BuildingComponent::GetTypeStatic()

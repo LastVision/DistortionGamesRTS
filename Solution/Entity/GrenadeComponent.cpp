@@ -2,10 +2,12 @@
 
 #include <AudioInterface.h>
 #include "CollisionComponent.h"
+#include "EmitterMessage.h"
+#include "ControllerComponent.h"
 #include "GrenadeComponent.h"
 #include "HealthComponent.h"
 #include "Intersection.h"
-#include "EmitterMessage.h"
+#include "KillUnitMessage.h"
 #include "Postmaster.h"
 #include "PollingStation.h"
 #include "TriggerMessage.h"
@@ -70,27 +72,11 @@ void GrenadeComponent::CheckUnitsForAdd(const CU::GrowingArray<Entity*>& someUni
 void GrenadeComponent::Update(float aDeltaTime)
 {
 	CheckUnitsForRemove(myUnits);
-	if (myEntity.GetType() == eEntityType::BASE_BUILING)
-	{
-		if (myEntity.GetOwner() == eOwnerType::PLAYER)
-		{
-			CheckUnitsForAdd(PollingStation::GetInstance()->GetUnits(eOwnerType::NEUTRAL), myUnits);
-			CheckUnitsForAdd(PollingStation::GetInstance()->GetUnits(eOwnerType::ENEMY), myUnits);
-		}
-		else if (myEntity.GetOwner() == eOwnerType::ENEMY)
-		{
-			CheckUnitsForAdd(PollingStation::GetInstance()->GetUnits(eOwnerType::PLAYER), myUnits);
-			CheckUnitsForAdd(PollingStation::GetInstance()->GetUnits(eOwnerType::NEUTRAL), myUnits);
-		}
 
-		AutoCast();
-	}
-	else
-	{
-		CheckUnitsForAdd(PollingStation::GetInstance()->GetUnits(eOwnerType::PLAYER), myUnits);
-		CheckUnitsForAdd(PollingStation::GetInstance()->GetUnits(eOwnerType::NEUTRAL), myUnits);
-		CheckUnitsForAdd(PollingStation::GetInstance()->GetUnits(eOwnerType::ENEMY), myUnits);
-	}
+	CheckUnitsForAdd(PollingStation::GetInstance()->GetUnits(eOwnerType::PLAYER), myUnits);
+	CheckUnitsForAdd(PollingStation::GetInstance()->GetUnits(eOwnerType::NEUTRAL), myUnits);
+	CheckUnitsForAdd(PollingStation::GetInstance()->GetUnits(eOwnerType::ENEMY), myUnits);
+	
 
 	myCurrentCooldown -= aDeltaTime;
 	myDelay -= aDeltaTime;
@@ -132,6 +118,7 @@ void GrenadeComponent::Explosion()
 		Prism::Audio::AudioInterface::GetInstance()->PostEvent("Grunt_GrenadeExplosion"
 			, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
 	}
+	bool hasSurvived = true;
 	if (myUnits.Size() > 0)
 	{
 		for (int i = 0; i < myUnits.Size(); ++i)
@@ -139,19 +126,14 @@ void GrenadeComponent::Explosion()
 			//			float length2 = CU::Length2(myUnits[i]->GetPosition() - my2DPosition);
 			if (myUnits[i]->GetOwner() != myEntity.GetOwner())
 			{
-				myUnits[i]->GetComponent<HealthComponent>()->TakeDamageAndCheckSurvive(myDamage);
+				hasSurvived = myUnits[i]->GetComponent<HealthComponent>()->TakeDamageAndCheckSurvive(myDamage);
+			}
+			if (hasSurvived == false)
+			{
+				PostMaster::GetInstance()->SendMessage(KillUnitMessage(static_cast<int>(myUnits[i]->GetUnitType()),
+					static_cast<int>(myUnits[i]->GetOwner()), myUnits[i]->GetComponent<ControllerComponent>()->GetTargetPosition()));
 			}
 		}
 	}
 	myHasExploded = true;
-}
-
-void GrenadeComponent::AutoCast()
-{
-	if (myUnits.Size() > 0)
-	{
-		Entity* toThrowAt = myUnits[rand() % myUnits.Size()];
-		CU::Vector3<float> throwPos(toThrowAt->GetPosition().x, 1.f, toThrowAt->GetPosition().y);
-		ThrowGrenade(throwPos);
-	}
 }
