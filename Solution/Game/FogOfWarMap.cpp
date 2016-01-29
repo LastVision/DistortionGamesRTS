@@ -63,11 +63,17 @@ void FogOfWarMap::AddValue(float aValue, float aRadius, const CU::Vector2<float>
 			{
 				int index = x + y * mySide;
 				//myGrid[index] = aValue;
-				float rest = aRadius - OUTER_RING;
+				/*float rest = aRadius - OUTER_RING;
 				float parts = 1.f / OUTER_RING;
 				float toPoint = (distance - rest) * parts;
 				float divider = (rest / myTileSize);
-				float value = aValue - toPoint;
+				float value = aValue - toPoint;*/
+
+				float inner = aRadius - (OUTER_RING);
+				float newDist = distance - inner;
+				float newMax = aRadius - inner;
+				float value = 1.f - (newDist / newMax);
+
 				myGrid[index] += value;
 				myGrid[index] = fminf(myGrid[index], myMaxValue);
 				myGrid[index] = fmaxf(myGrid[index], MIN_DARKNESS);
