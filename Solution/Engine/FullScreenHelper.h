@@ -70,8 +70,8 @@ namespace Prism
 		void Render(Effect* aEffect);
 		void Render(Effect* aEffect, const std::string& aTechnique);
 
-		void DownSample(Texture* aTarget, Texture* aSource, float aWidth, float aHeight);
-		void BloomEffect(Texture* aSource);
+		void DownSample(Texture* aTarget, Texture* aSource, float aWidth, float aHeight, const std::string& aTechnique);
+		void BloomEffect(Texture* aSource, const std::string& aTechnique);
 		void DoBloom(Texture* aSource, Texture* aTarget);
 
 		CombineData myCombineData;

@@ -191,6 +191,12 @@
     <ClCompile Include="FogOfWarHelper.cpp">
       <Filter>Rendering</Filter>
     </ClCompile>
+    <ClCompile Include="SpriteAnimation.cpp">
+      <Filter>Rendering\SpriteAnimation</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteAnimator.cpp">
+      <Filter>Rendering\SpriteAnimation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h" />
@@ -428,6 +434,12 @@
     <ClInclude Include="FogOfWarHelper.h">
       <Filter>Rendering</Filter>
     </ClInclude>
+    <ClInclude Include="SpriteAnimation.h">
+      <Filter>Rendering\SpriteAnimation</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteAnimator.h">
+      <Filter>Rendering\SpriteAnimation</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Precompile">
@@ -492,6 +504,9 @@
     </Filter>
     <Filter Include="Rendering\Sprite">
       <UniqueIdentifier>{60336301-3065-4576-a4c9-e0a77c04a688}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering\SpriteAnimation">
+      <UniqueIdentifier>{1431722e-37c1-41f6-91d2-020c2db12921}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
