@@ -9,6 +9,7 @@ namespace Prism
 	class Terrain;
 	class Scene;
 	class SpriteProxy;
+	class SpriteAnimator;
 }
 
 namespace GUI
@@ -159,6 +160,9 @@ private:
 	int myMaxSelectedUnits;
 	CU::Vector2<float> myLastEventPosition;
 	bool myHasEventToGoTo;
+
+	Prism::SpriteAnimator* myConfimrationAnimation;
+	CU::Vector2<float> myConfirmationPosition;
 
 };
 

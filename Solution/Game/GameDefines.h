@@ -9,7 +9,7 @@
 
 #ifdef _DEBUG
 
-//#undef LOAD_PROPS
+#undef LOAD_PROPS
 #undef USE_WEATHER
 
 #endif
