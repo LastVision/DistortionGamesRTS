@@ -72,7 +72,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPTSTR, int aNumberCommands)
 		LocalFree(realCommands);
 	}
 
-	if (ReadSetup(globalSetup, CU::GetMyDocumentFolderPath() + "Raven\\Data\\Setting\\SET_config.bin") == false)
+	if (ReadSetup(globalSetup, CU::GetMyDocumentFolderPath() + "Ice\\Data\\Setting\\SET_config.bin") == false)
 	{
 		return 1;
 	}

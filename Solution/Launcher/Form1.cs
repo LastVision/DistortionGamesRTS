@@ -18,7 +18,7 @@ namespace Launcher
         private string myConfigPath = "Data\\Setting\\SET_config.bin";
         private string myExePath = "Application_Release.exe";
         private string myLogo = "bin\\Data\\Resource\\Texture\\Logo\\T_launcher_logo.png";
-        private string myGameName = "Raven";
+        private string myGameName = "Ice";
 
         enum eResolutions
         {
