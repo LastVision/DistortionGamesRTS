@@ -69,9 +69,9 @@ void EmitterManager::UpdateEmitters(float aDeltaTime, CU::Matrix44f aWorldMatrix
 				{
 					CU::Vector3f newPosition = myEmitterList[i]->myCameraToFollow->GetOrientation().GetPos();
 					newPosition += myEmitterList[i]->myOffset;
+
 					myEmitterList[i]->myEmitters[k][j]->SetPosition(newPosition);
 				}
-
 				myEmitterList[i]->myEmitters[k][j]->Update(aDeltaTime, aWorldMatrix);
 			}
 		}
@@ -190,7 +190,15 @@ void EmitterManager::ReadList(const std::string& aPath, const std::string& anID,
 	{
 		std::string entityPath = "";
 		rootDocument.ForceReadAttribute(e, "src", entityPath);
-		if (entityPath != "")
+		if (entityPath == "Data/Resource/Particle/P_emitter_weather_snow_medium.xml" ||
+			entityPath == "Data/Resource/Particle/P_emitter_weather_snow_small.xml")
+		{
+			Prism::ParticleEmitterInstance* newEmitter;
+			newEmitter = new Prism::ParticleEmitterInstance(Prism::ParticleDataContainer::GetInstance()->
+				GetParticleData(entityPath), true);
+			myEmitters[anID]->myEmitters[anIndex].Add(newEmitter);
+		}
+		else if (entityPath != "")
 		{
 			Prism::ParticleEmitterInstance* newEmitter;
 			newEmitter = new Prism::ParticleEmitterInstance(Prism::ParticleDataContainer::GetInstance()->
