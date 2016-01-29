@@ -2,6 +2,7 @@
 
 #include <AudioInterface.h>
 #include "CollisionComponent.h"
+#include <EmitterMessage.h>
 #include "MathHelper.h"
 #include "HealthComponent.h"
 #include "Intersection.h"
@@ -73,6 +74,8 @@ void TotemComponent::Update(float aDeltaTime)
 		{
 			myUnits[i]->GetComponent<HealthComponent>()->Heal(myHealPerSecond*aDeltaTime);
 		}
+		PostMaster::GetInstance()->SendMessage(EmitterMessage("totem_healing", myTargetPosition));
+
 	}
 
 
