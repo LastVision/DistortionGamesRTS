@@ -390,6 +390,31 @@ namespace Prism
 		return proxy;
 	}
 
+	SpriteProxy* ModelLoader::LoadSprite(ID3D11Texture2D* aD3D11Texture, const CU::Vector2<float>& aSize
+		, const CU::Vector2<float>& aHotSpot)
+	{
+		SpriteProxy* proxy = new SpriteProxy();
+		proxy->mySprite = nullptr;
+		proxy->SetSize(aSize, aHotSpot);
+
+#ifdef THREADED_LOADING
+		WaitUntilAddIsAllowed();
+		myCanCopyArray = false;
+
+		LoadData newData;
+		newData.myD3D11Texture = aD3D11Texture;
+		newData.mySpriteProxy = proxy;
+		newData.myLoadType = eLoadType::SPRITE;
+		newData.mySize = { aSize.x, aSize.y, aHotSpot.x, aHotSpot.y };
+
+		myBuffers[myInactiveBuffer].Add(newData);
+		myCanCopyArray = true;
+#else
+		proxy->mySprite = new Sprite(aD3D11Texture, aSize, aHotSpot);
+#endif	
+		return proxy;
+	}
+
 	bool ModelLoader::CheckIfWorking()
 	{
 		if (myIsPaused == true || (myBuffers[myInactiveBuffer].Size() == 0
@@ -500,7 +525,14 @@ namespace Prism
 
 	void ModelLoader::CreateSprite(LoadData& someData)
 	{
-		if (mySprites.find(someData.myModelPath) != mySprites.end())
+		if (someData.myD3D11Texture != nullptr)
+		{
+			CU::Vector2<float> size(someData.mySize.x, someData.mySize.y);
+			CU::Vector2<float> hotSpot(someData.mySize.z, someData.mySize.w);
+
+			someData.mySpriteProxy->mySprite = new Sprite(someData.myD3D11Texture, size, hotSpot);
+		}
+		else if (mySprites.find(someData.myModelPath) != mySprites.end())
 		{
 			someData.mySpriteProxy->mySprite = mySprites[someData.myModelPath];
 		}

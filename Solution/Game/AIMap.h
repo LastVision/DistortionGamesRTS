@@ -13,7 +13,7 @@ public:
 	AIMap(int aSide = 64.f);
 	virtual ~AIMap();
 
-	virtual void Update() = 0;
+	virtual void Update(){};
 	void Render(const Prism::Camera& aCamera);
 	virtual void UpdateRenderPlane();
 

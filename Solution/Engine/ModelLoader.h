@@ -3,6 +3,8 @@
 #include <GrowingArray.h>
 #include <atomic>
 
+struct ID3D11Texture2D;
+
 namespace Prism
 {
 	class AnimationProxy;
@@ -36,6 +38,8 @@ namespace Prism
 		AnimationProxy* LoadAnimation(const std::string& aPath);
 		SpriteProxy* LoadSprite(const std::string& aPath, const CU::Vector2<float>& aSize
 			, const CU::Vector2<float>& aHotSpot = { 0.f, 0.f });
+		SpriteProxy* LoadSprite(ID3D11Texture2D* aD3D11Texture, const CU::Vector2<float>& aSize
+			, const CU::Vector2<float>& aHotSpot = { 0.f, 0.f });
 
 	private:
 		enum class eLoadType
@@ -61,6 +65,7 @@ namespace Prism
 			std::string myEffectPath = "";
 			CU::Vector4<float> mySize; //Cube uses X/Y/Z, Sprite uses X/Y as size and Z/W as hotspot
 			CU::Vector4<float> myColor;
+			ID3D11Texture2D* myD3D11Texture = nullptr;
 		};
 
 		ModelLoader();

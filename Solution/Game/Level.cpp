@@ -49,6 +49,7 @@ Level::Level(const Prism::Camera& aCamera, Prism::Terrain* aTerrain, GUI::Cursor
 
 	myFogOfWarHelper = new Prism::FogOfWarHelper();
 	FogOfWarMap::GetInstance();
+	FogOfWarMap::GetInstance()->SetFogOfWarHelperTexture(myFogOfWarHelper->GetTexture());
 }
 
 Level::~Level()
@@ -110,7 +111,7 @@ bool Level::Update(float aDeltaTime, Prism::Camera& aCamera)
 	myAI->Update(aDeltaTime);
 	myNeutralDirector->Update(aDeltaTime);
 
-	FogOfWarMap::GetInstance()->Update();
+	FogOfWarMap::GetInstance()->Update(aDeltaTime);
 	DoFogCulling();
 
 	myEmitterManager->UpdateEmitters(aDeltaTime, CU::Matrix44f());
@@ -150,8 +151,6 @@ void Level::Render(Prism::Camera& aCamera)
 	myNeutralDirector->RenderHealthBars(aCamera);
 	
 	myPlayer->Render(aCamera);
-
-	
 }
 
 void Level::OnResize(int aWidth, int aHeigth)
