@@ -70,7 +70,7 @@ namespace CSharpUtilities.Components
             }
         }
 
-        public void Update()
+        public override void Update()
         {
             myPreviewWindow.Invalidate();
 
