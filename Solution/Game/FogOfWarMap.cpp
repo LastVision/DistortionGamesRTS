@@ -5,6 +5,9 @@
 #include <RenderPlane.h>
 #include <TriggerComponent.h>
 
+#define OUTER_RING 10.f
+#define MIN_DARKNESS 0.3f
+
 FogOfWarMap::FogOfWarMap()
 	: AIMap(256)
 {
@@ -20,7 +23,7 @@ void FogOfWarMap::Update()
 {
 	for (int i = 0; i < myGrid.Size(); ++i)
 	{
-		myGrid[i] = 0.25f;
+		myGrid[i] = MIN_DARKNESS;
 	}
 
 	AddValue(1.f, 20.f, PollingStation::GetInstance()->GetBase(eOwnerType::PLAYER)->GetPosition());
@@ -51,23 +54,23 @@ void FogOfWarMap::AddValue(float aValue, float aRadius, const CU::Vector2<float>
 		for (int x = topLeft.x; x < botRight.x; ++x)
 		{
 			float distance = CU::Length(GetPosition(x, y) - aPosition);
-			if (distance < aRadius - 5.f && ValidIndex(x, y))
+			if (distance < aRadius - OUTER_RING && ValidIndex(x, y))
 			{
 				int index = x + y * mySide;
 				myGrid[index] = aValue;
 			}
-			else if (distance >= aRadius - 5.f && distance <= aRadius)
+			else if (distance >= aRadius - OUTER_RING && distance <= aRadius)
 			{
 				int index = x + y * mySide;
 				//myGrid[index] = aValue;
-				float rest = aRadius - 5.f;
-				float parts = 0.75f / 5.f;
+				float rest = aRadius - OUTER_RING;
+				float parts = 1.f / OUTER_RING;
 				float toPoint = (distance - rest) * parts;
 				float divider = (rest / myTileSize);
 				float value = aValue - toPoint;
 				myGrid[index] += value;
 				myGrid[index] = fminf(myGrid[index], myMaxValue);
-				myGrid[index] = fmaxf(myGrid[index], 0.25f);
+				myGrid[index] = fmaxf(myGrid[index], MIN_DARKNESS);
 
 
 			}
