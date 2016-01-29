@@ -2,10 +2,12 @@
 
 #include <AudioInterface.h>
 #include "CollisionComponent.h"
+#include "EmitterMessage.h"
+#include "ControllerComponent.h"
 #include "GrenadeComponent.h"
 #include "HealthComponent.h"
 #include "Intersection.h"
-#include "EmitterMessage.h"
+#include "KillUnitMessage.h"
 #include "Postmaster.h"
 #include "PollingStation.h"
 #include "TriggerMessage.h"
@@ -116,6 +118,7 @@ void GrenadeComponent::Explosion()
 		Prism::Audio::AudioInterface::GetInstance()->PostEvent("Grunt_GrenadeExplosion"
 			, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
 	}
+	bool hasSurvived = true;
 	if (myUnits.Size() > 0)
 	{
 		for (int i = 0; i < myUnits.Size(); ++i)
@@ -123,7 +126,12 @@ void GrenadeComponent::Explosion()
 			//			float length2 = CU::Length2(myUnits[i]->GetPosition() - my2DPosition);
 			if (myUnits[i]->GetOwner() != myEntity.GetOwner())
 			{
-				myUnits[i]->GetComponent<HealthComponent>()->TakeDamageAndCheckSurvive(myDamage);
+				hasSurvived = myUnits[i]->GetComponent<HealthComponent>()->TakeDamageAndCheckSurvive(myDamage);
+			}
+			if (hasSurvived == false)
+			{
+				PostMaster::GetInstance()->SendMessage(KillUnitMessage(static_cast<int>(myUnits[i]->GetUnitType()),
+					static_cast<int>(myUnits[i]->GetOwner()), myUnits[i]->GetComponent<ControllerComponent>()->GetTargetPosition()));
 			}
 		}
 	}
