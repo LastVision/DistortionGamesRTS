@@ -146,7 +146,7 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 	reader.ForceReadAttribute(reader.ForceFindFirstChild(rootElement, "maxSelected"), "value", myMaxSelectedUnits);
 	reader.CloseDocument();
 
-	myConfimrationAnimation = new Prism::SpriteAnimator("Data/Resource/Animation.xml");
+	myConfimrationAnimation = new Prism::SpriteAnimator("Data/Resource/SpriteAnimation/ConfirmationAnimation.xml");
 }
 
 PlayerDirector::~PlayerDirector()
