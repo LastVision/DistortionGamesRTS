@@ -831,11 +831,24 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 		PlaceTotem(firstTargetPos);
 	}
 
+	if (myConfimrationAnimation->IsPlayingAnimation() == true &&
+		myConfimrationCameraPosition != aCamera.GetOrientation().GetPos())
+	{
+		CU::Vector2<float> difference;
+		difference.x = (aCamera.GetOrientation().GetPos().x - myConfimrationCameraPosition.x) * 25.f;
+		difference.y = (aCamera.GetOrientation().GetPos().z - myConfimrationCameraPosition.z) * 20.f;
+		myConfirmationPosition.x -= difference.x;
+		myConfirmationPosition.y -= difference.y;
+
+		myConfimrationCameraPosition = aCamera.GetOrientation().GetPos();
+	}
+
 	if (myRightClicked == true && mySelectedUnits.Size() > 0 && mySelectedUnits[0]->GetType() == eEntityType::UNIT)
 	{
 		myConfimrationAnimation->ResetAnimation();
 		myConfirmationPosition = myCursor->GetMousePosition();
 		myConfimrationAnimation->StartAnimation("confirmation");
+		myConfimrationCameraPosition = aCamera.GetOrientation().GetPos();
 	}
 
 	if (myLeftMouseDown == true)
