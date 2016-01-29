@@ -92,6 +92,7 @@ void ComponentLoader::LoadBuidlingComponent(XMLReader& aDocument, tinyxml2::XMLE
 {
 	aOutputData.myExistsInEntity = true;
 
+
 	aOutputData.myBuildUnitTypes[0] = eUnitType::NOT_A_UNIT;
 	aOutputData.myBuildUnitTypes[1] = eUnitType::NOT_A_UNIT;
 	aOutputData.myBuildUnitTypes[2] = eUnitType::NOT_A_UNIT;
@@ -155,6 +156,10 @@ void ComponentLoader::LoadBuidlingComponent(XMLReader& aDocument, tinyxml2::XMLE
 					++upgradeIndex;
 				}
 			}
+		}
+		else if (elementName == CU::ToLower("MineFieldRadius"))
+		{
+			aDocument.ForceReadAttribute(e, "value", aOutputData.myMineFieldRadius);
 		}
 		else 
 		{

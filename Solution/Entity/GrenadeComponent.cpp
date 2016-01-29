@@ -70,27 +70,11 @@ void GrenadeComponent::CheckUnitsForAdd(const CU::GrowingArray<Entity*>& someUni
 void GrenadeComponent::Update(float aDeltaTime)
 {
 	CheckUnitsForRemove(myUnits);
-	if (myEntity.GetType() == eEntityType::BASE_BUILING)
-	{
-		if (myEntity.GetOwner() == eOwnerType::PLAYER)
-		{
-			CheckUnitsForAdd(PollingStation::GetInstance()->GetUnits(eOwnerType::NEUTRAL), myUnits);
-			CheckUnitsForAdd(PollingStation::GetInstance()->GetUnits(eOwnerType::ENEMY), myUnits);
-		}
-		else if (myEntity.GetOwner() == eOwnerType::ENEMY)
-		{
-			CheckUnitsForAdd(PollingStation::GetInstance()->GetUnits(eOwnerType::PLAYER), myUnits);
-			CheckUnitsForAdd(PollingStation::GetInstance()->GetUnits(eOwnerType::NEUTRAL), myUnits);
-		}
 
-		AutoCast();
-	}
-	else
-	{
-		CheckUnitsForAdd(PollingStation::GetInstance()->GetUnits(eOwnerType::PLAYER), myUnits);
-		CheckUnitsForAdd(PollingStation::GetInstance()->GetUnits(eOwnerType::NEUTRAL), myUnits);
-		CheckUnitsForAdd(PollingStation::GetInstance()->GetUnits(eOwnerType::ENEMY), myUnits);
-	}
+	CheckUnitsForAdd(PollingStation::GetInstance()->GetUnits(eOwnerType::PLAYER), myUnits);
+	CheckUnitsForAdd(PollingStation::GetInstance()->GetUnits(eOwnerType::NEUTRAL), myUnits);
+	CheckUnitsForAdd(PollingStation::GetInstance()->GetUnits(eOwnerType::ENEMY), myUnits);
+	
 
 	myCurrentCooldown -= aDeltaTime;
 	myDelay -= aDeltaTime;
@@ -144,14 +128,4 @@ void GrenadeComponent::Explosion()
 		}
 	}
 	myHasExploded = true;
-}
-
-void GrenadeComponent::AutoCast()
-{
-	if (myUnits.Size() > 0)
-	{
-		Entity* toThrowAt = myUnits[rand() % myUnits.Size()];
-		CU::Vector3<float> throwPos(toThrowAt->GetPosition().x, 1.f, toThrowAt->GetPosition().y);
-		ThrowGrenade(throwPos);
-	}
 }
