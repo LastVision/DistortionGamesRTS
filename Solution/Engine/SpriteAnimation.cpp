@@ -4,38 +4,18 @@
 
 namespace Prism
 {
-	SpriteAnimation::SpriteAnimation()
-		: mySpriteSheet(nullptr)
-	{
-	}
-
-	SpriteAnimation::SpriteAnimation(float aTimePerFrame, int aNumberOfFrames, int aFramesPerRow, int aFramesPerColumn
-		, SpriteProxy* aSpriteSheet, const std::string &aName, bool aIsLooping)
+	SpriteAnimation::SpriteAnimation(float aTimePerFrame, int aNumberOfFrames, CU::Vector2<float> aFrameSize, SpriteProxy* aSpriteSheet, bool aIsLooping)
 	{
 		myTimePerFrame = aNumberOfFrames / aTimePerFrame;
 		myNumberOfFrames = aNumberOfFrames;
-		myFramesPerRow = aFramesPerRow;
 		mySpriteSheet = aSpriteSheet;
 		mySpriteSheetSize = mySpriteSheet->GetSize();
 		myIsLooping = aIsLooping;
-		myName = aName;
-
-		myFrameSize.x = mySpriteSheet->GetSize().x / myFramesPerRow;
-		myFrameSize.y = mySpriteSheet->GetSize().y / aFramesPerColumn;
-	}
-
-	SpriteAnimation::SpriteAnimation(float aTimePerFrame, int aNumberOfFrames, int aFramesPerRow, CU::Vector2<float> aFrameSize
-		, SpriteProxy* aSpriteSheet, const std::string &aName, bool aIsLooping)
-	{
-		myTimePerFrame = aNumberOfFrames / aTimePerFrame;
-		myNumberOfFrames = aNumberOfFrames;
-		myFramesPerRow = aFramesPerRow;
-		mySpriteSheet = aSpriteSheet;
-		mySpriteSheetSize = mySpriteSheet->GetSize();
-		myIsLooping = aIsLooping;
-		myName = aName;
-
 		myFrameSize = aFrameSize;
+
+		myFramesPerRow = int(mySpriteSheetSize.x / myFrameSize.x);
+		//myFrameSize.x = mySpriteSheet->GetSize().x / myFramesPerRow;
+		//myFrameSize.y = mySpriteSheet->GetSize().y / aFramesPerColumn;
 	}
 
 	SpriteAnimation::~SpriteAnimation()
@@ -56,10 +36,5 @@ namespace Prism
 	SpriteProxy* SpriteAnimation::GetSpriteSheet()
 	{
 		return mySpriteSheet;
-	}
-
-	const std::string& SpriteAnimation::GetName() const
-	{
-		return myName;
 	}
 }

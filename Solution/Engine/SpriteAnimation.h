@@ -7,12 +7,8 @@ namespace Prism
 	class SpriteAnimation
 	{
 	public:
-		SpriteAnimation();
-		SpriteAnimation(float aTimePerFrame, int aNumberOfFrames, int aFramesPerRow, int aFramesPerColumn, SpriteProxy* aSpriteSheet
-			, const std::string &aName, bool aIsLooping);
 
-		SpriteAnimation(float aTimePerFrame, int aNumberOfFrames, int aFramesPerRow, CU::Vector2<float> aFrameSize, SpriteProxy* aSpriteSheet
-			, const std::string &aName, bool aIsLooping);
+		SpriteAnimation(float aTimePerFrame, int aNumberOfFrames, CU::Vector2<float> aFrameSize, SpriteProxy* aSpriteSheet, bool aIsLooping);
 		~SpriteAnimation();
 
 		float GetTimePerFrame() const;
@@ -20,7 +16,6 @@ namespace Prism
 		int GetFramesPerRow() const;
 
 		SpriteProxy* GetSpriteSheet();
-		const std::string& GetName() const;
 
 		const CU::Vector2<float>& GetFrameSize() const;
 		const CU::Vector2<float>& GetSpriteSheetSize() const;
@@ -28,7 +23,6 @@ namespace Prism
 		bool IsLooping() const;
 
 	private:
-		std::string myName;
 
 		CU::Vector2<float> mySpriteSheetSize;
 		CU::Vector2<float> myFrameSize;

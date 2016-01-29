@@ -5,70 +5,42 @@
 
 namespace Prism
 {
-	SpriteAnimator::SpriteAnimator()
-		: myCurrentAnimation(nullptr)
-		, myTimeSinceLastFrame(0.f)
-		, myCurrentFrame(0)
-	{
-	}
-
 	SpriteAnimator::SpriteAnimator(std::string aXMLPath)
 	{
+		myAnimations.Init(1);
+
 		XMLReader reader;
 		reader.OpenDocument(aXMLPath);
 
-		std::string spritePath = ""; 
-		std::string name = "";
+		CU::Vector2<float> spriteHotspot(0.f, 0.f);
+		CU::Vector2<float> frameSize;
+		std::string spritePath = "";
 		CU::Vector2<float> spriteSize(0.f, 0.f);
-		float fps = 0.f; 
+		float fps = 0.f;
 		bool isLooping = true;
-		int numberOfFrames = -1; 
-		int framesPerRow = -1; 
-		
+		int numberOfFrames = -1;
+
 		tinyxml2::XMLElement* rootElement = reader.FindFirstChild("root");
 
 		reader.ForceReadAttribute(reader.ForceFindFirstChild(rootElement, "spritesheet"), "path", spritePath);
 		reader.ForceReadAttribute(reader.ForceFindFirstChild(rootElement, "spritesheet"), "sizex", spriteSize.x);
 		reader.ForceReadAttribute(reader.ForceFindFirstChild(rootElement, "spritesheet"), "sizey", spriteSize.y);
-		reader.ForceReadAttribute(reader.ForceFindFirstChild(rootElement, "name"), "value", name);
 		reader.ForceReadAttribute(reader.ForceFindFirstChild(rootElement, "fps"), "value", fps);
 		reader.ForceReadAttribute(reader.ForceFindFirstChild(rootElement, "islooping"), "value", isLooping);
-		reader.ForceReadAttribute(reader.ForceFindFirstChild(rootElement, "numberofframes"), "value", numberOfFrames);
-		reader.ForceReadAttribute(reader.ForceFindFirstChild(rootElement, "framesperrow"), "value", framesPerRow);
-		
-		if (reader.FindFirstChild(rootElement, "framespercolumn") != nullptr)
-		{
-			int framesPerColumn = -1;
-			reader.ForceReadAttribute(reader.ForceFindFirstChild(rootElement, "framespercolumn"), "value", framesPerColumn);
-			AddAnimation(fps, numberOfFrames, framesPerRow, framesPerColumn
-				, ModelLoader::GetInstance()->LoadSprite(spritePath, spriteSize), name, isLooping);
-		}
-		else if (reader.FindFirstChild(rootElement, "framesize") != nullptr)
-		{
-			CU::Vector2<float> spriteHotspot(0.f, 0.f);
-			CU::Vector2<float> frameSize;
-			reader.ForceReadAttribute(reader.ForceFindFirstChild(rootElement, "framesize"), "x", frameSize.x);
-			reader.ForceReadAttribute(reader.ForceFindFirstChild(rootElement, "framesize"), "y", frameSize.y);
-			reader.ReadAttribute(reader.FindFirstChild(rootElement, "framesize"), "hotspotx", spriteHotspot.x);
-			reader.ReadAttribute(reader.FindFirstChild(rootElement, "framesize"), "hotspoty", spriteHotspot.y);
-			AddAnimation(fps, numberOfFrames, framesPerRow, frameSize
-				, ModelLoader::GetInstance()->LoadSprite(spritePath, spriteSize, spriteHotspot), name, isLooping);
-		}
-		else
-		{
-			std::string message = "[SpriteAnimation] Has to have either 'framesize' or 'framespercolumn' in " + aXMLPath;
-			DL_ASSERT(message);
-		}
+		reader.ForceReadAttribute(reader.ForceFindFirstChild(rootElement, "numberofframes"), "value", numberOfFrames);	
+		reader.ForceReadAttribute(reader.ForceFindFirstChild(rootElement, "framesize"), "x", frameSize.x);
+		reader.ForceReadAttribute(reader.ForceFindFirstChild(rootElement, "framesize"), "y", frameSize.y);
+		reader.ReadAttribute(reader.FindFirstChild(rootElement, "framesize"), "hotspotx", spriteHotspot.x);
+		reader.ReadAttribute(reader.FindFirstChild(rootElement, "framesize"), "hotspoty", spriteHotspot.y);
+
+		AddAnimation(fps, numberOfFrames, frameSize, ModelLoader::GetInstance()->LoadSprite(spritePath, spriteSize, spriteHotspot), isLooping);
 
 		reader.CloseDocument();
 	}
 
 	SpriteAnimator::~SpriteAnimator()
 	{
-		for (auto &sprite : myAnimations) 
-		{
-			SAFE_DELETE(sprite.second);
-		}
+		myAnimations.DeleteAll();
 	}
 
 	void SpriteAnimator::Update(float aDelta)
@@ -105,22 +77,25 @@ namespace Prism
 		}
 	}
 
-	void SpriteAnimator::StartAnimation(std::string aName)
+	void SpriteAnimator::StartAnimation(int anID)
 	{
-		myCurrentAnimation = myAnimations[aName];
+		DL_ASSERT_EXP(anID <= myAnimations.Size() - 1, "[SpriteAnimator] Trying to start animation at nonexisting index");
+		myCurrentAnimation = myAnimations[anID];
 	}
 
-	void SpriteAnimator::StopAnimation(std::string aName)
+	void SpriteAnimator::RestartAnimation(int anID)
 	{
-		if (myCurrentAnimation != nullptr && aName == myCurrentAnimation->GetName())
+		DL_ASSERT_EXP(anID <= myAnimations.Size() - 1, "[SpriteAnimator] Trying to start animation at nonexisting index");
+		myCurrentFrame = 0;
+		myCurrentAnimation = myAnimations[anID];
+	}
+
+	void SpriteAnimator::StopAnimation()
+	{
+		if (myCurrentAnimation != nullptr)
 		{
 			myCurrentAnimation = nullptr;
 		}
-	}
-
-	void SpriteAnimator::StopAllAnimations()
-	{
-		myCurrentAnimation = nullptr;
 	}
 
 	void SpriteAnimator::ResetAnimation()
@@ -128,21 +103,10 @@ namespace Prism
 		myCurrentFrame = 0;
 	}
 
-	void SpriteAnimator::AddAnimation(float aFPS, int aNumberOfFrames, int aFramesPerRow, int aFramesPerColumn
-		, SpriteProxy* aSpriteSheet, std::string aName, bool aIsLooping)
+	void SpriteAnimator::AddAnimation(float aFPS, int aNumberOfFrames, CU::Vector2<float> aFrameSize
+		, SpriteProxy* aSpriteSheet, bool aIsLooping)
 	{
-		myAnimations[aName] = new SpriteAnimation(aFPS, aNumberOfFrames, aFramesPerRow, aFramesPerColumn, aSpriteSheet, aName, aIsLooping);
-	}
-
-	void SpriteAnimator::AddAnimation(float aFPS, int aNumberOfFrames, int aFramesPerRow, CU::Vector2<float> aFrameSize
-		, SpriteProxy* aSpriteSheet, std::string aName, bool aIsLooping)
-	{
-		myAnimations[aName] = new SpriteAnimation(aFPS, aNumberOfFrames, aFramesPerRow, aFrameSize, aSpriteSheet, aName, aIsLooping);
-	}
-
-	void SpriteAnimator::AddAnimation(SpriteAnimation* aAnimation)
-	{
-		myAnimations[aAnimation->GetName()] = aAnimation;
+		myAnimations.Add(new SpriteAnimation(aFPS, aNumberOfFrames, aFrameSize, aSpriteSheet, aIsLooping));
 	}
 
 	SpriteProxy* SpriteAnimator::GetSpriteFrame()
@@ -173,16 +137,6 @@ namespace Prism
 		return myCurrentAnimation->GetSpriteSheet();
 	}
 
-	const std::string& SpriteAnimator::GetActiveAnimationName() const
-	{
-		if (myCurrentAnimation != nullptr)
-		{
-			return myCurrentAnimation->GetName();
-		}
-
-		DL_ASSERT("[SpriteAnimator] Failed to get animation name.");
-		return myCurrentAnimation->GetName();
-	}
 	bool SpriteAnimator::IsPlayingAnimation() const
 	{
 		return myCurrentAnimation != nullptr;
