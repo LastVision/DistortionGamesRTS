@@ -12,6 +12,7 @@
 #include <EntityData.h>
 #include <EntityFactory.h>
 #include <EventPositionMessage.h>
+#include "FogOfWarMap.h"
 #include <GameEnum.h>
 #include <GUIManager.h>
 #include <GraphicsComponent.h>
@@ -900,7 +901,8 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 	}
 
 	Entity* hoveredEnemy = PollingStation::GetInstance()->FindEntityAtPosition(firstTargetPos, eOwnerType::ENEMY | eOwnerType::NEUTRAL);
-	if (hoveredEnemy != nullptr && mySelectedAction == eSelectedAction::NONE)
+	if (hoveredEnemy != nullptr && FogOfWarMap::GetInstance()->IsVisible(hoveredEnemy->GetPosition())
+		&& mySelectedAction == eSelectedAction::NONE)
 	{
 		myCursor->SetCurrentCursor(eCursorType::ATTACK);
 	}
