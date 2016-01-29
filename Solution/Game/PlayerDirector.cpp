@@ -12,6 +12,7 @@
 #include <EntityData.h>
 #include <EntityFactory.h>
 #include <EventPositionMessage.h>
+#include "FogOfWarMap.h"
 #include <GameEnum.h>
 #include <GUIManager.h>
 #include <GraphicsComponent.h>
@@ -375,7 +376,6 @@ void PlayerDirector::ReceiveMessage(const OnClickMessage& aMessage)
 			mySelectedControlGroup = aMessage.myID;
 			myCurrentDoubleClickTimer = myDoubleClickTime;
 		}
-		
 	}
 }
 
@@ -900,7 +900,8 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 	}
 
 	Entity* hoveredEnemy = PollingStation::GetInstance()->FindEntityAtPosition(firstTargetPos, eOwnerType::ENEMY | eOwnerType::NEUTRAL);
-	if (hoveredEnemy != nullptr && mySelectedAction == eSelectedAction::NONE)
+	if (hoveredEnemy != nullptr && FogOfWarMap::GetInstance()->IsVisible(hoveredEnemy->GetPosition())
+		&& mySelectedAction == eSelectedAction::NONE)
 	{
 		myCursor->SetCurrentCursor(eCursorType::ATTACK);
 	}
@@ -915,26 +916,30 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 	{
 		SelectOrHoverEntity(myActiveUnits[i], hasSelected, hasHovered, line);
 
-		if (myMouseIsOverGUI == false && myActiveUnits[i]->IsSelected())
+		if ( myActiveUnits[i]->IsSelected())
 		{
 			ControllerComponent* controller = myActiveUnits[i]->GetComponent<ControllerComponent>();
-			if ((mySelectedAction == eSelectedAction::ATTACK_TAGRET && hoveredEnemy != nullptr && myLeftMouseUp == true)
-				|| (hoveredEnemy != nullptr && myRightClicked == true))
+
+			if (myMouseIsOverGUI == false)
 			{
-				controller->AttackTarget(hoveredEnemy, !myShiftPressed, myHasPlayedSound);
-				hasDoneAction = true;
+				if ((mySelectedAction == eSelectedAction::ATTACK_TAGRET && hoveredEnemy != nullptr && myLeftMouseUp == true)
+					|| (hoveredEnemy != nullptr && myRightClicked == true))
+				{
+					controller->AttackTarget(hoveredEnemy, !myShiftPressed, myHasPlayedSound);
+					hasDoneAction = true;
+				}
+				else if (mySelectedAction == eSelectedAction::ATTACK_MOVE && myLeftMouseUp == true)
+				{
+					controller->AttackMove(firstTargetPos, !myShiftPressed, myHasPlayedSound);
+					hasDoneAction = true;
+				}
+				else if ((mySelectedAction == eSelectedAction::MOVE && myLeftMouseUp) || myRightClicked)
+				{
+					controller->MoveTo(firstTargetPos, !myShiftPressed, myHasPlayedSound);
+					hasDoneAction = true;
+				}
 			}
-			else if (mySelectedAction == eSelectedAction::ATTACK_MOVE && myLeftMouseUp == true)
-			{
-				controller->AttackMove(firstTargetPos, !myShiftPressed, myHasPlayedSound);
-				hasDoneAction = true;
-			}
-			else if ((mySelectedAction == eSelectedAction::MOVE && myLeftMouseUp) || myRightClicked)
-			{
-				controller->MoveTo(firstTargetPos, !myShiftPressed, myHasPlayedSound);
-				hasDoneAction = true;
-			}
-			else if (mySelectedAction == eSelectedAction::STOP)
+			if (mySelectedAction == eSelectedAction::STOP)
 			{
 				controller->Stop(myHasPlayedSound);
 				hasDoneAction = true;
