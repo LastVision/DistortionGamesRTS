@@ -53,6 +53,7 @@ public:
 	const CU::Vector2<float>& GetPosition() const;
 	Prism::Scene& GetScene();
 	eOwnerType GetOwner() const;
+	eOwnerType GetTemporaryOwner() const;
 	void SetOwner(eOwnerType anOwner);
 	eEntityType GetType() const;
 	const std::string& GetSubType() const;
@@ -70,6 +71,8 @@ public:
 	void SetHovered(bool aStatus);
 	bool IsHovered() const;
 
+	void SetShouldRender(bool aStatus);
+
 	bool GetShouldBeRemoved() const;
 
 	CU::GrowingArray<CU::Vector2<float>> GetCutMesh() const;
@@ -79,6 +82,9 @@ public:
 	void SetMaxSpeed(float aSpeed);
 
 	const CU::Vector2<float>& GetVelocity() const;
+
+	void SetTemporaryOwner(eOwnerType aOwner);
+	void RestoreRealOwner();
 
 private:
 	void operator=(Entity&) = delete;
@@ -90,6 +96,7 @@ private:
 	std::string mySubType;
 	eUnitType myUnitType;
 	eOwnerType myOwner;
+	eOwnerType myTemporaryOwner;
 	eEntityState myState;
 	
 	const Prism::eOctreeType myOctreeType;
@@ -145,6 +152,11 @@ inline Prism::Scene& Entity::GetScene()
 inline eOwnerType Entity::GetOwner() const
 {
 	return myOwner;
+}
+
+inline eOwnerType Entity::GetTemporaryOwner() const
+{
+	return myTemporaryOwner;
 }
 
 inline eEntityType Entity::GetType() const
@@ -205,4 +217,14 @@ inline void Entity::SetMaxSpeed(float aSpeed)
 inline const CU::Vector2<float>& Entity::GetVelocity() const
 {
 	return myVelocity;
+}
+
+inline void Entity::SetTemporaryOwner(eOwnerType aOwner)
+{
+	myTemporaryOwner = aOwner;
+}
+
+inline void Entity::RestoreRealOwner()
+{
+	myTemporaryOwner = myOwner;
 }

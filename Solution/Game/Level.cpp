@@ -47,8 +47,8 @@ Level::Level(const Prism::Camera& aCamera, Prism::Terrain* aTerrain, GUI::Cursor
 
 	myRenderer = new Prism::Renderer();
 
-	myFogOfWarMap = new FogOfWarMap();
 	myFogOfWarHelper = new Prism::FogOfWarHelper();
+	FogOfWarMap::GetInstance();
 }
 
 Level::~Level()
@@ -63,7 +63,7 @@ Level::~Level()
 	SAFE_DELETE(myNeutralDirector);
 	SAFE_DELETE(myScene);
 	SAFE_DELETE(myRenderer);
-	SAFE_DELETE(myFogOfWarMap);
+	FogOfWarMap::Destroy();
 	SAFE_DELETE(myFogOfWarHelper);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::TOGGLE_RENDER_LINES, this);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::TOGGLE_FOG_OF_WAR, this);
@@ -109,7 +109,9 @@ bool Level::Update(float aDeltaTime, Prism::Camera& aCamera)
 	myPlayer->Update(aDeltaTime, aCamera);
 	myAI->Update(aDeltaTime);
 	myNeutralDirector->Update(aDeltaTime);
-	myFogOfWarMap->Update();
+
+	FogOfWarMap::GetInstance()->Update();
+	DoFogCulling();
 
 	myEmitterManager->UpdateEmitters(aDeltaTime, CU::Matrix44f());
 
@@ -122,8 +124,8 @@ void Level::Render(Prism::Camera& aCamera)
 
 	if (myShowFogOfWar == true)
 	{
-		myFogOfWarMap->UpdateRenderPlane();
-		myFogOfWarHelper->Render(aCamera, myFogOfWarMap->GetRenderPlane());
+		FogOfWarMap::GetInstance()->UpdateRenderPlane();
+		myFogOfWarHelper->Render(aCamera, FogOfWarMap::GetInstance()->GetRenderPlane());
 	}
 
 	myRenderer->BeginScene();
@@ -167,6 +169,7 @@ void Level::ReceiveMessage(const ToggleRenderLinesMessage& aMessage)
 
 void Level::ReceiveMessage(const ToggleFogOfWarMessage& aMessage)
 {
+	FogOfWarMap::GetInstance()->ToggleFogOfWar();
 	myShowFogOfWar = !myShowFogOfWar;
 }
 
@@ -190,3 +193,35 @@ CU::Vector3<float> Level::GetCameraMoveVector() const
 	return myPlayer->GetCameraMoveVector();
 }
 
+void Level::DoFogCulling()
+{
+	const CU::GrowingArray<Entity*>& enemies = PollingStation::GetInstance()->GetUnits(eOwnerType::ENEMY);
+	for (int i = 0; i < enemies.Size(); ++i)
+	{
+		enemies[i]->SetShouldRender(false);
+		if (myShowFogOfWar == false || FogOfWarMap::GetInstance()->IsVisible(enemies[i]->GetPosition()))
+		{
+			enemies[i]->SetShouldRender(true);
+		}
+	}
+
+	const CU::GrowingArray<Entity*>& neutrals = PollingStation::GetInstance()->GetUnits(eOwnerType::NEUTRAL);
+	for (int i = 0; i < neutrals.Size(); ++i)
+	{
+		neutrals[i]->SetShouldRender(false);
+		if (myShowFogOfWar == false || FogOfWarMap::GetInstance()->IsVisible(neutrals[i]->GetPosition()))
+		{
+			neutrals[i]->SetShouldRender(true);
+		}
+	}
+
+	const CU::GrowingArray<Entity*>& points = PollingStation::GetInstance()->GetResourcePoints();
+	for (int i = 0; i < points.Size(); ++i)
+	{
+		points[i]->SetTemporaryOwner(eOwnerType::NEUTRAL);
+		if (myShowFogOfWar == false || FogOfWarMap::GetInstance()->IsVisible(points[i]->GetPosition()))
+		{
+			points[i]->RestoreRealOwner();
+		}
+	}
+}

@@ -7,6 +7,7 @@
 #include "Console.h"
 #include "Director.h"
 #include <Entity.h>
+#include "FogOfWarMap.h"
 #include <HealthComponent.h>
 #include <KillUnitMessage.h>
 #include <PostMaster.h>
@@ -93,14 +94,18 @@ void Director::RenderHealthBars(const Prism::Camera& aCamera)
 {
 	for (int i = 0; i < myActiveUnits.Size(); i++)
 	{
-		if (myActiveUnits[i]->GetAlive() == true)
+		if (FogOfWarMap::GetInstance()->IsVisible(myActiveUnits[i]->GetPosition()))
 		{
-			myActiveUnits[i]->GetComponent<HealthComponent>()->RenderHealthBar(aCamera);
+			if (myActiveUnits[i]->GetAlive() == true)
+			{
+				myActiveUnits[i]->GetComponent<HealthComponent>()->RenderHealthBar(aCamera);
+			}
+			if (myActiveUnits[i]->GetAlive() == true)
+			{
+				myActiveUnits[i]->GetComponent<PromotionComponent>()->RenderPromotion(aCamera);
+			}
 		}
-		if (myActiveUnits[i]->GetAlive() == true)
-		{
-			myActiveUnits[i]->GetComponent<PromotionComponent>()->RenderPromotion(aCamera);
-		}
+		
 	}
 }
 

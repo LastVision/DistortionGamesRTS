@@ -21,7 +21,6 @@ class Entity;
 class EmitterManager;
 class NeutralDirector;
 class PlayerDirector;
-class FogOfWarMap;
 class Tutorial;
 
 class Level : public Subscriber
@@ -49,7 +48,10 @@ public:
 	CU::Vector3<float> GetCameraMoveVector() const;
 
 	PlayerDirector* GetPlayer();
+
 private:
+	void DoFogCulling();
+
 	Prism::Terrain* myTerrain;
 	Prism::DirectionalLight* myLight;
 	Prism::Scene* myScene;
@@ -63,7 +65,6 @@ private:
 	AIDirector* myAI;
 	NeutralDirector* myNeutralDirector;
 
-	FogOfWarMap* myFogOfWarMap;
 	Prism::FogOfWarHelper* myFogOfWarHelper;
 
 	int myMaxVictoryPoint;

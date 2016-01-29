@@ -8,12 +8,28 @@
 #define OUTER_RING 10.f
 #define MIN_DARKNESS 0.3f
 
+FogOfWarMap* FogOfWarMap::myInstance = nullptr;
+FogOfWarMap* FogOfWarMap::GetInstance()
+{
+	if (myInstance == nullptr)
+	{
+		myInstance = new FogOfWarMap();
+	}
+
+	return myInstance;
+}
+
+void FogOfWarMap::Destroy()
+{
+	SAFE_DELETE(myInstance);
+}
+
 FogOfWarMap::FogOfWarMap()
 	: AIMap(256)
+	, myFogEnabled(true)
 {
 	myMaxValue = 1.f;
 }
-
 
 FogOfWarMap::~FogOfWarMap()
 {
@@ -101,4 +117,19 @@ void FogOfWarMap::UpdateRenderPlane()
 	}
 
 	myPlane->EndModify();
+}
+
+bool FogOfWarMap::IsVisible(const CU::Vector2<float>& aPosition)
+{
+	if (myFogEnabled == false)
+	{
+		return true;
+	}
+
+	return GetValue(aPosition) > MIN_DARKNESS;
+}
+
+void FogOfWarMap::ToggleFogOfWar()
+{
+	myFogEnabled = !myFogEnabled;
 }

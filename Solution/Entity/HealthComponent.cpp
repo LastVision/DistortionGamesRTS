@@ -13,6 +13,9 @@
 #include <PostMaster.h>
 #include "SoundComponent.h"
 
+
+#include "../Game/FogOfWarMap.h"
+
 HealthComponent::HealthComponent(Entity& aEntity, HealthComponentData& aData)
 	: Component(aEntity)
 	, myMaxHealth(aData.myHealth)
@@ -68,8 +71,11 @@ bool HealthComponent::TakeDamageAndCheckSurvive(float aDamage)
 {
 	DL_ASSERT_EXP(aDamage >= 0, "Cant take negative damage, use Heal for healing if that was your intention");
 
-	PostMaster::GetInstance()->SendMessage(EmitterMessage("OnHit", myEntity.GetId()));
-	PostMaster::GetInstance()->SendMessage(MinimapEventMessage(myEntity.GetPosition(), MinimapEventType::eUNIT_ATTACKED));
+	if (FogOfWarMap::GetInstance()->IsVisible(myEntity.GetPosition()))
+	{
+		PostMaster::GetInstance()->SendMessage(EmitterMessage("OnHit", myEntity.GetId()));
+		PostMaster::GetInstance()->SendMessage(MinimapEventMessage(myEntity.GetPosition(), MinimapEventType::eUNIT_ATTACKED));
+	}
 
 	float damage = aDamage - myArmor;
 	if (damage <= 0.f)
