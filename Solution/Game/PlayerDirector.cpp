@@ -245,8 +245,6 @@ void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 		}
 	}
 
-
-
 	Director::Update(aDeltaTime);
 	UpdateMouseInteraction(aCamera);
 	myBuilding->Update(aDeltaTime);
@@ -273,7 +271,7 @@ void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 		mySelectedAction = eSelectedAction::NONE;
 	}
 
-	myConfimrationAnimation->Update(aDeltaTime);
+	UpdateConfirmationAnimation(aDeltaTime, aCamera);
 }
 
 void PlayerDirector::Render(const Prism::Camera& aCamera)
@@ -797,6 +795,31 @@ void PlayerDirector::UpdateControlGroups()
 	}
 }
 
+void PlayerDirector::UpdateConfirmationAnimation(float aDeltaTime, const Prism::Camera& aCamera)
+{
+	if (myConfimrationAnimation->IsPlayingAnimation() == true &&
+		myConfimrationCameraPosition != aCamera.GetOrientation().GetPos())
+	{
+		CU::Vector2<float> difference;
+		difference.x = (aCamera.GetOrientation().GetPos().x - myConfimrationCameraPosition.x) * 25.f;
+		difference.y = (aCamera.GetOrientation().GetPos().z - myConfimrationCameraPosition.z) * 20.f;
+		myConfirmationPosition.x -= difference.x;
+		myConfirmationPosition.y -= difference.y;
+
+		myConfimrationCameraPosition = aCamera.GetOrientation().GetPos();
+	}
+
+	if (myMouseIsOverGUI == false && myRightClicked == true && mySelectedUnits.Size() > 0 
+		&& mySelectedUnits[0]->GetType() == eEntityType::UNIT)
+	{
+		myConfirmationPosition = myCursor->GetMousePosition();
+		myConfimrationAnimation->RestartAnimation();
+		myConfimrationCameraPosition = aCamera.GetOrientation().GetPos();
+	}
+
+	myConfimrationAnimation->Update(aDeltaTime);
+}
+
 void PlayerDirector::CameraFocusOnControlGroup(int aIndex)
 {
 	CU::Vector2<float> averagePosition;
@@ -829,13 +852,6 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 	{
 		myCursor->SetCurrentCursor(eCursorType::NORMAL);
 		PlaceTotem(firstTargetPos);
-	}
-
-	if (myRightClicked == true && mySelectedUnits.Size() > 0 && mySelectedUnits[0]->GetType() == eEntityType::UNIT)
-	{
-		myConfimrationAnimation->ResetAnimation();
-		myConfirmationPosition = myCursor->GetMousePosition();
-		myConfimrationAnimation->StartAnimation("confirmation");
 	}
 
 	if (myLeftMouseDown == true)

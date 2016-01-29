@@ -220,6 +220,7 @@
     <ClInclude Include="Level.h" />
     <ClInclude Include="LevelFactory.h" />
     <ClInclude Include="LevelSelectState.h" />
+    <ClInclude Include="LoadingState.h" />
     <ClInclude Include="MainMenuState.h" />
     <ClInclude Include="MessageState.h" />
     <ClInclude Include="NeutralDirector.h" />
@@ -257,6 +258,7 @@
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="LevelFactory.cpp" />
     <ClCompile Include="LevelSelectState.cpp" />
+    <ClCompile Include="LoadingState.cpp" />
     <ClCompile Include="MainMenuState.cpp" />
     <ClCompile Include="MessageState.cpp" />
     <ClCompile Include="NeutralDirector.cpp" />
