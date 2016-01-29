@@ -163,7 +163,7 @@ private:
 
 	Prism::SpriteAnimator* myConfimrationAnimation;
 	CU::Vector2<float> myConfirmationPosition;
-
+	CU::Vector3<float> myConfimrationCameraPosition;
 };
 
 inline const CU::GrowingArray<Entity*>& PlayerDirector::GetSelectedUnits() const
