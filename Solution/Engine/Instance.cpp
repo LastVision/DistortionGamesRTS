@@ -31,24 +31,28 @@ void Prism::Instance::Update(float aDelta)
 {
 	if (myProxy.IsLoaded() == true && myProxy.IsAnimated())
 	{
-		if (myHierarchyIsBuilt == false)
+		if (myShouldRender == true)
 		{
-			if (myProxy.myModelAnimated->myAnimation != nullptr)
+			if (myHierarchyIsBuilt == false)
 			{
-				myAnimation = myProxy.myModelAnimated->myAnimation;
+				if (myProxy.myModelAnimated->myAnimation != nullptr)
+				{
+					myAnimation = myProxy.myModelAnimated->myAnimation;
+				}
+				MemoryTracker::GetInstance()->SetRunTime(false);
+				BuildHierarchy(myHierarchy, myProxy.myModelAnimated);
+				MemoryTracker::GetInstance()->SetRunTime(true);
+				myHierarchyIsBuilt = true;
+
 			}
-			MemoryTracker::GetInstance()->SetRunTime(false);
-			BuildHierarchy(myHierarchy, myProxy.myModelAnimated);
-			MemoryTracker::GetInstance()->SetRunTime(true);
-			myHierarchyIsBuilt = true;
-			
+
+			myHierarchy.Update(aDelta, myAnimation->GetAnimationLenght());
+			if (myAnimation != nullptr)
+			{
+				myAnimation->Update(myTotalTime, myBones);
+			}
 		}
 
-		myHierarchy.Update(aDelta, myAnimation->GetAnimationLenght());
-		if (myAnimation != nullptr)
-		{
-			myAnimation->Update(myTotalTime, myBones);
-		}
 		myTotalTime += aDelta;
 	}
 }

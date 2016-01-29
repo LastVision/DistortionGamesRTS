@@ -56,9 +56,9 @@ void GraphicsComponent::InitCube(float aWidth, float aHeight, float aDepth)
 void GraphicsComponent::Update(float aDeltaTime)
 {
 	aDeltaTime;
-	if (myEntity.GetOwner() != eOwnerType::NOT_USED)
+	if (myEntity.GetTemporaryOwner() != eOwnerType::NOT_USED)
 	{
-		myInstance->ActivateAlbedo(myEntity.GetOwner());
+		myInstance->ActivateAlbedo(myEntity.GetTemporaryOwner());
 	}
 }
 

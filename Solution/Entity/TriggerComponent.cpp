@@ -9,6 +9,9 @@
 #include <PostMaster.h>
 #include <MinimapEventMessage.h>
 
+
+#include "../Game/FogOfWarMap.h"
+
 TriggerComponent::TriggerComponent(Entity& aEntity, TriggerComponentData& aData)
 	: Component(aEntity)
 	, myType(aData.myType)
@@ -88,21 +91,24 @@ eOwnerType TriggerComponent::ModifyOwnership(eOwnerType anOwner, float aModifyVa
 	{
 		if (anOwner == eOwnerType::ENEMY)
 		{
-			if (myHasSentEventMessage == false)
+			if (FogOfWarMap::GetInstance()->IsVisible(myEntity.GetPosition()))
 			{
-				if (myType == eTriggerType::RESOURCE)
+				if (myHasSentEventMessage == false)
 				{
-					PostMaster::GetInstance()->SendMessage(MinimapEventMessage(myEntity.GetPosition(), MinimapEventType::eRESOURCE_POINT));
+					if (myType == eTriggerType::RESOURCE)
+					{
+						PostMaster::GetInstance()->SendMessage(MinimapEventMessage(myEntity.GetPosition(), MinimapEventType::eRESOURCE_POINT));
+					}
+					else if (myType == eTriggerType::VICTORY)
+					{
+						PostMaster::GetInstance()->SendMessage(MinimapEventMessage(myEntity.GetPosition(), MinimapEventType::eVICTORY_POINT));
+					}
+					else
+					{
+						DL_ASSERT("INVALID TYPE IN TRIGGER");
+					}
+					myHasSentEventMessage = true;
 				}
-				else if (myType == eTriggerType::VICTORY)
-				{
-					PostMaster::GetInstance()->SendMessage(MinimapEventMessage(myEntity.GetPosition(), MinimapEventType::eVICTORY_POINT));
-				}
-				else
-				{
-					DL_ASSERT("INVALID TYPE IN TRIGGER");
-				}
-				myHasSentEventMessage = true;
 			}
 		}
 		myOwnershipRatio += aModifyValue;

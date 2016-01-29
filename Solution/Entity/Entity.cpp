@@ -17,12 +17,13 @@
 #include <Terrain.h>
 #include "TotemComponent.h"
 #include "TriggerComponent.h"
-
+#include <Instance.h>
 
 Entity::Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& aEntityData
 		, Prism::Scene& aScene, const CU::Vector3<float> aStartPosition, const Prism::Terrain& aTerrain
 		, const CU::Vector3f& aRotation, const CU::Vector3f& aScale, eUnitType aUnitType)
 	: myOwner(aOwner)
+	, myTemporaryOwner(aOwner)
 	, myScene(aScene)
 	, myOctreeType(anOctreeType)
 	, myState(eEntityState::IDLE)
@@ -289,6 +290,19 @@ void Entity::SetHovered(bool aStatus)
 bool Entity::IsHovered() const
 {
 	return myHovered;
+}
+
+void Entity::SetShouldRender(bool aStatus)
+{
+	if (GetComponent<AnimationComponent>() != nullptr)
+	{
+		GetComponent<AnimationComponent>()->GetInstance()->SetShouldRender(aStatus);
+	}
+
+	if (GetComponent<GraphicsComponent>() != nullptr)
+	{
+		GetComponent<GraphicsComponent>()->GetInstance()->SetShouldRender(aStatus);
+	}
 }
 
 bool Entity::GetShouldBeRemoved() const

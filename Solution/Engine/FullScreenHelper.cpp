@@ -93,7 +93,7 @@ namespace Prism
 			Engine::GetInstance()->GetContex()->ClearRenderTargetView(
 				myBloomData.myFinalTexture->GetRenderTargetView(), myClearColor);
 
-			BloomEffect(myProcessingTexture);
+			BloomEffect(myProcessingTexture, "BLOOM_DOWNSAMPLE");
 
 			Engine::GetInstance()->RestoreViewPort();
 			CombineTextures(myBloomData.myFinalTexture, aSource, myProcessingTexture, false);
@@ -101,18 +101,18 @@ namespace Prism
 
 		if (aEffect & ePostProcessing::FOG_OF_WAR)
 		{
-			//Engine::GetInstance()->GetContex()->ClearRenderTargetView(
-			//	myBloomData.myDownSampleTextures[0]->GetRenderTargetView(), myClearColor);
-			//Engine::GetInstance()->GetContex()->ClearRenderTargetView(
-			//	myBloomData.myDownSampleTextures[1]->GetRenderTargetView(), myClearColor);
-			//Engine::GetInstance()->GetContex()->ClearRenderTargetView(
-			//	myBloomData.myFinalTexture->GetRenderTargetView(), myClearColor);
-			//
-			//BloomEffect(myProcessingTexture, "BLOOM_HDR");
-
+			Engine::GetInstance()->GetContex()->ClearRenderTargetView(
+				myBloomData.myDownSampleTextures[0]->GetRenderTargetView(), myClearColor);
+			Engine::GetInstance()->GetContex()->ClearRenderTargetView(
+				myBloomData.myDownSampleTextures[1]->GetRenderTargetView(), myClearColor);
 			Engine::GetInstance()->GetContex()->ClearRenderTargetView(
 				myBloomData.myFinalTexture->GetRenderTargetView(), myClearColor);
-			DoFogOfWar(myProcessingTexture, aFogOfWarTexture, aTarget);
+			
+			BloomEffect(aFogOfWarTexture, "HDR_DOWNSAMPLE");
+			Engine::GetInstance()->RestoreViewPort();
+
+			
+			DoFogOfWar(myProcessingTexture, myBloomData.myFinalTexture, aTarget);
 		}
 		else
 		{
@@ -331,7 +331,7 @@ namespace Prism
 	}
 
 
-	void FullScreenHelper::DownSample(Texture* aTarget, Texture* aSource, float aWidth, float aHeight)
+	void FullScreenHelper::DownSample(Texture* aTarget, Texture* aSource, float aWidth, float aHeight, const std::string& aTechnique)
 	{
 		myViewPort.Width = aWidth;
 		myViewPort.Height = aHeight;
@@ -344,23 +344,23 @@ namespace Prism
 
 		myBloomData.myDownSampleVariable->SetResource(aSource->GetShaderView());
 
-		Render(myBloomData.myDownSampleEffect, "BLOOM_DOWNSAMPLE");
+		Render(myBloomData.myDownSampleEffect, aTechnique);
 
 		myBloomData.myDownSampleVariable->SetResource(NULL);
 	}
 
-	void FullScreenHelper::BloomEffect(Texture* aSource)
+	void FullScreenHelper::BloomEffect(Texture* aSource, const std::string& aTechnique)
 	{
 		float width = static_cast<FLOAT>(Engine::GetInstance()->GetWindowSize().x / 2);
 		float height = static_cast<FLOAT>(Engine::GetInstance()->GetWindowSize().y / 2);
 
-		DownSample(myBloomData.myDownSampleTextures[0], aSource, width, height);
+		DownSample(myBloomData.myDownSampleTextures[0], aSource, width, height, aTechnique);
 
 		width /= 2.f;
 		height /= 2.f;
 
 		DownSample(myBloomData.myDownSampleTextures[1]
-			, myBloomData.myDownSampleTextures[0], width, height);
+			, myBloomData.myDownSampleTextures[0], width, height, aTechnique);
 
 
 		DoBloom(myBloomData.myDownSampleTextures[1], myBloomData.myFinalTexture);

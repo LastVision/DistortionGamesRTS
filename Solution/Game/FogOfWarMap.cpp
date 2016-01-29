@@ -5,12 +5,31 @@
 #include <RenderPlane.h>
 #include <TriggerComponent.h>
 
+#define OUTER_RING 10.f
+#define MIN_DARKNESS 0.3f
+
+FogOfWarMap* FogOfWarMap::myInstance = nullptr;
+FogOfWarMap* FogOfWarMap::GetInstance()
+{
+	if (myInstance == nullptr)
+	{
+		myInstance = new FogOfWarMap();
+	}
+
+	return myInstance;
+}
+
+void FogOfWarMap::Destroy()
+{
+	SAFE_DELETE(myInstance);
+}
+
 FogOfWarMap::FogOfWarMap()
 	: AIMap(256)
+	, myFogEnabled(true)
 {
 	myMaxValue = 1.f;
 }
-
 
 FogOfWarMap::~FogOfWarMap()
 {
@@ -20,7 +39,7 @@ void FogOfWarMap::Update()
 {
 	for (int i = 0; i < myGrid.Size(); ++i)
 	{
-		myGrid[i] = 0.25f;
+		myGrid[i] = MIN_DARKNESS;
 	}
 
 	AddValue(1.f, 20.f, PollingStation::GetInstance()->GetBase(eOwnerType::PLAYER)->GetPosition());
@@ -51,23 +70,29 @@ void FogOfWarMap::AddValue(float aValue, float aRadius, const CU::Vector2<float>
 		for (int x = topLeft.x; x < botRight.x; ++x)
 		{
 			float distance = CU::Length(GetPosition(x, y) - aPosition);
-			if (distance < aRadius - 5.f && ValidIndex(x, y))
+			if (distance < aRadius - OUTER_RING && ValidIndex(x, y))
 			{
 				int index = x + y * mySide;
 				myGrid[index] = aValue;
 			}
-			else if (distance >= aRadius - 5.f && distance <= aRadius)
+			else if (distance >= aRadius - OUTER_RING && distance <= aRadius)
 			{
 				int index = x + y * mySide;
 				//myGrid[index] = aValue;
-				float rest = aRadius - 5.f;
-				float parts = 0.75f / 5.f;
+				/*float rest = aRadius - OUTER_RING;
+				float parts = 1.f / OUTER_RING;
 				float toPoint = (distance - rest) * parts;
 				float divider = (rest / myTileSize);
-				float value = aValue - toPoint;
+				float value = aValue - toPoint;*/
+
+				float inner = aRadius - (OUTER_RING);
+				float newDist = distance - inner;
+				float newMax = aRadius - inner;
+				float value = 1.f - (newDist / newMax);
+
 				myGrid[index] += value;
 				myGrid[index] = fminf(myGrid[index], myMaxValue);
-				myGrid[index] = fmaxf(myGrid[index], 0.25f);
+				myGrid[index] = fmaxf(myGrid[index], MIN_DARKNESS);
 
 
 			}
@@ -92,4 +117,19 @@ void FogOfWarMap::UpdateRenderPlane()
 	}
 
 	myPlane->EndModify();
+}
+
+bool FogOfWarMap::IsVisible(const CU::Vector2<float>& aPosition)
+{
+	if (myFogEnabled == false)
+	{
+		return true;
+	}
+
+	return GetValue(aPosition) > MIN_DARKNESS;
+}
+
+void FogOfWarMap::ToggleFogOfWar()
+{
+	myFogEnabled = !myFogEnabled;
 }
