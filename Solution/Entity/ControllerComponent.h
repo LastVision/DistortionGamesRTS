@@ -3,6 +3,11 @@
 namespace Prism
 {
 	class Terrain;
+
+	namespace Navigation
+	{
+		class Triangle;
+	}
 }
 
 
@@ -37,6 +42,7 @@ public:
 	bool HasFoundPath() const;
 
 private:
+	void UpdateLastValidTriangle(float aDelta);
 	void FillCommandList(eEntityCommand aAction, bool aClearCommandQueue, Entity* aEntity = nullptr
 		, const CU::Vector2<float>& aTargetPosition = { -1.f, -1.f });
 
@@ -63,6 +69,10 @@ private:
 	bool mySecondFrame;
 	bool myIsReady;
 	bool myFoundPath;
+
+	Prism::Navigation::Triangle* myLastValidTriangle;
+	float myTriangleTimer;
+	float myCurrentTriangleTimer;
 
 	CU::GrowingArray<EntityCommandData> myCommands;
 	EntityCommandData myCurrentCommand;

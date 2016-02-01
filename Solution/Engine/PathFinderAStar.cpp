@@ -65,16 +65,22 @@ namespace Prism
 
 		bool PathFinderAStar::IsOutside(const CU::Vector2<float>& aPosition)
 		{
+			return GetCurrentTriangle(aPosition) == nullptr;
+		}
+
+		Triangle* PathFinderAStar::GetCurrentTriangle(const CU::Vector2<float>& aPosition)
+		{
 			const CU::GrowingArray<Triangle*>& triangles = myNavMesh->GetTriangles();
 			for (int i = 0; i < triangles.Size(); ++i)
 			{
 				Triangle* current = myNavMesh->GetTriangles()[i];
 				if (current->Collide(aPosition) == true)
 				{
-					return false;
+					return current;
 				}
 			}
-			return true;
+
+			return nullptr;
 		}
 
 		bool PathFinderAStar::FindStartAndEnd(const CU::Vector2<float>& aStart, const CU::Vector2<float>& anEnd)
