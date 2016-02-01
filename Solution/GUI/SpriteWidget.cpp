@@ -50,4 +50,10 @@ namespace GUI
 			myBackground->SetSize(aNewSize * ratio, { 0.f, 0.f });
 		}
 	}
+
+	Widget* SpriteWidget::MouseIsOver(const CU::Vector2<float>& aPosition)
+	{
+		return nullptr;
+	}
+
 }

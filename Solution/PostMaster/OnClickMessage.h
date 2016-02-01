@@ -19,7 +19,8 @@ enum class eOnClickEvent
 	PLACE_TOTEM,
 	ENRAGE,
 	SELECT_CONTROL_GROUP,
-	UPGRADE_UNIT
+	UPGRADE_UNIT,
+	RESUME_GAME,
 };
 
 struct OnClickMessage : public Message
