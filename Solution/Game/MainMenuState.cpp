@@ -2,6 +2,7 @@
 #include <Camera.h>
 #include "CreditMenuState.h"
 #include <GUIManager.h>
+#include "HelpState.h"
 #include "InGameState.h"
 #include <InputWrapper.h>
 #include "LevelSelectState.h"
@@ -108,9 +109,19 @@ void MainMenuState::ReceiveMessage(const OnClickMessage& aMessage)
 			PostMaster::GetInstance()->UnSubscribe(eMessageType::ON_CLICK, this);
 			myStateStack->PushMainGameState(new CreditMenuState());
 			break;
+		case eOnClickEvent::GAME_HELP:
+		{
+			bool oldRuntime = Prism::MemoryTracker::GetInstance()->GetRunTime();
+			Prism::MemoryTracker::GetInstance()->SetRunTime(false);
+			PostMaster::GetInstance()->UnSubscribe(eMessageType::ON_CLICK, this);
+			myStateStack->PushSubGameState(new HelpState());
+			Prism::MemoryTracker::GetInstance()->SetRunTime(oldRuntime);
+			break;
+		}
 		case eOnClickEvent::GAME_QUIT:
 			myStateStatus = eStateStatus::ePopMainState;
 			break;
+		
 		default:
 			DL_ASSERT("Unknown event type.");
 			break;

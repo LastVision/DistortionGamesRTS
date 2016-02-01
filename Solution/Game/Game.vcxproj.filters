@@ -111,6 +111,9 @@
     <ClCompile Include="InGameMenuState.cpp">
       <Filter>StateStack</Filter>
     </ClCompile>
+    <ClCompile Include="HelpState.cpp">
+      <Filter>StateStack</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -231,6 +234,9 @@
       <Filter>Managers</Filter>
     </ClInclude>
     <ClInclude Include="InGameMenuState.h">
+      <Filter>StateStack</Filter>
+    </ClInclude>
+    <ClInclude Include="HelpState.h">
       <Filter>StateStack</Filter>
     </ClInclude>
   </ItemGroup>

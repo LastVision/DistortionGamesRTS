@@ -5,7 +5,7 @@
 #include "PostMaster.h"
 #include "OnClickMessage.h"
 #include "InGameState.h"
-
+#include "HelpState.h"
 
 InGameMenuState::InGameMenuState()
 {
@@ -65,7 +65,7 @@ void InGameMenuState::Render()
 
 void InGameMenuState::ResumeState()
 {
-
+	myIsActiveState = true;
 }
 
 void InGameMenuState::ReceiveMessage(const OnClickMessage& aMessage)
@@ -82,7 +82,17 @@ void InGameMenuState::ReceiveMessage(const OnClickMessage& aMessage)
 			myIsActiveState = false;
 			myStateStatus = eStateStatus::ePopMainState;
 			break;
-
+		case eOnClickEvent::GAME_HELP:
+		{
+			myIsActiveState = false;
+			bool oldRuntime = Prism::MemoryTracker::GetInstance()->GetRunTime();
+			Prism::MemoryTracker::GetInstance()->SetRunTime(false);
+			myStateStack->PushSubGameState(new HelpState());
+			Prism::MemoryTracker::GetInstance()->SetRunTime(oldRuntime);
+			break;
+		}
+		default:
+			break;
 		}
 	}
 }

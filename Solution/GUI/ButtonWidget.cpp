@@ -198,6 +198,10 @@ namespace GUI
 		{
 			myClickEvent = new OnClickMessage(eOnClickEvent::GAME_QUIT);
 		}
+		else if (clickEvent == "game_help")
+		{
+			myClickEvent = new OnClickMessage(eOnClickEvent::GAME_HELP);
+		}
 		else if (clickEvent == "resume_game")
 		{
 			myClickEvent = new OnClickMessage(eOnClickEvent::RESUME_GAME);
