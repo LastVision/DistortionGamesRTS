@@ -23,6 +23,9 @@ ControllerComponent::ControllerComponent(Entity& aEntity, ControllerComponentDat
 	: Component(aEntity)
 	, myTerrain(aTerrain)
 	, myCommands(16)
+	, myLastValidTriangle(nullptr)
+	, myCurrentTriangleTimer(0.f)
+	, myTriangleTimer(0.25f)
 {
 }
 
@@ -55,11 +58,16 @@ void ControllerComponent::ReceiveNote(const BehaviorNote& aNote)
 	}
 }
 
-void ControllerComponent::Update(float)
+void ControllerComponent::Update(float aDelta)
 {
 	if (myEntity.GetAlive() == false || myEntity.GetState() == eEntityState::DIE)
 	{
 		return;
+	}
+
+	if (myEntity.GetOwner() != eOwnerType::NEUTRAL)
+	{
+		UpdateLastValidTriangle(aDelta);
 	}
 
 	if (mySecondFrame == true)
@@ -238,6 +246,20 @@ void ControllerComponent::HoldPosition(bool& aHasPlayedSound)
 	myCommands.Add(EntityCommandData(eEntityCommand::HOLD_POSITION, nullptr, myEntity.myPosition));
 }
 
+void ControllerComponent::UpdateLastValidTriangle(float aDelta)
+{
+	myCurrentTriangleTimer -= aDelta;
+	if (myCurrentTriangleTimer <= 0.f)
+	{
+		myCurrentTriangleTimer = myTriangleTimer;
+		Prism::Navigation::Triangle* tri = myTerrain.GetPathFinder()->GetCurrentTriangle(myEntity.GetPosition());
+		if (tri != nullptr)
+		{
+			myLastValidTriangle = tri;
+		}
+	}
+}
+
 void ControllerComponent::FillCommandList(eEntityCommand aAction, bool aClearCommandQueue, Entity* aEntity
 	, const CU::Vector2<float>& aTargetPosition)
 {
@@ -279,14 +301,24 @@ void ControllerComponent::FillCommandList(eEntityCommand aAction, bool aClearCom
 	action.myEntity = nullptr;
 
 	CU::Vector3<float> targetPosition(aTargetPosition.x, 0, aTargetPosition.y);
+	CU::Vector3<float> startPosition(myEntity.GetOrientation().GetPos());
 
 	if (aEntity != nullptr)
 	{
 		targetPosition = aEntity->GetOrientation().GetPos();
 	}
 
+	if (myTerrain.GetPathFinder()->IsOutside(myEntity.GetPosition()) == true)
+	{
+		DL_ASSERT_EXP(myLastValidTriangle != nullptr, "Entity Outside Navmesh without LastValidTriangle");
+		if (myLastValidTriangle != nullptr)
+		{
+			startPosition = myLastValidTriangle->GetCenter();
+		}
+	}
+
 	CU::GrowingArray<CU::Vector3<float>> path(16);
-	if (myTerrain.GetPathFinder()->FindPath(myEntity.GetOrientation().GetPos(), targetPosition, path) == true)
+	if (myTerrain.GetPathFinder()->FindPath(startPosition, targetPosition, path) == true)
 	{
 		if (path.Size() > 0)
 		{
@@ -329,19 +361,16 @@ void ControllerComponent::FillCommandList(eEntityCommand aAction, bool aClearCom
 			}
 		}
 	}
-	else
+	/*else
 	{
 		myCommands.RemoveAll();
-		if (myTerrain.GetPathFinder()->IsOutside(myEntity.GetPosition()) == true)
-		{
-			myCommands.Add(EntityCommandData(eEntityCommand::MOVE, aEntity, aTargetPosition));
-		}
+		
 		else
 		{
 			myCommands.Add(EntityCommandData(eEntityCommand::STOP, nullptr, myEntity.GetPosition()));
 			myFoundPath = false;
 		}
-	}
+	}*/
 
 	if (aClearCommandQueue == false)
 	{

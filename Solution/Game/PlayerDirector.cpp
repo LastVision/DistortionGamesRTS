@@ -223,8 +223,15 @@ void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 	}
 	else if (CU::InputWrapper::GetInstance()->KeyDown(DIK_F1) == true)
 	{
+		for (int i = 0; i < myActiveUnits.Size(); ++i)
+		{
+			myActiveUnits[i]->SetSelect(false);
+		}
+
 		mySelectedUnits.RemoveAll();
 		mySelectedUnits.Add(myBuilding);
+		myBuilding->SetSelect(true);
+
 		myHasClicked = true;
 
 		if (myHasClicked == true && myHasClickedF1 == true && myCurrentDoubleClickTimer > 0.f)

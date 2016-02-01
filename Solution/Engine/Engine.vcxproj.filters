@@ -197,6 +197,9 @@
     <ClCompile Include="SpriteAnimator.cpp">
       <Filter>Rendering\SpriteAnimation</Filter>
     </ClCompile>
+    <ClCompile Include="SpotLightShadow.cpp">
+      <Filter>Lights</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h" />
@@ -439,6 +442,9 @@
     </ClInclude>
     <ClInclude Include="SpriteAnimator.h">
       <Filter>Rendering\SpriteAnimation</Filter>
+    </ClInclude>
+    <ClInclude Include="SpotLightShadow.h">
+      <Filter>Lights</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

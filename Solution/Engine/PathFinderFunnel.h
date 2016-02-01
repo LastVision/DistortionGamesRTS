@@ -24,6 +24,7 @@ namespace Prism
 			PathFinderAStar* GetAStar() const;
 
 			bool IsOutside(const CU::Vector2<float>& aPosition);
+			Triangle* GetCurrentTriangle(const CU::Vector2<float>& aPosition);
 		private:
 			void CalcFunneledPath(const CU::Vector2<float>& aStart, const CU::Vector2<float>& anEnd
 				, const CU::GrowingArray<Prism::Navigation::Triangle*>& someTriangles
