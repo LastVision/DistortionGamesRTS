@@ -63,7 +63,7 @@ private:
 	CU::StaticArray<float, 3> myUpgradeCooldowns;
 	CU::StaticArray<float, 3> myUpgradeMaxCooldowns;
 
-	std::queue<BuildInfo> myBuildQueue;
+	CU::GrowingArray<BuildInfo> myBuildQueue;
 
 	float myCurrentBuildTime;
 	float myMaxBuildTime;
@@ -92,12 +92,12 @@ inline eComponentType BuildingComponent::GetType()
 
 inline eUnitType BuildingComponent::GetEntityToSpawn() const
 {
-	if (myBuildQueue.empty() == true)
+	if (myBuildQueue.Size() <= 0)
 	{
 		return eUnitType::NOT_A_UNIT;
 	}
 
-	return myBuildQueue.front().myUnit;
+	return myBuildQueue[0].myUnit;
 }
 
 inline const float& BuildingComponent::GetCurrentBuildTime() const
@@ -112,12 +112,12 @@ inline const float& BuildingComponent::GetMaxBuildTime() const
 
 inline int BuildingComponent::GetSpawnQueueSize() const
 {
-	return myBuildQueue.size();
+	return myBuildQueue.Size();
 }
 
 inline bool BuildingComponent::IsQueueFull() const
 {
-	return myBuildQueue.size() >= myMaxQueue;
+	return myBuildQueue.Size() >= myMaxQueue;
 }
 
 inline void BuildingComponent::SetIgnoreBuildTime(bool anIgnoreBuildTime)

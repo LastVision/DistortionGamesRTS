@@ -51,12 +51,12 @@ void BuildingComponent::Update(float aDeltaTime)
 	UpdateUpgradeCooldown(aDeltaTime, eUnitType::RANGER);
 	UpdateUpgradeCooldown(aDeltaTime, eUnitType::TANK);
 
-	if (myBuildQueue.empty() == true)
+	if (myBuildQueue.Size() <= 0)
 	{
 		return;
 	}
 
-	const BuildInfo& currentOrder = myBuildQueue.front();
+	const BuildInfo& currentOrder = myBuildQueue[0];
 	if (currentOrder.myUnit == eUnitType::NOT_A_UNIT)
 	{
 		return;
@@ -94,24 +94,24 @@ void BuildingComponent::Update(float aDeltaTime)
 			PostMaster::GetInstance()->SendMessage(SpawnUnitMessage(currentOrder.myUnit, myEntity.GetOwner(), mySpawnPoint, myRallyPoint));
 		}
 
-		myBuildQueue.pop();
+		myBuildQueue.RemoveNonCyclicAtIndex(0);
 		myCurrentBuildTime = 0.f;
 	}
 }
 
 void BuildingComponent::BuildUnit(eUnitType aUnitType)
 {
-	if (myBuildQueue.size() < myMaxQueue)
+	if (myBuildQueue.Size() < myMaxQueue)
 	{
-		myBuildQueue.push({ aUnitType, false });
+		myBuildQueue.Add({ aUnitType, false });
 	}
 }
 
 void BuildingComponent::UpgradeUnit(eUnitType aUnitType)
 {
-	if (myUpgradesInQueue == true &&myBuildQueue.size() < myMaxQueue)
+	if (myUpgradesInQueue == true &&myBuildQueue.Size() < myMaxQueue)
 	{
-		myBuildQueue.push({ aUnitType, true });
+		myBuildQueue.Add({ aUnitType, true });
 		int unitIndex = static_cast<int>(aUnitType);
 		int upgradeIndex = myUnitUpgradeProgress[unitIndex];
 		myUnitUpgrades[unitIndex][upgradeIndex].myInProgress = true;
