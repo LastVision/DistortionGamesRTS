@@ -106,6 +106,7 @@
       <Filter>StateStack</Filter>
     </ClCompile>
     <ClCompile Include="TextEventManager.cpp" />
+    <ClCompile Include="InGameMenuState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -223,6 +224,7 @@
       <Filter>StateStack</Filter>
     </ClInclude>
     <ClInclude Include="TextEventManager.h" />
+    <ClInclude Include="InGameMenuState.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="PreCompile">
