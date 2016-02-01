@@ -88,6 +88,8 @@ namespace Prism
 		myViewProjectionMatrix = CU::InverseSimple(myOrientation) * myProjectionMatrix;
 
 		myFrustum->Update();
+
+		DEBUG_PRINT(myOrientation.GetPos());
 	}
 	void Camera::SetOrientation(const CU::Matrix44<float>& aOrientation)
 	{

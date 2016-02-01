@@ -217,6 +217,7 @@
     <ClInclude Include="GameState.h" />
     <ClInclude Include="GoalMap.h" />
     <ClInclude Include="InfluenceMap.h" />
+    <ClInclude Include="InGameMenuState.h" />
     <ClInclude Include="InGameState.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="LevelFactory.h" />
@@ -257,6 +258,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GoalMap.cpp" />
     <ClCompile Include="InfluenceMap.cpp" />
+    <ClCompile Include="InGameMenuState.cpp" />
     <ClCompile Include="InGameState.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="LevelFactory.cpp" />

@@ -23,7 +23,6 @@ struct EmitterData
 	short myCurrentIndex;
 	short myFinishedCount;
 	bool myGroupIsActive;
-	Prism::Camera* myCameraToFollow;
 	CU::Vector3f myOffset;
 };
 
