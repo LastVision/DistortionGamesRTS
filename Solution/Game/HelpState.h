@@ -7,11 +7,12 @@ namespace GUI
 	class GUIManager;
 }
 
-class InGameMenuState : public GameState, public Subscriber
+
+class HelpState : public GameState, public Subscriber
 {
 public:
-	InGameMenuState();
-	~InGameMenuState();
+	HelpState();
+	~HelpState();
 
 	void InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCursor) override;
 	void EndState() override;
@@ -25,5 +26,5 @@ public:
 
 private:
 	GUI::GUIManager* myGUIManager;
-
 };
+
