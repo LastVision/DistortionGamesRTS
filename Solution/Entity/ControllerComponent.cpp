@@ -99,10 +99,12 @@ void ControllerComponent::Update(float aDelta)
 		StartNextAction();
 	}
 
+#ifdef _DEBUG
 	if (myEntity.GetOwner() == eOwnerType::PLAYER)
 	{
 		RenderDebugLines();
 	}
+#endif
 }
 
 void ControllerComponent::MoveTo(const CU::Vector3<float>& aPosition, bool aClearCommandQueue, bool& aHasPlayedSound)
