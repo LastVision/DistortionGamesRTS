@@ -8,6 +8,7 @@ enum class eOnClickEvent
 	GAME_CREDIT,
 	GAME_QUIT,
 	GAME_RESTART,
+	GAME_HELP,
 	GAME_WIN,
 	GAME_LOSE,
 	SPAWN_UNIT,
