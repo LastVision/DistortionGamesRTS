@@ -162,9 +162,11 @@
     <ClInclude Include="BlockMapMessage.h" />
     <ClInclude Include="EmitterMessage.h" />
     <ClInclude Include="EventPositionMessage.h" />
+    <ClInclude Include="InWorldTextMessage.h" />
     <ClInclude Include="KillUnitMessage.h" />
     <ClInclude Include="MinimapEventMessage.h" />
     <ClInclude Include="MinimapMoveMessage.h" />
+    <ClInclude Include="NotificationMessage.h" />
     <ClInclude Include="SelectUnitMessage.h" />
     <ClInclude Include="TextMessage.h" />
     <ClInclude Include="TimeMultiplierMessage.h" />
