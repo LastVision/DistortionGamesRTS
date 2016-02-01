@@ -1,4 +1,5 @@
 #pragma once
+#include <Subscriber.h>
 
 namespace Prism
 {
@@ -23,7 +24,7 @@ struct NotificationText
 	bool myIsActive;
 };
 
-class TextEventManager
+class TextEventManager : public Subscriber
 {
 public:
 	TextEventManager(const Prism::Camera* aCamera);
@@ -32,9 +33,12 @@ public:
 	void Update(float aDeltaTime);
 	void Render();
 
-	void AddNotification(std::string aText, CU::Vector4<float> aColor = { 1.f, 1.f, 1.f, 1.f });
-	void AddInWorldText(std::string aText, const CU::Vector3<float>& aPosition, CU::Vector4<float> aColor = { 1.f, 1.f, 1.f, 1.f });
-	void AddInWorldText(std::string aText, const CU::Vector2<float>& aPosition, CU::Vector4<float> aColor = { 1.f, 1.f, 1.f, 1.f });
+	void AddNotification(const std::string& aText, const CU::Vector4<float>& aColor = { 1.f, 1.f, 1.f, 1.f });
+	void AddInWorldText(const std::string& aText, const CU::Vector3<float>& aPosition, const CU::Vector4<float>& aColor = { 1.f, 1.f, 1.f, 1.f });
+	void AddInWorldText(const std::string& aText, const CU::Vector2<float>& aPosition, const CU::Vector4<float>& aColor = { 1.f, 1.f, 1.f, 1.f });
+
+	void ReceiveMessage(const NotificationMessage& aMessage) override;
+	void ReceiveMessage(const InWorldTextMessage& aMessage) override;
 
 private:
 

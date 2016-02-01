@@ -1,11 +1,14 @@
 #include "stdafx.h"
 #include <Camera.h>
+#include <InWorldTextMessage.h>
+#include <NotificationMessage.h>
 #include "TextEventManager.h"
 #include <Text.h>
+#include <PostMaster.h>
 
 TextEventManager::TextEventManager(const Prism::Camera* aCamera)
 	: myCamera(aCamera)
-	, myNotificationPosition(500.f, 900.f)
+	, myNotificationPosition(50.f, 900.f)
 	, myTextLifeTime(5.f)
 	, myTextStartFadingTime(1.f)
 	, myNotifications(10)
@@ -23,6 +26,9 @@ TextEventManager::TextEventManager(const Prism::Camera* aCamera)
 		notification->myText = new Prism::Text(*Prism::Engine::GetInstance()->GetFont(Prism::eFont::DIALOGUE));
 		myNotifications.Add(notification);
 	}
+
+	PostMaster::GetInstance()->Subscribe(eMessageType::IN_WORLD_TEXT, this);
+	PostMaster::GetInstance()->Subscribe(eMessageType::NOTIFICATION, this);
 }
 
 TextEventManager::~TextEventManager()
@@ -38,6 +44,9 @@ TextEventManager::~TextEventManager()
 		SAFE_DELETE(myNotifications[i]->myText);
 		SAFE_DELETE(myNotifications[i]);
 	}
+
+	PostMaster::GetInstance()->UnSubscribe(eMessageType::IN_WORLD_TEXT, this);
+	PostMaster::GetInstance()->UnSubscribe(eMessageType::NOTIFICATION, this);
 }
 
 void TextEventManager::Update(float aDeltaTime)
@@ -104,7 +113,7 @@ void TextEventManager::Render()
 	}
 }
 
-void TextEventManager::AddNotification(std::string aText, CU::Vector4<float> aColor)
+void TextEventManager::AddNotification(const std::string& aText, const CU::Vector4<float>& aColor)
 {
 	myNotifications[myNotificationIndex]->myText->SetText(aText);
 	myNotifications[myNotificationIndex]->myColor = aColor;
@@ -119,7 +128,7 @@ void TextEventManager::AddNotification(std::string aText, CU::Vector4<float> aCo
 	}
 }
 
-void TextEventManager::AddInWorldText(std::string aText, const CU::Vector2<float>& aPosition, CU::Vector4<float> aColor)
+void TextEventManager::AddInWorldText(const std::string& aText, const CU::Vector2<float>& aPosition, const CU::Vector4<float>& aColor)
 {
 	myInWorldTexts[myInWorldTextIndex]->myText->SetText(aText);
 	myInWorldTexts[myInWorldTextIndex]->myColor = aColor;
@@ -135,9 +144,19 @@ void TextEventManager::AddInWorldText(std::string aText, const CU::Vector2<float
 	}
 }
 
-void TextEventManager::AddInWorldText(std::string aText, const CU::Vector3<float>& aPosition, CU::Vector4<float> aColor)
+void TextEventManager::AddInWorldText(const std::string& aText, const CU::Vector3<float>& aPosition, const CU::Vector4<float>& aColor)
 {
 	AddInWorldText(aText, { aPosition.x, aPosition.z }, aColor);
+}
+
+void TextEventManager::ReceiveMessage(const NotificationMessage& aMessage)
+{
+	AddNotification(aMessage.myText, aMessage.myColor);
+}
+
+void TextEventManager::ReceiveMessage(const InWorldTextMessage& aMessage)
+{
+	AddInWorldText(aMessage.myText, aMessage.myPosition, aMessage.myColor);
 }
 
 CU::Vector2<float> TextEventManager::Get2DPosition(const CU::Vector3<float>& aPosition)

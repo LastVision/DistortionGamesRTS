@@ -29,5 +29,7 @@ enum class eMessageType
 	BLOCK_MAP,
 	SELECT_UNIT,
 	TOGGLE_FOG_OF_WAR,
+	IN_WORLD_TEXT,
+	NOTIFICATION,
 	COUNT,
 };
