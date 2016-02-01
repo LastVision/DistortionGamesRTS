@@ -19,14 +19,14 @@ BlendedBehavior::~BlendedBehavior()
 	myBehaviors.DeleteAll();
 }
 
-const CU::Vector2<float>& BlendedBehavior::Update()
+const CU::Vector2<float>& BlendedBehavior::Update(float aDelta)
 {
 	myAcceleration.x = 0;
 	myAcceleration.y = 0;
 
 	for (int i = 0; i < myBehaviors.Size(); ++i)
 	{
-		myAcceleration += myBehaviors[i]->Update();
+		myAcceleration += myBehaviors[i]->Update(aDelta);
 	}
 	//DL_DEBUG("length: %f", CU::Length2(myPreviousAcceleration + myAcceleration));
 

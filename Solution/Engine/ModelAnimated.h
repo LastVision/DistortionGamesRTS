@@ -40,7 +40,7 @@ namespace Prism
 		void Render(const CU::Matrix44<float>& aOrientation, const CU::Vector3<float>& aCameraPosition);
 
 		void ActivateAlbedo(eOwnerType aOwner);
-
+		void SetFileName(const std::string& aFileName) override;
 	private:
 		bool myIsNULLObject;
 
@@ -57,4 +57,13 @@ namespace Prism
 		ModelAnimated* myParent;
 		bool myInited;
 	};
+
+	inline void ModelAnimated::SetFileName(const std::string& aFileName)
+	{
+		myFileName = aFileName;
+		for (int i = 0; i < myChildren.Size(); ++i)
+		{
+			myChildren[i]->SetFileName(aFileName);
+		}
+	}
 }

@@ -15,9 +15,11 @@ LoadingState::LoadingState()
 	myBackground = Prism::ModelLoader::GetInstance()->LoadSprite("Data/Resource/Texture/Menu/T_loadingscreen_background.dds",
 		windowSize, windowSize * 0.5f);
 
+	Prism::ModelLoader::GetInstance()->Pause();
 	myText = new Prism::Text(*Prism::Engine::GetInstance()->GetFont(Prism::eFont::DIALOGUE));
 	myText->SetText("Press Enter to start!");
 	myText->SetPosition(windowSize * 0.5f);
+	Prism::ModelLoader::GetInstance()->UnPause();
 }
 
 

@@ -17,7 +17,7 @@ ArriveBehavior::~ArriveBehavior()
 {
 }
 
-const CU::Vector2<float>& ArriveBehavior::Update()
+const CU::Vector2<float>& ArriveBehavior::Update(float)
 {
 	if (myActive == false) // can remove?
 	{

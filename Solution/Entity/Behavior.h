@@ -7,7 +7,7 @@ class Behavior
 public:
 	virtual ~Behavior();
 
-	virtual const CU::Vector2<float>& Update() = 0;
+	virtual const CU::Vector2<float>& Update(float aDelta) = 0;
 	virtual void SetTarget(const CU::Vector2<float>& aTargetPosition);
 	virtual bool GetDone() const;
 

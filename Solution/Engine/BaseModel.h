@@ -27,6 +27,8 @@ namespace Prism
 
 		virtual const std::string& GetTechniqueName() const;
 
+		virtual void SetFileName(const std::string& aFileName);
+
 	protected:
 		void EvaluateEffectTechnique(bool aInstanced);
 		void Render();
@@ -65,5 +67,10 @@ namespace Prism
 	inline const std::string& BaseModel::GetTechniqueName() const
 	{
 		return myTechniqueName;
+	}
+
+	inline void BaseModel::SetFileName(const std::string& aFileName)
+	{
+		myFileName = aFileName;
 	}
 }
