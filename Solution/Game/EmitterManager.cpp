@@ -1,6 +1,5 @@
 #include "stdafx.h"
 
-#include <Camera.h>
 #include "EmitterManager.h"
 #include <EmitterMessage.h>
 #include <EntityId.h>
@@ -65,13 +64,6 @@ void EmitterManager::UpdateEmitters(float aDeltaTime, CU::Matrix44f aWorldMatrix
 					break;
 				}
 
-				if (myEmitterList[i]->myCameraToFollow != nullptr)
-				{
-					CU::Vector3f newPosition = myEmitterList[i]->myCameraToFollow->GetOrientation().GetPos();
-					newPosition += myEmitterList[i]->myOffset;
-
-					myEmitterList[i]->myEmitters[k][j]->SetPosition(newPosition);
-				}
 				myEmitterList[i]->myEmitters[k][j]->Update(aDeltaTime, aWorldMatrix);
 			}
 		}
@@ -135,17 +127,12 @@ void EmitterManager::ReceiveMessage(const EmitterMessage& aMessage)
 	{
 		myEmitters[particleType]->myCurrentIndex = 0;
 	}
-	if (aMessage.myCamera != nullptr)
-	{
-		myEmitters[particleType]->myOffset = aMessage.myPosition;
-	}
 
 	short index = myEmitters[particleType]->myCurrentIndex;
 
 	for (int i = 0; i < myEmitters[particleType]->myEmitters[index].Size(); ++i)
 	{
 		myEmitters[particleType]->myEmitters[index][i]->SetPosition(position);
-		myEmitters[particleType]->myCameraToFollow = aMessage.myCamera;
 		myEmitters[particleType]->myEmitters[index][i]->Activate();
 	}
 	myEmitters[particleType]->myFinishedGroups[index] = UNFINISHED;
@@ -214,7 +201,6 @@ EmitterData::EmitterData(const std::string& aType)
 	: myType(aType)
 	, myCurrentIndex(0)
 	, myFinishedCount(0)
-	, myCameraToFollow(nullptr)
 {
 	for (int i = 0; i < PREALLOCATED_EMITTERGROUP; ++i)
 	{
