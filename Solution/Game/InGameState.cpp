@@ -9,6 +9,7 @@
 #include <Entity.h>
 #include <GameStateMessage.h>
 #include <GUIManager.h>
+#include "InGameMenuState.h"
 #include "InGameState.h"
 #include <InputWrapper.h>
 #include "Level.h"
@@ -70,8 +71,8 @@ void InGameState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCur
 	myCursor = aCursor;
 	myLevelFactory = new LevelFactory("Data/Level/LI_level.xml", *myCamera, myCursor);
 	myLevel = myLevelFactory->LoadLevel(myStartLevelIndex, false);
-	
-	
+
+
 
 	CU::Vector2<int> windowSize = Prism::Engine::GetInstance()->GetWindowSizeInt();
 
@@ -106,7 +107,23 @@ const eStateStatus InGameState::Update(const float& aDeltaTime)
 #endif
 	UpdateCamera(aDeltaTime, myLevel->GetCameraMoveVector());
 
+
+#ifndef _DEBUG
+	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_ESCAPE))
+	{
+		bool oldRuntime = Prism::MemoryTracker::GetInstance()->GetRunTime();
+		Prism::MemoryTracker::GetInstance()->SetRunTime(false);
+
+		myStateStack->PushSubGameState(new InGameMenuState());
+
+		Prism::MemoryTracker::GetInstance()->SetRunTime(oldRuntime);
+	}
+#endif
+#ifdef _DEBUG
 	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_ESCAPE) || myIsShuttingDown == true || myIsComplete == true)
+#else
+	if (myIsShuttingDown == true || myIsComplete == true)
+#endif
 	{
 		myIsActiveState = false;
 		SAFE_DELETE(myLevel);
@@ -222,7 +239,7 @@ void InGameState::ReceiveMessage(const GameStateMessage& aMessage)
 		{
 			PostMaster::GetInstance()->SendMessage(OnClickMessage(eOnClickEvent::GAME_WIN));
 		}
-		else 
+		else
 		{
 			runtime = Prism::MemoryTracker::GetInstance()->GetRunTime();
 			Prism::MemoryTracker::GetInstance()->SetRunTime(false);
@@ -237,7 +254,7 @@ void InGameState::ReceiveMessage(const GameStateMessage& aMessage)
 		Prism::MemoryTracker::GetInstance()->SetRunTime(runtime);
 		break;
 	}
-	
+
 }
 
 void InGameState::ReceiveMessage(const OnClickMessage& aMessage)
@@ -269,7 +286,7 @@ void InGameState::ReceiveMessage(const MoveCameraMessage& aMessage)
 	CU::Vector2<float> position;
 	if (aMessage.myMovementHandle == eHowToHandleMovement::ZERO_TO_ONE)
 	{
-		 position = aMessage.myPosition * 255.f;
+		position = aMessage.myPosition * 255.f;
 
 	}
 	else if (aMessage.myMovementHandle == eHowToHandleMovement::WORLD_POSITION)

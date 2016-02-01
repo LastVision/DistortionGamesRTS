@@ -26,6 +26,8 @@ namespace GUI
 
 		void OnResize(const CU::Vector2<float>& aNewSize, const CU::Vector2<float>& anOldSize, bool aIsFullScreen) override;
 
+		Widget* MouseIsOver(const CU::Vector2<float>& aPosition) override;
+
 	private:
 		Prism::SpriteProxy* myBackground;
 	};
