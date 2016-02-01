@@ -212,16 +212,6 @@ void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 		PostMaster::GetInstance()->SendMessage(ToggleGUIMessage(!myRenderGUI, 1.f / 3.f));
 	}
 
-	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_M) == true)
-	{
-		myTextEventManager->AddNotification("WEEEEEEEEEEEEEE", { 0.5f, 0.5f, 1.f, 1.f });
-	}
-
-	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_N) == true)
-	{
-		myTextEventManager->AddInWorldText("-10", mySelectedUnits[0]->GetPosition(), { 1.f, 0.f, 0.f, 1.f });
-	}
-
 	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_F2) == true)
 	{
 		SelectAllUnits();

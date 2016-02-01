@@ -71,6 +71,9 @@ private:
 
 	bool myRenderNavMeshLines;
 	bool myShowFogOfWar;
+
+	bool myHasToldPlayerAboutWinning;
+	bool myHasToldPlayerAboutLosing;
 };
 
 inline PlayerDirector* Level::GetPlayer()

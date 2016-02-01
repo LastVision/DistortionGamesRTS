@@ -15,6 +15,7 @@
 #include <InputWrapper.h>
 #include "Level.h"
 #include "NeutralDirector.h"
+#include <NotificationMessage.h>
 #include "PlayerDirector.h"
 #include "PollingStation.h"
 #include <PostMaster.h>
@@ -30,6 +31,8 @@ Level::Level(const Prism::Camera& aCamera, Prism::Terrain* aTerrain, GUI::Cursor
 	, myRenderNavMeshLines(false)
 	, myShowFogOfWar(true)
 	, myMaxVictoryPoint(-1)
+	, myHasToldPlayerAboutWinning(false)
+	, myHasToldPlayerAboutLosing(false)
 {
 	EntityFactory::GetInstance()->LoadEntities("Data/Resource/Entity/LI_entity.xml");
 	myEmitterManager = new EmitterManager(aCamera);
@@ -115,6 +118,19 @@ bool Level::Update(float aDeltaTime, Prism::Camera& aCamera)
 	DoFogCulling();
 
 	myEmitterManager->UpdateEmitters(aDeltaTime, CU::Matrix44f());
+
+	if (myHasToldPlayerAboutWinning == false && myPlayer->GetVictoryPoints() >= myMaxVictoryPoint - 100)
+	{
+		myHasToldPlayerAboutWinning = true;
+		PostMaster::GetInstance()->SendMessage(NotificationMessage("You have 100 victory points left.", { 1.f, 1.f, 1.f, 1.f }));
+	}
+
+	if (myHasToldPlayerAboutLosing == false && myAI->GetVictoryPoints() >= myMaxVictoryPoint - 100)
+	{
+		myHasToldPlayerAboutLosing = true;
+		PostMaster::GetInstance()->SendMessage(NotificationMessage("Enemy has 100 victory points left.", { 1.f, 0.5f, 0.5f, 1.f }));
+	}
+
 
 	return true;
 }

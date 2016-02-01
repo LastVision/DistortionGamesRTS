@@ -39,6 +39,10 @@ void Subscriber::ReceiveMessage(const GameStateMessage&)
 {
 }
 
+void Subscriber::ReceiveMessage(const InWorldTextMessage&)
+{
+}
+
 void Subscriber::ReceiveMessage(const KillUnitMessage&)
 {
 }
@@ -56,6 +60,10 @@ void Subscriber::ReceiveMessage(const MinimapMoveMessage&)
 }
 
 void Subscriber::ReceiveMessage(const MoveCameraMessage&)
+{
+}
+
+void Subscriber::ReceiveMessage(const NotificationMessage&)
 {
 }
 
