@@ -96,7 +96,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <AdditionalIncludeDirectories>$(SolutionDir)Memory;$(SolutionDir)CommonUtilities;$(SolutionDir)DL_Debug;$(SolutionDir)Engine;$(SolutionDir)Audio;$(SolutionDir)PostMaster;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Memory;$(SolutionDir)CommonUtilities;$(SolutionDir)DL_Debug;$(SolutionDir)Engine;$(SolutionDir)Audio;$(SolutionDir)PostMaster;$(SolutionDir)InputWrapper;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
     </ClCompile>
@@ -112,7 +112,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <AdditionalIncludeDirectories>$(SolutionDir)Memory;$(SolutionDir)CommonUtilities;$(SolutionDir)DL_Debug;$(SolutionDir)Engine;$(SolutionDir)Audio;$(SolutionDir)PostMaster;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Memory;$(SolutionDir)CommonUtilities;$(SolutionDir)DL_Debug;$(SolutionDir)Engine;$(SolutionDir)Audio;$(SolutionDir)PostMaster;$(SolutionDir)InputWrapper;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <PreprocessorDefinitions>RELEASE_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
@@ -130,7 +130,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <AdditionalIncludeDirectories>$(SolutionDir)Memory;$(SolutionDir)CommonUtilities;$(SolutionDir)DL_Debug;$(SolutionDir)Engine;$(SolutionDir)Audio;$(SolutionDir)PostMaster;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Memory;$(SolutionDir)CommonUtilities;$(SolutionDir)DL_Debug;$(SolutionDir)Engine;$(SolutionDir)Audio;$(SolutionDir)PostMaster;$(SolutionDir)InputWrapper;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
@@ -148,7 +148,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <AdditionalIncludeDirectories>$(SolutionDir)Memory;$(SolutionDir)CommonUtilities;$(SolutionDir)DL_Debug;$(SolutionDir)Engine;$(SolutionDir)Audio;$(SolutionDir)PostMaster;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Memory;$(SolutionDir)CommonUtilities;$(SolutionDir)DL_Debug;$(SolutionDir)Engine;$(SolutionDir)Audio;$(SolutionDir)PostMaster;$(SolutionDir)InputWrapper;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>

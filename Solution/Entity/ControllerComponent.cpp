@@ -7,6 +7,7 @@
 #include "ControllerComponent.h"
 #include "GrenadeComponent.h"
 #include "HealthComponent.h"
+#include <InputWrapper.h>
 #include <KillUnitMessage.h>
 #include <PathFinderAStar.h>
 #include <PathFinderFunnel.h>
@@ -99,12 +100,10 @@ void ControllerComponent::Update(float aDelta)
 		StartNextAction();
 	}
 
-#ifdef _DEBUG
-	if (myEntity.GetOwner() == eOwnerType::PLAYER)
+	if (myEntity.GetOwner() == eOwnerType::PLAYER && CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_LSHIFT) == true)
 	{
 		RenderDebugLines();
 	}
-#endif
 }
 
 void ControllerComponent::MoveTo(const CU::Vector3<float>& aPosition, bool aClearCommandQueue, bool& aHasPlayedSound)
