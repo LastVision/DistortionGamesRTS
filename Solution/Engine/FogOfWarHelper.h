@@ -13,6 +13,7 @@ namespace Prism
 		void Render(Camera& aCamera, RenderPlane* aRenderPlane);
 
 		Texture* GetTexture();
+		void OnResize(float aWidth, float aHeight);
 
 	private:
 

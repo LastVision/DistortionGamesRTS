@@ -156,6 +156,8 @@ void Level::Render(Prism::Camera& aCamera)
 void Level::OnResize(int aWidth, int aHeigth)
 {
 	myPlayer->OnResize(aWidth, aHeigth);
+	myRenderer->OnResize(static_cast<float>(aWidth), static_cast<float>(aHeigth));
+	myFogOfWarHelper->OnResize(static_cast<float>(aWidth), static_cast<float>(aHeigth));
 }
 
 void Level::ReceiveMessage(const ToggleRenderLinesMessage& aMessage)

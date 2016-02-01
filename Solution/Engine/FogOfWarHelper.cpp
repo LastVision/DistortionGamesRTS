@@ -39,4 +39,9 @@ namespace Prism
 	{
 		return myTexture;
 	}
+
+	void FogOfWarHelper::OnResize(float aWidth, float aHeight)
+	{
+		myTexture->Resize(aWidth, aHeight);
+	}
 }
