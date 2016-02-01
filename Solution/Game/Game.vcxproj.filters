@@ -105,6 +105,7 @@
     <ClCompile Include="CinematicState.cpp">
       <Filter>StateStack</Filter>
     </ClCompile>
+    <ClCompile Include="TextEventManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -221,6 +222,7 @@
     <ClInclude Include="CinematicState.h">
       <Filter>StateStack</Filter>
     </ClInclude>
+    <ClInclude Include="TextEventManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="PreCompile">

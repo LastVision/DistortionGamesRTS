@@ -41,6 +41,8 @@ public:
 
 	void SetRallyPoint(const CU::Vector2<float>& aPoint);
 
+	void Abort(int aIndex);
+
 private:
 	struct BuildInfo
 	{
@@ -71,7 +73,7 @@ private:
 	bool myIgnoreBuildTime;
 	bool myUpgradesInQueue;
 
-	unsigned int myMaxQueue;
+	int myMaxQueue;
 
 	void HandleMineField();
 	void CheckUnitsForRemove(CU::GrowingArray<Entity*>& someUnits) const;
@@ -143,4 +145,12 @@ inline const float& BuildingComponent::GetUpgradeMaxCooldown(int aUnitID) const
 inline void BuildingComponent::SetRallyPoint(const CU::Vector2<float>& aPoint)
 {
 	myRallyPoint = aPoint;
+}
+
+inline void BuildingComponent::Abort(int aIndex)
+{
+	if (myBuildQueue.Size() >= aIndex)
+	{
+		myBuildQueue.RemoveNonCyclicAtIndex(aIndex);
+	}
 }

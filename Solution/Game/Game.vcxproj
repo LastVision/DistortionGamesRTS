@@ -233,6 +233,7 @@
     <ClInclude Include="StateStackProxy.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="TensionMap.h" />
+    <ClInclude Include="TextEventManager.h" />
     <ClInclude Include="Tutorial.h" />
     <ClInclude Include="VulnerabilityMap.h" />
   </ItemGroup>
@@ -282,6 +283,7 @@
       <MultiProcessorCompilation Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</MultiProcessorCompilation>
     </ClCompile>
     <ClCompile Include="TensionMap.cpp" />
+    <ClCompile Include="TextEventManager.cpp" />
     <ClCompile Include="Tutorial.cpp" />
     <ClCompile Include="VulnerabilityMap.cpp" />
   </ItemGroup>

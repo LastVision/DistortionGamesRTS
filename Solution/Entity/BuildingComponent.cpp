@@ -19,6 +19,7 @@ BuildingComponent::BuildingComponent(Entity& aEntity, BuildingComponentData& aDa
 	, myMineFieldRadius(aData.myMineFieldRadius)
 	, myUnitsInMineField(8)
 	, myUpgradesInQueue(aData.myUpgradesInQueue)
+	, myBuildQueue(aData.myMaxQueue)
 {
 	for (int i = 0; i < 3; ++i)
 	{
