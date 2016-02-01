@@ -33,8 +33,8 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.panel3 = new System.Windows.Forms.Panel();
-            this.myResolutionList = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.myResolutionList = new System.Windows.Forms.ComboBox();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel3.SuspendLayout();
@@ -83,14 +83,6 @@
             this.panel3.Size = new System.Drawing.Size(584, 71);
             this.panel3.TabIndex = 8;
             // 
-            // myResolutionList
-            // 
-            this.myResolutionList.FormattingEnabled = true;
-            this.myResolutionList.Location = new System.Drawing.Point(12, 25);
-            this.myResolutionList.Name = "myResolutionList";
-            this.myResolutionList.Size = new System.Drawing.Size(121, 21);
-            this.myResolutionList.TabIndex = 1;
-            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -99,6 +91,14 @@
             this.label1.Size = new System.Drawing.Size(57, 13);
             this.label1.TabIndex = 2;
             this.label1.Text = "Resolution";
+            // 
+            // myResolutionList
+            // 
+            this.myResolutionList.FormattingEnabled = true;
+            this.myResolutionList.Location = new System.Drawing.Point(12, 25);
+            this.myResolutionList.Name = "myResolutionList";
+            this.myResolutionList.Size = new System.Drawing.Size(121, 21);
+            this.myResolutionList.TabIndex = 1;
             // 
             // Form1
             // 
