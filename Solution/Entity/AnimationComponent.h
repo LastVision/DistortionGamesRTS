@@ -30,6 +30,9 @@ public:
 	bool IsCurrentAnimationDone() const;
 	void RestartCurrentAnimation();
 
+	void SetRotation(const CU::Vector3<float>& aRotation);
+	void SetScale(const CU::Vector3<float>& aScale);
+
 private:
 	void PlayAnimation(eEntityState aAnimationState);
 	struct AnimationData

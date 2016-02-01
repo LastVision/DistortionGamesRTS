@@ -149,3 +149,20 @@ void AnimationComponent::PlayAnimation(eEntityState aAnimationState)
 		myInstance->ResetAnimationTime(data.myElapsedTime);
 	}
 }
+
+void AnimationComponent::SetRotation(const CU::Vector3<float>& aRotation)
+{
+	CU::Vector3f position(myEntity.myOrientation.GetPos());
+	myEntity.myOrientation.SetPos(CU::Vector3f());
+
+	myEntity.myOrientation = CU::Matrix44f::CreateRotateAroundX(aRotation.x) * myEntity.myOrientation;
+	myEntity.myOrientation = CU::Matrix44f::CreateRotateAroundY(aRotation.y) * myEntity.myOrientation;
+	myEntity.myOrientation = CU::Matrix44f::CreateRotateAroundZ(aRotation.z) * myEntity.myOrientation;
+
+	myEntity.myOrientation.SetPos(position);
+}
+
+void AnimationComponent::SetScale(const CU::Vector3<float>& aScale)
+{
+	myInstance->SetScale(aScale);
+}

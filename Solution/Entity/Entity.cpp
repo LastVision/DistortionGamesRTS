@@ -43,6 +43,8 @@ Entity::Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& a
 	if (aEntityData.myAnimationData.myExistsInEntity == true)
 	{
 		myComponents[static_cast<int>(eComponentType::ANIMATION)] = new AnimationComponent(*this, aEntityData.myAnimationData, aTerrain);
+		GetComponent<AnimationComponent>()->SetRotation(aRotation);
+		GetComponent<AnimationComponent>()->SetScale(aScale);
 	}
 	else if (aEntityData.myGraphicsData.myExistsInEntity == true)
 	{
