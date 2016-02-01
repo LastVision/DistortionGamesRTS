@@ -29,6 +29,8 @@ namespace Prism
 
 
 		void PerformTransformation(const CU::Matrix44<float>& aTransformation);
+	protected:
+		CU::Matrix44<float> myOrientation;
 
 	private:
 		CU::Vector4<float> myPosition;
@@ -38,7 +40,6 @@ namespace Prism
 		CU::Vector3<float> myOriginalDirection;
 
 		CU::Vector4<float> myColor;
-		CU::Matrix44<float> myOrientation;
 
 		float myRange;
 		float myCone;
