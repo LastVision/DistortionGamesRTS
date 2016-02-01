@@ -7,7 +7,7 @@ public:
 	ArriveBehavior(const Entity& anEntity);
 	~ArriveBehavior();
 
-	const CU::Vector2<float>& Update() override;
+	const CU::Vector2<float>& Update(float aDelta) override;
 	void SetTarget(const CU::Vector2<float>& aTargetPosition) override;
 
 private:

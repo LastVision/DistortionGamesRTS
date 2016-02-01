@@ -7,7 +7,7 @@ public:
 	EvadeBehavior(const Entity& anEntity);
 	~EvadeBehavior();
 
-	const CU::Vector2<float>& Update() override;
+	const CU::Vector2<float>& Update(float aDelta) override;
 
 private:
 	float myMaxAcceleration;

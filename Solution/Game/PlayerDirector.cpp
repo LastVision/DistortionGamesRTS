@@ -27,6 +27,7 @@
 #include <PollingStation.h>
 #include <SelectUnitMessage.h>
 #include <Terrain.h>
+#include "TextEventManager.h"
 #include <ToggleGUIMessage.h>
 #include <ToggleBuildTimeMessage.h>
 #include <TotemComponent.h>
@@ -158,6 +159,7 @@ PlayerDirector::~PlayerDirector()
 	SAFE_DELETE(myDragSelectionSpriteHorizontal);
 	SAFE_DELETE(myTotem);
 	SAFE_DELETE(myConfimrationAnimation);
+	SAFE_DELETE(myTextEventManager);
 
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::TOGGLE_GUI, this);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::ON_CLICK, this);
@@ -173,6 +175,7 @@ PlayerDirector::~PlayerDirector()
 void PlayerDirector::InitGUI(const AIDirector* anAI, const Prism::Camera& aCamera, int aLeveID)
 {
 	myGUIManager = new GUI::GUIManager(myCursor, "Data/Resource/GUI/GUI_ingame.xml", this, anAI, &aCamera, aLeveID);
+	myTextEventManager = new TextEventManager;
 
 }
 
@@ -207,6 +210,11 @@ void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_G) == true)
 	{
 		PostMaster::GetInstance()->SendMessage(ToggleGUIMessage(!myRenderGUI, 1.f / 3.f));
+	}
+
+	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_M) == true)
+	{
+		myTextEventManager->AddNotification("WEEEEEEEEEEEEEE");
 	}
 
 	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_F2) == true)
@@ -280,6 +288,8 @@ void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 	}
 
 	UpdateConfirmationAnimation(aDeltaTime, aCamera);
+
+	myTextEventManager->Update(aDeltaTime);
 }
 
 void PlayerDirector::Render(const Prism::Camera& aCamera)
@@ -303,6 +313,9 @@ void PlayerDirector::Render(const Prism::Camera& aCamera)
 		}
 
 		myConfimrationAnimation->Render(myConfirmationPosition);
+
+		myTextEventManager->Render();
+
 		myGUIManager->Render();
 	}
 }

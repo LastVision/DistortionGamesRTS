@@ -543,6 +543,7 @@ Prism::Model* Prism::FBXFactory::LoadModel(const char* aFilePath, Effect* aEffec
 	Model* returnModel = CreateModel(modelData, aEffect);
 	returnModel->myFileName = aFilePath;
 	returnModel->Init();
+	returnModel->SetFileName(aFilePath);
 
 	myModels[aFilePath] = returnModel;
 
@@ -611,6 +612,7 @@ Prism::ModelAnimated* Prism::FBXFactory::LoadModelAnimated(const char* aFilePath
 	ModelAnimated* returnModel = CreateModelAnimated(modelData, aEffect);
 	returnModel->myFileName = aFilePath;
 	returnModel->Init();
+	returnModel->SetFileName(aFilePath);
 
 	myModelsAnimated[aFilePath] = returnModel;
 

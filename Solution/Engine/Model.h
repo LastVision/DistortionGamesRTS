@@ -49,6 +49,7 @@ namespace Prism
 
 		const std::string& GetTechniqueName() const override;
 		Model* GetRealModel(const CU::Vector3<float>& aModelPosition, const CU::Vector3<float>& aCameraPosition);
+		void SetFileName(const std::string& aFileName) override;
 
 	private:
 		
@@ -77,4 +78,13 @@ namespace Prism
 		ID3D11Buffer* myVertexBuffers[3];
 		const int myMaxInstances;
 	};
+
+	inline void Model::SetFileName(const std::string& aFileName)
+	{
+		myFileName = aFileName;
+		for (int i = 0; i < myChildren.Size(); ++i)
+		{
+			myChildren[i]->SetFileName(aFileName);
+		}
+	}
 }

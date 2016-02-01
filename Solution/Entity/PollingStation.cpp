@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-//#include "CollisionComponent.h"
+#include "CollisionComponent.h"
 #include "PollingStation.h"
 #include "TriggerComponent.h"
 
@@ -148,6 +148,8 @@ void PollingStation::FindAllEntitiesCloseToEntity(const Entity* anEntity, float 
 void PollingStation::FindAllEntitiesCloseToEntity(const CU::GrowingArray<Entity*>& someEntitiesIn
 	, const Entity* anEntity, float aRadius, CU::GrowingArray<Entity*>& someEntitiesOut)
 {
+	float aRadius2 = aRadius * aRadius;
+
 	float dist2;
 	for (int i = 0; i < someEntitiesIn.Size(); ++i)
 	{
@@ -155,8 +157,15 @@ void PollingStation::FindAllEntitiesCloseToEntity(const CU::GrowingArray<Entity*
 		if ((current->GetAlive() == true || current->GetType() == eEntityType::PROP) && current != anEntity)
 		{
 			dist2 = CU::Length2(current->GetPosition() - anEntity->GetPosition());
+			CollisionComponent* collision = current->GetComponent<CollisionComponent>();
+			float targetRadius2 = 0.f;
+			if (collision != nullptr)
+			{
+				targetRadius2 = collision->GetRadius();
+				targetRadius2 = targetRadius2 * targetRadius2;
+			}
 
-			if (dist2 < aRadius * aRadius)
+			if (dist2 < aRadius2 + targetRadius2)
 			{
 				someEntitiesOut.Add(current);
 			}

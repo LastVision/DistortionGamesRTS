@@ -25,8 +25,8 @@ public:
 	eComponentType GetType() override;
 
 
-	void LookInDirection(const CU::Vector2<float>& aDirection);
-	void LookAtPoint(const CU::Vector2<float>& aPoint);
+	void LookInDirection(const CU::Vector2<float>& aDirection, float aDelta);
+	void LookAtPoint(const CU::Vector2<float>& aPoint, float aDelta);
 
 	float GetVisionRange2() const;
 	float GetAttackRange2() const;
@@ -48,14 +48,14 @@ private:
 	void DoAttackTarget(float aDelta);
 	void DoAttackMove(float aDelta);
 	void DoMove(float aDelta);
-	void DoHoldPosition();
+	void DoHoldPosition(float aDelta);
 
 	void StandStill();
 
 	void CheckAnimationComplete();
 	Entity* FindAttackTarget();
 	
-	void AttackTarget(Entity* aTarget);
+	void AttackTarget(Entity* aTarget, float aDelta);
 
 	const Prism::Terrain& myTerrain;
 	CU::Vector2<float> myAcceleration;

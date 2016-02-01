@@ -86,7 +86,7 @@ void ActorComponent::Update(float aDelta)
 		myPreviousCommand = myCurrentCommand;
 	}
 
-	myAcceleration = myBehavior->Update();
+	myAcceleration = myBehavior->Update(aDelta);
 
 	if (myBehavior->GetDone() || myIsDone == true)
 	{
@@ -118,7 +118,7 @@ void ActorComponent::Update(float aDelta)
 		DoAttackMove(aDelta);
 		break;
 	case eEntityCommand::HOLD_POSITION:
-		DoHoldPosition();
+		DoHoldPosition(aDelta);
 		break;
 	default:
 		DL_ASSERT("Unknown intentionstate!");
@@ -183,7 +183,7 @@ void ActorComponent::DoStop(float aDelta)
 			{
 				if (myAttackTimer < 0)
 				{
-					AttackTarget(closestTarget);
+					AttackTarget(closestTarget, aDelta);
 				}
 				else
 				{
@@ -205,6 +205,12 @@ void ActorComponent::DoStop(float aDelta)
 				myBehavior->SetTarget(myCurrentCommand.GetPosition());
 				DoMove(aDelta);
 			}
+			else if (CU::Length(myAcceleration) > 1.f)
+			{
+				myBehavior->SetTarget(myEntity.GetPosition());
+				DoMove(aDelta);
+				myIsDone = true;
+			}
 			else
 			{
 				StandStill();
@@ -222,7 +228,7 @@ void ActorComponent::DoAttackTarget(float aDelta)
 	{
 		if (myAttackTimer < 0)
 		{
-			AttackTarget(myCurrentCommand.myEntity);
+			AttackTarget(myCurrentCommand.myEntity, aDelta);
 		}
 		else
 		{
@@ -243,7 +249,7 @@ void ActorComponent::DoAttackMove(float aDelta)
 	{
 		if (myAttackTimer < 0)
 		{
-			AttackTarget(closestTarget);
+			AttackTarget(closestTarget, aDelta);
 		}
 		else
 		{
@@ -259,7 +265,7 @@ void ActorComponent::DoAttackMove(float aDelta)
 
 void ActorComponent::DoMove(float aDelta)
 {
-	LookInDirection(myEntity.myVelocity);
+	LookInDirection(myEntity.myVelocity, aDelta);
 	myEntity.SetState(eEntityState::WALK);
 	CU::Vector2<float> position = myEntity.myPosition;
 
@@ -268,7 +274,7 @@ void ActorComponent::DoMove(float aDelta)
 	myTerrain.CalcEntityHeight(myEntity.myOrientation);
 }
 
-void ActorComponent::DoHoldPosition()
+void ActorComponent::DoHoldPosition(float aDelta)
 {
 	Entity* closestTarget = FindAttackTarget();
 
@@ -276,7 +282,7 @@ void ActorComponent::DoHoldPosition()
 	{
 		if (myAttackTimer < 0)
 		{
-			AttackTarget(closestTarget);
+			AttackTarget(closestTarget, aDelta);
 		}
 		else
 		{
@@ -291,8 +297,8 @@ void ActorComponent::DoHoldPosition()
 
 void ActorComponent::StandStill()
 {
-	myAcceleration = { 0.f, 0.f };
-	myEntity.myVelocity = { 0.f, 0.f };
+	//myAcceleration = { 0.f, 0.f };
+	//myEntity.myVelocity = { 0.f, 0.f };
 
 
 	if (myEntity.GetState() != eEntityState::ATTACK
@@ -302,7 +308,7 @@ void ActorComponent::StandStill()
 	}
 }
 
-void ActorComponent::AttackTarget(Entity* aTarget)
+void ActorComponent::AttackTarget(Entity* aTarget, float aDelta)
 {
 	if (aTarget->GetAlive() == false)
 	{
@@ -315,7 +321,7 @@ void ActorComponent::AttackTarget(Entity* aTarget)
 		return;
 	}
 	myEntity.SetState(eEntityState::ATTACK);
-	LookInDirection(aTarget->GetPosition() - myEntity.GetPosition());
+	LookInDirection(aTarget->GetPosition() - myEntity.GetPosition(), aDelta);
 	
 	myAttackTimer = myAttackRechargeTime;
 
@@ -386,7 +392,7 @@ void ActorComponent::AttackTarget(Entity* aTarget)
 	}
 }
 
-void ActorComponent::LookInDirection(const CU::Vector2<float>& aDirection)
+void ActorComponent::LookInDirection(const CU::Vector2<float>& aDirection, float aDelta)
 {
 	CU::Vector2<float> direction2D = CU::GetNormalized(aDirection);
 	CU::Vector3<float> direction = { direction2D.x, 0, direction2D.y };
@@ -401,6 +407,16 @@ void ActorComponent::LookInDirection(const CU::Vector2<float>& aDirection)
 		float det = CU::Dot(planeNormal, CU::Cross(forward, direction));
 
 		float angle = atan2(det, dot);
+		float limit = (M_PI) * aDelta;
+		if (angle > limit)
+		{
+			angle = limit;
+		}
+		else if (angle < -limit)
+		{
+			angle = -limit;
+		}
+
 
 		CU::Vector3<float> pos = myEntity.myOrientation.GetPos();
 		myEntity.myOrientation.SetPos({ 0.f, 0.f, 0.f });
@@ -409,8 +425,8 @@ void ActorComponent::LookInDirection(const CU::Vector2<float>& aDirection)
 	}
 }
 
-void ActorComponent::LookAtPoint(const CU::Vector2<float>& aPoint)
+void ActorComponent::LookAtPoint(const CU::Vector2<float>& aPoint, float aDelta)
 {
 	CU::Vector2<float> direction = aPoint - myEntity.myPosition;
-	LookInDirection(direction);
+	LookInDirection(direction, aDelta);
 }

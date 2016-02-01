@@ -7,7 +7,7 @@ public:
 	BlendedBehavior(const Entity& anEntity);
 	~BlendedBehavior();
 
-	const CU::Vector2<float>& Update() override;
+	const CU::Vector2<float>& Update(float aDelta) override;
 	void SetTarget(const CU::Vector2<float>& aTargetPosition) override;
 	bool GetDone() const override;
 
