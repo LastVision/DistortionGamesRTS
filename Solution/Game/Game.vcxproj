@@ -216,6 +216,7 @@
     <ClInclude Include="GameDefines.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="GoalMap.h" />
+    <ClInclude Include="HelpState.h" />
     <ClInclude Include="InfluenceMap.h" />
     <ClInclude Include="InGameMenuState.h" />
     <ClInclude Include="InGameState.h" />
@@ -257,6 +258,7 @@
     <ClCompile Include="FogOfWarMap.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GoalMap.cpp" />
+    <ClCompile Include="HelpState.cpp" />
     <ClCompile Include="InfluenceMap.cpp" />
     <ClCompile Include="InGameMenuState.cpp" />
     <ClCompile Include="InGameState.cpp" />
