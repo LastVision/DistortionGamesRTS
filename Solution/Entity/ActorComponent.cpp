@@ -205,6 +205,12 @@ void ActorComponent::DoStop(float aDelta)
 				myBehavior->SetTarget(myCurrentCommand.GetPosition());
 				DoMove(aDelta);
 			}
+			else if (CU::Length(myAcceleration) > 1.f)
+			{
+				myBehavior->SetTarget(myEntity.GetPosition());
+				DoMove(aDelta);
+				myIsDone = true;
+			}
 			else
 			{
 				StandStill();
@@ -291,8 +297,8 @@ void ActorComponent::DoHoldPosition()
 
 void ActorComponent::StandStill()
 {
-	myAcceleration = { 0.f, 0.f };
-	myEntity.myVelocity = { 0.f, 0.f };
+	//myAcceleration = { 0.f, 0.f };
+	//myEntity.myVelocity = { 0.f, 0.f };
 
 
 	if (myEntity.GetState() != eEntityState::ATTACK

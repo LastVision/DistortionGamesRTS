@@ -42,6 +42,9 @@ public:
 	T* GetComponent();
 
 	template <typename T>
+	const T* GetComponent() const;
+
+	template <typename T>
 	void SendNote(const T& aNote);
 
 	void AddToScene();
@@ -118,6 +121,12 @@ private:
 
 template <typename T>
 inline T* Entity::GetComponent()
+{
+	return static_cast<T*>(myComponents[static_cast<int>(T::GetTypeStatic())]);
+}
+
+template <typename T>
+inline const T* Entity::GetComponent() const
 {
 	return static_cast<T*>(myComponents[static_cast<int>(T::GetTypeStatic())]);
 }
