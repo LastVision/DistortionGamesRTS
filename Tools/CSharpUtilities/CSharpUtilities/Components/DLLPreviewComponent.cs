@@ -15,8 +15,8 @@ namespace CSharpUtilities.Components
 
         private bool myUseText;
 
-        public DLLPreviewComponent(Point aLocation, Size aSize, string aText, bool aUseText = false)
-            : base(aLocation, aSize, aText)
+        public DLLPreviewComponent(Point aLocation, Size aSize, string aText, string aPanelName, bool aUseText = false)
+            : base(aLocation, aSize, aText, aPanelName)
         {
             myUseText = aUseText;
         }
@@ -44,7 +44,7 @@ namespace CSharpUtilities.Components
 
             myPreviewWindow.Invalidate();
 
-            DLLImporter.NativeMethods.SetupWindow(myPreviewWindow.Size.Width, myPreviewWindow.Size.Height);
+            DLLImporter.NativeMethods.SetupWindow(mySize.Width, mySize.Height);
             DLLImporter.NativeMethods.StartEngine(previewWindowHandler);
             DLLImporter.NativeMethods.Render();
         }

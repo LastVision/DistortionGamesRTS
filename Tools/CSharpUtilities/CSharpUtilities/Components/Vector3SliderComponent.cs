@@ -16,11 +16,11 @@ namespace CSharpUtilities.Components
         private SliderComponent myYSlider;
         private SliderComponent myZSlider;
 
-        public Vector3SliderComponent(Point aLocation, Size aSize, string aText, 
+        public Vector3SliderComponent(Point aLocation, Size aSize, string aText, string aPanelName, 
             float aMinValue, float aMaxValue, float aStartValue, bool aOneToOneScaleFlag = false, 
             string aXText = "X: ", string aYText ="Y: ", string aZText = "Z: ", 
             float aDownScaleMinValue = -1.0f, float aDownScaleMaxValue = 1.0f)
-            : base(aLocation, aSize, aText)
+            : base(aLocation, aSize, aText, aPanelName)
         {
             InitializeComponents(aText, aMinValue, aMaxValue, aStartValue, aOneToOneScaleFlag, 
                 aXText, aYText, aZText, aDownScaleMinValue, aDownScaleMaxValue);
@@ -40,13 +40,13 @@ namespace CSharpUtilities.Components
             float aDownScaleMinValue, float aDownScaleMaxValue)
         {
             myXSlider = new SliderComponent(new Point(myLocation.X, myLocation.Y + 15),
-                new Size(175, 13), aXText, aMinValue, aMaxValue, aStartValue, aOneToOneScaleFlag, 
+                new Size(175, 13), aXText, myPanelName, aMinValue, aMaxValue, aStartValue, aOneToOneScaleFlag, 
                 aDownScaleMinValue, aDownScaleMaxValue);
             myYSlider = new SliderComponent(new Point(myLocation.X, myLocation.Y + 30),
-                new Size(175, 13), aYText, aMinValue, aMaxValue, aStartValue, aOneToOneScaleFlag, 
+                new Size(175, 13), aYText, myPanelName, aMinValue, aMaxValue, aStartValue, aOneToOneScaleFlag, 
                 aDownScaleMinValue, aDownScaleMaxValue);
             myZSlider = new SliderComponent(new Point(myLocation.X, myLocation.Y + 45),
-                new Size(175, 13), aZText, aMinValue, aMaxValue, aStartValue, aOneToOneScaleFlag, 
+                new Size(175, 13), aZText, myPanelName, aMinValue, aMaxValue, aStartValue, aOneToOneScaleFlag, 
                 aDownScaleMinValue, aDownScaleMaxValue);
         }
 

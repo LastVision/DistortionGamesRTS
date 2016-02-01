@@ -14,8 +14,8 @@ namespace CSharpUtilities.Components
         private NumericTextComponent myMinValue;
         private NumericTextComponent myMaxValue;
 
-        public MinMaxComponent(Point aLocation, Size aSize, string aText)
-            : base(aLocation, aSize, aText)
+        public MinMaxComponent(Point aLocation, Size aSize, string aText, string aPanelName)
+            : base(aLocation, aSize, aText, aPanelName)
         {
 
         }
@@ -28,8 +28,8 @@ namespace CSharpUtilities.Components
             myLabel.Location = new Point(myLocation.X, myLocation.Y);
             myLabel.Size = new Size(textSize, mySize.Height);
 
-            myMinValue = new NumericTextComponent(new Point(myLocation.X + textSize, myLocation.Y), new Size(100, mySize.Height), "Min");
-            myMaxValue = new NumericTextComponent(new Point(myLocation.X + textSize + 100, myLocation.Y), new Size(100, mySize.Height), "Max");
+            myMinValue = new NumericTextComponent(new Point(myLocation.X + textSize, myLocation.Y), new Size(100, mySize.Height), "Min", myPanelName);
+            myMaxValue = new NumericTextComponent(new Point(myLocation.X + textSize + 100, myLocation.Y), new Size(100, mySize.Height), "Max", myPanelName);
         }
 
         public override void BindToPanel(Panel aPanel)

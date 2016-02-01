@@ -59,6 +59,7 @@
     <Compile Include="Components\BaseComponent.cs" />
     <Compile Include="Components\DLLPreviewComponent.cs" />
     <Compile Include="Components\DropDownEditComponent.cs" />
+    <Compile Include="Components\IO\ComponentIO.cs" />
     <Compile Include="Components\MinMaxComponent.cs" />
     <Compile Include="Components\NumericTextComponent.cs" />
     <Compile Include="Components\SliderComponent.cs" />

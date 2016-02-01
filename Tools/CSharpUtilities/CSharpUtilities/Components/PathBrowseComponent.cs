@@ -14,7 +14,8 @@ namespace CSharpUtilities.Components
         private TextBox myTextBox = new TextBox();
         private Button myButton = new Button();
 
-        public PathBrowseComponent(Point aLocation, Size aSize, string aText) : base(aLocation,aSize,aText)
+        public PathBrowseComponent(Point aLocation, Size aSize, string aText, string aPanelName)
+            : base(aLocation, aSize, aText, aPanelName)
         {
 
         }

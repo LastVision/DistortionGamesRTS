@@ -4,16 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ToolBuilder.ToolBuilder
+namespace CSharpUtilities.Components.IO
 {
-    enum eIOType
+    public enum eIOType
     {
         IN,
         OUT,
         INOUT
     };
 
-    struct ToolBuilderIO
+    public class ComponentIO
     {
         public eIOType myIOType;
         public String myIOComponentType;

@@ -22,6 +22,7 @@ namespace ToolBuilder
             InitializeComponent();
             myReader = new ToolBuilder.ToolReader(myCurrentToolFile, ref Tool_Window_Main, ref Tool_Window_Property);
             myComponents = myReader.GetComponents();
+            myTimer.Start();
         }
 
         private void OnTick(object sender, EventArgs e)

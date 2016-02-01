@@ -12,11 +12,13 @@ namespace CSharpUtilities.Components
     {
         protected Point myLocation;
         protected Size mySize;
+        protected String myPanelName;
 
-        public BaseComponent(Point aLocation, Size aSize, string aText)
+        public BaseComponent(Point aLocation, Size aSize, string aText, string aPanelName)
         {
             myLocation = aLocation;
             mySize = aSize;
+            myPanelName = aPanelName;
 
             InitializeComponents(aText);
         }
@@ -31,5 +33,9 @@ namespace CSharpUtilities.Components
         }
 
         abstract public void BindToPanel(Panel aPanel);
+        public String GetPanelName()
+        {
+            return myPanelName;
+        }
     }
 }

@@ -9,12 +9,12 @@ using System.IO;
 using System.Xml;
 using CSharpUtilities;
 using CSharpUtilities.Components;
+using CSharpUtilities.Components.IO;
 
 namespace ToolBuilder.ToolBuilder
 {
     public class ToolReader
     {
-        private Form myToolWindow;
         private XMLWrapperRead myXMLReader = new XMLWrapperRead();
 
         private List<BaseComponent> myComponents = new List<BaseComponent>();
@@ -53,20 +53,23 @@ namespace ToolBuilder.ToolBuilder
             {
                 ReadComponent(component);
             }
-            if (myCurrentPanelName == "PropertyWindow")
+            for (int i = 0; i < myComponents.Count; ++i)
             {
-                BuildPanel(ref aPropertyWindow);
-            }
-            else
-            {
-                BuildPanel(ref aMainWindow);
+                if (myComponents[i].GetPanelName() == "PropertyWindow")
+                {
+                    BuildPanel(ref aPropertyWindow, i);
+                }
+                else
+                {
+                    BuildPanel(ref aMainWindow, i);
+                }
             }
         }
 
         private void ReadComponent(XmlNode aNode)
         {
             String type = "";
-            ToolBuilderIO IO;
+            ComponentIO IO = new ComponentIO();
             IO.myIOType = eIOType.IN;
             IO.myIOComponentType = "";
             IO.myIOElementName = "";
@@ -109,13 +112,16 @@ namespace ToolBuilder.ToolBuilder
             BuildComponent(type, IO);
         }
 
-        private void BuildComponent(string aType, ToolBuilderIO aIO)
+        private void BuildComponent(string aType, ComponentIO aIO)
         {
             BaseComponent newComponent = null;
             switch(aType)
             {
                 case "DLLPreview":
-                    newComponent = new DLLPreviewComponent(new Point(0, 0), new Size(500, 500), "DLLPreview");
+                    newComponent = new DLLPreviewComponent(new Point(0, 0), new Size(700, 530), "DLLPreview", myCurrentPanelName);
+                    break;
+                case "Vector3":
+                    newComponent = new Vector3Component(new Point(0, 0), new Size(120, 13), aIO.myIOElementName, myCurrentPanelName);
                     break;
             }
             if (newComponent != null)
@@ -124,13 +130,10 @@ namespace ToolBuilder.ToolBuilder
             }
         }
 
-        private void BuildPanel(ref Panel aPanel)
+        private void BuildPanel(ref Panel aPanel, int aIndex)
         {
-            for(int i = 0; i < myComponents.Count; ++i)
-            {
-                myComponents[i].BindToPanel(aPanel);
-                myComponents[i].Show();
-            }
+            myComponents[aIndex].BindToPanel(aPanel);
+            myComponents[aIndex].Show();
         }
     }
 }
