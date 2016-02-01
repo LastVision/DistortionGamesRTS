@@ -221,16 +221,13 @@ namespace GUI
 			CU::Vector2<float> position = (victoryPoints[i]->GetPosition() / 255.f) * mySize;
 			CU::Vector4<float> color = { 0.5f, 0.5f, 0.f, 1.f };
 
-			if (FogOfWarMap::GetInstance()->IsVisible(victoryPoints[i]->GetPosition()))
+			if (victoryPoints[i]->GetTemporaryOwner() == eOwnerType::PLAYER)
 			{
-				if (victoryPoints[i]->GetComponent<TriggerComponent>()->GetOwnerGainingPoint() == eOwnerType::PLAYER)
-				{
-					color = { 0.f, 0.f, 1.f, 1.f };
-				}
-				else if (victoryPoints[i]->GetComponent<TriggerComponent>()->GetOwnerGainingPoint() == eOwnerType::ENEMY)
-				{
-					color = { 1.f, 0.f, 0.f, 1.f };
-				}
+				color = { 0.f, 0.f, 1.f, 1.f };
+			}
+			else if (victoryPoints[i]->GetTemporaryOwner() == eOwnerType::ENEMY)
+			{
+				color = { 1.f, 0.f, 0.f, 1.f };
 			}
 
 			myVictoryPointSprite->Render(aParentPosition + myPosition + position, { 1.f, 1.f }, color);
@@ -248,16 +245,13 @@ namespace GUI
 
 			if (resourcePoints[i]->GetComponent<TriggerComponent>() != nullptr)
 			{
-				if (FogOfWarMap::GetInstance()->IsVisible(resourcePoints[i]->GetPosition()))
+				if (resourcePoints[i]->GetTemporaryOwner() == eOwnerType::PLAYER)
 				{
-					if (resourcePoints[i]->GetComponent<TriggerComponent>()->GetOwnerGainingPoint() == eOwnerType::PLAYER)
-					{
-						color = { 0.f, 0.f, 1.f, 1.f };
-					}
-					else if (resourcePoints[i]->GetComponent<TriggerComponent>()->GetOwnerGainingPoint() == eOwnerType::ENEMY)
-					{
-						color = { 1.f, 0.f, 0.f, 1.f };
-					}
+					color = { 0.f, 0.f, 1.f, 1.f };
+				}
+				else if (resourcePoints[i]->GetTemporaryOwner() == eOwnerType::ENEMY)
+				{
+					color = { 1.f, 0.f, 0.f, 1.f };
 				}
 
 				myResourcePointSprite->Render(aParentPosition + myPosition + position, { 1.f, 1.f }, color);

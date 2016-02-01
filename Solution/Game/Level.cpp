@@ -215,14 +215,4 @@ void Level::DoFogCulling()
 			neutrals[i]->SetShouldRender(true);
 		}
 	}
-
-	const CU::GrowingArray<Entity*>& points = PollingStation::GetInstance()->GetResourcePoints();
-	for (int i = 0; i < points.Size(); ++i)
-	{
-		points[i]->SetTemporaryOwner(eOwnerType::NEUTRAL);
-		if (myShowFogOfWar == false || FogOfWarMap::GetInstance()->IsVisible(points[i]->GetPosition()))
-		{
-			points[i]->RestoreRealOwner();
-		}
-	}
 }

@@ -40,8 +40,12 @@ void TriggerComponent::Update(float)
 	CheckUnitsForAdd(PollingStation::GetInstance()->GetUnits(eOwnerType::ENEMY), myEnemyUnits);
 	CheckUnitsForAdd(PollingStation::GetInstance()->GetUnits(eOwnerType::NEUTRAL), myNeutralUnits);
 
-	float height = CU::Math::Remap(myOwnershipRatio, 0.f, 100.f, -5.f, 0.f);
-	myEntity.SetPosition({ myOriginalPosition.x, myOriginalPosition.y + height, myOriginalPosition.z });
+	if (FogOfWarMap::GetInstance()->IsVisible(myEntity.GetPosition()))
+	{
+		float height = CU::Math::Remap(myOwnershipRatio, 0.f, 100.f, -5.f, 0.f);
+		myEntity.SetPosition({ myOriginalPosition.x, myOriginalPosition.y + height, myOriginalPosition.z });
+		myEntity.SetTemporaryOwner(myGainingPointsOwner);
+	}
 }
 
 void TriggerComponent::CheckUnitsForRemove(CU::GrowingArray<Entity*>& someUnits) const
