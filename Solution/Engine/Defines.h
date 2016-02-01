@@ -27,3 +27,6 @@
 #endif
 
 #define USE_BINARY_TERRAIN
+
+//The red text
+#define RENDER_DEBUG_TEXT
