@@ -303,6 +303,7 @@
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="SelectionCircle.cpp" />
     <ClCompile Include="SplatMapContainer.cpp" />
+    <ClCompile Include="SpotLightShadow.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="ModelLoader.cpp" />
     <ClCompile Include="ModelProxy.cpp" />
@@ -395,6 +396,7 @@
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="SelectionCircle.h" />
     <ClInclude Include="SplatMapContainer.h" />
+    <ClInclude Include="SpotLightShadow.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="ModelLoader.h" />
     <ClInclude Include="ModelProxy.h" />
