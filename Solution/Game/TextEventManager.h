@@ -3,16 +3,15 @@
 namespace Prism
 {
 	class Text;
+	class Camera;
 }
 
 struct InWorldText
 {
 	Prism::Text* myText;
-	CU::Vector2<float> myPosition;
-	CU::Vector3<float> myCameraPosition;
+	CU::Vector3<float> myInWorldPosition;
 	CU::Vector4<float> myColor;
 	float myLifeTime;
-	float myAlphaFade;
 	bool myIsActive;
 };
 
@@ -21,23 +20,25 @@ struct NotificationText
 	Prism::Text* myText;
 	CU::Vector4<float> myColor;
 	float myLifeTime;
-	float myAlphaFade;
 	bool myIsActive;
 };
 
 class TextEventManager
 {
 public:
-	TextEventManager();
+	TextEventManager(const Prism::Camera* aCamera);
 	~TextEventManager();
 
 	void Update(float aDeltaTime);
 	void Render();
 
 	void AddNotification(std::string aText, CU::Vector4<float> aColor = { 1.f, 1.f, 1.f, 1.f });
+	void AddInWorldText(std::string aText, const CU::Vector3<float>& aPosition, CU::Vector4<float> aColor = { 1.f, 1.f, 1.f, 1.f });
 	void AddInWorldText(std::string aText, const CU::Vector2<float>& aPosition, CU::Vector4<float> aColor = { 1.f, 1.f, 1.f, 1.f });
 
 private:
+
+	CU::Vector2<float> Get2DPosition(const CU::Vector3<float>& aPosition);
 
 	CU::GrowingArray<InWorldText*> myInWorldTexts;
 	CU::GrowingArray<NotificationText*> myNotifications;
@@ -50,5 +51,6 @@ private:
 	float myTextLifeTime;
 	float myTextStartFadingTime;
 
+	const Prism::Camera* myCamera;
 };
 

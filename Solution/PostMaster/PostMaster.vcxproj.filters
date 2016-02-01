@@ -127,5 +127,11 @@
     <ClInclude Include="ToggleFogOfWarMessage.h">
       <Filter>Message\ScriptMessage</Filter>
     </ClInclude>
+    <ClInclude Include="InWorldTextMessage.h">
+      <Filter>Message</Filter>
+    </ClInclude>
+    <ClInclude Include="NotificationMessage.h">
+      <Filter>Message</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

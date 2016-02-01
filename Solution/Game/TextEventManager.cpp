@@ -1,9 +1,11 @@
 #include "stdafx.h"
+#include <Camera.h>
 #include "TextEventManager.h"
 #include <Text.h>
 
-TextEventManager::TextEventManager()
-	: myNotificationPosition(500.f, 900.f)
+TextEventManager::TextEventManager(const Prism::Camera* aCamera)
+	: myCamera(aCamera)
+	, myNotificationPosition(500.f, 900.f)
 	, myTextLifeTime(5.f)
 	, myTextStartFadingTime(1.f)
 	, myNotifications(10)
@@ -45,14 +47,15 @@ void TextEventManager::Update(float aDeltaTime)
 		if (myInWorldTexts[i]->myIsActive == true)
 		{
 			myInWorldTexts[i]->myLifeTime -= aDeltaTime;
+			myInWorldTexts[i]->myInWorldPosition.y += aDeltaTime;
 
-			if (myInWorldTexts[i]->myLifeTime <= myTextStartFadingTime)
-			{
-				myInWorldTexts[i]->myColor.w -= aDeltaTime;
-			}
-			else if (myInWorldTexts[i]->myLifeTime <= 0.f)
+			if (myInWorldTexts[i]->myLifeTime <= 0.f)
 			{
 				myInWorldTexts[i]->myIsActive = false;
+			}
+			else if (myInWorldTexts[i]->myLifeTime <= myTextStartFadingTime)
+			{
+				myInWorldTexts[i]->myColor.w = 1.f - (myTextStartFadingTime - myInWorldTexts[i]->myLifeTime);
 			}
 		}
 	}
@@ -62,14 +65,14 @@ void TextEventManager::Update(float aDeltaTime)
 		if (myNotifications[i]->myIsActive == true)
 		{
 			myNotifications[i]->myLifeTime -= aDeltaTime;
-
-			if (myNotifications[i]->myLifeTime <= myTextStartFadingTime)
-			{
-				myNotifications[i]->myColor.w -= (1.f - myTextLifeTime - myTextStartFadingTime) * aDeltaTime;
-			}
-			else  if (myNotifications[i]->myLifeTime <= 0.f)
+			
+			if (myNotifications[i]->myLifeTime <= 0.f)
 			{
 				myNotifications[i]->myIsActive = false;
+			}
+			else if (myNotifications[i]->myLifeTime <= myTextStartFadingTime)
+			{
+				myNotifications[i]->myColor.w = 1.f - (myTextStartFadingTime - myNotifications[i]->myLifeTime);
 			}
 		}
 	}
@@ -81,6 +84,8 @@ void TextEventManager::Render()
 	{
 		if (myInWorldTexts[i]->myIsActive == true)
 		{
+			myInWorldTexts[i]->myText->SetPosition(Get2DPosition(myInWorldTexts[i]->myInWorldPosition));
+			myInWorldTexts[i]->myText->SetColor(myInWorldTexts[i]->myColor);
 			myInWorldTexts[i]->myText->Render();
 		}
 	}
@@ -104,7 +109,6 @@ void TextEventManager::AddNotification(std::string aText, CU::Vector4<float> aCo
 	myNotifications[myNotificationIndex]->myText->SetText(aText);
 	myNotifications[myNotificationIndex]->myColor = aColor;
 	myNotifications[myNotificationIndex]->myLifeTime = myTextLifeTime;
-	myNotifications[myNotificationIndex]->myAlphaFade = 1.f;
 	myNotifications[myNotificationIndex]->myIsActive = true;
 
 	myNotificationIndex++;
@@ -120,8 +124,8 @@ void TextEventManager::AddInWorldText(std::string aText, const CU::Vector2<float
 	myInWorldTexts[myInWorldTextIndex]->myText->SetText(aText);
 	myInWorldTexts[myInWorldTextIndex]->myColor = aColor;
 	myInWorldTexts[myInWorldTextIndex]->myLifeTime = myTextLifeTime;
-	myInWorldTexts[myInWorldTextIndex]->myAlphaFade = 1.f;
 	myInWorldTexts[myInWorldTextIndex]->myIsActive = true;
+	myInWorldTexts[myInWorldTextIndex]->myInWorldPosition = { aPosition.x, 0.f , aPosition.y };
 
 	myInWorldTextIndex++;
 
@@ -129,4 +133,28 @@ void TextEventManager::AddInWorldText(std::string aText, const CU::Vector2<float
 	{
 		myInWorldTextIndex = 0;
 	}
+}
+
+void TextEventManager::AddInWorldText(std::string aText, const CU::Vector3<float>& aPosition, CU::Vector4<float> aColor)
+{
+	AddInWorldText(aText, { aPosition.x, aPosition.z }, aColor);
+}
+
+CU::Vector2<float> TextEventManager::Get2DPosition(const CU::Vector3<float>& aPosition)
+{
+	CU::Matrix44<float> renderPos;
+	renderPos.SetPos(aPosition);
+	renderPos = renderPos * CU::InverseSimple(myCamera->GetOrientation());
+	renderPos = renderPos * myCamera->GetProjection();
+
+	CU::Vector3<float> newRenderPos = renderPos.GetPos();
+	CU::Vector2<float> windowSize = Prism::Engine::GetInstance()->GetWindowSize();
+
+	newRenderPos /= renderPos.GetPos4().w;
+	newRenderPos += 1.f;
+	newRenderPos *= 0.5f;
+	newRenderPos.x *= windowSize.x;
+	newRenderPos.y *= windowSize.y;
+
+	return{ newRenderPos.x, newRenderPos.y + 10.f };
 }

@@ -175,7 +175,7 @@ PlayerDirector::~PlayerDirector()
 void PlayerDirector::InitGUI(const AIDirector* anAI, const Prism::Camera& aCamera, int aLeveID)
 {
 	myGUIManager = new GUI::GUIManager(myCursor, "Data/Resource/GUI/GUI_ingame.xml", this, anAI, &aCamera, aLeveID);
-	myTextEventManager = new TextEventManager;
+	myTextEventManager = new TextEventManager(&aCamera);
 
 }
 
@@ -214,7 +214,12 @@ void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 
 	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_M) == true)
 	{
-		myTextEventManager->AddNotification("WEEEEEEEEEEEEEE");
+		myTextEventManager->AddNotification("WEEEEEEEEEEEEEE", { 0.5f, 0.5f, 1.f, 1.f });
+	}
+
+	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_N) == true)
+	{
+		myTextEventManager->AddInWorldText("-10", mySelectedUnits[0]->GetPosition(), { 1.f, 0.f, 0.f, 1.f });
 	}
 
 	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_F2) == true)
@@ -806,7 +811,8 @@ void PlayerDirector::UpdateControlGroups()
 			myHasClicked = true;
 		}
 		SelectControlGroup(index);
-		if (myHasClicked == true && mySelectedControlGroup == index && index > -1 && myCurrentDoubleClickTimer > 0.f)
+		if (myHasClicked == true && mySelectedControlGroup == index && index > -1 && myCurrentDoubleClickTimer > 0.f 
+			&& myControlGroups[mySelectedControlGroup].Size() > 0)
 		{
 			CameraFocusOnControlGroup(index);
 			mySelectedControlGroup = -1;
