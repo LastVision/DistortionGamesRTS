@@ -4,7 +4,6 @@
 #include "Engine.h"
 #include "Line3DRenderer.h"
 #include <sstream>
-
 #ifdef RELEASE_BUILD
 	#define WHITE_DEBUG CU::Vector4<float>(176.f/255.f, 176.f/255.f, 175.f/255.f, 1.f)
 	#define BLACK_DEBUG CU::Vector4<float>(0.f, 0.f, 0.f, 1.f)
@@ -154,12 +153,14 @@ namespace Prism
 
 		float rowHeight = 28.f;
 		CU::Vector2<float> textPos(10.f, window.y - rowHeight * 2.f);
+#ifdef RENDER_DEBUG_TEXT
 		for (int i = 0; i < myDebugTexts.Size(); ++i)
 		{
 			Engine::GetInstance()->PrintText(myDebugTexts[i].myName + ": " + myDebugTexts[i].myValue
 				, textPos, eTextType::DEBUG_TEXT, 1.f, { 1.f, 0.3f, 0.3f, 1.f });
 			textPos.y -= rowHeight;
 		}
+#endif
 		my3DLines.RemoveAll();
 		myDebugTexts.RemoveAll();
 
