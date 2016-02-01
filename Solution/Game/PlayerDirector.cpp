@@ -811,7 +811,8 @@ void PlayerDirector::UpdateControlGroups()
 			myHasClicked = true;
 		}
 		SelectControlGroup(index);
-		if (myHasClicked == true && mySelectedControlGroup == index && index > -1 && myCurrentDoubleClickTimer > 0.f)
+		if (myHasClicked == true && mySelectedControlGroup == index && index > -1 && myCurrentDoubleClickTimer > 0.f 
+			&& myControlGroups[mySelectedControlGroup].Size() > 0)
 		{
 			CameraFocusOnControlGroup(index);
 			mySelectedControlGroup = -1;
