@@ -65,6 +65,8 @@ namespace Prism
 		void SetBones(const CU::StaticArray<CU::Matrix44<float>, MAX_NR_OF_BONES>& someBones);
 
 		void SetFogOfWarTexture(Texture* aFogOfWarTexture);
+		void SetShadowDepthTexture(Texture* aShadowDepthTexture);
+		void SetShadowMVP(const CU::Matrix44<float>& aMatrix);
 
 	private:
 		ID3DX11Effect* myEffect;
@@ -75,6 +77,7 @@ namespace Prism
 		ID3DX11EffectMatrixVariable* myViewMatrix;
 		ID3DX11EffectMatrixVariable* myWorldMatrix;
 		ID3DX11EffectMatrixVariable* myViewProjectionMatrix;
+		ID3DX11EffectMatrixVariable* myShadowMVP;
 
 		ID3DX11EffectScalarVariable* myEyePosition;
 		ID3DX11EffectScalarVariable* myTotalTime;
@@ -91,6 +94,7 @@ namespace Prism
 
 		ID3DX11EffectShaderResourceVariable* myTexture;
 		ID3DX11EffectShaderResourceVariable* myFogOfWarTexture;
+		ID3DX11EffectShaderResourceVariable* myShadowDepthTexture;
 
 		ID3DX11EffectVectorVariable* mySpritePosAndScale;
 		ID3DX11EffectMatrixVariable* mySpriteOrientation;

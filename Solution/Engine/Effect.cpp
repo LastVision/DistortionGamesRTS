@@ -105,6 +105,16 @@ namespace Prism
 		myFogOfWarTexture->SetResource(aFogOfWarTexture->GetShaderView());
 	}
 
+	void Effect::SetShadowDepthTexture(Texture* aLightDepthTexture)
+	{
+		myShadowDepthTexture->SetResource(aLightDepthTexture->GetDepthStencilShaderView());
+	}
+
+	void Effect::SetShadowMVP(const CU::Matrix44<float>& aMatrix)
+	{
+		myShadowMVP->SetMatrix(&aMatrix.myMatrix[0]);
+	}
+
 	void Effect::SetPosAndScale(const CU::Vector2<float>& aPos
 		, const CU::Vector2<float>& aScale)
 	{
@@ -334,6 +344,18 @@ namespace Prism
 		if (myFogOfWarTexture->IsValid() == false)
 		{
 			myFogOfWarTexture = nullptr;
+		}
+
+		myShadowDepthTexture = myEffect->GetVariableByName("ShadowDepth")->AsShaderResource();
+		if (myShadowDepthTexture->IsValid() == false)
+		{
+			myShadowDepthTexture = nullptr;
+		}
+
+		myShadowMVP = myEffect->GetVariableByName("ShadowMVP")->AsMatrix();
+		if (myShadowMVP->IsValid() == false)
+		{
+			myShadowMVP = nullptr;
 		}
 
 		mySpritePosAndScale = myEffect->GetVariableByName("SpritePositionAndScale")->AsVector();

@@ -9,6 +9,8 @@ struct ID3D11DepthStencilView;
 namespace Prism
 {
 	class FullScreenHelper;
+	class Scene;
+	class SpotLightShadow;
 	class Texture;
 
 	struct SceneData;
@@ -18,6 +20,8 @@ namespace Prism
 	public:
 		Renderer();
 		~Renderer();
+
+		void ProcessShadow(SpotLightShadow* aShadowSpotLight, Scene* aScene);
 
 		void BeginScene();
 		void EndScene(int aEffect, Texture* aFogOfWarTexture);

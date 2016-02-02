@@ -69,8 +69,10 @@ void Prism::Texture::Init(float aWidth, float aHeight, unsigned int aBindFlag
 	}
 }
 
-void Prism::Texture::InitAsDepthBuffer(ID3D11Texture2D* aSource)
+void Prism::Texture::InitAsDepthBuffer()
 {
+	int width = 1024;
+	int height = 1024;
 	myFileName = "Initied as DSV";
 	myShaderView = nullptr;
 	myRenderTargetView = nullptr;
@@ -80,16 +82,48 @@ void Prism::Texture::InitAsDepthBuffer(ID3D11Texture2D* aSource)
 	myDepthStencilShaderView = nullptr;
 	myDepthTexture = nullptr;
 
+	D3D11_TEXTURE2D_DESC textureBufferInfo;
+	textureBufferInfo.Width = width;
+	textureBufferInfo.Height = height;
+	textureBufferInfo.MipLevels = 1;
+	textureBufferInfo.ArraySize = 1;
+	textureBufferInfo.Format = DXGI_FORMAT_R16G16B16A16_FLOAT;
+	textureBufferInfo.SampleDesc.Count = 1;
+	textureBufferInfo.SampleDesc.Quality = 0;
+	textureBufferInfo.Usage = D3D11_USAGE_DEFAULT;
+	int flags = 0;
+	flags |= D3D11_BIND_SHADER_RESOURCE;
+	flags |= D3D11_BIND_RENDER_TARGET;
+
+	textureBufferInfo.BindFlags = flags;
+	textureBufferInfo.CPUAccessFlags = 0;
+	textureBufferInfo.MiscFlags = 0;
+	HRESULT hr = Engine::GetInstance()->GetDevice()->CreateTexture2D(&textureBufferInfo, NULL, &myTexture);
+	DL_ASSERT_EXP(hr == S_OK, "Failed to create texture");
+
+	hr = Engine::GetInstance()->GetDevice()->CreateRenderTargetView(myTexture, NULL, &myRenderTargetView);
+	if (FAILED(hr))
+		assert(0);
+
 	D3D11_TEXTURE2D_DESC tempBufferInfo;
-	aSource->GetDesc(&tempBufferInfo);
+	tempBufferInfo.Width = width;
+	tempBufferInfo.Height = height;
+	tempBufferInfo.MipLevels = 1;
+	tempBufferInfo.ArraySize = 1;
+
 	tempBufferInfo.Format = DXGI_FORMAT_R32_TYPELESS;
 	tempBufferInfo.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_DEPTH_STENCIL;
 
-	HRESULT hr = Engine::GetInstance()->GetDevice()->CreateTexture2D(&tempBufferInfo, NULL, &myDepthTexture);
+	tempBufferInfo.SampleDesc.Count = 1;
+	tempBufferInfo.SampleDesc.Quality = 0;
+	tempBufferInfo.Usage = D3D11_USAGE_DEFAULT;
+	tempBufferInfo.CPUAccessFlags = 0;
+	tempBufferInfo.MiscFlags = 0;
+
+	hr = Engine::GetInstance()->GetDevice()->CreateTexture2D(&tempBufferInfo, NULL, &myDepthTexture);
+	if (FAILED(hr))
+		assert(0);
 	Engine::GetInstance()->SetDebugName(myDepthTexture, "Texture::myDepthTexture");
-
-
-	Engine::GetInstance()->GetContex()->CopyResource(myDepthTexture, aSource);
 
 	D3D11_DEPTH_STENCIL_VIEW_DESC depthDesc;
 	ZeroMemory(&depthDesc, sizeof(D3D11_DEPTH_STENCIL_VIEW_DESC));
