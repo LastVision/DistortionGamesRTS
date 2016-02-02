@@ -67,6 +67,7 @@ private:
 	int myTargetType;
 
 	bool myIsDone;
+	bool myIsReturning;
 
 	float myVisionRange2;
 	float myAttackRange2;
