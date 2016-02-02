@@ -160,7 +160,7 @@ void Prism::Scene::Render(bool aRenderNavMeshLines, Texture* aFogOfWarTexture, S
 	myTerrain.GetEffect()->SetFogOfWarTexture(aFogOfWarTexture);
 	myTerrain.GetIce()->GetEffect()->SetFogOfWarTexture(aFogOfWarTexture);
 	//myTerrain.UpdatePointLights(myPointLightData);
-	//myTerrain.UpdateSpotLights(mySpotLightData);
+	myTerrain.GetEffect()->UpdateSpotLights(mySpotLightData);
 	myTerrain.Render(*myCamera, aRenderNavMeshLines);
 
 #ifdef SCENE_USE_OCTREE
@@ -226,6 +226,12 @@ void Prism::Scene::AddLight(PointLight* aLight)
 void Prism::Scene::AddLight(SpotLight* aLight)
 {
 	mySpotLights.Add(aLight);
+}
+
+void Prism::Scene::SetCamera(const Camera& aCamera)
+{
+	myCamera = &aCamera;
+	myInstancingHelper->SetCamera(myCamera);
 }
 
 void Prism::Scene::RemoveInstance(Instance* aInstance) 

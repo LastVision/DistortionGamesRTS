@@ -569,10 +569,16 @@ namespace CU
 	{
 		Matrix44 temp;
 
+		//temp.myMatrix[0] = 2.f / aWidth;
+		//temp.myMatrix[5] = 2.f / aHeight;
+		//temp.myMatrix[10] = 1.f / (aFarZ - aNearZ);
+		//temp.myMatrix[11] = -aNearZ / (aFarZ - aNearZ);
+		//temp.myMatrix[15] = 1.f;
+
 		temp.myMatrix[0] = 2.f / aWidth;
 		temp.myMatrix[5] = 2.f / aHeight;
 		temp.myMatrix[10] = 1.f / (aFarZ - aNearZ);
-		temp.myMatrix[11] = -aNearZ / (aFarZ - aNearZ);
+		temp.myMatrix[14] = aNearZ / (aNearZ - aFarZ);
 		temp.myMatrix[15] = 1.f;
 
 		return temp;

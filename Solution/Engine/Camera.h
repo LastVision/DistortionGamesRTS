@@ -14,6 +14,7 @@ namespace Prism
 		void ReadXML(const std::string& aFileName);
 
 		void OnResize(const int aWidth, const int aHeight);
+		void InitShadowCamera(float aWidth, float aHeight);
 
 		const CU::Matrix44<float>& GetOrientation() const;
 		const CU::Matrix44<float>& GetProjection() const;

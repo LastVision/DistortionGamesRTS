@@ -57,10 +57,7 @@ namespace Prism
 		CU::StaticArray<SpotLightData, NUMBER_OF_SPOT_LIGHTS> mySpotLightData;
 	};
 
-	inline void Scene::SetCamera(const Camera& aCamera)
-	{
-		myCamera = &aCamera;
-	}
+
 
 	inline const Camera* Scene::GetCamera() const
 	{

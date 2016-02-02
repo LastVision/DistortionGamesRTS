@@ -48,7 +48,7 @@ Level::Level(const Prism::Camera& aCamera, Prism::Terrain* aTerrain, GUI::Cursor
 
 	myRenderer = new Prism::Renderer();
 
-	myShadowLight = new Prism::SpotLightShadow();
+	myShadowLight = new Prism::SpotLightShadow(aCamera.GetOrientation());
 	myScene->AddLight(myShadowLight);
 
 	myFogOfWarHelper = new Prism::FogOfWarHelper();
@@ -89,6 +89,7 @@ bool Level::Update(float aDeltaTime, Prism::Camera& aCamera)
 	//CU::Vector3<float> lightDir(myLight->GetCurrentDir().x, myLight->GetCurrentDir().y, myLight->GetCurrentDir().z);
 	//myLight->SetDir(lightDir * CU::Matrix44<float>::CreateRotateAroundZ(-3.14f * aDeltaTime / 3.f));
 
+	myShadowLight->UpdateOrientation();
 	myShadowLight->GetCamera()->Update(aDeltaTime);
 
 	PollingStation::GetInstance()->CleanUp();

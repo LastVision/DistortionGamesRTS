@@ -370,7 +370,7 @@ void LevelFactory::LoadDirectionalLights(XMLReader& aReader, tinyxml2::XMLElemen
 
 	for (int i = 0; i < myDirectionalLights.Size(); ++i)
 	{
-		myCurrentLevel->myScene->AddLight(myDirectionalLights[i]);
+		//myCurrentLevel->myScene->AddLight(myDirectionalLights[i]);
 	}
 }
 

@@ -182,6 +182,9 @@ void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 	{
 		myCursor->SetCurrentCursor(eCursorType::NORMAL);
 	}
+	//static float totalTime = 0;
+	//totalTime += aDeltaTime;
+	//myBuilding->SetPosition({ myBuilding->GetOrientation().GetPos().x, myBuilding->GetOrientation().GetPos().y, cos(totalTime) * 5 });
 
 	myCurrentDoubleClickTimer -= aDeltaTime;
 	if (myCurrentDoubleClickTimer <= 0 && myHasDoubleClicked == true)
