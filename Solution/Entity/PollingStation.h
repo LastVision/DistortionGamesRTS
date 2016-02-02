@@ -13,6 +13,8 @@ public:
 	CU::GrowingArray<Entity*> FindClosestEntities(const CU::Vector3<float>& aPosition, int aEntityOwner, float aMaxDistance2 = FLT_MAX);
 	Entity* FindEntityAtPosition(const CU::Vector3<float>& aPosition, int aEntityOwner);
 	void FindAllEntitiesCloseToEntity(const Entity* anEntity, float aRadius, CU::GrowingArray<Entity*>& someEntitiesOut);
+	void FindAllUnitsCloseToEntity(const Entity* anEntity, float aRadius, CU::GrowingArray<Entity*>& someEntitiesOut);
+	void FindAllPropsCloseToEntity(const Entity* anEntity, float aRadius, CU::GrowingArray<Entity*>& someEntitiesOut);
 	
 	const CU::GrowingArray<Entity*>& GetUnits(eOwnerType anOwner) const;
 	const CU::GrowingArray<Entity*>& GetResourcePoints() const;

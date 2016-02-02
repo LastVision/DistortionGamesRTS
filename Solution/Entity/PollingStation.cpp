@@ -139,16 +139,26 @@ Entity* PollingStation::FindEntityAtPosition(const CU::Vector3<float>& aPosition
 void PollingStation::FindAllEntitiesCloseToEntity(const Entity* anEntity, float aRadius
 	, CU::GrowingArray<Entity*>& someEntitiesOut)
 {
+	FindAllUnitsCloseToEntity(anEntity, aRadius, someEntitiesOut);
+	FindAllPropsCloseToEntity(anEntity, aRadius, someEntitiesOut);
+}
+
+void PollingStation::FindAllUnitsCloseToEntity(const Entity* anEntity, float aRadius, CU::GrowingArray<Entity*>& someEntitiesOut)
+{
 	FindAllEntitiesCloseToEntity(myPlayerUnits, anEntity, aRadius, someEntitiesOut);
 	FindAllEntitiesCloseToEntity(myNeutralUnits, anEntity, aRadius, someEntitiesOut);
 	FindAllEntitiesCloseToEntity(myAIUnits, anEntity, aRadius, someEntitiesOut);
+}
+
+void PollingStation::FindAllPropsCloseToEntity(const Entity* anEntity, float aRadius, CU::GrowingArray<Entity*>& someEntitiesOut)
+{
 	FindAllEntitiesCloseToEntity(myProps, anEntity, aRadius, someEntitiesOut);
 }
 
 void PollingStation::FindAllEntitiesCloseToEntity(const CU::GrowingArray<Entity*>& someEntitiesIn
 	, const Entity* anEntity, float aRadius, CU::GrowingArray<Entity*>& someEntitiesOut)
 {
-	float aRadius2 = aRadius * aRadius;
+	//float aRadius2 = aRadius * aRadius;
 
 	float dist2;
 	for (int i = 0; i < someEntitiesIn.Size(); ++i)
@@ -158,14 +168,16 @@ void PollingStation::FindAllEntitiesCloseToEntity(const CU::GrowingArray<Entity*
 		{
 			dist2 = CU::Length2(current->GetPosition() - anEntity->GetPosition());
 			CollisionComponent* collision = current->GetComponent<CollisionComponent>();
-			float targetRadius2 = 0.f;
+			float targetRadius = 0.f;
 			if (collision != nullptr)
 			{
-				targetRadius2 = collision->GetRadius();
-				targetRadius2 = targetRadius2 * targetRadius2;
+				targetRadius = collision->GetRadius();
+				//targetRadius2 = targetRadius2 * targetRadius2;
 			}
 
-			if (dist2 < aRadius2 + targetRadius2)
+			float radius2 = (aRadius + targetRadius) * (aRadius + targetRadius);
+
+			if (dist2 < radius2)
 			{
 				someEntitiesOut.Add(current);
 			}
