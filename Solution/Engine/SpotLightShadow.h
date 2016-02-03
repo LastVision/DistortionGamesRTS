@@ -21,6 +21,7 @@ namespace Prism
 		void ClearTexture();
 
 		Texture* GetTexture() const;
+		void OnResize(float aWidth, float aHeight);
 		CU::Matrix44<float> GetMVP() const;
 
 	private:

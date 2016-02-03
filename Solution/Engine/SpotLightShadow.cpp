@@ -88,6 +88,11 @@ namespace Prism
 		Engine::GetInstance()->GetContex()->ClearDepthStencilView(myTexture->GetDepthStencilView(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0);
 	}
 
+	void SpotLightShadow::OnResize(float aWidth, float aHeight)
+	{
+		myTexture->Resize(aWidth, aHeight);
+	}
+
 	CU::Matrix44<float> SpotLightShadow::GetMVP() const
 	{
 		return CU::InverseSimple(myOrientation) * myCamera->GetProjection();// *myBiasMatrix;

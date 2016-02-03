@@ -49,6 +49,7 @@ namespace Prism
 
 		ID3D11Texture2D* myTexture;
 		ID3D11Texture2D* myDepthTexture;
+		bool myIsDepthTexture;
 
 	};
 }

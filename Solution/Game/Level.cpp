@@ -146,7 +146,7 @@ void Level::Render(Prism::Camera& aCamera)
 {
 	Prism::Engine::GetInstance()->SetClearColor({ 0.2f, 0.2f, 0.2f, 1.f });
 
-	myRenderer->ProcessShadow(myShadowLight, myScene);
+	//myRenderer->ProcessShadow(myShadowLight, myScene);
 
 	if (myShowFogOfWar == true)
 	{
@@ -183,6 +183,7 @@ void Level::OnResize(int aWidth, int aHeigth)
 	myPlayer->OnResize(aWidth, aHeigth);
 	myRenderer->OnResize(static_cast<float>(aWidth), static_cast<float>(aHeigth));
 	myFogOfWarHelper->OnResize(static_cast<float>(aWidth), static_cast<float>(aHeigth));
+	myShadowLight->OnResize(static_cast<float>(aWidth), static_cast<float>(aHeigth));
 }
 
 void Level::ReceiveMessage(const ToggleRenderLinesMessage& aMessage)

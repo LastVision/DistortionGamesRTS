@@ -15,6 +15,7 @@ Prism::Texture::~Texture()
 void Prism::Texture::Init(float aWidth, float aHeight, unsigned int aBindFlag
 	, unsigned int aFormat)
 {
+	myIsDepthTexture = false;
 	myFileName = "Initied as SRV/RTV/DSV";
 	myShaderView = nullptr;
 	myRenderTargetView = nullptr;
@@ -71,6 +72,7 @@ void Prism::Texture::Init(float aWidth, float aHeight, unsigned int aBindFlag
 
 void Prism::Texture::InitAsDepthBuffer()
 {
+	myIsDepthTexture = true;
 	int width = Prism::Engine::GetInstance()->GetWindowSizeInt().x;
 	int height = Prism::Engine::GetInstance()->GetWindowSizeInt().y;
 	myFileName = "Initied as DSV";
@@ -306,7 +308,14 @@ void Prism::Texture::Resize(float aWidth, float aHeight)
 		myDepthStencilShaderView = nullptr;
 	}
 
-	Init(aWidth, aHeight, bindFlag, myTextureFormat);
+	if (myIsDepthTexture == true)
+	{
+		InitAsDepthBuffer();
+	}
+	else
+	{
+		Init(aWidth, aHeight, bindFlag, myTextureFormat);
+	}
 }
 
 void Prism::Texture::CreateDepthStencilView(float aWidth, float aHeight)
