@@ -115,6 +115,7 @@ private:
 	CU::FuzzySet UpdateResourceAdvisor();
 	CU::FuzzySet UpdateUpgradeAdvisor();
 	CU::FuzzySet UpdateSpawningAdvisor();
+	CU::FuzzySet UpdateRoamingAdvisor();
 	CU::FuzzySet* myFuzzySet;
 	
 
@@ -128,7 +129,8 @@ private:
 
 	void HandleControlPoints(eFuzzyAI aAction);
 	void HandleUpgrades(eFuzzyAI aAction);
-	void UpdateTakeControlPoints();
+	void HandleRoaming();
+	void UpdateTakeControlPoints(eFuzzyAI aAction);
 	ControlPointAdvisorData myResourceData;
 	UpgradeAdvisorData myUpgradeData;
 	SpawnAdvisorData mySpawnData;
@@ -143,5 +145,10 @@ private:
 	CU::GrowingArray<Entity*> myUnitsOnMission;
 
 	AIMaps myMaps;
+
+
+	//used for DEBUG_PRINTING what the AI is doing
+	std::string myAIAction;
+	std::string myAIDecision;
 };
 
