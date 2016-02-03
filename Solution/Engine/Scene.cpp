@@ -162,6 +162,7 @@ void Prism::Scene::Render(bool aRenderNavMeshLines, Texture* aFogOfWarTexture, S
 	myTerrain.GetIce()->GetEffect()->SetFogOfWarTexture(aFogOfWarTexture);
 	//myTerrain.UpdatePointLights(myPointLightData);
 	myTerrain.GetEffect()->UpdateSpotLights(mySpotLightData);
+	myTerrain.GetIce()->GetEffect()->UpdateSpotLights(mySpotLightData);
 	myTerrain.Render(*myCamera, aRenderNavMeshLines, false);
 
 #ifdef SCENE_USE_OCTREE

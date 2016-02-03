@@ -214,6 +214,20 @@ void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 	{
 		PostMaster::GetInstance()->SendMessage(ToggleGUIMessage(!myRenderGUI, 1.f / 3.f));
 	}
+	
+	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_T) == true)
+	{
+		if (mySelectedAction != eSelectedAction::PLACE_TOTEM)
+		{
+			mySelectedAction = eSelectedAction::PLACE_TOTEM;
+			myCursor->SetCurrentCursor(eCursorType::TOTEM);
+		}
+		else if (mySelectedAction == eSelectedAction::PLACE_TOTEM)
+		{
+			mySelectedAction = eSelectedAction::NONE;
+			myCursor->SetCurrentCursor(eCursorType::NORMAL);
+		}
+	}
 
 	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_F2) == true)
 	{
