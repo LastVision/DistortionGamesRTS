@@ -133,5 +133,8 @@
     <ClInclude Include="NotificationMessage.h">
       <Filter>Message</Filter>
     </ClInclude>
+    <ClInclude Include="KilledPromotedMessage.h">
+      <Filter>Message</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -4,6 +4,7 @@
 #include <AudioInterface.h>
 #include "Camera.h"
 #include "HealthComponent.h"
+#include "../Game/FogOfWarMap.h"
 #include <Engine.h>
 #include "../GUI/BarWidget.h"
 #include "ModelLoader.h"
@@ -39,7 +40,7 @@ HealthComponent::HealthComponent(Entity& aEntity, HealthComponentData& aData)
 	default:
 		break;
 	}
-	
+
 	myHealthBar = new GUI::BarWidget(myMaxHealth, myCurrentHealth, { 50.f, 10.f }, color);
 }
 
@@ -96,18 +97,27 @@ bool HealthComponent::TakeDamageAndCheckSurvive(float aDamage)
 
 		if (myEntity.GetUnitType() == eUnitType::GRUNT)
 		{
-			Prism::Audio::AudioInterface::GetInstance()->PostEvent("Grunt_Death"
-				, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+			if (FogOfWarMap::GetInstance()->IsVisible(myEntity.GetPosition()) == true)
+			{
+				Prism::Audio::AudioInterface::GetInstance()->PostEvent("Grunt_Death"
+					, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+			}
 		}
 		else if (myEntity.GetUnitType() == eUnitType::RANGER)
 		{
-			Prism::Audio::AudioInterface::GetInstance()->PostEvent("Ranger_Death"
-				, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+			if (FogOfWarMap::GetInstance()->IsVisible(myEntity.GetPosition()) == true)
+			{
+				Prism::Audio::AudioInterface::GetInstance()->PostEvent("Ranger_Death"
+					, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+			}
 		}
 		else if (myEntity.GetUnitType() == eUnitType::TANK)
 		{
-			Prism::Audio::AudioInterface::GetInstance()->PostEvent("Tank_Death"
-				, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+			if (FogOfWarMap::GetInstance()->IsVisible(myEntity.GetPosition()) == true)
+			{
+				Prism::Audio::AudioInterface::GetInstance()->PostEvent("Tank_Death"
+					, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+			}
 		}
 		myEntity.SetState(eEntityState::DIE);
 		return false;
@@ -116,21 +126,30 @@ bool HealthComponent::TakeDamageAndCheckSurvive(float aDamage)
 
 	if (myEntity.GetUnitType() == eUnitType::GRUNT)
 	{
-		Prism::Audio::AudioInterface::GetInstance()->PostEvent("Grunt_TakeDamage"
-			, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+		if (FogOfWarMap::GetInstance()->IsVisible(myEntity.GetPosition()) == true)
+		{
+			Prism::Audio::AudioInterface::GetInstance()->PostEvent("Grunt_TakeDamage"
+				, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+		}
 	}
 	else if (myEntity.GetUnitType() == eUnitType::RANGER)
 	{
-		Prism::Audio::AudioInterface::GetInstance()->PostEvent("Ranger_TakeDamage"
-			, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+		if (FogOfWarMap::GetInstance()->IsVisible(myEntity.GetPosition()) == true)
+		{
+			Prism::Audio::AudioInterface::GetInstance()->PostEvent("Ranger_TakeDamage"
+				, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+		}
 	}
 	else if (myEntity.GetUnitType() == eUnitType::TANK)
 	{
-		Prism::Audio::AudioInterface::GetInstance()->PostEvent("Tank_TakeDamage"
-			, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+		if (FogOfWarMap::GetInstance()->IsVisible(myEntity.GetPosition()) == true)
+		{
+			Prism::Audio::AudioInterface::GetInstance()->PostEvent("Tank_TakeDamage"
+				, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+		}
 	}
 
-	myHealthBar->Update(0.f); 
+	myHealthBar->Update(0.f);
 
 	return true;
 }

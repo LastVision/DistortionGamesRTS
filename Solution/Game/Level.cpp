@@ -1,6 +1,7 @@
 #include "stdafx.h"
 
 #include "AIDirector.h"
+#include <AudioInterface.h>
 #include <Camera.h>
 #include <DirectionalLight.h>
 #include "EmitterManager.h"
@@ -57,6 +58,8 @@ Level::Level(const Prism::Camera& aCamera, Prism::Terrain* aTerrain, GUI::Cursor
 	myFogOfWarHelper = new Prism::FogOfWarHelper();
 	FogOfWarMap::GetInstance();
 	FogOfWarMap::GetInstance()->SetFogOfWarHelperTexture(myFogOfWarHelper->GetTexture());
+
+	Prism::Audio::AudioInterface::GetInstance()->PostEvent("Play_Ambience", 0);
 }
 
 Level::~Level()
@@ -80,6 +83,8 @@ Level::~Level()
 	EntityId::Destroy();
 	PollingStation::Destroy();
 	LUA::ScriptSystem::GetInstance()->Destroy();
+
+	Prism::Audio::AudioInterface::GetInstance()->PostEvent("Stop_Ambience", 0);
 }
 
 void Level::LoadTutorial(const Prism::Camera& aCamera, const std::string& aTutorialPath)

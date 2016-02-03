@@ -163,6 +163,7 @@
     <ClInclude Include="EmitterMessage.h" />
     <ClInclude Include="EventPositionMessage.h" />
     <ClInclude Include="InWorldTextMessage.h" />
+    <ClInclude Include="KilledPromotedMessage.h" />
     <ClInclude Include="KillUnitMessage.h" />
     <ClInclude Include="MinimapEventMessage.h" />
     <ClInclude Include="MinimapMoveMessage.h" />

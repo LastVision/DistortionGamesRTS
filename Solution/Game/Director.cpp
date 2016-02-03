@@ -10,6 +10,7 @@
 #include "FogOfWarMap.h"
 #include <HealthComponent.h>
 #include <KillUnitMessage.h>
+#include <KilledPromotedMessage.h>
 #include <PostMaster.h>
 #include <ResourceMessage.h>
 #include <VictoryMessage.h>
@@ -51,6 +52,7 @@ Director::Director(eOwnerType aOwnerType, const Prism::Terrain& aTerrain)
 	PostMaster::GetInstance()->Subscribe(eMessageType::VICTORY, this);
 	PostMaster::GetInstance()->Subscribe(eMessageType::UPGRADE_UNIT, this);
 	PostMaster::GetInstance()->Subscribe(eMessageType::KILL_UNIT, this);
+	PostMaster::GetInstance()->Subscribe(eMessageType::KILLED_PROMOTION, this);
 }
 
 Director::~Director()
@@ -62,6 +64,7 @@ Director::~Director()
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::VICTORY, this);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::UPGRADE_UNIT, this);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::KILL_UNIT, this);
+	PostMaster::GetInstance()->UnSubscribe(eMessageType::KILLED_PROMOTION, this);
 }
 
 void Director::Update(float aDeltaTime)
@@ -332,6 +335,14 @@ void Director::ReceiveMessage(const ArtifactMessage& aMessage)
 	if (aMessage.myOwner == myOwner)
 	{
 		myArtifacts += aMessage.myArtifactModifier;
+	}
+}
+
+void Director::ReceiveMessage(const KilledPromotedMessage& aMessage)
+{
+	if (aMessage.myOwner == myOwner)
+	{
+		myGunpowder += aMessage.myGunpowderModifier;
 	}
 }
 

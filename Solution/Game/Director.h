@@ -38,6 +38,7 @@ public:
 	void ReceiveMessage(const UpgradeUnitMessage& aMessage) override;
 	void ReceiveMessage(const KillUnitMessage& aMessage) override;
 	void ReceiveMessage(const ArtifactMessage& aMessage) override;
+	void ReceiveMessage(const KilledPromotedMessage& aMessage) override;
 
 	void SetGunPowder(int anAmount);
 	void SetBaseIncome(int anAmount);

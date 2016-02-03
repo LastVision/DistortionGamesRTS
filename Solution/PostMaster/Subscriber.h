@@ -9,6 +9,7 @@ struct EventPositionMessage;
 struct GameStateMessage;
 struct InWorldTextMessage;
 struct KillUnitMessage;
+struct KilledPromotedMessage;
 struct Message;
 struct MinimapEventMessage;
 struct MinimapMoveMessage;
@@ -46,6 +47,7 @@ public:
 	virtual void ReceiveMessage(const GameStateMessage& aMessage);
 	virtual void ReceiveMessage(const InWorldTextMessage& aMessage);
 	virtual void ReceiveMessage(const KillUnitMessage& aMessage);
+	virtual void ReceiveMessage(const KilledPromotedMessage& aMessage);
 	virtual void ReceiveMessage(const Message& aMessage);
 	virtual void ReceiveMessage(const MinimapEventMessage& aMessage);
 	virtual void ReceiveMessage(const MinimapMoveMessage& aMessage);
