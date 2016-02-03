@@ -38,7 +38,7 @@ private:
 	bool myHasReachedTarget;
 
 	bool myActive;
-
+	bool myEffectActive;
 
 	CU::Vector3f myOriginalPosition;
 	CU::Vector3f myTargetPosition;

@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "CollisionComponent.h"
 #include "CommonHelper.h"
+#include <EmitterMessage.h>
 #include "MathHelper.h"
 #include "TriggerComponent.h"
 #include <TriggerMessage.h>
@@ -102,6 +103,7 @@ eOwnerType TriggerComponent::ModifyOwnership(eOwnerType anOwner, float aModifyVa
 					if (myType == eTriggerType::RESOURCE)
 					{
 						PostMaster::GetInstance()->SendMessage(MinimapEventMessage(myEntity.GetPosition(), MinimapEventType::eRESOURCE_POINT));
+
 					}
 					else if (myType == eTriggerType::VICTORY)
 					{
@@ -135,6 +137,28 @@ eOwnerType TriggerComponent::ModifyOwnership(eOwnerType anOwner, float aModifyVa
 	{
 		myEntity.SetOwner(anOwner);
 		myGainingPointsOwner = anOwner;
+		if (anOwner == eOwnerType::PLAYER)
+		{
+			if (myType == eTriggerType::VICTORY)
+			{
+				PostMaster::GetInstance()->SendMessage(EmitterMessage("victory_point_capture",myEntity.GetOrientation().GetPos()));
+			}
+			else if (myType == eTriggerType::RESOURCE)
+			{
+				PostMaster::GetInstance()->SendMessage(EmitterMessage("resource_point_capture", myEntity.GetOrientation().GetPos()));
+			}
+		}
+		else if (anOwner == eOwnerType::ENEMY)
+		{
+			if (myType == eTriggerType::VICTORY)
+			{
+				PostMaster::GetInstance()->SendMessage(EmitterMessage("enemy_victory_point_capture", myEntity.GetOrientation().GetPos()));
+			}
+			else if (myType == eTriggerType::RESOURCE)
+			{
+				PostMaster::GetInstance()->SendMessage(EmitterMessage("enemy_resource_point_capture", myEntity.GetOrientation().GetPos()));
+			}
+		}
 	}
 
 	return myGainingPointsOwner;

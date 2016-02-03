@@ -6,10 +6,13 @@
 #include "PromotionComponent.h"
 #include "PromotionComponentData.h"
 #include <SpriteProxy.h>
+#include <PostMaster.h>
+#include <EmitterMessage.h>
 
 PromotionComponent::PromotionComponent(Entity& aEntity, PromotionComponentData& aData)
 	: Component(aEntity)
 	, myKillCount(aData.myKillCount)
+	, myIsPromoted(false)
 {
 	CU::Vector2<float> size(32.f, 32.f);
 	mySprite = Prism::ModelLoader::GetInstance()->LoadSprite(
@@ -54,5 +57,14 @@ void PromotionComponent::RenderPromotion(const CU::Vector2<float>& aPosition, co
 	if (GetPromoted() == true)
 	{
 		mySprite->Render(aPosition, aScale);
+	}
+}
+
+void PromotionComponent::Promote()
+{
+	if (myCurrentKillCount >= myKillCount)
+	{
+		PostMaster::GetInstance()->SendMessage(EmitterMessage("promotion", myEntity.GetId()));
+		myIsPromoted = true;
 	}
 }

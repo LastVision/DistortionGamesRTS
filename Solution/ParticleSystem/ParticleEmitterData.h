@@ -65,7 +65,8 @@ namespace Prism
 		bool					myIsActiveAtStart;
 		bool					myUseEmitterLifeTime;
 		bool					myUseAlphaDelta;
-
+		bool					myIsHollow;
+		bool					myIsCircle;
 
 
 	};

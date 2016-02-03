@@ -1,3 +1,4 @@
+
 #include "stdafx.h"
 
 #include "ActorComponent.h"
@@ -7,6 +8,7 @@
 #include "BlendedBehavior.h"
 //#include "ActorComponentData.h"
 #include "ControllerComponent.h"
+#include <EmitterMessage.h>
 #include "GrenadeComponent.h"
 #include "HealthComponent.h"
 #include "KillUnitMessage.h"
@@ -136,6 +138,7 @@ void ActorComponent::Update(float aDelta)
 			if (CU::Length2(myEntity.GetPosition() - artifacts[i]->GetPosition()) < 5 * 5)
 			{
 				PostMaster::GetInstance()->SendMessage(ArtifactMessage(myEntity.GetOwner(), 1));
+				PostMaster::GetInstance()->SendMessage(EmitterMessage("artifact_pickup", myEntity.GetOrientation().GetPos()));
 				PollingStation::GetInstance()->DeleteArtifact(artifacts[i]);
 			}
 		}

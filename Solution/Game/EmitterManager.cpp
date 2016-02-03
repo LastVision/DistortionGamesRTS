@@ -58,13 +58,19 @@ void EmitterManager::UpdateEmitters(float aDeltaTime, CU::Matrix44f aWorldMatrix
 
 			for (int j = 0; j < myEmitterList[i]->myEmitters[k].Size(); ++j)
 			{
+				Prism::ParticleEmitterInstance* instance = myEmitterList[i]->myEmitters[k][j];
 
-				if (myEmitterList[i]->myEmitters[k][j]->IsActive() == false)
+				if (instance->IsActive() == false)
 				{
 					break;
 				}
+				if (instance->GetEntity() != nullptr)
+				{
+					instance->SetPosition({ instance->GetEntity()->GetOrientation().GetPos().x, 3.f
+						, instance->GetEntity()->GetOrientation().GetPos().z });
+				}
 
-				myEmitterList[i]->myEmitters[k][j]->Update(aDeltaTime, aWorldMatrix);
+				instance->Update(aDeltaTime, aWorldMatrix);
 			}
 		}
 	}
@@ -132,8 +138,19 @@ void EmitterManager::ReceiveMessage(const EmitterMessage& aMessage)
 
 	for (int i = 0; i < myEmitters[particleType]->myEmitters[index].Size(); ++i)
 	{
-		myEmitters[particleType]->myEmitters[index][i]->SetPosition(position);
-		myEmitters[particleType]->myEmitters[index][i]->Activate();
+		Prism::ParticleEmitterInstance* instance = myEmitters[particleType]->myEmitters[index][i];
+
+		if (aMessage.myEntityID != -1)
+		{
+			instance->SetEntity(EntityId::GetInstance()->GetEntity(aMessage.myEntityID));
+		}
+
+		instance->SetPosition(position);
+		instance->Activate();
+		if (aMessage.myEmitterLifeTime > 0.f)
+		{
+			instance->SetEmitterLifeTime(aMessage.myEmitterLifeTime);
+		}
 	}
 	myEmitters[particleType]->myFinishedGroups[index] = UNFINISHED;
 	myEmitters[particleType]->myFinishedCount--;

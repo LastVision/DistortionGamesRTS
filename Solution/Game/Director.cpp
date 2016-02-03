@@ -32,6 +32,7 @@ Director::Director(eOwnerType aOwnerType, const Prism::Terrain& aTerrain)
 	, myUnitCount(0)
 	, myHasUnlockedRanger(false)
 	, myHasUnlockedTank(false)
+	, myHasUnlockedResource(false)
 	, myIncomeTimer(1.f)
 	, myCurrentIncomeTimer(1.f)
 	, myBaseIncome(0)
@@ -65,6 +66,7 @@ Director::~Director()
 
 void Director::Update(float aDeltaTime)
 {
+	ResourceGainUnlockCheck();
 	for (int i = 0; i < myDeadUnits.Size(); ++i)
 	{
 		myDeadUnits[i]->Update(aDeltaTime);
@@ -80,12 +82,14 @@ void Director::Update(float aDeltaTime)
 			myActiveUnits.RemoveCyclicAtIndex(i);
 		}
 	}
-
-	myCurrentIncomeTimer -= aDeltaTime;
-	if (myCurrentIncomeTimer <= 0.f)
+	if (myHasUnlockedResource == true)
 	{
-		myCurrentIncomeTimer = myIncomeTimer;
-		myGunpowder += myBaseIncome;
+		myCurrentIncomeTimer -= aDeltaTime;
+		if (myCurrentIncomeTimer <= 0.f)
+		{
+			myCurrentIncomeTimer = myIncomeTimer;
+			myGunpowder += myBaseIncome;
+		}
 	}
 	DEBUG_PRINT(myArtifacts);
 }
@@ -335,4 +339,12 @@ bool Director::IsAlreadyActive(Entity* aUnit)
 		}
 	}
 	return false;
+}
+
+void Director::ResourceGainUnlockCheck()
+{
+	if (myHasUnlockedResource == false && myBuilding != nullptr)
+	{
+		myHasUnlockedResource = myBuilding->GetComponent<BuildingComponent>()->GetHasSpawnedAtLeastOnce();
+	}
 }

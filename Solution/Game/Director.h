@@ -42,8 +42,12 @@ public:
 	void SetGunPowder(int anAmount);
 	void SetBaseIncome(int anAmount);
 
+	Entity& GetBuilding() const;
+
 protected:
 	bool IsAlreadyActive(Entity* aUnit);
+
+	void ResourceGainUnlockCheck();
 
 	CU::GrowingArray<Entity*> myUnits;
 	CU::GrowingArray<Entity*> myActiveUnits;
@@ -62,6 +66,7 @@ protected:
 
 	bool myHasUnlockedRanger;
 	bool myHasUnlockedTank;
+	bool myHasUnlockedResource;
 
 	float myIncomeTimer;
 	float myCurrentIncomeTimer;
@@ -98,4 +103,9 @@ inline void Director::SetGunPowder(int anAmount)
 inline void Director::SetBaseIncome(int anAmount)
 {
 	myBaseIncome = anAmount;
+}
+
+inline Entity& Director::GetBuilding() const
+{
+	return *myBuilding;
 }

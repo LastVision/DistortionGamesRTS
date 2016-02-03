@@ -89,6 +89,9 @@ public:
 	void SetTemporaryOwner(eOwnerType aOwner);
 	void RestoreRealOwner();
 
+	void SetSelectable(const bool aFlag);
+	const bool IsSelectable() const;
+
 private:
 	void operator=(Entity&) = delete;
 	CU::StaticArray<Component*, static_cast<int>(eComponentType::_COUNT)> myComponents;
@@ -115,6 +118,7 @@ private:
 	bool myHovered;
 	bool myIsInScene;
 	bool myDecayFlag;
+	bool myIsSelectable;
 
 	float myCurrentDecayTime;
 };
@@ -236,4 +240,14 @@ inline void Entity::SetTemporaryOwner(eOwnerType aOwner)
 inline void Entity::RestoreRealOwner()
 {
 	myTemporaryOwner = myOwner;
+}
+
+inline void Entity::SetSelectable(const bool aFlag)
+{
+	myIsSelectable = aFlag;
+}
+
+inline const bool Entity::IsSelectable() const
+{
+	return myIsSelectable;
 }
