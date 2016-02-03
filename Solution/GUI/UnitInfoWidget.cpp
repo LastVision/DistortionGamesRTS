@@ -311,7 +311,10 @@ namespace GUI
 				color = { 1.f, 0.7f, 0.7f, 1.f };
 			}
 
-			CU::Vector2<float> position = { (myPosition.x + portrait->GetSize().x * i) + (i * 10.f), myPosition.y };
+			int x = i % 4;
+			int y = i / 4;
+
+			CU::Vector2<float> position = { (myPosition.x + portrait->GetSize().x * x) + (x * 10.f), myPosition.y - portrait->GetSize().y * y - y * 10.f};
 			position += aParentPosition + myUnitPosition;
 
 			CU::Vector2<float> upgradePosition = position;

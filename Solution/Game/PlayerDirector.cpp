@@ -74,6 +74,8 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 	myDragSelectionPositions.Reserve(4);
 	myDragSelectionSpriteVertical = Prism::ModelLoader::GetInstance()->LoadSprite("Data/Resource/Texture/UI/T_selection_box_vertical.dds", { 0.f, 0.f });
 	myDragSelectionSpriteHorizontal = Prism::ModelLoader::GetInstance()->LoadSprite("Data/Resource/Texture/UI/T_selection_box_horizontal.dds", { 0.f, 0.f });
+	myDragSelectionSpriteVerticalFlip = Prism::ModelLoader::GetInstance()->LoadSprite("Data/Resource/Texture/UI/T_selection_box_vertical_flip.dds", { 0.f, 0.f });
+	myDragSelectionSpriteHorizontalFlip = Prism::ModelLoader::GetInstance()->LoadSprite("Data/Resource/Texture/UI/T_selection_box_horizontal_flip.dds", { 0.f, 0.f });
 
 	for (int i = 0; i < 64; ++i)
 	{
@@ -157,6 +159,8 @@ PlayerDirector::~PlayerDirector()
 	SAFE_DELETE(myGUIManager);
 	SAFE_DELETE(myDragSelectionSpriteVertical);
 	SAFE_DELETE(myDragSelectionSpriteHorizontal);
+	SAFE_DELETE(myDragSelectionSpriteVerticalFlip);
+	SAFE_DELETE(myDragSelectionSpriteHorizontalFlip);
 	SAFE_DELETE(myTotem);
 	SAFE_DELETE(myConfimrationAnimation);
 	SAFE_DELETE(myTextEventManager);
@@ -315,8 +319,8 @@ void PlayerDirector::Render(const Prism::Camera& aCamera)
 	{
 		if (myLeftMousePressed == true && myRenderDragSelection == true) // balck magic numbers, don't change
 		{
-			myDragSelectionSpriteVertical->SetSize({ 10.f, mySelectionSpriteSize.y + 10.f }, mySelectionSpriteHotspot);
-			myDragSelectionSpriteVertical->Render(mySelectionSpriteRenderPosition);
+			myDragSelectionSpriteVerticalFlip->SetSize({ 10.f, mySelectionSpriteSize.y + 10.f }, mySelectionSpriteHotspot);
+			myDragSelectionSpriteVerticalFlip->Render(mySelectionSpriteRenderPosition);
 
 			myDragSelectionSpriteHorizontal->SetSize({ mySelectionSpriteSize.x + 10.f, 10.f }, mySelectionSpriteHotspot);
 			myDragSelectionSpriteHorizontal->Render(mySelectionSpriteRenderPosition);
@@ -324,8 +328,8 @@ void PlayerDirector::Render(const Prism::Camera& aCamera)
 			myDragSelectionSpriteVertical->SetSize({ 10.f, mySelectionSpriteSize.y + 10.f }, { -mySelectionSpriteSize.x, mySelectionSpriteSize.y });
 			myDragSelectionSpriteVertical->Render(mySelectionSpriteRenderPosition);
 
-			myDragSelectionSpriteHorizontal->SetSize({ mySelectionSpriteSize.x + 10.f, 10.f }, { mySelectionSpriteHotspot.x, mySelectionSpriteHotspot.y - mySelectionSpriteSize.y });
-			myDragSelectionSpriteHorizontal->Render(mySelectionSpriteRenderPosition);
+			myDragSelectionSpriteHorizontalFlip->SetSize({ mySelectionSpriteSize.x + 10.f, 10.f }, { mySelectionSpriteHotspot.x, mySelectionSpriteHotspot.y - mySelectionSpriteSize.y });
+			myDragSelectionSpriteHorizontalFlip->Render(mySelectionSpriteRenderPosition);
 		}
 
 		myConfimrationAnimation->Render(myConfirmationPosition);
