@@ -34,24 +34,28 @@ Tutorial::Tutorial(const std::string& aXMLPath, const PlayerDirector* aPlayer, c
 	for (tinyxml2::XMLElement* mission = reader.FindFirstChild(element, "mission"); mission != nullptr
 		; mission = reader.FindNextElement(mission, "mission"))
 	{
+		float time = myMaxTime;
 		std::string typeString;
 		reader.ForceReadAttribute(mission, "type", typeString);
+		reader.ReadAttribute(mission, "time", time);
 
 		std::string textString = reader.ForceFindFirstChild(mission, "text")->GetText();
 
 		Prism::Text* text = new Prism::Text(*Prism::Engine::GetInstance()->GetFont(Prism::eFont::DIALOGUE));
 		text->SetText(textString);
-		myMissions.Add(Mission(text, GetAction(typeString)));
+		myMissions.Add(Mission(text, GetAction(typeString), time));
 	}
 	reader.CloseDocument();
 
+	myCurrentTime = myMaxTime;
 	if (myMissions.Size() > 0)
 	{
 		PostMaster::GetInstance()->SendMessage(TextMessage(myMissions[myCurrentMission].myText));
+		myCurrentTime = myMissions[myCurrentMission].myTime;
 	}
 
-	myCurrentTime = myMaxTime;
 	PostMaster::GetInstance()->Subscribe(eMessageType::TUTORIAL, this);
+	myPlayer->GetBuilding().SetSelectable(false);
 }
 
 Tutorial::~Tutorial()
@@ -67,6 +71,7 @@ void Tutorial::Update(float aDeltaTime)
 {
 	if (myActive == false)
 	{
+		myPlayer->GetBuilding().SetSelectable(true);
 		return;
 	}
 
@@ -107,6 +112,10 @@ void Tutorial::Update(float aDeltaTime)
 		{
 			myCurrentTime = myMaxTime;
 			++myCurrentMission;
+			if (myCurrentMission < myMissions.Size())
+			{
+				myCurrentTime = myMissions[myCurrentMission].myTime;
+			}
 			myMissionComplete = false;
 
 			myPreviousNeutralCount = myNeutral->GetActiveUnitsSize();

@@ -29,9 +29,10 @@ private:
 	struct Mission
 	{
 		Mission() {}
-		Mission(Prism::Text* aText, Action anAction) : myText(aText), myAction(anAction) {}
+		Mission(Prism::Text* aText, Action anAction, float aTime) : myText(aText), myAction(anAction), myTime(aTime) {}
 		Prism::Text* myText;
 		Action myAction;
+		float myTime;
 	};
 
 	Action GetAction(const std::string& anAction) const;
