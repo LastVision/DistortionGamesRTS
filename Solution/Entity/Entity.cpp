@@ -218,8 +218,8 @@ void Entity::AddToScene()
 	if (GetComponent<SelectionComponent>() != nullptr && GetComponent<SelectionComponent>()->GetSelectedInstance() != nullptr
 		&& GetComponent<SelectionComponent>()->GetHoveredInstance() != nullptr)
 	{
-		myScene.AddInstance(GetComponent<SelectionComponent>()->GetSelectedInstance());
-		myScene.AddInstance(GetComponent<SelectionComponent>()->GetHoveredInstance());
+		myScene.AddInstance(GetComponent<SelectionComponent>()->GetSelectedInstance(), true);
+		myScene.AddInstance(GetComponent<SelectionComponent>()->GetHoveredInstance(), true);
 	}
 
 	myIsInScene = true;
@@ -237,8 +237,8 @@ void Entity::RemoveFromScene()
 	}
 	if (GetComponent<SelectionComponent>() != nullptr)
 	{
-		myScene.RemoveInstance(GetComponent<SelectionComponent>()->GetSelectedInstance());
-		myScene.RemoveInstance(GetComponent<SelectionComponent>()->GetHoveredInstance());
+		myScene.RemoveInstance(GetComponent<SelectionComponent>()->GetSelectedInstance(), true);
+		myScene.RemoveInstance(GetComponent<SelectionComponent>()->GetHoveredInstance(), true);
 	}
 
 	myIsInScene = false;

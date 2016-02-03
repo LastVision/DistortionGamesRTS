@@ -132,12 +132,14 @@ const eStateStatus InGameState::Update(const float& aDeltaTime)
 
 	if (CU::InputWrapper::GetInstance()->KeyUp(DIK_GRAVE) == true || myShouldReOpenConsole == true)
 	{
+#ifndef RELEASE_BUILD
 		bool runtime = Prism::MemoryTracker::GetInstance()->GetRunTime();
 		Prism::MemoryTracker::GetInstance()->SetRunTime(false);
 		myShouldReOpenConsole = false;
 		ConsoleState* newState = new ConsoleState(myShouldReOpenConsole);
 		myStateStack->PushSubGameState(newState);
 		Prism::MemoryTracker::GetInstance()->SetRunTime(runtime);
+#endif
 	}
 
 	if (myIsPlayerCinematic == false)

@@ -109,7 +109,7 @@ namespace Prism
 		myEffect->SetWorldMatrix(CU::Matrix44<float>());
 		myEffect->SetViewProjectionMatrix(aCamera.GetViewProjection());
 		myEffect->SetCameraPosition(aCamera.GetOrientation().GetPos());
-		BaseModel::Render();
+		BaseModel::Render(false);
 	}
 
 	void Ice::SetTextures()

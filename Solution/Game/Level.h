@@ -7,6 +7,7 @@ namespace Prism
 	class DirectionalLight;
 	class Renderer;
 	class Scene;
+	class SpotLightShadow;
 	class Terrain;
 	class FogOfWarHelper;
 }
@@ -54,6 +55,7 @@ private:
 
 	Prism::Terrain* myTerrain;
 	Prism::DirectionalLight* myLight;
+	Prism::SpotLightShadow* myShadowLight;
 	Prism::Scene* myScene;
 	Prism::Renderer* myRenderer;
 	Tutorial* myTutorial;

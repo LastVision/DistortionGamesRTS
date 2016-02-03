@@ -3,6 +3,8 @@
 #include "FullScreenHelper.h"
 #include "Texture.h"
 #include "Renderer.h"
+#include "Scene.h"
+#include "SpotLightShadow.h"
 #include <D3DX11.h>
 
 namespace Prism
@@ -58,6 +60,29 @@ namespace Prism
 			SAFE_DELETE(mySceneData[i].myFinished);
 		}
 		SAFE_DELETE(myFullScreenHelper);
+	}
+
+	void Renderer::ProcessShadow(SpotLightShadow* aShadowSpotLight, Scene* aScene)
+	{
+		aShadowSpotLight->ClearTexture();
+
+		ID3D11RenderTargetView* originalRenderTargetView;
+		ID3D11DepthStencilView* originalDepthStencilView;
+		Engine::GetInstance()->GetContex()->OMGetRenderTargets(1, &originalRenderTargetView, &originalDepthStencilView);
+
+		ID3D11RenderTargetView* view = aShadowSpotLight->GetTexture()->GetRenderTargetView();
+
+		Engine::GetInstance()->GetContex()->OMSetRenderTargets(1, &view, aShadowSpotLight->GetTexture()->GetDepthStencilView());
+		const Camera* oldCamera = aScene->GetCamera();
+		aScene->SetCamera(*aShadowSpotLight->GetCamera());
+
+		aScene->Render(false);
+		//Prism::Engine::GetInstance()->DisableZBuffer();
+		//aScene->RenderEmitters();
+		//Prism::Engine::GetInstance()->EnableZBuffer();
+
+		Engine::GetInstance()->GetContex()->OMSetRenderTargets(1, &originalRenderTargetView, originalDepthStencilView);
+		aScene->SetCamera(*oldCamera);
 	}
 
 	void Renderer::BeginScene()

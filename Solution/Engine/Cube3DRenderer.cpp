@@ -27,6 +27,7 @@ namespace Prism
 	void Cube3DRenderer::AddCube(const CU::Vector3<float>& aPosition, float aSideLength, const CU::Vector4<float>& aColor
 		, bool aWireFrame)
 	{
+#ifndef RELEASE_BUILD
 		ModelLoader::GetInstance()->Pause();
 		myActiveCubes.Add(myInactiveCubes.GetLast());
 		myInactiveCubes.RemoveCyclicAtIndex(myInactiveCubes.Size() - 1);
@@ -34,6 +35,7 @@ namespace Prism
 		myActiveCubes.GetLast()->SetSizeAndColor(aSideLength, aColor);
 		myActiveCubes.GetLast()->SetWireFrame(aWireFrame);
 		ModelLoader::GetInstance()->UnPause();
+#endif
 	}
 
 	void Cube3DRenderer::Render(const Camera& aCamera)

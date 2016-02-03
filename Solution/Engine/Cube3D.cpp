@@ -229,7 +229,7 @@ namespace Prism
 		if (myInputLayout == nullptr)
 		{
 			D3DX11_PASS_DESC passDesc;
-			hr = myEffect->GetTechnique()->GetPassByIndex(0)->GetDesc(&passDesc);
+			hr = myEffect->GetTechnique(false)->GetPassByIndex(0)->GetDesc(&passDesc);
 			DL_ASSERT_EXP(!FAILED(hr), "[Cube3D](CreateInputLayout) : Failed to get Pass Description!");
 
 			const D3D11_INPUT_ELEMENT_DESC Cube3DRendererLayout[] =
@@ -317,14 +317,14 @@ namespace Prism
 
 
 		D3DX11_TECHNIQUE_DESC techDesc;
-		myEffect->GetTechnique()->GetDesc(&techDesc);
+		myEffect->GetTechnique(false)->GetDesc(&techDesc);
 
 		Engine::GetInstance()->GetContex()->IASetPrimitiveTopology(myPrimitiveTopology);
 		if (myWireFrame == true)
 		{
 			for (UINT p = 0; p < techDesc.Passes; ++p)
 			{
-				myEffect->GetTechnique()->GetPassByIndex(p)->Apply(0, Engine::GetInstance()->GetContex());
+				myEffect->GetTechnique(false)->GetPassByIndex(p)->Apply(0, Engine::GetInstance()->GetContex());
 				Engine::GetInstance()->EnableWireframe();
 				Engine::GetInstance()->GetContex()->DrawIndexed(myIndexBaseData->myNumberOfIndices, 0, 0);
 				Engine::GetInstance()->DisableWireframe();
@@ -334,7 +334,7 @@ namespace Prism
 		{
 			for (UINT p = 0; p < techDesc.Passes; ++p)
 			{
-				myEffect->GetTechnique()->GetPassByIndex(p)->Apply(0, Engine::GetInstance()->GetContex());
+				myEffect->GetTechnique(false)->GetPassByIndex(p)->Apply(0, Engine::GetInstance()->GetContex());
 				Engine::GetInstance()->GetContex()->DrawIndexed(myIndexBaseData->myNumberOfIndices, 0, 0);
 			}
 		}

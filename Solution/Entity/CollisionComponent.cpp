@@ -5,8 +5,8 @@
 CollisionComponent::CollisionComponent(Entity& aEntity, CollisionComponentData& aData)
 	: Component(aEntity)
 {
-	mySphere.myRadius = aData.myRadius;
-	mySphere.myRadiusSquared = aData.myRadius * aData.myRadius;
+	mySphere.myRadius = (aData.myDiameter / 2.f);
+	mySphere.myRadiusSquared = mySphere.myRadius * mySphere.myRadius;
 	mySphere.myCenterPosition = myEntity.GetOrientation().GetPos();
 	if (mySphere.myRadius > 2.f)
 	{

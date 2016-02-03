@@ -24,8 +24,8 @@ namespace Prism
 		~Instance();
 
 		void Update(float aDelta);
-		void Render(const Camera& aCamera);
-		void Render(const Camera& aCamera, InstancingHelper& aInstancingHelper);
+		void Render(const Camera& aCamera, bool aIsDepthRender);
+		void Render(const Camera& aCamera, InstancingHelper& aInstancingHelper, bool aIsDepthRender);
 
 		CU::Vector3<float> GetPosition() const;
 
@@ -54,7 +54,7 @@ namespace Prism
 		void operator=(Instance&) = delete;
 
 		void RenderModelAnimated(ModelAnimated* aModel, const CU::Matrix44<float>& aParent
-			, const Camera& aCamera, TransformationNodeInstance& aHierarchy);
+			, const Camera& aCamera, TransformationNodeInstance& aHierarchy, bool aIsDepthRender);
 		void BuildHierarchy(TransformationNodeInstance& aHierarchy, ModelAnimated* aModel);
 		bool myHierarchyIsBuilt;
 

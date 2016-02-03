@@ -6,6 +6,7 @@
 #include "Effect.h"
 #include "EffectContainer.h"
 #include "FileWatcher.h"
+#include "SpotLightShadow.h"
 #include "Texture.h"
 #include "TextureContainer.h"
 
@@ -79,6 +80,7 @@ namespace Prism
 		DL_ASSERT_EXP(newEffect != nullptr, "newEffect is nullpter in LoadEffect, HOW?");
 
 		myEffects[aFilePath] = newEffect;
+		myEffectArrays.Add(newEffect);
 
 		WATCH_FILE(aFilePath, EffectContainer::ReloadEffect);
 	}
@@ -141,9 +143,9 @@ namespace Prism
 
 	void EffectContainer::Update(const float aDeltaTime)
 	{
-		for (auto it = myEffects.begin(); it != myEffects.end(); ++it)
+		for (int i = 0; i < myEffectArrays.Size(); ++i)
 		{
-			it->second->UpdateTime(aDeltaTime);
+			myEffectArrays[i]->UpdateTime(aDeltaTime);
 		}
 	}
 
@@ -152,16 +154,25 @@ namespace Prism
 		if (aFilePath != myCubeMap)
 		{
 			myCubeMap = aFilePath;
-			for (auto it = myEffects.begin(); it != myEffects.end(); ++it)
+			for (int i = 0; i < myEffectArrays.Size(); ++i)
 			{
 				Texture* tex = TextureContainer::GetInstance()->GetTexture(myCubeMap);
-				ID3DX11EffectShaderResourceVariable* shaderVar = it->second->GetEffect()->GetVariableByName("CubeMap")->AsShaderResource();
+				ID3DX11EffectShaderResourceVariable* shaderVar = myEffectArrays[i]->GetEffect()->GetVariableByName("CubeMap")->AsShaderResource();
 
 				if (shaderVar->IsValid())
 				{
 					shaderVar->SetResource(tex->GetShaderView());
 				}
 			}
+		}
+	}
+
+	void EffectContainer::SetShadowDepth(SpotLightShadow* aShadowSpotLight)
+	{
+		for (int i = 0; i < myEffectArrays.Size(); ++i)
+		{
+			myEffectArrays[i]->SetShadowMVP(aShadowSpotLight->GetMVP());
+			myEffectArrays[i]->SetShadowDepthTexture(aShadowSpotLight->GetTexture());
 		}
 	}
 }

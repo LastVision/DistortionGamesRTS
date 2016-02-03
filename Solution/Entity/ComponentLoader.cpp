@@ -176,8 +176,17 @@ void ComponentLoader::LoadCollisionComponent(XMLReader& aDocument, tinyxml2::XML
 {
 	aOutputData.myExistsInEntity = true;
 
-	tinyxml2::XMLElement* e = aDocument.ForceFindFirstChild(aSourceElement, "Radius");
-	aDocument.ForceReadAttribute(e, "value", aOutputData.myRadius);
+	tinyxml2::XMLElement* e = aDocument.FindFirstChild(aSourceElement, "Diameter");
+	if (e != nullptr)
+	{
+		aDocument.ForceReadAttribute(e, "value", aOutputData.myDiameter);
+	}
+	else
+	{
+		tinyxml2::XMLElement* e = aDocument.FindFirstChild(aSourceElement, "Radius");
+		aDocument.ForceReadAttribute(e, "value", aOutputData.myDiameter);
+		aOutputData.myDiameter *= 2.f;
+	}
 }
 
 void ComponentLoader::LoadControllerComponent(XMLReader& aDocument, tinyxml2::XMLElement* aSourceElement, ControllerComponentData& aOutputData)

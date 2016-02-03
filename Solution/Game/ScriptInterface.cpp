@@ -38,7 +38,7 @@ namespace Script_Interface
 	{
 		std::string stringArg = lua_tostring(aState, 1);
 
-		Console::GetInstance()->AddHistory(stringArg, eHistoryType::WARNING);
+		//Console::GetInstance()->AddHistory(stringArg, eHistoryType::WARNING);
 		return 0;
 	}
 
