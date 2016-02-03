@@ -12,6 +12,7 @@
 #include "GrenadeComponent.h"
 #include "HealthComponent.h"
 #include "KillUnitMessage.h"
+#include "KilledPromotedMessage.h"
 #include <Terrain.h>
 #include "AnimationComponent.h"
 #include "PollingStation.h"
@@ -405,6 +406,11 @@ void ActorComponent::AttackTarget(Entity* aTarget, float aDelta)
 		myBehavior->SetTarget(myEntity.GetPosition());
 		PostMaster::GetInstance()->SendMessage(KillUnitMessage(static_cast<int>(aTarget->GetUnitType()), 
 			static_cast<int>(aTarget->GetOwner()), aTarget->GetComponent<ControllerComponent>()->GetTargetPosition()));
+		
+		if (aTarget->GetComponent<PromotionComponent>()->GetPromoted() == true)
+		{
+			PostMaster::GetInstance()->SendMessage(KilledPromotedMessage(myEntity.GetOwner(), 10));
+		}
 	}
 }
 
