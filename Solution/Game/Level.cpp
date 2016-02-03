@@ -231,7 +231,7 @@ void Level::DoFogCulling()
 	for (int i = 0; i < enemies.Size(); ++i)
 	{
 		enemies[i]->SetShouldRender(false);
-		if (myShowFogOfWar == false || FogOfWarMap::GetInstance()->IsVisible(enemies[i]->GetPosition()))
+		if (FogOfWarMap::GetInstance()->IsVisible(enemies[i]->GetPosition()))
 		{
 			enemies[i]->SetShouldRender(true);
 		}
@@ -241,7 +241,7 @@ void Level::DoFogCulling()
 	for (int i = 0; i < neutrals.Size(); ++i)
 	{
 		neutrals[i]->SetShouldRender(false);
-		if (myShowFogOfWar == false || FogOfWarMap::GetInstance()->IsVisible(neutrals[i]->GetPosition()))
+		if (FogOfWarMap::GetInstance()->IsVisible(neutrals[i]->GetPosition()))
 		{
 			neutrals[i]->SetShouldRender(true);
 		}

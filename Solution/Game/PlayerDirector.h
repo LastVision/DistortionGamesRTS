@@ -155,6 +155,8 @@ private:
 	CU::GrowingArray<CU::Vector3<float>> myDragSelectionPositions;
 	Prism::SpriteProxy* myDragSelectionSpriteVertical;
 	Prism::SpriteProxy* myDragSelectionSpriteHorizontal;
+	Prism::SpriteProxy* myDragSelectionSpriteVerticalFlip;
+	Prism::SpriteProxy* myDragSelectionSpriteHorizontalFlip;
 
 	Entity* myTotem;
 

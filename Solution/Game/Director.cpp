@@ -146,10 +146,16 @@ bool Director::SpawnUnit(eUnitType aUnitType)
 		return false;
 	}
 
-	if (myGunpowder >= myBuilding->GetComponent<BuildingComponent>()->GetUnitCost(aUnitType))
+	BuildingComponent* building = myBuilding->GetComponent<BuildingComponent>();
+	if (myUnitCount + building->GetUnitSupplyCost(aUnitType) > myUnitCap)
 	{
-		myGunpowder -= myBuilding->GetComponent<BuildingComponent>()->GetUnitCost(aUnitType);
-		myBuilding->GetComponent<BuildingComponent>()->BuildUnit(aUnitType);
+		return false;
+	}
+
+	if (myGunpowder >= building->GetUnitCost(aUnitType))
+	{
+		myGunpowder -= building->GetUnitCost(aUnitType);
+		building->BuildUnit(aUnitType);
 		return true;
 	}
 	else
