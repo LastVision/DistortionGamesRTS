@@ -27,10 +27,11 @@ public:
 
 private:
 	void operator=(PromotionComponent&) = delete;
-
-	int myKillCount;
+	void Promote();
+	bool myIsPromoted;
 	Prism::SpriteProxy* mySprite;
 
+	int myKillCount;
 
 	int myCurrentKillCount;
 };
@@ -48,9 +49,14 @@ inline eComponentType PromotionComponent::GetType()
 inline void PromotionComponent::EnemyKilled()
 {
 	++myCurrentKillCount;
+
+	if (myIsPromoted == false)
+	{
+		Promote();
+	}
 }
 
 inline bool PromotionComponent::GetPromoted() const
 {
-	return myCurrentKillCount >= myKillCount;
+	return myIsPromoted;
 }
