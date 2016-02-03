@@ -54,6 +54,11 @@ Entity::Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& a
 	}
 	//AddToScene();
 
+	if (aEntityData.mySoundData.myExistsInEntity == true)
+	{
+		myComponents[static_cast<int>(eComponentType::SOUND)] = new SoundComponent(*this);
+	}
+
 	if (aEntityData.myBuildingData.myExistsInEntity == true)
 	{
 		myComponents[static_cast<int>(eComponentType::BUILDING)] = new BuildingComponent(*this, aEntityData.myBuildingData);
@@ -119,10 +124,7 @@ Entity::Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& a
 		}
 	}
 
-	if (aEntityData.mySoundData.myExistsInEntity == true)
-	{
-		myComponents[static_cast<int>(eComponentType::SOUND)] = new SoundComponent(*this);
-	}
+
 	
 	Reset();
 }

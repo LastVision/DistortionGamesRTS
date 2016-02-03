@@ -1,4 +1,6 @@
 #include "stdafx.h"
+
+#include <AudioInterface.h>
 #include "CollisionComponent.h"
 #include "CommonHelper.h"
 #include <EmitterMessage.h>
@@ -9,6 +11,7 @@
 #include "PollingStation.h"
 #include <PostMaster.h>
 #include <MinimapEventMessage.h>
+#include "SoundComponent.h"
 
 
 #include "../Game/FogOfWarMap.h"
@@ -26,10 +29,21 @@ TriggerComponent::TriggerComponent(Entity& aEntity, TriggerComponentData& aData)
 	, myHasSentEventMessage(false)
 {
 	myOriginalPosition = myEntity.GetOrientation().GetPos();
+
+	if (myType == eTriggerType::RESOURCE)
+	{
+		Prism::Audio::AudioInterface::GetInstance()->PostEvent("Play_ResourcePoint"
+			, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+	}
 }
 
 TriggerComponent::~TriggerComponent()
 {
+	if (myType == eTriggerType::RESOURCE)
+	{
+		Prism::Audio::AudioInterface::GetInstance()->PostEvent("Stop_ResourcePoint"
+			, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+	}
 }
 
 void TriggerComponent::Update(float)
