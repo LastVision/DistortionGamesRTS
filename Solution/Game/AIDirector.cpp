@@ -751,8 +751,11 @@ void AIDirector::StartNextAction()
 
 		for (int i = 0; i < myIdleUnits.Size() && i < 3; ++i)
 		{
+			CU::Vector3<float> dir = myIdleUnits[i]->GetOrientation().GetPos() - targetPos;
+			CU::Normalize(dir);
+
 			bool quiet = true;
-			myIdleUnits[i]->GetComponent<ControllerComponent>()->AttackMove(targetPos, true, quiet);
+			myIdleUnits[i]->GetComponent<ControllerComponent>()->AttackMove(targetPos + (dir*2.f), true, quiet);
 		}
 		break;
 	}
@@ -947,13 +950,22 @@ void AIDirector::HandleRoaming()
 		while (foundUnitToSpawn == false)
 		{
 			int bestUnit = spawnSet.GetHighersMember();
-			spawnSet.AddValue(bestUnit, -spawnSet.GetValue(bestUnit));
-
-			unitToSpawn = static_cast<eUnitType>(bestUnit);
-			if (remainingSupply >= myBuilding->GetComponent<BuildingComponent>()->GetUnitSupplyCost(unitToSpawn))
+			if (bestUnit == -1)
 			{
+				unitToSpawn = eUnitType::GRUNT;
 				foundUnitToSpawn = true;
 			}
+			else
+			{
+				spawnSet.AddValue(bestUnit, -spawnSet.GetValue(bestUnit));
+
+				unitToSpawn = static_cast<eUnitType>(bestUnit);
+				if (remainingSupply >= myBuilding->GetComponent<BuildingComponent>()->GetUnitSupplyCost(unitToSpawn))
+				{
+					foundUnitToSpawn = true;
+				}
+			}
+			
 		}
 
 		switch (unitToSpawn)
