@@ -27,6 +27,12 @@ namespace Prism
 		void SetEntity(Entity* anEntity);
 		Entity* GetEntity();
 		void SetGPUData(Camera* aCamera);
+
+		CU::Vector2<float> GetPosition();
+
+		bool GetShouldAlwaysShow();
+		void SetShouldAlwaysShow(bool aShouldAlwaysShow);
+
 	private:
 
 		void CreateVertexBuffer();
@@ -58,6 +64,8 @@ namespace Prism
 
 		int myParticleIndex;
 		int myLiveParticleCount;
+
+		bool myAlwaysShow;
 
 		Entity* myEntity;
 

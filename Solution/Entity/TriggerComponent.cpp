@@ -135,30 +135,36 @@ eOwnerType TriggerComponent::ModifyOwnership(eOwnerType anOwner, float aModifyVa
 	}
 	else if (myOwnershipRatio == 100.f)
 	{
+
+		if (myGainingPointsOwner != anOwner)
+		{
+			if (anOwner == eOwnerType::PLAYER)
+			{
+				if (myType == eTriggerType::VICTORY)
+				{
+					PostMaster::GetInstance()->SendMessage(EmitterMessage("victory_point_capture", myEntity.GetOrientation().GetPos()));
+				}
+				else if (myType == eTriggerType::RESOURCE)
+				{
+					PostMaster::GetInstance()->SendMessage(EmitterMessage("resource_point_capture", myEntity.GetOrientation().GetPos()));
+				}
+			}
+			else if (anOwner == eOwnerType::ENEMY)
+			{
+				if (myType == eTriggerType::VICTORY)
+				{
+					PostMaster::GetInstance()->SendMessage(EmitterMessage("enemy_victory_point_capture", myEntity.GetOrientation().GetPos()));
+				}
+				else if (myType == eTriggerType::RESOURCE)
+				{
+					PostMaster::GetInstance()->SendMessage(EmitterMessage("enemy_resource_point_capture", myEntity.GetOrientation().GetPos()));
+				}
+			}
+		}
+
 		myEntity.SetOwner(anOwner);
 		myGainingPointsOwner = anOwner;
-		if (anOwner == eOwnerType::PLAYER)
-		{
-			if (myType == eTriggerType::VICTORY)
-			{
-				PostMaster::GetInstance()->SendMessage(EmitterMessage("victory_point_capture",myEntity.GetOrientation().GetPos()));
-			}
-			else if (myType == eTriggerType::RESOURCE)
-			{
-				PostMaster::GetInstance()->SendMessage(EmitterMessage("resource_point_capture", myEntity.GetOrientation().GetPos()));
-			}
-		}
-		else if (anOwner == eOwnerType::ENEMY)
-		{
-			if (myType == eTriggerType::VICTORY)
-			{
-				PostMaster::GetInstance()->SendMessage(EmitterMessage("enemy_victory_point_capture", myEntity.GetOrientation().GetPos()));
-			}
-			else if (myType == eTriggerType::RESOURCE)
-			{
-				PostMaster::GetInstance()->SendMessage(EmitterMessage("enemy_resource_point_capture", myEntity.GetOrientation().GetPos()));
-			}
-		}
+		
 	}
 
 	return myGainingPointsOwner;

@@ -30,6 +30,7 @@ namespace Prism
 		, myEmitterLife(0)
 		, myParticleIndex(0)
 		, myLiveParticleCount(0)
+		, myAlwaysShow(false)
 	{
 		myStates.reset();
 		myParticleEmitterData = someData;
@@ -424,6 +425,23 @@ namespace Prism
 	Entity* ParticleEmitterInstance::GetEntity()
 	{
 		return myEntity;
+	}
+
+
+	CU::Vector2<float> ParticleEmitterInstance::GetPosition()
+	{
+		return CU::Vector2<float>(myOrientation.GetPos().x, myOrientation.GetPos().z);
+	}
+
+
+	bool ParticleEmitterInstance::GetShouldAlwaysShow()
+	{
+		return myAlwaysShow;
+	}
+
+	void ParticleEmitterInstance::SetShouldAlwaysShow(bool aShouldAlwaysShow)
+	{
+		myAlwaysShow = aShouldAlwaysShow;
 	}
 
 }

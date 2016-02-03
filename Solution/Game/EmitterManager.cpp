@@ -9,6 +9,7 @@
 #include <XMLReader.h>
 #include <TimerManager.h>
 #include "CommonHelper.h"
+#include "FogOfWarMap.h"
 
 #define FINISHED 0
 #define UNFINISHED 1
@@ -70,7 +71,11 @@ void EmitterManager::UpdateEmitters(float aDeltaTime, CU::Matrix44f aWorldMatrix
 						, instance->GetEntity()->GetOrientation().GetPos().z });
 				}
 
-				instance->Update(aDeltaTime, aWorldMatrix);
+				if (FogOfWarMap::GetInstance()->IsVisible(myEmitterList[i]->myEmitters[k][j]->GetPosition()) == true ||
+					myEmitterList[i]->myEmitters[k][j]->GetShouldAlwaysShow())
+				{
+					instance->Update(aDeltaTime, aWorldMatrix);
+				}
 			}
 		}
 	}
@@ -107,7 +112,11 @@ void EmitterManager::RenderEmitters()
 					break;
 				}
 
-				myEmitterList[i]->myEmitters[k][j]->Render();
+				if (FogOfWarMap::GetInstance()->IsVisible(myEmitterList[i]->myEmitters[k][j]->GetPosition()) == true ||
+						myEmitterList[i]->myEmitters[k][j]->GetShouldAlwaysShow())
+				{
+					myEmitterList[i]->myEmitters[k][j]->Render();
+				}
 			}
 		}
 	}
@@ -121,7 +130,7 @@ void EmitterManager::ReceiveMessage(const EmitterMessage& aMessage)
 		position = EntityId::GetInstance()->GetEntity(aMessage.myEntityID)->GetOrientation().GetPos();
 		position.y += 2;
 	}
-	
+
 
 	std::string particleType = CU::ToLower(aMessage.myParticleTypeString);
 
@@ -143,6 +152,10 @@ void EmitterManager::ReceiveMessage(const EmitterMessage& aMessage)
 		if (aMessage.myEntityID != -1)
 		{
 			instance->SetEntity(EntityId::GetInstance()->GetEntity(aMessage.myEntityID));
+		}
+		else
+		{
+			instance->SetEntity(nullptr);
 		}
 
 		instance->SetPosition(position);
@@ -200,6 +213,7 @@ void EmitterManager::ReadList(const std::string& aPath, const std::string& anID,
 			Prism::ParticleEmitterInstance* newEmitter;
 			newEmitter = new Prism::ParticleEmitterInstance(Prism::ParticleDataContainer::GetInstance()->
 				GetParticleData(entityPath), true);
+			newEmitter->SetShouldAlwaysShow(true);
 			myEmitters[anID]->myEmitters[anIndex].Add(newEmitter);
 		}
 		else if (entityPath != "")
@@ -207,6 +221,7 @@ void EmitterManager::ReadList(const std::string& aPath, const std::string& anID,
 			Prism::ParticleEmitterInstance* newEmitter;
 			newEmitter = new Prism::ParticleEmitterInstance(Prism::ParticleDataContainer::GetInstance()->
 				GetParticleData(entityPath), false);
+			newEmitter->SetShouldAlwaysShow(false);
 			myEmitters[anID]->myEmitters[anIndex].Add(newEmitter);
 		}
 	}
