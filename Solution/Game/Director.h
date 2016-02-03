@@ -42,6 +42,8 @@ public:
 	void SetGunPowder(int anAmount);
 	void SetBaseIncome(int anAmount);
 
+	Entity& GetBuilding() const;
+
 protected:
 	bool IsAlreadyActive(Entity* aUnit);
 
@@ -98,4 +100,9 @@ inline void Director::SetGunPowder(int anAmount)
 inline void Director::SetBaseIncome(int anAmount)
 {
 	myBaseIncome = anAmount;
+}
+
+inline Entity& Director::GetBuilding() const
+{
+	return *myBuilding;
 }

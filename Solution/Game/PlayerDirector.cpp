@@ -218,6 +218,10 @@ void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 	}
 	else if (CU::InputWrapper::GetInstance()->KeyDown(DIK_F1) == true)
 	{
+		if (myBuilding->IsSelectable() == false)
+		{
+			return;
+		}
 		for (int i = 0; i < myActiveUnits.Size(); ++i)
 		{
 			myActiveUnits[i]->SetSelect(false);
@@ -459,7 +463,7 @@ CU::Vector3<float> PlayerDirector::GetCameraMoveVector() const
 
 void PlayerDirector::SelectUnit(Entity* anEntity)
 {
-	if (mySelectedUnits.Size() >= myMaxSelectedUnits) // max selected
+	if (anEntity->IsSelectable() == false || mySelectedUnits.Size() >= myMaxSelectedUnits) // max selected
 	{
 		anEntity->SetSelect(false);
 		anEntity->SetHovered(false);

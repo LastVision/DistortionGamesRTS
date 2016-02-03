@@ -143,6 +143,7 @@ void Entity::Reset()
 	myDecayFlag = false;
 	myHovered = false;
 	mySelected = false;
+	myIsSelectable = true;
 	for (int i = 0; i < static_cast<int>(eComponentType::_COUNT); ++i)
 	{
 		if (myComponents[i] != nullptr)

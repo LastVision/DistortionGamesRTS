@@ -53,7 +53,10 @@ void FogOfWarMap::Update(float aDelta)
 		myGrid[i] = fmaxf(myGrid[i], MIN_DARKNESS);
 	}
 
-	AddValue(myLearnSpeed*aDelta, 20.f, PollingStation::GetInstance()->GetBase(eOwnerType::PLAYER)->GetPosition());
+	if (PollingStation::GetInstance()->GetBase(eOwnerType::PLAYER)->IsSelectable() == true)
+	{
+		AddValue(myLearnSpeed*aDelta, 20.f, PollingStation::GetInstance()->GetBase(eOwnerType::PLAYER)->GetPosition());
+	}
 
 	const CU::GrowingArray<Entity*>& playerUnits = PollingStation::GetInstance()->GetUnits(eOwnerType::PLAYER);
 	for (int j = 0; j < playerUnits.Size(); ++j)
