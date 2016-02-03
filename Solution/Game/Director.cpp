@@ -307,13 +307,16 @@ void Director::ReceiveMessage(const KillUnitMessage& aMessage)
 {
 	if (static_cast<eOwnerType>(aMessage.myOwnerType) != myOwner)
 	{
-		if (myHasUnlockedRanger == false && static_cast<eUnitType>(aMessage.myUnitType) == eUnitType::RANGER)
+		if (aMessage.myAttackerOwnerType == myOwner)
 		{
-			myHasUnlockedRanger = true;
-		}
-		else if (myHasUnlockedTank == false && static_cast<eUnitType>(aMessage.myUnitType) == eUnitType::TANK)
-		{
-			myHasUnlockedTank = true;
+			if (myHasUnlockedRanger == false && static_cast<eUnitType>(aMessage.myUnitType) == eUnitType::RANGER)
+			{
+				myHasUnlockedRanger = true;
+			}
+			else if (myHasUnlockedTank == false && static_cast<eUnitType>(aMessage.myUnitType) == eUnitType::TANK)
+			{
+				myHasUnlockedTank = true;
+			}
 		}
 	}
 	else if (myOwner != eOwnerType::NEUTRAL)

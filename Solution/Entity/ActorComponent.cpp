@@ -418,7 +418,8 @@ void ActorComponent::AttackTarget(Entity* aTarget, float aDelta)
 		myEntity.GetComponent<PromotionComponent>()->EnemyKilled();
 		myBehavior->SetTarget(myEntity.GetPosition());
 		PostMaster::GetInstance()->SendMessage(KillUnitMessage(static_cast<int>(aTarget->GetUnitType()), 
-			static_cast<int>(aTarget->GetOwner()), aTarget->GetComponent<ControllerComponent>()->GetTargetPosition()));
+			static_cast<int>(aTarget->GetOwner()), aTarget->GetComponent<ControllerComponent>()->GetTargetPosition()
+			, static_cast<int>(myEntity.GetOwner())));
 		
 		if (aTarget->GetComponent<PromotionComponent>()->GetPromoted() == true)
 		{

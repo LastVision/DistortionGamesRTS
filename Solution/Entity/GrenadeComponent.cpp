@@ -135,7 +135,8 @@ void GrenadeComponent::Explosion()
 			if (hasSurvived == false)
 			{
 				PostMaster::GetInstance()->SendMessage(KillUnitMessage(static_cast<int>(myUnits[i]->GetUnitType()),
-					static_cast<int>(myUnits[i]->GetOwner()), myUnits[i]->GetComponent<ControllerComponent>()->GetTargetPosition()));
+					static_cast<int>(myUnits[i]->GetOwner()), myUnits[i]->GetComponent<ControllerComponent>()->GetTargetPosition(), 
+					static_cast<int>(myEntity.GetOwner())));
 			}
 		}
 	}
