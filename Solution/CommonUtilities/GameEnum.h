@@ -135,16 +135,6 @@ enum class eHistoryType
 	WARNING
 };
 
-enum class eParticleType : int
-{
-	NONE = -1,
-	BLOOD,
-	WEATHER_SNOW,
-	//HEALING,
-	GRENADE_EXPLOSION,
-	_COUNT
-};
-
 enum class eFuzzyAI
 {
 	SPAWN_GRUNT,
