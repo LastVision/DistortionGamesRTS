@@ -27,12 +27,12 @@ namespace Prism
 		void Render(bool aRenderNavMeshLines);
 		void Render(bool aRenderNavMeshLines, Texture* aFogOfWarTexture, SpotLightShadow* aShadowSpotLight);
 
-		void AddInstance(Instance* aInstance);
+		void AddInstance(Instance* aInstance, bool aIsSelectionRing = false);
 		void AddLight(DirectionalLight* aLight);
 		void AddLight(PointLight* aLight);
 		void AddLight(SpotLight* aLight);
 
-		void RemoveInstance(Instance* aInstance);
+		void RemoveInstance(Instance* aInstance, bool aIsSelectionRing = false);
 
 		void SetCamera(const Camera& aCamera);
 		const Camera* GetCamera() const;
@@ -44,6 +44,7 @@ namespace Prism
 #endif
 		CU::GrowingArray<Instance*> myInstances;
 		CU::GrowingArray<Instance*> myDynamicInstances;
+		CU::GrowingArray<Instance*> mySelectionCircles;
 		CU::GrowingArray<DirectionalLight*> myDirectionalLights;
 		CU::GrowingArray<PointLight*> myPointLights;
 		CU::GrowingArray<SpotLight*> mySpotLights;

@@ -30,6 +30,7 @@ Prism::Scene::Scene(const Camera& aCamera, Terrain& aTerrain)
 	myDirectionalLights.Init(4);
 	myPointLights.Init(4);
 	mySpotLights.Init(4);
+	mySelectionCircles.Init(64);
 
 	memset(&myDirectionalLightData[0], 0, sizeof(DirectionalLightData) * NUMBER_OF_DIRECTIONAL_LIGHTS);
 	memset(&myPointLightData[0], 0, sizeof(PointLightData) * NUMBER_OF_POINT_LIGHTS);
@@ -194,23 +195,35 @@ void Prism::Scene::Render(bool aRenderNavMeshLines, Texture* aFogOfWarTexture, S
 		myInstances[i]->Render(*myCamera, *myInstancingHelper, false);
 	}
 
+	for (int i = 0; i < mySelectionCircles.Size(); ++i)
+	{
+		mySelectionCircles[i]->Render(*myCamera, *myInstancingHelper, false);
+	}
+
 	myInstancingHelper->Render(myDirectionalLightData, false);
 }
 
-void Prism::Scene::AddInstance(Instance* aInstance)
+void Prism::Scene::AddInstance(Instance* aInstance, bool aIsSelectionRing)
 {
-#ifdef SCENE_USE_OCTREE
-	if (aInstance->GetOctreeType() == eOctreeType::DYNAMIC)
+	if(aIsSelectionRing == true)
 	{
-		myDynamicInstances.Add(aInstance);
+		mySelectionCircles.Add(aInstance);
 	}
 	else
 	{
-		myOctree->Add(aInstance);
-	}
+#ifdef SCENE_USE_OCTREE
+		if (aInstance->GetOctreeType() == eOctreeType::DYNAMIC)
+		{
+			myDynamicInstances.Add(aInstance);
+		}
+		else
+		{
+			myOctree->Add(aInstance);
+		}
 #else
-	myInstances.Add(aInstance);
+		myInstances.Add(aInstance);
 #endif
+	}
 }
 
 void Prism::Scene::AddLight(DirectionalLight* aLight)
@@ -234,18 +247,25 @@ void Prism::Scene::SetCamera(const Camera& aCamera)
 	myInstancingHelper->SetCamera(myCamera);
 }
 
-void Prism::Scene::RemoveInstance(Instance* aInstance) 
+void Prism::Scene::RemoveInstance(Instance* aInstance, bool aIsSelectionRing)
 {
-#ifdef SCENE_USE_OCTREE
-	if (aInstance->GetOctreeType() == eOctreeType::DYNAMIC)
+	if (aIsSelectionRing == true)
 	{
-		myDynamicInstances.RemoveCyclic(aInstance);
+		mySelectionCircles.RemoveCyclic(aInstance);
 	}
 	else
 	{
-		myOctree->Remove(aInstance);
-	}
+#ifdef SCENE_USE_OCTREE
+		if (aInstance->GetOctreeType() == eOctreeType::DYNAMIC)
+		{
+			myDynamicInstances.RemoveCyclic(aInstance);
+		}
+		else
+		{
+			myOctree->Remove(aInstance);
+		}
 #else
-	myInstances.RemoveCyclic(aInstance);
+		myInstances.RemoveCyclic(aInstance);
 #endif
+	}
 }
