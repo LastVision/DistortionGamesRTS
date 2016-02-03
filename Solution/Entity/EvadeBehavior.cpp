@@ -33,7 +33,7 @@ const CU::Vector2<float>& EvadeBehavior::Update(float aDelta)
 	EvadeEntities(aDelta, myPropSpeed);
 
 
-	DEBUG_PRINT(myPropSpeed);
+	/*DEBUG_PRINT(myPropSpeed);
 	DEBUG_PRINT(myPropMod);
 
 	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_O))
@@ -51,16 +51,8 @@ const CU::Vector2<float>& EvadeBehavior::Update(float aDelta)
 	else if (CU::InputWrapper::GetInstance()->KeyDown(DIK_K))
 	{
 		myPropMod -= 10.f;
-	}
+	}*/
 
-
-	//myAcceleration -= myEntity.GetVelocity();
-	//myAcceleration /= 0.1f;
-
-	//myTargetSpeed = myEntity.GetMaxSpeed();
-	//CU::Normalize(myAcceleration);
-	//myAcceleration *= myTargetSpeed;
-	
 
 	if (CU::Length(myAcceleration) > myMaxAcceleration)
 	{
@@ -68,7 +60,6 @@ const CU::Vector2<float>& EvadeBehavior::Update(float aDelta)
 		myAcceleration *= myMaxAcceleration;
 	}
 
-	//myAcceleration *= 0.75f;
 	return myAcceleration;
 }
 
@@ -89,9 +80,6 @@ void EvadeBehavior::EvadeEntities(float aDelta, float aEvadeSpeed)
 		float totalRadius = (radius + targetRadius);// *(radius + targetRadius);
 		float distToTarget = CU::Length(toTarget);
 		float diff = 1.f - (distToTarget / totalRadius);
-
-		//toTarget += aEvadeSpeed * diff * aDelta;
-		//myAcceleration += toTarget;
 
 		float speed = aEvadeSpeed * diff;
 		myAcceleration += toTarget * speed;
