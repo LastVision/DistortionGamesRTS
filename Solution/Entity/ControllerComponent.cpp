@@ -114,18 +114,15 @@ void ControllerComponent::MoveTo(const CU::Vector3<float>& aPosition, bool aClea
 		{
 			if (myEntity.GetUnitType() == eUnitType::GRUNT)
 			{
-				Prism::Audio::AudioInterface::GetInstance()->PostEvent("Grunt_Move"
-					, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+				Prism::Audio::AudioInterface::GetInstance()->PostEvent("Grunt_Move", 0);
 			}
 			else if (myEntity.GetUnitType() == eUnitType::RANGER)
 			{
-				Prism::Audio::AudioInterface::GetInstance()->PostEvent("Ranger_Move"
-					, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+				Prism::Audio::AudioInterface::GetInstance()->PostEvent("Ranger_Move", 0);
 			}
 			else if (myEntity.GetUnitType() == eUnitType::TANK)
 			{
-				Prism::Audio::AudioInterface::GetInstance()->PostEvent("Tank_Move"
-					, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+				Prism::Audio::AudioInterface::GetInstance()->PostEvent("Tank_Move", 0);
 			}
 			aHasPlayedSound = true;
 		}
@@ -141,18 +138,15 @@ void ControllerComponent::AttackTarget(Entity* aEntity, bool aClearCommandQueue,
 		{
 			if (myEntity.GetUnitType() == eUnitType::GRUNT)
 			{
-				Prism::Audio::AudioInterface::GetInstance()->PostEvent("Grunt_Attack"
-					, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+				Prism::Audio::AudioInterface::GetInstance()->PostEvent("Grunt_Attack", 0);
 			}
 			else if (myEntity.GetUnitType() == eUnitType::RANGER)
 			{
-				Prism::Audio::AudioInterface::GetInstance()->PostEvent("Ranger_Attack"
-					, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+				Prism::Audio::AudioInterface::GetInstance()->PostEvent("Ranger_Attack", 0);
 			}
 			else if (myEntity.GetUnitType() == eUnitType::TANK)
 			{
-				Prism::Audio::AudioInterface::GetInstance()->PostEvent("Tank_Attack"
-					, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+				Prism::Audio::AudioInterface::GetInstance()->PostEvent("Tank_Attack", 0);
 			}
 			aHasPlayedSound = true;
 		}
@@ -168,18 +162,15 @@ void ControllerComponent::AttackMove(const CU::Vector3<float>& aPosition, bool a
 		{
 			if (myEntity.GetUnitType() == eUnitType::GRUNT)
 			{
-				Prism::Audio::AudioInterface::GetInstance()->PostEvent("Grunt_AttackMove"
-					, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+				Prism::Audio::AudioInterface::GetInstance()->PostEvent("Grunt_AttackMove", 0);
 			}
 			else if (myEntity.GetUnitType() == eUnitType::RANGER)
 			{
-				Prism::Audio::AudioInterface::GetInstance()->PostEvent("Ranger_AttackMove"
-					, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+				Prism::Audio::AudioInterface::GetInstance()->PostEvent("Ranger_AttackMove", 0);
 			}
 			else if (myEntity.GetUnitType() == eUnitType::TANK)
 			{
-				Prism::Audio::AudioInterface::GetInstance()->PostEvent("Tank_AttackMove"
-					, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+				Prism::Audio::AudioInterface::GetInstance()->PostEvent("Tank_AttackMove", 0);
 			}
 			aHasPlayedSound = true;
 		}
@@ -195,18 +186,15 @@ void ControllerComponent::Stop(bool& aHasPlayedSound)
 		{
 			if (myEntity.GetUnitType() == eUnitType::GRUNT)
 			{
-				Prism::Audio::AudioInterface::GetInstance()->PostEvent("Grunt_Stop"
-					, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+				Prism::Audio::AudioInterface::GetInstance()->PostEvent("Grunt_Stop", 0);
 			}
 			else if (myEntity.GetUnitType() == eUnitType::RANGER)
 			{
-				Prism::Audio::AudioInterface::GetInstance()->PostEvent("Ranger_Stop"
-					, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+				Prism::Audio::AudioInterface::GetInstance()->PostEvent("Ranger_Stop", 0);
 			}
 			else if (myEntity.GetUnitType() == eUnitType::TANK)
 			{
-				Prism::Audio::AudioInterface::GetInstance()->PostEvent("Tank_Stop"
-					, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+				Prism::Audio::AudioInterface::GetInstance()->PostEvent("Tank_Stop", 0);
 			}
 			aHasPlayedSound = true;
 		}
@@ -225,18 +213,15 @@ void ControllerComponent::HoldPosition(bool& aHasPlayedSound)
 		{
 			if (myEntity.GetUnitType() == eUnitType::GRUNT)
 			{
-				Prism::Audio::AudioInterface::GetInstance()->PostEvent("Grunt_Hold"
-					, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+				Prism::Audio::AudioInterface::GetInstance()->PostEvent("Grunt_Hold", 0);
 			}
 			else if (myEntity.GetUnitType() == eUnitType::RANGER)
 			{
-				Prism::Audio::AudioInterface::GetInstance()->PostEvent("Ranger_Hold"
-					, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+				Prism::Audio::AudioInterface::GetInstance()->PostEvent("Ranger_Hold", 0);
 			}
 			else if (myEntity.GetUnitType() == eUnitType::TANK)
 			{
-				Prism::Audio::AudioInterface::GetInstance()->PostEvent("Tank_Hold"
-					, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+				Prism::Audio::AudioInterface::GetInstance()->PostEvent("Tank_Hold", 0);
 			}
 			aHasPlayedSound = true;
 		}

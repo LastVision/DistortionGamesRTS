@@ -7,6 +7,7 @@
 #include "BehaviorNote.h"
 #include "BlendedBehavior.h"
 //#include "ActorComponentData.h"
+#include "../Game/FogOfWarMap.h"
 #include "ControllerComponent.h"
 #include <EmitterMessage.h>
 #include "GrenadeComponent.h"
@@ -352,28 +353,40 @@ void ActorComponent::AttackTarget(Entity* aTarget, float aDelta)
 		}
 		else
 		{
-			Prism::Audio::AudioInterface::GetInstance()->PostEvent("Grunt_MachineGun"
-				, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+			if (FogOfWarMap::GetInstance()->IsVisible(myEntity.GetPosition()) == true)
+			{
+				Prism::Audio::AudioInterface::GetInstance()->PostEvent("Grunt_MachineGun"
+					, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+			}
 		}
 	}
 	else if (myEntity.GetUnitType() == eUnitType::RANGER)
 	{
 		if (myRangerOneShotTimer <= 0.f)
 		{
-			Prism::Audio::AudioInterface::GetInstance()->PostEvent("Ranger_OneShot"
-				, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+			if (FogOfWarMap::GetInstance()->IsVisible(myEntity.GetPosition()) == true)
+			{
+				Prism::Audio::AudioInterface::GetInstance()->PostEvent("Ranger_OneShot"
+					, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+			}
 		}
 		else
 		{
-			Prism::Audio::AudioInterface::GetInstance()->PostEvent("Ranger_Sniper"
-				, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+			if (FogOfWarMap::GetInstance()->IsVisible(myEntity.GetPosition()) == true)
+			{
+				Prism::Audio::AudioInterface::GetInstance()->PostEvent("Ranger_Sniper"
+					, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+			}
 		}
 
 	}
 	else if (myEntity.GetUnitType() == eUnitType::TANK)
 	{
-		Prism::Audio::AudioInterface::GetInstance()->PostEvent("Tank_MiniGun"
-			, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+		if (FogOfWarMap::GetInstance()->IsVisible(myEntity.GetPosition()) == true)
+		{
+			Prism::Audio::AudioInterface::GetInstance()->PostEvent("Tank_MiniGun"
+				, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+		}
 	}
 
 	HealthComponent* targetHealth = aTarget->GetComponent<HealthComponent>();
