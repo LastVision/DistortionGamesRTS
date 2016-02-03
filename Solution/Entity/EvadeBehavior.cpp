@@ -3,18 +3,16 @@
 #include "CollisionComponent.h"
 #include "EvadeBehavior.h"
 #include "PollingStation.h"
-
 #include <InputWrapper.h>
+
 EvadeBehavior::EvadeBehavior(const Entity& anEntity)
 	: Behavior(anEntity)
 	, myMaxAcceleration(10000.f)
 	, myEntitiesToEvade(128)
-	, myPropSpeed(500.f)
+	, myPropSpeed(240.f)
 	, myPropMod(50.f)
 {
-	//myAcceleration.x = 10.f;
 }
-
 
 EvadeBehavior::~EvadeBehavior()
 {
@@ -25,14 +23,13 @@ const CU::Vector2<float>& EvadeBehavior::Update(float aDelta)
 	myAcceleration.x = 0;
 	myAcceleration.y = 0;
 
+	myEntitiesToEvade.RemoveAll();
+	float radius = myEntity.GetComponent<CollisionComponent>()->GetRadius();
+	PollingStation::GetInstance()->FindAllUnitsCloseToEntity(&myEntity, radius, myEntitiesToEvade);
+	EvadeEntities(aDelta, 240.f);
 
 	myEntitiesToEvade.RemoveAll();
-	//PollingStation::GetInstance()->FindAllEntitiesCloseToEntity(&myEntity, 5.f, myEntitiesToEvade);
-	PollingStation::GetInstance()->FindAllUnitsCloseToEntity(&myEntity, 1.f, myEntitiesToEvade);
-	EvadeEntities(aDelta, 50.f);
-
-	myEntitiesToEvade.RemoveAll();
-	PollingStation::GetInstance()->FindAllPropsCloseToEntity(&myEntity, 3.f, myEntitiesToEvade);
+	PollingStation::GetInstance()->FindAllPropsCloseToEntity(&myEntity, radius, myEntitiesToEvade);
 	EvadeEntities(aDelta, myPropSpeed);
 
 
@@ -57,59 +54,46 @@ const CU::Vector2<float>& EvadeBehavior::Update(float aDelta)
 	}
 
 
-	myAcceleration -= myEntity.GetVelocity();
-	myAcceleration /= 0.1f;
+	//myAcceleration -= myEntity.GetVelocity();
+	//myAcceleration /= 0.1f;
 
-	if (CU::Length2(myAcceleration) > myMaxAcceleration)
+	//myTargetSpeed = myEntity.GetMaxSpeed();
+	//CU::Normalize(myAcceleration);
+	//myAcceleration *= myTargetSpeed;
+	
+
+	if (CU::Length(myAcceleration) > myMaxAcceleration)
 	{
 		CU::Normalize(myAcceleration);
 		myAcceleration *= myMaxAcceleration;
 	}
 
-	return myAcceleration * 0.75f;
+	//myAcceleration *= 0.75f;
+	return myAcceleration;
 }
 
 void EvadeBehavior::EvadeEntities(float aDelta, float aEvadeSpeed)
 {
-	//float radius = myEntity.GetComponent<CollisionComponent>()->GetRadius();
-	//radius2 = radius2 * radius2;
-
-	CU::Vector2<float> forward(myEntity.GetOrientation().GetForward().x, myEntity.GetOrientation().GetForward().y);
-	int test = 5;
+	float radius = myEntity.GetComponent<CollisionComponent>()->GetRadius();
 
 	for (int i = 0; i < myEntitiesToEvade.Size(); ++i)
 	{
 		CU::Vector2<float> toTarget = myEntity.GetPosition() - myEntitiesToEvade[i]->GetPosition();
-
-		CU::Vector2<float> normToTarget(CU::GetNormalized(toTarget));
-		if (CU::Length(forward + normToTarget) < 0.5f)
+		CollisionComponent* collision = myEntitiesToEvade[i]->GetComponent<CollisionComponent>();
+		float targetRadius = 0.f;
+		if (collision != nullptr)
 		{
-			float oldX = toTarget.x;
-			toTarget.x = -toTarget.y;
-			toTarget.y = oldX;
+			targetRadius = collision->GetRadius();
 		}
 
+		float totalRadius = (radius + targetRadius);// *(radius + targetRadius);
+		float distToTarget = CU::Length(toTarget);
+		float diff = 1.f - (distToTarget / totalRadius);
 
+		//toTarget += aEvadeSpeed * diff * aDelta;
+		//myAcceleration += toTarget;
 
-
-		float distToTarget2 = CU::Length2(toTarget);
-		toTarget /= (distToTarget2 + 0.00001f);
-		toTarget *= aEvadeSpeed * aDelta;
-		myAcceleration += toTarget;
-
-
-		//CollisionComponent* collision = myEntitiesToEvade[i]->GetComponent<CollisionComponent>();
-		//if (collision != nullptr)
-		//{
-		//	float targetRadius = collision->GetRadius();
-		//	//targetRadius2 = targetRadius2 * targetRadius2;
-
-		//	if (distToTarget2 < ((radius + targetRadius) * (radius + targetRadius)))
-		//	{
-		//		toTarget /= (distToTarget2 + 0.00001f);
-		//		toTarget *= aEvadeSpeed * aDelta;
-		//		myAcceleration += toTarget;
-		//	}
-		//}
+		float speed = aEvadeSpeed * diff;
+		myAcceleration += toTarget * speed;
 	}
 }

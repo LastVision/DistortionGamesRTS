@@ -21,6 +21,7 @@ ActorComponent::ActorComponent(Entity& aEntity, ActorComponentData& aData, const
 		, const EntityCommandData& aCurrentCommand)
 	: Component(aEntity)
 	, myTerrain(aTerrain)
+	, myVisionRange(aData.myVisionRange)
 	, myVisionRange2(aData.myVisionRange * aData.myVisionRange)
 	, myAttackRange2(aData.myAttackRange * aData.myAttackRange)
 	, myAttackDamage(aData.myAttackDamage)

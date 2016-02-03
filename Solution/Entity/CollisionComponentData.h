@@ -2,6 +2,6 @@
 
 struct CollisionComponentData
 {
-	float myRadius;
+	float myDiameter;
 	bool myExistsInEntity = false;
 };
