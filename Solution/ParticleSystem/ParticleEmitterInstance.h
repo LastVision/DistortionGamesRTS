@@ -4,6 +4,9 @@
 #include "ParticleEmitterData.h"
 #include "ParticleData.h"
 #include <bitset>
+
+class Entity;
+
 namespace Prism
 {
 	class Camera;
@@ -17,9 +20,12 @@ namespace Prism
 		void ReleaseData();
 		void Render();
 		void Update(float aDeltaTime, const CU::Matrix44f& aWorldMatrix);
-		void SetPosition(CU::Vector3f aPosition);
+		void SetPosition(const CU::Vector3f& aPosition);
+		void SetEmitterLifeTime(float aLifeTime);
 		void Activate();
 		bool IsActive();
+		void SetEntity(Entity* anEntity);
+		Entity* GetEntity();
 		void SetGPUData(Camera* aCamera);
 	private:
 
@@ -31,9 +37,15 @@ namespace Prism
 
 		void EmitParticle(const CU::Matrix44f& aWorldMatrix);
 
+		CU::Vector3<float> CreateCirclePositions();
+		CU::Vector3<float> CreateSpherePositions();
+
+		CU::Vector3<float> CreateHollowSquare();
+
+
+
 		CU::GrowingArray<LogicalParticle> myLogicalParticles;
 		CU::GrowingArray<GraphicalParticle> myGraphicalParticles;
-
 		CU::Vector3f myDiffColor;
 		CU::Matrix44f myOrientation;
 
@@ -47,14 +59,20 @@ namespace Prism
 		int myParticleIndex;
 		int myLiveParticleCount;
 
-		bool myIsActive;
-		bool myUseAlphaDelta;
+		Entity* myEntity;
 
+		enum eEmitterStates
+		{
+			ALPHADELTA,
+			HOLLOW,
+			ACTIVE,
+			CIRCLE,
+			_COUNT
+		};
+
+		std::bitset<_COUNT> myStates;
 		std::string myEmitterPath;
 	};
 
-	inline bool ParticleEmitterInstance::IsActive()
-	{
-		return myIsActive;
-	}
+
 }

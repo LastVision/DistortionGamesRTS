@@ -17,13 +17,14 @@ struct EmitterData
 {
 	EmitterData(const std::string& aType);
 	~EmitterData();
-	CU::StaticArray< CU::GrowingArray < Prism::ParticleEmitterInstance* > , PREALLOCATED_EMITTERGROUP> myEmitters;
+	CU::StaticArray<CU::GrowingArray<Prism::ParticleEmitterInstance*>, PREALLOCATED_EMITTERGROUP> myEmitters;
 	std::bitset<PREALLOCATED_EMITTERGROUP> myFinishedGroups;
 	std::string myType;
 	short myCurrentIndex;
 	short myFinishedCount;
 	bool myGroupIsActive;
 	CU::Vector3f myOffset;
+
 };
 
 class EmitterManager : public Subscriber

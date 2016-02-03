@@ -40,6 +40,12 @@ namespace Prism
 		element = read.ForceFindFirstChild(emitter, "Texture");
 		read.ReadAttribute(element, "filepath", myTextureName);
 
+		element = read.ForceFindFirstChild(emitter, "CircleEmitter");
+		read.ReadAttribute(element, "value", myIsCircle);
+
+		element = read.ForceFindFirstChild(emitter, "HollowEmitter");
+		read.ReadAttribute(element, "value", myIsHollow);
+
 		element = read.ForceFindFirstChild(emitter, "EmitterSize");
 		read.ReadAttribute(element, "x", "y", "z", myEmitterSize);
 		myEmitterSize *= 0.5f;
@@ -109,7 +115,7 @@ namespace Prism
 		read.ReadAttribute(element, "value", myUseAlphaDelta);
 
 		read.CloseDocument();
-		//Jag har lagt till en kommentar. Haha
+
 		myData.myStartColor /= 255.f;
 		myData.myEndColor /= 255.f;
 
