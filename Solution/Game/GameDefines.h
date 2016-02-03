@@ -7,9 +7,9 @@
 #define LOAD_PROPS
 #define USE_WEATHER
 
-#ifdef _DEBUG
-
-#undef LOAD_PROPS
-#undef USE_WEATHER
-
-#endif
+//#ifdef _DEBUG
+//
+//#undef LOAD_PROPS
+//#undef USE_WEATHER
+//
+//#endif

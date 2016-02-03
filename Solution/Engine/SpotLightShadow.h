@@ -12,8 +12,10 @@ namespace Prism
 	class SpotLightShadow : public SpotLight
 	{
 	public:
-		SpotLightShadow();
+		SpotLightShadow(const CU::Matrix44<float>& aPlayerOrientation);
 		~SpotLightShadow();
+
+		void UpdateOrientation();
 
 		Camera* GetCamera() const;
 		void ClearTexture();
@@ -25,7 +27,7 @@ namespace Prism
 		Camera* myCamera;
 		Texture* myTexture;
 		CU::Matrix44<float> myBiasMatrix;
-
+		const CU::Matrix44<float>& myPlayerOrientation;
 	};
 
 

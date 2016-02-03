@@ -19,7 +19,7 @@
 #endif
 
 Prism::Scene::Scene(const Camera& aCamera, Terrain& aTerrain)
-	: myCamera(aCamera)
+	: myCamera(&aCamera)
 	, myTerrain(aTerrain)
 #ifdef SCENE_USE_OCTREE
 	, myOctree(new Octree(6))
@@ -36,7 +36,7 @@ Prism::Scene::Scene(const Camera& aCamera, Terrain& aTerrain)
 	memset(&mySpotLightData[0], 0, sizeof(SpotLightData) * NUMBER_OF_SPOT_LIGHTS);
 
 	myInstancingHelper = new InstancingHelper();
-	myInstancingHelper->SetCamera(&myCamera);
+	myInstancingHelper->SetCamera(myCamera);
 }
 
 Prism::Scene::~Scene()
@@ -87,7 +87,7 @@ void Prism::Scene::Render(bool aRenderNavMeshLines)
 	myTerrain.GetIce()->GetEffect()->UpdateDirectionalLights(myDirectionalLightData);
 	//myTerrain.UpdatePointLights(myPointLightData);
 	//myTerrain.UpdateSpotLights(mySpotLightData);
-	myTerrain.Render(myCamera, aRenderNavMeshLines);
+	myTerrain.Render(*myCamera, aRenderNavMeshLines, true);
 
 #ifdef SCENE_USE_OCTREE
 	myOctree->Update();
@@ -116,14 +116,16 @@ void Prism::Scene::Render(bool aRenderNavMeshLines)
 
 	for (int i = 0; i < myInstances.Size(); ++i)
 	{
-		myInstances[i]->Render(myCamera, *myInstancingHelper);
+		myInstances[i]->Render(*myCamera, *myInstancingHelper, true);
 	}
 
-	myInstancingHelper->Render(myDirectionalLightData);
+	myInstancingHelper->Render(myDirectionalLightData, true);
 }
 
-void Prism::Scene::Render(bool aRenderNavMeshLines, Texture* aFogOfWarTexture)
+void Prism::Scene::Render(bool aRenderNavMeshLines, Texture* aFogOfWarTexture, SpotLightShadow* aShadowSpotLight)
 {
+	Prism::EffectContainer::GetInstance()->SetShadowDepth(aShadowSpotLight);
+
 	for (int i = 0; i < myDirectionalLights.Size(); ++i)
 	{
 		myDirectionalLights[i]->Update();
@@ -158,8 +160,8 @@ void Prism::Scene::Render(bool aRenderNavMeshLines, Texture* aFogOfWarTexture)
 	myTerrain.GetEffect()->SetFogOfWarTexture(aFogOfWarTexture);
 	myTerrain.GetIce()->GetEffect()->SetFogOfWarTexture(aFogOfWarTexture);
 	//myTerrain.UpdatePointLights(myPointLightData);
-	//myTerrain.UpdateSpotLights(mySpotLightData);
-	myTerrain.Render(myCamera, aRenderNavMeshLines);
+	myTerrain.GetEffect()->UpdateSpotLights(mySpotLightData);
+	myTerrain.Render(*myCamera, aRenderNavMeshLines, false);
 
 #ifdef SCENE_USE_OCTREE
 	myOctree->Update();
@@ -188,10 +190,11 @@ void Prism::Scene::Render(bool aRenderNavMeshLines, Texture* aFogOfWarTexture)
 
 	for (int i = 0; i < myInstances.Size(); ++i)
 	{
-		myInstances[i]->Render(myCamera, *myInstancingHelper);
+		myInstances[i]->UpdateSpotLights(mySpotLightData);
+		myInstances[i]->Render(*myCamera, *myInstancingHelper, false);
 	}
 
-	myInstancingHelper->Render(myDirectionalLightData);
+	myInstancingHelper->Render(myDirectionalLightData, false);
 }
 
 void Prism::Scene::AddInstance(Instance* aInstance)
@@ -223,6 +226,12 @@ void Prism::Scene::AddLight(PointLight* aLight)
 void Prism::Scene::AddLight(SpotLight* aLight)
 {
 	mySpotLights.Add(aLight);
+}
+
+void Prism::Scene::SetCamera(const Camera& aCamera)
+{
+	myCamera = &aCamera;
+	myInstancingHelper->SetCamera(myCamera);
 }
 
 void Prism::Scene::RemoveInstance(Instance* aInstance) 

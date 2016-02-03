@@ -47,8 +47,14 @@ namespace Prism
 
 	}
 
-	ID3DX11EffectTechnique* Effect::GetTechnique(const std::string& aName)
+	ID3DX11EffectTechnique* Effect::GetTechnique(bool aIsDepthRender, const std::string& aName)
 	{
+		if (aIsDepthRender == true)
+		{
+			std::string name = aName;
+			name += "_DEPTHONLY";
+			return myEffect->GetTechniqueByName(name.c_str());
+		}
 		return myEffect->GetTechniqueByName(aName.c_str());
 	}
 
@@ -103,6 +109,16 @@ namespace Prism
 	void Effect::SetFogOfWarTexture(Texture* aFogOfWarTexture)
 	{
 		myFogOfWarTexture->SetResource(aFogOfWarTexture->GetShaderView());
+	}
+
+	void Effect::SetShadowDepthTexture(Texture* aLightDepthTexture)
+	{
+		myShadowDepthTexture->SetResource(aLightDepthTexture->GetDepthStencilShaderView());
+	}
+
+	void Effect::SetShadowMVP(const CU::Matrix44<float>& aMatrix)
+	{
+		myShadowMVP->SetMatrix(&aMatrix.myMatrix[0]);
 	}
 
 	void Effect::SetPosAndScale(const CU::Vector2<float>& aPos
@@ -334,6 +350,18 @@ namespace Prism
 		if (myFogOfWarTexture->IsValid() == false)
 		{
 			myFogOfWarTexture = nullptr;
+		}
+
+		myShadowDepthTexture = myEffect->GetVariableByName("ShadowDepth")->AsShaderResource();
+		if (myShadowDepthTexture->IsValid() == false)
+		{
+			myShadowDepthTexture = nullptr;
+		}
+
+		myShadowMVP = myEffect->GetVariableByName("ShadowMVP")->AsMatrix();
+		if (myShadowMVP->IsValid() == false)
+		{
+			myShadowMVP = nullptr;
 		}
 
 		mySpritePosAndScale = myEffect->GetVariableByName("SpritePositionAndScale")->AsVector();

@@ -5,6 +5,8 @@
 namespace Prism
 {
 	class Effect;
+	class SpotLightShadow;
+
 	class EffectContainer
 	{
 	public:
@@ -14,10 +16,11 @@ namespace Prism
 		Effect* GetEffect(const std::string& aFilePath);
 
 		void Update(const float aDeltaTime);
-		void SetCubeMap(const std::string& aFilePath);	
+		void SetCubeMap(const std::string& aFilePath);
+		void SetShadowDepth(SpotLightShadow* aShadowSpotLight);
 
 	private:
-		EffectContainer(){};
+		EffectContainer() : myEffectArrays(64){};
 		~EffectContainer();
 
 		void LoadEffect(const std::string& aFilePath);
@@ -27,6 +30,7 @@ namespace Prism
 		std::string GetCSOPath(const std::string& aFXPath);
 
 		std::unordered_map<std::string, Effect*> myEffects;
+		CU::GrowingArray<Effect*> myEffectArrays;
 		std::string myCubeMap;
 
 		static EffectContainer* myInstance;

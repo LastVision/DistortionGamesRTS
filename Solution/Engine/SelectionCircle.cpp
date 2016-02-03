@@ -79,7 +79,7 @@ namespace Prism
 		Engine::GetInstance()->GetContex()->Unmap(myVertexBuffer->myVertexBuffer, 0);
 		
 
-		BaseModel::Render();
+		BaseModel::Render(false);
 	}
 
 	void SelectionCircle::CreateVertices()

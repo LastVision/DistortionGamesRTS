@@ -30,7 +30,7 @@ namespace Prism
 		};
 
 		D3DX11_PASS_DESC passDesc;
-		myRenderToTextureData.myEffect->GetTechnique()->GetPassByIndex(0)->GetDesc(&passDesc);
+		myRenderToTextureData.myEffect->GetTechnique(false)->GetPassByIndex(0)->GetDesc(&passDesc);
 		HRESULT hr = Engine::GetInstance()->GetDevice()->CreateInputLayout(vertexDesc
 			, ARRAYSIZE(vertexDesc), passDesc.pIAInputSignature, passDesc.IAInputSignatureSize, &myVertexLayout);
 		if (FAILED(hr) != S_OK)
@@ -308,10 +308,10 @@ namespace Prism
 	void FullScreenHelper::Render(Effect* aEffect)
 	{
 		D3DX11_TECHNIQUE_DESC techDesc;
-		aEffect->GetTechnique()->GetDesc(&techDesc);
+		aEffect->GetTechnique(false)->GetDesc(&techDesc);
 		for (UINT i = 0; i < techDesc.Passes; ++i)
 		{
-			aEffect->GetTechnique()->GetPassByIndex(i)->Apply(0, Engine::GetInstance()->GetContex());
+			aEffect->GetTechnique(false)->GetPassByIndex(i)->Apply(0, Engine::GetInstance()->GetContex());
 			Engine::GetInstance()->GetContex()->DrawIndexed(6, 0, 0);
 		}
 	}

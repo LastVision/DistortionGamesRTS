@@ -45,7 +45,18 @@ namespace Prism
 
 	void Camera::OnResize(const int aWidth, const int aHeight)
 	{
+		
 		myProjectionMatrix = CU::Matrix44<float>::CreateProjectionMatrixLH(myNear, myFar, static_cast<float>(aHeight) / static_cast<float>(aWidth), myFOV);
+		myProjectionMatrixNonInverted = CU::InverseSimple(myProjectionMatrix);
+		myFrustum->OnResize(myNear, myFar);
+	}
+
+	void Camera::InitShadowCamera(float aWidth, float aHeight)
+	{
+		//float screenAspect = aWidth / aHeight;
+		//myFOV = 3.14f / 2.f;
+		myProjectionMatrix = CU::Matrix44<float>::CreateOrthogonalMatrixLH(70.f, 90.f, myNear, myFar);
+		//myProjectionMatrix = CU::Matrix44<float>::CreateProjectionMatrixLH(myNear, myFar, static_cast<float>(aHeight) / static_cast<float>(aWidth), myFOV);
 		myProjectionMatrixNonInverted = CU::InverseSimple(myProjectionMatrix);
 		myFrustum->OnResize(myNear, myFar);
 	}

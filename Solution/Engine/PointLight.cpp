@@ -20,7 +20,7 @@ namespace Prism
 	void PointLight::Render(Camera* aCamera)
 	{
 		if (this != nullptr)
-			myInstance->Render(*aCamera);
+			myInstance->Render(*aCamera, false);
 	}
 
 };
