@@ -27,6 +27,7 @@ TotemComponent::TotemComponent(Entity& aEntity, TotemComponentData& aData)
 	, myHasReachedTarget(true)
 	, myAlpha(0.f)
 	, myActive(false)
+	, myEffectActive(false)
 {
 	myOriginalPosition = myEntity.GetOrientation().GetPos();
 }
@@ -63,10 +64,13 @@ void TotemComponent::Update(float aDeltaTime)
 			{
 				myUnits[i]->GetComponent<HealthComponent>()->SetIsHealing(true);
 			}
+			if (myEffectActive == false)
+			{
+				PostMaster::GetInstance()->SendMessage(EmitterMessage("totem_healing", myTargetPosition, myEndTime));
+				myEffectActive = true;
+			}
 		}
 	}
-	
-
 
 	if (myActive == true)
 	{
@@ -74,11 +78,8 @@ void TotemComponent::Update(float aDeltaTime)
 		{
 			myUnits[i]->GetComponent<HealthComponent>()->Heal(myHealPerSecond*aDeltaTime);
 		}
-		PostMaster::GetInstance()->SendMessage(EmitterMessage("totem_healing", myTargetPosition));
 
 	}
-
-
 
 	if (myHasReachedTarget == false)
 	{
@@ -90,6 +91,7 @@ void TotemComponent::Update(float aDeltaTime)
 	{
 		myHasReachedTarget = true;
 		myActive = true;
+		myEffectActive = false;
 		//if (myAlpha >= myOriginalCooldown)
 		//{
 		//	myActive = false;
