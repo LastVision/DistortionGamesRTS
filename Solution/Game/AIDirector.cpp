@@ -266,6 +266,7 @@ void AIDirector::LoadAISettings(const std::string& aFilePath)
 
 	reader.CloseDocument();
 }
+
  InfluenceMap* AIDirector::GetPlayerInfluenceMap()
 {
 	return myMaps.myPlayerInfluenceMap;
@@ -389,6 +390,7 @@ void AIDirector::UpdateAdvisors()
 	*myFuzzySet += UpdateResourceAdvisor();
 	*myFuzzySet += UpdateUpgradeAdvisor();
 	*myFuzzySet += UpdateSpawningAdvisor();
+	*myFuzzySet += UpdateRoamingAdvisor();
 
 	myFuzzySet->Normalize();
 }
@@ -498,11 +500,20 @@ CU::FuzzySet AIDirector::UpdateSpawningAdvisor()
 		tankValue = (1 - (tankCount / myActiveUnits.Size())) * mySpawnData.myTankValue;
 	}
 
-	if (myHasUnlockedRanger == false)
+	BuildingComponent* building = myBuilding->GetComponent<BuildingComponent>();
+	if (myUnitCount + building->GetUnitSupplyCost(eUnitType::GRUNT) > myUnitCap
+		|| myGunpowder < building->GetUnitCost(eUnitType::GRUNT))
+	{
+		gruntValue = 0.f;
+	}
+
+	if (myHasUnlockedRanger == false || myUnitCount + building->GetUnitSupplyCost(eUnitType::RANGER) > myUnitCap
+		|| myGunpowder < building->GetUnitCost(eUnitType::RANGER))
 	{
 		rangerValue = 0.f;
 	}
-	if (myHasUnlockedTank == false)
+	if (myHasUnlockedTank == false || myUnitCount + building->GetUnitSupplyCost(eUnitType::TANK) > myUnitCap
+		|| myGunpowder < building->GetUnitCost(eUnitType::TANK))
 	{
 		tankValue = 0.f;
 	}
@@ -510,6 +521,15 @@ CU::FuzzySet AIDirector::UpdateSpawningAdvisor()
 	set.AddValue(static_cast<int>(eFuzzyAI::SPAWN_GRUNT), gruntValue);
 	set.AddValue(static_cast<int>(eFuzzyAI::SPAWN_RANGER), rangerValue);
 	set.AddValue(static_cast<int>(eFuzzyAI::SPAWN_TANK), tankValue);
+
+	return set;
+}
+
+CU::FuzzySet AIDirector::UpdateRoamingAdvisor()
+{
+	CU::FuzzySet set(static_cast<int>(eFuzzyAI::_COUNT));
+
+	set.AddValue(static_cast<int>(eFuzzyAI::ROAM), 0.1f * myIdleUnits.Size());
 
 	return set;
 }
@@ -525,41 +545,58 @@ bool AIDirector::UpdateCurrentAction()
 	switch (myCurrentAction.myFuzzyAction)
 	{
 	case eFuzzyAI::SPAWN_GRUNT:
+		myAIAction = "SPAWN_GRUNT";
 		myCurrentAction.myIsDone = myBuilding->GetComponent<BuildingComponent>()->GetCurrentBuildTime() <= 0.f;
 		break;
 	case eFuzzyAI::SPAWN_RANGER:
+		myAIAction = "SPAWN_RANGER";
 		myCurrentAction.myIsDone = myBuilding->GetComponent<BuildingComponent>()->GetCurrentBuildTime() <= 0.f;
 		break;
 	case eFuzzyAI::SPAWN_TANK:
+		myAIAction = "SPAWN_TANK";
 		myCurrentAction.myIsDone = myBuilding->GetComponent<BuildingComponent>()->GetCurrentBuildTime() <= 0.f;
 		break;
 	case eFuzzyAI::TAKE_RESOURCE_POINT:
-		UpdateTakeControlPoints();
+		myAIAction = "TAKE_RESOURCE_POINT";
+		UpdateTakeControlPoints(myCurrentAction.myFuzzyAction);
 		break;
 	case eFuzzyAI::TAKE_VICTORY_POINT:
-		UpdateTakeControlPoints();
+		myAIAction = "TAKE_VICTORY_POINT";
+		UpdateTakeControlPoints(myCurrentAction.myFuzzyAction);
 		break;
 	case eFuzzyAI::TAKE_ARTIFACT:
+		myAIAction = "TAKE_ARTIFACT";
 		myCurrentAction.myIsDone = myUpgradeData.myArtifactHunters.Size() == 0;
 		break;
 	case eFuzzyAI::UPGRADE_GRUNT:
+		myAIAction = "UPGRADE_GRUNT";
 		myUpgradeData.myGruntKillCount = 0;
 		myCurrentAction.myIsDone = true;
 		break;
 	case eFuzzyAI::UPGRADE_RANGER:
+		myAIAction = "UPGRADE_RANGER";
 		myUpgradeData.myRangerKillCount = 0;
 		myCurrentAction.myIsDone = true;
 		break;
 	case eFuzzyAI::UPGRADE_TANK:
+		myAIAction = "UPGRADE_TANK";
 		myUpgradeData.myTankKillCount = 0;
 		myCurrentAction.myIsDone = true;
 		break;
+	case eFuzzyAI::ROAM:
+		myAIAction = "ROAM";
+		myCurrentAction.myIsDone = true;
+		break;
 	case eFuzzyAI::DO_NOTHING:
+		myAIAction = "DO_NOTHING";
 		myCurrentAction.myIsDone = true;
 		break;
 	default:
 		break;
 	}
+
+	DEBUG_PRINT(myAIDecision);
+	DEBUG_PRINT(myAIAction);
 
 
 	if (myCurrentAction.myIsDone == true && myDecisionTimer.ReachedMin() == false)
@@ -583,31 +620,44 @@ void AIDirector::InterpretFuzzySet()
 	switch (action)
 	{
 	case eFuzzyAI::SPAWN_GRUNT:
+		myAIDecision = "SPAWN_GRUNT";
 		myActionQueue.InsertFirst(Action(action));
 		break;
 	case eFuzzyAI::SPAWN_RANGER:
+		myAIDecision = "SPAWN_RANGER";
 		myActionQueue.InsertFirst(Action(action));
 		break;
 	case eFuzzyAI::SPAWN_TANK:
+		myAIDecision = "SPAWN_TANK";
 		myActionQueue.InsertFirst(Action(action));
 		break;
 	case eFuzzyAI::TAKE_RESOURCE_POINT:
+		myAIDecision = "TAKE_RESOURCE_POINT";
 		HandleControlPoints(action);
 		break;
 	case eFuzzyAI::TAKE_VICTORY_POINT:
+		myAIDecision = "TAKE_VICTORY_POINT";
 		HandleControlPoints(action);
 		break;
 	case eFuzzyAI::TAKE_ARTIFACT:
+		myAIDecision = "TAKE_ARTIFACT";
 		DL_ASSERT("eFuzzyAI Case Not Implemented");
 		break;
 	case eFuzzyAI::UPGRADE_GRUNT:
+		myAIDecision = "UPGRADE_GRUNT";
 		HandleUpgrades(action);
 		break;
 	case eFuzzyAI::UPGRADE_RANGER:
+		myAIDecision = "UPGRADE_RANGER";
 		HandleUpgrades(action);
 		break;
 	case eFuzzyAI::UPGRADE_TANK:
+		myAIDecision = "UPGRADE_TANK";
 		HandleUpgrades(action);
+		break;
+	case eFuzzyAI::ROAM:
+		myAIDecision = "ROAM";
+		HandleRoaming();
 		break;
 	default:
 		break;
@@ -692,6 +742,20 @@ void AIDirector::StartNextAction()
 	case eFuzzyAI::UPGRADE_TANK:
 		Director::UpgradeUnit(eUnitType::TANK);
 		break;
+	case eFuzzyAI::ROAM:
+	{
+		int controllPoint = PollingStation::GetInstance()->GetVictoryAndResourcePoints().Size();
+		controllPoint = rand() % controllPoint;
+		Entity* point = PollingStation::GetInstance()->GetVictoryAndResourcePoints()[controllPoint];
+		CU::Vector3<float> targetPos(point->GetPosition().x, 0.f, point->GetPosition().y);
+
+		for (int i = 0; i < myIdleUnits.Size() && i < 3; ++i)
+		{
+			bool quiet = true;
+			myIdleUnits[i]->GetComponent<ControllerComponent>()->AttackMove(targetPos, true, quiet);
+		}
+		break;
+	}
 	default:
 		break;
 	}
@@ -713,7 +777,9 @@ void AIDirector::HandleControlPoints(eFuzzyAI aAction)
 		DL_ASSERT("Invalid eFuzzyAction in HandleControlPoints");
 	}
 
-	if (myIdleUnits.Size() >= squadSize)
+	int remainingUnits = myIdleUnits.Size() - squadSize;
+
+	if (remainingUnits > 0)
 	{
 		float maxDist = sqrt(256.f * 256.f + 256.f * 256.f);
 		float distWeight = 10.f;
@@ -785,7 +851,7 @@ void AIDirector::HandleControlPoints(eFuzzyAI aAction)
 		float grunt = myFuzzySet->GetValue(static_cast<int>(eFuzzyAI::SPAWN_GRUNT));
 		float ranger = myFuzzySet->GetValue(static_cast<int>(eFuzzyAI::SPAWN_RANGER));
 		float tank = myFuzzySet->GetValue(static_cast<int>(eFuzzyAI::SPAWN_TANK));
-		for (int i = 0; i < squadSize - myIdleUnits.Size(); ++i)
+		for (int i = 0; i < abs(remainingUnits); ++i)
 		{
 			if (myHasUnlockedTank == true && tank > ranger && tank > grunt)
 			{
@@ -869,7 +935,51 @@ void AIDirector::HandleUpgrades(eFuzzyAI aAction)
 	}
 }
 
-void AIDirector::UpdateTakeControlPoints()
+void AIDirector::HandleRoaming()
+{
+	int remainingSupply = myUnitCap - myUnitCount;
+	if (remainingSupply > 0)
+	{
+		CU::FuzzySet spawnSet = UpdateSpawningAdvisor();
+
+		eUnitType unitToSpawn = eUnitType::NOT_A_UNIT;
+		bool foundUnitToSpawn = false;
+		while (foundUnitToSpawn == false)
+		{
+			int bestUnit = spawnSet.GetHighersMember();
+			spawnSet.AddValue(bestUnit, -spawnSet.GetValue(bestUnit));
+
+			unitToSpawn = static_cast<eUnitType>(bestUnit);
+			if (remainingSupply >= myBuilding->GetComponent<BuildingComponent>()->GetUnitSupplyCost(unitToSpawn))
+			{
+				foundUnitToSpawn = true;
+			}
+		}
+
+		switch (unitToSpawn)
+		{
+		case NOT_A_UNIT:
+			myActionQueue.InsertFirst(Action(eFuzzyAI::SPAWN_GRUNT));
+			break;
+		case GRUNT:
+			myActionQueue.InsertFirst(Action(eFuzzyAI::SPAWN_GRUNT));
+			break;
+		case RANGER:
+			myActionQueue.InsertFirst(Action(eFuzzyAI::SPAWN_RANGER));
+			break;
+		case TANK:
+			myActionQueue.InsertFirst(Action(eFuzzyAI::SPAWN_TANK));
+			break;
+		default:
+			myActionQueue.InsertFirst(Action(eFuzzyAI::SPAWN_GRUNT));
+			break;
+		}
+	}
+
+	myActionQueue.InsertFirst(Action(eFuzzyAI::ROAM));
+}
+
+void AIDirector::UpdateTakeControlPoints(eFuzzyAI aAction)
 {
 	if (myActiveUnits.Size() == 0)
 	{
@@ -878,7 +988,6 @@ void AIDirector::UpdateTakeControlPoints()
 	}
 
 	myCurrentAction.myIsDone = true;
-	bool shouldMove = true;
 	float blockWeight = 5.f;
 	float playerInfluenceWeight = 3.f;
 	float blockMapValue = myMaps.myBlockMap->GetValue(myCurrentAction.myPosition) * blockWeight;
@@ -887,25 +996,40 @@ void AIDirector::UpdateTakeControlPoints()
 	if (blockMapValue - playerInfluenceMapValue > 0.001f)
 	{
 		myCurrentAction.myIsDone = true;
-		shouldMove = false;
+		return;
 	}
 
+	int squadSize = 3;
+	if (aAction == eFuzzyAI::TAKE_RESOURCE_POINT)
+	{
+		squadSize = myResourceData.myResourceSquadSize;
+	}
+	else if (aAction == eFuzzyAI::TAKE_VICTORY_POINT)
+	{
+		squadSize = myResourceData.myVictorySquadSize;
+	}
+	else
+	{
+		DL_ASSERT("Invalid eFuzzyAction in HandleControlPoints");
+	}
+
+	int readyCount = 0;
 	for (int i = 0; i < myIdleUnits.Size(); ++i)
 	{
-		if (myIdleUnits[i]->GetComponent<ControllerComponent>()->IsReady() == false)
+		if (myIdleUnits[i]->GetComponent<ControllerComponent>()->IsReady() == true)
 		{
-			myCurrentAction.myIsDone = false;
-			shouldMove = false;
+			++readyCount;
 		}
 	}
 
-	if (shouldMove == true)
+	myCurrentAction.myIsDone = false;
+	if (readyCount >= squadSize)
 	{
 		CU::Vector3<float> target;
 		target.x = myCurrentAction.myPosition.x;
 		target.z = myCurrentAction.myPosition.y;
 		bool quiet = true;
-		for (int i = 0; i < myIdleUnits.Size(); ++i)
+		for (int i = 0; i < squadSize; ++i)
 		{
 			myIdleUnits[i]->GetComponent<ControllerComponent>()->AttackMove(target, true, quiet);
 		}
