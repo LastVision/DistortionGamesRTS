@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Console.h"
+#ifndef RELEASE_BUILD
 #include "ConsoleBackspace.h"
 #include "ConsoleHelp.h"
 #include "ConsoleHistoryManager.h"
@@ -8,7 +9,7 @@
 #include <ScriptSystem.h>
 #include <PostMaster.h>
 #include <ModelLoader.h>
-
+#endif
 Console* Console::myInstance = nullptr;
 
 Console* Console::GetInstance()
@@ -29,20 +30,26 @@ void Console::Destroy()
 
 Console::Console()
 {
+#ifndef RELEASE_BUILD
 	myHistory = new ConsoleHistoryManager();
 	myHistory->Load();
 	myBackspace = new ConsoleBackspace(myInput);
 	myHelp = new ConsoleHelp();
 	PostMaster::GetInstance()->Subscribe(eMessageType::RUN_SCRIPT, this);
+#endif
 }
 
 Console::~Console()
 {
+#ifndef RELEASE_BUILD
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::RUN_SCRIPT, this);
 	SAFE_DELETE(myHistory);
 	SAFE_DELETE(myBackspace);
 	SAFE_DELETE(myHelp);
+#endif
 }
+
+#ifndef RELEASE_BUILD
 
 void Console::Update()
 {
@@ -193,3 +200,4 @@ void Console::ReadInput()
 	
 }
 
+#endif
