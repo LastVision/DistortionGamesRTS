@@ -1062,7 +1062,7 @@ void PlayerDirector::SelectOrHoverEntity(Entity* aEntity, bool &aSelected, bool 
 		}
 	}
 
-	if (unitCollided == true)
+	if (unitCollided == true && mySelectedUnits.Size() < myMaxSelectedUnits)
 	{
 		if (myLeftMouseUp == true)
 		{
