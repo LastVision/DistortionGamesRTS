@@ -167,7 +167,7 @@ namespace Prism
 	{
 		for (int i = 0; i < myLogicalParticles.Size(); ++i)
 		{
-			if (myGraphicalParticles[i].myAlpha <= 0.0f)
+			if (myGraphicalParticles[i].myAlpha < 0.0f)
 			{
 				myLiveParticleCount--;
 				myLogicalParticles[i].myIsAlive = false;
@@ -184,7 +184,10 @@ namespace Prism
 			{
 				myGraphicalParticles[i].myAlpha -= myGraphicalParticles[i].myLifeTime * aDeltaTime;
 			}
-			myGraphicalParticles[i].mySize += myParticleEmitterData->myData.mySizeDelta * aDeltaTime;
+			if (myGraphicalParticles[i].mySize >= 0.f)
+			{
+				myGraphicalParticles[i].mySize += myParticleEmitterData->myData.mySizeDelta * aDeltaTime;
+			}
 
 			myGraphicalParticles[i].myColor += myDiffColor  * aDeltaTime;
 
