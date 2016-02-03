@@ -3,6 +3,8 @@
 #include "ResourceBarWidget.h"
 #include "../Game/PlayerDirector.h"
 #include "../Game/AIDirector.h"
+#include <SpriteAnimator.h>
+#include <AudioInterface.h>
 
 namespace GUI
 {
@@ -10,6 +12,8 @@ namespace GUI
 		: Widget()
 		, myValueSprite(nullptr)
 		, myTextScale(1.f)
+		, myGainAnimation(nullptr)
+		, myLastValue(0)
 	{
 		std::string valueSpritePath = "";
 		std::string value = "";
@@ -49,10 +53,14 @@ namespace GUI
 		else if (value == "player_victory_point")
 		{
 			myValue = &aPlayer->GetVictoryPoints();
+			myLastValue = *myValue;
+			myGainAnimation = new Prism::SpriteAnimator("Data/Resource/SpriteAnimation/VictoryPointGainAnimation.xml");
 		}
 		else if (value == "enemy_victory_point")
 		{
 			myValue = &anAI->GetVictoryPoints();
+			myLastValue = *myValue;
+			myGainAnimation = new Prism::SpriteAnimator("Data/Resource/SpriteAnimation/VictoryPointGainAnimation.xml");
 		}
 		else if (value == "player_artifact")
 		{
@@ -70,7 +78,22 @@ namespace GUI
 
 	ResourceBarWidget::~ResourceBarWidget()
 	{
+		SAFE_DELETE(myGainAnimation);
 		SAFE_DELETE(myValueSprite);
+	}
+
+	void ResourceBarWidget::Update(float aDelta)
+	{
+		if (myGainAnimation != nullptr)
+		{
+			if (myLastValue != *myValue && *myValue % 100 == 0)
+			{
+				myGainAnimation->RestartAnimation();
+				Prism::Audio::AudioInterface::GetInstance()->PostEvent("victoryGain", 0);
+			}
+			myLastValue = *myValue;
+			myGainAnimation->Update(aDelta);
+		}
 	}
 
 	void ResourceBarWidget::Render(const CU::Vector2<float>& aParentPosition)
@@ -78,6 +101,11 @@ namespace GUI
 		if (myValueSprite != nullptr)
 		{
 			myValueSprite->Render(myPosition + aParentPosition + mySpritePosition);
+		}
+
+		if (myGainAnimation != nullptr)
+		{
+			myGainAnimation->Render(myPosition + aParentPosition);
 		}
 
 		Prism::Engine::GetInstance()->PrintText(*myValue, myPosition + aParentPosition + myTextPosition, Prism::eTextType::RELEASE_TEXT, myTextScale);
