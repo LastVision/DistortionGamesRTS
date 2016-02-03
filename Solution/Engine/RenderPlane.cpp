@@ -52,7 +52,7 @@ namespace Prism
 		myEffect->SetViewProjectionMatrix(aCamera.GetViewProjection());
 		myEffect->SetCameraPosition(aCamera.GetOrientation().GetPos());
 
-		BaseModel::Render();
+		BaseModel::Render(false);
 	}
 
 	void RenderPlane::StartModify()

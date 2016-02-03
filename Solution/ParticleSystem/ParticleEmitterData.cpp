@@ -134,7 +134,7 @@ namespace Prism
 		HRESULT hr;
 
 		D3DX11_PASS_DESC passDesc;
-		hr = myEffect->GetTechnique()->GetPassByIndex(0)->GetDesc(&passDesc);
+		hr = myEffect->GetTechnique(false)->GetPassByIndex(0)->GetDesc(&passDesc);
 		DL_ASSERT_EXP(!FAILED(hr), "[ParticleEmitterData](CreateInputLayout) : Failed to get Pass Description!");
 
 		const D3D11_INPUT_ELEMENT_DESC VertexParticleLayout[] =

@@ -37,7 +37,7 @@ namespace Prism
 
 		void SetEffect(Effect* aEffect);
 
-		void Render(const CU::Matrix44<float>& aOrientation, const CU::Vector3<float>& aCameraPosition);
+		void Render(const CU::Matrix44<float>& aOrientation, const CU::Vector3<float>& aCameraPosition, bool aIsDepthRender);
 
 		void ActivateAlbedo(eOwnerType aOwner);
 

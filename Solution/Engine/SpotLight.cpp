@@ -21,7 +21,7 @@ namespace Prism
 	{
 		if (myInstance != nullptr)
 		{
-			myInstance->Render(*aCamera);
+			myInstance->Render(*aCamera, false);
 		}
 	}
 

@@ -80,7 +80,7 @@ namespace Prism
 			Engine::GetInstance()->GetContex()->IASetInputLayout(tempData->myInputLayout);
 			Engine::GetInstance()->GetContex()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
 
-			tempData->myEffect->GetTechnique()->GetDesc(tempData->myTechniqueDesc);
+			tempData->myEffect->GetTechnique(false)->GetDesc(tempData->myTechniqueDesc);
 		}
 	}
 
