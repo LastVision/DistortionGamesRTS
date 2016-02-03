@@ -5,6 +5,7 @@
 #include "Console.h"
 #include <ColoursForBG.h>
 #include "ConsoleState.h"
+#include <EffectContainer.h>
 #include <Engine.h>
 #include <Entity.h>
 #include <GameStateMessage.h>
@@ -95,6 +96,8 @@ void InGameState::EndState()
 
 const eStateStatus InGameState::Update(const float& aDeltaTime)
 {
+	Prism::EffectContainer::GetInstance()->Update(aDeltaTime);
+
 #ifndef _DEBUG
 	if (myIsFirstFrame == true)
 	{
