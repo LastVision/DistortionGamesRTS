@@ -94,52 +94,72 @@ namespace Prism
 
 	void DebugDrawer::RenderText(const char* aName, bool aValue)
 	{
+#ifndef RELEASE_BUILD
 		myDebugTexts.Add(DebugText(aName, aValue ? "true" : "false"));
+#endif
 	}
 
 	void DebugDrawer::RenderText(const char* aName, const CU::Vector2<float>& aValue)
 	{
+#ifndef RELEASE_BUILD
+
 		std::stringstream ss;
 		ss.precision(4);
 		ss << "(" << aValue.x << ", " << aValue.y << ")";
 		myDebugTexts.Add(DebugText(aName, ss.str()));
+#endif
 	}
 
 	void DebugDrawer::RenderText(const char* aName, const CU::Vector3<float>& aValue)
 	{
+#ifndef RELEASE_BUILD
+
 		std::stringstream ss;
 		ss.precision(4);
 		ss << "(" << aValue.x << ", " << aValue.y << ", " << aValue.z << ")";
 		myDebugTexts.Add(DebugText(aName, ss.str()));
+#endif
 	}
 
 	void DebugDrawer::RenderText(const char* aName, const CU::Vector4<float>& aValue)
 	{
+#ifndef RELEASE_BUILD
+
 		std::stringstream ss;
 		ss.precision(4);
 		ss << "(" << aValue.x << ", " << aValue.y << ", " << aValue.z << ", " << aValue.w << ")";
 		myDebugTexts.Add(DebugText(aName, ss.str()));
+#endif
 	}
 
 	void DebugDrawer::RenderText(const char* aName, float aValue)
 	{
+#ifndef RELEASE_BUILD
+
 		std::stringstream ss;
 		ss.precision(4);
 		ss << aValue;
 		myDebugTexts.Add(DebugText(aName, ss.str()));
+#endif
 	}
 
 	void DebugDrawer::RenderText(const char* aName, int aValue)
 	{
+#ifndef RELEASE_BUILD
+
 		std::stringstream ss;
 		ss.precision(4);
 		ss << aValue;
 		myDebugTexts.Add(DebugText(aName, ss.str()));
+#endif
 	}
 
 	void DebugDrawer::RenderText(const char* aName, const std::string& aValue)
 	{
+#ifndef RELEASE_BUILD
+
 		myDebugTexts.Add(DebugText(aName, aValue));
+#endif
 	}
 
 	void DebugDrawer::Render(const Camera& aCamera)

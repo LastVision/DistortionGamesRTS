@@ -31,8 +31,8 @@ void Prism::Instance::Update(float aDelta)
 {
 	if (myProxy.IsLoaded() == true && myProxy.IsAnimated())
 	{
-		if (myShouldRender == true)
-		{
+		//if (myShouldRender == true) // creates bug where enemy units are not animated when arriving from Fog of war
+		//{
 			if (myHierarchyIsBuilt == false)
 			{
 				if (myProxy.myModelAnimated->myAnimation != nullptr)
@@ -51,7 +51,7 @@ void Prism::Instance::Update(float aDelta)
 			{
 				myAnimation->Update(myTotalTime, myBones);
 			}
-		}
+		//}
 
 		myTotalTime += aDelta;
 	}

@@ -1,6 +1,8 @@
 #pragma once
 #include "GameState.h"
 
+#ifndef RELEASE_BUILD
+
 namespace Prism
 {
 	class SpriteProxy;
@@ -44,3 +46,4 @@ private:
 	bool myHistoryMode;
 };
 
+#endif

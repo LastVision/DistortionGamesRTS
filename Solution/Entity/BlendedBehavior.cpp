@@ -35,7 +35,7 @@ const CU::Vector2<float>& BlendedBehavior::Update(float aDelta)
 		myDone = true;
 	}*/
 
-	if (CU::Length2(myAcceleration) > myMaxAcceleration)
+	if (CU::Length2(myAcceleration) > myMaxAcceleration*myMaxAcceleration)
 	{
 		CU::Normalize(myAcceleration);
 		myAcceleration *= myMaxAcceleration;
