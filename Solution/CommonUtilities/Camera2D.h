@@ -27,6 +27,7 @@ public:
 	bool IsShaking();
 	void Shake(float aDuration);
 	void StopShaking();
+
 private:
 	void SetProjection();
 

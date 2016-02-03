@@ -22,6 +22,7 @@
 #include <Renderer.h>
 #include <Scene.h>
 #include <ScriptSystem.h>
+#include <SpotLightShadow.h>
 #include <Terrain.h>
 #include <ToggleRenderLinesMessage.h>
 #include "Tutorial.h"
@@ -50,6 +51,9 @@ Level::Level(const Prism::Camera& aCamera, Prism::Terrain* aTerrain, GUI::Cursor
 
 	myRenderer = new Prism::Renderer();
 
+	myShadowLight = new Prism::SpotLightShadow(aCamera.GetOrientation());
+	myScene->AddLight(myShadowLight);
+
 	myFogOfWarHelper = new Prism::FogOfWarHelper();
 	FogOfWarMap::GetInstance();
 	FogOfWarMap::GetInstance()->SetFogOfWarHelperTexture(myFogOfWarHelper->GetTexture());
@@ -69,6 +73,7 @@ Level::~Level()
 	SAFE_DELETE(myRenderer);
 	FogOfWarMap::Destroy();
 	SAFE_DELETE(myFogOfWarHelper);
+	SAFE_DELETE(myShadowLight);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::TOGGLE_RENDER_LINES, this);
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::TOGGLE_FOG_OF_WAR, this);
 	EntityFactory::Destroy();
@@ -87,6 +92,8 @@ bool Level::Update(float aDeltaTime, Prism::Camera& aCamera)
 	//CU::Vector3<float> lightDir(myLight->GetCurrentDir().x, myLight->GetCurrentDir().y, myLight->GetCurrentDir().z);
 	//myLight->SetDir(lightDir * CU::Matrix44<float>::CreateRotateAroundZ(-3.14f * aDeltaTime / 3.f));
 
+	myShadowLight->UpdateOrientation();
+	myShadowLight->GetCamera()->Update(aDeltaTime);
 
 	PollingStation::GetInstance()->CleanUp();
 	myPlayer->CleanUp();
@@ -139,6 +146,8 @@ void Level::Render(Prism::Camera& aCamera)
 {
 	Prism::Engine::GetInstance()->SetClearColor({ 0.2f, 0.2f, 0.2f, 1.f });
 
+	myRenderer->ProcessShadow(myShadowLight, myScene);
+
 	if (myShowFogOfWar == true)
 	{
 		FogOfWarMap::GetInstance()->UpdateRenderPlane();
@@ -146,7 +155,7 @@ void Level::Render(Prism::Camera& aCamera)
 	}
 
 	myRenderer->BeginScene();
-	myScene->Render(myRenderNavMeshLines, myFogOfWarHelper->GetTexture());
+	myScene->Render(myRenderNavMeshLines, myFogOfWarHelper->GetTexture(), myShadowLight);
 	myEmitterManager->RenderEmitters();
 
 	myAI->RenderMaps(aCamera);

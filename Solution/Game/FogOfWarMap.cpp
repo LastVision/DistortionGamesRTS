@@ -1,4 +1,6 @@
 #include "stdafx.h"
+
+#include <ActorComponent.h>
 #include "FogOfWarMap.h"
 #include <PollingStation.h>
 #include <Entity.h>
@@ -58,7 +60,8 @@ void FogOfWarMap::Update(float aDelta)
 	const CU::GrowingArray<Entity*>& playerUnits = PollingStation::GetInstance()->GetUnits(eOwnerType::PLAYER);
 	for (int j = 0; j < playerUnits.Size(); ++j)
 	{
-		AddValue(myLearnSpeed*aDelta, 20.f, playerUnits[j]->GetPosition());
+		float radius = playerUnits[j]->GetComponent<ActorComponent>()->GetVisionRange();
+		AddValue(myLearnSpeed*aDelta, radius, playerUnits[j]->GetPosition());
 	}
 
 	const CU::GrowingArray<Entity*>& playerPoints = PollingStation::GetInstance()->GetVictoryAndResourcePoints();

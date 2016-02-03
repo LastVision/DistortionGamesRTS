@@ -89,6 +89,8 @@ private:
 	std::thread* myLoadLevelThread;
 
 	GUI::Cursor* myCursor;
+
+
 };
 
 inline const volatile bool& LevelFactory::IsLevelLoading() const

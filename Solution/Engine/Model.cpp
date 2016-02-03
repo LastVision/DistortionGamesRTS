@@ -286,7 +286,7 @@ namespace Prism
 		}
 	}
 
-	void Model::Render(const CU::Matrix44<float>& aOrientation, const CU::Vector3<float>& aCameraPosition)
+	void Model::Render(const CU::Matrix44<float>& aOrientation, const CU::Vector3<float>& aCameraPosition, bool aIsDepthRender)
 	{
 		if (myIsLodGroup == true)
 		{
@@ -309,7 +309,7 @@ namespace Prism
 
 			if (toRender)
 			{
-				toRender->Render(aOrientation, aCameraPosition);
+				toRender->Render(aOrientation, aCameraPosition, aIsDepthRender);
 			}
 		}
 		else
@@ -325,12 +325,12 @@ namespace Prism
 				myEffect->SetBlendState(NULL, blendFactor);
 				myEffect->SetWorldMatrix(aOrientation);
 
-				BaseModel::Render();
+				BaseModel::Render(aIsDepthRender);
 			}
 
 			for (int i = 0; i < myChildren.Size(); ++i)
 			{
-				myChildren[i]->Render(myChildTransforms[i] * aOrientation, aCameraPosition);
+				myChildren[i]->Render(myChildTransforms[i] * aOrientation, aCameraPosition, aIsDepthRender);
 			}
 		}
 	}

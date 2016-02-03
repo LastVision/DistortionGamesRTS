@@ -28,6 +28,7 @@ public:
 	void LookInDirection(const CU::Vector2<float>& aDirection, float aDelta);
 	void LookAtPoint(const CU::Vector2<float>& aPoint, float aDelta);
 
+	float GetVisionRange() const;
 	float GetVisionRange2() const;
 	float GetAttackRange2() const;
 
@@ -67,7 +68,9 @@ private:
 	int myTargetType;
 
 	bool myIsDone;
+	bool myIsReturning;
 
+	float myVisionRange;
 	float myVisionRange2;
 	float myAttackRange2;
 	float myAttackDamage;
@@ -92,6 +95,10 @@ inline eComponentType ActorComponent::GetType()
 	return GetTypeStatic();
 }
 
+inline float ActorComponent::GetVisionRange() const
+{
+	return myVisionRange;
+}
 
 inline float ActorComponent::GetVisionRange2() const
 {

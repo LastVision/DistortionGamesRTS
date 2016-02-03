@@ -19,7 +19,7 @@
 #endif
 
 Prism::Scene::Scene(const Camera& aCamera, Terrain& aTerrain)
-	: myCamera(aCamera)
+	: myCamera(&aCamera)
 	, myTerrain(aTerrain)
 #ifdef SCENE_USE_OCTREE
 	, myOctree(new Octree(6))
@@ -30,13 +30,14 @@ Prism::Scene::Scene(const Camera& aCamera, Terrain& aTerrain)
 	myDirectionalLights.Init(4);
 	myPointLights.Init(4);
 	mySpotLights.Init(4);
+	mySelectionCircles.Init(64);
 
 	memset(&myDirectionalLightData[0], 0, sizeof(DirectionalLightData) * NUMBER_OF_DIRECTIONAL_LIGHTS);
 	memset(&myPointLightData[0], 0, sizeof(PointLightData) * NUMBER_OF_POINT_LIGHTS);
 	memset(&mySpotLightData[0], 0, sizeof(SpotLightData) * NUMBER_OF_SPOT_LIGHTS);
 
 	myInstancingHelper = new InstancingHelper();
-	myInstancingHelper->SetCamera(&myCamera);
+	myInstancingHelper->SetCamera(myCamera);
 }
 
 Prism::Scene::~Scene()
@@ -87,7 +88,7 @@ void Prism::Scene::Render(bool aRenderNavMeshLines)
 	myTerrain.GetIce()->GetEffect()->UpdateDirectionalLights(myDirectionalLightData);
 	//myTerrain.UpdatePointLights(myPointLightData);
 	//myTerrain.UpdateSpotLights(mySpotLightData);
-	myTerrain.Render(myCamera, aRenderNavMeshLines);
+	myTerrain.Render(*myCamera, aRenderNavMeshLines, true);
 
 #ifdef SCENE_USE_OCTREE
 	myOctree->Update();
@@ -116,14 +117,16 @@ void Prism::Scene::Render(bool aRenderNavMeshLines)
 
 	for (int i = 0; i < myInstances.Size(); ++i)
 	{
-		myInstances[i]->Render(myCamera, *myInstancingHelper);
+		myInstances[i]->Render(*myCamera, *myInstancingHelper, true);
 	}
 
-	myInstancingHelper->Render(myDirectionalLightData);
+	myInstancingHelper->Render(myDirectionalLightData, true);
 }
 
-void Prism::Scene::Render(bool aRenderNavMeshLines, Texture* aFogOfWarTexture)
+void Prism::Scene::Render(bool aRenderNavMeshLines, Texture* aFogOfWarTexture, SpotLightShadow* aShadowSpotLight)
 {
+	Prism::EffectContainer::GetInstance()->SetShadowDepth(aShadowSpotLight);
+
 	for (int i = 0; i < myDirectionalLights.Size(); ++i)
 	{
 		myDirectionalLights[i]->Update();
@@ -158,8 +161,8 @@ void Prism::Scene::Render(bool aRenderNavMeshLines, Texture* aFogOfWarTexture)
 	myTerrain.GetEffect()->SetFogOfWarTexture(aFogOfWarTexture);
 	myTerrain.GetIce()->GetEffect()->SetFogOfWarTexture(aFogOfWarTexture);
 	//myTerrain.UpdatePointLights(myPointLightData);
-	//myTerrain.UpdateSpotLights(mySpotLightData);
-	myTerrain.Render(myCamera, aRenderNavMeshLines);
+	myTerrain.GetEffect()->UpdateSpotLights(mySpotLightData);
+	myTerrain.Render(*myCamera, aRenderNavMeshLines, false);
 
 #ifdef SCENE_USE_OCTREE
 	myOctree->Update();
@@ -188,26 +191,39 @@ void Prism::Scene::Render(bool aRenderNavMeshLines, Texture* aFogOfWarTexture)
 
 	for (int i = 0; i < myInstances.Size(); ++i)
 	{
-		myInstances[i]->Render(myCamera, *myInstancingHelper);
+		myInstances[i]->UpdateSpotLights(mySpotLightData);
+		myInstances[i]->Render(*myCamera, *myInstancingHelper, false);
 	}
 
-	myInstancingHelper->Render(myDirectionalLightData);
+	for (int i = 0; i < mySelectionCircles.Size(); ++i)
+	{
+		mySelectionCircles[i]->Render(*myCamera, *myInstancingHelper, false);
+	}
+
+	myInstancingHelper->Render(myDirectionalLightData, false);
 }
 
-void Prism::Scene::AddInstance(Instance* aInstance)
+void Prism::Scene::AddInstance(Instance* aInstance, bool aIsSelectionRing)
 {
-#ifdef SCENE_USE_OCTREE
-	if (aInstance->GetOctreeType() == eOctreeType::DYNAMIC)
+	if(aIsSelectionRing == true)
 	{
-		myDynamicInstances.Add(aInstance);
+		mySelectionCircles.Add(aInstance);
 	}
 	else
 	{
-		myOctree->Add(aInstance);
-	}
+#ifdef SCENE_USE_OCTREE
+		if (aInstance->GetOctreeType() == eOctreeType::DYNAMIC)
+		{
+			myDynamicInstances.Add(aInstance);
+		}
+		else
+		{
+			myOctree->Add(aInstance);
+		}
 #else
-	myInstances.Add(aInstance);
+		myInstances.Add(aInstance);
 #endif
+	}
 }
 
 void Prism::Scene::AddLight(DirectionalLight* aLight)
@@ -225,18 +241,31 @@ void Prism::Scene::AddLight(SpotLight* aLight)
 	mySpotLights.Add(aLight);
 }
 
-void Prism::Scene::RemoveInstance(Instance* aInstance) 
+void Prism::Scene::SetCamera(const Camera& aCamera)
 {
-#ifdef SCENE_USE_OCTREE
-	if (aInstance->GetOctreeType() == eOctreeType::DYNAMIC)
+	myCamera = &aCamera;
+	myInstancingHelper->SetCamera(myCamera);
+}
+
+void Prism::Scene::RemoveInstance(Instance* aInstance, bool aIsSelectionRing)
+{
+	if (aIsSelectionRing == true)
 	{
-		myDynamicInstances.RemoveCyclic(aInstance);
+		mySelectionCircles.RemoveCyclic(aInstance);
 	}
 	else
 	{
-		myOctree->Remove(aInstance);
-	}
+#ifdef SCENE_USE_OCTREE
+		if (aInstance->GetOctreeType() == eOctreeType::DYNAMIC)
+		{
+			myDynamicInstances.RemoveCyclic(aInstance);
+		}
+		else
+		{
+			myOctree->Remove(aInstance);
+		}
 #else
-	myInstances.RemoveCyclic(aInstance);
+		myInstances.RemoveCyclic(aInstance);
 #endif
+	}
 }

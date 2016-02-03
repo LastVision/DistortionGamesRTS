@@ -168,7 +168,7 @@ namespace Prism
 		RESOURCE_LOG("SetupDirectXData took %d ms", elapsed);
 	}
 
-	void Terrain::Render(const Camera& aCamera, bool aRenderNavMeshLines)
+	void Terrain::Render(const Camera& aCamera, bool aRenderNavMeshLines, bool aIsDepthRender)
 	{
 
 		CU::Matrix44<float> world;
@@ -176,7 +176,7 @@ namespace Prism
 		myEffect->SetWorldMatrix(world);
 		myEffect->SetViewProjectionMatrix(aCamera.GetViewProjection());
 		myEffect->SetCameraPosition(aCamera.GetOrientation().GetPos());
-		BaseModel::Render();
+		BaseModel::Render(aIsDepthRender);
 		myIce->Render(aCamera);
 		myNavMesh->Render(aRenderNavMeshLines);
 	}

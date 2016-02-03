@@ -55,11 +55,11 @@ namespace Prism
 				, &myVertexBuffer->myByteOffset);
 
 			D3DX11_TECHNIQUE_DESC techDesc;
-			myEffect->GetTechnique()->GetDesc(&techDesc);
+			myEffect->GetTechnique(false)->GetDesc(&techDesc);
 
 			for (UINT i = 0; i < techDesc.Passes; ++i)
 			{
-				myEffect->GetTechnique()->GetPassByIndex(i)->Apply(0, Engine::GetInstance()->GetContex());
+				myEffect->GetTechnique(false)->GetPassByIndex(i)->Apply(0, Engine::GetInstance()->GetContex());
 				Engine::GetInstance()->GetContex()->Draw(someLines.Size() * 2, 0);
 			}
 		}
@@ -87,7 +87,7 @@ namespace Prism
 		HRESULT hr;
 
 		D3DX11_PASS_DESC passDesc;
-		hr = myEffect->GetTechnique()->GetPassByIndex(0)->GetDesc(&passDesc);
+		hr = myEffect->GetTechnique(false)->GetPassByIndex(0)->GetDesc(&passDesc);
 		DL_ASSERT_EXP(!FAILED(hr), "[Line3DRenderer](CreateInputLayout) : Failed to get Pass Description!");
 
 		const D3D11_INPUT_ELEMENT_DESC Line3DRendererLayout[] =

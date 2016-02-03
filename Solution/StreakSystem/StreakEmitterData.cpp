@@ -143,7 +143,7 @@ bool Prism::StreakEmitterData::LoadDataFile(const std::string& aFileName)
 bool Prism::StreakEmitterData::CreateInputLayout()
 {
 	D3DX11_PASS_DESC passDesc;
-	HRESULT hr = myEffect->GetTechnique()->GetPassByIndex(0)->GetDesc(&passDesc);
+	HRESULT hr = myEffect->GetTechnique(false)->GetPassByIndex(0)->GetDesc(&passDesc);
 	DL_ASSERT_EXP(SUCCEEDED(hr) == true, "Unable to get pass description.");
 
 	const D3D11_INPUT_ELEMENT_DESC StreakLayout[] =

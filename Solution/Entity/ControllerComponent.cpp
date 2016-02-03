@@ -100,7 +100,7 @@ void ControllerComponent::Update(float aDelta)
 		StartNextAction();
 	}
 
-	if (myEntity.GetOwner() == eOwnerType::PLAYER && CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_LSHIFT) == true)
+	if (myEntity.GetOwner() == eOwnerType::PLAYER && (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_LSHIFT) == true || CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_RSHIFT) == true))
 	{
 		RenderDebugLines();
 	}

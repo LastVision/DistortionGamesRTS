@@ -131,7 +131,7 @@ namespace Prism
 
 		for (UINT i = 0; i < myParticleEmitterData->myTechniqueDesc->Passes; ++i)
 		{
-			myParticleEmitterData->myEffect->GetTechnique()->GetPassByIndex(i)->Apply(0, Engine::GetInstance()->GetContex());
+			myParticleEmitterData->myEffect->GetTechnique(false)->GetPassByIndex(i)->Apply(0, Engine::GetInstance()->GetContex());
 			Engine::GetInstance()->GetContex()->Draw(myGraphicalParticles.Size(), 0);
 		}
 
@@ -204,7 +204,7 @@ namespace Prism
 			EmitParticle(aWorldMatrix);
 			myEmissionTime = myParticleEmitterData->myEmissionRate;
 		}
-		
+
 		if (myParticleEmitterData->myUseEmitterLifeTime == true)
 		{
 			if (myEmitterLife <= 0.f && myLiveParticleCount <= 0)
@@ -218,7 +218,7 @@ namespace Prism
 	{
 		for (int i = 0; i < myLogicalParticles.Size(); ++i)
 		{
-			if (myGraphicalParticles[i].myAlpha <= 0.0f && myLogicalParticles[i].myIsAlive == true)
+			if (myGraphicalParticles[i].myAlpha < 0.0f)
 			{
 				myLiveParticleCount--;
 				myLogicalParticles[i].myIsAlive = false;
@@ -235,10 +235,13 @@ namespace Prism
 			{
 				myGraphicalParticles[i].myAlpha -= myGraphicalParticles[i].myLifeTime * aDeltaTime;
 			}
-
 			myGraphicalParticles[i].myAlpha = CU::Math::CapValue(0.f, 1.f, myGraphicalParticles[i].myAlpha);
+			if (myGraphicalParticles[i].mySize >= 0.f)
+			{
 
-			myGraphicalParticles[i].mySize += myParticleEmitterData->myData.mySizeDelta * aDeltaTime;
+
+				myGraphicalParticles[i].mySize += myParticleEmitterData->myData.mySizeDelta * aDeltaTime;
+			}
 
 			myGraphicalParticles[i].myColor += myDiffColor  * aDeltaTime;
 
@@ -279,9 +282,9 @@ namespace Prism
 			}
 			else
 			{
-				myGraphicalParticles[myParticleIndex].myPosition =
-					CU::Math::RandomVector(aWorldMatrix.GetPos() - myParticleEmitterData->myEmitterSize
-					, aWorldMatrix.GetPos() + myParticleEmitterData->myEmitterSize);
+			myGraphicalParticles[myParticleIndex].myPosition =
+				CU::Math::RandomVector(aWorldMatrix.GetPos() - myParticleEmitterData->myEmitterSize
+				, aWorldMatrix.GetPos() + myParticleEmitterData->myEmitterSize);
 			}
 
 			myGraphicalParticles[myParticleIndex].myLifeTime = myParticleEmitterData->myParticlesLifeTime;

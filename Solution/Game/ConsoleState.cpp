@@ -1,4 +1,7 @@
 #include "stdafx.h"
+
+#ifndef RELEASE_BUILD
+
 #include "ConsoleState.h"
 #include "Console.h"
 #include "ConsoleHelp.h"
@@ -341,3 +344,4 @@ void ConsoleState::HandleSuggestionMode()
 		}
 	}
 }
+#endif

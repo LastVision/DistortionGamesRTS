@@ -124,7 +124,7 @@ namespace Prism
 		}
 	}
 
-	void BaseModel::Render()
+	void BaseModel::Render(bool aIsDepthRender)
 	{
 		Engine::GetInstance()->GetContex()->IASetInputLayout(myVertexLayout);
 		Engine::GetInstance()->GetContex()->IASetVertexBuffers(myVertexBuffer->myStartSlot
@@ -154,11 +154,11 @@ namespace Prism
 			//	tech = myEffect->GetTechnique();
 			//}
 
-			tech = myEffect->GetTechnique(myTechniqueName);
+			tech = myEffect->GetTechnique(aIsDepthRender, myTechniqueName);
 
 			if (tech->IsValid() == false)
 			{
-				tech = myEffect->GetTechnique();
+				tech = myEffect->GetTechnique(aIsDepthRender);
 				DL_ASSERT("INVALID TECHNIQUE IN BASEMODEL::RENDER: " + myTechniqueName);
 			}
 
@@ -179,7 +179,7 @@ namespace Prism
 	void BaseModel::InitInputLayout(D3D11_INPUT_ELEMENT_DESC* aVertexDescArray, int aArraySize, const std::string& aDebugName)
 	{
 		D3DX11_PASS_DESC passDesc;
-		myEffect->GetTechnique(myTechniqueName)->GetPassByIndex(0)->GetDesc(&passDesc);
+		myEffect->GetTechnique(false, myTechniqueName)->GetPassByIndex(0)->GetDesc(&passDesc);
 		HRESULT hr = Engine::GetInstance()->GetDevice()->CreateInputLayout(aVertexDescArray
 			, aArraySize, passDesc.pIAInputSignature, passDesc.IAInputSignatureSize, &myVertexLayout);
 		if (FAILED(hr) != S_OK)

@@ -23,6 +23,7 @@ ActorComponent::ActorComponent(Entity& aEntity, ActorComponentData& aData, const
 		, const EntityCommandData& aCurrentCommand)
 	: Component(aEntity)
 	, myTerrain(aTerrain)
+	, myVisionRange(aData.myVisionRange)
 	, myVisionRange2(aData.myVisionRange * aData.myVisionRange)
 	, myAttackRange2(aData.myAttackRange * aData.myAttackRange)
 	, myAttackDamage(aData.myAttackDamage)
@@ -36,6 +37,7 @@ ActorComponent::ActorComponent(Entity& aEntity, ActorComponentData& aData, const
 	, myRangerOneShotCooldown(aData.myRangerOneShotCoolDown)
 	, myBehavior(new BlendedBehavior(myEntity))
 	, myCurrentCommand(aCurrentCommand)
+	, myIsReturning(false)
 {
 	myEntity.myMaxSpeed = aData.myMoveSpeed;
 
@@ -174,6 +176,17 @@ void ActorComponent::DoStop(float aDelta)
 	{
 		myBehavior->SetTarget(myCurrentCommand.GetPosition());
 		DoMove(aDelta);
+		myIsReturning = true;
+	}
+	else if (myIsReturning == true)
+	{
+		myBehavior->SetTarget(myCurrentCommand.GetPosition());
+		DoMove(aDelta);
+		
+		if (myBehavior->GetDone() == true)
+		{
+			myIsReturning = false;
+		}
 	}
 	else
 	{

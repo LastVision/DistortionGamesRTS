@@ -30,7 +30,8 @@ namespace Prism
 		myRenderInfo[aOwner][aModel].myScales.Add(aScale);
 	}
 
-	void InstancingHelper::Render(CU::StaticArray<DirectionalLightData, NUMBER_OF_DIRECTIONAL_LIGHTS>& someLights)
+	void InstancingHelper::Render(CU::StaticArray<DirectionalLightData, NUMBER_OF_DIRECTIONAL_LIGHTS>& someLights
+		, bool aIsDepthRender)
 	{
 		DL_ASSERT_EXP(myCamera != nullptr, "Tried to render without a camera");
 
@@ -60,8 +61,14 @@ namespace Prism
 					//currModel->ActivateAlbedo(it->first);
 
 					D3DX11_TECHNIQUE_DESC techDesc;
-					ID3DX11EffectTechnique* tech = currEffect->GetTechnique(currModel->GetTechniqueName());
+					ID3DX11EffectTechnique* tech = currEffect->GetTechnique(aIsDepthRender, currModel->GetTechniqueName());
 					tech->GetDesc(&techDesc);
+
+					if (tech->IsValid() == false)
+					{
+						tech = currEffect->GetTechnique(aIsDepthRender);
+						DL_ASSERT("INVALID TECHNIQUE IN INSTANCEHELPER::RENDER:");
+					}
 
 					for (UINT j = 0; j < techDesc.Passes; ++j)
 					{
