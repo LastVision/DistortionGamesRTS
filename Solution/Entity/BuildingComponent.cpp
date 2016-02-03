@@ -39,6 +39,7 @@ void BuildingComponent::Reset()
 	myCurrentBuildTime = 0.f;
 	myIgnoreBuildTime = false;
 	myEntity.myAlive = true;
+	myHasSpawnedAtLeastOnce = false;
 
 	CU::Vector2<float> forward(myEntity.GetOrientation().GetForward().x, myEntity.GetOrientation().GetForward().z);
 	mySpawnPoint = myEntity.GetPosition() + (-forward * 14.f);
@@ -92,6 +93,10 @@ void BuildingComponent::Update(float aDeltaTime)
 		}
 		else
 		{
+			if (myHasSpawnedAtLeastOnce == false)
+			{
+				myHasSpawnedAtLeastOnce = true;
+			}
 			PostMaster::GetInstance()->SendMessage(SpawnUnitMessage(currentOrder.myUnit, myEntity.GetOwner(), mySpawnPoint, myRallyPoint));
 		}
 

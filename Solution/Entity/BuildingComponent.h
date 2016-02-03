@@ -43,6 +43,8 @@ public:
 
 	void Abort(int aIndex);
 
+	const bool GetHasSpawnedAtLeastOnce() const;
+
 private:
 	struct BuildInfo
 	{
@@ -72,6 +74,7 @@ private:
 
 	bool myIgnoreBuildTime;
 	bool myUpgradesInQueue;
+	bool myHasSpawnedAtLeastOnce;
 
 	int myMaxQueue;
 
@@ -153,4 +156,9 @@ inline void BuildingComponent::Abort(int aIndex)
 	{
 		myBuildQueue.RemoveNonCyclicAtIndex(aIndex);
 	}
+}
+
+inline const bool BuildingComponent::GetHasSpawnedAtLeastOnce() const
+{
+	return myHasSpawnedAtLeastOnce;
 }

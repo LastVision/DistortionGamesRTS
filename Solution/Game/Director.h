@@ -47,6 +47,8 @@ public:
 protected:
 	bool IsAlreadyActive(Entity* aUnit);
 
+	void ResourceGainUnlockCheck();
+
 	CU::GrowingArray<Entity*> myUnits;
 	CU::GrowingArray<Entity*> myActiveUnits;
 	CU::GrowingArray<Entity*> myDeadUnits;
@@ -64,6 +66,7 @@ protected:
 
 	bool myHasUnlockedRanger;
 	bool myHasUnlockedTank;
+	bool myHasUnlockedResource;
 
 	float myIncomeTimer;
 	float myCurrentIncomeTimer;
