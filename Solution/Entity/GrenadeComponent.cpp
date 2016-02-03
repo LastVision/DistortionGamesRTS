@@ -5,6 +5,7 @@
 #include "EmitterMessage.h"
 #include "ControllerComponent.h"
 #include "GrenadeComponent.h"
+#include "../Game/FogOfWarMap.h"
 #include "HealthComponent.h"
 #include "Intersection.h"
 #include "KillUnitMessage.h"
@@ -115,8 +116,11 @@ void GrenadeComponent::Explosion()
 	PostMaster::GetInstance()->SendMessage(EmitterMessage("Grenade", myPosition));
 	if (myEntity.GetUnitType() == eUnitType::GRUNT)
 	{
-		Prism::Audio::AudioInterface::GetInstance()->PostEvent("Grunt_GrenadeExplosion"
-			, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+		if (FogOfWarMap::GetInstance()->IsVisible(myEntity.GetPosition()) == true)
+		{
+			Prism::Audio::AudioInterface::GetInstance()->PostEvent("Grunt_GrenadeExplosion"
+				, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+		}
 	}
 	bool hasSurvived = true;
 	if (myUnits.Size() > 0)
