@@ -116,7 +116,7 @@ void GrenadeComponent::Explosion()
 	PostMaster::GetInstance()->SendMessage(EmitterMessage("Grenade", myPosition));
 	if (myEntity.GetUnitType() == eUnitType::GRUNT)
 	{
-		if (FogOfWarMap::GetInstance()->IsVisible(myEntity.GetPosition()) == true)
+		if (FogOfWarMap::GetInstance()->IsVisible(my2DPosition) == true)
 		{
 			Prism::Audio::AudioInterface::GetInstance()->PostEvent("Grunt_GrenadeExplosion"
 				, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
