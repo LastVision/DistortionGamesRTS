@@ -209,7 +209,7 @@ namespace GUI
 		{
 			if (myEventSprites[i].myEventPosition == aMessage.myPosition)
 			{
-				return false;
+				return;
 			}
 		}
 
