@@ -67,8 +67,8 @@ namespace Prism
 
 		file.close();
 
-		newModel->Init();
 		newModel->SetFileName(aFilePath);
+		newModel->Init();
 		int elapsed = static_cast<int>(
 			CU::TimerManager::GetInstance()->StopTimer("LoadDGFX").GetMilliseconds());
 		RESOURCE_LOG("DGFX-Model \"%s\" took %d ms to load", dgfxFile.c_str(), elapsed);
@@ -109,8 +109,8 @@ namespace Prism
 
 		file.close();
 
-		newModel->Init();
 		newModel->SetFileName(aFilePath);
+		newModel->Init();
 		int elapsed = static_cast<int>(
 			CU::TimerManager::GetInstance()->StopTimer("LoadDGFXAnimated").GetMilliseconds());
 		RESOURCE_LOG("Animated DGFX-Model \"%s\" took %d ms to load", dgfxFile.c_str(), elapsed);
