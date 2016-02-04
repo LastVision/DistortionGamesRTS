@@ -344,6 +344,7 @@ void PlayerDirector::Render(const Prism::Camera& aCamera)
 void PlayerDirector::OnResize(int aWidth, int aHeight)
 {
 	myGUIManager->OnResize(aWidth, aHeight);
+	myTextEventManager->OnResize({ float(aWidth), float(aHeight) });
 }
 
 void PlayerDirector::ReceiveMessage(const ToggleGUIMessage& aMessage)

@@ -40,6 +40,8 @@ public:
 	void ReceiveMessage(const NotificationMessage& aMessage) override;
 	void ReceiveMessage(const InWorldTextMessage& aMessage) override;
 
+	void OnResize(const CU::Vector2<float>& aNewSize);
+
 private:
 
 	CU::Vector2<float> Get2DPosition(const CU::Vector3<float>& aPosition);
@@ -48,15 +50,16 @@ private:
 	CU::GrowingArray<NotificationText*> myNotifications;
 
 	CU::Vector2<float> myNotificationPosition;
-
-	int myInWorldTextIndex;
-	int myNotificationIndex;
-
-	int myInWorldTextMax;
-	int myNotificationMax;
+	CU::Vector2<float> mySize;
 
 	float myTextLifeTime;
 	float myTextStartFadingTime;
+	float myTextScale;
+
+	int myInWorldTextIndex;
+	int myNotificationIndex;
+	int myInWorldTextMax;
+	int myNotificationMax;
 
 	const Prism::Camera* myCamera;
 };
