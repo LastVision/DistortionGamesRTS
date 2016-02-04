@@ -127,6 +127,7 @@ void AIDirector::Update(float aDeltaTime)
 		const BuildingComponent* building = PollingStation::GetInstance()->GetBase(eOwnerType::PLAYER)->GetComponent<BuildingComponent>();
 		myPlayerHasStarted = building->GetHasSpawnedAtLeastOnce();
 		//myPlayerHasStarted = PollingStation::GetInstance()->GetUnits(eOwnerType::PLAYER).Size() > 0;
+		myTimeMultiplier = 1.f;
 		return;
 	}
 
