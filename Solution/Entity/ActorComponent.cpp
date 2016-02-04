@@ -423,7 +423,7 @@ void ActorComponent::AttackTarget(Entity* aTarget, float aDelta)
 		
 		if (aTarget->GetComponent<PromotionComponent>()->GetPromoted() == true)
 		{
-			PostMaster::GetInstance()->SendMessage(KilledPromotedMessage(myEntity.GetOwner(), 10));
+			PostMaster::GetInstance()->SendMessage(KilledPromotedMessage(myEntity.GetOwner(), 10, aTarget->GetPosition()));
 		}
 	}
 }

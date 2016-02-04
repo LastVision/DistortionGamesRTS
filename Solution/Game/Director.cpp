@@ -9,6 +9,7 @@
 #include <Entity.h>
 #include "FogOfWarMap.h"
 #include <HealthComponent.h>
+#include <InWorldTextMessage.h>
 #include <KillUnitMessage.h>
 #include <KilledPromotedMessage.h>
 #include <PostMaster.h>
@@ -346,6 +347,13 @@ void Director::ReceiveMessage(const KilledPromotedMessage& aMessage)
 	if (aMessage.myOwner == myOwner)
 	{
 		myGunpowder += aMessage.myGunpowderModifier;
+
+		if (aMessage.myOwner == eOwnerType::PLAYER)
+		{
+			std::string message = "+" + std::to_string(aMessage.myGunpowderModifier) + "gp";
+
+			PostMaster::GetInstance()->SendMessage(InWorldTextMessage(message, aMessage.myUnitPosition));
+		}
 	}
 }
 

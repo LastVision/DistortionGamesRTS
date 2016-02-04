@@ -52,6 +52,9 @@ private:
 	int myInWorldTextIndex;
 	int myNotificationIndex;
 
+	int myInWorldTextMax;
+	int myNotificationMax;
+
 	float myTextLifeTime;
 	float myTextStartFadingTime;
 

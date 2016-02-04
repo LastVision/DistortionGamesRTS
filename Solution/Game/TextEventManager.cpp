@@ -11,17 +11,23 @@ TextEventManager::TextEventManager(const Prism::Camera* aCamera)
 	, myNotificationPosition(50.f, 900.f)
 	, myTextLifeTime(5.f)
 	, myTextStartFadingTime(1.f)
-	, myNotifications(10)
-	, myInWorldTexts(10)
 	, myInWorldTextIndex(0)
 	, myNotificationIndex(0)
+	, myNotificationMax(20)
+	, myInWorldTextMax(10)
 {
-	for (int i = 0; i < 10; i++)
+	myNotifications.Init(myNotificationMax);
+	myInWorldTexts.Init(myInWorldTextMax);
+
+	for (int i = 0; i < myInWorldTextMax; i++)
 	{
 		InWorldText* inworldText = new InWorldText;
 		inworldText->myText = new Prism::Text(*Prism::Engine::GetInstance()->GetFont(Prism::eFont::DIALOGUE));
 		myInWorldTexts.Add(inworldText);
+	}
 
+	for (int i = 0; i < myNotificationMax; i++)
+	{
 		NotificationText* notification = new NotificationText;
 		notification->myText = new Prism::Text(*Prism::Engine::GetInstance()->GetFont(Prism::eFont::DIALOGUE));
 		myNotifications.Add(notification);
@@ -122,7 +128,7 @@ void TextEventManager::AddNotification(const std::string& aText, const CU::Vecto
 
 	myNotificationIndex++;
 
-	if (myNotificationIndex >= 10)
+	if (myNotificationIndex >= myNotificationMax)
 	{
 		myNotificationIndex = 0;
 	}
@@ -138,7 +144,7 @@ void TextEventManager::AddInWorldText(const std::string& aText, const CU::Vector
 
 	myInWorldTextIndex++;
 
-	if (myInWorldTextIndex >= 10)
+	if (myInWorldTextIndex >= myInWorldTextMax)
 	{
 		myInWorldTextIndex = 0;
 	}
