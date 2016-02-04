@@ -345,9 +345,9 @@ namespace Script_Interface
 	{
 		//Unlock units
 		PostMaster::GetInstance()->SendMessage(KillUnitMessage(static_cast<int>(eUnitType::RANGER),
-			static_cast<int>(eOwnerType::NEUTRAL), { 0.f, 0.f }));
+			static_cast<int>(eOwnerType::NEUTRAL), { 0.f, 0.f }, static_cast<int>(eOwnerType::PLAYER)));
 		PostMaster::GetInstance()->SendMessage(KillUnitMessage(static_cast<int>(eUnitType::TANK), 
-			static_cast<int>(eOwnerType::NEUTRAL), { 0.f, 0.f }));
+			static_cast<int>(eOwnerType::NEUTRAL), { 0.f, 0.f }, static_cast<int>(eOwnerType::PLAYER)));
 
 		return 0;
 	}
