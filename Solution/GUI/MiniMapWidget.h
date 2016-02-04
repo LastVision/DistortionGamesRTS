@@ -15,6 +15,15 @@ namespace tinyxml2
 
 class XMLReader;
 
+struct MiniMapEvent
+{
+	Prism::SpriteProxy* myEventSprite;
+	float myEventTimer;
+	float myEventTime;
+	bool myShouldRenderEvent;
+	CU::Vector2<float> myEventPosition;
+};
+
 namespace GUI
 {
 	class MiniMapWidget : public Widget, public Subscriber
@@ -52,11 +61,13 @@ namespace GUI
 		Prism::SpriteProxy* myArtifactSprite;
 		Prism::SpriteProxy* myCameraFrustum;
 		Prism::SpriteProxy* myEventSprite;
-
 		float myEventTimer;
 		float myEventTime;
 		bool myShouldRenderEvent;
 		CU::Vector2<float> myEventPosition;
+
+		CU::GrowingArray<MiniMapEvent> myEventSprites;
+		int myCurrentEventSprite;
 
 		const CU::Matrix44<float>* myCameraOrientation;
 		const bool& myCantClickOn;

@@ -72,7 +72,7 @@ bool HealthComponent::TakeDamageAndCheckSurvive(float aDamage)
 {
 	DL_ASSERT_EXP(aDamage >= 0, "Cant take negative damage, use Heal for healing if that was your intention");
 
-	if (FogOfWarMap::GetInstance()->IsVisible(myEntity.GetPosition()))
+	if (FogOfWarMap::GetInstance()->IsVisible(myEntity.GetPosition()) && myEntity.GetOwner() == eOwnerType::PLAYER)
 	{
 		PostMaster::GetInstance()->SendMessage(EmitterMessage("OnHit", myEntity.GetId()));
 		PostMaster::GetInstance()->SendMessage(MinimapEventMessage(myEntity.GetPosition(), MinimapEventType::eUNIT_ATTACKED));

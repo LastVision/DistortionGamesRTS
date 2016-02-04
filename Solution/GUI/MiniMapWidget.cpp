@@ -20,6 +20,8 @@ namespace GUI
 		, myCantClickOn(aCantClickOn)
 		, myShouldRenderEvent(false)
 		, myEventTime(5.f)
+		, myEventSprites(8)
+		, myCurrentEventSprite(0)
 	{
 		std::string mapPath = "";
 		std::string unitPath = "";
@@ -69,6 +71,17 @@ namespace GUI
 		myCameraFrustum = Prism::ModelLoader::GetInstance()->LoadSprite(cameraPath, cameraSize, cameraSize / 2.f);
 
 		PostMaster::GetInstance()->Subscribe(eMessageType::MINIMAP_EVENT, this);
+
+		for (int i = 0; i < 8; ++i)
+		{
+			MiniMapEvent toAdd;
+			toAdd.myEventPosition = { 128.f, 128.f };
+			toAdd.myEventSprite = myEventSprite;
+			toAdd.myEventTime = 5.f;
+			toAdd.myEventTimer = 0.f;
+			toAdd.myShouldRenderEvent = false;
+			myEventSprites.Add(toAdd);
+		}
 	}
 
 	MiniMapWidget::~MiniMapWidget()
@@ -95,6 +108,15 @@ namespace GUI
 		{
 			myShouldRenderEvent = false;
 		}
+
+		for (int i = 0; i < myEventSprites.Size(); ++i)
+		{
+			myEventSprites[i].myEventTimer += aDelta;
+			if (myEventSprites[i].myEventTimer > myEventSprites[i].myEventTime)
+			{
+				myEventSprites[i].myShouldRenderEvent = false;
+			}
+		}
 	}
 
 	void MiniMapWidget::Render(const CU::Vector2<float>& aParentPosition)
@@ -114,13 +136,26 @@ namespace GUI
 		cameraPosition.y += myCameraFrustum->GetSize().y * 1.4f;
 		myCameraFrustum->Render(cameraPosition);
 		
-		if (myShouldRenderEvent == true)
+		//if (myShouldRenderEvent == true)
+		//{
+		//	//if (static_cast<int>(myEventTimer) % 2 == 0)
+		//	{
+		//		CU::Vector2<float> position = (myEventPosition / 255.f) * mySize;
+		//		float scale = 2 + 5 * log(myEventTimer + 1);
+		//		myEventSprite->Render(aParentPosition + myPosition + position, { scale, scale }, { 1.f, 1.f, 1.f, 1.f - (myEventTimer * 51.f / 255.f) });
+		//	}
+		//}
+
+		for (int i = 0; i < myEventSprites.Size(); ++i)
 		{
-			//if (static_cast<int>(myEventTimer) % 2 == 0)
+			if (myEventSprites[i].myShouldRenderEvent == true)
 			{
-				CU::Vector2<float> position = (myEventPosition / 255.f) * mySize;
-				float scale = 2 + 5 * log(myEventTimer + 1);
-				myEventSprite->Render(aParentPosition + myPosition + position, { scale, scale }, { 1.f, 1.f, 1.f, 1.f - (myEventTimer * 51.f / 255.f) });
+
+				CU::Vector2<float> position = (myEventSprites[i].myEventPosition / 255.f) * mySize;
+				float scale = 2 + 5 * log(myEventSprites[i].myEventTimer + 1);
+				myEventSprites[i].myEventSprite->Render(aParentPosition + myPosition + position
+					, { scale, scale }, { 1.f, 1.f, 1.f, 1.f - (myEventSprites[i].myEventTimer * 51.f / 255.f) });
+				
 			}
 		}
 	}
@@ -165,12 +200,32 @@ namespace GUI
 
 	void MiniMapWidget::ReceiveMessage(const MinimapEventMessage& aMessage)
 	{
-		aMessage.myMessageType;
-		myEventPosition = aMessage.myPosition;
-		myEventTimer = 0.f;
-		myShouldRenderEvent = true;
+		//aMessage.myMessageType;
+		//myEventPosition = aMessage.myPosition;
+		//myEventTimer = 0.f;
+		//myShouldRenderEvent = true;
 
-		PostMaster::GetInstance()->SendMessage(EventPositionMessage(myEventPosition));
+		for (int i = 0; i < myEventSprites.Size(); ++i)
+		{
+			if (myEventSprites[i].myEventPosition == aMessage.myPosition)
+			{
+				return false;
+			}
+		}
+
+		myEventSprites[myCurrentEventSprite].myEventPosition = aMessage.myPosition;
+		myEventSprites[myCurrentEventSprite].myEventTimer = 0.f;
+		myEventSprites[myCurrentEventSprite].myShouldRenderEvent = true;
+
+		PostMaster::GetInstance()->SendMessage(EventPositionMessage(myEventSprites[myCurrentEventSprite].myEventPosition));
+
+
+		++myCurrentEventSprite;
+
+		if (myCurrentEventSprite >= myEventSprites.Size())
+		{
+			myCurrentEventSprite = 0;
+		}
 	}
 
 	void MiniMapWidget::RenderUnits(const CU::Vector2<float>& aParentPosition)

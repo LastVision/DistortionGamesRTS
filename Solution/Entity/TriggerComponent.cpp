@@ -112,7 +112,7 @@ eOwnerType TriggerComponent::ModifyOwnership(eOwnerType anOwner, float aModifyVa
 		{
 			if (FogOfWarMap::GetInstance()->IsVisible(myEntity.GetPosition()))
 			{
-				if (myHasSentEventMessage == false)
+				if (myHasSentEventMessage == false && myGainingPointsOwner == eOwnerType::PLAYER)
 				{
 					if (myType == eTriggerType::RESOURCE)
 					{
