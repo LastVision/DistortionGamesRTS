@@ -12,7 +12,6 @@
 PromotionComponent::PromotionComponent(Entity& aEntity, PromotionComponentData& aData)
 	: Component(aEntity)
 	, myKillCount(aData.myKillCount)
-	, myIsPromoted(false)
 {
 	CU::Vector2<float> size(32.f, 32.f);
 	mySprite = Prism::ModelLoader::GetInstance()->LoadSprite(
@@ -28,6 +27,7 @@ PromotionComponent::~PromotionComponent()
 void PromotionComponent::Reset()
 {
 	myCurrentKillCount = 0;
+	myIsPromoted = false;
 }
 
 void PromotionComponent::RenderPromotion(const Prism::Camera& aCamera)
