@@ -21,6 +21,7 @@
 #include <InputWrapper.h>
 #include <MinimapMoveMessage.h>
 #include <MoveCameraMessage.h>
+#include <NotificationMessage.h>
 #include <OnClickMessage.h>
 #include <PathFinderFunnel.h>
 #include "PlayerDirector.h"
@@ -359,6 +360,10 @@ void PlayerDirector::ReceiveMessage(const OnClickMessage& aMessage)
 		{
 			mySelectedAction = eSelectedAction::PLACE_TOTEM;
 			myCursor->SetCurrentCursor(eCursorType::TOTEM);
+		}
+		else
+		{
+			PostMaster::GetInstance()->SendMessage(NotificationMessage("Totem is on cooldown."));
 		}
 		return;
 	}

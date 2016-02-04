@@ -82,7 +82,7 @@ void BuildingComponent::Update(float aDeltaTime)
 		if (currentOrder.myIsUpgrade == true)
 		{
 			PostMaster::GetInstance()->SendMessage(UpgradeUnitMessage(currentOrder.myUnit, myUnitUpgrades[unitIndex][upgradeIndex]
-				, myEntity.GetOwner()));
+				, myEntity.GetOwner(), upgradeIndex));
 			++myUnitUpgradeProgress[unitIndex];
 			upgradeIndex = myUnitUpgradeProgress[unitIndex];
 			if (upgradeIndex < 3)
@@ -128,7 +128,7 @@ void BuildingComponent::UpgradeUnit(eUnitType aUnitType)
 		int upgradeIndex = myUnitUpgradeProgress[unitIndex];
 
 		PostMaster::GetInstance()->SendMessage(UpgradeUnitMessage(aUnitType, myUnitUpgrades[unitIndex][upgradeIndex]
-			, myEntity.GetOwner()));
+			, myEntity.GetOwner(), upgradeIndex));
 		++myUnitUpgradeProgress[unitIndex];
 		upgradeIndex = myUnitUpgradeProgress[unitIndex];
 		if (upgradeIndex < 3)

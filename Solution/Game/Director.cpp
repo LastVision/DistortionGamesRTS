@@ -316,6 +316,27 @@ void Director::ReceiveMessage(const UpgradeUnitMessage& aMessage)
 				}
 			}
 		}
+
+		if (myOwner == eOwnerType::PLAYER)
+		{
+			std::string message = "";
+
+			switch (aMessage.myUnit)
+			{
+			case eUnitType::GRUNT:
+				message = "Grunt";
+				break;
+			case eUnitType::RANGER:
+				message = "Ranger";
+				break;
+			case eUnitType::TANK:
+				message = "Tank";
+				break;
+			}
+	
+			message.append(" upgraded to level " + std::to_string(aMessage.myUpgradeLevel + 1) + ".");
+			PostMaster::GetInstance()->SendMessage(NotificationMessage(message));
+		}
 	}
 }
 
