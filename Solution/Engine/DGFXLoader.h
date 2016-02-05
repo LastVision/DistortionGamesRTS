@@ -207,8 +207,8 @@ namespace Prism
 		DGFXLoader();
 		~DGFXLoader();
 
-		Model* LoadModel(const std::string& aFilePath, Effect* aEffect);
-		ModelAnimated* LoadAnimatedModel(const std::string& aFilePath, Effect* aEffect);
+		Model* LoadModel(const std::string& aFilePath);
+		ModelAnimated* LoadAnimatedModel(const std::string& aFilePath);
 		Animation* LoadAnimation(const std::string& aFilePath);
 		
 		bool CheckIfFbxIsNewer(const std::string& aDGFXPath);
@@ -235,16 +235,16 @@ namespace Prism
 			NR_OF_TEXTURETYPES,
 		};
 
-		Model* CreateModel(Effect* aEffect, std::fstream& aStream);
-		ModelAnimated* CreateModelAnimated(Effect* aEffect, std::fstream& aStream);
+		Model* CreateModel(std::fstream& aStream);
+		ModelAnimated* CreateModelAnimated(const std::string& aFBXPath, std::fstream& aStream);
 
 		void LoadData(VertexIndexWrapper* aIndexWrapper, VertexDataWrapper* aVertexData
 			, CU::GrowingArray<D3D11_INPUT_ELEMENT_DESC*>& someInputElements, Surface& aSurface
-			, Effect* aEffect, std::fstream& aStream);
+			, std::fstream& aStream);
 
 		void LoadLodGroup(Model* aOutData, std::fstream& aStream);
 
-		Animation* LoadAnimation(ModelAnimated* aOutData, std::fstream& aStream);
+		Animation* LoadAnimation(const std::string& aFBXPath, ModelAnimated* aOutData, std::fstream& aStream);
 		void LoadBoneHierarchy(HierarchyBone& aOutBone, std::fstream& aStream);
 
 	

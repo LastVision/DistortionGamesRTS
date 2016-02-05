@@ -26,6 +26,7 @@ namespace Prism
 	{
 		friend class FBXFactory;
 		friend class DGFXLoader;
+		friend class ModelLoader;
 		friend class Instance;
 	public:
 		ModelAnimated();

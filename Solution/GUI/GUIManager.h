@@ -48,6 +48,8 @@ namespace GUI
 
 		const Widget* GetActiveWidget() const;
 
+		void SetPosition(const CU::Vector2<float>& aPosition);
+
 	private:
 
 		void ReadContainers(XMLReader& aReader, tinyxml2::XMLElement* aContainerElement);

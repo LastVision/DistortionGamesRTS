@@ -35,7 +35,7 @@ namespace Prism
 		myModelsAnimated.clear();
 	}
 
-	Model* DGFXLoader::LoadModel(const std::string& aFilePath, Effect* aEffect)
+	Model* DGFXLoader::LoadModel(const std::string& aFilePath)
 	{
 		if (myModels.find(aFilePath) != myModels.end())
 		{
@@ -63,12 +63,10 @@ namespace Prism
 			return nullptr;
 		}
 
-		Model* newModel = CreateModel(aEffect, file);
+		Model* newModel = CreateModel(file);
 
 		file.close();
 
-		newModel->SetFileName(aFilePath);
-		newModel->Init();
 		int elapsed = static_cast<int>(
 			CU::TimerManager::GetInstance()->StopTimer("LoadDGFX").GetMilliseconds());
 		RESOURCE_LOG("DGFX-Model \"%s\" took %d ms to load", dgfxFile.c_str(), elapsed);
@@ -78,7 +76,7 @@ namespace Prism
 		return newModel;
 	}
 
-	ModelAnimated* DGFXLoader::LoadAnimatedModel(const std::string& aFilePath, Effect* aEffect)
+	ModelAnimated* DGFXLoader::LoadAnimatedModel(const std::string& aFilePath)
 	{
 		if (myModelsAnimated.find(aFilePath) != myModelsAnimated.end())
 		{
@@ -105,12 +103,10 @@ namespace Prism
 			return nullptr;
 		}
 
-		ModelAnimated* newModel = CreateModelAnimated(aEffect, file);
+		ModelAnimated* newModel = CreateModelAnimated(aFilePath, file);
 
 		file.close();
 
-		newModel->SetFileName(aFilePath);
-		newModel->Init();
 		int elapsed = static_cast<int>(
 			CU::TimerManager::GetInstance()->StopTimer("LoadDGFXAnimated").GetMilliseconds());
 		RESOURCE_LOG("Animated DGFX-Model \"%s\" took %d ms to load", dgfxFile.c_str(), elapsed);
@@ -172,22 +168,19 @@ namespace Prism
 			_wassert(L"ANIMATION NEEDS TO BE A NULLOBJECT, BUT IT WASNT", L"DGFXLoader.cpp", 189);
 		}
 
-		Animation* animation = LoadAnimation(nullptr, stream);
-
+		Animation* animation = LoadAnimation(aFilePath, nullptr, stream);
 		stream.close();
 
 		int elapsed = static_cast<int>(
 			CU::TimerManager::GetInstance()->StopTimer("LoadAnimationDGFX").GetMilliseconds());
 		RESOURCE_LOG("DGFX-Animation \"%s\" took %d ms to load", dgfxFile.c_str(), elapsed);
 
-		myAnimations[aFilePath] = animation;
 		return animation;
 	}
 
-	Model* DGFXLoader::CreateModel(Effect* aEffect, std::fstream& aStream)
+	Model* DGFXLoader::CreateModel(std::fstream& aStream)
 	{
 		Model* tempModel = new Model();
-		tempModel->SetEffect(aEffect);
 
 		int fileVersion = -1;
 		aStream.read((char*)&fileVersion, sizeof(int));
@@ -216,7 +209,7 @@ namespace Prism
 			Surface* surface = new Surface();
 
 			LoadData(indexWrapper, vertexData, tempModel->myVertexFormat, *surface
-				, aEffect, aStream);
+				, aStream);
 
 			tempModel->mySurfaces.Add(surface);
 			tempModel->myIndexBaseData = indexWrapper;
@@ -235,16 +228,15 @@ namespace Prism
 		aStream.read((char*)&childCount, sizeof(int));
 		for (int i = 0; i < childCount; ++i)
 		{
-			tempModel->AddChild(CreateModel(aEffect, aStream));
+			tempModel->AddChild(CreateModel(aStream));
 		}
 
 		return tempModel;
 	}
 
-	ModelAnimated* DGFXLoader::CreateModelAnimated(Effect* aEffect, std::fstream& aStream)
+	ModelAnimated* DGFXLoader::CreateModelAnimated(const std::string& aFBXPath, std::fstream& aStream)
 	{
 		ModelAnimated* tempModel = new ModelAnimated();
-		tempModel->SetEffect(aEffect);
 
 		int fileVersion = -1;
 		aStream.read((char*)&fileVersion, sizeof(int));
@@ -274,7 +266,7 @@ namespace Prism
 			Surface* surface = new Surface();
 
 			LoadData(indexWrapper, vertexData, tempModel->myVertexFormat, *surface
-				, aEffect, aStream);
+				, aStream);
 
 			tempModel->mySurfaces.Add(surface);
 			tempModel->myIndexBaseData = indexWrapper;
@@ -286,14 +278,14 @@ namespace Prism
 
 		if (isAnimated == 1)
 		{
-			LoadAnimation(tempModel, aStream);
+			LoadAnimation(aFBXPath, tempModel, aStream);
 		}
 
 		int childCount = 0;
 		aStream.read((char*)&childCount, sizeof(int));
 		for (int i = 0; i < childCount; ++i)
 		{
-			tempModel->AddChild(CreateModelAnimated(aEffect, aStream));
+			tempModel->AddChild(CreateModelAnimated(aFBXPath, aStream));
 		}
 
 		return tempModel;
@@ -301,7 +293,7 @@ namespace Prism
 
 	void DGFXLoader::LoadData(VertexIndexWrapper* aIndexWrapper, VertexDataWrapper* aVertexData
 		, CU::GrowingArray<D3D11_INPUT_ELEMENT_DESC*>& someInputElements, Surface& aSurface
-		, Effect* aEffect, std::fstream& aStream)
+		, std::fstream& aStream)
 	{
 		int indexCount = 0;
 		aStream.read((char*)&indexCount, sizeof(int)); //Index count
@@ -405,7 +397,6 @@ namespace Prism
 		aSurface.SetVertexStart(0);
 		aSurface.SetIndexStart(0);
 		aSurface.SetVertexCount(vertexCount);
-		aSurface.SetEffect(aEffect);
 
 		int textureCount = 0;
 		aStream.read((char*)&textureCount, sizeof(int)); //numberOfTextures
@@ -477,7 +468,7 @@ namespace Prism
 		aOutData->SetLodGroup(lodGroup);
 	}
 
-	Animation* DGFXLoader::LoadAnimation(ModelAnimated* aOutData, std::fstream& aStream)
+	Animation* DGFXLoader::LoadAnimation(const std::string& aFBXPath, ModelAnimated* aOutData, std::fstream& aStream)
 	{
 		CU::Matrix44<float> bindMatrix;
 		aStream.read((char*)&bindMatrix.myMatrix[0], sizeof(float) * 16);
@@ -540,6 +531,7 @@ namespace Prism
 			aOutData->myAnimation = newAnimation;
 		}
 
+		myAnimations[aFBXPath] = newAnimation;
 		return newAnimation;
 	}
 

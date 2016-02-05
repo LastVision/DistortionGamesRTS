@@ -27,8 +27,8 @@ namespace Prism
 		FBXFactory();
 		~FBXFactory();
 
-		Model* LoadModel(const char* aFilePath, Effect* aEffect);
-		ModelAnimated* LoadModelAnimated(const char* aFilePath, Effect* aEffect);
+		Model* LoadModel(const char* aFilePath);
+		ModelAnimated* LoadModelAnimated(const char* aFilePath);
 		Animation* LoadAnimation(const char* aFilePath);
 		void LoadModelForRadiusCalc(const char* aFilePath, CU::GrowingArray<CU::Vector3<float>>& someVerticesOut);
 
@@ -36,14 +36,16 @@ namespace Prism
 		void ConvertToDGFX(const char* aInputPath, const char* aOutputPath, CU::GrowingArray<std::string>& someOutErrors);
 		
 	private:
-		void FillData(ModelData* someData, Model* outData, Effect* aEffect);
-		void FillData(ModelData* someData, ModelAnimated* outData, Effect* aEffect);
+		void LoadData(VertexIndexWrapper* aIndexWrapper, VertexDataWrapper* aVertexData
+			, CU::GrowingArray<D3D11_INPUT_ELEMENT_DESC*>& someInputElements, Surface& aSurface
+			, ModelData* someData);
+
 		void FillAnimationData(FbxModelData* someData, ModelAnimated* outData);
-		Animation* FillBoneAnimationData(FbxModelData* someData, ModelAnimated* aOutData);
+		Animation* FillBoneAnimationData(const std::string& aFBXPath, FbxModelData* someData, ModelAnimated* aOutData);
 		void BuildBoneHierarchy(Bone& aBone, AnimationData* aAnimationData, HierarchyBone& aOutBone);
 
-		Model* CreateModel(FbxModelData* someModelData, Effect* aEffect);
-		ModelAnimated* CreateModelAnimated(FbxModelData* someModelData, Effect* aEffect);
+		Model* CreateModel(FbxModelData* someModelData);
+		ModelAnimated* CreateModelAnimated(const std::string& aFBXPath, FbxModelData* someModelData);
 
 		void CreateModelForRadiusCalc(FbxModelData* someModelData, CU::GrowingArray<CU::Vector3<float>>& someVerticesOut
 			, const CU::Matrix44<float>& aParentOrientation = CU::Matrix44<float>());
@@ -70,5 +72,6 @@ namespace Prism
 		std::vector<FBXData*> myFBXData;
 		std::unordered_map<std::string, Model*> myModels;
 		std::unordered_map<std::string, ModelAnimated*> myModelsAnimated;
+		std::unordered_map<std::string, Animation*> myAnimations;
 	};
 }

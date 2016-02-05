@@ -15,7 +15,7 @@ namespace GUI
 		CU::Vector2<float> backgroundSize = mySize + 8.f;
 
 		myBackgroundSprite = Prism::ModelLoader::GetInstance()->LoadSprite(
-			"Data/Resource/Texture/UI/T_healthbar_background.dds", backgroundSize, backgroundSize / 2.f);
+			"Data/Resource/Texture/UI/T_healthbar_background.dds", mySize, mySize / 2.f);
 
 		myValueSprite = Prism::ModelLoader::GetInstance()->LoadSprite(
 			"Data/Resource/Texture/UI/T_healthbar_value.dds", mySize, mySize / 2.f);
@@ -32,7 +32,7 @@ namespace GUI
 		CU::Vector2<float> backgroundSize = mySize + 8.f;
 
 		myBackgroundSprite = Prism::ModelLoader::GetInstance()->LoadSprite(
-			"Data/Resource/Texture/UI/T_healthbar_background.dds", backgroundSize, backgroundSize / 2.f);
+			"Data/Resource/Texture/UI/T_healthbar_background.dds", mySize, mySize / 2.f);
 
 		myValueSprite = Prism::ModelLoader::GetInstance()->LoadSprite(
 			"Data/Resource/Texture/UI/T_healthbar_value.dds", mySize, mySize / 2.f);
@@ -84,8 +84,8 @@ namespace GUI
 			newSize = *myCurrentValueFloat / *myMaxValueFloat;
 		}
 
-		CU::Vector2<float> ratio = myBackgroundSprite->GetSize() / anOldWindowSize.x;
-		myBackgroundSprite->SetSize(aNewWindowSize.x * ratio, aNewWindowSize.x * ratio / 2.f);
+		//CU::Vector2<float> ratio = myBackgroundSprite->GetSize() / anOldWindowSize.x;
+		myBackgroundSprite->SetSize({ mySize.x * newSize, mySize.y }, mySize / 2.f);
 		myValueSprite->SetSize({ mySize.x * newSize, mySize.y }, mySize / 2.f);
 	}
 }

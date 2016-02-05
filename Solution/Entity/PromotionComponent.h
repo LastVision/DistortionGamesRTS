@@ -19,7 +19,8 @@ public:
 	eComponentType GetType() override;
 
 	void RenderPromotion(const Prism::Camera& aCamera);
-	void RenderPromotion(const CU::Vector2<float>& aPosition, const CU::Vector2<float>& aScale = { 1.f, 1.f });
+	void RenderPromotion(const CU::Vector2<float>& aPosition, const CU::Vector2<float>& aScale = { 1.f, 1.f }
+		, const CU::Vector4<float>& aColor = { 1.f, 1.f, 1.f, 1.f });
 
 	void EnemyKilled();
 	bool GetPromoted() const;

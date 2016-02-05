@@ -147,11 +147,7 @@ void AIDirector::Update(float aDeltaTime)
 		StartNextAction();
 	}
 
-	myBuilding->Update(aDeltaTime);
-	BuildingComponent* aiBuilding = myBuilding->GetComponent<BuildingComponent>();
-	DEBUG_PRINT(aiBuilding->GetUpgradeLevel(0));
-	DEBUG_PRINT(aiBuilding->GetUpgradeLevel(1));
-	DEBUG_PRINT(aiBuilding->GetUpgradeLevel(2));
+	
 }
 
 void AIDirector::ReceiveMessage(const SpawnUnitMessage& aMessage)

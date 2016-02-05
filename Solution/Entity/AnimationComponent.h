@@ -3,6 +3,7 @@
 
 namespace Prism
 {
+	class Animation;
 	class Instance;
 	struct MeshData;
 	class Camera;
@@ -32,6 +33,8 @@ public:
 
 	void SetRotation(const CU::Vector3<float>& aRotation);
 	void SetScale(const CU::Vector3<float>& aScale);
+
+	Prism::Animation* GetCurrent() const;
 
 private:
 	void PlayAnimation(eEntityState aAnimationState);

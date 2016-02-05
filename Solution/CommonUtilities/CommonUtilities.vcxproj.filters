@@ -110,6 +110,7 @@
     <ClInclude Include="GameEnum.h" />
     <ClInclude Include="GameStructs.h" />
     <ClInclude Include="FuzzySet.h" />
+    <ClInclude Include="Tweener.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Math">

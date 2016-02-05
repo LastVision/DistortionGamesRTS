@@ -48,13 +48,15 @@ const eStateStatus ClickableState::Update(const float& aDeltaTime)
 	myCurrentTime += aDeltaTime;
 	if (myCurrentTime >= myTimer)
 	{
-		if (CU::InputWrapper::GetInstance()->MouseUp(0) == true)
+		if (CU::InputWrapper::GetInstance()->MouseUp(0) == true || CU::InputWrapper::GetInstance()->MouseUp(1) == true)
 		{
 			myStateStatus = eStateStatus::ePopSubState;
 		}
 		myCurrentTime = myTimer;
 	}
-	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_ESCAPE) == true)
+	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_ESCAPE) == true
+		|| CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_RETURN) == true
+		|| CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_SPACE) == true)
 	{
 		myStateStatus = eStateStatus::ePopSubState;
 	}

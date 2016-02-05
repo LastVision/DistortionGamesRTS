@@ -166,3 +166,8 @@ void AnimationComponent::SetScale(const CU::Vector3<float>& aScale)
 {
 	myInstance->SetScale(aScale);
 }
+
+Prism::Animation* AnimationComponent::GetCurrent() const
+{
+	return myInstance->GetCurrentAnimation();
+}

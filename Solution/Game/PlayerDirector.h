@@ -160,6 +160,9 @@ private:
 
 	Entity* myTotem;
 
+	Entity* myRallyPoint;
+	bool myRallypointVisible;
+
 	int myAudioSFXID;
 	int myMaxSelectedUnits;
 	CU::Vector2<float> myLastEventPosition;

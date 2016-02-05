@@ -18,6 +18,7 @@ enum eEntityType
 	VICTORY_POINT = 16,
 	TOTEM = 32,
 	ARTIFACT = 64,
+	RALLY_POINT = 128,
 	_COUNT,
 };
 

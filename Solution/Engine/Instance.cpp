@@ -180,6 +180,11 @@ void Prism::Instance::SetAnimation(Animation* aAnimation)
 	myAnimation = aAnimation;
 }
 
+Prism::Animation* Prism::Instance::GetCurrentAnimation() const
+{
+	return myAnimation;
+}
+
 bool Prism::Instance::IsAnimationDone()
 {
 	if (myAnimation == nullptr) return true;
