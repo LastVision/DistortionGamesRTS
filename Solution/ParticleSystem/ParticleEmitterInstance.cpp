@@ -31,6 +31,7 @@ namespace Prism
 		, myParticleIndex(0)
 		, myLiveParticleCount(0)
 		, myAlwaysShow(false)
+		, myHasEmitted(false)
 	{
 		myStates.reset();
 		myParticleEmitterData = someData;
@@ -47,8 +48,8 @@ namespace Prism
 
 		myEmissionTime = myParticleEmitterData->myEmissionRate;
 
-		myDiffColor = (myParticleEmitterData->myData.myEndColor - myParticleEmitterData->myData.myStartColor) 
-					/ myParticleEmitterData->myParticlesLifeTime;
+		myDiffColor = (myParticleEmitterData->myData.myEndColor - myParticleEmitterData->myData.myStartColor)
+			/ myParticleEmitterData->myParticlesLifeTime;
 
 		for (int i = 0; i < particleCount; ++i)
 		{
@@ -64,7 +65,7 @@ namespace Prism
 		}
 		else
 		{
-			myStates[ALPHADELTA] = DONT_USE_ALPA_DELTA;
+			myStates[ALPHADELTA] = USE_ALPHA_DELTA;
 		}
 
 		if (myParticleEmitterData->myIsActiveAtStart == true)
@@ -198,7 +199,6 @@ namespace Prism
 		myEmissionTime -= aDeltaTime;
 		myEmitterLife -= aDeltaTime;
 
-		UpdateParticle(aDeltaTime);
 
 		if (myEmissionTime <= 0.f && (myEmitterLife > 0.f || myParticleEmitterData->myUseEmitterLifeTime == false))
 		{
@@ -206,6 +206,14 @@ namespace Prism
 			myEmissionTime = myParticleEmitterData->myEmissionRate;
 		}
 
+		if (myLiveParticleCount < 0)
+		{
+			int apa = 0;
+		}
+		if (myHasEmitted == true)
+		{
+			UpdateParticle(aDeltaTime);
+		}
 		if (myParticleEmitterData->myUseEmitterLifeTime == true)
 		{
 			if (myEmitterLife <= 0.f && myLiveParticleCount <= 0)
@@ -219,12 +227,7 @@ namespace Prism
 	{
 		for (int i = 0; i < myLogicalParticles.Size(); ++i)
 		{
-			if (myGraphicalParticles[i].myAlpha < 0.0f)
-			{
-				myLiveParticleCount--;
-				myLogicalParticles[i].myIsAlive = false;
-				continue;
-			}
+
 
 			myGraphicalParticles[i].myPosition += myLogicalParticles[i].myVelocity * aDeltaTime;
 
@@ -236,13 +239,12 @@ namespace Prism
 			{
 				myGraphicalParticles[i].myAlpha -= myGraphicalParticles[i].myLifeTime * aDeltaTime;
 			}
-			myGraphicalParticles[i].myAlpha = CU::Math::CapValue(0.f, 1.f, myGraphicalParticles[i].myAlpha);
 			if (myGraphicalParticles[i].mySize >= 0.f)
 			{
-
-
 				myGraphicalParticles[i].mySize += myParticleEmitterData->myData.mySizeDelta * aDeltaTime;
 			}
+
+			myGraphicalParticles[i].myAlpha = CU::Math::CapValue(0.f, 1.f, myGraphicalParticles[i].myAlpha);
 
 			myGraphicalParticles[i].myColor += myDiffColor  * aDeltaTime;
 
@@ -250,6 +252,12 @@ namespace Prism
 
 			myGraphicalParticles[i].myLifeTime -= aDeltaTime;
 
+			if (myGraphicalParticles[i].myLifeTime < 0.0f && myLogicalParticles[i].myIsAlive == true)
+			{
+				myLiveParticleCount--;
+				myLogicalParticles[i].myIsAlive = false;
+				continue;
+			}
 		}
 	}
 
@@ -283,9 +291,9 @@ namespace Prism
 			}
 			else
 			{
-			myGraphicalParticles[myParticleIndex].myPosition =
-				CU::Math::RandomVector(aWorldMatrix.GetPos() - myParticleEmitterData->myEmitterSize
-				, aWorldMatrix.GetPos() + myParticleEmitterData->myEmitterSize);
+				myGraphicalParticles[myParticleIndex].myPosition =
+					CU::Math::RandomVector(aWorldMatrix.GetPos() - myParticleEmitterData->myEmitterSize
+					, aWorldMatrix.GetPos() + myParticleEmitterData->myEmitterSize);
 			}
 
 			myGraphicalParticles[myParticleIndex].myLifeTime = myParticleEmitterData->myParticlesLifeTime;
@@ -313,6 +321,10 @@ namespace Prism
 			myLogicalParticles[myParticleIndex].myRotationDelta = myParticleEmitterData->myRotationDelta;
 
 			myParticleIndex += 1;
+		}
+		if (myHasEmitted == false)
+		{
+			myHasEmitted = true;
 		}
 	}
 
