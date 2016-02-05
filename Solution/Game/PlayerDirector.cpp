@@ -79,9 +79,9 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 	myDragSelectionSpriteVerticalFlip = Prism::ModelLoader::GetInstance()->LoadSprite("Data/Resource/Texture/UI/T_selection_box_vertical_flip.dds", { 0.f, 0.f });
 	myDragSelectionSpriteHorizontalFlip = Prism::ModelLoader::GetInstance()->LoadSprite("Data/Resource/Texture/UI/T_selection_box_horizontal_flip.dds", { 0.f, 0.f });
 
-	myRallyPoint = EntityFactory::CreateEntity(myOwner, eEntityType::RALLY_POINT, Prism::eOctreeType::DYNAMIC, 
+	myRallyPoint = EntityFactory::CreateEntity(myOwner, eEntityType::RALLY_POINT, Prism::eOctreeType::DYNAMIC,
 		aScene, { 0.f, 0.f, 0.f }, aTerrain);
-	
+
 
 	for (int i = 0; i < 64; ++i)
 	{
@@ -192,7 +192,7 @@ void PlayerDirector::InitGUI(const AIDirector* anAI, const Prism::Camera& aCamer
 
 void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 {
-	if (myCursor->GetCurrentCursor() == eCursorType::ATTACK || 
+	if (myCursor->GetCurrentCursor() == eCursorType::ATTACK ||
 		(myCursor->GetCurrentCursor() != eCursorType::TOTEM && myCursor->GetCurrentCursor() != eCursorType::CANCEL
 		&& (myBuilding->IsSelected() == true || mySelectedUnits.Size() == 0))) // if units have died
 	{
@@ -213,7 +213,7 @@ void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 			PlaceRallyPoint(myBuilding->GetComponent<BuildingComponent>()->GetRallyPoint());
 		}
 	}
-	else 
+	else
 	{
 		if (myRallyPoint->IsInScene() == true)
 		{
@@ -278,15 +278,22 @@ void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 #endif
 	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_T) == true)
 	{
-		if (mySelectedAction != eSelectedAction::PLACE_TOTEM)
+		if (myTotem->GetComponent<TotemComponent>()->CanActivate() == true)
 		{
-			mySelectedAction = eSelectedAction::PLACE_TOTEM;
-			myCursor->SetCurrentCursor(eCursorType::TOTEM);
+			if (mySelectedAction != eSelectedAction::PLACE_TOTEM)
+			{
+				mySelectedAction = eSelectedAction::PLACE_TOTEM;
+				myCursor->SetCurrentCursor(eCursorType::TOTEM);
+			}
+			else if (mySelectedAction == eSelectedAction::PLACE_TOTEM)
+			{
+				mySelectedAction = eSelectedAction::NONE;
+				myCursor->SetCurrentCursor(eCursorType::NORMAL);
+			}
 		}
-		else if (mySelectedAction == eSelectedAction::PLACE_TOTEM)
+		else
 		{
-			mySelectedAction = eSelectedAction::NONE;
-			myCursor->SetCurrentCursor(eCursorType::NORMAL);
+			PostMaster::GetInstance()->SendMessage(NotificationMessage("Totem is on cooldown."));
 		}
 	}
 
@@ -417,8 +424,16 @@ void PlayerDirector::ReceiveMessage(const OnClickMessage& aMessage)
 	{
 		if (myTotem->GetComponent<TotemComponent>()->CanActivate() == true)
 		{
-			mySelectedAction = eSelectedAction::PLACE_TOTEM;
-			myCursor->SetCurrentCursor(eCursorType::TOTEM);
+			if (mySelectedAction != eSelectedAction::PLACE_TOTEM)
+			{
+				mySelectedAction = eSelectedAction::PLACE_TOTEM;
+				myCursor->SetCurrentCursor(eCursorType::TOTEM);
+			}
+			else if (mySelectedAction == eSelectedAction::PLACE_TOTEM)
+			{
+				mySelectedAction = eSelectedAction::NONE;
+				myCursor->SetCurrentCursor(eCursorType::NORMAL);
+			}
 		}
 		else
 		{
@@ -890,7 +905,7 @@ void PlayerDirector::UpdateControlGroups()
 			myHasClicked = true;
 		}
 		SelectControlGroup(index);
-		if (myHasClicked == true && mySelectedControlGroup == index && index > -1 && myCurrentDoubleClickTimer > 0.f 
+		if (myHasClicked == true && mySelectedControlGroup == index && index > -1 && myCurrentDoubleClickTimer > 0.f
 			&& myControlGroups[mySelectedControlGroup].Size() > 0)
 		{
 			CameraFocusOnControlGroup(index);
@@ -922,7 +937,7 @@ void PlayerDirector::UpdateConfirmationAnimation(float aDeltaTime, const Prism::
 		myConfimrationCameraPosition = aCamera.GetOrientation().GetPos();
 	}
 
-	if (myMouseIsOverGUI == false && myRightClicked == true && mySelectedUnits.Size() > 0 
+	if (myMouseIsOverGUI == false && myRightClicked == true && mySelectedUnits.Size() > 0
 		&& mySelectedUnits[0]->GetType() == eEntityType::UNIT)
 	{
 		myConfirmationPosition = myCursor->GetMousePosition();
@@ -1029,7 +1044,7 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 	{
 		SelectOrHoverEntity(myActiveUnits[i], hasSelected, hasHovered, line);
 
-		if ( myActiveUnits[i]->IsSelected())
+		if (myActiveUnits[i]->IsSelected())
 		{
 			ControllerComponent* controller = myActiveUnits[i]->GetComponent<ControllerComponent>();
 
@@ -1169,7 +1184,10 @@ void PlayerDirector::PlaceRallyPoint(CU::Vector2<float> aWorldPosition)
 
 void PlayerDirector::PlaceTotem(const CU::Vector3f& aPositionInWorld)
 {
-	myTotem->GetComponent<TotemComponent>()->SetTargetPosition(aPositionInWorld);
+	if (myMouseIsOverGUI == false)
+	{
+		myTotem->GetComponent<TotemComponent>()->SetTargetPosition(aPositionInWorld);
+	}
 }
 
 void PlayerDirector::SelectControlGroup(int anIndex)
