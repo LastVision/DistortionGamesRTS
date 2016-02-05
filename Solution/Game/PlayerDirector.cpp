@@ -40,6 +40,8 @@
 #include <PostMaster.h>
 #include <XMLReader.h>
 
+#include <EmitterMessage.h>
+
 PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aScene, GUI::Cursor* aCursor)
 	: Director(eOwnerType::PLAYER, aTerrain)
 	, myRenderGUI(true)
@@ -997,7 +999,9 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 		myFirstMousePosition = CU::InputWrapper::GetInstance()->GetMousePosition();
 		myFirstMousePositionInWorld = CalcCursorWorldPosition(myFirstMousePosition, aCamera);
 		myFirstCameraPosition = aCamera.GetOrientation().GetPos();
-
+#ifdef CLICK_EXPLOSION
+		PostMaster::GetInstance()->SendMessage(EmitterMessage("grenade", myFirstMousePositionInWorld));
+#endif
 		if (myMouseIsOverGUI == true)
 		{
 			myRenderDragSelection = false;

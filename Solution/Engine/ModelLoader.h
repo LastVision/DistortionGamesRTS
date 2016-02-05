@@ -13,6 +13,7 @@ namespace Prism
 	class FBXFactory;
 	class DGFXLoader;
 	class SpriteProxy;
+	class Sprite;
 
 	class ModelLoader
 	{

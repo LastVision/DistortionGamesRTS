@@ -2,6 +2,7 @@
 #include "stdafx.h"
 
 #include "ActorComponent.h"
+#include <Animation.h>
 #include <ArtifactMessage.h>
 #include "AudioInterface.h"
 #include "BehaviorNote.h"
@@ -10,11 +11,14 @@
 #include "../Game/FogOfWarMap.h"
 #include "ControllerComponent.h"
 #include <EmitterMessage.h>
+#include <EngineEnums.h>
 #include "GrenadeComponent.h"
 #include "HealthComponent.h"
+#include <Instance.h>
 #include <InWorldTextMessage.h>
 #include "KillUnitMessage.h"
 #include "KilledPromotedMessage.h"
+#include <ModelLoader.h>
 #include <Terrain.h>
 #include "AnimationComponent.h"
 #include "PollingStation.h"
@@ -41,6 +45,10 @@ ActorComponent::ActorComponent(Entity& aEntity, ActorComponentData& aData, const
 	, myBehavior(new BlendedBehavior(myEntity))
 	, myCurrentCommand(aCurrentCommand)
 	, myIsReturning(false)
+	, myMuzzleFlashes(8)
+	, myCurrentMuzzleFlash(0)
+	, myMuzzleTimer(0)
+	, myMuzzleTimerShow(0)
 {
 	myEntity.myMaxSpeed = aData.myMoveSpeed;
 
@@ -60,11 +68,29 @@ ActorComponent::ActorComponent(Entity& aEntity, ActorComponentData& aData, const
 	{
 		DL_ASSERT("An Entity not owned by Player, Enemy or Neutral tried to create a ControllerComponent");
 	}
+
+	myMuzzleRadius = 5.f;
+	myMuzzleFlashes.Add(new Prism::Instance(*Prism::ModelLoader::GetInstance()->LoadModel("Data/Resource/Model/SM_muzzleflash.fbx"
+		, "Data/Resource/Shader/S_effect_pbl.fx"), myMuzzleOrientation, Prism::eOctreeType::DYNAMIC, myMuzzleRadius));
+	myMuzzleFlashes.Add(new Prism::Instance(*Prism::ModelLoader::GetInstance()->LoadModel("Data/Resource/Model/SM_muzzleflash2.fbx"
+		, "Data/Resource/Shader/S_effect_pbl.fx"), myMuzzleOrientation, Prism::eOctreeType::DYNAMIC, myMuzzleRadius));
+	myMuzzleFlashes.Add(new Prism::Instance(*Prism::ModelLoader::GetInstance()->LoadModel("Data/Resource/Model/SM_muzzleflash3.fbx"
+		, "Data/Resource/Shader/S_effect_pbl.fx"), myMuzzleOrientation, Prism::eOctreeType::DYNAMIC, myMuzzleRadius));
+	myMuzzleFlashes.Add(new Prism::Instance(*Prism::ModelLoader::GetInstance()->LoadModel("Data/Resource/Model/SM_muzzleflash4.fbx"
+		, "Data/Resource/Shader/S_effect_pbl.fx"), myMuzzleOrientation, Prism::eOctreeType::DYNAMIC, myMuzzleRadius));
+	myMuzzleFlashes.Add(new Prism::Instance(*Prism::ModelLoader::GetInstance()->LoadModel("Data/Resource/Model/SM_muzzleflash5.fbx"
+		, "Data/Resource/Shader/S_effect_pbl.fx"), myMuzzleOrientation, Prism::eOctreeType::DYNAMIC, myMuzzleRadius));
+
+	for (int i = 0; i < myMuzzleFlashes.Size(); ++i)
+	{
+		myMuzzleFlashes[i]->SetShouldRender(false);
+	}
 }
 
 ActorComponent::~ActorComponent()
 {
 	SAFE_DELETE(myBehavior);
+	myMuzzleFlashes.DeleteAll();
 }
 
 void ActorComponent::Reset()
@@ -81,6 +107,8 @@ void ActorComponent::Update(float aDelta)
 	{
 		return;
 	}
+
+	MuzzleFlash(aDelta);
 
 	CheckAnimationComplete();
 
@@ -496,4 +524,64 @@ void ActorComponent::LookAtPoint(const CU::Vector2<float>& aPoint, float aDelta)
 {
 	CU::Vector2<float> direction = aPoint - myEntity.myPosition;
 	LookInDirection(direction, aDelta);
+}
+
+void ActorComponent::Kill()
+{
+	for (int i = 0; i < myMuzzleFlashes.Size(); ++i)
+	{
+		myMuzzleFlashes[i]->SetShouldRender(false);
+	}
+}
+
+void ActorComponent::MuzzleFlash(float aDelta)
+{
+	myMuzzleTimer -= aDelta;
+	myMuzzleTimerShow -= aDelta;
+	for (int i = 0; i < myMuzzleFlashes.Size(); ++i)
+	{
+		myMuzzleFlashes[i]->SetShouldRender(false);
+	}
+
+	if (myEntity.GetState() == eEntityState::ATTACK)
+	{
+		++myCurrentMuzzleFlash;
+		if (myCurrentMuzzleFlash >= myMuzzleFlashes.Size())
+		{
+			myCurrentMuzzleFlash = 0;
+		}
+
+		
+		myMuzzleFlashes[myCurrentMuzzleFlash]->SetShouldRender(true);
+
+		CU::Vector4<float> muzzlePosition;
+		switch (myEntity.GetUnitType())
+		{
+		case eUnitType::GRUNT:
+			muzzlePosition = CU::Vector4<float>(0.123f, 1.266f, 0.967f, 1.f);
+			break;
+		case eUnitType::RANGER:
+			if (myMuzzleTimerShow < 0)
+			{
+				myMuzzleFlashes[myCurrentMuzzleFlash]->SetShouldRender(false);
+			}
+			muzzlePosition = CU::Vector4<float>(0.48f, 1.828f, 1.431f, 1.f);
+			break;
+		case eUnitType::TANK:
+		case eUnitType::NON_ATTACK_TUTORIAL:
+			muzzlePosition = CU::Vector4<float>(0.577f, 0.964f, 3.307f, 1.f);
+			break;
+		}
+
+		
+		if (myMuzzleTimer < 0)
+		{
+			myMuzzleTimer = 1.0f;
+			myMuzzleTimerShow = 0.1f;
+		}
+
+		myMuzzleOrientation = myEntity.GetOrientation();
+
+		myMuzzleOrientation.SetPos(muzzlePosition * myEntity.GetOrientation());
+	}
 }

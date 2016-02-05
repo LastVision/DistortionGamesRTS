@@ -3,6 +3,7 @@
 
 namespace Prism
 {
+	class Instance;
 	class Terrain;
 }
 
@@ -43,6 +44,10 @@ public:
 	const float& GetRangerCooldown() const;
 	const float& GetRangerMaxCooldown() const;
 
+	const CU::GrowingArray<Prism::Instance*>& GetMuzzleFlashes() const;
+
+	void Kill();
+
 private:
 
 	void DoStop(float aDelta);
@@ -57,6 +62,8 @@ private:
 	Entity* FindAttackTarget();
 	
 	void AttackTarget(Entity* aTarget, float aDelta);
+
+	void MuzzleFlash(float aDelta);
 
 	const Prism::Terrain& myTerrain;
 	CU::Vector2<float> myAcceleration;
@@ -83,6 +90,13 @@ private:
 
 	float myRangerOneShotTimer;
 	float myRangerOneShotCooldown;
+
+	CU::GrowingArray<Prism::Instance*> myMuzzleFlashes;
+	CU::Matrix44<float> myMuzzleOrientation;
+	float myMuzzleRadius;
+	int myCurrentMuzzleFlash;
+	float myMuzzleTimer;
+	float myMuzzleTimerShow;
 };
 
 inline eComponentType ActorComponent::GetTypeStatic()
@@ -143,4 +157,9 @@ inline const float& ActorComponent::GetRangerCooldown() const
 inline const float& ActorComponent::GetRangerMaxCooldown() const
 {
 	return myRangerOneShotCooldown;
+}
+
+inline const CU::GrowingArray<Prism::Instance*>& ActorComponent::GetMuzzleFlashes() const
+{
+	return myMuzzleFlashes;
 }

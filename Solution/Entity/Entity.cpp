@@ -229,6 +229,14 @@ void Entity::AddToScene()
 		myScene.AddInstance(GetComponent<SelectionComponent>()->GetHoveredInstance(), true);
 	}
 
+	if (GetComponent<ActorComponent>() != nullptr)
+	{
+		const CU::GrowingArray<Prism::Instance*>& muzzleFlashes = GetComponent<ActorComponent>()->GetMuzzleFlashes();
+		for (int i = 0; i < muzzleFlashes.Size(); ++i)
+		{
+			myScene.AddInstance(muzzleFlashes[i]);
+		}
+	}
 	myIsInScene = true;
 }
 
@@ -248,6 +256,15 @@ void Entity::RemoveFromScene()
 		myScene.RemoveInstance(GetComponent<SelectionComponent>()->GetHoveredInstance(), true);
 	}
 
+	if (GetComponent<ActorComponent>() != nullptr)
+	{
+		const CU::GrowingArray<Prism::Instance*>& muzzleFlashes = GetComponent<ActorComponent>()->GetMuzzleFlashes();
+		for (int i = 0; i < muzzleFlashes.Size(); ++i)
+		{
+			myScene.RemoveInstance(muzzleFlashes[i]);
+		}
+	}
+
 	myIsInScene = false;
 }
 
@@ -265,7 +282,10 @@ void Entity::Kill()
 {
 	DL_ASSERT_EXP(myAlive == true, "Tried to kill an Entity multiple times");
 	myAlive = false;
-	
+	if (GetComponent<ActorComponent>() != nullptr)
+	{
+		GetComponent<ActorComponent>()->Kill();
+	}
 	//RemoveFromScene();
 }
 

@@ -70,6 +70,7 @@ namespace Prism
 		int myLiveParticleCount;
 
 		bool myAlwaysShow;
+		bool myHasEmitted;
 
 		Entity* myEntity;
 

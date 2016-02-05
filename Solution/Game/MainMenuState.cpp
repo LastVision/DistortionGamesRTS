@@ -30,12 +30,13 @@ MainMenuState::MainMenuState()
 		, float(Prism::Engine::GetInstance()->GetWindowSize().y));
 
 	myLogoPosition.x = myWindowSize.x * 0.5f;
-	myLogoPosition.y = myWindowSize.y + logoSize.y;
+	myLogoPosition.y = myWindowSize.y + (logoSize.y * 2.f);
 	myLogoStartPosition = myLogoPosition;
 	myLogoEndPosition.x = myLogoPosition.x;
 	myLogoEndPosition.y = myWindowSize.y - (myLogo->GetSize().y * 0.5f);
 
 	myGUIPosition = myGUIStartPosition;
+
 }
 
 MainMenuState::~MainMenuState()
@@ -54,7 +55,7 @@ void MainMenuState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aC
 	myStateStack = aStateStackProxy;
 	myCursor = aCursor;
 	myGUIManager = new GUI::GUIManager(myCursor, "Data/Resource/GUI/GUI_main_menu.xml", nullptr, nullptr, nullptr, -1);
-
+	myGUIManager->SetPosition(myGUIPosition);
 	CU::Vector2<int> windowSize = Prism::Engine::GetInstance()->GetWindowSizeInt();
 	OnResize(windowSize.x, windowSize.y);
 	myHasRunOnce = false;
