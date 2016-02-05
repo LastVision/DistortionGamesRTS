@@ -6,6 +6,7 @@
 
 #define LOAD_PROPS
 #define USE_WEATHER
+//#define CLICK_EXPLOSION
 
 #ifdef _DEBUG
 
