@@ -180,65 +180,90 @@ Entity* ActorComponent::FindAttackTarget()
 
 void ActorComponent::DoStop(float aDelta)
 {
-	if (CU::Length2(myEntity.GetPosition() - myCurrentCommand.GetPosition()) > myChaseDistance2)
-	{
-		myBehavior->SetTarget(myCurrentCommand.GetPosition());
-		DoMove(aDelta);
-		myIsReturning = true;
-	}
-	else if (myIsReturning == true)
-	{
-		myBehavior->SetTarget(myCurrentCommand.GetPosition());
-		DoMove(aDelta);
-		
-		if (myBehavior->GetDone() == true)
-		{
-			myIsReturning = false;
-		}
-	}
-	else
-	{
-		Entity* closestTarget = PollingStation::GetInstance()->FindClosestEntity(myEntity.GetOrientation().GetPos()
-			, myTargetType, myVisionRange2);
+	Entity* closestTarget = PollingStation::GetInstance()->FindClosestEntity(myEntity.GetOrientation().GetPos()
+		, myTargetType, myVisionRange2);
 
-		if (closestTarget != nullptr)
+	bool attacking = false;
+
+	if (closestTarget != nullptr)
+	{
+		if (CU::Length2(closestTarget->GetPosition() - myEntity.GetPosition()) < myAttackRange2)
 		{
-			if (CU::Length2(closestTarget->GetPosition() - myEntity.GetPosition()) < myAttackRange2)
+			attacking = true;
+			if (myAttackTimer < 0)
 			{
-				if (myAttackTimer < 0)
-				{
-					AttackTarget(closestTarget, aDelta);
-				}
-				else
-				{
-					StandStill();
-				}
-			}
-			else
-			{
-				myBehavior->SetTarget(closestTarget->GetPosition());
-				DoMove(aDelta);
-			}
-		}
-		else
-		{
-			/*int nearbyFriends = PollingStation::GetInstance()->FindClosestEntities(myEntity.GetOrientation().GetPos(), 
-				myEntity.GetOwner(), myVisionRange2).Size();*/
-			if (myBehavior->GetDone() == false/* || CU::Length2(myEntity.GetPosition() - myCurrentCommand.GetPosition()) > 1.f * nearbyFriends*/)
-			{
-				myBehavior->SetTarget(myCurrentCommand.GetPosition());
-				DoMove(aDelta);
-			}
-			else if (CU::Length(myAcceleration) > 1.f)
-			{
-				myBehavior->SetTarget(myEntity.GetPosition());
-				DoMove(aDelta);
-				myIsDone = true;
+				AttackTarget(closestTarget, aDelta);
 			}
 			else
 			{
 				StandStill();
-				myIsDone = true;
+			}
+		}
+	}
+	
+	if (attacking == false)
+	{
+
+		if (CU::Length2(myEntity.GetPosition() - myCurrentCommand.GetPosition()) > myChaseDistance2)
+		{
+			myBehavior->SetTarget(myCurrentCommand.GetPosition());
+			DoMove(aDelta);
+			myIsReturning = true;
+		}
+		else if (myIsReturning == true)
+		{
+			myBehavior->SetTarget(myCurrentCommand.GetPosition());
+			DoMove(aDelta);
+
+			if (myBehavior->GetDone() == true)
+			{
+				myIsReturning = false;
+			}
+		}
+		else
+		{
+			Entity* closestTarget = PollingStation::GetInstance()->FindClosestEntity(myEntity.GetOrientation().GetPos()
+				, myTargetType, myVisionRange2);
+
+			if (closestTarget != nullptr)
+			{
+				if (CU::Length2(closestTarget->GetPosition() - myEntity.GetPosition()) < myAttackRange2)
+				{
+					if (myAttackTimer < 0)
+					{
+						AttackTarget(closestTarget, aDelta);
+					}
+					else
+					{
+						StandStill();
+					}
+				}
+				else
+				{
+					myBehavior->SetTarget(closestTarget->GetPosition());
+					DoMove(aDelta);
+				}
+			}
+			else
+			{
+				/*int nearbyFriends = PollingStation::GetInstance()->FindClosestEntities(myEntity.GetOrientation().GetPos(),
+					myEntity.GetOwner(), myVisionRange2).Size();*/
+				if (myBehavior->GetDone() == false/* || CU::Length2(myEntity.GetPosition() - myCurrentCommand.GetPosition()) > 1.f * nearbyFriends*/)
+				{
+					myBehavior->SetTarget(myCurrentCommand.GetPosition());
+					DoMove(aDelta);
+				}
+				else if (CU::Length(myAcceleration) > 1.f)
+				{
+					myBehavior->SetTarget(myEntity.GetPosition());
+					DoMove(aDelta);
+					myIsDone = true;
+				}
+				else
+				{
+					StandStill();
+					myIsDone = true;
+				}
 			}
 		}
 	}
