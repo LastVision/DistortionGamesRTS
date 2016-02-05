@@ -102,11 +102,6 @@ inline void Prism::Surface::SetIndexCount(const int aCount)
 	myIndexCount = aCount;
 }
 
-inline void Prism::Surface::SetEffect(Effect* aEffect)
-{
-	myEffect = aEffect;
-}
-
 inline void Prism::Surface::SetPrimitiveTopology(const D3D11_PRIMITIVE_TOPOLOGY aTopology)
 {
 	myPrimitiveTopologyType = aTopology;

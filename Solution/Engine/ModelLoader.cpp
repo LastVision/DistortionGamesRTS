@@ -5,6 +5,7 @@
 #include "Engine.h"
 #include "EffectContainer.h"
 #include "Model.h"
+#include "ModelAnimated.h"
 #include "ModelLoader.h"
 #include "ModelProxy.h"
 #include "FBXFactory.h"
@@ -265,8 +266,10 @@ namespace Prism
 			myModelFactory->ConvertToDGFX(aModelPath.c_str(), animOutput.c_str());
 		#endif
 
-		model = myDGFXLoader->LoadModel(aModelPath.c_str()
-			, EffectContainer::GetInstance()->GetEffect(aEffectPath));
+		model = myDGFXLoader->LoadModel(aModelPath.c_str());
+		model->SetEffect(EffectContainer::GetInstance()->GetEffect(aEffectPath));
+		model->myFileName = aModelPath;
+		model->Init();
 
 	#else
 		model = myModelFactory->LoadModel(aModelPath.c_str(),
@@ -313,8 +316,10 @@ namespace Prism
 				myModelFactory->ConvertToDGFX(aModelPath.c_str(), animOutput.c_str());
 			#endif
 
-			model = myDGFXLoader->LoadAnimatedModel(aModelPath.c_str()
-				, EffectContainer::GetInstance()->GetEffect(aEffectPath));
+			model = myDGFXLoader->LoadAnimatedModel(aModelPath.c_str());
+			model->SetEffect(EffectContainer::GetInstance()->GetEffect(aEffectPath));
+			model->myFileName = aModelPath;
+			model->Init();
 		#else
 			model = myModelFactory->LoadModelAnimated(aModelPath.c_str(),
 				EffectContainer::GetInstance()->GetEffect(aEffectPath));
@@ -506,11 +511,15 @@ namespace Prism
 		myModelFactory->ConvertToDGFX(someData.myModelPath.c_str(), animOutput.c_str());
 #endif
 
-		Model* model = myDGFXLoader->LoadModel(someData.myModelPath
-			, EffectContainer::GetInstance()->GetEffect(someData.myEffectPath));
+		Model* model = myDGFXLoader->LoadModel(someData.myModelPath);
+		model->SetEffect(EffectContainer::GetInstance()->GetEffect(someData.myEffectPath));
+		model->myFileName = someData.myModelPath;
+		model->Init();
 #else
-		Model* model = myModelFactory->LoadModel(someData.myModelPath.c_str(),
-			EffectContainer::GetInstance()->GetEffect(someData.myEffectPath));
+		Model* model = myModelFactory->LoadModel(someData.myModelPath.c_str());
+		model->SetEffect(EffectContainer::GetInstance()->GetEffect(someData.myEffectPath));
+		model->myFileName = someData.myModelPath;
+		model->Init();
 #endif
 
 		someData.myModelProxy->SetModel(model);
@@ -524,11 +533,15 @@ namespace Prism
 		myModelFactory->ConvertToDGFX(someData.myModelPath.c_str(), animOutput.c_str());
 #endif
 
-		ModelAnimated* model = myDGFXLoader->LoadAnimatedModel(someData.myModelPath
-			, EffectContainer::GetInstance()->GetEffect(someData.myEffectPath));
+		ModelAnimated* model = myDGFXLoader->LoadAnimatedModel(someData.myModelPath);
+		model->SetEffect(EffectContainer::GetInstance()->GetEffect(someData.myEffectPath));
+		model->myFileName = someData.myModelPath;
+		model->Init();
 #else
-		ModelAnimated* model = myModelFactory->LoadModelAnimated(someData.myModelPath.c_str(),
-			EffectContainer::GetInstance()->GetEffect(someData.myEffectPath));
+		ModelAnimated* model = myModelFactory->LoadModelAnimated(someData.myModelPath.c_str());
+		model->SetEffect(EffectContainer::GetInstance()->GetEffect(someData.myEffectPath));
+		model->myFileName = someData.myModelPath;
+		model->Init();
 #endif
 		someData.myModelProxy->SetModelAnimated(model);
 	}

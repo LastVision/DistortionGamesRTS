@@ -30,6 +30,10 @@ namespace EntityEnumConverter
 		{
 			return eEntityType::ARTIFACT;
 		}
+		else if (aType == "rallypoint")
+		{
+			return eEntityType::RALLY_POINT;
+		}
 		DL_ASSERT("The " + aType + " entity type is not supported, please tell Daniel about it.");
 		return eEntityType::_COUNT;
 	}

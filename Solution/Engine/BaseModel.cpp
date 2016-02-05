@@ -226,13 +226,13 @@ namespace Prism
 	{
 		Surface* surface = new Surface();
 
-		surface->SetEffect(myEffect);
 		surface->SetIndexCount(0);
 		surface->SetIndexStart(0);
 		surface->SetVertexCount(0);
 		surface->SetVertexStart(0);
 		surface->SetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		surface->SetTexture(aResourceName, aFileName, true);
+		surface->SetEffect(myEffect);
 		mySurfaces.Add(surface);
 	}
 

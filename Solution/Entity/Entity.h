@@ -92,6 +92,8 @@ public:
 	void SetSelectable(const bool aFlag);
 	const bool IsSelectable() const;
 
+	const bool IsInScene() const;
+
 private:
 	void operator=(Entity&) = delete;
 	CU::StaticArray<Component*, static_cast<int>(eComponentType::_COUNT)> myComponents;
@@ -250,4 +252,9 @@ inline void Entity::SetSelectable(const bool aFlag)
 inline const bool Entity::IsSelectable() const
 {
 	return myIsSelectable;
+}
+
+inline const bool Entity::IsInScene() const
+{
+	return myIsInScene;
 }
