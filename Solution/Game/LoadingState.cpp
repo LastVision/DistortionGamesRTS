@@ -142,9 +142,9 @@ void LoadingState::Render()
 			, 1.f, { 1.f, 1.f, 1.f, myFinishedTextAlpha });
 	}
 
-	myRotatingThing->Render(windowSize * 0.5f + 500.f
+	myRotatingThing->Render(windowSize * 0.5f + 250.f
 	, { myRotatingThingScale, myRotatingThingScale });
-	myRotatingThing2->Render(windowSize * 0.5f + 500.f
+	myRotatingThing2->Render(windowSize * 0.5f + 250.f
 	, { myRotatingThingScale, myRotatingThingScale });
 }
 
