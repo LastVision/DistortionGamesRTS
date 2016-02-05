@@ -2,6 +2,13 @@
 #include "DGFXReader.h"
 #include <iostream>
 
+struct ModelData
+{
+	ModelData(): myEffectPath("NOT INITED"), myIsAnimated(false) {}
+	std::string myEffectPath;
+	bool myIsAnimated;
+};
+
 DGFXReader::DGFXReader()
 	: myErrors(64)
 	, myConvertedFiles(64)
@@ -32,18 +39,17 @@ DGFXReader::~DGFXReader()
 		binFile.read((char*)&isAnimated, sizeof(int));
 		binFile.close();
 
-		file << myConvertedFiles[i];
+		
 		if (isAnimated == 1)
 		{
-			file << " ANIMATED ";
-
-			if (isNullObject == 1)
-			{
-				file << " NOT_MODEL ";
-			}
+			file << "1 ";
+		}
+		else
+		{
+			file << "0 ";
 		}
 
-		
+		file << myConvertedFiles[i];
 
 		file << std::endl;
 
