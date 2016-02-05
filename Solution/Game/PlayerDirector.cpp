@@ -194,6 +194,34 @@ void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 	//totalTime += aDeltaTime;
 	//myBuilding->SetPosition({ myBuilding->GetOrientation().GetPos().x, myBuilding->GetOrientation().GetPos().y, cos(totalTime) * 5 });
 
+	if (myBuilding->IsSelected() == true)
+	{
+		if (CU::InputWrapper::GetInstance()->KeyDown(DIK_Q) == true)
+		{
+			SpawnUnit(eUnitType::GRUNT);
+		}
+		if (CU::InputWrapper::GetInstance()->KeyDown(DIK_W) == true)
+		{
+			SpawnUnit(eUnitType::RANGER);
+		}
+		if (CU::InputWrapper::GetInstance()->KeyDown(DIK_E) == true)
+		{
+			SpawnUnit(eUnitType::TANK);
+		}
+		if (CU::InputWrapper::GetInstance()->KeyDown(DIK_A) == true)
+		{
+			UpgradeUnit(eUnitType::GRUNT);
+		}
+		if (CU::InputWrapper::GetInstance()->KeyDown(DIK_S) == true)
+		{
+			UpgradeUnit(eUnitType::RANGER);
+		}
+		if (CU::InputWrapper::GetInstance()->KeyDown(DIK_D) == true)
+		{
+			UpgradeUnit(eUnitType::TANK);
+		}
+	}
+
 	myCurrentDoubleClickTimer -= aDeltaTime;
 	if (myCurrentDoubleClickTimer <= 0 && myHasDoubleClicked == true)
 	{
@@ -215,11 +243,12 @@ void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 	Prism::Audio::AudioInterface::GetInstance()->SetListenerPosition(aCamera.GetOrientation().GetPos().x
 		, 7.5f, aCamera.GetOrientation().GetPos().z + 25.f);
 
+#ifndef RELEASE_BUILD
 	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_G) == true)
 	{
 		PostMaster::GetInstance()->SendMessage(ToggleGUIMessage(!myRenderGUI, 1.f / 3.f));
 	}
-	
+#endif
 	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_T) == true)
 	{
 		if (mySelectedAction != eSelectedAction::PLACE_TOTEM)
@@ -234,10 +263,10 @@ void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 		}
 	}
 
-	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_F2) == true)
-	{
-		SelectAllUnits();
-	}
+	//if (CU::InputWrapper::GetInstance()->KeyDown(DIK_F2) == true)
+	//{
+	//	SelectAllUnits();
+	//}
 	else if (CU::InputWrapper::GetInstance()->KeyDown(DIK_F1) == true)
 	{
 		if (myBuilding->IsSelectable() == false)
@@ -691,7 +720,7 @@ void PlayerDirector::UpdateInputs()
 		|| CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_RCONTROL);
 	myMouseIsOverGUI = myGUIManager->MouseOverGUI();
 
-	if (mySelectedUnits.Size() > 0)
+	if (myBuilding->IsSelected() == false && mySelectedUnits.Size() > 0)
 	{
 		if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_A) == true)
 		{

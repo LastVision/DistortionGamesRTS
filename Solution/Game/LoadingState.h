@@ -22,6 +22,14 @@ public:
 
 private:
 	Prism::SpriteProxy* myBackground;
-	Prism::Text* myText;
+	Prism::SpriteProxy* myRotatingThing;
+	Prism::SpriteProxy* myRotatingThing2;
+	//Prism::Text* myText;
+	float myRotatingThingScale;
+
+	float myFinishedTextAlpha;
+	bool myFinishedTextFadeIn;
+	bool myIsDone;
+
 };
 
