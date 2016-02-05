@@ -62,12 +62,15 @@ namespace GUI
 
 		myGruntActionButtons->SetPosition(myGruntActionButtons->At(0)->GetPosition() - myGruntActionButtons->At(0)->GetSize() / 2.f);
 		myGruntActionButtons->At(0)->SetPosition(myGruntActionButtons->At(0)->GetSize() / 2.f, false);
+		myGruntActionButtons->At(1)->SetPosition(myGruntActionButtons->At(0)->GetPosition(), false);
 		
 		myRangerActionButtons->SetPosition(myRangerActionButtons->At(0)->GetPosition() - myRangerActionButtons->At(0)->GetSize() / 2.f);
 		myRangerActionButtons->At(0)->SetPosition(myRangerActionButtons->At(0)->GetSize() / 2.f, false);
+		myRangerActionButtons->At(1)->SetPosition(myRangerActionButtons->At(0)->GetPosition(), false);
 
 		myTankActionButtons->SetPosition(myTankActionButtons->At(0)->GetPosition() - myTankActionButtons->At(0)->GetSize() / 2.f);
 		myTankActionButtons->At(0)->SetPosition(myTankActionButtons->At(0)->GetSize() / 2.f, false);
+		myTankActionButtons->At(1)->SetPosition(myTankActionButtons->At(0)->GetPosition(), false);
 	}
 
 	UnitActionWidget::~UnitActionWidget()
@@ -87,19 +90,22 @@ namespace GUI
 			{
 				myUnitActionButtons->Render(myPosition + aParentPosition);
 
-				if (myFirstSelectedGrunt != nullptr && myFirstSelectedGrunt->GetComponent<PromotionComponent>()->GetPromoted() == true)
+				if (myFirstSelectedGrunt != nullptr)
 				{
-					myGruntActionButtons->Render(myPosition + aParentPosition);
+					myFirstSelectedGrunt->GetComponent<PromotionComponent>()->GetPromoted() ? 
+						myGruntActionButtons->Render(myPosition + aParentPosition, 0) : myGruntActionButtons->Render(myPosition + aParentPosition, 1);
 				}
 
-				if (myFirstSelectedRanger != nullptr && myFirstSelectedRanger->GetComponent<PromotionComponent>()->GetPromoted() == true)
+				if (myFirstSelectedRanger != nullptr)
 				{
-					myRangerActionButtons->Render(myPosition + aParentPosition);
+					myFirstSelectedRanger->GetComponent<PromotionComponent>()->GetPromoted() ?
+						myRangerActionButtons->Render(myPosition + aParentPosition, 0) : myRangerActionButtons->Render(myPosition + aParentPosition, 1);
 				}
 
-				if (myFirstSelectedTank != nullptr && myFirstSelectedTank->GetComponent<PromotionComponent>()->GetPromoted() == true)
+				if (myFirstSelectedTank != nullptr)
 				{
-					myTankActionButtons->Render(myPosition + aParentPosition);
+					myFirstSelectedTank->GetComponent<PromotionComponent>()->GetPromoted() ?
+						myTankActionButtons->Render(myPosition + aParentPosition, 0) : myTankActionButtons->Render(myPosition + aParentPosition, 1);
 				}
 			}
 			else if (mySelectedType == eEntityType::BASE_BUILING)
@@ -167,19 +173,22 @@ namespace GUI
 			{
 				Widget* widget = nullptr;
 
-				if (myFirstSelectedGrunt != nullptr && myFirstSelectedGrunt->GetComponent<PromotionComponent>()->GetPromoted() == true)
+				if (myFirstSelectedGrunt != nullptr)
 				{
-					Widget* gruntWidget = myGruntActionButtons->MouseIsOver(aPosition - myPosition);
+					Widget* gruntWidget = myFirstSelectedGrunt->GetComponent<PromotionComponent>()->GetPromoted() ? 
+						myGruntActionButtons->MouseIsOver(aPosition - myPosition, 0) : myGruntActionButtons->MouseIsOver(aPosition - myPosition, 1);
 					widget = gruntWidget == nullptr ? widget : gruntWidget;
 				}
-				if (myFirstSelectedRanger != nullptr && myFirstSelectedRanger->GetComponent<PromotionComponent>()->GetPromoted() == true)
+				if (myFirstSelectedRanger != nullptr)
 				{
-					Widget* rangerWidget = myRangerActionButtons->MouseIsOver(aPosition - myPosition);
+					Widget* rangerWidget = myFirstSelectedRanger->GetComponent<PromotionComponent>()->GetPromoted() ?
+						myRangerActionButtons->MouseIsOver(aPosition - myPosition, 0) : myRangerActionButtons->MouseIsOver(aPosition - myPosition, 1);
 					widget = rangerWidget == nullptr ? widget : rangerWidget;
 				}
-				if (myFirstSelectedTank != nullptr && myFirstSelectedTank->GetComponent<PromotionComponent>()->GetPromoted() == true)
+				if (myFirstSelectedTank != nullptr)
 				{
-					Widget* tankWidget = myTankActionButtons->MouseIsOver(aPosition - myPosition);
+					Widget* tankWidget = myFirstSelectedTank->GetComponent<PromotionComponent>()->GetPromoted() ?
+						myTankActionButtons->MouseIsOver(aPosition - myPosition, 0) : myTankActionButtons->MouseIsOver(aPosition - myPosition, 1);
 					widget = tankWidget == nullptr ? widget : tankWidget;
 				}
 

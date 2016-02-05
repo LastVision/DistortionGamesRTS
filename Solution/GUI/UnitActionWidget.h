@@ -50,6 +50,10 @@ namespace GUI
 		WidgetContainer* myRangerActionButtons;
 		WidgetContainer* myTankActionButtons;
 
+		WidgetContainer* myGruntInactiveActionButtons;
+		WidgetContainer* myRangerInactiveActionButtons;
+		WidgetContainer* myTankInactiveActionButtons;
+
 		const bool& myHasUnlockedRanger;
 		const bool& myHasUnlockedTank;
 
