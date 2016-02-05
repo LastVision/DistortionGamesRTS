@@ -20,6 +20,8 @@ namespace GUI
 
 		void SetValue(const float& aFirstValue, const float& aSecondValue) override;
 
+		void OnResize(const CU::Vector2<float>& aNewSize, const CU::Vector2<float>& anOldSize, bool aIsFullScreen) override;
+
 	private:
 		const float* myCooldown;
 		const float* myMaxCooldown;
