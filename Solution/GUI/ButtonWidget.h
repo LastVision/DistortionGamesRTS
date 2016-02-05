@@ -36,7 +36,8 @@ namespace GUI
 
 		void ReadTooltip(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement, const PlayerDirector* aPlayer);
 		void ReadEvent(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement);
-
+		
+		void SetEvent(OnClickMessage* anEvent);
 		const OnClickMessage* GetEvent() const;
 
 	protected:
@@ -53,5 +54,10 @@ namespace GUI
 	inline const OnClickMessage* ButtonWidget::GetEvent() const
 	{
 		return myClickEvent;
+	}
+
+	inline void ButtonWidget::SetEvent(OnClickMessage* anEvent)
+	{
+		myClickEvent = anEvent;
 	}
 }

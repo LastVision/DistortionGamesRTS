@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "BarWidget.h"
+#include "ButtonWidget.h"
 #include <Engine.h>
 #include "../Entity/EnrageComponent.h"
 #include "../Entity/BuildingComponent.h"
@@ -10,6 +11,7 @@
 #include "../Entity/HealthComponent.h"
 #include "../Entity/PromotionComponent.h"
 #include <PostMaster.h>
+#include <OnClickMessage.h>
 #include <SelectUnitMessage.h>
 #include "UnitInfoWidget.h"
 #include "WidgetContainer.h"
@@ -24,6 +26,7 @@ namespace GUI
 		, myBuildingTimer(nullptr)
 		, myTextScale(1.f)
 		, myEnemyColor(0.35f, 0.35f, 0.35f, 1.f)
+		, myQueueButtons(aPlayer->GetBuildingComponent().GetMaxQueue())
 	{
 		std::string gruntUnitPath = "";
 		std::string rangerUnitPath = "";
@@ -36,6 +39,8 @@ namespace GUI
 		CU::Vector2<float> unitSize;
 		CU::Vector2<float> portraitSize;
 		CU::Vector2<float> statsSize;
+
+		tinyxml2::XMLElement* abortButtonElement = aReader->FindFirstChild(anXMLElement, "widget");
 
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "size"), "x", mySize.x);
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "size"), "y", mySize.y);
@@ -68,6 +73,22 @@ namespace GUI
 		myBuildingPortrait = Prism::ModelLoader::GetInstance()->LoadSprite(buildingPortraitPath, portraitSize);
 		myStatsSprite = Prism::ModelLoader::GetInstance()->LoadSprite(statsSpritePath, statsSize);
 		myBuildingTimer = new BarWidget(myBuilding.GetMaxBuildTime(), myBuilding.GetCurrentBuildTime(), { unitSize.x * 4.f, unitSize.y / 2.f }, { 0.f, 0.f, 1.f, 1.f });
+
+		int maxQueue = aPlayer->GetBuildingComponent().GetMaxQueue();
+		CU::Vector2<float> queuePosition = myPortraitPosition;
+		queuePosition.x += portraitSize.x;
+
+		for (int i = 0; i < maxQueue; i++)
+		{
+			ButtonWidget* abortButton = new ButtonWidget(aReader, abortButtonElement, aPlayer);
+
+			CU::Vector2<float> position = queuePosition + abortButton->GetSize() / 2.f;
+			position.x += abortButton->GetSize().x * float(i);
+
+			abortButton->SetPosition(position);
+			abortButton->SetEvent(new OnClickMessage(eOnClickEvent::ABORT_QUEUE, i));
+			myQueueButtons.Add(abortButton);
+		}
 	}
 
 	UnitInfoWidget::~UnitInfoWidget()
@@ -81,6 +102,7 @@ namespace GUI
 		SAFE_DELETE(myBuildingPortrait);
 		SAFE_DELETE(myStatsSprite);
 		SAFE_DELETE(myBuildingTimer);
+		myQueueButtons.DeleteAll();
 	}
 
 	void UnitInfoWidget::Update(float)
@@ -174,6 +196,22 @@ namespace GUI
 		}
 	}
 
+	Widget*	UnitInfoWidget::MouseIsOver(const CU::Vector2<float>& aPosition)
+	{
+		const CU::GrowingArray<BuildInfo>& queue = myBuilding.GetQueue();
+
+		for (int i = 0; i < queue.Size(); i++)
+		{
+			Widget* widget = myQueueButtons[i]->MouseIsOver(aPosition - myPosition);
+			if (widget != nullptr)
+			{
+				return widget;
+			}
+		}
+
+		return this;
+	}
+
 	void UnitInfoWidget::RenderBaseInfo(const CU::Vector2<float>& aParentPosition)
 	{
 		myBuildingPortrait->Render(myPosition + aParentPosition + myPortraitPosition);
@@ -185,6 +223,13 @@ namespace GUI
 			myBuildingTimer->Render(position);
 			position.x += myBuildingTimer->GetSize().x + 10.f;
 			Prism::Engine::GetInstance()->PrintText(myBuilding.GetSpawnQueueSize(), position, Prism::eTextType::RELEASE_TEXT, myTextScale);
+
+			const CU::GrowingArray<BuildInfo>& queue = myBuilding.GetQueue();
+
+			for (int i = 0; i < queue.Size(); i++)
+			{
+				myQueueButtons[i]->Render(myPosition + aParentPosition);
+			}
 		}
 	}
 

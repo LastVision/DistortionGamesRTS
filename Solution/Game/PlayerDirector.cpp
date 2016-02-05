@@ -446,6 +446,11 @@ void PlayerDirector::ReceiveMessage(const OnClickMessage& aMessage)
 		UpgradeUnit(static_cast<eUnitType>(aMessage.myID));
 		return;
 	}
+	else if (aMessage.myEvent == eOnClickEvent::ABORT_QUEUE)
+	{
+		myBuilding->GetComponent<BuildingComponent>()->Abort(aMessage.myID);
+		return;
+	}
 
 	if (mySelectedUnits.Size() > 0 && mySelectedUnits[0]->GetOwner() == myOwner)
 	{
