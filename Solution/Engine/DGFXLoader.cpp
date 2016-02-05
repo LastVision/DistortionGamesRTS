@@ -211,7 +211,17 @@ namespace Prism
 		{
 			tempModel->myIsNULLObject = false;
 
-			LoadModelData(tempModel, aEffect, aStream);
+			VertexIndexWrapper* indexWrapper = new VertexIndexWrapper();
+			VertexDataWrapper* vertexData = new VertexDataWrapper();
+			Surface* surface = new Surface();
+
+			LoadData(indexWrapper, vertexData, tempModel->myVertexFormat, *surface
+				, aEffect, aStream);
+
+			tempModel->mySurfaces.Add(surface);
+			tempModel->myIndexBaseData = indexWrapper;
+			tempModel->myVertexBaseData = vertexData;
+
 			CU::Matrix44<float> matrix;
 			aStream.read((char*)&tempModel->myOrientation.myMatrix[0], sizeof(float) * 16);
 		}
@@ -258,7 +268,18 @@ namespace Prism
 		if (isNullObject == 0)
 		{
 			tempModel->myIsNULLObject = false;
-			LoadModelAnimatedData(tempModel, aEffect, aStream);
+
+			VertexIndexWrapper* indexWrapper = new VertexIndexWrapper();
+			VertexDataWrapper* vertexData = new VertexDataWrapper();
+			Surface* surface = new Surface();
+
+			LoadData(indexWrapper, vertexData, tempModel->myVertexFormat, *surface
+				, aEffect, aStream);
+
+			tempModel->mySurfaces.Add(surface);
+			tempModel->myIndexBaseData = indexWrapper;
+			tempModel->myVertexBaseData = vertexData;
+
 			CU::Matrix44<float> matrix;
 			aStream.read((char*)&tempModel->myOrientation.myMatrix[0], sizeof(float) * 16);
 		}
@@ -278,7 +299,9 @@ namespace Prism
 		return tempModel;
 	}
 
-	void DGFXLoader::LoadModelData(Model* aOutData, Effect* aEffect, std::fstream& aStream)
+	void DGFXLoader::LoadData(VertexIndexWrapper* aIndexWrapper, VertexDataWrapper* aVertexData
+		, CU::GrowingArray<D3D11_INPUT_ELEMENT_DESC*>& someInputElements, Surface& aSurface
+		, Effect* aEffect, std::fstream& aStream)
 	{
 		int indexCount = 0;
 		aStream.read((char*)&indexCount, sizeof(int)); //Index count
@@ -286,12 +309,10 @@ namespace Prism
 		unsigned int* indexData = new unsigned int[indexCount];
 		aStream.read((char*)(indexData), sizeof(int) * indexCount); //All index data
 
-		VertexIndexWrapper* indexWrapper = new VertexIndexWrapper();
-		indexWrapper->myFormat = DXGI_FORMAT_R32_UINT;
-		indexWrapper->myIndexData = (char*)indexData;
-		indexWrapper->mySize = indexCount * sizeof(unsigned int);
-		indexWrapper->myNumberOfIndices = indexCount;
-		aOutData->myIndexBaseData = indexWrapper;
+		aIndexWrapper->myFormat = DXGI_FORMAT_R32_UINT;
+		aIndexWrapper->myIndexData = (char*)indexData;
+		aIndexWrapper->mySize = indexCount * sizeof(unsigned int);
+		aIndexWrapper->myNumberOfIndices = indexCount;
 
 
 		int vertexCount = 0;
@@ -303,176 +324,10 @@ namespace Prism
 		char* vertexRawData = new char[sizeOfBuffer];
 		aStream.read(vertexRawData, sizeOfBuffer); //All vertex data
 
-		VertexDataWrapper* vertexData = new VertexDataWrapper();
-		vertexData->myVertexData = vertexRawData;
-		vertexData->myNumberOfVertices = vertexCount;
-		vertexData->mySize = sizeOfBuffer;
-		vertexData->myStride = stride*sizeof(float);
-		aOutData->myVertexBaseData = vertexData;
-
-
-		int layoutCount = 0;
-		aStream.read((char*)&layoutCount, sizeof(int)); //Inputlayout element count
-
-		for (int i = 0; i < layoutCount; ++i)
-		{
-			int byteOffset = 0;
-			aStream.read((char*)&byteOffset, sizeof(int)); //Inputlayout element count
-
-			int semanticIndex = 0;
-			aStream.read((char*)&semanticIndex, sizeof(int)); //Inputlayout semantic index
-
-
-			D3D11_INPUT_ELEMENT_DESC* desc = new D3D11_INPUT_ELEMENT_DESC();
-			desc->SemanticIndex = semanticIndex;
-			desc->AlignedByteOffset = byteOffset;
-			desc->InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-			desc->InputSlot = 0;
-			desc->InstanceDataStepRate = 0;
-
-			int type = -1;
-			aStream.read((char*)&type, sizeof(int)); //element type
-
-			if (type == eVertexLayout::VERTEX_POS)
-			{
-				desc->SemanticName = "POSITION";
-				desc->Format = DXGI_FORMAT_R32G32B32_FLOAT;
-			}
-			else if (type == eVertexLayout::VERTEX_NORMAL)
-			{
-				desc->SemanticName = "NORMAL";
-				desc->Format = DXGI_FORMAT_R32G32B32_FLOAT;
-			}
-			else if (type == eVertexLayout::VERTEX_UV)
-			{
-				desc->SemanticName = "TEXCOORD";
-				desc->Format = DXGI_FORMAT_R32G32_FLOAT;
-			}
-			else if (type == eVertexLayout::VERTEX_BINORMAL)
-			{
-				desc->SemanticName = "BINORMAL";
-				desc->Format = DXGI_FORMAT_R32G32B32_FLOAT;
-			}
-			else if (type == eVertexLayout::VERTEX_TANGENT)
-			{
-				desc->SemanticName = "TANGENT";
-				desc->Format = DXGI_FORMAT_R32G32B32_FLOAT;
-			}
-			else if (type == eVertexLayout::VERTEX_SKINWEIGHTS)
-			{
-				desc->SemanticName = "WEIGHTS";
-				desc->Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
-			}
-			else if (type == eVertexLayout::VERTEX_BONEID)
-			{
-				desc->SemanticName = "BONES";
-				desc->Format = DXGI_FORMAT_R32G32B32A32_SINT;
-			}
-			else if (type == eVertexLayout::VERTEX_COLOR)
-			{
-				desc->SemanticName = "COLOR";
-				desc->Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
-			}
-			else
-			{
-				DL_ASSERT("Found a invalid InputElement while loading DGFX");
-				assert(false && "Found a invalid InputElement while loading DGFX, RELEASE-ASSERT");
-			}
-
-			aOutData->myVertexFormat.Add(desc);
-		}
-
-		Surface surface;
-		surface.SetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-		surface.SetIndexCount(indexCount);
-		surface.SetVertexStart(0);
-		surface.SetIndexStart(0);
-		surface.SetVertexCount(vertexCount);
-		surface.SetEffect(aEffect);
-
-		int textureCount;
-		aStream.read((char*)&textureCount, sizeof(int)); //numberOfTextures
-		for (int i = 0; i < textureCount; ++i)
-		{
-			int textureType;
-			aStream.read((char*)&textureType, sizeof(int)); //textureType
-
-			std::string resourceName;
-			if (textureType == eTextureType::ALBEDO)
-			{
-				resourceName = "AlbedoTexture";
-			}
-			else if (textureType == eTextureType::NORMAL)
-			{
-				resourceName = "NormalTexture";
-			}
-			else if (textureType == eTextureType::ROUGHNESS)
-			{
-				resourceName = "RoughnessTexture";
-			}
-			else if (textureType == eTextureType::METALNESS)
-			{
-				resourceName = "MetalnessTexture";
-			}
-			else if (textureType == eTextureType::AMBIENT)
-			{
-				resourceName = "AOTexture";
-			}
-			else if (textureType == eTextureType::EMISSIVE)
-			{
-				resourceName = "EmissiveTexture";
-			}
-			else
-			{
-				DL_ASSERT("Found a invalid TextureType while loading DGFX");
-				assert(false && "Found a invalid TextureType while loading DGFX, RELEASE-ASSERT");
-			}
-
-
-			int textureLenght = 0;
-			aStream.read((char*)&textureLenght, sizeof(int)); //currentTexture.myFileName lenght
-			char* texture = new char[textureLenght+1];
-			aStream.read(texture, sizeof(char) * textureLenght); //currentTexture.myFileName
-			texture[textureLenght] = '\0';
-
-			surface.SetTexture(resourceName, texture, false);
-			delete texture;
-		}
-
-		aOutData->mySurfaces.Add(new Surface(surface));
-	}
-
-	void DGFXLoader::LoadModelAnimatedData(ModelAnimated* aOutData, Effect* aEffect, std::fstream& aStream)
-	{
-		int indexCount = 0;
-		aStream.read((char*)&indexCount, sizeof(int)); //Index count
-
-		unsigned int* indexData = new unsigned int[indexCount];
-		aStream.read((char*)(indexData), sizeof(int) * indexCount); //All index data
-
-		VertexIndexWrapper* indexWrapper = new VertexIndexWrapper();
-		indexWrapper->myFormat = DXGI_FORMAT_R32_UINT;
-		indexWrapper->myIndexData = (char*)indexData;
-		indexWrapper->mySize = indexCount * sizeof(unsigned int);
-		indexWrapper->myNumberOfIndices = indexCount;
-		aOutData->myIndexBaseData = indexWrapper;
-
-
-		int vertexCount = 0;
-		aStream.read((char*)&vertexCount, sizeof(int)); //Vertex count
-		int stride = 0;
-		aStream.read((char*)&stride, sizeof(int)); //Vertex stride
-
-		int sizeOfBuffer = vertexCount * stride * sizeof(float);
-		char* vertexRawData = new char[sizeOfBuffer];
-		aStream.read(vertexRawData, sizeOfBuffer); //All vertex data
-
-		VertexDataWrapper* vertexData = new VertexDataWrapper();
-		vertexData->myVertexData = vertexRawData;
-		vertexData->myNumberOfVertices = vertexCount;
-		vertexData->mySize = sizeOfBuffer;
-		vertexData->myStride = stride*sizeof(float);
-		aOutData->myVertexBaseData = vertexData;
+		aVertexData->myVertexData = vertexRawData;
+		aVertexData->myNumberOfVertices = vertexCount;
+		aVertexData->mySize = sizeOfBuffer;
+		aVertexData->myStride = stride*sizeof(float);
 
 
 		int layoutCount = 0;
@@ -542,16 +397,15 @@ namespace Prism
 				assert(false && "Found a invalid InputElement while loading DGFX, RELEASE-ASSERT");
 			}
 
-			aOutData->myVertexFormat.Add(desc);
+			someInputElements.Add(desc);
 		}
 
-		Surface surface;
-		surface.SetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-		surface.SetIndexCount(indexCount);
-		surface.SetVertexStart(0);
-		surface.SetIndexStart(0);
-		surface.SetVertexCount(vertexCount);
-		surface.SetEffect(aEffect);
+		aSurface.SetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		aSurface.SetIndexCount(indexCount);
+		aSurface.SetVertexStart(0);
+		aSurface.SetIndexStart(0);
+		aSurface.SetVertexCount(vertexCount);
+		aSurface.SetEffect(aEffect);
 
 		int textureCount = 0;
 		aStream.read((char*)&textureCount, sizeof(int)); //numberOfTextures
@@ -594,15 +448,13 @@ namespace Prism
 
 			int textureLenght = 0;
 			aStream.read((char*)&textureLenght, sizeof(int)); //currentTexture.myFileName lenght
-			char* texture = new char[textureLenght+1];
+			char* texture = new char[textureLenght + 1];
 			aStream.read(texture, sizeof(char) * textureLenght); //currentTexture.myFileName
 			texture[textureLenght] = '\0';
 
-			surface.SetTexture(resourceName, texture, false);
+			aSurface.SetTexture(resourceName, texture, false);
 			delete texture;
 		}
-
-		aOutData->mySurfaces.Add(new Surface(surface));
 	}
 
 	void DGFXLoader::LoadLodGroup(Model* aOutData, std::fstream& aStream)
@@ -634,7 +486,6 @@ namespace Prism
 		LoadBoneHierarchy(rootBone, aStream);
 
 		Animation* newAnimation = new Animation();
-
 
 		int nrOfbones = 0;
 		aStream.read((char*)&nrOfbones, sizeof(int));

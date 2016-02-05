@@ -15,7 +15,38 @@ DGFXReader::~DGFXReader()
 	file.open("GeneratedData/modellist.bin");
 	for (int i = 0; i < myConvertedFiles.Size(); ++i)
 	{
-		file << myConvertedFiles[i] << std::endl;
+		std::string dgfxPath = CU::GetGeneratedDataFolderFilePath(myConvertedFiles[i], "dgfx");
+		std::fstream binFile;
+		binFile.open(dgfxPath.c_str(), std::ios::in | std::ios::binary);
+
+		int fileVersion = -1;
+		binFile.read((char*)&fileVersion, sizeof(int));
+
+		int isNullObject = -1;
+		binFile.read((char*)&isNullObject, sizeof(int));
+
+		int isLodGroup = 0;
+		binFile.read((char*)&isLodGroup, sizeof(int));
+
+		int isAnimated = 0;
+		binFile.read((char*)&isAnimated, sizeof(int));
+		binFile.close();
+
+		file << myConvertedFiles[i];
+		if (isAnimated == 1)
+		{
+			file << " ANIMATED ";
+
+			if (isNullObject == 1)
+			{
+				file << " NOT_MODEL ";
+			}
+		}
+
+		
+
+		file << std::endl;
+
 	}
 	file.close();
 
@@ -39,6 +70,8 @@ void DGFXReader::ReadFile(const std::string& aFilePath)
 	if (aFilePath.compare(aFilePath.size() - 4, 4, ".fbx") == 0
 		|| aFilePath.compare(aFilePath.size() - 4, 4, ".FBX") == 0)
 	{
+		myConvertedFiles.Add(aFilePath);
+
 		std::cout << "Converting FBX: " + aFilePath << std::endl;
 
 		std::string dgfxPath = CU::GetGeneratedDataFolderFilePath(aFilePath, "dgfx");
