@@ -107,6 +107,8 @@ const eStateStatus LoadingState::Update(const float& aDeltaTime)
 
 		if (CU::InputWrapper::GetInstance()->KeyDown(DIK_SPACE) == true
 			|| CU::InputWrapper::GetInstance()->KeyDown(DIK_ESCAPE) == true
+			|| CU::InputWrapper::GetInstance()->MouseDown(0) == true
+			|| CU::InputWrapper::GetInstance()->MouseDown(1) == true
 			|| CU::InputWrapper::GetInstance()->KeyDown(DIK_RETURN) == true)
 		{
 			return eStateStatus::ePopSubState;
