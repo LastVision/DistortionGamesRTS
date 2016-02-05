@@ -74,4 +74,12 @@ namespace GUI
 		myCooldown = &aFirstValue;
 		myMaxCooldown = &aSecondValue;
 	}
+
+	void AbilityButton::OnResize(const CU::Vector2<float>& aNewSize, const CU::Vector2<float>& anOldSize, bool aIsFullScreen)
+	{
+		ButtonWidget::OnResize(aNewSize, anOldSize, aIsFullScreen);
+
+		myCooldownIndicator->SetSize(mySize, { 0.f, 0.f });
+		myHasCooldownSprite->SetSize(mySize, { 0.f, 0.f });
+	}
 }

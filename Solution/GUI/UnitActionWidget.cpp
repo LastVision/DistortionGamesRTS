@@ -63,7 +63,7 @@ namespace GUI
 		myGruntActionButtons->SetPosition(myGruntActionButtons->At(0)->GetPosition() - myGruntActionButtons->At(0)->GetSize() / 2.f);
 		myGruntActionButtons->At(0)->SetPosition(myGruntActionButtons->At(0)->GetSize() / 2.f, false);
 		myGruntActionButtons->At(1)->SetPosition(myGruntActionButtons->At(0)->GetPosition(), false);
-		
+
 		myRangerActionButtons->SetPosition(myRangerActionButtons->At(0)->GetPosition() - myRangerActionButtons->At(0)->GetSize() / 2.f);
 		myRangerActionButtons->At(0)->SetPosition(myRangerActionButtons->At(0)->GetSize() / 2.f, false);
 		myRangerActionButtons->At(1)->SetPosition(myRangerActionButtons->At(0)->GetPosition(), false);
@@ -86,13 +86,13 @@ namespace GUI
 	{
 		if (myIsUnitSelected == true)
 		{
-			if (mySelectedType == eEntityType::UNIT)
+			if (mySelectedType == eEntityType::UNIT && myUnits[0]->GetOwner() == eOwnerType::PLAYER)
 			{
 				myUnitActionButtons->Render(myPosition + aParentPosition);
 
 				if (myFirstSelectedGrunt != nullptr)
 				{
-					myFirstSelectedGrunt->GetComponent<PromotionComponent>()->GetPromoted() ? 
+					myFirstSelectedGrunt->GetComponent<PromotionComponent>()->GetPromoted() ?
 						myGruntActionButtons->Render(myPosition + aParentPosition, 0) : myGruntActionButtons->Render(myPosition + aParentPosition, 1);
 				}
 
@@ -108,7 +108,7 @@ namespace GUI
 						myTankActionButtons->Render(myPosition + aParentPosition, 0) : myTankActionButtons->Render(myPosition + aParentPosition, 1);
 				}
 			}
-			else if (mySelectedType == eEntityType::BASE_BUILING)
+			else if (mySelectedType == eEntityType::BASE_BUILING && myUnits[0]->GetOwner() == eOwnerType::PLAYER)
 			{
 				myBuildingActionButtons->At(0)->Render(myPosition + aParentPosition);
 				myBuildingActionButtons->At(5)->Render(myPosition + aParentPosition);
@@ -186,7 +186,7 @@ namespace GUI
 
 				if (myFirstSelectedGrunt != nullptr)
 				{
-					Widget* gruntWidget = myFirstSelectedGrunt->GetComponent<PromotionComponent>()->GetPromoted() ? 
+					Widget* gruntWidget = myFirstSelectedGrunt->GetComponent<PromotionComponent>()->GetPromoted() ?
 						myGruntActionButtons->MouseIsOver(aPosition - myPosition, 0) : myGruntActionButtons->MouseIsOver(aPosition - myPosition, 1);
 					widget = gruntWidget == nullptr ? widget : gruntWidget;
 				}
@@ -225,7 +225,7 @@ namespace GUI
 					widget = myBuildingActionButtons->MouseIsOver(aPosition - myPosition, 2);
 					widget = widget != nullptr ? widget : myBuildingActionButtons->MouseIsOver(aPosition - myPosition, 8);
 				}
-				
+
 				if (myHasUnlockedTank == true && widget == nullptr)
 				{
 					widget = myBuildingActionButtons->MouseIsOver(aPosition - myPosition, 3);
