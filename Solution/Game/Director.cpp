@@ -96,6 +96,11 @@ void Director::Update(float aDeltaTime)
 			myGunpowder += myBaseIncome;
 		}
 	}
+
+	if (myBuilding != nullptr)
+	{
+		myBuilding->Update(aDeltaTime);
+	}
 	DEBUG_PRINT(myArtifacts);
 }
 

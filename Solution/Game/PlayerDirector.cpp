@@ -284,7 +284,7 @@ void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 
 	Director::Update(aDeltaTime);
 	UpdateMouseInteraction(aCamera);
-	myBuilding->Update(aDeltaTime);
+	//myBuilding->Update(aDeltaTime);
 	myTotem->Update(aDeltaTime);
 
 	for (int i = mySelectedUnits.Size() - 1; i >= 0; --i) // remove dead units
