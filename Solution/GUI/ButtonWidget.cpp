@@ -120,13 +120,15 @@ namespace GUI
 			std::string text = "";
 			std::string action = "";
 			int upgradeLevel = -1;
+			bool isLargeTooltip = true;
 
 			aReader->ReadAttribute(aReader->FindFirstChild(anXMLElement, "tooltip"), "headline", headline);
 			aReader->ReadAttribute(aReader->FindFirstChild(anXMLElement, "tooltip"), "text", text);
+			aReader->ReadAttribute(aReader->FindFirstChild(anXMLElement, "tooltip"), "islargetooltip", isLargeTooltip);
 			aReader->ReadAttribute(aReader->FindFirstChild(anXMLElement, "tooltip"), "action", action);
 			aReader->ReadAttribute(aReader->FindFirstChild(anXMLElement, "tooltip"), "upgradelevel", upgradeLevel);
 
-			myTooltipInfo = new TooltipInfo(headline, text);
+			myTooltipInfo = new TooltipInfo(headline, text, isLargeTooltip);
 
 			if (action == "totem")
 			{
