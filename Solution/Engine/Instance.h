@@ -38,6 +38,7 @@ namespace Prism
 		void UpdateSpotLights(const CU::StaticArray<SpotLightData, NUMBER_OF_SPOT_LIGHTS>& someSpotLightData);
 		
 		void SetAnimation(Animation* aAnimation);
+		Animation* GetCurrentAnimation() const;
 		bool IsAnimationDone();
 		void ResetAnimationTime(float aTime);
 
