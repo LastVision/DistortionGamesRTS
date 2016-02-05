@@ -6,6 +6,14 @@
 
 struct BuildingComponentData;
 
+struct BuildInfo
+{
+	BuildInfo() : myUnit(eUnitType::NOT_A_UNIT), myIsUpgrade(false){}
+	BuildInfo(eUnitType aUnit, bool aIsUpgrade) : myUnit(aUnit), myIsUpgrade(aIsUpgrade){}
+	eUnitType myUnit;
+	bool myIsUpgrade;
+};
+
 class BuildingComponent : public Component
 {
 public:
@@ -46,15 +54,12 @@ public:
 
 	const bool GetHasSpawnedAtLeastOnce() const;
 
-private:
-	struct BuildInfo
-	{
-		BuildInfo() : myUnit(eUnitType::NOT_A_UNIT), myIsUpgrade(false){}
-		BuildInfo(eUnitType aUnit, bool aIsUpgrade) : myUnit(aUnit), myIsUpgrade(aIsUpgrade){}
-		eUnitType myUnit;
-		bool myIsUpgrade;
-	};
+	int GetMaxQueue() const;
 
+	const CU::GrowingArray<BuildInfo>& GetQueue() const;
+
+private:
+	
 	void UpdateUpgradeCooldown(float aDelta, eUnitType aUnit);
 
 	CU::Vector2<float> mySpawnPoint;
@@ -167,4 +172,14 @@ inline void BuildingComponent::Abort(int aIndex)
 inline const bool BuildingComponent::GetHasSpawnedAtLeastOnce() const
 {
 	return myHasSpawnedAtLeastOnce;
+}
+
+inline int BuildingComponent::GetMaxQueue() const
+{
+	return myMaxQueue;
+}
+
+inline const CU::GrowingArray<BuildInfo>& BuildingComponent::GetQueue() const
+{
+	return myBuildQueue;
 }

@@ -34,6 +34,8 @@ namespace GUI
 
 		void OnResize(const CU::Vector2<float>& aNewWindowSize, const CU::Vector2<float>& anOldWindowSize, bool aIsFullScreen) override;
 
+		Widget*	MouseIsOver(const CU::Vector2<float>& aPosition) override;
+
 	private:
 		void RenderBaseInfo(const CU::Vector2<float>& aParentPosition);
 		void RenderUnitInfo(const CU::Vector2<float>& aParentPosition);
@@ -43,6 +45,8 @@ namespace GUI
 
 		const CU::GrowingArray<Entity*>& myUnits;
 		const BuildingComponent& myBuilding;
+
+		CU::GrowingArray<ButtonWidget*> myQueueButtons;
 
 		Prism::SpriteProxy* myGruntUnit;
 		Prism::SpriteProxy* myRangerUnit;
