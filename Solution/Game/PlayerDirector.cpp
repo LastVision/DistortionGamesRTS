@@ -149,7 +149,7 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 	myTotem = new Entity(eOwnerType::PLAYER, Prism::eOctreeType::DYNAMIC, tempData, aScene, { 128.f, 100.f, 128.f },
 		aTerrain, { 0.f, 0.f, 0.f }, { 1.f, 1.f, 1.f }, eUnitType::NOT_A_UNIT);
 	myTotem->AddToScene();
-
+	PollingStation::GetInstance()->AddTotem(myTotem);
 	reader.OpenDocument("Data/Setting/SET_game.xml");
 	tinyxml2::XMLElement* rootElement = reader.FindFirstChild("root");
 	reader.ForceReadAttribute(reader.ForceFindFirstChild(rootElement, "maxSelected"), "value", myMaxSelectedUnits);

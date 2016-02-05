@@ -104,6 +104,20 @@ void TotemComponent::Update(float aDeltaTime)
 	}
 }
 
+bool TotemComponent::GetIsInside(Entity* aEntity)
+{
+	if (myActive == false)
+	{
+		return false;
+	}
+	
+	if (CU::Intersection::CircleVsCircle(myEntity.GetPosition(), myRadius
+		, aEntity->GetPosition(), aEntity->GetComponent<CollisionComponent>()->GetRadius()) == true)
+	{
+		return true;
+	}
+}
+
 void TotemComponent::CheckUnitsForRemove(CU::GrowingArray<Entity*>& someUnits) const
 {
 	for (int i = someUnits.Size() - 1; i >= 0; --i)
