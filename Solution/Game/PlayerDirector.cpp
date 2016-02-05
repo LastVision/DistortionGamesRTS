@@ -192,7 +192,9 @@ void PlayerDirector::InitGUI(const AIDirector* anAI, const Prism::Camera& aCamer
 
 void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 {
-	if (myCursor->GetCurrentCursor() == eCursorType::ATTACK) // prevent cursor getting stuck after hovering enemy
+	if (myCursor->GetCurrentCursor() == eCursorType::ATTACK || 
+		(myCursor->GetCurrentCursor() != eCursorType::TOTEM && myCursor->GetCurrentCursor() != eCursorType::CANCEL
+		&& (myBuilding->IsSelected() == true || mySelectedUnits.Size() == 0))) // if units have died
 	{
 		myCursor->SetCurrentCursor(eCursorType::NORMAL);
 	}
@@ -1194,4 +1196,5 @@ void PlayerDirector::AttackMoveSelectedUnits(const CU::Vector2<float>& aPosition
 		mySelectedUnits[i]->GetComponent<ControllerComponent>()->AttackMove({ aPosition.x, 0.f, aPosition.y }, !myShiftPressed, myHasPlayedSound);
 	}
 	mySelectedAction = eSelectedAction::NONE;
+	myCursor->SetCurrentCursor(eCursorType::NORMAL);
 }
