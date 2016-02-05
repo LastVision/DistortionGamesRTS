@@ -192,6 +192,7 @@ void Prism::Scene::Render(bool aRenderNavMeshLines, Texture* aFogOfWarTexture, S
 
 	for (int i = 0; i < myInstances.Size(); ++i)
 	{
+		myInstances[i]->UpdateDirectionalLights(myDirectionalLightData);
 		myInstances[i]->UpdateSpotLights(mySpotLightData);
 		myInstances[i]->Render(*myCamera, *myInstancingHelper, false);
 	}

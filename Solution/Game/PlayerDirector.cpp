@@ -70,6 +70,7 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 	, myCurrentCancleCursorTime(0.f)
 	, myCancleCursorTime(0.5f)
 	, myConfimrationAnimation(nullptr)
+	, myRallypointVisible(false)
 {
 	myAudioSFXID = Prism::Audio::AudioInterface::GetInstance()->GetUniqueID();
 	myDragSelectionPositions.Reserve(4);
@@ -77,6 +78,10 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 	myDragSelectionSpriteHorizontal = Prism::ModelLoader::GetInstance()->LoadSprite("Data/Resource/Texture/UI/T_selection_box_horizontal.dds", { 0.f, 0.f });
 	myDragSelectionSpriteVerticalFlip = Prism::ModelLoader::GetInstance()->LoadSprite("Data/Resource/Texture/UI/T_selection_box_vertical_flip.dds", { 0.f, 0.f });
 	myDragSelectionSpriteHorizontalFlip = Prism::ModelLoader::GetInstance()->LoadSprite("Data/Resource/Texture/UI/T_selection_box_horizontal_flip.dds", { 0.f, 0.f });
+
+	myRallyPoint = EntityFactory::CreateEntity(myOwner, eEntityType::RALLY_POINT, Prism::eOctreeType::DYNAMIC, 
+		aScene, { 0.f, 0.f, 0.f }, aTerrain);
+	
 
 	for (int i = 0; i < 64; ++i)
 	{
@@ -163,6 +168,7 @@ PlayerDirector::~PlayerDirector()
 	SAFE_DELETE(myDragSelectionSpriteVerticalFlip);
 	SAFE_DELETE(myDragSelectionSpriteHorizontalFlip);
 	SAFE_DELETE(myTotem);
+	SAFE_DELETE(myRallyPoint);
 	SAFE_DELETE(myConfimrationAnimation);
 	SAFE_DELETE(myTextEventManager);
 
@@ -193,6 +199,25 @@ void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 	//static float totalTime = 0;
 	//totalTime += aDeltaTime;
 	//myBuilding->SetPosition({ myBuilding->GetOrientation().GetPos().x, myBuilding->GetOrientation().GetPos().y, cos(totalTime) * 5 });
+
+	if (myRallypointVisible == true)
+	{
+		if (myRallyPoint->IsInScene() == false)
+		{
+			myRallyPoint->AddToScene();
+		}
+		if (myRallyPoint->GetPosition() == CU::Vector2<float>())
+		{
+			PlaceRallyPoint(myBuilding->GetComponent<BuildingComponent>()->GetRallyPoint());
+		}
+	}
+	else 
+	{
+		if (myRallyPoint->IsInScene() == true)
+		{
+			myRallyPoint->RemoveFromScene();
+		}
+	}
 
 	if (myBuilding->IsSelected() == true)
 	{
@@ -340,6 +365,8 @@ void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 	UpdateConfirmationAnimation(aDeltaTime, aCamera);
 
 	myTextEventManager->Update(aDeltaTime);
+
+	myRallypointVisible = myBuilding->IsSelected();
 }
 
 void PlayerDirector::Render(const Prism::Camera& aCamera)
@@ -1131,6 +1158,11 @@ void PlayerDirector::PlaceRallyPoint(CU::Vector2<float> aWorldPosition)
 	// check if inside navmesh 
 
 	myBuilding->GetComponent<BuildingComponent>()->SetRallyPoint(aWorldPosition);
+
+	myRallyPoint->SetPosition({ aWorldPosition.x, 0, aWorldPosition.y });
+	CU::Matrix44f rallyOrientation = myRallyPoint->GetOrientation();
+	myTerrain.CalcEntityHeight(rallyOrientation);
+	myRallyPoint->SetPosition(rallyOrientation.GetPos());
 }
 
 void PlayerDirector::PlaceTotem(const CU::Vector3f& aPositionInWorld)
