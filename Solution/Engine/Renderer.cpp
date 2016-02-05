@@ -47,11 +47,20 @@ namespace Prism
 		myClearColor[3] = 0.f;
 
 		mySceneIndex = 0;
+
+		myShadowViewport = new D3D11_VIEWPORT[D3D11_VIEWPORT_AND_SCISSORRECT_MAX_INDEX];
+		myShadowViewport->Height = 1024;
+		myShadowViewport->Width = 1024;
+		myShadowViewport->TopLeftX = 0;
+		myShadowViewport->TopLeftY = 0;
+		myShadowViewport->MinDepth = 0;
+		myShadowViewport->MaxDepth = 1;
 	}
 	
 	
 	Renderer::~Renderer()
 	{
+		SAFE_DELETE(myShadowViewport);
 		SAFE_DELETE(myCombineMiddleMan);
 		SAFE_DELETE(myFinalTexture);
 		for (int i = 0; i < MAX_NUMBER_OF_SCENES; ++i)
@@ -65,6 +74,14 @@ namespace Prism
 	void Renderer::ProcessShadow(SpotLightShadow* aShadowSpotLight, Scene* aScene)
 	{
 		aShadowSpotLight->ClearTexture();
+
+		UINT nbrOfVp = 1;
+		D3D11_VIEWPORT oldVp;
+		Engine::GetInstance()->GetContex()->RSGetViewports(&nbrOfVp, &oldVp);
+
+
+		Engine::GetInstance()->GetContex()->RSSetViewports(1, myShadowViewport);
+		
 
 		ID3D11RenderTargetView* originalRenderTargetView;
 		ID3D11DepthStencilView* originalDepthStencilView;
@@ -82,6 +99,8 @@ namespace Prism
 		//Prism::Engine::GetInstance()->EnableZBuffer();
 
 		Engine::GetInstance()->GetContex()->OMSetRenderTargets(1, &originalRenderTargetView, originalDepthStencilView);
+
+		Engine::GetInstance()->GetContex()->RSSetViewports(1, &oldVp);
 		aScene->SetCamera(*oldCamera);
 	}
 
