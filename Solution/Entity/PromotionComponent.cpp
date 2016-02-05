@@ -52,11 +52,11 @@ void PromotionComponent::RenderPromotion(const Prism::Camera& aCamera)
 	}
 }
 
-void PromotionComponent::RenderPromotion(const CU::Vector2<float>& aPosition, const CU::Vector2<float>& aScale)
+void PromotionComponent::RenderPromotion(const CU::Vector2<float>& aPosition, const CU::Vector2<float>& aScale, const CU::Vector4<float>& aColor)
 {
 	if (GetPromoted() == true)
 	{
-		mySprite->Render(aPosition, aScale);
+		mySprite->Render(aPosition, aScale, aColor);
 	}
 }
 

@@ -447,7 +447,7 @@ void PlayerDirector::ReceiveMessage(const OnClickMessage& aMessage)
 		return;
 	}
 
-	if (mySelectedUnits.Size() > 0)
+	if (mySelectedUnits.Size() > 0 && mySelectedUnits[0]->GetOwner() == myOwner)
 	{
 		switch (aMessage.myEvent)
 		{
@@ -511,6 +511,11 @@ void PlayerDirector::ReceiveMessage(const TimeMultiplierMessage& aMessage)
 
 void PlayerDirector::ReceiveMessage(const MinimapMoveMessage& aMessage)
 {
+	if (mySelectedUnits.Size() > 0 && mySelectedUnits[0]->GetOwner() != myOwner)
+	{
+		return;
+	}
+
 	CU::Vector2<float> position = aMessage.myPosition * 255.f;
 
 	if (mySelectedUnits.Size() > 0 && mySelectedUnits[0]->GetType() == eEntityType::UNIT)
@@ -764,7 +769,7 @@ void PlayerDirector::UpdateInputs()
 		|| CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_RCONTROL);
 	myMouseIsOverGUI = myGUIManager->MouseOverGUI();
 
-	if (myBuilding->IsSelected() == false && mySelectedUnits.Size() > 0)
+	if (myBuilding->IsSelected() == false && mySelectedUnits.Size() > 0 && mySelectedUnits[0]->GetOwner() == myOwner)
 	{
 		if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_A) == true)
 		{
@@ -804,7 +809,7 @@ void PlayerDirector::UpdateInputs()
 
 void PlayerDirector::UpdateControlGroups()
 {
-	if (mySelectedUnits.Size() > 0 && myControlPressed == true)
+	if (mySelectedUnits.Size() > 0 && myControlPressed == true && mySelectedUnits[0]->GetOwner() == myOwner)
 	{
 		if (CU::InputWrapper::GetInstance()->KeyDown(DIK_1) == true)
 		{
@@ -938,7 +943,7 @@ void PlayerDirector::UpdateConfirmationAnimation(float aDeltaTime, const Prism::
 	}
 
 	if (myMouseIsOverGUI == false && myRightClicked == true && mySelectedUnits.Size() > 0
-		&& mySelectedUnits[0]->GetType() == eEntityType::UNIT)
+		&& mySelectedUnits[0]->GetType() == eEntityType::UNIT && mySelectedUnits[0]->GetOwner() == eOwnerType::PLAYER)
 	{
 		myConfirmationPosition = myCursor->GetMousePosition();
 		myConfimrationAnimation->RestartAnimation();
@@ -1040,6 +1045,7 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 
 	CU::Intersection::LineSegment3D line(aCamera.GetOrientation().GetPos(), firstTargetPos);
 	bool myHasPlayedSound = false;
+
 	for (int i = 0; i < myActiveUnits.Size(); ++i)
 	{
 		SelectOrHoverEntity(myActiveUnits[i], hasSelected, hasHovered, line);
@@ -1101,14 +1107,16 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 	}
 
 	SelectOrHoverEntity(myBuilding, hasSelected, hasHovered, line);
+
+	if (hasSelected == false && hoveredEnemy != nullptr && myLeftMouseUp == true)
+	{
+		SelectUnit(hoveredEnemy);
+	}
 }
 
 void PlayerDirector::SelectOrHoverEntity(Entity* aEntity, bool &aSelected, bool &aHovered
 	, const CU::Intersection::LineSegment3D& aMouseRay)
 {
-	aSelected;
-	aMouseRay;
-
 	if (myLeftMouseDown == true && myShiftPressed == false && myMouseIsOverGUI == false
 		&& (mySelectedAction == eSelectedAction::NONE || mySelectedAction == eSelectedAction::HOLD_POSITION
 		|| mySelectedAction == eSelectedAction::STOP))
@@ -1148,6 +1156,7 @@ void PlayerDirector::SelectOrHoverEntity(Entity* aEntity, bool &aSelected, bool 
 		if (myLeftMouseUp == true)
 		{
 			SelectUnit(aEntity);
+			aSelected = true;
 		}
 		else
 		{
@@ -1213,7 +1222,10 @@ void PlayerDirector::AttackMoveSelectedUnits(const CU::Vector2<float>& aPosition
 	bool myHasPlayedSound = false;
 	for (int i = 0; i < mySelectedUnits.Size(); i++)
 	{
-		mySelectedUnits[i]->GetComponent<ControllerComponent>()->AttackMove({ aPosition.x, 0.f, aPosition.y }, !myShiftPressed, myHasPlayedSound);
+		if (mySelectedUnits[i]->GetOwner() == myOwner)
+		{
+			mySelectedUnits[i]->GetComponent<ControllerComponent>()->AttackMove({ aPosition.x, 0.f, aPosition.y }, !myShiftPressed, myHasPlayedSound);
+		}
 	}
 	mySelectedAction = eSelectedAction::NONE;
 	myCursor->SetCurrentCursor(eCursorType::NORMAL);

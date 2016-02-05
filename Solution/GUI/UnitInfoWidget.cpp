@@ -23,6 +23,7 @@ namespace GUI
 		, myBuilding(aPlayer->GetBuildingComponent())
 		, myBuildingTimer(nullptr)
 		, myTextScale(1.f)
+		, myEnemyColor(0.35f, 0.35f, 0.35f, 1.f)
 	{
 		std::string gruntUnitPath = "";
 		std::string rangerUnitPath = "";
@@ -195,7 +196,12 @@ namespace GUI
 
 		CU::Vector4<float> color(1.f, 1.f, 1.f, 1.f);
 		HealthComponent* toCheck = myUnits[0]->GetComponent<HealthComponent>();
-		if (toCheck->GetIsHealing() == true && toCheck->GetCurrentHealth() < toCheck->GetMaxHealth())
+
+		if (myUnits[0]->GetOwner() != eOwnerType::PLAYER)
+		{
+			color = myEnemyColor;
+		}
+		else if (toCheck->GetIsHealing() == true && toCheck->GetCurrentHealth() < toCheck->GetMaxHealth())
 		{
 			color = { 0.f, 1.f, 0.f, 1.f };
 		}
@@ -227,9 +233,13 @@ namespace GUI
 
 		upgradePosition.x += myGruntPortrait->GetSize().y * 0.9f;
 
-		myUnits[0]->GetComponent<PromotionComponent>()->RenderPromotion(portraitPosition);
+		myUnits[0]->GetComponent<PromotionComponent>()->RenderPromotion(portraitPosition, { 1.f, 1.f }, myUnits[0]->GetOwner() == eOwnerType::PLAYER ? CU::Vector4<float>(1.f, 1.f, 1.f, 1.f) : myEnemyColor);
 
-		Prism::Engine::GetInstance()->PrintText(myBuilding.GetUpgradeLevel(myUnits[0]->GetUnitType()), upgradePosition, Prism::eTextType::RELEASE_TEXT);
+		if (myUnits[0]->GetUnitType() != eUnitType::NON_ATTACK_TUTORIAL)
+		{
+			Prism::Engine::GetInstance()->PrintText(myBuilding.GetUpgradeLevel(myUnits[0]->GetUnitType()), upgradePosition
+				, Prism::eTextType::RELEASE_TEXT, 1.f, myUnits[0]->GetOwner() == eOwnerType::PLAYER ? CU::Vector4<float>(1.f, 1.f, 1.f, 1.f) : myEnemyColor);
+		}
 
 		portraitPosition.y -= myGruntPortrait->GetSize().y / 3.5f;
 		portraitPosition.x += myGruntPortrait->GetSize().x / 3.f;
@@ -239,14 +249,18 @@ namespace GUI
 
 		std::string maxHealth = "/" + std::to_string(int(myUnits[0]->GetComponent<HealthComponent>()->GetMaxHealth()));
 		Prism::Engine::GetInstance()->PrintText(maxHealth, { portraitPosition.x + 25.f, portraitPosition.y }
-		, Prism::eTextType::RELEASE_TEXT, myTextScale);
+		, Prism::eTextType::RELEASE_TEXT, myTextScale, color);
 
 		color.x = 1.f;
 		color.y = 1.f;
 		color.z = 1.f;
 		color.w = 1.f;
 
-		if (myUnits[0]->GetUnitType() == eUnitType::TANK)
+		if (myUnits[0]->GetOwner() != eOwnerType::PLAYER)
+		{
+			color = myEnemyColor;
+		}
+		else if (myUnits[0]->GetUnitType() == eUnitType::TANK)
 		{
 			if (myUnits[0]->GetComponent<EnrageComponent>()->IsActive() == true)
 			{
@@ -257,7 +271,8 @@ namespace GUI
 
 		CU::Vector2<float> position = { myGruntUnit->GetSize().x / 2.f, myPosition.y };
 		position += aParentPosition + myUnitPosition;
-		myStatsSprite->Render(position);
+		myStatsSprite->Render(position, { 1.f, 1.f }, myUnits[0]->GetOwner() == eOwnerType::PLAYER ?
+			CU::Vector4<float>(1.f, 1.f, 1.f, 1.f) : myEnemyColor);
 
 		position.x += myStatsSprite->GetSize().x / 20.f;
 		position.y -= myStatsSprite->GetSize().y / 2.f;
@@ -314,7 +329,7 @@ namespace GUI
 			int x = i % 4;
 			int y = i / 4;
 
-			CU::Vector2<float> position = { (myPosition.x + portrait->GetSize().x * x) + (x * 10.f), myPosition.y - portrait->GetSize().y * y - y * 10.f};
+			CU::Vector2<float> position = { (myPosition.x + portrait->GetSize().x * x) + (x * 10.f), myPosition.y - portrait->GetSize().y * y - y * 10.f };
 			position += aParentPosition + myUnitPosition;
 
 			CU::Vector2<float> upgradePosition = position;
