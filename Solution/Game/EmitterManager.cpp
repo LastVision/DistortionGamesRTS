@@ -70,12 +70,7 @@ void EmitterManager::UpdateEmitters(float aDeltaTime, CU::Matrix44f aWorldMatrix
 					instance->SetPosition({ instance->GetEntity()->GetOrientation().GetPos().x, 3.f
 						, instance->GetEntity()->GetOrientation().GetPos().z });
 				}
-
-				if (FogOfWarMap::GetInstance()->IsVisible(myEmitterList[i]->myEmitters[k][j]->GetPosition()) == true ||
-					myEmitterList[i]->myEmitters[k][j]->GetShouldAlwaysShow())
-				{
-					instance->Update(aDeltaTime, aWorldMatrix);
-				}
+				instance->Update(aDeltaTime, aWorldMatrix);
 			}
 		}
 	}
@@ -111,12 +106,7 @@ void EmitterManager::RenderEmitters()
 					}
 					break;
 				}
-
-				if (FogOfWarMap::GetInstance()->IsVisible(myEmitterList[i]->myEmitters[k][j]->GetPosition()) == true ||
-						myEmitterList[i]->myEmitters[k][j]->GetShouldAlwaysShow())
-				{
-					myEmitterList[i]->myEmitters[k][j]->Render();
-				}
+				myEmitterList[i]->myEmitters[k][j]->Render();
 			}
 		}
 	}
@@ -125,56 +115,60 @@ void EmitterManager::RenderEmitters()
 void EmitterManager::ReceiveMessage(const EmitterMessage& aMessage)
 {
 	CU::Vector3f position = aMessage.myPosition;
-	if (aMessage.myEntityID != -1)
+
+	if (FogOfWarMap::GetInstance()->IsVisible({ position.x, position.z }) == true || aMessage.myShouldAlwaysShow == true)
 	{
-		position = EntityId::GetInstance()->GetEntity(aMessage.myEntityID)->GetOrientation().GetPos();
-		position.y += 2;
-	}
-
-	std::string particleType = CU::ToLower(aMessage.myParticleTypeString);
-
-	DL_ASSERT_EXP(myEmitters.find(particleType) != myEmitters.end(), "Effect did not exist!");
-
-	if (myEmitters[particleType]->myCurrentIndex >= PREALLOCATED_EMITTERGROUP)
-	{
-		myEmitters[particleType]->myCurrentIndex = 0;
-	}
-
-	short index = myEmitters[particleType]->myCurrentIndex;
-
-	for (int i = 0; i < myEmitters[particleType]->myEmitters[index].Size(); ++i)
-	{
-		Prism::ParticleEmitterInstance* instance = myEmitters[particleType]->myEmitters[index][i];
-
 		if (aMessage.myEntityID != -1)
 		{
-			instance->SetEntity(EntityId::GetInstance()->GetEntity(aMessage.myEntityID));
-		}
-		else
-		{
-			instance->SetEntity(nullptr);
+			position = EntityId::GetInstance()->GetEntity(aMessage.myEntityID)->GetOrientation().GetPos();
+			position.y += 2;
 		}
 
-		instance->SetPosition(position);
-		instance->Activate();
-		if (aMessage.myEmitterLifeTime > 0.f)
+		std::string particleType = CU::ToLower(aMessage.myParticleTypeString);
+
+		DL_ASSERT_EXP(myEmitters.find(particleType) != myEmitters.end(), "Effect did not exist!");
+
+		if (myEmitters[particleType]->myCurrentIndex >= PREALLOCATED_EMITTERGROUP)
 		{
-			instance->SetEmitterLifeTime(aMessage.myEmitterLifeTime);
-		}
-		if (aMessage.myRadius > 0.f)
-		{
-			instance->SetRadius(aMessage.myRadius);
-		}
-		if ((aMessage.mySize.x > 0.f) && (aMessage.mySize.y > 0.f) && (aMessage.mySize.z > 0.f))
-		{
-			instance->SetSize(aMessage.mySize);
+			myEmitters[particleType]->myCurrentIndex = 0;
 		}
 
+		short index = myEmitters[particleType]->myCurrentIndex;
+
+		for (int i = 0; i < myEmitters[particleType]->myEmitters[index].Size(); ++i)
+		{
+			Prism::ParticleEmitterInstance* instance = myEmitters[particleType]->myEmitters[index][i];
+
+			if (aMessage.myEntityID != -1)
+			{
+				instance->SetEntity(EntityId::GetInstance()->GetEntity(aMessage.myEntityID));
+			}
+			else
+			{
+				instance->SetEntity(nullptr);
+			}
+
+			instance->SetPosition(position);
+			instance->Activate();
+			if (aMessage.myEmitterLifeTime > 0.f)
+			{
+				instance->SetEmitterLifeTime(aMessage.myEmitterLifeTime);
+			}
+			if (aMessage.myRadius > 0.f)
+			{
+				instance->SetRadius(aMessage.myRadius);
+			}
+			if ((aMessage.mySize.x > 0.f) && (aMessage.mySize.y > 0.f) && (aMessage.mySize.z > 0.f))
+			{
+				instance->SetSize(aMessage.mySize);
+			}
+
+		}
+		myEmitters[particleType]->myFinishedGroups[index] = UNFINISHED;
+		myEmitters[particleType]->myFinishedCount--;
+		myEmitters[particleType]->myGroupIsActive = true;
+		myEmitters[particleType]->myCurrentIndex++;
 	}
-	myEmitters[particleType]->myFinishedGroups[index] = UNFINISHED;
-	myEmitters[particleType]->myFinishedCount--;
-	myEmitters[particleType]->myGroupIsActive = true;
-	myEmitters[particleType]->myCurrentIndex++;
 }
 
 void EmitterManager::ReadListOfLists(const std::string& aPath)

@@ -22,6 +22,7 @@ enum class eOnClickEvent
 	SELECT_CONTROL_GROUP,
 	UPGRADE_UNIT,
 	RESUME_GAME,
+	ABORT_QUEUE,
 };
 
 struct OnClickMessage : public Message
