@@ -12,7 +12,9 @@
 #include "EntityId.h"
 #include <EmitterMessage.h>
 #include <PostMaster.h>
+#include "PollingStation.h"
 #include "SoundComponent.h"
+#include "TotemComponent.h"
 
 
 #include "../Game/FogOfWarMap.h"
@@ -66,6 +68,22 @@ void HealthComponent::RenderHealthBar(const Prism::Camera& aCamera)
 	newRenderPos.y *= windowSize.y;
 	newRenderPos.y += 50.f;
 	myHealthBar->Render({ newRenderPos.x, newRenderPos.y });
+}
+
+void HealthComponent::Update(float aDelta)
+{
+	if (myEntity.GetOwner() == eOwnerType::PLAYER)
+	{
+		if (myCurrentHealth == myMaxHealth)
+		{
+			myIsHealing = false;
+		}
+		else
+		{
+			myIsHealing = PollingStation::GetInstance()->GetTotem()->GetComponent<TotemComponent>()->GetIsInside(&myEntity);
+		}
+		
+	}
 }
 
 bool HealthComponent::TakeDamageAndCheckSurvive(float aDamage)

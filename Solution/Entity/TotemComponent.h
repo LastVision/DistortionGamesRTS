@@ -17,6 +17,7 @@ public:
 	const float& GetMaxCooldown() const;
 
 	bool CanActivate() const;
+	bool GetIsInside(Entity* aEntity);
 
 private:
 	void operator=(TotemComponent&) = delete;
