@@ -201,7 +201,8 @@ namespace Prism
 	{
 		CU::TimerManager::GetInstance()->StartTimer("LoadModel");
 
-		Model* model = myModelFactory->LoadModel(aModelPath.c_str(), aEffect);
+		Model* model = myModelFactory->LoadModel(aModelPath.c_str());
+		model->SetEffect(aEffect);
 		model->Init();
 
 		int elapsed = static_cast<int>(
