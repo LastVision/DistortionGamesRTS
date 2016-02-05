@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include <Camera.h>
 #include <InWorldTextMessage.h>
+#include <ModelLoader.h>
 #include <NotificationMessage.h>
 #include "TextEventManager.h"
 #include <Text.h>
@@ -82,7 +83,7 @@ void TextEventManager::Update(float aDeltaTime)
 		if (myNotifications[i]->myIsActive == true)
 		{
 			myNotifications[i]->myLifeTime -= aDeltaTime;
-			
+
 			if (myNotifications[i]->myLifeTime <= 0.f)
 			{
 				myNotifications[i]->myIsActive = false;
@@ -125,32 +126,38 @@ void TextEventManager::Render()
 
 void TextEventManager::AddNotification(const std::string& aText, const CU::Vector4<float>& aColor)
 {
-	myNotifications[myNotificationIndex]->myText->SetText(aText);
-	myNotifications[myNotificationIndex]->myColor = aColor;
-	myNotifications[myNotificationIndex]->myLifeTime = myTextLifeTime;
-	myNotifications[myNotificationIndex]->myIsActive = true;
-
-	myNotificationIndex++;
-
-	if (myNotificationIndex >= myNotificationMax)
+	if (Prism::ModelLoader::GetInstance()->IsLoading() == false)
 	{
-		myNotificationIndex = 0;
+		myNotifications[myNotificationIndex]->myText->SetText(aText);
+		myNotifications[myNotificationIndex]->myColor = aColor;
+		myNotifications[myNotificationIndex]->myLifeTime = myTextLifeTime;
+		myNotifications[myNotificationIndex]->myIsActive = true;
+
+		myNotificationIndex++;
+
+		if (myNotificationIndex >= myNotificationMax)
+		{
+			myNotificationIndex = 0;
+		}
 	}
 }
 
 void TextEventManager::AddInWorldText(const std::string& aText, const CU::Vector2<float>& aPosition, const CU::Vector4<float>& aColor)
 {
-	myInWorldTexts[myInWorldTextIndex]->myText->SetText(aText);
-	myInWorldTexts[myInWorldTextIndex]->myColor = aColor;
-	myInWorldTexts[myInWorldTextIndex]->myLifeTime = myTextLifeTime;
-	myInWorldTexts[myInWorldTextIndex]->myIsActive = true;
-	myInWorldTexts[myInWorldTextIndex]->myInWorldPosition = { aPosition.x, 0.f , aPosition.y };
-
-	myInWorldTextIndex++;
-
-	if (myInWorldTextIndex >= myInWorldTextMax)
+	if (Prism::ModelLoader::GetInstance()->IsLoading() == false)
 	{
-		myInWorldTextIndex = 0;
+		myInWorldTexts[myInWorldTextIndex]->myText->SetText(aText);
+		myInWorldTexts[myInWorldTextIndex]->myColor = aColor;
+		myInWorldTexts[myInWorldTextIndex]->myLifeTime = myTextLifeTime;
+		myInWorldTexts[myInWorldTextIndex]->myIsActive = true;
+		myInWorldTexts[myInWorldTextIndex]->myInWorldPosition = { aPosition.x, 0.f, aPosition.y };
+
+		myInWorldTextIndex++;
+
+		if (myInWorldTextIndex >= myInWorldTextMax)
+		{
+			myInWorldTextIndex = 0;
+		}
 	}
 }
 
