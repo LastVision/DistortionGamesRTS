@@ -26,8 +26,10 @@ namespace GUI
 		void AddWidget(Widget* aWidget);
 		void Update(float aDelta) override;
 		void Render(const CU::Vector2<float>& aParentPosition) override;
+		void Render(const CU::Vector2<float>& aParentPosition, int anIndex);
 
 		Widget* MouseIsOver(const CU::Vector2<float>& aPosition) override;
+		Widget* MouseIsOver(const CU::Vector2<float>& aPosition, int anIndex);
 
 		void OnResize(const CU::Vector2<float>& aNewSize, const CU::Vector2<float>& anOldSize, bool aIsFullScreen) override;
 

@@ -57,6 +57,7 @@ namespace GUI
 		eEntityType mySelectedType;
 		bool myIsUnitSelected;
 
+		CU::Vector4<float> myEnemyColor;
 		CU::Vector2<float> myUnitPosition;
 		CU::Vector2<float> myPortraitPosition;
 		float myTextScale;

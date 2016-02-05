@@ -6,6 +6,7 @@
 
 struct ID3D11RenderTargetView;
 struct ID3D11DepthStencilView;
+struct D3D11_VIEWPORT;
 namespace Prism
 {
 	class FullScreenHelper;
@@ -49,6 +50,8 @@ namespace Prism
 
 		Texture* myFinalTexture;
 		Texture* myCombineMiddleMan;
+
+		D3D11_VIEWPORT* myShadowViewport;
 	};
 
 	inline Texture* Renderer::GetWorldTexture()

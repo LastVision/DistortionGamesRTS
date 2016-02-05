@@ -12,13 +12,36 @@
 #include <PostMaster.h>
 #include "SplashState.h"
 #include "StateStackProxy.h"
+#include <SpriteProxy.h>
 
 MainMenuState::MainMenuState()
+	: myLogoPosition(0.f,0.f)
+	, myLerpAlpha(0.f)
+	, myGUIPosition(0.f, 0.f)
+	, myGUIEndPosition(0.f, 0.f)
+	, myGUIStartPosition(-512.f, 0.f)
+	, myLogoDone(false)
 {
+	CU::Vector2<float> logoSize(512.f, 512.f);
+	myLogo = Prism::ModelLoader::GetInstance()->LoadSprite("Data/Resource/Texture/Menu/MainMenu/T_gamelogo.dds"
+		, logoSize, logoSize * 0.5f);
+
+	myWindowSize = CU::Vector2<float>(float(Prism::Engine::GetInstance()->GetWindowSize().x)
+		, float(Prism::Engine::GetInstance()->GetWindowSize().y));
+
+	myLogoPosition.x = myWindowSize.x * 0.5f;
+	myLogoPosition.y = myWindowSize.y + (logoSize.y * 2.f);
+	myLogoStartPosition = myLogoPosition;
+	myLogoEndPosition.x = myLogoPosition.x;
+	myLogoEndPosition.y = myWindowSize.y - (myLogo->GetSize().y * 0.5f);
+
+	myGUIPosition = myGUIStartPosition;
+
 }
 
 MainMenuState::~MainMenuState()
 {
+	SAFE_DELETE(myLogo);
 	SAFE_DELETE(myGUIManager);
 	myCursor = nullptr;
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::ON_CLICK, this);
@@ -32,7 +55,7 @@ void MainMenuState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aC
 	myStateStack = aStateStackProxy;
 	myCursor = aCursor;
 	myGUIManager = new GUI::GUIManager(myCursor, "Data/Resource/GUI/GUI_main_menu.xml", nullptr, nullptr, nullptr, -1);
-
+	myGUIManager->SetPosition(myGUIPosition);
 	CU::Vector2<int> windowSize = Prism::Engine::GetInstance()->GetWindowSizeInt();
 	OnResize(windowSize.x, windowSize.y);
 	myHasRunOnce = false;
@@ -40,7 +63,7 @@ void MainMenuState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aC
 
 void MainMenuState::EndState()
 {
-
+	
 }
 
 const eStateStatus MainMenuState::Update(const float& aDeltaTime)
@@ -67,7 +90,26 @@ const eStateStatus MainMenuState::Update(const float& aDeltaTime)
 			myIsActiveState = false;
 			return eStateStatus::ePopMainState;
 		}
+		myLerpAlpha += aDeltaTime;
+		if (myLogoPosition.y - 25.f > myLogoEndPosition.y)
+		{
+			myLogoPosition.y = myTweener.DoTween(myLerpAlpha, myLogoStartPosition.y, myLogoEndPosition.y - myLogoStartPosition.y, 1.5f, eTweenType::EXPONENTIAL_HALF);
+		}
+		else
+		{
+			if (myLogoDone == false)
+			{
+				myLogoDone = true;
+				myLerpAlpha = 0.f;
+			}
+			if (myGUIPosition.x < 0.f)
+			{
+				myGUIPosition.x = myTweener.DoTween(myLerpAlpha, myGUIStartPosition.x, myGUIEndPosition.x - myGUIStartPosition.x, 1.5f, eTweenType::EXPONENTIAL_HALF);
+			}
+		}
 
+
+		myGUIManager->SetPosition(myGUIPosition);
 		myGUIManager->Update(aDeltaTime);
 	}
 	return myStateStatus;
@@ -76,6 +118,7 @@ const eStateStatus MainMenuState::Update(const float& aDeltaTime)
 void MainMenuState::Render()
 {
 	myGUIManager->Render();
+	myLogo->Render(myLogoPosition);
 }
 
 void MainMenuState::ResumeState()
