@@ -146,6 +146,7 @@ void Entity::Reset()
 	myHovered = false;
 	mySelected = false;
 	myIsSelectable = true;
+	myIsInScene = false;
 	for (int i = 0; i < static_cast<int>(eComponentType::_COUNT); ++i)
 	{
 		if (myComponents[i] != nullptr)
