@@ -133,12 +133,15 @@ namespace GUI
 		{
 			myLargeTooltip->myHeadlinePosition = (myLargeTooltip->myHeadlinePosition / anOldWindowSize.x) * aNewWindowSize.x;
 			myLargeTooltip->myTextPosition = (myLargeTooltip->myTextPosition / anOldWindowSize.x) * aNewWindowSize.x;
+			mySmallTooltip->myHeadlinePosition = (mySmallTooltip->myHeadlinePosition / anOldWindowSize.x) * aNewWindowSize.x;
+			mySmallTooltip->myTextPosition = (mySmallTooltip->myTextPosition / anOldWindowSize.x) * aNewWindowSize.x;
 			myCostTextOffset = (myCostTextOffset / anOldWindowSize.x) * aNewWindowSize.x;
 			myCooldownPosition = (myCooldownPosition / anOldWindowSize.x) * aNewWindowSize.x;
 			myGunpowderPosition = (myGunpowderPosition / anOldWindowSize.x) * aNewWindowSize.x;
 			mySupplyPosition = (mySupplyPosition / anOldWindowSize.x) * aNewWindowSize.x;
 			myArtifactPosition = (myArtifactPosition / anOldWindowSize.x) * aNewWindowSize.x;
 			myLargeTooltip->myBackground->SetSize((myLargeTooltip->myBackground->GetSize() / anOldWindowSize.x) * aNewWindowSize.x, { 0.f, 0.f });
+			mySmallTooltip->myBackground->SetSize((mySmallTooltip->myBackground->GetSize() / anOldWindowSize.x) * aNewWindowSize.x, { 0.f, 0.f });
 
 			CU::Vector2<float> costSize = (myCooldownSprite->GetSize() / anOldWindowSize.x) * aNewWindowSize.x;
 			myCooldownSprite->SetSize(costSize, { 0.f, 0.f });
@@ -150,12 +153,15 @@ namespace GUI
 		{
 			myLargeTooltip->myHeadlinePosition = (myLargeTooltip->myHeadlinePosition / anOldWindowSize) * aNewWindowSize;
 			myLargeTooltip->myTextPosition = (myLargeTooltip->myTextPosition / anOldWindowSize) * aNewWindowSize;
+			mySmallTooltip->myHeadlinePosition = (mySmallTooltip->myHeadlinePosition / anOldWindowSize) * aNewWindowSize;
+			mySmallTooltip->myTextPosition = (mySmallTooltip->myTextPosition / anOldWindowSize) * aNewWindowSize;
 			myCostTextOffset = (myCostTextOffset / anOldWindowSize) * aNewWindowSize;
 			myCooldownPosition = (myCooldownPosition / anOldWindowSize) * aNewWindowSize;
 			myGunpowderPosition = (myGunpowderPosition / anOldWindowSize) * aNewWindowSize;
 			mySupplyPosition = (mySupplyPosition / anOldWindowSize) * aNewWindowSize;
 			myArtifactPosition = (myArtifactPosition / anOldWindowSize) * aNewWindowSize;
 			myLargeTooltip->myBackground->SetSize((myLargeTooltip->myBackground->GetSize() / anOldWindowSize) * aNewWindowSize, { 0.f, 0.f });
+			mySmallTooltip->myBackground->SetSize((mySmallTooltip->myBackground->GetSize() / anOldWindowSize) * aNewWindowSize, { 0.f, 0.f });
 
 			CU::Vector2<float> costSize = (myCooldownSprite->GetSize() / anOldWindowSize) * aNewWindowSize;
 			myCooldownSprite->SetSize(costSize, { 0.f, 0.f });
@@ -166,6 +172,8 @@ namespace GUI
 
 		myLargeTooltip->myTextScale = (myLargeTooltip->myTextScale / anOldWindowSize.x) * aNewWindowSize.x;
 		myLargeTooltip->myHeadlineScale = (myLargeTooltip->myHeadlineScale / anOldWindowSize.x) * aNewWindowSize.x;
+		mySmallTooltip->myTextScale = (mySmallTooltip->myTextScale / anOldWindowSize.x) * aNewWindowSize.x;
+		mySmallTooltip->myHeadlineScale = (mySmallTooltip->myHeadlineScale / anOldWindowSize.x) * aNewWindowSize.x;
 	}
 
 	void TooltipWidget::RenderCost(const CU::Vector2<float>& aParentPosition, const TooltipInfo* aTooltipInfo)

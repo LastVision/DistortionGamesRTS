@@ -1085,6 +1085,7 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 	{
 		PlaceRallyPoint({ firstTargetPos.x, firstTargetPos.z });
 	}
+	eSelectedAction previousAction = mySelectedAction;
 
 	if (hasDoneAction == true)
 	{
@@ -1092,7 +1093,8 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 		myCursor->SetCurrentCursor(eCursorType::NORMAL);
 	}
 
-	if (hasDoneAction == true && myTerrain.GetPathFinder()->IsOutside({ firstTargetPos.x, firstTargetPos.z }))
+	if (hasDoneAction == true && myTerrain.GetPathFinder()->IsOutside({ firstTargetPos.x, firstTargetPos.z }) &&
+		previousAction != eSelectedAction::STOP && previousAction != eSelectedAction::HOLD_POSITION)
 	{
 		myCursor->SetCurrentCursor(eCursorType::CANCEL);
 		myCurrentCancleCursorTime = myCancleCursorTime;
