@@ -131,6 +131,10 @@ Entity::Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& a
 
 Entity::~Entity()
 {
+	if (myIsInScene == true)
+	{
+		RemoveFromScene();
+	}
 	for (int i = 0; i < static_cast<int>(eComponentType::_COUNT); ++i)
 	{
 		delete myComponents[i];
