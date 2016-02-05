@@ -49,6 +49,7 @@ ActorComponent::ActorComponent(Entity& aEntity, ActorComponentData& aData, const
 	, myCurrentMuzzleFlash(0)
 	, myMuzzleTimer(0)
 	, myMuzzleTimerShow(0)
+	, myMuzzleFrameTimer(0)
 {
 	myEntity.myMaxSpeed = aData.myMoveSpeed;
 
@@ -398,7 +399,7 @@ void ActorComponent::AttackTarget(Entity* aTarget, float aDelta)
 		return;
 	}
 	myEntity.SetState(eEntityState::ATTACK);
-	LookInDirection(aTarget->GetPosition() - myEntity.GetPosition(), aDelta);
+	LookInDirection(aTarget->GetPosition() - myEntity.GetPosition(), aDelta, true);
 	
 	myAttackTimer = myAttackRechargeTime;
 
@@ -487,7 +488,7 @@ void ActorComponent::AttackTarget(Entity* aTarget, float aDelta)
 	}
 }
 
-void ActorComponent::LookInDirection(const CU::Vector2<float>& aDirection, float aDelta)
+void ActorComponent::LookInDirection(const CU::Vector2<float>& aDirection, float aDelta, bool aTurnInstant)
 {
 	CU::Vector2<float> direction2D = CU::GetNormalized(aDirection);
 	CU::Vector3<float> direction = { direction2D.x, 0, direction2D.y };
@@ -502,28 +503,25 @@ void ActorComponent::LookInDirection(const CU::Vector2<float>& aDirection, float
 		float det = CU::Dot(planeNormal, CU::Cross(forward, direction));
 
 		float angle = atan2(det, dot);
-		float limit = (M_PI) * aDelta;
-		if (angle > limit)
-		{
-			angle = limit;
-		}
-		else if (angle < -limit)
-		{
-			angle = -limit;
-		}
 
+		if (aTurnInstant == false)
+		{
+			float limit = (M_PI)* aDelta;
+			if (angle > limit)
+			{
+				angle = limit;
+			}
+			else if (angle < -limit)
+			{
+				angle = -limit;
+			}
+		}
 
 		CU::Vector3<float> pos = myEntity.myOrientation.GetPos();
 		myEntity.myOrientation.SetPos({ 0.f, 0.f, 0.f });
 		myEntity.myOrientation = myEntity.myOrientation * CU::Matrix44<float>::CreateRotateAroundY(angle);
 		myEntity.myOrientation.SetPos(pos);
 	}
-}
-
-void ActorComponent::LookAtPoint(const CU::Vector2<float>& aPoint, float aDelta)
-{
-	CU::Vector2<float> direction = aPoint - myEntity.myPosition;
-	LookInDirection(direction, aDelta);
 }
 
 void ActorComponent::Kill()
@@ -538,19 +536,24 @@ void ActorComponent::MuzzleFlash(float aDelta)
 {
 	myMuzzleTimer -= aDelta;
 	myMuzzleTimerShow -= aDelta;
+	myMuzzleFrameTimer -= aDelta;
+
 	for (int i = 0; i < myMuzzleFlashes.Size(); ++i)
 	{
 		myMuzzleFlashes[i]->SetShouldRender(false);
 	}
 
-	if (myEntity.GetState() == eEntityState::ATTACK)
+	if (myEntity.GetState() == eEntityState::ATTACK && FogOfWarMap::GetInstance()->IsVisible(myEntity.GetPosition()))
 	{
-		++myCurrentMuzzleFlash;
-		if (myCurrentMuzzleFlash >= myMuzzleFlashes.Size())
+		if (myMuzzleFrameTimer < 0)
 		{
-			myCurrentMuzzleFlash = 0;
+			++myCurrentMuzzleFlash;
+			myMuzzleFrameTimer = 1.f / 10.f;
+			if (myCurrentMuzzleFlash >= myMuzzleFlashes.Size())
+			{
+				myCurrentMuzzleFlash = 0;
+			}
 		}
-
 		
 		myMuzzleFlashes[myCurrentMuzzleFlash]->SetShouldRender(true);
 
@@ -576,7 +579,7 @@ void ActorComponent::MuzzleFlash(float aDelta)
 		
 		if (myMuzzleTimer < 0)
 		{
-			myMuzzleTimer = 1.0f;
+			myMuzzleTimer = 1.85f;
 			myMuzzleTimerShow = 0.1f;
 		}
 

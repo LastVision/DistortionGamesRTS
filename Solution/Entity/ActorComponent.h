@@ -25,9 +25,7 @@ public:
 	static eComponentType GetTypeStatic();
 	eComponentType GetType() override;
 
-
-	void LookInDirection(const CU::Vector2<float>& aDirection, float aDelta);
-	void LookAtPoint(const CU::Vector2<float>& aPoint, float aDelta);
+	void LookInDirection(const CU::Vector2<float>& aDirection, float aDelta, bool aTurnInstant = false);
 
 	float GetVisionRange() const;
 	float GetVisionRange2() const;
@@ -97,6 +95,7 @@ private:
 	int myCurrentMuzzleFlash;
 	float myMuzzleTimer;
 	float myMuzzleTimerShow;
+	float myMuzzleFrameTimer;
 };
 
 inline eComponentType ActorComponent::GetTypeStatic()
