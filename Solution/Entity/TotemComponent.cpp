@@ -116,6 +116,7 @@ bool TotemComponent::GetIsInside(Entity* aEntity)
 	{
 		return true;
 	}
+	return false;
 }
 
 void TotemComponent::CheckUnitsForRemove(CU::GrowingArray<Entity*>& someUnits) const
