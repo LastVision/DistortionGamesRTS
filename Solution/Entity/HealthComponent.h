@@ -14,6 +14,8 @@ public:
 
 	void RenderHealthBar(const Prism::Camera& aCamera);
 
+	void Update(float aDelta) override;
+
 	static eComponentType GetTypeStatic();
 	eComponentType GetType() override;
 

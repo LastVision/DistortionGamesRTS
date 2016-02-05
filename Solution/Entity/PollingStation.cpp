@@ -374,6 +374,16 @@ void PollingStation::CleanUp()
 	//}
 }
 
+void PollingStation::AddTotem(Entity* aTotem)
+{
+	myPlayerTotem = aTotem;
+}
+
+Entity* PollingStation::GetTotem()
+{
+	return myPlayerTotem;
+}
+
 PollingStation::PollingStation()
 	: myPlayerUnits(GC::playerUnitCount)
 	, myAIUnits(GC::enemyUnitCount)

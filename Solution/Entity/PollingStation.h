@@ -38,6 +38,9 @@ public:
 
 	void CleanUp();
 
+	void AddTotem(Entity* aTotem);
+	Entity* GetTotem();
+
 private:
 	PollingStation();
 	~PollingStation();
@@ -58,6 +61,7 @@ private:
 
 	Entity* myPlayerBuilding;
 	Entity* myAIBuilding;
+	Entity* myPlayerTotem;
 
 	static PollingStation* myInstance;
 };

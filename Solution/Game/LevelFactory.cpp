@@ -628,8 +628,8 @@ void LevelFactory::LoadArtifacts(XMLReader& aReader, tinyxml2::XMLElement* aLeve
 		myCurrentLevel->myEntities.Add(EntityFactory::CreateEntity(eOwnerType::NEUTRAL, eEntityType::ARTIFACT, propType,
 			Prism::eOctreeType::STATIC, *myCurrentLevel->myScene, propPosition, *myCurrentLevel->myTerrain,
 			propRotation, propScale));
-		myCurrentLevel->myEntities.GetLast()->AddToScene();
 		myCurrentLevel->myEntities.GetLast()->Reset();
+		myCurrentLevel->myEntities.GetLast()->AddToScene();
 
 		PollingStation::GetInstance()->AddArtifact(myCurrentLevel->myEntities.GetLast());
 	}
