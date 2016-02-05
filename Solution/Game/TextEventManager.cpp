@@ -15,6 +15,8 @@ TextEventManager::TextEventManager(const Prism::Camera* aCamera)
 	, myNotificationIndex(0)
 	, myNotificationMax(20)
 	, myInWorldTextMax(10)
+	, myTextScale(1.f)
+	, mySize(1920.f, 1080.f)
 {
 	myNotifications.Init(myNotificationMax);
 	myInWorldTexts.Init(myInWorldTextMax);
@@ -101,6 +103,7 @@ void TextEventManager::Render()
 		{
 			myInWorldTexts[i]->myText->SetPosition(Get2DPosition(myInWorldTexts[i]->myInWorldPosition));
 			myInWorldTexts[i]->myText->SetColor(myInWorldTexts[i]->myColor);
+			myInWorldTexts[i]->myText->SetScale({ myTextScale, myTextScale });
 			myInWorldTexts[i]->myText->Render();
 		}
 	}
@@ -113,6 +116,7 @@ void TextEventManager::Render()
 		{
 			myNotifications[i]->myText->SetPosition(position);
 			myNotifications[i]->myText->SetColor(myNotifications[i]->myColor);
+			myNotifications[i]->myText->SetScale({ myTextScale, myTextScale });
 			myNotifications[i]->myText->Render();
 			position.y -= 20.f;
 		}
@@ -163,6 +167,18 @@ void TextEventManager::ReceiveMessage(const NotificationMessage& aMessage)
 void TextEventManager::ReceiveMessage(const InWorldTextMessage& aMessage)
 {
 	AddInWorldText(aMessage.myText, aMessage.myPosition, aMessage.myColor);
+}
+
+void TextEventManager::OnResize(const CU::Vector2<float>& aNewSize)
+{
+	myTextScale = (myTextScale / mySize.x) * aNewSize.x;
+
+	myNotificationPosition = (myNotificationPosition / mySize) * aNewSize;
+
+
+
+
+	mySize = aNewSize;
 }
 
 CU::Vector2<float> TextEventManager::Get2DPosition(const CU::Vector3<float>& aPosition)
