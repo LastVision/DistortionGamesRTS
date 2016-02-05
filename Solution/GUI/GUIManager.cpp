@@ -124,6 +124,11 @@ namespace GUI
 		reader.CloseDocument();
 	}
 
+	void GUIManager::SetPosition(const CU::Vector2<float>& aPosition)
+	{
+		myWidgets->SetPosition(aPosition);
+	}
+
 	void GUIManager::ReadContainers(XMLReader& aReader, tinyxml2::XMLElement* aContainerElement)
 	{
 		std::string path = "";

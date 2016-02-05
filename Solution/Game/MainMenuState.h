@@ -10,7 +10,7 @@ namespace CU
 namespace Prism
 {
 	class Camera;
-	class Sprite;
+	class SpriteProxy;
 }
 
 namespace GUI
@@ -38,6 +38,13 @@ public:
 
 private:
 	GUI::GUIManager* myGUIManager;
+	Prism::SpriteProxy* myLogo;
+	CU::Vector2<float> myLogoPosition;
+	CU::Vector2<float> myWindowSize;
+	float myLerpAlpha;
+
+	CU::Vector2<float> myGUIPosition;
+
 
 	bool myHasRunOnce;
 };
