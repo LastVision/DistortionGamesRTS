@@ -252,7 +252,11 @@ void Prism::Scene::RemoveInstance(Instance* aInstance, bool aIsSelectionRing)
 {
 	if (aIsSelectionRing == true)
 	{
-		mySelectionCircles.RemoveCyclic(aInstance);
+		int index = mySelectionCircles.Find(aInstance);
+		if (index != mySelectionCircles.FoundNone)
+		{
+			mySelectionCircles.RemoveCyclicAtIndex(index);
+		}
 	}
 	else
 	{
@@ -266,7 +270,11 @@ void Prism::Scene::RemoveInstance(Instance* aInstance, bool aIsSelectionRing)
 			myOctree->Remove(aInstance);
 		}
 #else
-		myInstances.RemoveCyclic(aInstance);
+		int index = myInstances.Find(aInstance);
+		if (index != myInstances.FoundNone)
+		{
+			myInstances.RemoveCyclicAtIndex(index);
+		}
 #endif
 	}
 }
