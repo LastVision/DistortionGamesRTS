@@ -290,12 +290,13 @@ namespace Prism
 
 			myGraphicalParticles[myParticleIndex].myLifeTime = myParticleEmitterData->myParticlesLifeTime;
 
-			myGraphicalParticles[myParticleIndex].mySize = 1 * myParticleScaling;
 
 			myGraphicalParticles[myParticleIndex].myAlpha = myParticleEmitterData->myData.myStartAlpha;
 
 			myParticleScaling = CU::Math::RandomRange(myParticleEmitterData->myData.myMinStartSize
 				, myParticleEmitterData->myData.myMaxStartSize);
+
+			myGraphicalParticles[myParticleIndex].mySize = 1 * myParticleScaling;
 
 			myLogicalParticles[myParticleIndex].myIsAlive = true;
 
@@ -444,5 +445,16 @@ namespace Prism
 		myAlwaysShow = aShouldAlwaysShow;
 	}
 
-}
+	void ParticleEmitterInstance::SetRadius(float aRadius)
+	{
+		myParticleEmitterData->myEmitterSize.x = aRadius;
+		myParticleEmitterData->myEmitterSize.z = aRadius;
+		myParticleEmitterData->myEmitterSize.y = 0.f;
+	}
 
+	void ParticleEmitterInstance::SetSize(const CU::Vector3f& aSize)
+	{
+		myParticleEmitterData->myEmitterSize = aSize;
+	}
+
+}

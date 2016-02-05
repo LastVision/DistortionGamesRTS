@@ -41,17 +41,17 @@ namespace Prism
 		CreateTextureFromFile("Data/Resource/Texture/Terrain/SplatMap/splat_b/T_splat_b_albedo.dds", &myAlbedoTextures[3]);
 		CreateTextureFromFile("Data/Resource/Texture/Terrain/SplatMap/splat_a/T_splat_a_albedo.dds", &myAlbedoTextures[4]);
 
-		CreateTextureFromFile("Data/Resource/Texture/Terrain/SplatMap/splat_base/T_splat_base_metalness.dds", &myMetalnessTextures[0]);
-		CreateTextureFromFile("Data/Resource/Texture/Terrain/SplatMap/splat_r/T_splat_r_metalness.dds", &myMetalnessTextures[1]);
-		CreateTextureFromFile("Data/Resource/Texture/Terrain/SplatMap/splat_g/T_splat_g_metalness.dds", &myMetalnessTextures[2]);
-		CreateTextureFromFile("Data/Resource/Texture/Terrain/SplatMap/splat_b/T_splat_b_metalness.dds", &myMetalnessTextures[3]);
-		CreateTextureFromFile("Data/Resource/Texture/Terrain/SplatMap/splat_a/T_splat_a_metalness.dds", &myMetalnessTextures[4]);
-		
-		CreateTextureFromFile("Data/Resource/Texture/Terrain/SplatMap/splat_base/T_splat_base_roughness.dds", &myRoughnessTextures[0]);
-		CreateTextureFromFile("Data/Resource/Texture/Terrain/SplatMap/splat_r/T_splat_r_roughness.dds", &myRoughnessTextures[1]);
-		CreateTextureFromFile("Data/Resource/Texture/Terrain/SplatMap/splat_g/T_splat_g_roughness.dds", &myRoughnessTextures[2]);
-		CreateTextureFromFile("Data/Resource/Texture/Terrain/SplatMap/splat_b/T_splat_b_roughness.dds", &myRoughnessTextures[3]);
-		CreateTextureFromFile("Data/Resource/Texture/Terrain/SplatMap/splat_a/T_splat_a_roughness.dds", &myRoughnessTextures[4]);
+		//CreateTextureFromFile("Data/Resource/Texture/Terrain/SplatMap/splat_base/T_splat_base_metalness.dds", &myMetalnessTextures[0]);
+		//CreateTextureFromFile("Data/Resource/Texture/Terrain/SplatMap/splat_r/T_splat_r_metalness.dds", &myMetalnessTextures[1]);
+		//CreateTextureFromFile("Data/Resource/Texture/Terrain/SplatMap/splat_g/T_splat_g_metalness.dds", &myMetalnessTextures[2]);
+		//CreateTextureFromFile("Data/Resource/Texture/Terrain/SplatMap/splat_b/T_splat_b_metalness.dds", &myMetalnessTextures[3]);
+		//CreateTextureFromFile("Data/Resource/Texture/Terrain/SplatMap/splat_a/T_splat_a_metalness.dds", &myMetalnessTextures[4]);
+		//
+		//CreateTextureFromFile("Data/Resource/Texture/Terrain/SplatMap/splat_base/T_splat_base_roughness.dds", &myRoughnessTextures[0]);
+		//CreateTextureFromFile("Data/Resource/Texture/Terrain/SplatMap/splat_r/T_splat_r_roughness.dds", &myRoughnessTextures[1]);
+		//CreateTextureFromFile("Data/Resource/Texture/Terrain/SplatMap/splat_g/T_splat_g_roughness.dds", &myRoughnessTextures[2]);
+		//CreateTextureFromFile("Data/Resource/Texture/Terrain/SplatMap/splat_b/T_splat_b_roughness.dds", &myRoughnessTextures[3]);
+		//CreateTextureFromFile("Data/Resource/Texture/Terrain/SplatMap/splat_a/T_splat_a_roughness.dds", &myRoughnessTextures[4]);
 		
 		CreateTextureFromFile("Data/Resource/Texture/Terrain/SplatMap/splat_base/T_splat_base_normal.dds", &myNormalTextures[0]);
 		CreateTextureFromFile("Data/Resource/Texture/Terrain/SplatMap/splat_r/T_splat_r_normal.dds", &myNormalTextures[1]);
@@ -75,17 +75,17 @@ namespace Prism
 		SAFE_RELEASE(myAlbedoTextures[3]);
 		SAFE_RELEASE(myAlbedoTextures[4]);
 
-		SAFE_RELEASE(myMetalnessTextures[0]);
-		SAFE_RELEASE(myMetalnessTextures[1]);
-		SAFE_RELEASE(myMetalnessTextures[2]);
-		SAFE_RELEASE(myMetalnessTextures[3]);
-		SAFE_RELEASE(myMetalnessTextures[4]);
-
-		SAFE_RELEASE(myRoughnessTextures[0]);
-		SAFE_RELEASE(myRoughnessTextures[1]);
-		SAFE_RELEASE(myRoughnessTextures[2]);
-		SAFE_RELEASE(myRoughnessTextures[3]);
-		SAFE_RELEASE(myRoughnessTextures[4]);
+		//SAFE_RELEASE(myMetalnessTextures[0]);
+		//SAFE_RELEASE(myMetalnessTextures[1]);
+		//SAFE_RELEASE(myMetalnessTextures[2]);
+		//SAFE_RELEASE(myMetalnessTextures[3]);
+		//SAFE_RELEASE(myMetalnessTextures[4]);
+		//
+		//SAFE_RELEASE(myRoughnessTextures[0]);
+		//SAFE_RELEASE(myRoughnessTextures[1]);
+		//SAFE_RELEASE(myRoughnessTextures[2]);
+		//SAFE_RELEASE(myRoughnessTextures[3]);
+		//SAFE_RELEASE(myRoughnessTextures[4]);
 
 		SAFE_RELEASE(myNormalTextures[0]);
 		SAFE_RELEASE(myNormalTextures[1]);

@@ -131,12 +131,9 @@ void EmitterManager::ReceiveMessage(const EmitterMessage& aMessage)
 		position.y += 2;
 	}
 
-
 	std::string particleType = CU::ToLower(aMessage.myParticleTypeString);
 
 	DL_ASSERT_EXP(myEmitters.find(particleType) != myEmitters.end(), "Effect did not exist!");
-
-
 
 	if (myEmitters[particleType]->myCurrentIndex >= PREALLOCATED_EMITTERGROUP)
 	{
@@ -164,6 +161,15 @@ void EmitterManager::ReceiveMessage(const EmitterMessage& aMessage)
 		{
 			instance->SetEmitterLifeTime(aMessage.myEmitterLifeTime);
 		}
+		if (aMessage.myRadius > 0.f)
+		{
+			instance->SetRadius(aMessage.myRadius);
+		}
+		if ((aMessage.mySize.x > 0.f) && (aMessage.mySize.y > 0.f) && (aMessage.mySize.z > 0.f))
+		{
+			instance->SetSize(aMessage.mySize);
+		}
+
 	}
 	myEmitters[particleType]->myFinishedGroups[index] = UNFINISHED;
 	myEmitters[particleType]->myFinishedCount--;
