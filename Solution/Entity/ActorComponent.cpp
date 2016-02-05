@@ -140,7 +140,11 @@ void ActorComponent::Update(float aDelta)
 		{
 			if (CU::Length2(myEntity.GetPosition() - artifacts[i]->GetPosition()) < 5 * 5)
 			{
-				PostMaster::GetInstance()->SendMessage(InWorldTextMessage("artifact pickup", myEntity.GetPosition()));
+				if (myEntity.GetOwner() == eOwnerType::PLAYER)
+				{
+					PostMaster::GetInstance()->SendMessage(InWorldTextMessage("artifact pickup", myEntity.GetPosition()));
+				}
+
 				PostMaster::GetInstance()->SendMessage(ArtifactMessage(myEntity.GetOwner(), 1));
 				PostMaster::GetInstance()->SendMessage(EmitterMessage("artifact_pickup", myEntity.GetOrientation().GetPos()));
 				PollingStation::GetInstance()->DeleteArtifact(artifacts[i]);

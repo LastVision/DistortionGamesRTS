@@ -11,52 +11,68 @@ namespace GUI
 		, const GUIManager* aGuiManager, const PlayerDirector* aPlayer)
 		: Widget()
 		, myGuiManager(aGuiManager)
-		, myBackground(nullptr)
 		, myCooldownSprite(nullptr)
 		, myGunpowderSprite(nullptr)
 		, mySupplySprite(nullptr)
-		, myHeadlineScale(1.f)
-		, myTextScale(1.f)
 		, myPlayer(aPlayer)
 	{
 		mySize = { 0.f, 0.f};
 		myPosition = { 0.f, 0.f };
 
-		std::string backgroundPath = "";
+		myLargeTooltip = new TooltipBox;
+		mySmallTooltip = new TooltipBox;
+
+		std::string largeBackgroundPath = "";
+		std::string smallBackgroundPath = "";
 		std::string cooldownPath = "";
 		std::string gunpowderPath = "";
 		std::string supplyPath = "";
 		std::string artifactPath = "";
 		CU::Vector2<float> costSpriteSize;
-		CU::Vector2<float> backgroundSize;
+		CU::Vector2<float> largeBackgroundSize;
+		CU::Vector2<float> smallBackgroundSize;
 
-		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "backgroundsize"), "x", backgroundSize.x);
-		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "backgroundsize"), "y", backgroundSize.y);
-		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "headlineposition"), "x", myHeadlinePosition.x);
-		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "headlineposition"), "y", myHeadlinePosition.y);
-		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "textposition"), "x", myTextPosition.x);
-		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "textposition"), "y", myTextPosition.y);
-		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "backgroundsprite"), "path", backgroundPath);
-		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "costspritesize"), "x", costSpriteSize.x);
-		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "costspritesize"), "y", costSpriteSize.y);
-		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "costtextoffset"), "x", myCostTextOffset.x);
-		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "costtextoffset"), "y", myCostTextOffset.y);
-		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "cooldownsprite"), "path", cooldownPath);
-		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "gunpowdersprite"), "path", gunpowderPath);
-		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "supplysprite"), "path", supplyPath);
-		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "artifactsprite"), "path", artifactPath);
-		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "headlinescale"), "value", myHeadlineScale);
-		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "textscale"), "value", myTextScale);
-		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "cooldownsprite"), "positionx", myCooldownPosition.x);
-		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "cooldownsprite"), "positiony", myCooldownPosition.y);
-		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "gunpowdersprite"), "positionx", myGunpowderPosition.x);
-		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "gunpowdersprite"), "positiony", myGunpowderPosition.y);
-		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "supplysprite"), "positionx", mySupplyPosition.x);
-		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "supplysprite"), "positiony", mySupplyPosition.y);
-		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "artifactsprite"), "positionx", myArtifactPosition.x);
-		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "artifactsprite"), "positiony", myArtifactPosition.y);
+		tinyxml2::XMLElement* largeTooltipElement = aReader->FindFirstChild(anXMLElement, "largetooltip");
+		tinyxml2::XMLElement* smallTooltipElement = aReader->FindFirstChild(anXMLElement, "smalltooltip");
 
-		myBackground = Prism::ModelLoader::GetInstance()->LoadSprite(backgroundPath, backgroundSize);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(largeTooltipElement, "backgroundsize"), "x", largeBackgroundSize.x);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(largeTooltipElement, "backgroundsize"), "y", largeBackgroundSize.y);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(largeTooltipElement, "headlineposition"), "x", myLargeTooltip->myHeadlinePosition.x);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(largeTooltipElement, "headlineposition"), "y", myLargeTooltip->myHeadlinePosition.y);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(largeTooltipElement, "textposition"), "x", myLargeTooltip->myTextPosition.x);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(largeTooltipElement, "textposition"), "y", myLargeTooltip->myTextPosition.y);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(largeTooltipElement, "backgroundsprite"), "path", largeBackgroundPath);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(largeTooltipElement, "costspritesize"), "x", costSpriteSize.x);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(largeTooltipElement, "costspritesize"), "y", costSpriteSize.y);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(largeTooltipElement, "costtextoffset"), "x", myCostTextOffset.x);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(largeTooltipElement, "costtextoffset"), "y", myCostTextOffset.y);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(largeTooltipElement, "cooldownsprite"), "path", cooldownPath);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(largeTooltipElement, "gunpowdersprite"), "path", gunpowderPath);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(largeTooltipElement, "supplysprite"), "path", supplyPath);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(largeTooltipElement, "artifactsprite"), "path", artifactPath);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(largeTooltipElement, "headlinescale"), "value", myLargeTooltip->myHeadlineScale);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(largeTooltipElement, "textscale"), "value", myLargeTooltip->myTextScale);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(largeTooltipElement, "cooldownsprite"), "positionx", myCooldownPosition.x);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(largeTooltipElement, "cooldownsprite"), "positiony", myCooldownPosition.y);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(largeTooltipElement, "gunpowdersprite"), "positionx", myGunpowderPosition.x);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(largeTooltipElement, "gunpowdersprite"), "positiony", myGunpowderPosition.y);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(largeTooltipElement, "supplysprite"), "positionx", mySupplyPosition.x);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(largeTooltipElement, "supplysprite"), "positiony", mySupplyPosition.y);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(largeTooltipElement, "artifactsprite"), "positionx", myArtifactPosition.x);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(largeTooltipElement, "artifactsprite"), "positiony", myArtifactPosition.y);
+
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(smallTooltipElement, "backgroundsize"), "x", smallBackgroundSize.x);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(smallTooltipElement, "backgroundsize"), "y", smallBackgroundSize.y);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(smallTooltipElement, "headlineposition"), "x", mySmallTooltip->myHeadlinePosition.x);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(smallTooltipElement, "headlineposition"), "y", mySmallTooltip->myHeadlinePosition.y);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(smallTooltipElement, "textposition"), "x", mySmallTooltip->myTextPosition.x);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(smallTooltipElement, "textposition"), "y", mySmallTooltip->myTextPosition.y);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(smallTooltipElement, "backgroundsprite"), "path", smallBackgroundPath);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(smallTooltipElement, "headlinescale"), "value", mySmallTooltip->myHeadlineScale);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(smallTooltipElement, "textscale"), "value", mySmallTooltip->myTextScale);
+
+		myLargeTooltip->myBackground = Prism::ModelLoader::GetInstance()->LoadSprite(largeBackgroundPath, largeBackgroundSize);
+		mySmallTooltip->myBackground = Prism::ModelLoader::GetInstance()->LoadSprite(smallBackgroundPath, smallBackgroundSize);
 		myCooldownSprite = Prism::ModelLoader::GetInstance()->LoadSprite(cooldownPath, costSpriteSize);
 		myGunpowderSprite = Prism::ModelLoader::GetInstance()->LoadSprite(gunpowderPath, costSpriteSize);
 		mySupplySprite = Prism::ModelLoader::GetInstance()->LoadSprite(supplyPath, costSpriteSize);
@@ -65,7 +81,10 @@ namespace GUI
 
 	TooltipWidget::~TooltipWidget()
 	{
-		SAFE_DELETE(myBackground);
+		SAFE_DELETE(myLargeTooltip->myBackground);
+		SAFE_DELETE(mySmallTooltip->myBackground);
+		SAFE_DELETE(myLargeTooltip);
+		SAFE_DELETE(mySmallTooltip);
 		SAFE_DELETE(myCooldownSprite);
 		SAFE_DELETE(myGunpowderSprite);
 		SAFE_DELETE(mySupplySprite);
@@ -81,15 +100,28 @@ namespace GUI
 			const TooltipInfo* tooltipInfo = myActiveWidget->GetTooltipInfo();
 			CU::Vector2<float> position = myPosition + aParentPosition;
 
-			myBackground->Render(position);
+			if (tooltipInfo->myIsLargeTooltip == true)
+			{
+				myLargeTooltip->myBackground->Render(position);
 
-			Prism::Engine::GetInstance()->PrintText(tooltipInfo->myHeadline, myHeadlinePosition + position
-				, Prism::eTextType::RELEASE_TEXT, myHeadlineScale);
+				Prism::Engine::GetInstance()->PrintText(tooltipInfo->myHeadline, myLargeTooltip->myHeadlinePosition + position
+					, Prism::eTextType::RELEASE_TEXT, myLargeTooltip->myHeadlineScale);
 
-			Prism::Engine::GetInstance()->PrintText(tooltipInfo->myText, myTextPosition + position
-				, Prism::eTextType::RELEASE_TEXT, myTextScale);
+				Prism::Engine::GetInstance()->PrintText(tooltipInfo->myText, myLargeTooltip->myTextPosition + position
+					, Prism::eTextType::RELEASE_TEXT, myLargeTooltip->myTextScale);
 
-			RenderCost(position, tooltipInfo);
+				RenderCost(position, tooltipInfo);
+			}
+			else
+			{
+				mySmallTooltip->myBackground->Render(position);
+
+				Prism::Engine::GetInstance()->PrintText(tooltipInfo->myHeadline, mySmallTooltip->myHeadlinePosition + position
+					, Prism::eTextType::RELEASE_TEXT, mySmallTooltip->myHeadlineScale);
+
+				Prism::Engine::GetInstance()->PrintText(tooltipInfo->myText, mySmallTooltip->myTextPosition + position
+					, Prism::eTextType::RELEASE_TEXT, mySmallTooltip->myTextScale);
+			}
 		}
 	}
 
@@ -99,14 +131,14 @@ namespace GUI
 
 		if (myIsFullscreen == false)
 		{
-			myHeadlinePosition = (myHeadlinePosition / anOldWindowSize.x) * aNewWindowSize.x;
-			myTextPosition = (myTextPosition / anOldWindowSize.x) * aNewWindowSize.x;
+			myLargeTooltip->myHeadlinePosition = (myLargeTooltip->myHeadlinePosition / anOldWindowSize.x) * aNewWindowSize.x;
+			myLargeTooltip->myTextPosition = (myLargeTooltip->myTextPosition / anOldWindowSize.x) * aNewWindowSize.x;
 			myCostTextOffset = (myCostTextOffset / anOldWindowSize.x) * aNewWindowSize.x;
 			myCooldownPosition = (myCooldownPosition / anOldWindowSize.x) * aNewWindowSize.x;
 			myGunpowderPosition = (myGunpowderPosition / anOldWindowSize.x) * aNewWindowSize.x;
 			mySupplyPosition = (mySupplyPosition / anOldWindowSize.x) * aNewWindowSize.x;
 			myArtifactPosition = (myArtifactPosition / anOldWindowSize.x) * aNewWindowSize.x;
-			myBackground->SetSize((myBackground->GetSize() / anOldWindowSize.x) * aNewWindowSize.x, { 0.f, 0.f });
+			myLargeTooltip->myBackground->SetSize((myLargeTooltip->myBackground->GetSize() / anOldWindowSize.x) * aNewWindowSize.x, { 0.f, 0.f });
 
 			CU::Vector2<float> costSize = (myCooldownSprite->GetSize() / anOldWindowSize.x) * aNewWindowSize.x;
 			myCooldownSprite->SetSize(costSize, { 0.f, 0.f });
@@ -116,14 +148,14 @@ namespace GUI
 		}
 		else
 		{
-			myHeadlinePosition = (myHeadlinePosition / anOldWindowSize) * aNewWindowSize;
-			myTextPosition = (myTextPosition / anOldWindowSize) * aNewWindowSize;
+			myLargeTooltip->myHeadlinePosition = (myLargeTooltip->myHeadlinePosition / anOldWindowSize) * aNewWindowSize;
+			myLargeTooltip->myTextPosition = (myLargeTooltip->myTextPosition / anOldWindowSize) * aNewWindowSize;
 			myCostTextOffset = (myCostTextOffset / anOldWindowSize) * aNewWindowSize;
 			myCooldownPosition = (myCooldownPosition / anOldWindowSize) * aNewWindowSize;
 			myGunpowderPosition = (myGunpowderPosition / anOldWindowSize) * aNewWindowSize;
 			mySupplyPosition = (mySupplyPosition / anOldWindowSize) * aNewWindowSize;
 			myArtifactPosition = (myArtifactPosition / anOldWindowSize) * aNewWindowSize;
-			myBackground->SetSize((myBackground->GetSize() / anOldWindowSize) * aNewWindowSize, { 0.f, 0.f });
+			myLargeTooltip->myBackground->SetSize((myLargeTooltip->myBackground->GetSize() / anOldWindowSize) * aNewWindowSize, { 0.f, 0.f });
 
 			CU::Vector2<float> costSize = (myCooldownSprite->GetSize() / anOldWindowSize) * aNewWindowSize;
 			myCooldownSprite->SetSize(costSize, { 0.f, 0.f });
@@ -132,8 +164,8 @@ namespace GUI
 			myArtifactSprite->SetSize(costSize, { 0.f, 0.f });
 		}
 
-		myTextScale = (myTextScale / anOldWindowSize.x) * aNewWindowSize.x;
-		myHeadlineScale = (myHeadlineScale / anOldWindowSize.x) * aNewWindowSize.x;
+		myLargeTooltip->myTextScale = (myLargeTooltip->myTextScale / anOldWindowSize.x) * aNewWindowSize.x;
+		myLargeTooltip->myHeadlineScale = (myLargeTooltip->myHeadlineScale / anOldWindowSize.x) * aNewWindowSize.x;
 	}
 
 	void TooltipWidget::RenderCost(const CU::Vector2<float>& aParentPosition, const TooltipInfo* aTooltipInfo)
@@ -142,7 +174,7 @@ namespace GUI
 		{
 			myCooldownSprite->Render(aParentPosition + myCooldownPosition);
 			Prism::Engine::GetInstance()->PrintText(*aTooltipInfo->myCooldown, aParentPosition + myCooldownPosition + myCostTextOffset
-				, Prism::eTextType::RELEASE_TEXT, myTextScale);
+				, Prism::eTextType::RELEASE_TEXT, myLargeTooltip->myTextScale);
 		}
 
 		if (aTooltipInfo->myGunpowderCost != nullptr)
@@ -155,7 +187,7 @@ namespace GUI
 
 			myGunpowderSprite->Render(aParentPosition + myGunpowderPosition, { 1.f, 1.f }, color);
 			Prism::Engine::GetInstance()->PrintText(*aTooltipInfo->myGunpowderCost, aParentPosition + myGunpowderPosition + myCostTextOffset
-				, Prism::eTextType::RELEASE_TEXT, myTextScale, color);
+				, Prism::eTextType::RELEASE_TEXT, myLargeTooltip->myTextScale, color);
 		}
 
 		if (aTooltipInfo->mySupplyCost != nullptr)
@@ -168,7 +200,7 @@ namespace GUI
 
 			mySupplySprite->Render(aParentPosition + mySupplyPosition, { 1.f, 1.f }, color);
 			Prism::Engine::GetInstance()->PrintText(*aTooltipInfo->mySupplyCost, aParentPosition + mySupplyPosition + myCostTextOffset
-				, Prism::eTextType::RELEASE_TEXT, myTextScale, color);
+				, Prism::eTextType::RELEASE_TEXT, myLargeTooltip->myTextScale, color);
 		}
 
 		if (aTooltipInfo->myArftifactCost != nullptr)
@@ -181,7 +213,7 @@ namespace GUI
 
 			myArtifactSprite->Render(aParentPosition + myArtifactPosition, { 1.f, 1.f }, color);
 			Prism::Engine::GetInstance()->PrintText(*aTooltipInfo->myArftifactCost, aParentPosition + myArtifactPosition + myCostTextOffset
-				, Prism::eTextType::RELEASE_TEXT, myTextScale, color);
+				, Prism::eTextType::RELEASE_TEXT, myLargeTooltip->myTextScale, color);
 		}
 	}
 }

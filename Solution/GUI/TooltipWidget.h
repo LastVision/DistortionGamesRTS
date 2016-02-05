@@ -14,6 +14,17 @@ namespace tinyxml2
 class XMLReader;
 class PlayerDirector;
 
+struct TooltipBox
+{
+	CU::Vector2<float> myTextPosition;
+	CU::Vector2<float> myHeadlinePosition;
+	
+	Prism::SpriteProxy* myBackground;
+
+	float myHeadlineScale;
+	float myTextScale;
+};
+
 namespace GUI
 {
 	class GUIManager;
@@ -32,28 +43,22 @@ namespace GUI
 
 		void RenderCost(const CU::Vector2<float>& aParentPosition, const TooltipInfo* aTooltipInfo);
 
-		CU::Vector2<float> myTextPosition;
-		CU::Vector2<float> myHeadlinePosition;
+		TooltipBox* myLargeTooltip;
+		TooltipBox* mySmallTooltip;
 
 		CU::Vector2<float> myCooldownPosition;
 		CU::Vector2<float> myGunpowderPosition;
 		CU::Vector2<float> mySupplyPosition;
 		CU::Vector2<float> myArtifactPosition;
-
 		CU::Vector2<float> myCostTextOffset;
 
-		const Widget* myActiveWidget;
-		const GUIManager* myGuiManager;
-
-		Prism::SpriteProxy* myBackground;
 		Prism::SpriteProxy* myCooldownSprite;
 		Prism::SpriteProxy* myGunpowderSprite;
 		Prism::SpriteProxy* mySupplySprite;
 		Prism::SpriteProxy* myArtifactSprite;
 
-		float myHeadlineScale;
-		float myTextScale;
-
+		const Widget* myActiveWidget;
+		const GUIManager* myGuiManager;
 		const PlayerDirector* myPlayer;
 	};
 }
