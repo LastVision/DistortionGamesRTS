@@ -1,7 +1,7 @@
 #pragma once
 #include "GameState.h"
 #include <Subscriber.h>
-
+#include <Tweener.h>
 namespace CU
 {
 	class InputWrapper;
@@ -18,6 +18,7 @@ namespace GUI
 	class GUIManager;
 	class Cursor;
 }
+
 
 class MainMenuState : public GameState, public Subscriber
 {
@@ -38,13 +39,20 @@ public:
 
 private:
 	GUI::GUIManager* myGUIManager;
+
+	Tweener<float> myTweener;
+	CU::Vector2<float> myLogoStartPosition;
+	CU::Vector2<float> myLogoEndPosition;
 	Prism::SpriteProxy* myLogo;
 	CU::Vector2<float> myLogoPosition;
 	CU::Vector2<float> myWindowSize;
 	float myLerpAlpha;
 
+	CU::Vector2<float> myGUIStartPosition;
+	CU::Vector2<float> myGUIEndPosition;
 	CU::Vector2<float> myGUIPosition;
-
+	
+	bool myLogoDone;
 
 	bool myHasRunOnce;
 };
