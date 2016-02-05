@@ -227,8 +227,6 @@ namespace Prism
 	{
 		for (int i = 0; i < myLogicalParticles.Size(); ++i)
 		{
-
-
 			myGraphicalParticles[i].myPosition += myLogicalParticles[i].myVelocity * aDeltaTime;
 
 			if (myStates[ALPHADELTA] == USE_ALPHA_DELTA)
