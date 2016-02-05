@@ -49,6 +49,18 @@ namespace GUI
 		}
 	}
 
+	void WidgetContainer::Render(const CU::Vector2<float>& aParentPosition, int anIndex)
+	{
+		DL_ASSERT_EXP(myWidgets.Size() >= anIndex, "[WidgetContainer] Trying to render nonexisting index.");
+
+		if (myBackground != nullptr)
+		{
+			myBackground->Render(myPosition);
+		}
+
+		myWidgets[anIndex]->Render(myPosition + aParentPosition);
+	}
+
 	Widget* WidgetContainer::MouseIsOver(const CU::Vector2<float>& aPosition)
 	{
 		if (IsInside(aPosition) == true)
@@ -66,6 +78,22 @@ namespace GUI
 			}
 
 			return this;
+		}
+		return nullptr;
+	}
+
+	Widget* WidgetContainer::MouseIsOver(const CU::Vector2<float>& aPosition, int anIndex)
+	{
+		if (IsInside(aPosition) == true)
+		{
+			if (myWidgets[anIndex]->IsVisible() == true && myWidgets[anIndex]->IsInside(aPosition - myPosition) == true)
+			{
+				Widget* childWidget = myWidgets[anIndex]->MouseIsOver(aPosition - myPosition);
+				if (childWidget != nullptr)
+				{
+					return childWidget;
+				}
+			}
 		}
 		return nullptr;
 	}
