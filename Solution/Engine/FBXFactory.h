@@ -8,6 +8,7 @@
 struct AnimationData;
 struct Bone;
 struct ModelData;
+struct D3D11_INPUT_ELEMENT_DESC;
 
 class FBXLoader;
 class FbxModelData;
@@ -19,7 +20,10 @@ namespace Prism
 	class ModelAnimated;
 	class Effect;
 	class HierarchyBone;
+	class Surface;
 	struct LodGroup;
+	struct VertexIndexWrapper;
+	struct VertexDataWrapper;
 
 	class FBXFactory
 	{

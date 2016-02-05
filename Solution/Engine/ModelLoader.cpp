@@ -85,7 +85,27 @@ namespace Prism
 		DL_ASSERT_EXP(file.is_open(), "Failed to open modellist.bin, did you run DGFX-Tool?");
 		if (file.is_open())
 		{
+			std::string animated;
 			std::string filePath;
+
+			while (file >> animated)
+			{
+				file >> filePath;
+				std::string dgfxPath = CU::GetGeneratedDataFolderFilePath(filePath, "dgfx");
+#ifndef RELEASE_BUILD
+				if (myDGFXLoader->CheckIfFbxIsNewer(dgfxPath) == true)
+				{
+					DL_MESSAGE_BOX("Found a FBX-File thats newer than the DGFX-File, did you forget to run the tool?", "Old DGFX", MB_ICONQUESTION);
+				}
+#endif
+				if (CU::FileExists(dgfxPath) == false)
+				{
+					assert(false && "FAILED TO OPEN DGFX-FILE");
+				}
+
+
+			}
+
 			while (std::getline(file, filePath))
 			{
 				std::string dgfxPath = CU::GetGeneratedDataFolderFilePath(filePath, "dgfx");
