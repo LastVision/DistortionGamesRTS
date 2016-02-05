@@ -84,7 +84,7 @@ void EmitterManager::UpdateEmitters(float aDeltaTime, CU::Matrix44f aWorldMatrix
 void EmitterManager::RenderEmitters()
 {
 
-	/*Prism::ParticleDataContainer::GetInstance()->SetGPUData(myCamera);
+	Prism::ParticleDataContainer::GetInstance()->SetGPUData(myCamera);
 	for (int i = 0; i < myEmitterList.Size(); ++i)
 	{
 		if (myEmitterList[i]->myGroupIsActive == false)
@@ -119,7 +119,7 @@ void EmitterManager::RenderEmitters()
 				}
 			}
 		}
-	}*/
+	}
 }
 
 void EmitterManager::ReceiveMessage(const EmitterMessage& aMessage)
