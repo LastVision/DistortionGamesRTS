@@ -94,8 +94,6 @@ namespace GUI
 					return childWidget;
 				}
 			}
-
-			return this;
 		}
 		return nullptr;
 	}

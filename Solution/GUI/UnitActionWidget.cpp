@@ -111,18 +111,29 @@ namespace GUI
 			else if (mySelectedType == eEntityType::BASE_BUILING)
 			{
 				myBuildingActionButtons->At(0)->Render(myPosition + aParentPosition);
-				myBuildingActionButtons->At(3)->Render(myPosition + aParentPosition);
+				myBuildingActionButtons->At(5)->Render(myPosition + aParentPosition);
 
 				if (myHasUnlockedRanger == true)
 				{
 					myBuildingActionButtons->At(1)->Render(myPosition + aParentPosition);
-					myBuildingActionButtons->At(4)->Render(myPosition + aParentPosition);
+					myBuildingActionButtons->At(6)->Render(myPosition + aParentPosition);
 
 				}
-				if (myHasUnlockedTank == true)
+				else
 				{
 					myBuildingActionButtons->At(2)->Render(myPosition + aParentPosition);
-					myBuildingActionButtons->At(5)->Render(myPosition + aParentPosition);
+					myBuildingActionButtons->At(8)->Render(myPosition + aParentPosition);
+				}
+
+				if (myHasUnlockedTank == true)
+				{
+					myBuildingActionButtons->At(3)->Render(myPosition + aParentPosition);
+					myBuildingActionButtons->At(7)->Render(myPosition + aParentPosition);
+				}
+				else
+				{
+					myBuildingActionButtons->At(4)->Render(myPosition + aParentPosition);
+					myBuildingActionButtons->At(9)->Render(myPosition + aParentPosition);
 				}
 			}
 		}
@@ -201,15 +212,29 @@ namespace GUI
 			}
 			else if (mySelectedType == eEntityType::BASE_BUILING)
 			{
-				Widget* widget = myBuildingActionButtons->MouseIsOver(aPosition - myPosition);
+				Widget* widget = myBuildingActionButtons->MouseIsOver(aPosition - myPosition, 0);
+				widget = widget != nullptr ? widget : myBuildingActionButtons->MouseIsOver(aPosition - myPosition, 5);
 
-				if (myHasUnlockedRanger == false && (widget == myBuildingActionButtons->At(1) || widget == myBuildingActionButtons->At(4)))
+				if (myHasUnlockedRanger == true && widget == nullptr)
 				{
-					return nullptr;
+					widget = myBuildingActionButtons->MouseIsOver(aPosition - myPosition, 1);
+					widget = widget != nullptr ? widget : myBuildingActionButtons->MouseIsOver(aPosition - myPosition, 6);
 				}
-				else if (myHasUnlockedTank == false && (widget == myBuildingActionButtons->At(2) || widget == myBuildingActionButtons->At(5)))
+				else if (myHasUnlockedRanger == false && widget == nullptr)
 				{
-					return nullptr;
+					widget = myBuildingActionButtons->MouseIsOver(aPosition - myPosition, 2);
+					widget = widget != nullptr ? widget : myBuildingActionButtons->MouseIsOver(aPosition - myPosition, 8);
+				}
+				
+				if (myHasUnlockedTank == true && widget == nullptr)
+				{
+					widget = myBuildingActionButtons->MouseIsOver(aPosition - myPosition, 3);
+					widget = widget != nullptr ? widget : myBuildingActionButtons->MouseIsOver(aPosition - myPosition, 7);
+				}
+				else if (myHasUnlockedTank == false && widget == nullptr)
+				{
+					widget = myBuildingActionButtons->MouseIsOver(aPosition - myPosition, 4);
+					widget = widget != nullptr ? widget : myBuildingActionButtons->MouseIsOver(aPosition - myPosition, 9);
 				}
 
 				return widget;
