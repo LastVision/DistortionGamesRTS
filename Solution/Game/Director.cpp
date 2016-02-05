@@ -366,6 +366,11 @@ void Director::ReceiveMessage(const KillUnitMessage& aMessage)
 		myUnitCount -= myBuilding->GetComponent<BuildingComponent>()->GetUnitSupplyCost(static_cast<eUnitType>(aMessage.myUnitType));
 
 		DL_ASSERT_EXP(myUnitCount >= 0, "[Director] Current unit count is negative");
+		if (myUnitCount < 0)
+		{
+			myUnitCount = 0;
+		}
+
 	}
 }
 
