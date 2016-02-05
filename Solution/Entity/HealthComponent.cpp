@@ -31,7 +31,7 @@ HealthComponent::HealthComponent(Entity& aEntity, HealthComponentData& aData)
 	switch (myEntity.GetOwner())
 	{
 	case eOwnerType::PLAYER:
-		color = { 0.35f, 0.35f, 0.9f, 1.f };
+		color = { 0.f, 0.35f, 0.75f, 1.f };
 		break;
 	case eOwnerType::ENEMY:
 		color = { 1.f, 0.f, 0.f, 1.f };
