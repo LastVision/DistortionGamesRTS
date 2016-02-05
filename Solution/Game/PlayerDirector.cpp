@@ -21,6 +21,7 @@
 #include <InputWrapper.h>
 #include <MinimapMoveMessage.h>
 #include <MoveCameraMessage.h>
+#include <NotificationMessage.h>
 #include <OnClickMessage.h>
 #include <PathFinderFunnel.h>
 #include "PlayerDirector.h"
@@ -372,6 +373,7 @@ void PlayerDirector::Render(const Prism::Camera& aCamera)
 void PlayerDirector::OnResize(int aWidth, int aHeight)
 {
 	myGUIManager->OnResize(aWidth, aHeight);
+	myTextEventManager->OnResize({ float(aWidth), float(aHeight) });
 }
 
 void PlayerDirector::ReceiveMessage(const ToggleGUIMessage& aMessage)
@@ -388,6 +390,10 @@ void PlayerDirector::ReceiveMessage(const OnClickMessage& aMessage)
 		{
 			mySelectedAction = eSelectedAction::PLACE_TOTEM;
 			myCursor->SetCurrentCursor(eCursorType::TOTEM);
+		}
+		else
+		{
+			PostMaster::GetInstance()->SendMessage(NotificationMessage("Totem is on cooldown."));
 		}
 		return;
 	}

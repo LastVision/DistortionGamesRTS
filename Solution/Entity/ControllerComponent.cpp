@@ -303,6 +303,12 @@ void ControllerComponent::FillCommandList(eEntityCommand aAction, bool aClearCom
 		}
 	}
 
+	if (myCommands.Size() > 1)
+	{
+		startPosition.x = myCommands[0].GetPosition().x;
+		startPosition.z = myCommands[0].GetPosition().y;
+	}
+
 	CU::GrowingArray<CU::Vector3<float>> path(16);
 	if (myTerrain.GetPathFinder()->FindPath(startPosition, targetPosition, path) == true)
 	{

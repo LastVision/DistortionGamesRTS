@@ -398,6 +398,8 @@ void InGameState::UpdateCamera(float aDeltaTime, const CU::Vector3<float>& aCame
 	{
 		cameraPos.x += cameraSpeed;
 	}
+
+#ifndef RELEASE_BUILD
 	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_Q) == true)
 	{
 		cameraPos.y -= cameraSpeed;
@@ -406,11 +408,13 @@ void InGameState::UpdateCamera(float aDeltaTime, const CU::Vector3<float>& aCame
 	{
 		cameraPos.y += cameraSpeed;
 	}
+#endif
 
 	cameraPos += aCameraMovement * cameraSpeed;
 
 	myCameraOrientation.SetPos(cameraPos);
 
+#ifndef RELEASE_BUILD
 	float rotationSpeed = 1.f * aDeltaTime;
 
 	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_NUMPAD2) == true)
@@ -429,6 +433,7 @@ void InGameState::UpdateCamera(float aDeltaTime, const CU::Vector3<float>& aCame
 	{
 		myCameraOrientation = CU::Matrix44<float>::CreateRotateAroundY(rotationSpeed) * myCameraOrientation;
 	}
+#endif
 
 	CapCameraToTerrain();
 }

@@ -12,6 +12,7 @@
 #include <InWorldTextMessage.h>
 #include <KillUnitMessage.h>
 #include <KilledPromotedMessage.h>
+#include <NotificationMessage.h>
 #include <PostMaster.h>
 #include <ResourceMessage.h>
 #include <VictoryMessage.h>
@@ -144,17 +145,19 @@ bool Director::SpawnUnit(eUnitType aUnitType)
 	if (aUnitType == eUnitType::TANK && myHasUnlockedTank == false) return false;
 	if (myBuilding->GetComponent<BuildingComponent>()->IsQueueFull() == true)
 	{
+		PostMaster::GetInstance()->SendMessage(NotificationMessage("Queue is full."));
 		return false;
 	}
 
 	BuildingComponent* building = myBuilding->GetComponent<BuildingComponent>();
 	if (myUnitCount + building->GetUnitSupplyCost(aUnitType) > myUnitCap)
 	{
+		PostMaster::GetInstance()->SendMessage(NotificationMessage("Not enough supply."));
 		return false;
 	}
 
 	if (myGunpowder >= building->GetUnitCost(aUnitType))
-	{
+	{		
 		myGunpowder -= building->GetUnitCost(aUnitType);
 		building->BuildUnit(aUnitType);
 		return true;
@@ -163,6 +166,7 @@ bool Director::SpawnUnit(eUnitType aUnitType)
 	{
 		if (myOwner == eOwnerType::PLAYER)
 		{
+			PostMaster::GetInstance()->SendMessage(NotificationMessage("Not enough gun powder."));
 			Prism::Audio::AudioInterface::GetInstance()->PostEvent("Not_Enough_Fuel", 0);
 		}
 	}
@@ -172,13 +176,14 @@ bool Director::SpawnUnit(eUnitType aUnitType)
 bool Director::UpgradeUnit(eUnitType aUnitType)
 {
 	BuildingComponent* building = myBuilding->GetComponent<BuildingComponent>();
-	if (building->IsQueueFull() == true)
-	{
-		return false;
-	}
+	//if (building->IsQueueFull() == true)
+	//{
+	//	return false;
+	//}
 
 	if (building->CanUpgrade(aUnitType) == false)
 	{
+		PostMaster::GetInstance()->SendMessage(NotificationMessage("Upgrade on cooldown."));
 		return false;
 	}
 
@@ -187,6 +192,10 @@ bool Director::UpgradeUnit(eUnitType aUnitType)
 		myArtifacts -= building->GetUpgradeCost(aUnitType);
 		building->UpgradeUnit(aUnitType);
 		return true;
+	}
+	else
+	{
+		PostMaster::GetInstance()->SendMessage(NotificationMessage("Not enough artifact."));
 	}
 
 	return false;
@@ -306,6 +315,27 @@ void Director::ReceiveMessage(const UpgradeUnitMessage& aMessage)
 					actor->SetRechargeTime(actor->GetAttackSpeed() + upgrade.myAttackSpeedModifier);
 				}
 			}
+		}
+
+		if (myOwner == eOwnerType::PLAYER)
+		{
+			std::string message = "";
+
+			switch (aMessage.myUnit)
+			{
+			case eUnitType::GRUNT:
+				message = "Grunt";
+				break;
+			case eUnitType::RANGER:
+				message = "Ranger";
+				break;
+			case eUnitType::TANK:
+				message = "Tank";
+				break;
+			}
+	
+			message.append(" upgraded to level " + std::to_string(aMessage.myUpgradeLevel + 1) + ".");
+			PostMaster::GetInstance()->SendMessage(NotificationMessage(message));
 		}
 	}
 }

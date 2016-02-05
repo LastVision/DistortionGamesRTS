@@ -66,7 +66,7 @@ void TotemComponent::Update(float aDeltaTime)
 			}
 			if (myEffectActive == false)
 			{
-				PostMaster::GetInstance()->SendMessage(EmitterMessage("totem_healing", myTargetPosition, myEndTime));
+				PostMaster::GetInstance()->SendMessage(EmitterMessage("totem_healing", myTargetPosition, myEndTime, myRadius));
 				myEffectActive = true;
 			}
 		}

@@ -14,6 +14,7 @@ namespace Prism
 		~HierarchyBone();
 
 		void Update(const CU::Matrix44<float>& aParentMatrix, float aCurrentTime);
+		void GetBoneMatrix(const std::string& aBoneName, CU::Matrix44<float>& aOutMatrix) const;
 
 	private:
 		CU::Matrix44<float>* myResultMatrix;

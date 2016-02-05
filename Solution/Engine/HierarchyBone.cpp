@@ -44,4 +44,18 @@ namespace Prism
 			myChildren[i].Update(calculatedMatrix, aCurrentTime);
 		}
 	}
+
+	void HierarchyBone::GetBoneMatrix(const std::string& aBoneName, CU::Matrix44<float>& aOutMatrix) const
+	{
+		if (myBoneName == aBoneName)
+		{
+			aOutMatrix *= *myResultMatrix;
+			return;
+		}
+
+		for (int i = 0; i < myChildren.Size(); ++i)
+		{
+			myChildren[i].GetBoneMatrix(aBoneName, aOutMatrix);
+		}
+	}
 }

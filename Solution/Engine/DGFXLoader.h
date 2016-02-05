@@ -238,8 +238,9 @@ namespace Prism
 		Model* CreateModel(Effect* aEffect, std::fstream& aStream);
 		ModelAnimated* CreateModelAnimated(Effect* aEffect, std::fstream& aStream);
 
-		void LoadModelData(Model* aOutData, Effect* aEffect, std::fstream& aStream);
-		void LoadModelAnimatedData(ModelAnimated* aOutData, Effect* aEffect, std::fstream& aStream);
+		void LoadData(VertexIndexWrapper* aIndexWrapper, VertexDataWrapper* aVertexData
+			, CU::GrowingArray<D3D11_INPUT_ELEMENT_DESC*>& someInputElements, Surface& aSurface
+			, Effect* aEffect, std::fstream& aStream);
 
 		void LoadLodGroup(Model* aOutData, std::fstream& aStream);
 
