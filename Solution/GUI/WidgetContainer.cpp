@@ -48,7 +48,7 @@ namespace GUI
 	{
 		if (myIsScrolling == true)
 		{
-			myScrollOffset.x = sinf(totalTime) * 128.f;
+			myScrollOffset.x = sinf(totalTime) * 100.f;
 		}
 		if (myIsVisible == true)
 		{
