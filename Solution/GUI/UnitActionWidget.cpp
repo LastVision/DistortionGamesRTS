@@ -255,7 +255,7 @@ namespace GUI
 
 	WidgetContainer* UnitActionWidget::ReadContainer(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement, CU::Vector2<float> aSize)
 	{
-		GUI::WidgetContainer* container = new WidgetContainer(nullptr, aSize, false);
+		GUI::WidgetContainer* container = new WidgetContainer(nullptr, nullptr, aSize, false);
 		tinyxml2::XMLElement* widgetElement = aReader->FindFirstChild(anXMLElement, "widget");
 		for (; widgetElement != nullptr; widgetElement = aReader->FindNextElement(widgetElement))
 		{

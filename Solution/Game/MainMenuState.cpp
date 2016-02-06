@@ -15,8 +15,10 @@
 #include <SpriteProxy.h>
 
 MainMenuState::MainMenuState()
-	: myLogoPosition(0.f,0.f)
-	, myLerpAlpha(0.f)
+	: myLogoPosition(0.f, 0.f)
+	, myLogoAlpha(0.f)
+	, myMenuAlpha(0.f)
+	, myDustAlpha(0.f)
 	, myGUIPosition(0.f, 0.f)
 	, myGUIEndPosition(0.f, 0.f)
 	, myGUIStartPosition(-512.f, 0.f)
@@ -24,6 +26,8 @@ MainMenuState::MainMenuState()
 {
 	CU::Vector2<float> logoSize(512.f, 512.f);
 	myLogo = Prism::ModelLoader::GetInstance()->LoadSprite("Data/Resource/Texture/Menu/MainMenu/T_gamelogo.dds"
+		, logoSize, logoSize * 0.5f);
+	myLogoDust = Prism::ModelLoader::GetInstance()->LoadSprite("Data/Resource/Texture/Menu/MainMenu/T_gamelogo_dust.dds"
 		, logoSize, logoSize * 0.5f);
 
 	myWindowSize = CU::Vector2<float>(float(Prism::Engine::GetInstance()->GetWindowSize().x)
@@ -42,6 +46,7 @@ MainMenuState::MainMenuState()
 MainMenuState::~MainMenuState()
 {
 	SAFE_DELETE(myLogo);
+	SAFE_DELETE(myLogoDust);
 	SAFE_DELETE(myGUIManager);
 	myCursor = nullptr;
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::ON_CLICK, this);
@@ -90,24 +95,28 @@ const eStateStatus MainMenuState::Update(const float& aDeltaTime)
 			myIsActiveState = false;
 			return eStateStatus::ePopMainState;
 		}
-		myLerpAlpha += aDeltaTime;
+		myLogoAlpha += aDeltaTime;
 		if (myLogoPosition.y - 25.f > myLogoEndPosition.y)
 		{
-			myLogoPosition.y = myTweener.DoTween(myLerpAlpha, myLogoStartPosition.y, myLogoEndPosition.y - myLogoStartPosition.y, 1.5f, eTweenType::EXPONENTIAL_HALF);
+			myLogoPosition.y = myTweener.DoTween(myLogoAlpha, myLogoStartPosition.y, myLogoEndPosition.y - myLogoStartPosition.y, 1.5f, eTweenType::EXPONENTIAL_HALF);
 		}
 		else
 		{
+			myMenuAlpha += aDeltaTime;
 			if (myLogoDone == false)
 			{
 				myLogoDone = true;
-				myLerpAlpha = 0.f;
+				myMenuAlpha = 0.f;
 			}
 			if (myGUIPosition.x < 0.f)
 			{
-				myGUIPosition.x = myTweener.DoTween(myLerpAlpha, myGUIStartPosition.x, myGUIEndPosition.x - myGUIStartPosition.x, 1.5f, eTweenType::EXPONENTIAL_HALF);
+				myGUIPosition.x = myTweener.DoTween(myMenuAlpha, myGUIStartPosition.x, myGUIEndPosition.x - myGUIStartPosition.x, 1.5f, eTweenType::EXPONENTIAL_HALF);
 			}
 		}
 
+		myDustAlpha = fmaxf(myLogoAlpha - 2.5f, 0.f);
+		myDustAlpha *= 3.f;
+		myDustAlpha = fminf(myDustAlpha, 1.f);
 
 		myGUIManager->SetPosition(myGUIPosition);
 		myGUIManager->Update(aDeltaTime);
@@ -119,6 +128,7 @@ void MainMenuState::Render()
 {
 	myGUIManager->Render();
 	myLogo->Render(myLogoPosition);
+	myLogoDust->Render(myLogoEndPosition, CU::Vector2<float>(0.95f + myDustAlpha * 0.05f, 0.95f + myDustAlpha * 0.05f), CU::Vector4<float>(1.f, 1.f, 1.f, myDustAlpha));
 }
 
 void MainMenuState::ResumeState()

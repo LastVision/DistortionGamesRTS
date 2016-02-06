@@ -4,10 +4,14 @@
 
 namespace GUI
 {
-	WidgetContainer::WidgetContainer(Prism::SpriteProxy* aBackgroundSprite, const CU::Vector2<float>& aSize, bool aIsFullscreen)
+	WidgetContainer::WidgetContainer(Prism::SpriteProxy* aBackgroundSprite,
+			Prism::SpriteProxy* aVignette, const CU::Vector2<float>& aSize
+			, bool aIsFullscreen, bool aIsScrolling)
 		: Widget()
 		, myBackground(aBackgroundSprite)
+		, myVignette(aVignette)
 		, myWidgets(8)
+		, myIsScrolling(aIsScrolling)
 	{
 		myIsFullscreen = aIsFullscreen;
 		mySize = aSize;
@@ -17,6 +21,7 @@ namespace GUI
 	{
 		myWidgets.DeleteAll();
 		SAFE_DELETE(myBackground);
+		SAFE_DELETE(myVignette);
 	}
 
 	void WidgetContainer::AddWidget(Widget* aWidget)
@@ -25,8 +30,14 @@ namespace GUI
 		aWidget->SetParent(this);
 	}
 
+	static float totalTime = 0;
 	void WidgetContainer::Update(float aDelta)
 	{
+		if (myIsScrolling == true)
+		{
+			totalTime += aDelta * 0.2f;
+			
+		}
 		for (int i = 0; i < myWidgets.Size(); i++)
 		{
 			myWidgets[i]->Update(aDelta);
@@ -35,11 +46,19 @@ namespace GUI
 
 	void WidgetContainer::Render(const CU::Vector2<float>& aParentPosition)
 	{
+		if (myIsScrolling == true)
+		{
+			myScrollOffset.x = sinf(totalTime) * 128.f;
+		}
 		if (myIsVisible == true)
 		{
 			if (myBackground != nullptr)
 			{
-				myBackground->Render(myPosition);
+				myBackground->Render(myPosition + myScrollStaticOffset + myScrollOffset);
+			}
+			if (myVignette != nullptr)
+			{
+				myVignette->Render(myPosition);
 			}
 
 			for (int i = 0; i < myWidgets.Size(); i++)
@@ -56,6 +75,10 @@ namespace GUI
 		if (myBackground != nullptr)
 		{
 			myBackground->Render(myPosition);
+		}
+		if (myVignette != nullptr)
+		{
+			myVignette->Render(myPosition);
 		}
 
 		myWidgets[anIndex]->Render(myPosition + aParentPosition);
@@ -108,7 +131,12 @@ namespace GUI
 		}
 		if (myBackground != nullptr)
 		{
-			if (myIsFullscreen == false)
+			if (myIsScrolling == true)
+			{
+				myScrollStaticOffset = aNewSize * 0.5f;
+				myBackground->SetSize(CU::Vector2<float>(aNewSize.y * 2.f, aNewSize.y), CU::Vector2<float>(aNewSize.y, aNewSize.y * 0.5f));
+			}
+			else if (myIsFullscreen == false)
 			{
 				CU::Vector2<float> ratio = myBackground->GetSize() / anOldSize.x;
 				myBackground->SetSize(aNewSize.x * ratio, { 0.f, 0.f });
@@ -118,6 +146,11 @@ namespace GUI
 				CU::Vector2<float> ratio = myBackground->GetSize() / anOldSize;
 				myBackground->SetSize(aNewSize * ratio, { 0.f, 0.f });
 			}
+		}
+		if (myVignette != nullptr)
+		{
+			//CU::Vector2<float> ratio = myVignette->GetSize() / anOldSize.x;
+			myVignette->SetSize(aNewSize, { 0.f, 0.f });
 		}
 	}
 }

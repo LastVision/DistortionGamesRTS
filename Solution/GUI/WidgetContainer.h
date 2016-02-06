@@ -20,7 +20,8 @@ namespace GUI
 	{
 	public:
 
-		WidgetContainer(Prism::SpriteProxy* aBackgroundSprite, const CU::Vector2<float>& aSize, bool aIsFullscreen);
+		WidgetContainer(Prism::SpriteProxy* aBackgroundSprite, Prism::SpriteProxy* aVignetteSprite
+			, const CU::Vector2<float>& aSize, bool aIsFullscreen, bool aIsScrolling = false);
 		~WidgetContainer();
 
 		void AddWidget(Widget* aWidget);
@@ -43,6 +44,10 @@ namespace GUI
 	private:
 		CU::GrowingArray<Widget*> myWidgets;
 		Prism::SpriteProxy* myBackground;
+		Prism::SpriteProxy* myVignette;
+		bool myIsScrolling;
+		CU::Vector2<float> myScrollOffset;
+		CU::Vector2<float> myScrollStaticOffset;
 	};
 
 	inline int WidgetContainer::GetSize() const

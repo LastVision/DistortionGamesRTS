@@ -32,7 +32,7 @@ namespace GUI
 	{
 		myWindowSize = { 1920.f, 1080.f }; // XML coordinates respond to this resolution, will be resized
 
-		myWidgets = new WidgetContainer(nullptr, myWindowSize, true);
+		myWidgets = new WidgetContainer(nullptr, nullptr, myWindowSize, true);
 		myWidgets->SetPosition({ 0.f, 0.f });
 
 		ReadXML(aXMLPath);
@@ -139,7 +139,9 @@ namespace GUI
 		{
 			bool isFullscreen = false;
 			bool isClickable = true;
+			bool isScrolling = false;
 			Prism::SpriteProxy* backgroundSprite = nullptr;
+			Prism::SpriteProxy* vignetteSprite = nullptr;
 
 			aReader.ForceReadAttribute(aReader.ForceFindFirstChild(aContainerElement, "size"), "x", size.x);
 			aReader.ForceReadAttribute(aReader.ForceFindFirstChild(aContainerElement, "size"), "y", size.y);
@@ -150,22 +152,39 @@ namespace GUI
 			tinyxml2::XMLElement* spriteSizeElement = aReader.FindFirstChild(aContainerElement, "backgroundsize");
 			tinyxml2::XMLElement* fullscreenElement = aReader.FindFirstChild(aContainerElement, "isfullscreen");
 			tinyxml2::XMLElement* clickableElement = aReader.FindFirstChild(aContainerElement, "isclickable");
+			tinyxml2::XMLElement* scrollingElement = aReader.FindFirstChild(aContainerElement, "isscrolling");
+			tinyxml2::XMLElement* vignetteElement = aReader.FindFirstChild(aContainerElement, "vignettesprite");
 
 			if (spriteElement != nullptr)
 			{
 				aReader.ForceReadAttribute(spriteElement, "path", path);
 
+				if (scrollingElement != nullptr)
+				{
+					aReader.ForceReadAttribute(scrollingElement, "value", isScrolling);
+				}
 				if (spriteSizeElement != nullptr)
 				{
 					CU::Vector2<float> spriteSize;
 					aReader.ForceReadAttribute(spriteSizeElement, "x", spriteSize.x);
 					aReader.ForceReadAttribute(spriteSizeElement, "y", spriteSize.y);
+					if (isScrolling == true)
+					{
+						spriteSize.x = spriteSize.y * 2.f;
+					}
 					backgroundSprite = Prism::ModelLoader::GetInstance()->LoadSprite(path, spriteSize);
 				}
 				else
 				{
 					backgroundSprite = Prism::ModelLoader::GetInstance()->LoadSprite(path, size);
 				}
+			}
+
+			if (vignetteElement != nullptr)
+			{
+				aReader.ForceReadAttribute(vignetteElement, "path", path);
+
+				vignetteSprite = Prism::ModelLoader::GetInstance()->LoadSprite(path, size);
 			}
 
 			if (fullscreenElement != nullptr)
@@ -178,7 +197,7 @@ namespace GUI
 				aReader.ForceReadAttribute(clickableElement, "value", isClickable);
 			}
 
-			GUI::WidgetContainer* container = new WidgetContainer(backgroundSprite, size, isFullscreen);
+			GUI::WidgetContainer* container = new WidgetContainer(backgroundSprite, vignetteSprite, size, isFullscreen, isScrolling);
 			container->SetPosition(position);
 
 			tinyxml2::XMLElement* widgetElement = aReader.FindFirstChild(aContainerElement, "widget");
