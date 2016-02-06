@@ -29,7 +29,7 @@ class InGameState : public GameState, public Subscriber
 {
 public:
 
-	InGameState(int aLevelindex);
+	InGameState(int aLevelindex, eDifficulty aDifficulty);
 	~InGameState();
 
 	void InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCursor) override;
@@ -80,6 +80,7 @@ private:
 	int myCinematicIndex;
 
 	int myStartLevelIndex;
+	eDifficulty myDifficulty;
 
 	bool myIsFirstFrame;
 };

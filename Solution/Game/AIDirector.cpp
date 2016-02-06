@@ -39,12 +39,13 @@ AIDirector::AIMaps::~AIMaps()
 	SAFE_DELETE(myBlockMap);
 }
 
-AIDirector::AIDirector(const Prism::Terrain& aTerrain, Prism::Scene& aScene)
+AIDirector::AIDirector(const Prism::Terrain& aTerrain, Prism::Scene& aScene, eDifficulty aDifficulty)
 	: Director(eOwnerType::ENEMY, aTerrain)
 	, myPlayerHasStarted(false)
 	, myIdleUnits(32)
 	, myUnitsOnMission(32)
 	, myActionQueue(8)
+	, myDifficulty(aDifficulty)
 {
 	for (int i = 0; i < GC::enemyGruntCount; ++i)
 	{
@@ -260,6 +261,32 @@ void AIDirector::LoadAISettings(const std::string& aFilePath)
 		, "value", myDecisionTimer.myMinTime);
 	reader.ForceReadAttribute(reader.ForceFindFirstChild(decisionTime, "max")
 		, "value", myDecisionTimer.myMaxTime);
+
+
+
+	tinyxml2::XMLElement* difficultyElement = reader.ForceFindFirstChild(root, "Difficulty");
+	float difficultyModifier = 1.f;
+	switch (myDifficulty)
+	{
+	case eDifficulty::EASY:
+		reader.ForceReadAttribute(reader.ForceFindFirstChild(difficultyElement, "easy")
+			, "value", difficultyModifier);
+		break;
+	case eDifficulty::NORMAL:
+		reader.ForceReadAttribute(reader.ForceFindFirstChild(difficultyElement, "normal")
+			, "value", difficultyModifier);
+		break;
+	case eDifficulty::HARD:
+		reader.ForceReadAttribute(reader.ForceFindFirstChild(difficultyElement, "hard")
+			, "value", difficultyModifier);
+		break;
+	default:
+		DL_ASSERT("Invalid AI-Difficulty");
+		break;
+	}
+
+	myDecisionTimer.myMinTime *= difficultyModifier;
+	myDecisionTimer.myMaxTime *= difficultyModifier;
 
 	reader.CloseDocument();
 }

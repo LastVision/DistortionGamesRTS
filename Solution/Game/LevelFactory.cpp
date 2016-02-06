@@ -86,7 +86,7 @@ LevelFactory::~LevelFactory()
 	myDirectionalLights.DeleteAll();
 }
 
-Level* LevelFactory::LoadLevel(const int& aID, bool aPauseModelLoader)
+Level* LevelFactory::LoadLevel(const int& aID, bool aPauseModelLoader, eDifficulty aDifficulty)
 {
 	if (myLevelPaths.find(aID) == myLevelPaths.end())
 	{
@@ -94,10 +94,10 @@ Level* LevelFactory::LoadLevel(const int& aID, bool aPauseModelLoader)
 	}
 	myCurrentID = aID;
 
-	return LoadCurrentLevel(aPauseModelLoader);
+	return LoadCurrentLevel(aPauseModelLoader, aDifficulty);
 }
 
-Level* LevelFactory::LoadCurrentLevel(bool aPauseModelLoader)
+Level* LevelFactory::LoadCurrentLevel(bool aPauseModelLoader, eDifficulty aDifficulty)
 {
 	myIsLoading = true;
 	if (aPauseModelLoader == true)
@@ -108,7 +108,7 @@ Level* LevelFactory::LoadCurrentLevel(bool aPauseModelLoader)
 	myCurrentLevel = nullptr;
 
 	LoadTerrain(myLevelPaths[myCurrentID]);
-	myCurrentLevel = new Level(myCamera, myTerrain, myCursor);
+	myCurrentLevel = new Level(myCamera, myTerrain, myCursor, aDifficulty);
 
 	SAFE_DELETE(myLoadLevelThread);
 	//myLoadLevelThread = new std::thread(&LevelFactory::ReadLevel, this, myLevelPaths[myCurrentID]);
@@ -136,14 +136,14 @@ Level* LevelFactory::LoadCurrentLevel(bool aPauseModelLoader)
 	return myCurrentLevel;
 }
 
-Level* LevelFactory::LoadNextLevel()
+Level* LevelFactory::LoadNextLevel(eDifficulty aDifficulty)
 {
 	if (IsLastLevel() == true)
 	{
 		return myCurrentLevel;
 	}
 
-	return LoadLevel(myCurrentID + 1);
+	return LoadLevel(myCurrentID + 1, true, aDifficulty);
 }
 
 bool LevelFactory::IsLastLevel() const

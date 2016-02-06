@@ -160,3 +160,10 @@ enum class eCursorType
 	TOTEM,
 	CANCEL,
 };
+
+enum class eDifficulty
+{
+	EASY,
+	NORMAL,
+	HARD
+};

@@ -28,7 +28,7 @@
 #include <ToggleRenderLinesMessage.h>
 #include "Tutorial.h"
 
-Level::Level(const Prism::Camera& aCamera, Prism::Terrain* aTerrain, GUI::Cursor* aCursor)
+Level::Level(const Prism::Camera& aCamera, Prism::Terrain* aTerrain, GUI::Cursor* aCursor, eDifficulty aDifficulty)
 	: myEntities(64)
 	, myRenderNavMeshLines(false)
 	, myShowFogOfWar(true)
@@ -46,7 +46,7 @@ Level::Level(const Prism::Camera& aCamera, Prism::Terrain* aTerrain, GUI::Cursor
 	PostMaster::GetInstance()->Subscribe(eMessageType::TOGGLE_FOG_OF_WAR, this);
 
 	myPlayer = new PlayerDirector(*myTerrain, *myScene, aCursor);
-	myAI = new AIDirector(*myTerrain, *myScene);
+	myAI = new AIDirector(*myTerrain, *myScene, aDifficulty);
 
 	myNeutralDirector = new NeutralDirector(*myTerrain, *myScene);
 

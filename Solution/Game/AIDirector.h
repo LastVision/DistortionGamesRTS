@@ -23,7 +23,7 @@ class VulnerabilityMap;
 class AIDirector : public Director
 {
 public:
-	AIDirector(const Prism::Terrain& aTerrain, Prism::Scene& aScene);
+	AIDirector(const Prism::Terrain& aTerrain, Prism::Scene& aScene, eDifficulty aDifficulty);
 	~AIDirector();
 
 	void RenderMaps(const Prism::Camera& aCamera);
@@ -136,7 +136,7 @@ private:
 	SpawnAdvisorData mySpawnData;
 
 	DecisionTimer myDecisionTimer;
-
+	eDifficulty myDifficulty;
 
 
 	bool myPlayerHasStarted;

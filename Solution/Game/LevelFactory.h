@@ -39,9 +39,9 @@ public:
 	LevelFactory(const std::string& aLevelListPath, Prism::Camera& aCamera, GUI::Cursor* aCursor);
 	~LevelFactory();
 
-	Level* LoadLevel(const int& aID, bool aPauseModelLoader = true);
-	Level* LoadCurrentLevel(bool aPauseModelLoader = true);
-	Level* LoadNextLevel();
+	Level* LoadLevel(const int& aID, bool aPauseModelLoader = true, eDifficulty aDifficulty = eDifficulty::NORMAL);
+	Level* LoadCurrentLevel(bool aPauseModelLoader = true, eDifficulty aDifficulty = eDifficulty::NORMAL);
+	Level* LoadNextLevel(eDifficulty aDifficulty);
 
 	const volatile bool& IsLevelLoading() const;
 	const int& GetLevelID() const;

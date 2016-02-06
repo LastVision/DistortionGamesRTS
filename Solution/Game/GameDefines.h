@@ -14,3 +14,5 @@
 #undef USE_WEATHER
 
 #endif
+
+#define USE_DIFFICULTY

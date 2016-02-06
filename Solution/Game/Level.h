@@ -28,7 +28,7 @@ class Level : public Subscriber
 {
 	friend class LevelFactory;
 public:
-	Level(const Prism::Camera& aCamera, Prism::Terrain* aTerrain, GUI::Cursor* aCursor);
+	Level(const Prism::Camera& aCamera, Prism::Terrain* aTerrain, GUI::Cursor* aCursor, eDifficulty aDifficulty);
 	~Level();
 
 	void LoadTutorial(const Prism::Camera& aCamera, const std::string& aTutorialPath);

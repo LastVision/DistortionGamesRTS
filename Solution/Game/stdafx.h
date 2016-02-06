@@ -9,6 +9,7 @@
 #include <GameEnum.h>
 #include <Entity.h>
 #include <GameConstants.h>
+#include "GameDefines.h"
 #include <GrowingArray.h>
 #include <MathHelper.h>
 #include <Matrix.h>

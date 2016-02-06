@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include <Camera.h>
 #include "CreditMenuState.h"
+#include <FadeMessage.h>
 #include <GUIManager.h>
 #include "HelpState.h"
 #include "InGameState.h"
@@ -13,6 +14,10 @@
 #include "SplashState.h"
 #include "StateStackProxy.h"
 #include <SpriteProxy.h>
+
+#ifdef USE_DIFFICULTY
+#include "DifficultySelectState.h"
+#endif
 
 MainMenuState::MainMenuState()
 	: myLogoPosition(0.f, 0.f)
@@ -150,7 +155,11 @@ void MainMenuState::ReceiveMessage(const OnClickMessage& aMessage)
 		case eOnClickEvent::GAME_START:
 			Prism::MemoryTracker::GetInstance()->SetRunTime(false);
 			PostMaster::GetInstance()->UnSubscribe(eMessageType::ON_CLICK, this);
-			myStateStack->PushMainGameState(new InGameState(aMessage.myID));
+#ifndef USE_DIFFICULTY
+			myStateStack->PushMainGameState(new InGameState(aMessage.myID, eDifficulty::NORMAL));
+#else
+			myStateStack->PushMainGameState(new DifficultySelectState(aMessage.myID));
+#endif
 			break;
 		case eOnClickEvent::GAME_LEVEL_SELECT:
 			Prism::MemoryTracker::GetInstance()->SetRunTime(false);

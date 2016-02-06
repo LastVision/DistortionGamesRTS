@@ -72,11 +72,11 @@ void CreditMenuState::ReceiveMessage(const OnClickMessage& aMessage)
 	{
 		switch (aMessage.myEvent)
 		{
-		case eOnClickEvent::GAME_START:
+		/*case eOnClickEvent::GAME_START:
 			Prism::MemoryTracker::GetInstance()->SetRunTime(false);
 			PostMaster::GetInstance()->UnSubscribe(eMessageType::ON_CLICK, this);
 			myStateStack->PushMainGameState(new InGameState(aMessage.myID));
-			break;
+			break;*/
 		case eOnClickEvent::GAME_QUIT:
 			myStateStatus = eStateStatus::ePopMainState;
 			break;

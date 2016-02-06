@@ -206,6 +206,7 @@
     <ClInclude Include="CreditMenuState.h" />
     <ClInclude Include="DecisionMap.h" />
     <ClInclude Include="DifferenceMap.h" />
+    <ClInclude Include="DifficultySelectState.h" />
     <ClInclude Include="Director.h" />
     <ClInclude Include="AIDirector.h" />
     <ClInclude Include="Console.h" />
@@ -251,6 +252,7 @@
     <ClCompile Include="CreditMenuState.cpp" />
     <ClCompile Include="DecisionMap.cpp" />
     <ClCompile Include="DifferenceMap.cpp" />
+    <ClCompile Include="DifficultySelectState.cpp" />
     <ClCompile Include="Director.cpp" />
     <ClCompile Include="AIDirector.cpp" />
     <ClCompile Include="Console.cpp" />

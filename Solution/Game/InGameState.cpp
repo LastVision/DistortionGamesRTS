@@ -33,10 +33,11 @@
 #include <CinematicMessage.h>
 #include <RunScriptMessage.h>
 
-InGameState::InGameState(int aLevelIndex)
+InGameState::InGameState(int aLevelIndex, eDifficulty aDifficulty)
 	: myShouldReOpenConsole(false)
 	, myStartLevelIndex(aLevelIndex)
 	, myIsFirstFrame(true)
+	, myDifficulty(aDifficulty)
 {
 	myIsActiveState = false;
 	myIsPlayerCinematic = false;
@@ -71,7 +72,7 @@ void InGameState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCur
 	myStateStatus = eStateStatus::eKeepState;
 	myCursor = aCursor;
 	myLevelFactory = new LevelFactory("Data/Level/LI_level.xml", *myCamera, myCursor);
-	myLevel = myLevelFactory->LoadLevel(myStartLevelIndex, false);
+	myLevel = myLevelFactory->LoadLevel(myStartLevelIndex, false, myDifficulty);
 
 
 
@@ -248,7 +249,7 @@ void InGameState::ReceiveMessage(const GameStateMessage& aMessage)
 		{
 			runtime = Prism::MemoryTracker::GetInstance()->GetRunTime();
 			Prism::MemoryTracker::GetInstance()->SetRunTime(false);
-			myLevel = myLevelFactory->LoadNextLevel();
+			myLevel = myLevelFactory->LoadNextLevel(myDifficulty);
 			Prism::MemoryTracker::GetInstance()->SetRunTime(runtime);
 		}
 		break;

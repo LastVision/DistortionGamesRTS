@@ -184,6 +184,18 @@ namespace GUI
 			aReader->ReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "onclick"), "id", id);
 			myClickEvent = new OnClickMessage(eOnClickEvent::GAME_START, id);
 		}
+		else if (clickEvent == "game_start_easy")
+		{
+			myClickEvent = new OnClickMessage(eOnClickEvent::GAME_START_EASY);
+		}
+		else if (clickEvent == "game_start_normal")
+		{
+			myClickEvent = new OnClickMessage(eOnClickEvent::GAME_START_NORMAL);
+		}
+		else if (clickEvent == "game_start_hard")
+		{
+			myClickEvent = new OnClickMessage(eOnClickEvent::GAME_START_HARD);
+		}
 		else if (clickEvent == "game_level_select")
 		{
 			myClickEvent = new OnClickMessage(eOnClickEvent::GAME_LEVEL_SELECT);

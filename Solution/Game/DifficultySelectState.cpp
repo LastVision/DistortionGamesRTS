@@ -3,45 +3,42 @@
 #include <GUIManager.h>
 #include "InGameState.h"
 #include <InputWrapper.h>
-#include "LevelSelectState.h"
+#include "DifficultySelectState.h"
 #include <OnClickMessage.h>
 #include <PostMaster.h>
 #include "StateStackProxy.h"
 
-#ifdef USE_DIFFICULTY
-#include "DifficultySelectState.h"
-#endif
-
-LevelSelectState::LevelSelectState()
+DifficultySelectState::DifficultySelectState(int aLevelindex)
+	: myLevelindex(aLevelindex)
 {
 }
 
-LevelSelectState::~LevelSelectState()
+DifficultySelectState::~DifficultySelectState()
 {
 	SAFE_DELETE(myGUIManager);
 	myCursor = nullptr;
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::ON_CLICK, this);
 }
 
-void LevelSelectState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCursor)
+void DifficultySelectState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCursor)
 {
 	PostMaster::GetInstance()->Subscribe(eMessageType::ON_CLICK, this);
 	myIsActiveState = true;
 	myStateStatus = eStateStatus::eKeepState;
 	myStateStack = aStateStackProxy;
 	myCursor = aCursor;
-	myGUIManager = new GUI::GUIManager(myCursor, "Data/Resource/GUI/GUI_level_select.xml", nullptr, nullptr, nullptr, -1);
+	myGUIManager = new GUI::GUIManager(myCursor, "Data/Resource/GUI/GUI_difficulty_select.xml", nullptr, nullptr, nullptr, -1);
 
 	CU::Vector2<int> windowSize = Prism::Engine::GetInstance()->GetWindowSizeInt();
 	OnResize(windowSize.x, windowSize.y);
 }
 
-void LevelSelectState::EndState()
+void DifficultySelectState::EndState()
 {
 
 }
 
-const eStateStatus LevelSelectState::Update(const float& aDeltaTime)
+const eStateStatus DifficultySelectState::Update(const float& aDeltaTime)
 {
 	aDeltaTime;
 
@@ -56,36 +53,41 @@ const eStateStatus LevelSelectState::Update(const float& aDeltaTime)
 	return myStateStatus;
 }
 
-void LevelSelectState::Render()
+void DifficultySelectState::Render()
 {
 	myGUIManager->Render();
 }
 
-void LevelSelectState::ResumeState()
+void DifficultySelectState::ResumeState()
 {
 	PostMaster::GetInstance()->Subscribe(eMessageType::ON_CLICK, this);
 }
 
-void LevelSelectState::OnResize(int aWidth, int aHeight)
+void DifficultySelectState::OnResize(int aWidth, int aHeight)
 {
 	myGUIManager->OnResize(aWidth, aHeight);
 }
 
-void LevelSelectState::ReceiveMessage(const OnClickMessage& aMessage)
+void DifficultySelectState::ReceiveMessage(const OnClickMessage& aMessage)
 {
 	if (myIsActiveState == true)
 	{
 		switch (aMessage.myEvent)
 		{
-		case eOnClickEvent::GAME_START:
+		case eOnClickEvent::GAME_START_EASY:
 			Prism::MemoryTracker::GetInstance()->SetRunTime(false);
 			PostMaster::GetInstance()->UnSubscribe(eMessageType::ON_CLICK, this);
-			
-#ifndef USE_DIFFICULTY
-			myStateStack->PushMainGameState(new InGameState(aMessage.myID, eDifficulty::NORMAL));
-#else
-			myStateStack->PushMainGameState(new DifficultySelectState(aMessage.myID));
-#endif
+			myStateStack->PushMainGameState(new InGameState(myLevelindex, eDifficulty::EASY));
+			break;
+		case eOnClickEvent::GAME_START_NORMAL:
+			Prism::MemoryTracker::GetInstance()->SetRunTime(false);
+			PostMaster::GetInstance()->UnSubscribe(eMessageType::ON_CLICK, this);
+			myStateStack->PushMainGameState(new InGameState(myLevelindex, eDifficulty::NORMAL));
+			break;
+		case eOnClickEvent::GAME_START_HARD:
+			Prism::MemoryTracker::GetInstance()->SetRunTime(false);
+			PostMaster::GetInstance()->UnSubscribe(eMessageType::ON_CLICK, this);
+			myStateStack->PushMainGameState(new InGameState(myLevelindex, eDifficulty::HARD));
 			break;
 		case eOnClickEvent::GAME_QUIT:
 			myStateStatus = eStateStatus::ePopMainState;
