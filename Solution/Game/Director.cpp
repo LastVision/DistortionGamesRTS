@@ -416,3 +416,8 @@ void Director::ResourceGainUnlockCheck()
 		myHasUnlockedResource = myBuilding->GetComponent<BuildingComponent>()->GetHasSpawnedAtLeastOnce();
 	}
 }
+
+const BuildingComponent& Director::GetBuildingComponent() const
+{
+	return *myBuilding->GetComponent<BuildingComponent>();
+}
