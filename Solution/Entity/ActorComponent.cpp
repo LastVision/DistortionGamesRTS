@@ -51,6 +51,7 @@ ActorComponent::ActorComponent(Entity& aEntity, ActorComponentData& aData, const
 	, myMuzzleTimer(0)
 	, myMuzzleTimerShow(0)
 	, myMuzzleFrameTimer(0)
+	, myIsDone(false)
 {
 	myEntity.myMaxSpeed = aData.myMoveSpeed;
 

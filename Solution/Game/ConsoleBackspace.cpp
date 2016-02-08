@@ -7,6 +7,7 @@ ConsoleBackspace::ConsoleBackspace(std::string& aString)
 	, myFirstWait(0.5f)
 	, myRepeatWait(0.15f)
 	, myCurrentTime(0)
+	, myHasReachedFirstWait(false)
 {
 }
 

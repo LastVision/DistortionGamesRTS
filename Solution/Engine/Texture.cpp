@@ -6,6 +6,18 @@
 #include "Texture.h"
 #include "TextureHelper.h"
 
+Prism::Texture::Texture()
+	: myFileName("Not initialized")
+	, myShaderView(nullptr)
+	, myRenderTargetView(nullptr)
+	, myTextureFormat(0)
+	, myDepthStencilView(nullptr)
+	, myDepthStencilShaderView(nullptr)
+	, myTexture(nullptr)
+	, myDepthTexture(nullptr)
+	, myIsDepthTexture(false)
+{
+}
 
 Prism::Texture::~Texture()
 {
@@ -337,6 +349,9 @@ void Prism::Texture::CreateDepthStencilView(float aWidth, float aHeight)
 	tempBufferInfo.MiscFlags = 0;
 
 	HRESULT hr = Engine::GetInstance()->GetDevice()->CreateTexture2D(&tempBufferInfo, NULL, &myDepthTexture);
+	if (FAILED(hr))
+		assert(0);
+
 	Engine::GetInstance()->SetDebugName(myDepthTexture, "Texture::myDepthTexture");
 
 

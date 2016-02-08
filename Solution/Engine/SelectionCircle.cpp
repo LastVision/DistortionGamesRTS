@@ -39,7 +39,7 @@ namespace Prism
 
 		InitBlendState("SelectionCircle::BlendState");
 
-		ZeroMemory(myInitData, sizeof(myInitData));
+		ZeroMemory(myInitData, sizeof(*myInitData));
 
 		CreateVertices();
 

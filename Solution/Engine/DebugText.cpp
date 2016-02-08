@@ -13,6 +13,17 @@
 #include "IndexBufferWrapper.h"
 #include "Surface.h"
 
+Prism::DebugText::DebugText()
+	: BaseModel()
+	, myVertices(16)
+	, myIndices(16)
+	, myFont(nullptr)
+	, myTextWidth(0.f)
+	, myCharSpacing(0.f)
+	, myLastText("Not initialized.")
+{
+}
+
 void Prism::DebugText::Init(DebugFont* aFont)
 {
 	myEffect = EffectContainer::GetInstance()->GetEffect("Data/Resource/Shader/S_effect_fontDebug.fx");
@@ -33,10 +44,7 @@ void Prism::DebugText::Init(DebugFont* aFont)
 	InitSurface("DiffuseTexture", myFont->GetTexture()->GetFileName());
 	InitBlendState("DebugText::BlendState");
 
-	ZeroMemory(myInitData, sizeof(myInitData));
-
-	myVertices.Init(16);
-	myIndices.Init(16);
+	ZeroMemory(myInitData, sizeof(*myInitData));
 }
 
 void Prism::DebugText::Render(const std::string& aString, const CU::Vector2<float>& aPosition

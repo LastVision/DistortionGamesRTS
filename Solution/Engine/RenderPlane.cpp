@@ -35,7 +35,7 @@ namespace Prism
 		InitIndexBuffer();
 		InitBlendState("RenderPlane::BlendState");
 
-		ZeroMemory(myInitData, sizeof(myInitData));
+		ZeroMemory(myInitData, sizeof(*myInitData));
 
 		CreateVertices();
 	}

@@ -15,6 +15,7 @@ SelectionComponent::SelectionComponent(Entity& aEntity, SelectionComponentData& 
 	, mySelectedInstance(nullptr)
 	, myHoveredInstance(nullptr)
 	, myCullingRadius(2.5f)
+	, myPreviousHover(false)
 {
 	Prism::ModelProxy* selected = Prism::ModelLoader::GetInstance()->LoadModel(aComponentData.mySelectedPath
 		, aComponentData.myEffectPath);

@@ -10,6 +10,14 @@
 namespace Prism
 {
 
+	SpotLight::SpotLight()
+		: myRange(0)
+		, myCone(0)
+		, myInstance(nullptr)
+		, myObjectCullingRadius(0)
+	{
+	}
+
 	void SpotLight::Initiate()
 	{
 		myObjectCullingRadius = 10.f;

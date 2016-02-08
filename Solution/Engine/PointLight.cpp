@@ -9,6 +9,12 @@
 
 namespace Prism
 {
+	PointLight::PointLight()
+		: myRange(0)
+		, myInstance(nullptr)
+		, myObjectCullingRadius(0)
+	{
+	}
 
 	void PointLight::Initiate()
 	{

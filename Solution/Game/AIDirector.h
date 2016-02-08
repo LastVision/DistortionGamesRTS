@@ -65,6 +65,15 @@ private:
 	};
 	struct ControlPointAdvisorData
 	{
+		ControlPointAdvisorData()
+			: myResourceSquadSize(0)
+			, myOptimalGunpowerCount(0)
+			, myGunpowderValue(0)
+			, myVictorySquadSize(0)
+			, myOptimalVictoryPoints(0)
+			, myVictoryPointValue(0)
+		{}
+
 		int myResourceSquadSize;
 		int myOptimalGunpowerCount;
 		float myGunpowderValue;
@@ -75,7 +84,16 @@ private:
 	};
 	struct UpgradeAdvisorData
 	{
-		UpgradeAdvisorData():myArtifactHunters(8){}
+		UpgradeAdvisorData()
+			: myGruntsKilledBeforeUpgrade(0)
+			, myRangersKilledBeforeUpgrade(0)
+			, myTanksKilledBeforeUpgrade(0)
+			, myGruntKillCount(0)
+			, myRangerKillCount(0)
+			, myTankKillCount(0)
+			, myUpgradeValue(0)
+			, myArtifactHunters(8)
+		{}
 
 		int myGruntsKilledBeforeUpgrade;
 		int myRangersKilledBeforeUpgrade;
@@ -91,6 +109,11 @@ private:
 	};
 	struct SpawnAdvisorData
 	{
+		SpawnAdvisorData()
+			: myGruntValue(0)
+			, myRangerValue(0)
+			, myTankValue(0)
+		{}
 		float myGruntValue;
 		float myRangerValue;
 		float myTankValue;

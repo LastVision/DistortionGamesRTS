@@ -33,7 +33,6 @@ namespace Prism
 		, mySize(aSize)
 		, myHeight(aHeight)
 		, myOrientation(aOrientation)
-		, myVertexFormat(4)
 		, myPathFinder(nullptr)
 		, myNavMesh(nullptr)
 		, myIceHeight(0.9f)
@@ -149,7 +148,7 @@ namespace Prism
 
 		InitBlendState("Terrain::BlendState");
 
-		ZeroMemory(myInitData, sizeof(myInitData));
+		ZeroMemory(myInitData, sizeof(*myInitData));
 
 		myIce = new Ice(EffectContainer::GetInstance()->GetEffect("Data/Resource/Shader/S_effect_ice.fx")
 			, { 256.f, 256.f }, myIceHeight, aIceInfluence);

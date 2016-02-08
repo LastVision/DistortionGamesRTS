@@ -26,6 +26,7 @@ XMLReader::~XMLReader()
 void XMLReader::OpenDocument(const std::string& aFilePath)
 {
 	delete myDoc;
+	myDoc = nullptr;
 
 	if (myDoc == nullptr)
 	{

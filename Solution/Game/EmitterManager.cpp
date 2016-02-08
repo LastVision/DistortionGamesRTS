@@ -233,6 +233,7 @@ EmitterData::EmitterData(const std::string& aType)
 	: myType(aType)
 	, myCurrentIndex(0)
 	, myFinishedCount(0)
+	, myGroupIsActive(false)
 {
 	for (int i = 0; i < PREALLOCATED_EMITTERGROUP; ++i)
 	{

@@ -173,6 +173,12 @@ namespace Prism
 			soundPos.Position.X = aX;
 			soundPos.Position.Y = aY;
 			soundPos.Position.Z = aZ;
+			soundPos.OrientationFront.X = 0;
+			soundPos.OrientationFront.Y = 0;
+			soundPos.OrientationFront.Z = 0;
+			soundPos.OrientationTop.X = 0;
+			soundPos.OrientationTop.Y = 0;
+			soundPos.OrientationTop.Z = 0;
 			AKRESULT result = AK::SoundEngine::SetListenerPosition(soundPos);
 		}
 

@@ -24,6 +24,7 @@ GrenadeComponent::GrenadeComponent(Entity& anEntity, GrenadeComponentData& aGren
 	, myDelay(0)
 	, myUnits(GC::playerUnitCount)
 	, myHasExploded(true)
+	, myCurrentCooldown(0.f)
 {
 	myPosition = { myEntity.GetPosition().x, 1.f, myEntity.GetPosition().y };
 }
