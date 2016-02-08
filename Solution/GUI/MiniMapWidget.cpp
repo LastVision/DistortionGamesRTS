@@ -183,10 +183,22 @@ namespace GUI
 		if (myIsFullscreen == false)
 		{
 			myCameraFrustum->SetSize(frustumRatio * aNewWindowSize.x, (frustumRatio * aNewWindowSize.x) / 2.f);
+			myArtifactSprite->SetSize((myArtifactSprite->GetSize() / anOldWindowSize.x) * aNewWindowSize.x, ((myArtifactSprite->GetSize() / anOldWindowSize.x) * aNewWindowSize.x) / 2.f);
+			myBaseSprite->SetSize((myBaseSprite->GetSize() / anOldWindowSize.x) * aNewWindowSize.x, ((myBaseSprite->GetSize() / anOldWindowSize.x) * aNewWindowSize.x) / 2.f);
+			myResourcePointSprite->SetSize((myResourcePointSprite->GetSize() / anOldWindowSize.x) * aNewWindowSize.x, ((myResourcePointSprite->GetSize() / anOldWindowSize.x) * aNewWindowSize.x) / 2.f);
+			myVictoryPointSprite->SetSize((myVictoryPointSprite->GetSize() / anOldWindowSize.x) * aNewWindowSize.x, ((myVictoryPointSprite->GetSize() / anOldWindowSize.x) * aNewWindowSize.x) / 2.f);
+			myUnitSprite->SetSize((myUnitSprite->GetSize() / anOldWindowSize.x) * aNewWindowSize.x, ((myUnitSprite->GetSize() / anOldWindowSize.x) * aNewWindowSize.x) / 2.f);
+			myEventSprite->SetSize((myEventSprite->GetSize() / anOldWindowSize.x) * aNewWindowSize.x, ((myEventSprite->GetSize() / anOldWindowSize.x) * aNewWindowSize.x) / 2.f);
 		}
 		else
 		{
 			myCameraFrustum->SetSize(frustumRatio * aNewWindowSize, (frustumRatio * aNewWindowSize) / 2.f);
+			myArtifactSprite->SetSize((myArtifactSprite->GetSize() / anOldWindowSize) * aNewWindowSize, ((myArtifactSprite->GetSize() / anOldWindowSize) * aNewWindowSize) / 2.f);
+			myBaseSprite->SetSize((myBaseSprite->GetSize() / anOldWindowSize) * aNewWindowSize, ((myBaseSprite->GetSize() / anOldWindowSize) * aNewWindowSize) / 2.f);
+			myResourcePointSprite->SetSize((myResourcePointSprite->GetSize() / anOldWindowSize) * aNewWindowSize, ((myResourcePointSprite->GetSize() / anOldWindowSize) * aNewWindowSize) / 2.f);
+			myVictoryPointSprite->SetSize((myVictoryPointSprite->GetSize() / anOldWindowSize) * aNewWindowSize, ((myVictoryPointSprite->GetSize() / anOldWindowSize) * aNewWindowSize) / 2.f);
+			myUnitSprite->SetSize((myUnitSprite->GetSize() / anOldWindowSize) * aNewWindowSize, ((myUnitSprite->GetSize() / anOldWindowSize) * aNewWindowSize) / 2.f);
+			myEventSprite->SetSize((myEventSprite->GetSize() / anOldWindowSize) * aNewWindowSize, ((myEventSprite->GetSize() / anOldWindowSize) * aNewWindowSize) / 2.f);
 		}
 	}
 
