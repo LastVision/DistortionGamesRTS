@@ -112,6 +112,11 @@ namespace GUI
 		{
 			mySelectedType = myUnits[0]->GetType();
 		}
+
+		for (int i = myBuilding.GetQueue().Size(); i < myQueueButtons.Size(); i++)
+		{
+			myQueueButtons[i]->OnMouseExit(); // to prevent buttons getting stuck on hover image
+		}
 	}
 
 	void UnitInfoWidget::Render(const CU::Vector2<float>& aParentPosition)
