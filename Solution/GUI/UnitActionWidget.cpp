@@ -28,18 +28,12 @@ namespace GUI
 		, myFirstSelectedRanger(nullptr)
 		, myFirstSelectedTank(nullptr)
 	{
-		CU::Vector2<float> size;
-		CU::Vector2<float> position;
 		CU::Vector2<float> buttonSize;
-		CU::Vector2<float> buttonPosition;
 
-		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "size"), "x", size.x);
-		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "size"), "y", size.y);
-		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "position"), "x", position.x);
-		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "position"), "y", position.y);
-
-		mySize = size;
-		myPosition = position;
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "size"), "x", mySize.x);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "size"), "y", mySize.y);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "position"), "x", myPosition.x);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "position"), "y", myPosition.y);
 
 		tinyxml2::XMLElement* unitElement = aReader->ForceFindFirstChild(anXMLElement, "unit");
 		tinyxml2::XMLElement* gruntElement = aReader->ForceFindFirstChild(anXMLElement, "grunt");
@@ -47,14 +41,10 @@ namespace GUI
 		tinyxml2::XMLElement* tankElement = aReader->ForceFindFirstChild(anXMLElement, "tank");
 		tinyxml2::XMLElement* buildingElement = aReader->ForceFindFirstChild(anXMLElement, "building");
 
-		myUnitActionButtons = ReadContainer(aReader, unitElement, size);
-		myBuildingActionButtons = ReadContainer(aReader, buildingElement, size);
+		myUnitActionButtons = ReadContainer(aReader, unitElement, mySize);
+		myBuildingActionButtons = ReadContainer(aReader, buildingElement, mySize);
 
 		buttonSize = myUnitActionButtons->GetFirstWidget()->GetSize();
-		buttonPosition = myUnitActionButtons->GetFirstWidget()->GetPosition();
-
-		buttonPosition.x -= (buttonSize.x * 0.5f);
-		buttonPosition.y += (buttonSize.y * 0.5f);
 
 		myGruntActionButtons = ReadContainer(aReader, gruntElement, buttonSize);
 		myRangerActionButtons = ReadContainer(aReader, rangerElement, buttonSize);
