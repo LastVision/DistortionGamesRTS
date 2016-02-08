@@ -410,6 +410,13 @@ void ActorComponent::AttackTarget(Entity* aTarget, float aDelta)
 		{
 			myEntity.SetState(eEntityState::THROW);
 			myEntity.GetComponent<GrenadeComponent>()->ThrowGrenade(aTarget->GetOrientation().GetPos());
+			if (FogOfWarMap::GetInstance()->IsVisible(myEntity.GetPosition()) == true && rand() % 2 == 0)
+			{
+				Prism::Audio::AudioInterface::GetInstance()->PostEvent("Grunt_ThrowGrenade"
+					, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+
+				PostMaster::GetInstance()->SendMessage(InWorldTextMessage("Grenade!", myEntity.GetPosition(), { 1.f, 0.88f, 0.f, 1.f }));
+			}
 		}
 		else
 		{

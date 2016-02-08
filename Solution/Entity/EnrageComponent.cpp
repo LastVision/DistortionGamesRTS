@@ -6,6 +6,7 @@
 #include "EnrageComponent.h"
 #include "HealthComponent.h"
 #include "Intersection.h"
+#include "InWorldTextMessage.h"
 #include "Postmaster.h"
 #include "PollingStation.h"
 #include "PromotionComponent.h"
@@ -85,7 +86,7 @@ void EnrageComponent::Activate()
 	{
 		HealthComponent* health = myEntity.GetComponent<HealthComponent>();
 		ActorComponent* actor = myEntity.GetComponent<ActorComponent>();
-
+		PostMaster::GetInstance()->SendMessage(InWorldTextMessage("Enrage!", myEntity.GetPosition(), { 1.f, 0.88f, 0.f, 1.f }));
 
 		myIsActive = true;
 		myCurrentDuration = myData.myDuration;
