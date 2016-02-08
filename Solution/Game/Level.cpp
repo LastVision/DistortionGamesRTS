@@ -172,7 +172,7 @@ void Level::Render(Prism::Camera& aCamera)
 {
 	Prism::Engine::GetInstance()->SetClearColor({ 0.2f, 0.2f, 0.2f, 1.f });
 
-	myRenderer->ProcessShadow(myShadowLight, myScene);
+	//myRenderer->ProcessShadow(myShadowLight, myScene);
 
 	if (myShowFogOfWar == true)
 	{
