@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "../Game/GameDefines.h"
 #include "BarWidget.h"
 #include "ButtonWidget.h"
 #include <Engine.h>
@@ -111,7 +112,7 @@ namespace GUI
 
 		CU::Vector2<float> timerSize(myQueueButtons[0]->GetSize().x * float(abortButtonsPerRow), myQueueButtons[0]->GetSize().y / 2.f);
 
-		myBuildingTimer = new BarWidget(myBuilding.GetMaxBuildTime(), myBuilding.GetCurrentBuildTime(), timerSize, { 0.f, 0.f, 1.f, 1.f });
+		myBuildingTimer = new BarWidget(myBuilding.GetMaxBuildTime(), myBuilding.GetCurrentBuildTime(), timerSize, PLAYER_COLOR);
 		myActiveQueueOverlay = Prism::ModelLoader::GetInstance()->LoadSprite(activeQueueOverlaySpritePath
 			, myQueueButtons[0]->GetSize(), myQueueButtons[0]->GetSize() / 2.f); 
 	}

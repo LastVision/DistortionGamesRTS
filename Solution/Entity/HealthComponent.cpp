@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+#include "../Game/GameDefines.h"
 #include "AnimationComponent.h"
 #include <AudioInterface.h>
 #include "Camera.h"
@@ -31,7 +32,7 @@ HealthComponent::HealthComponent(Entity& aEntity, HealthComponentData& aData)
 	switch (myEntity.GetOwner())
 	{
 	case eOwnerType::PLAYER:
-		color = { 0.f, 0.35f, 0.75f, 1.f };
+		color = PLAYER_COLOR;
 		break;
 	case eOwnerType::ENEMY:
 		color = { 1.f, 0.f, 0.f, 1.f };
