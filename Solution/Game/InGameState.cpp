@@ -194,6 +194,8 @@ void InGameState::Render()
 	VTUNE_EVENT_BEGIN(VTUNE::GAME_RENDER);
 
 	myLevel->Render(*myCamera);
+	Prism::DebugDrawer::GetInstance()->RenderLinesToScreen(*myCamera); //Have to be last
+
 
 	VTUNE_EVENT_END();
 }

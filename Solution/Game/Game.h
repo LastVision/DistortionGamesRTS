@@ -32,8 +32,6 @@ private:
 	void operator=(Game& aApp) = delete;
 
 	GUI::Cursor* myCursor;
-	Prism::Camera* myCamera;
-	CU::Matrix44<float> myCameraOrientation;
 
 	HWND* myWindowHandler;
 

@@ -55,7 +55,8 @@ namespace Prism
 		void RenderText(const char* aName, int aValue);
 		void RenderText(const char* aName, const std::string& aValue);
 
-		void Render(const Camera& aCamera);
+		void RenderTextToScreen();
+		void RenderLinesToScreen(const Camera& aCamera);
 
 	private:
 
