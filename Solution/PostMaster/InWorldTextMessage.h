@@ -5,10 +5,10 @@
 
 struct InWorldTextMessage : public Message
 {
-	InWorldTextMessage(const std::string aText, const CU::Vector3<float>& aPosition
+	InWorldTextMessage(const std::string& aText, const CU::Vector3<float>& aPosition
 		, const CU::Vector4<float>& aColor = { 1.f, 1.f, 1.f, 1.f });
 
-	InWorldTextMessage(const std::string aText, const CU::Vector2<float>& aPosition
+	InWorldTextMessage(const std::string& aText, const CU::Vector2<float>& aPosition
 		, const CU::Vector4<float>& aColor = { 1.f, 1.f, 1.f, 1.f });
 
 	const CU::Vector3<float> myPosition;
@@ -16,7 +16,7 @@ struct InWorldTextMessage : public Message
 	const std::string myText;
 };
 
-inline InWorldTextMessage::InWorldTextMessage(const std::string aText, const CU::Vector3<float>& aPosition
+inline InWorldTextMessage::InWorldTextMessage(const std::string& aText, const CU::Vector3<float>& aPosition
 	, const CU::Vector4<float>& aColor)
 	: Message(eMessageType::IN_WORLD_TEXT)
 	, myPosition(aPosition)
@@ -25,7 +25,7 @@ inline InWorldTextMessage::InWorldTextMessage(const std::string aText, const CU:
 {
 }
 
-inline InWorldTextMessage::InWorldTextMessage(const std::string aText, const CU::Vector2<float>& aPosition
+inline InWorldTextMessage::InWorldTextMessage(const std::string& aText, const CU::Vector2<float>& aPosition
 	, const CU::Vector4<float>& aColor)
 	: Message(eMessageType::IN_WORLD_TEXT)
 	, myPosition({ aPosition.x, 0.f, aPosition.y })

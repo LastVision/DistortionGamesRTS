@@ -7,6 +7,8 @@
 Prism::DirectX::DirectX(HWND& aHwnd, SetupInfo& aSetupInfo)
 	: myHWND(aHwnd)
 	, mySetupInfo(aSetupInfo)
+	, myDebugInterface(nullptr)
+	, myInfoQueue(nullptr)
 {
 	D3DSetup();
 }
@@ -341,7 +343,6 @@ bool Prism::DirectX::D3DBackbufferSetup(int aWidth, int aHeight)
 
 
 	//BackbufferDepthstencil
-	HRESULT hr = S_OK;
 	D3D11_TEXTURE2D_DESC depthBufferInfo;
 	ZeroMemory(&depthBufferInfo, sizeof(depthBufferInfo));
 
@@ -354,7 +355,8 @@ bool Prism::DirectX::D3DBackbufferSetup(int aWidth, int aHeight)
 	depthBufferInfo.Usage = D3D11_USAGE_DEFAULT;
 	depthBufferInfo.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 
-	hr = myDevice->CreateTexture2D(&depthBufferInfo, NULL, &myDepthbufferTexture);
+	
+	HRESULT hr = myDevice->CreateTexture2D(&depthBufferInfo, NULL, &myDepthbufferTexture);
 	if (FAILED(hr))
 	{
 		return false;
@@ -397,8 +399,6 @@ bool Prism::DirectX::D3DViewPortSetup(int aWidth, int aHeight)
 
 bool Prism::DirectX::D3DEnabledStencilStateSetup()
 {
-	HRESULT hr = S_OK;
-
 	D3D11_DEPTH_STENCIL_DESC  stencilDesc;
 	ZeroMemory(&stencilDesc, sizeof(stencilDesc));
 
@@ -417,7 +417,7 @@ bool Prism::DirectX::D3DEnabledStencilStateSetup()
 	stencilDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
 	stencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
 
-	hr = myDevice->CreateDepthStencilState(&stencilDesc, &myEnabledDepthStencilState);
+	HRESULT hr = myDevice->CreateDepthStencilState(&stencilDesc, &myEnabledDepthStencilState);
 	if (FAILED(hr))
 	{
 		return false;
@@ -428,8 +428,6 @@ bool Prism::DirectX::D3DEnabledStencilStateSetup()
 
 bool Prism::DirectX::D3DDisabledStencilStateSetup()
 {
-	HRESULT hr = S_OK;
-
 	D3D11_DEPTH_STENCIL_DESC  stencilDesc;
 	ZeroMemory(&stencilDesc, sizeof(stencilDesc));
 	
@@ -448,7 +446,7 @@ bool Prism::DirectX::D3DDisabledStencilStateSetup()
 	stencilDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
 	stencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
 
-	hr = myDevice->CreateDepthStencilState(&stencilDesc, &myDisabledDepthStencilState);
+	HRESULT hr = myDevice->CreateDepthStencilState(&stencilDesc, &myDisabledDepthStencilState);
 	if (FAILED(hr))
 	{
 		return false;

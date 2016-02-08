@@ -38,6 +38,13 @@ InGameState::InGameState(int aLevelIndex, eDifficulty aDifficulty)
 	, myStartLevelIndex(aLevelIndex)
 	, myIsFirstFrame(true)
 	, myDifficulty(aDifficulty)
+	, myLevel(nullptr)
+	, myLevelFactory(nullptr)
+	, myGUIManager(nullptr)
+	, myMessageScreen(nullptr)
+	, myIsComplete(false)
+	, myIsShuttingDown(false)
+	, myCinematicIndex(0)
 {
 	myIsActiveState = false;
 	myIsPlayerCinematic = false;
@@ -299,7 +306,6 @@ void InGameState::ReceiveMessage(const MoveCameraMessage& aMessage)
 	{
 		DL_ASSERT("UNKNOWN HANDLINGTYPE OF CAMERAMOVEMENT");
 	}
-	float offset = 50.f;
 
 	if (myLevel->GetPlayer()->GetSelectedAction() == eSelectedAction::ATTACK_MOVE)
 	{
@@ -307,6 +313,7 @@ void InGameState::ReceiveMessage(const MoveCameraMessage& aMessage)
 	}
 	else
 	{
+		float offset = 50.f;
 		position.y -= offset;
 		myCamera->SetPosition({ position.x, myCamera->GetOrientation().GetPos().y, position.y });
 		CapCameraToTerrain();

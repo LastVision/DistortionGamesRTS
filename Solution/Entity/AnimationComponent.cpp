@@ -21,12 +21,14 @@ AnimationComponent::AnimationComponent(Entity& aEntity, AnimationComponentData& 
 	, myInstance(nullptr)
 	, myCullingRadius(10.f)
 	, myTerrain(aTerrain)
+	, myPrevEntityState(myEntity.GetState())
 {
 #ifndef BOX_MODE
 	Prism::ModelProxy* model = Prism::ModelLoader::GetInstance()->LoadModelAnimated(aComponentData.myModelPath
 		, aComponentData.myEffectPath);
 
 	myInstance = new Prism::Instance(*model, myEntity.myOrientation, myEntity.GetOctreeType(), myCullingRadius);
+	myInstance->ActivateAlbedo(myEntity.GetOwner());
 
 	int animations = static_cast<int>(eEntityState::_COUNT);
 

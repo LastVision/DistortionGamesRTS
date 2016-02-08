@@ -31,7 +31,6 @@ namespace Prism
 		const CU::Vector2<float> mySize;
 		const float myHeight;
 
-		CU::GrowingArray<D3D11_INPUT_ELEMENT_DESC*> myVertexFormat;
 		VertexIndexWrapper* myIndexBaseData;
 		VertexDataWrapper* myVertexBaseData;
 		CU::GrowingArray<IceVertex> myVertices;

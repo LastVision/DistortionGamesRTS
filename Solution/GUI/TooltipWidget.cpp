@@ -15,6 +15,7 @@ namespace GUI
 		, myGunpowderSprite(nullptr)
 		, mySupplySprite(nullptr)
 		, myPlayer(aPlayer)
+		, myActiveWidget(nullptr)
 	{
 		mySize = { 0.f, 0.f};
 		myPosition = { 0.f, 0.f };

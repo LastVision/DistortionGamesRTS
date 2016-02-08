@@ -5,6 +5,7 @@
 #include <ModelLoader.h>
 
 StateStack::StateStack()
+	: myCursor(nullptr)
 {
 	myMainIndex = -1;
 	mySubIndex = -1;

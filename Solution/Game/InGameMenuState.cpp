@@ -8,6 +8,7 @@
 #include "HelpState.h"
 
 InGameMenuState::InGameMenuState()
+	: myGUIManager(nullptr)
 {
 }
 

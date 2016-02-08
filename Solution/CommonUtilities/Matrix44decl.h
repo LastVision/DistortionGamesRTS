@@ -38,7 +38,7 @@ namespace CU
 		CU::Vector3<T> GetUp() const;
 		CU::Vector3<T> GetRight() const;
 
-		inline Matrix44<T> operator=(const Matrix44<T> aMatrix)
+		inline Matrix44<T> operator=(const Matrix44<T>& aMatrix)
 		{
 			for (unsigned char i = 0; i < 16; ++i)
 			{

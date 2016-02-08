@@ -14,6 +14,9 @@ namespace Prism
 		PathFinderAStar::PathFinderAStar(NavMesh* aNavMesh)
 			: myNavMesh(aNavMesh)
 			, myHeuristicMult(10.f)
+			, myStart(nullptr)
+			, myEnd(nullptr)
+			, myPathLength(0.f)
 		{
 		}
 

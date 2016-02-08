@@ -33,6 +33,8 @@
 
 Game::Game()
 	: myLockMouse(true)
+	, myWindowHandler(nullptr)
+	, myIsComplete(false)
 #ifdef RELEASE_BUILD
 	, myShowSystemInfo(false)
 #else

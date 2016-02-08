@@ -53,6 +53,7 @@ namespace Prism
 			return(myImage);
 		}
 
+		fclose(fp);
 		return(NULL);
 	}
 

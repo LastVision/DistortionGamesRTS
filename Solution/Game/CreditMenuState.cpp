@@ -7,6 +7,7 @@
 #include "InGameState.h"
 
 CreditMenuState::CreditMenuState()
+	: myGUIManager(nullptr)
 {
 }
 

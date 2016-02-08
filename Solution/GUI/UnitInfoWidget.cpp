@@ -28,6 +28,7 @@ namespace GUI
 		, myTextScale(1.f)
 		, myEnemyColor(0.35f, 0.35f, 0.35f, 1.f)
 		, myQueueButtons(aPlayer->GetBuildingComponent().GetMaxQueue())
+		, myIsUnitSelected(false)
 	{
 		std::string gruntUnitPath = "";
 		std::string rangerUnitPath = "";

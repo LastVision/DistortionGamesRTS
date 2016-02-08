@@ -22,6 +22,11 @@ EnrageComponent::EnrageComponent(Entity& anEntity, EnrageComponentData& aData)
 	, myUnits(8)
 	, myRadius(aData.myRadius)
 	, myUnitActivationCount(aData.myActivationUnitCount)
+	, myOriginalArmor(0.f)
+	, myOriginalAttackDamage(0.f)
+	, myOriginalRechargeTime(0.f)
+	, myOriginalAttackRange2(0.f)
+	, myOriginalMovementSpeed(0.f)
 {
 }
 

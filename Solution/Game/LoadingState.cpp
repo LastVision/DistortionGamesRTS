@@ -7,6 +7,7 @@
 
 
 LoadingState::LoadingState()
+	: myRotatingThingScale(1.f)
 {
 	CU::Vector2<float> windowSize = CU::Vector2<float>(float(Prism::Engine::GetInstance()->GetWindowSize().x)
 		, float(Prism::Engine::GetInstance()->GetWindowSize().y));
@@ -24,7 +25,7 @@ LoadingState::LoadingState()
 	//myText->SetPosition(windowSize * 0.5f);
 	Prism::ModelLoader::GetInstance()->UnPause();
 
-	myFinishedTextAlpha = false;
+	myFinishedTextAlpha = 0.f;
 	myFinishedTextFadeIn = false;
 	myIsDone = false;
 }
