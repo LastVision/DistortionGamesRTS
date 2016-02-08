@@ -118,6 +118,7 @@ enum class eComponentType
 	SELECTION,
 	SOUND,
 	PROMOTION,
+	SHADOWBLOB,
 	_COUNT,
 };
 

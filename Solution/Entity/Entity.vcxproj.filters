@@ -145,6 +145,9 @@
       <Filter>Component\Promotion</Filter>
     </ClCompile>
     <ClCompile Include="EntityCommandData.cpp" />
+    <ClCompile Include="ShadowBlobComponent.cpp">
+      <Filter>Component\Graphic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -274,5 +277,11 @@
       <Filter>Notes</Filter>
     </ClInclude>
     <ClInclude Include="EntityCommandData.h" />
+    <ClInclude Include="ShadowBlobComponent.h">
+      <Filter>Component\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="ShadowBlobComponentData.h">
+      <Filter>EntityFactory\EntityData\ComponentData</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

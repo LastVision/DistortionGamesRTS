@@ -27,7 +27,9 @@ namespace Prism
 		, myInited(false)
 		, myParent(nullptr)
 		, myVertexCount(0)
-		, myMaxInstances(2048)
+		, myMaxInstances(8192)
+		, myInstancingMatrixBuffer(nullptr)
+		, myInstancingScaleBuffer(nullptr)
 	{
 		myInstancingBufferDesc = new D3D11_BUFFER_DESC();
 	}
