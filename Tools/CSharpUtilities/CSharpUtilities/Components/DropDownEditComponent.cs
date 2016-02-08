@@ -13,8 +13,8 @@ namespace CSharpUtilities.Components
         private Label myLabel = new Label();
         private ComboBox myDropDown = new ComboBox();
 
-        public DropDownComponent(Point aLocation, Size aSize, string aText, string aPanelName)
-            : base(aLocation, aSize, aText, aPanelName)
+        public DropDownComponent(Point aLocation, Size aSize, IO.ComponentIO aIO, string aPanelName)
+            : base(aLocation, aSize, aIO, aPanelName)
         {
 
         }
