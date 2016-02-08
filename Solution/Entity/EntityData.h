@@ -13,6 +13,7 @@
 #include "SelectionComponentData.h"
 #include "TriggerComponentData.h"
 #include "TotemComponentData.h"
+#include "ShadowBlobComponentData.h"
 #include "SoundComponentData.h"
 
 struct EntityData
@@ -30,6 +31,7 @@ struct EntityData
 	EnrageComponentData myEnrageData;
 	GrenadeComponentData myGrenadeData;
 	SelectionComponentData mySelectionData;
+	ShadowBlobComponentData myShadowBlobData;
 	SoundComponentData mySoundData;
 	PromotionComponentData myPromotionData;
 

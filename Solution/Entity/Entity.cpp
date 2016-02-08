@@ -13,6 +13,7 @@
 #include "PromotionComponent.h"
 #include <Scene.h>
 #include "SelectionComponent.h"
+#include "ShadowBlobComponent.h"
 #include "SoundComponent.h"
 #include <Terrain.h>
 #include "TotemComponent.h"
@@ -39,6 +40,20 @@ Entity::Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& a
 
 	myOrientation.SetPos(aStartPosition);
 	//aTerrain.CalcEntityHeight(myOrientation);
+
+	//if (aEntityData.myActorData.myExistsInEntity == true)
+	if (false)
+	{
+		aEntityData.myShadowBlobData.myExistsInEntity = true;
+		aEntityData.myShadowBlobData.myEffectPath = "Data/Resource/Shader/S_effect_selection.fx";
+		aEntityData.myShadowBlobData.myScale = 1.f;
+		aEntityData.myShadowBlobData.myShadowBlobPath = "Data/Resource/Model/SM_shadowBlob.fbx";
+	}
+
+	if (aEntityData.myShadowBlobData.myExistsInEntity == true)
+	{
+		myComponents[static_cast<int>(eComponentType::SHADOWBLOB)] = new ShadowBlobComponent(*this, aEntityData.myShadowBlobData);
+	}
 
 	if (aEntityData.myAnimationData.myExistsInEntity == true)
 	{
@@ -222,6 +237,10 @@ void Entity::AddToScene()
 	{
 		myScene.AddInstance(GetComponent<AnimationComponent>()->GetInstance());
 	}
+	if (GetComponent<ShadowBlobComponent>() != nullptr && GetComponent<ShadowBlobComponent>()->GetShadowBlob() != nullptr)
+	{
+		myScene.AddInstance(GetComponent<ShadowBlobComponent>()->GetShadowBlob());
+	}
 	if (GetComponent<SelectionComponent>() != nullptr && GetComponent<SelectionComponent>()->GetSelectedInstance() != nullptr
 		&& GetComponent<SelectionComponent>()->GetHoveredInstance() != nullptr)
 	{
@@ -249,6 +268,10 @@ void Entity::RemoveFromScene()
 	else if (GetComponent<AnimationComponent>() != nullptr)
 	{
 		myScene.RemoveInstance(GetComponent<AnimationComponent>()->GetInstance());
+	}
+	if (GetComponent<ShadowBlobComponent>() != nullptr && GetComponent<ShadowBlobComponent>()->GetShadowBlob() != nullptr)
+	{
+		myScene.RemoveInstance(GetComponent<ShadowBlobComponent>()->GetShadowBlob());
 	}
 	if (GetComponent<SelectionComponent>() != nullptr)
 	{
