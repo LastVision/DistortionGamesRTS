@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include <AudioInterface.h>
 #include <Camera.h>
 #include "CreditMenuState.h"
 #include <FadeMessage.h>
@@ -75,7 +76,7 @@ void MainMenuState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aC
 
 void MainMenuState::EndState()
 {
-	
+
 }
 
 const eStateStatus MainMenuState::Update(const float& aDeltaTime)
@@ -141,6 +142,7 @@ void MainMenuState::Render()
 void MainMenuState::ResumeState()
 {
 	PostMaster::GetInstance()->Subscribe(eMessageType::ON_CLICK, this);
+	Prism::Audio::AudioInterface::GetInstance()->PostEvent("Play_Menu", 0);
 }
 
 void MainMenuState::OnResize(int aWidth, int aHeight)

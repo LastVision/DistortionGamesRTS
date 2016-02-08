@@ -566,11 +566,6 @@ void PlayerDirector::ReceiveMessage(const SelectUnitMessage& aMessage)
 	}
 }
 
-const BuildingComponent& PlayerDirector::GetBuildingComponent() const
-{
-	return *myBuilding->GetComponent<BuildingComponent>();
-}
-
 CU::Vector3<float> PlayerDirector::GetCameraMoveVector() const
 {
 	return myGUIManager->CalcCameraMovement();

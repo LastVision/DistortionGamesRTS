@@ -63,6 +63,7 @@ Level::Level(const Prism::Camera& aCamera, Prism::Terrain* aTerrain, GUI::Cursor
 	FogOfWarMap::GetInstance()->SetFogOfWarHelperTexture(myFogOfWarHelper->GetTexture());
 
 	Prism::Audio::AudioInterface::GetInstance()->PostEvent("Play_Ambience", 0);
+
 }
 
 Level::~Level()
@@ -88,6 +89,7 @@ Level::~Level()
 	LUA::ScriptSystem::GetInstance()->Destroy();
 
 	Prism::Audio::AudioInterface::GetInstance()->PostEvent("Stop_Ambience", 0);
+	Prism::Audio::AudioInterface::GetInstance()->PostEvent("Stop_Music", 0);
 }
 
 void Level::LoadTutorial(const Prism::Camera& aCamera, const std::string& aTutorialPath)
@@ -111,6 +113,8 @@ bool Level::Update(float aDeltaTime, Prism::Camera& aCamera)
 		{
 			points[i]->GetComponent<TriggerComponent>()->StartSound();
 		}
+		Prism::Audio::AudioInterface::GetInstance()->PostEvent("Stop_Loading", 0);
+		Prism::Audio::AudioInterface::GetInstance()->PostEvent("Play_Music", 0);
 		myIsSecondFrame = true;
 	}
 

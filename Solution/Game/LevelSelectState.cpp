@@ -85,7 +85,7 @@ void LevelSelectState::ReceiveMessage(const OnClickMessage& aMessage)
 #ifndef USE_DIFFICULTY
 			myStateStack->PushMainGameState(new InGameState(aMessage.myID, eDifficulty::NORMAL));
 #else
-			myStateStack->PushMainGameState(new DifficultySelectState(aMessage.myID));
+			myStateStack->PushSubGameState(new DifficultySelectState(aMessage.myID));
 #endif
 			break;
 		case eOnClickEvent::GAME_QUIT:
