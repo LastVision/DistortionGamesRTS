@@ -502,7 +502,7 @@ namespace Prism
 
 	void Model::InitInstancingBuffers()
 	{
-		ZeroMemory(myInstancingBufferDesc, sizeof(myInstancingBufferDesc));
+		ZeroMemory(myInstancingBufferDesc, sizeof(*myInstancingBufferDesc));
 		myInstancingBufferDesc->Usage = D3D11_USAGE_DYNAMIC;
 		myInstancingBufferDesc->BindFlags = D3D11_BIND_VERTEX_BUFFER;
 		myInstancingBufferDesc->CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;

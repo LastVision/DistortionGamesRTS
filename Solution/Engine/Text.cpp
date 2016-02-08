@@ -27,7 +27,7 @@ Prism::Text::Text(const Font& aFont)
 	InitSurface("DiffuseTexture", myFont.GetTexture()->GetFileName());
 	InitBlendState("Text::BlendState");
 
-	ZeroMemory(myInitData, sizeof(myInitData));
+	ZeroMemory(myInitData, sizeof(*myInitData));
 
 	myVertices.Init(1024);
 	myIndices.Init(1024);

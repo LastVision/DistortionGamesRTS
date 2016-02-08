@@ -7,6 +7,7 @@
 #include "PostMaster.h"
 
 HelpState::HelpState()
+	: myGUIManager(nullptr)
 {
 }
 

@@ -26,6 +26,8 @@ namespace Prism
 		, myInited(false)
 		, myParent(nullptr)
 		, myVertexCount(0)
+		, myTransformation(nullptr)
+		, myAnimation(nullptr)
 	{
 	}
 

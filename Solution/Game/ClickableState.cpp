@@ -10,6 +10,8 @@
 ClickableState::ClickableState(const float aTime, Prism::Text* aClickableText)
 	: myTimer(aTime)
 	, myClickableText(aClickableText)
+	, myCurrentTime(0)
+	, myGUIManager(nullptr)
 {
 	
 }

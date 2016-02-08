@@ -39,7 +39,7 @@ Prism::Sprite::Sprite(const std::string& aFileName, const CU::Vector2<float>& aS
 	InitSurface("DiffuseTexture", myFileName);
 	InitBlendState("Sprite::BlendState");
 
-	ZeroMemory(myInitData, sizeof(myInitData));
+	ZeroMemory(myInitData, sizeof(*myInitData));
 
 	CreateVertices();
 }
@@ -91,7 +91,7 @@ Prism::Sprite::Sprite(ID3D11Texture2D* aTexture, const CU::Vector2<float>& aSpri
 	InitIndexBuffer();
 	InitBlendState("Sprite::BlendState");
 
-	ZeroMemory(myInitData, sizeof(myInitData));
+	ZeroMemory(myInitData, sizeof(*myInitData));
 
 	CreateVertices();
 }

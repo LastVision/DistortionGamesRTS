@@ -90,6 +90,7 @@ inline EmitterMessage::EmitterMessage(const std::string& aParticleType, const CU
 	, mySize({ 0.f, 0.f, 0.f })
 	, myRadius(0.f)
 	, myShouldAlwaysShow(false)
+	, myCamera(nullptr)
 {
 }
 
@@ -102,6 +103,7 @@ inline EmitterMessage::EmitterMessage(const std::string& aParticleType, const CU
 	, myRadius(aRadius)
 	, mySize({ 0.f, 0.f, 0.f })
 	, myShouldAlwaysShow(false)
+	, myCamera(nullptr)
 {
 }
 
@@ -114,5 +116,6 @@ inline EmitterMessage::EmitterMessage(const std::string& aParticleType, const CU
 	, mySize(aSize)
 	, myRadius(0.f)
 	, myShouldAlwaysShow(false)
+	, myCamera(nullptr)
 {
 }

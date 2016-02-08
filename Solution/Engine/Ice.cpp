@@ -62,7 +62,7 @@ namespace Prism
 
 		InitBlendState("Ice::BlendState");
 
-		ZeroMemory(myInitData, sizeof(myInitData));
+		ZeroMemory(myInitData, sizeof(*myInitData));
 
 		CreateVertices();
 

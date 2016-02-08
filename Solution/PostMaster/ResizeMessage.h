@@ -11,6 +11,6 @@ struct ResizeMessage : public Message
 
 inline ResizeMessage::ResizeMessage(int aWidth, int aHeight)
 	: Message(eMessageType::RESIZE)
+	, myResolution(aWidth, aHeight)
 {
-	myResolution = { aWidth, aHeight };
 }

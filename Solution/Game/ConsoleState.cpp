@@ -18,6 +18,13 @@ ConsoleState::ConsoleState(bool& aShouldReOpenConsole)
 	, myCurrentSuggestion(0)
 	, mySuggestionString("")
 	, myHistoryMode(false)
+	, myBackground(nullptr)
+	, myMarker(nullptr)
+	, mySuggestionBox(nullptr)
+	, mySuggestionText(nullptr)
+	, myText(nullptr)
+	, myRenderTime(0)
+	, myMarkerBlinker(0)
 {
 }
 

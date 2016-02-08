@@ -29,7 +29,6 @@ public:
 	void OnResize(int aWidth, int aHeight);
 	void Clear();
 
-	void SetInputWrapper(CU::InputWrapper* anInputWrapper);
 	void SetCursor(GUI::Cursor* aCursor);
 
 private:
@@ -43,14 +42,8 @@ private:
 	int myMainIndex;
 	int mySubIndex;
 
-	CU::InputWrapper* myInputWrapper;
 	StateStackProxy* myStateStackProxy;
 };
-
-inline void StateStack::SetInputWrapper(CU::InputWrapper* anInputWrapper)
-{
-	myInputWrapper = anInputWrapper;
-}
 
 inline void StateStack::SetCursor(GUI::Cursor* aCursor)
 {

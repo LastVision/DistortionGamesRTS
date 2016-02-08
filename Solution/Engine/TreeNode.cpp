@@ -35,8 +35,18 @@ Prism::TreeNode::TreeNode(const CU::Vector3<float>& aPosition, float aHalfWidth,
 	, myLooseness(1.f)
 	, myObjectsDynamic(64)
 	, myObjectsStatic(256)
+	, myContainsObject(false)
 {
 	myLooseWidth = myHalfWidth * myLooseness;
+
+	myChildren[0] = nullptr;
+	myChildren[1] = nullptr;
+	myChildren[2] = nullptr;
+	myChildren[3] = nullptr;
+	myChildren[4] = nullptr;
+	myChildren[5] = nullptr;
+	myChildren[6] = nullptr;
+	myChildren[7] = nullptr;
 }
 
 Prism::TreeNode::~TreeNode()

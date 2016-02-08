@@ -22,6 +22,9 @@ BuildingComponent::BuildingComponent(Entity& aEntity, BuildingComponentData& aDa
 	, myUnitsInMineField(8)
 	, myUpgradesInQueue(aData.myUpgradesInQueue)
 	, myBuildQueue(aData.myMaxQueue)
+	, myCurrentBuildTime(0.f)
+	, myIgnoreBuildTime(false)
+	, myHasSpawnedAtLeastOnce(false)
 {
 	for (int i = 0; i < 3; ++i)
 	{

@@ -10,6 +10,7 @@
 
 DifficultySelectState::DifficultySelectState(int aLevelindex)
 	: myLevelindex(aLevelindex)
+	, myGUIManager(nullptr)
 {
 }
 

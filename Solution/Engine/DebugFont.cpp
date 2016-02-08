@@ -5,6 +5,7 @@
 
 Prism::DebugFont::DebugFont()
 	: myCharSize(32.f, 32.f)
+	, myTexture(nullptr)
 {
 }
 

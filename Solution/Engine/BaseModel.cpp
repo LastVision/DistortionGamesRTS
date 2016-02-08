@@ -14,6 +14,7 @@ namespace Prism
 	BaseModel::BaseModel()
 		: myTechniqueName("Render")
 		, myVertexFormat(8)
+		, myVertexLayout(nullptr)
 	{
 		myVertexBufferDesc = new D3D11_BUFFER_DESC();
 		myIndexBufferDesc = new D3D11_BUFFER_DESC();
@@ -199,7 +200,7 @@ namespace Prism
 		myVertexBuffer->myNumberOfBuffers = 1;
 
 
-		ZeroMemory(myVertexBufferDesc, sizeof(myVertexBufferDesc));
+		ZeroMemory(myVertexBufferDesc, sizeof(*myVertexBufferDesc));
 		myVertexBufferDesc->Usage = static_cast<D3D11_USAGE>(aBufferUsage);
 		myVertexBufferDesc->BindFlags = D3D11_BIND_VERTEX_BUFFER;
 		myVertexBufferDesc->CPUAccessFlags = aCPUUsage;
@@ -214,7 +215,7 @@ namespace Prism
 		myIndexBuffer->myByteOffset = 0;
 
 
-		ZeroMemory(myIndexBufferDesc, sizeof(myIndexBufferDesc));
+		ZeroMemory(myIndexBufferDesc, sizeof(*myIndexBufferDesc));
 		myIndexBufferDesc->Usage = D3D11_USAGE_IMMUTABLE;
 		myIndexBufferDesc->BindFlags = D3D11_BIND_INDEX_BUFFER;
 		myIndexBufferDesc->CPUAccessFlags = 0;
