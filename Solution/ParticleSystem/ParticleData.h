@@ -28,7 +28,7 @@ struct GraphicalParticle
 		: myAlpha(0.0f)
 		, mySize(0.0f)
 		, myLifeTime(10.0f)
-		, myRotation(0.f)
+		, myRotation(0.0f)
 	{
 	}
 
@@ -47,9 +47,10 @@ struct GraphicalParticle
 struct LogicalParticle
 {
 	LogicalParticle()
-		: mySpeed(0)
+		: mySpeed(0.0f)
 		, myIsAlive(false)
-		, myRotation(0)
+		, myRotation(0.0f)
+		, myRotationDelta(0.0f)
 	{
 	}
 	~LogicalParticle()

@@ -95,8 +95,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPTSTR, int aNumberCommands)
 	globalPreviousFullscreenState = Prism::Engine::GetInstance()->IsFullscreen();
 
 #ifdef RELEASE_BUILD
-	Prism::Engine::GetInstance()->SetFullscreen(true);
-	globalPreviousFullscreenState = true;
+	Prism::Engine::GetInstance()->SetFullscreen(false);
+	globalPreviousFullscreenState = false;
 #endif
 
 	MSG msg;

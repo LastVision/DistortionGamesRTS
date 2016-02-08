@@ -11,7 +11,7 @@
 #include "PromotionComponent.h"
 #include "SoundComponent.h"
 #include <TriggerMessage.h>
-
+#include <EmitterMessage.h>
 EnrageComponent::EnrageComponent(Entity& anEntity, EnrageComponentData& aData)
 	: Component(anEntity)
 	, myCurrentCooldown(0.f)
@@ -76,6 +76,7 @@ void EnrageComponent::Update(float aDeltaTime)
 			actor->SetRechargeTime(myOriginalRechargeTime);
 
 		}
+		PostMaster::GetInstance()->SendMessage(EmitterMessage("enrage", myEntity.GetId()));
 	}
 }
 
