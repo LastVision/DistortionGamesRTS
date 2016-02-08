@@ -497,10 +497,7 @@ namespace Prism
 			}
 
 		}
-		else
-		{
-			return this;
-		}
+		return this;
 	}
 
 	void Model::InitInstancingBuffers()

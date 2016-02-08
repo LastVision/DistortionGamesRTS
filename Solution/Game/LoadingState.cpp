@@ -41,6 +41,7 @@ LoadingState::~LoadingState()
 
 void LoadingState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCursor)
 {
+	aCursor;
 	myIsLetThrough = false;
 	myStateStack = aStateStackProxy;
 
@@ -160,6 +161,8 @@ void LoadingState::ResumeState()
 
 void LoadingState::OnResize(int aWidth, int aHeight)
 {
+	aWidth;
+	aHeight;
 	CU::Vector2<float> windowSize = CU::Vector2<float>(float(Prism::Engine::GetInstance()->GetWindowSize().x)
 		, float(Prism::Engine::GetInstance()->GetWindowSize().y));
 

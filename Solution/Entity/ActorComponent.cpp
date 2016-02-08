@@ -519,7 +519,7 @@ void ActorComponent::LookInDirection(const CU::Vector2<float>& aDirection, float
 
 		if (aTurnInstant == false)
 		{
-			float limit = (M_PI)* aDelta;
+			float limit = static_cast<float>((M_PI)) * aDelta;
 			if (angle > limit)
 			{
 				angle = limit;

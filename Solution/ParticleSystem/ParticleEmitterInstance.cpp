@@ -206,10 +206,6 @@ namespace Prism
 			myEmissionTime = myParticleEmitterData->myEmissionRate;
 		}
 
-		if (myLiveParticleCount < 0)
-		{
-			int apa = 0;
-		}
 		if (myHasEmitted == true)
 		{
 			UpdateParticle(aDeltaTime);
@@ -337,13 +333,13 @@ namespace Prism
 
 		CU::Vector3<float> toReturn;
 
-		int a = (4 * M_PI_2) * 100;
+		int a = static_cast<int>((4 * M_PI_2)) * 100;
 
 		float angle = static_cast<float>(rand() % a) / 100.f;
 
-		toReturn.x = radius * cos(angle);
+		toReturn.x = radius * cosf(angle);
 		toReturn.y = 0.f;
-		toReturn.z = radius * sin(angle);
+		toReturn.z = radius * sinf(angle);
 
 		return toReturn;
 	}
@@ -353,15 +349,15 @@ namespace Prism
 		float radius = 10.f;
 		CU::Vector3<float> toReturn;
 
-		int a = (4 * M_PI_2) * 100;
+		int a = static_cast<int>((4 * M_PI_2)) * 100;
 
 		float angleZ = static_cast<float>(rand() % a) / 100.f;
 
 		//float angle = CU::Math::RandomRange(0.f, );
 
-		toReturn.x = radius * cos(angleZ);
-		toReturn.y = radius * sin(a) * sin(angleZ);
-		toReturn.z = radius * sin(angleZ);
+		toReturn.x = radius * cosf(angleZ);
+		toReturn.y = radius * sinf(static_cast<float>(a)) * sinf(angleZ);
+		toReturn.z = radius * sinf(angleZ);
 
 		return toReturn;
 	}

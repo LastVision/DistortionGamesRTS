@@ -73,6 +73,7 @@ void HealthComponent::RenderHealthBar(const Prism::Camera& aCamera)
 
 void HealthComponent::Update(float aDelta)
 {
+	aDelta;
 	if (myEntity.GetOwner() == eOwnerType::PLAYER)
 	{
 		if (myCurrentHealth == myMaxHealth)

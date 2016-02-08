@@ -212,13 +212,13 @@ T Tweener<T>::QuinticHalf(float aDelta, T aStart, T aChangeInValue, float aDurat
 template <typename T>
 T Tweener<T>::Sinus(float aDelta, T aStart, T aChangeInValue, float aDuration)
 {
-	return aChangeInValue * sin(aDelta / aDuration * (M_PI / 2.f)) + aStart;
+	return aChangeInValue * sinf(aDelta / aDuration * static_cast<float>((M_PI / 2.f))) + aStart;
 }
 
 template <typename T>
 T Tweener<T>::SinusHalf(float aDelta, T aStart, T aChangeInValue, float aDuration)
 {
-	return (-aChangeInValue / 2.f) * (cos(M_PI * aDelta / aDuration) - 1.f) + aStart;
+	return (-aChangeInValue / 2.f) * (cosf(static_cast<float>(M_PI) * aDelta / aDuration) - 1.f) + aStart;
 }
 
 template <typename T>
