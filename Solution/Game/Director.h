@@ -5,6 +5,7 @@
 #include <GameStructs.h>
 
 class Entity;
+class BuildingComponent;
 
 namespace Prism
 {
@@ -44,6 +45,7 @@ public:
 	void SetBaseIncome(int anAmount);
 
 	Entity& GetBuilding() const;
+	const BuildingComponent& GetBuildingComponent() const;
 
 protected:
 	bool IsAlreadyActive(Entity* aUnit);

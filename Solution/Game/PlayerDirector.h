@@ -68,7 +68,6 @@ public:
 	void ReceiveMessage(const SelectUnitMessage& aMessage) override;
 
 	const CU::GrowingArray<Entity*>& GetSelectedUnits() const;
-	const BuildingComponent& GetBuildingComponent() const;
 	CU::Vector3<float> GetCameraMoveVector() const;
 
 	const int& GetGunpowder() const;

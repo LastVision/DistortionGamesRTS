@@ -214,7 +214,7 @@ namespace GUI
 				}
 				else if (type == "unit_info")
 				{
-					UnitInfoWidget* unitInfo = new UnitInfoWidget(&aReader, widgetElement, myPlayer);
+					UnitInfoWidget* unitInfo = new UnitInfoWidget(&aReader, widgetElement, myPlayer, myAI);
 					container->AddWidget(unitInfo);
 				}
 				else if (type == "unit_action")
