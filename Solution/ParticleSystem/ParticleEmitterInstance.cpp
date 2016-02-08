@@ -31,8 +31,6 @@ namespace Prism
 		, myLiveParticleCount(0)
 		, myAlwaysShow(false)
 		, myHasEmitted(false)
-		, myParticleScaling(1.f)
-		, myEntity(nullptr)
 	{
 		myStates.reset();
 		myParticleEmitterData = someData;

@@ -63,7 +63,7 @@ void EmitterManager::UpdateEmitters(float aDeltaTime, CU::Matrix44f aWorldMatrix
 
 				if (instance->IsActive() == false)
 				{
-					break;
+					continue;
 				}
 				if (instance->GetEntity() != nullptr)
 				{
@@ -78,7 +78,7 @@ void EmitterManager::UpdateEmitters(float aDeltaTime, CU::Matrix44f aWorldMatrix
 
 void EmitterManager::RenderEmitters()
 {
-
+	int finished = 0;
 	Prism::ParticleDataContainer::GetInstance()->SetGPUData(myCamera);
 	for (int i = 0; i < myEmitterList.Size(); ++i)
 	{
@@ -95,18 +95,26 @@ void EmitterManager::RenderEmitters()
 
 			for (int j = 0; j < myEmitterList[i]->myEmitters[k].Size(); ++j)
 			{
-
 				if (myEmitterList[i]->myEmitters[k][j]->IsActive() == false)
 				{
-					myEmitterList[i]->myFinishedCount++;
-					myEmitterList[i]->myFinishedGroups[k] = FINISHED;
-					if (myEmitterList[i]->myFinishedCount >= PREALLOCATED_EMITTERGROUP)
+					finished++;
+
+					if (finished >= myEmitterList[i]->myEmitters[k].Size())
 					{
-						myEmitterList[i]->myGroupIsActive = false;
+						myEmitterList[i]->myFinishedCount++;
+						myEmitterList[i]->myFinishedGroups[k] = FINISHED;
+						if (myEmitterList[i]->myFinishedCount >= PREALLOCATED_EMITTERGROUP)
+						{
+							myEmitterList[i]->myGroupIsActive = false;
+						}
 					}
-					break;
+				
+					continue;
 				}
-				myEmitterList[i]->myEmitters[k][j]->Render();
+				else
+				{
+					myEmitterList[i]->myEmitters[k][j]->Render();
+				}
 			}
 		}
 	}
