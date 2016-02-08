@@ -128,7 +128,7 @@ void EmitterManager::ReceiveMessage(const EmitterMessage& aMessage)
 
 		DL_ASSERT_EXP(myEmitters.find(particleType) != myEmitters.end(), "Effect did not exist!");
 
-		if (myEmitters[particleType]->myCurrentIndex >= PREALLOCATED_EMITTERGROUP)
+		if (myEmitters[particleType]->myCurrentIndex > (PREALLOCATED_EMITTERGROUP - 1))
 		{
 			myEmitters[particleType]->myCurrentIndex = 0;
 		}
@@ -191,6 +191,7 @@ void EmitterManager::ReadListOfLists(const std::string& aPath)
 			for (short i = 0; i < PREALLOCATED_EMITTERGROUP; ++i)
 			{
 				ReadList(entityPath, ID, i);
+
 			}
 		}
 	}
@@ -232,7 +233,7 @@ void EmitterManager::ReadList(const std::string& aPath, const std::string& anID,
 EmitterData::EmitterData(const std::string& aType)
 	: myType(aType)
 	, myCurrentIndex(0)
-	, myFinishedCount(0)
+	, myFinishedCount(PREALLOCATED_EMITTERGROUP)
 	, myGroupIsActive(false)
 {
 	for (int i = 0; i < PREALLOCATED_EMITTERGROUP; ++i)

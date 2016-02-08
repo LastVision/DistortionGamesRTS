@@ -23,7 +23,6 @@ struct EmitterData
 	short myCurrentIndex;
 	short myFinishedCount;
 	bool myGroupIsActive;
-	CU::Vector3f myOffset;
 
 };
 

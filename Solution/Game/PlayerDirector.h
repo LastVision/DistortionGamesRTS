@@ -96,6 +96,7 @@ public:
 	bool CanAffordSupply(int aSupplyCost) const;
 	bool CanAffordGunpowder(int aCost) const;
 	bool CanAffordArtifact(int aCost) const;
+	bool CanCastTotem() const;
 
 private:
 	void UpdateInputs();

@@ -766,6 +766,11 @@ bool PlayerDirector::CanAffordArtifact(int aCost) const
 	return true;
 }
 
+bool PlayerDirector::CanCastTotem() const
+{
+	return myTotem->GetComponent<TotemComponent>()->CanActivate();
+}
+
 void PlayerDirector::UpdateInputs()
 {
 	myShiftPressed = CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_LSHIFT)
