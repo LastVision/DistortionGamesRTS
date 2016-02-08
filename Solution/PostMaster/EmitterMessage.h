@@ -12,6 +12,7 @@ struct EmitterMessage : public Message
 {
 	EmitterMessage(const std::string& aParticleType, int aEntityID);
 	EmitterMessage(const std::string& aParticleType, const CU::Vector3f& aPosition);
+	EmitterMessage(const std::string& aParticleType, const CU::Vector3f& aPosition, bool aShouldKillEmitter, float aKilTime);
 	EmitterMessage(const std::string& aParticleType, const CU::Vector3f& aPosition, bool aShouldAlwaysShow);
 	EmitterMessage(const std::string& aParticleType, Prism::Camera* aCamera, const CU::Vector3f& aPosition = CU::Vector3f());
 	EmitterMessage(const std::string& aParticleType, const CU::Vector3f& aPosition, float anEmitterLifeTime);
@@ -27,6 +28,7 @@ struct EmitterMessage : public Message
 	CU::Vector3f mySize;
 	float myRadius;
 	bool myShouldAlwaysShow;
+	bool myShouldKillEmitter;
 };
 
 inline EmitterMessage::EmitterMessage(const std::string& aParticleType, int aEntityID)
@@ -38,6 +40,7 @@ inline EmitterMessage::EmitterMessage(const std::string& aParticleType, int aEnt
 	, mySize({ 0.f, 0.f, 0.f })
 	, myRadius(0.f)
 	, myShouldAlwaysShow(false)
+	, myShouldKillEmitter(false)
 {
 }
 
@@ -51,6 +54,7 @@ inline EmitterMessage::EmitterMessage(const std::string& aParticleType, const CU
 	, mySize({ 0.f, 0.f, 0.f })
 	, myRadius(0.f)
 	, myShouldAlwaysShow(false)
+	, myShouldKillEmitter(false)
 {
 }
 
@@ -64,6 +68,7 @@ inline EmitterMessage::EmitterMessage(const std::string& aParticleType, const CU
 	, mySize({ 0.f, 0.f, 0.f })
 	, myRadius(0.f)
 	, myShouldAlwaysShow(aShouldAlwaysShow)
+	, myShouldKillEmitter(false)
 {
 }
 
@@ -78,6 +83,7 @@ inline EmitterMessage::EmitterMessage(const std::string& aParticleType, Prism::C
 	, mySize({ 0.f, 0.f, 0.f })
 	, myRadius(0.f)
 	, myShouldAlwaysShow(false)
+	, myShouldKillEmitter(false)
 {
 }
 
@@ -91,6 +97,7 @@ inline EmitterMessage::EmitterMessage(const std::string& aParticleType, const CU
 	, myRadius(0.f)
 	, myShouldAlwaysShow(false)
 	, myCamera(nullptr)
+	, myShouldKillEmitter(false)
 {
 }
 
@@ -104,6 +111,7 @@ inline EmitterMessage::EmitterMessage(const std::string& aParticleType, const CU
 	, mySize({ 0.f, 0.f, 0.f })
 	, myShouldAlwaysShow(false)
 	, myCamera(nullptr)
+	, myShouldKillEmitter(false)
 {
 }
 
@@ -117,5 +125,20 @@ inline EmitterMessage::EmitterMessage(const std::string& aParticleType, const CU
 	, myRadius(0.f)
 	, myShouldAlwaysShow(false)
 	, myCamera(nullptr)
+	, myShouldKillEmitter(false)
+{
+}
+
+inline EmitterMessage::EmitterMessage(const std::string& aParticleType, const CU::Vector3f& aPosition, bool aShouldKillEmitter, float aKilTime)
+	: Message(eMessageType::PARTICLE)
+	, myParticleTypeString(aParticleType)
+	, myPosition(aPosition)
+	, myEntityID(-1)
+	, myEmitterLifeTime(aKilTime)
+	, mySize({ 0.f, 0.f, 0.f })
+	, myRadius(0.f)
+	, myShouldAlwaysShow(false)
+	, myCamera(nullptr)
+	, myShouldKillEmitter(aShouldKillEmitter)
 {
 }

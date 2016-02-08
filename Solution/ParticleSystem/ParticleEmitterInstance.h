@@ -36,7 +36,6 @@ namespace Prism
 		void SetRadius(float aRadius);
 		void SetSize(const CU::Vector3f& aSize);
 
-
 	private:
 
 		void CreateVertexBuffer();

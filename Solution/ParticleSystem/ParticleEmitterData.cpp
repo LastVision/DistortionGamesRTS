@@ -104,7 +104,10 @@ namespace Prism
 		{
 			myUseEmitterLifeTime = false;
 		}
-
+		else
+		{
+			myUseEmitterLifeTime = true;
+		}
 		element = read.ForceFindFirstChild(emitter, "EmittsPerSecond");
 		read.ReadAttribute(element, "value", myEmissionRate);
 		myEmissionRate = 1 / myEmissionRate;
