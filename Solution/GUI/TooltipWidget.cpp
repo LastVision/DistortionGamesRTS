@@ -16,7 +16,7 @@ namespace GUI
 		, mySupplySprite(nullptr)
 		, myPlayer(aPlayer)
 	{
-		mySize = { 0.f, 0.f};
+		mySize = { 0.f, 0.f };
 		myPosition = { 0.f, 0.f };
 
 		myLargeTooltip = new TooltipBox;
@@ -180,9 +180,27 @@ namespace GUI
 	{
 		if (aTooltipInfo->myCooldown != nullptr)
 		{
-			myCooldownSprite->Render(aParentPosition + myCooldownPosition);
+			CU::Vector4<float> color(1.f, 1.f, 1.f, 1.f);
+
+			switch (aTooltipInfo->myCooldownType)
+			{
+			case eCooldownType::TOTEM:
+				if (myPlayer->CanCastTotem() == false)
+				{
+					color = { 1.f, 0.f, 0.f, 1.f };
+				}
+				break;
+			case eCooldownType::UPGRADE:
+				if (myPlayer->CanUpgrade(aTooltipInfo->myUpgradeLevel) == false)
+				{
+					color = { 1.f, 0.f, 0.f, 1.f };
+				}
+				break;
+			}
+
+			myCooldownSprite->Render(aParentPosition + myCooldownPosition, { 1.f, 1.f }, color);
 			Prism::Engine::GetInstance()->PrintText(*aTooltipInfo->myCooldown, aParentPosition + myCooldownPosition + myCostTextOffset
-				, Prism::eTextType::RELEASE_TEXT, myLargeTooltip->myTextScale);
+				, Prism::eTextType::RELEASE_TEXT, myLargeTooltip->myTextScale, color);
 		}
 
 		if (aTooltipInfo->myGunpowderCost != nullptr)

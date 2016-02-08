@@ -64,7 +64,7 @@ namespace GUI
 			myCooldownIndicator->SetUVZeroToOne({ 0.f, 1.f - percentage }, { 1.f, 1.f });
 
 			myHasCooldownSprite->Render(aParentPosition, { 1.f, 1.f }, { 0.f, 0.f, 0.f, 0.5f });
-			myCooldownIndicator->Render(aParentPosition, { 1.f, 1.f }, { 1.f, 1.f, 1.f, 0.5f });
+			myCooldownIndicator->Render(aParentPosition, { 1.f, 1.f }, { 1.f, 1.f, 1.f, 0.3f });
 			Prism::Engine::GetInstance()->PrintText(*myCooldown, aParentPosition, Prism::eTextType::DEBUG_TEXT);
 		}
 	}

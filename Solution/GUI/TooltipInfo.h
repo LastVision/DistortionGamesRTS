@@ -1,6 +1,13 @@
 #pragma once
 #include <string>
 
+enum class eCooldownType
+{
+	TOTEM,
+	UPGRADE,
+	NONE
+};
+
 struct TooltipInfo
 {
 	TooltipInfo(std::string aHeadline, std::string aText, bool anIsLargeTooltip);
@@ -13,6 +20,8 @@ struct TooltipInfo
 	const int* myArftifactCost;
 	const int* mySupplyCost;
 	const float* myCooldown;
+	eCooldownType myCooldownType;
+	int myUpgradeLevel;
 
 	void operator=(TooltipInfo&) = delete;
 };
@@ -26,4 +35,6 @@ inline TooltipInfo::TooltipInfo(std::string aHeadline, std::string aText, bool a
 	myArftifactCost = nullptr;
 	mySupplyCost = nullptr;
 	myCooldown = nullptr;
+	myCooldownType = eCooldownType::NONE;
+	myUpgradeLevel = -1;
 }
