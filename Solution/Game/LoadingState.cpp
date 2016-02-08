@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include <AudioInterface.h>
 #include <InputWrapper.h>
 #include "LoadingState.h"
 #include <Sprite.h>
@@ -44,6 +45,8 @@ void LoadingState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCu
 	myStateStack = aStateStackProxy;
 
 	OnResize(Prism::Engine::GetInstance()->GetWindowSizeInt().x, Prism::Engine::GetInstance()->GetWindowSizeInt().y);
+	Prism::Audio::AudioInterface::GetInstance()->PostEvent("Stop_Menu", 0);
+	Prism::Audio::AudioInterface::GetInstance()->PostEvent("Play_Loading", 0);
 }
 
 void LoadingState::EndState()
