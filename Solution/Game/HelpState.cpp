@@ -46,6 +46,13 @@ const eStateStatus HelpState::Update(const float& aDeltaTime)
 {
 	aDeltaTime;
 
+
+	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_ESCAPE) == true)
+	{
+		myIsActiveState = false;
+		return eStateStatus::ePopSubState;
+	}
+
 	myGUIManager->Update(aDeltaTime);
 
 	return myStateStatus;

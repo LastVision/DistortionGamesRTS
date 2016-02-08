@@ -8,6 +8,7 @@
 #include "PollingStation.h"
 #include <SpawnUnitMessage.h>
 #include <UpgradeUnitMessage.h>
+#include <ResourceMessage.h>
 
 BuildingComponent::BuildingComponent(Entity& aEntity, BuildingComponentData& aData)
 	: Component(aEntity)
@@ -253,5 +254,14 @@ void BuildingComponent::CheckUnitsForAdd(const CU::GrowingArray<Entity*>& someUn
 				someUnitsOut.Add(current);
 			}
 		}
+	}
+}
+
+void BuildingComponent::Abort(int aIndex)
+{
+	if (myBuildQueue.Size() >= aIndex)
+	{
+		PostMaster::GetInstance()->SendMessage(ResourceMessage(myEntity.myOwner, GetUnitCost(myBuildQueue[aIndex].myUnit)));
+		myBuildQueue.RemoveNonCyclicAtIndex(aIndex);
 	}
 }

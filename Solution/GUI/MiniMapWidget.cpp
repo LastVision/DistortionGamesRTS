@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+#include "../Game/GameDefines.h"
 #include <EventPositionMessage.h>
 #include "../Engine/Camera.h"
 #include "../Entity/Entity.h"
@@ -229,7 +230,7 @@ namespace GUI
 		{
 			if (FogOfWarMap::GetInstance()->IsVisible(playerUnits[i]->GetPosition()))
 			{
-				CU::Vector4<float> color = { 0.f, 0.f, 1.f, 1.f };
+				CU::Vector4<float> color = PLAYER_COLOR;
 				if (playerUnits[i]->IsSelected() == true)
 				{
 					color = { 1.f, 1.f, 1.f, 1.f };
@@ -269,7 +270,7 @@ namespace GUI
 
 			if (victoryPoints[i]->GetTemporaryOwner() == eOwnerType::PLAYER)
 			{
-				color = { 0.f, 0.f, 1.f, 1.f };
+				color = PLAYER_COLOR;
 			}
 			else if (victoryPoints[i]->GetTemporaryOwner() == eOwnerType::ENEMY)
 			{
@@ -293,7 +294,7 @@ namespace GUI
 			{
 				if (resourcePoints[i]->GetTemporaryOwner() == eOwnerType::PLAYER)
 				{
-					color = { 0.f, 0.f, 1.f, 1.f };
+					color = PLAYER_COLOR;
 				}
 				else if (resourcePoints[i]->GetTemporaryOwner() == eOwnerType::ENEMY)
 				{
@@ -314,7 +315,7 @@ namespace GUI
 		myBaseSprite->Render(aParentPosition + myPosition + basePosition, { 1.f, 1.f }, { 1.f, 0.f, 0.f, 1.f });
 
 		basePosition = (playerBase->GetPosition() / 255.f) * mySize;
-		myBaseSprite->Render(aParentPosition + myPosition + basePosition, { 1.f, 1.f }, { 0.f, 0.f, 1.f, 1.f });
+		myBaseSprite->Render(aParentPosition + myPosition + basePosition, { 1.f, 1.f }, PLAYER_COLOR);
 	}
 
 	void MiniMapWidget::RenderArtifacts(const CU::Vector2<float>& aParentPosition)

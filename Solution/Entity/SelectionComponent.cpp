@@ -23,6 +23,9 @@ SelectionComponent::SelectionComponent(Entity& aEntity, SelectionComponentData& 
 	Prism::ModelProxy* hovered = Prism::ModelLoader::GetInstance()->LoadModel(aComponentData.myHoveredPath
 		, aComponentData.myEffectPath);
 	myHoveredInstance = new Prism::Instance(*hovered, myEntity.GetOrientation(), myEntity.GetOctreeType(), myCullingRadius);
+
+	mySelectedInstance->SetScale(CU::Vector3<float>(aComponentData.myScale, aComponentData.myScale, aComponentData.myScale));
+	myHoveredInstance->SetScale(CU::Vector3<float>(aComponentData.myScale, aComponentData.myScale, aComponentData.myScale));
 }
 
 

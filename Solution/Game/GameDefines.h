@@ -2,7 +2,7 @@
 
 #define AMOUNT_OF_CONTROL_GROUPS 9
 #define AMOUNT_OF_UPGRADES 3
-
+#define PLAYER_COLOR { 0.f, 0.35f, 0.75f, 1.f }
 
 #define LOAD_PROPS
 #define USE_WEATHER

@@ -56,6 +56,7 @@ namespace GUI
 		Prism::SpriteProxy* myTankPortrait;
 		Prism::SpriteProxy* myBuildingPortrait;
 		Prism::SpriteProxy* myStatsSprite;
+		Prism::SpriteProxy* myActiveQueueOverlay;
 		BarWidget* myBuildingTimer;
 
 		eEntityType mySelectedType;
@@ -64,6 +65,7 @@ namespace GUI
 		CU::Vector4<float> myEnemyColor;
 		CU::Vector2<float> myUnitPosition;
 		CU::Vector2<float> myPortraitPosition;
+		CU::Vector2<float> myTimerPosition;
 		float myTextScale;
 	};
 }

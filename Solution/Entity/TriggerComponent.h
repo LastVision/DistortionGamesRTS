@@ -20,6 +20,8 @@ public:
 
 	float GetRadiusSquared() const;
 
+	void StartSound();
+
 private:
 	void operator=(TriggerComponent&) = delete;
 
@@ -59,3 +61,5 @@ inline float TriggerComponent::GetRadiusSquared() const
 {
 	return myRadiusSquared;
 }
+
+

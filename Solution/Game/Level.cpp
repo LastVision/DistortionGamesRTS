@@ -27,6 +27,7 @@
 #include <Terrain.h>
 #include <ToggleRenderLinesMessage.h>
 #include "Tutorial.h"
+#include <TriggerComponent.h>
 
 Level::Level(const Prism::Camera& aCamera, Prism::Terrain* aTerrain, GUI::Cursor* aCursor, eDifficulty aDifficulty)
 	: myEntities(64)
@@ -35,6 +36,8 @@ Level::Level(const Prism::Camera& aCamera, Prism::Terrain* aTerrain, GUI::Cursor
 	, myMaxVictoryPoint(-1)
 	, myHasToldPlayerAboutWinning(false)
 	, myHasToldPlayerAboutLosing(false)
+	, myIsFirstFrame(false)
+	, myIsSecondFrame(false)
 {
 	EntityFactory::GetInstance()->LoadEntities("Data/Resource/Entity/LI_entity.xml");
 	myEmitterManager = new EmitterManager(aCamera);
@@ -96,6 +99,20 @@ bool Level::Update(float aDeltaTime, Prism::Camera& aCamera)
 {
 	//CU::Vector3<float> lightDir(myLight->GetCurrentDir().x, myLight->GetCurrentDir().y, myLight->GetCurrentDir().z);
 	//myLight->SetDir(lightDir * CU::Matrix44<float>::CreateRotateAroundZ(-3.14f * aDeltaTime / 3.f));
+
+	if (myIsFirstFrame == false)
+	{
+		myIsFirstFrame = true;
+	}
+	if (myIsFirstFrame == true && myIsSecondFrame == false)
+	{
+		const CU::GrowingArray<Entity*>& points = PollingStation::GetInstance()->GetResourcePoints();
+		for (int i = 0; i < points.Size(); ++i)
+		{
+			points[i]->GetComponent<TriggerComponent>()->StartSound();
+		}
+		myIsSecondFrame = true;
+	}
 
 	myShadowLight->UpdateOrientation();
 	myShadowLight->GetCamera()->Update(aDeltaTime);
