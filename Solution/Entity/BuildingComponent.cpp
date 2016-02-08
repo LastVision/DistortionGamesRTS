@@ -43,7 +43,7 @@ void BuildingComponent::Reset()
 
 	CU::Vector2<float> forward(myEntity.GetOrientation().GetForward().x, myEntity.GetOrientation().GetForward().z);
 	mySpawnPoint = myEntity.GetPosition() + (-forward * 14.f);
-	myRallyPoint = myEntity.GetPosition() + (-forward * 15.f);
+	myRallyPoint = myEntity.GetPosition() + (-forward * 25.f);
 }
 
 void BuildingComponent::Update(float aDeltaTime)
