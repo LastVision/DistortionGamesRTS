@@ -216,7 +216,7 @@ void Level::ReceiveMessage(const ToggleRenderLinesMessage& aMessage)
 	}
 }
 
-void Level::ReceiveMessage(const ToggleFogOfWarMessage& aMessage)
+void Level::ReceiveMessage(const ToggleFogOfWarMessage&)
 {
 	FogOfWarMap::GetInstance()->ToggleFogOfWar();
 	myShowFogOfWar = !myShowFogOfWar;

@@ -68,12 +68,17 @@ namespace CU
 {
 	GA_TEMPLATE
 	inline GA_TYPE::GrowingArray()
+		: myData(nullptr)
+		, myCurrentSize(0)
+		, myMaxSize(0)
+		, myUseSafeModeFlag(true)
+		, myIsInit(false)
 	{
-		myData = nullptr;
-		myCurrentSize = 0;
-		myMaxSize = 0;
-		myUseSafeModeFlag = true;
-		myIsInit = false;
+		//myData = nullptr;
+		//myCurrentSize = 0;
+		//myMaxSize = 0;
+		//myUseSafeModeFlag = true;
+		//myIsInit = false;
 	}
 
 	GA_TEMPLATE

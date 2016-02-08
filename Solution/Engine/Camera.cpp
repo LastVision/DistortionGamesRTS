@@ -53,6 +53,8 @@ namespace Prism
 
 	void Camera::InitShadowCamera(float aWidth, float aHeight)
 	{
+		aWidth;
+		aHeight;
 		//float screenAspect = aWidth / aHeight;
 		//myFOV = 3.14f / 2.f;
 		myProjectionMatrix = CU::Matrix44<float>::CreateOrthogonalMatrixLH(90.f, 90.f, myNear, myFar);

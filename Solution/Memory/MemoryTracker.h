@@ -24,7 +24,7 @@ namespace Prism
 	{
 
 		MemoryData()
-			: myFileName(""), myFunctionName(""), myLine(-1), myType(eMemoryType::UNKNOWN) {}
+			: myFileName(""), myFunctionName(""), myLine(-1), myType(eMemoryType::UNKNOWN), myAddress(nullptr), myBytes(0) {}
 
 		void* myAddress;
 		size_t myBytes;

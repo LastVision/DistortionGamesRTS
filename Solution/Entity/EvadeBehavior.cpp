@@ -65,6 +65,7 @@ const CU::Vector2<float>& EvadeBehavior::Update(float aDelta)
 
 void EvadeBehavior::EvadeEntities(float aDelta, float aEvadeSpeed)
 {
+	aDelta;
 	float radius = myEntity.GetComponent<CollisionComponent>()->GetRadius();
 
 	for (int i = 0; i < myEntitiesToEvade.Size(); ++i)
