@@ -107,10 +107,22 @@ Tutorial::~Tutorial()
 	{
 		SAFE_DELETE(myMissions[i].myText);
 	}
-	SAFE_DELETE(myArtifactMission->myText);
-	SAFE_DELETE(myEnemyBaseMission->myText);
-	SAFE_DELETE(myResourcePointMission->myText);
-	SAFE_DELETE(myVictoryPointMission->myText);
+	if (myArtifactMission != nullptr)
+	{
+		SAFE_DELETE(myArtifactMission->myText);
+	}
+	if (myEnemyBaseMission != nullptr)
+	{
+		SAFE_DELETE(myEnemyBaseMission->myText);
+	}
+	if (myResourcePointMission != nullptr)
+	{
+		SAFE_DELETE(myResourcePointMission->myText);
+	}
+	if (myVictoryPointMission != nullptr)
+	{
+		SAFE_DELETE(myVictoryPointMission->myText);
+	}
 	SAFE_DELETE(myArtifactMission);
 	SAFE_DELETE(myEnemyBaseMission);
 	SAFE_DELETE(myResourcePointMission);
