@@ -76,6 +76,9 @@ private:
 
 	bool myHasToldPlayerAboutWinning;
 	bool myHasToldPlayerAboutLosing;
+
+	bool myIsFirstFrame;
+	bool myIsSecondFrame;
 };
 
 inline PlayerDirector* Level::GetPlayer()

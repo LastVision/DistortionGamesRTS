@@ -30,11 +30,6 @@ TriggerComponent::TriggerComponent(Entity& aEntity, TriggerComponentData& aData)
 {
 	myOriginalPosition = myEntity.GetOrientation().GetPos();
 
-	if (myType == eTriggerType::RESOURCE)
-	{
-		Prism::Audio::AudioInterface::GetInstance()->PostEvent("Play_ResourcePoint"
-			, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
-	}
 }
 
 TriggerComponent::~TriggerComponent()
@@ -182,4 +177,13 @@ eOwnerType TriggerComponent::ModifyOwnership(eOwnerType anOwner, float aModifyVa
 	}
 
 	return myGainingPointsOwner;
+}
+
+void TriggerComponent::StartSound()
+{
+	if (myType == eTriggerType::RESOURCE)
+	{
+		Prism::Audio::AudioInterface::GetInstance()->PostEvent("Play_ResourcePoint"
+			, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+	}
 }
