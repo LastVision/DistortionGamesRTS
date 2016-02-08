@@ -185,12 +185,8 @@ const eStateStatus InGameState::Update(const float& aDeltaTime)
 void InGameState::Render()
 {
 	VTUNE_EVENT_BEGIN(VTUNE::GAME_RENDER);
-	myLevel->Render(*myCamera);
 
-	if (myIsActiveState == true)
-	{
-		Prism::DebugDrawer::GetInstance()->Render(*myCamera); //Have to be last
-	}
+	myLevel->Render(*myCamera);
 
 	VTUNE_EVENT_END();
 }

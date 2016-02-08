@@ -1117,7 +1117,7 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 
 	SelectOrHoverEntity(myBuilding, hasSelected, hasHovered, line);
 
-	if (hasSelected == false && hoveredEnemy != nullptr && myLeftMouseUp == true)
+	if (previousAction == eSelectedAction::NONE && hasSelected == false && hoveredEnemy != nullptr && myLeftMouseUp == true)
 	{
 		SelectUnit(hoveredEnemy);
 	}
