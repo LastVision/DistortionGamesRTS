@@ -230,10 +230,27 @@ namespace GUI
 			Prism::Engine::GetInstance()->PrintText(myBuilding.GetSpawnQueueSize(), position, Prism::eTextType::RELEASE_TEXT, myTextScale);
 
 			const CU::GrowingArray<BuildInfo>& queue = myBuilding.GetQueue();
+			CU::Vector2<float> portraitScale = myQueueButtons[0]->GetSize() / myGruntPortrait->GetSize();
 
 			for (int i = 0; i < queue.Size(); i++)
 			{
 				myQueueButtons[i]->Render(myPosition + aParentPosition);
+
+				CU::Vector2<float> portraitPosition = (myQueueButtons[i]->GetPosition() - 
+					(myQueueButtons[i]->GetSize() / 2.f)) + (myPosition + aParentPosition);
+
+				switch (queue[i].myUnit)
+				{
+				case eUnitType::GRUNT:
+					myGruntPortrait->Render(portraitPosition, portraitScale);
+					break;
+				case eUnitType::RANGER:
+					myRangerPortrait->Render(portraitPosition, portraitScale);
+					break;
+				case eUnitType::TANK:
+					myTankPortrait->Render(portraitPosition, portraitScale);
+					break;
+				}
 			}
 		}
 	}
