@@ -60,12 +60,8 @@ namespace GUI
 		Prism::SpriteProxy* myVictoryPointSprite;
 		Prism::SpriteProxy* myArtifactSprite;
 		Prism::SpriteProxy* myCameraFrustum;
-		Prism::SpriteProxy* myEventSprite;
-		float myEventTimer;
-		float myEventTime;
-		bool myShouldRenderEvent;
-		CU::Vector2<float> myEventPosition;
 
+		Prism::SpriteProxy* myEventSprite;
 		CU::GrowingArray<MiniMapEvent> myEventSprites;
 		int myCurrentEventSprite;
 
