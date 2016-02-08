@@ -19,6 +19,7 @@ namespace Prism
 			, myTriangle2(nullptr)
 			, myPortal1(nullptr)
 			, myPortal2(nullptr)
+			, myIndex(0)
 		{
 			++myVertex1->myEdgeCount;
 			++myVertex2->myEdgeCount;

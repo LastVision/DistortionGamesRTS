@@ -12,6 +12,7 @@ namespace Prism
 	class Texture
 	{
 	public:
+		Texture();
 		~Texture();
 
 		void Init(float aWidth, float aHeight, unsigned int aBindFlag

@@ -76,6 +76,7 @@ LevelFactory::LevelFactory(const std::string& aLevelListPath, Prism::Camera& aCa
 	, myCamera(aCamera)
 	, myCursor(aCursor)
 	, myCutBoxes(128)
+	, myTerrain(nullptr)
 {
 	ReadLevelList(aLevelListPath);
 }

@@ -9,6 +9,7 @@ namespace Prism
 	Animation::Animation()
 		: myAnimationData(4)
 		, myBoneNames(4)
+		, myAnimationLenght(0.f)
 	{
 		for (int i = 0; i < MAX_NR_OF_BONES; i++)
 		{

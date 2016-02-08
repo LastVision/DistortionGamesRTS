@@ -8,6 +8,8 @@ Formation::Formation(const Prism::Terrain& aTerrain)
 	, myTerrain(aTerrain)
 	, myPath(16)
 	, mySpeed(100)
+	, myTargetUnit(nullptr)
+	, myActive(false)
 {
 	Reset();
 }

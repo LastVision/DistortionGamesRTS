@@ -14,6 +14,14 @@
 SplashState::SplashState(const std::string& aTexturePath, bool aStartSound, bool aVictoryScreen)
 	: myVictoryScreen(aVictoryScreen)
 	, myStartSound(aStartSound)
+	, myFadeOut(false)
+	, myDisplay(false)
+	, myLogoAlpha(0.f)
+	, myFadeInTime(0.f)
+	, myFadeOutTime(0.f)
+	, myDisplayTime(0.f)
+	, myCurrentTime(0.f)
+	, myCamera(nullptr)
 {
 	CU::Vector2<float> size(1024.f, 1024.f);
 	CU::Vector2<float> windowSize = CU::Vector2<float>(float(Prism::Engine::GetInstance()->GetWindowSize().x)

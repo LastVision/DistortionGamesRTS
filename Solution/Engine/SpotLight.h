@@ -8,6 +8,7 @@ namespace Prism
 	class SpotLight
 	{
 	public:
+		SpotLight();
 		void Initiate();
 		void Render(Camera* aCamera);
 		void Update();

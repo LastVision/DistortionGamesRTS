@@ -27,11 +27,12 @@ namespace Prism
 	ParticleEmitterInstance::ParticleEmitterInstance(ParticleEmitterData* someData, bool anAllowManyParticles)
 		: myVertexWrapper(nullptr)
 		, myEmissionTime(0)
-		, myEmitterLife(0)
 		, myParticleIndex(0)
 		, myLiveParticleCount(0)
 		, myAlwaysShow(false)
 		, myHasEmitted(false)
+		, myParticleScaling(1.f)
+		, myEntity(nullptr)
 	{
 		myStates.reset();
 		myParticleEmitterData = someData;
@@ -94,12 +95,8 @@ namespace Prism
 		{
 			myStates[CIRCLE] = IS_NOT_CIRCLE;
 		}
-
-
-
-		//myIsActive = myParticleEmitterData->myIsActiveAtStart;
-
 		myEmitterLife = myParticleEmitterData->myEmitterLifeTime;
+		
 		CreateVertexBuffer();
 	}
 
@@ -196,6 +193,8 @@ namespace Prism
 
 	void ParticleEmitterInstance::UpdateEmitter(float aDeltaTime, const CU::Matrix44f& aWorldMatrix)
 	{
+		if (myStates[ACTIVE] == IS_ACTIVE)
+		{
 		myEmissionTime -= aDeltaTime;
 		myEmitterLife -= aDeltaTime;
 
@@ -206,10 +205,8 @@ namespace Prism
 			myEmissionTime = myParticleEmitterData->myEmissionRate;
 		}
 
-		if (myHasEmitted == true)
-		{
 			UpdateParticle(aDeltaTime);
-		}
+
 		if (myParticleEmitterData->myUseEmitterLifeTime == true)
 		{
 			if (myEmitterLife <= 0.f && myLiveParticleCount <= 0)
@@ -218,11 +215,14 @@ namespace Prism
 			}
 		}
 	}
+	}
 
 	void ParticleEmitterInstance::UpdateParticle(float aDeltaTime)
 	{
 		for (int i = 0; i < myLogicalParticles.Size(); ++i)
 		{
+			myGraphicalParticles[i].myLifeTime -= aDeltaTime;
+
 			myGraphicalParticles[i].myPosition += myLogicalParticles[i].myVelocity * aDeltaTime;
 
 			if (myStates[ALPHADELTA] == USE_ALPHA_DELTA)
@@ -244,7 +244,6 @@ namespace Prism
 
 			myGraphicalParticles[i].myRotation += myGraphicalParticles[i].myRotation * (myLogicalParticles[i].myRotationDelta * aDeltaTime);
 
-			myGraphicalParticles[i].myLifeTime -= aDeltaTime;
 
 			if (myGraphicalParticles[i].myLifeTime < 0.0f && myLogicalParticles[i].myIsAlive == true)
 			{
@@ -267,6 +266,7 @@ namespace Prism
 
 			myGraphicalParticles[myParticleIndex].myColor = myParticleEmitterData->myData.myStartColor;
 
+			#pragma	region		Shape
 			if (myStates[CIRCLE] == IS_CIRCLE && myStates[HOLLOW] == IS_HOLLOW)
 			{
 				CU::Vector3<float> pos = CreateCirclePositions();
@@ -289,16 +289,16 @@ namespace Prism
 					CU::Math::RandomVector(aWorldMatrix.GetPos() - myParticleEmitterData->myEmitterSize
 					, aWorldMatrix.GetPos() + myParticleEmitterData->myEmitterSize);
 			}
+			#pragma endregion
 
 			myGraphicalParticles[myParticleIndex].myLifeTime = myParticleEmitterData->myParticlesLifeTime;
-
 
 			myGraphicalParticles[myParticleIndex].myAlpha = myParticleEmitterData->myData.myStartAlpha;
 
 			myParticleScaling = CU::Math::RandomRange(myParticleEmitterData->myData.myMinStartSize
 				, myParticleEmitterData->myData.myMaxStartSize);
 
-			myGraphicalParticles[myParticleIndex].mySize = 1 * myParticleScaling;
+			myGraphicalParticles[myParticleIndex].mySize = myParticleScaling;
 
 			myLogicalParticles[myParticleIndex].myIsAlive = true;
 
@@ -315,10 +315,6 @@ namespace Prism
 			myLogicalParticles[myParticleIndex].myRotationDelta = myParticleEmitterData->myRotationDelta;
 
 			myParticleIndex += 1;
-		}
-		if (myHasEmitted == false)
-		{
-			myHasEmitted = true;
 		}
 	}
 

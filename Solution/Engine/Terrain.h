@@ -68,7 +68,6 @@ namespace Prism
 		const float myIceHeight;
 		const CU::Matrix44<float> myOrientation;
 
-		CU::GrowingArray<D3D11_INPUT_ELEMENT_DESC*> myVertexFormat;
 		VertexIndexWrapper* myIndexBaseData;
 		VertexDataWrapper* myVertexBaseData;
 		float myCellSize;

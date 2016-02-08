@@ -21,6 +21,7 @@ GraphicsComponent::GraphicsComponent(Entity& aEntity, GraphicsComponentData& aCo
 		, aComponentData.myEffectPath);
 
 	myInstance = new Prism::Instance(*model, myEntity.myOrientation, myEntity.GetOctreeType(), myCullingRadius);
+	myInstance->ActivateAlbedo(myEntity.GetOwner());
 }
 
 GraphicsComponent::~GraphicsComponent()
