@@ -70,6 +70,7 @@ void SplashState::EndState()
 	if (myStartSound == false)
 	{
 		Prism::Audio::AudioInterface::GetInstance()->PostEvent("StopSplash", 0);
+		Prism::Audio::AudioInterface::GetInstance()->PostEvent("Play_Menu", 0);
 	}
 	SAFE_DELETE(myLogo);
 	SAFE_DELETE(myBackground);
