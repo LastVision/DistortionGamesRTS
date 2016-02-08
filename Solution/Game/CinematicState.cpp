@@ -40,6 +40,7 @@ CinematicState::~CinematicState()
 
 void CinematicState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCursor)
 {
+	aCursor;
 	myIsLetThrough = false;
 	myStateStack = aStateStackProxy;
 
@@ -92,6 +93,8 @@ void CinematicState::ResumeState()
 
 void CinematicState::OnResize(int aWidth, int aHeight)
 {
+	aWidth;
+	aHeight;
 	CU::Vector2<float> windowSize = CU::Vector2<float>(float(Prism::Engine::GetInstance()->GetWindowSize().x)
 		, float(Prism::Engine::GetInstance()->GetWindowSize().y));
 
@@ -105,6 +108,6 @@ void CinematicState::OnResize(int aWidth, int aHeight)
 
 void CinematicState::ReadScenes(const std::string& aScenePath)
 {
-
+	aScenePath;
 }
 

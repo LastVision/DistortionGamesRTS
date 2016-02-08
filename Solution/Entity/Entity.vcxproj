@@ -183,6 +183,8 @@
     <ClInclude Include="PromotionComponentData.h" />
     <ClInclude Include="SelectionComponent.h" />
     <ClInclude Include="SelectionComponentData.h" />
+    <ClInclude Include="ShadowBlobComponent.h" />
+    <ClInclude Include="ShadowBlobComponentData.h" />
     <ClInclude Include="SoundComponent.h" />
     <ClInclude Include="SoundComponentData.h" />
     <ClInclude Include="TotemComponent.h" />
@@ -221,6 +223,7 @@
     <ClCompile Include="GrenadeComponent.cpp" />
     <ClCompile Include="PromotionComponent.cpp" />
     <ClCompile Include="SelectionComponent.cpp" />
+    <ClCompile Include="ShadowBlobComponent.cpp" />
     <ClCompile Include="SoundComponent.cpp" />
     <ClCompile Include="TotemComponent.cpp" />
     <ClCompile Include="TriggerComponent.cpp" />

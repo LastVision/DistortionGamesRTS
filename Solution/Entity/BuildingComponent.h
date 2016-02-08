@@ -161,14 +161,6 @@ inline void BuildingComponent::SetRallyPoint(const CU::Vector2<float>& aPoint)
 	myRallyPoint = aPoint;
 }
 
-inline void BuildingComponent::Abort(int aIndex)
-{
-	if (myBuildQueue.Size() >= aIndex)
-	{
-		myBuildQueue.RemoveNonCyclicAtIndex(aIndex);
-	}
-}
-
 inline const bool BuildingComponent::GetHasSpawnedAtLeastOnce() const
 {
 	return myHasSpawnedAtLeastOnce;

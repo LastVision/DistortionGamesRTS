@@ -15,6 +15,7 @@ class XMLReader;
 class Entity;
 class BuildingComponent;
 class PlayerDirector;
+class AIDirector;
 
 namespace GUI
 {
@@ -24,7 +25,8 @@ namespace GUI
 	{
 
 	public:
-		UnitInfoWidget(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement, const PlayerDirector* aPlayer);
+		UnitInfoWidget(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement, const PlayerDirector* aPlayer
+			, const AIDirector* anAI);
 		~UnitInfoWidget();
 
 		void Update(float aDelta) override;
@@ -44,7 +46,8 @@ namespace GUI
 		void operator=(UnitInfoWidget&) = delete;
 
 		const CU::GrowingArray<Entity*>& myUnits;
-		const BuildingComponent& myBuilding;
+		const BuildingComponent& myPlayerBuilding;
+		const BuildingComponent& myEnemyBuilding;
 
 		CU::GrowingArray<ButtonWidget*> myQueueButtons;
 
@@ -56,6 +59,8 @@ namespace GUI
 		Prism::SpriteProxy* myTankPortrait;
 		Prism::SpriteProxy* myBuildingPortrait;
 		Prism::SpriteProxy* myStatsSprite;
+		Prism::SpriteProxy* myActiveQueueOverlay;
+		Prism::SpriteProxy* myUpgradeStar;
 		BarWidget* myBuildingTimer;
 
 		eEntityType mySelectedType;
@@ -64,6 +69,8 @@ namespace GUI
 		CU::Vector4<float> myEnemyColor;
 		CU::Vector2<float> myUnitPosition;
 		CU::Vector2<float> myPortraitPosition;
+		CU::Vector2<float> myTimerPosition;
+		CU::Vector2<float> myUpgradeStarPosition;
 		float myTextScale;
 	};
 }

@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "../Game/GameDefines.h"
 #include "BarWidget.h"
 #include "ButtonWidget.h"
 #include <Engine.h>
@@ -6,6 +7,7 @@
 #include "../Entity/BuildingComponent.h"
 #include "../Entity/Entity.h"
 #include "../Game/PlayerDirector.h"
+#include "../Game/AIDirector.h"
 #include "../Entity/ActorComponent.h"
 #include "../Entity/ControllerComponent.h"
 #include "../Entity/HealthComponent.h"
@@ -18,11 +20,13 @@
 
 namespace GUI
 {
-	UnitInfoWidget::UnitInfoWidget(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement, const PlayerDirector* aPlayer)
+	UnitInfoWidget::UnitInfoWidget(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement
+		, const PlayerDirector* aPlayer	, const AIDirector* anAI)
 		: Widget()
 		, myUnits(aPlayer->GetSelectedUnits())
 		, mySelectedType(eEntityType::_COUNT)
-		, myBuilding(aPlayer->GetBuildingComponent())
+		, myPlayerBuilding(aPlayer->GetBuildingComponent())
+		, myEnemyBuilding(anAI->GetBuildingComponent())
 		, myBuildingTimer(nullptr)
 		, myTextScale(1.f)
 		, myEnemyColor(0.35f, 0.35f, 0.35f, 1.f)
@@ -36,9 +40,14 @@ namespace GUI
 		std::string tankPortraitPath = "";
 		std::string buildingPortraitPath = "";
 		std::string statsSpritePath = "";
+		std::string activeQueueOverlaySpritePath = "";
+		std::string starSpritePath = "";
 		CU::Vector2<float> unitSize;
 		CU::Vector2<float> portraitSize;
 		CU::Vector2<float> statsSize;
+		CU::Vector2<float> abortPosition;
+		CU::Vector2<float> starSize;
+		int abortButtonsPerRow = 0;
 
 		tinyxml2::XMLElement* abortButtonElement = aReader->FindFirstChild(anXMLElement, "widget");
 
@@ -62,6 +71,17 @@ namespace GUI
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "tankportrait"), "path", tankPortraitPath);
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "buildingportrait"), "path", buildingPortraitPath);
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "statssprite"), "path", statsSpritePath);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "abortbuttonposition"), "x", abortPosition.x);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "abortbuttonposition"), "y", abortPosition.y);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "timerposition"), "x", myTimerPosition.x);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "timerposition"), "y", myTimerPosition.y);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "abortbuttonsperrow"), "value", abortButtonsPerRow);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "activequeueoverlay"), "path", activeQueueOverlaySpritePath);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "starsprite"), "path", starSpritePath);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "starsprite"), "positionx", myUpgradeStarPosition.x);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "starsprite"), "positiony", myUpgradeStarPosition.y);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "starsprite"), "sizex", starSize.x);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "starsprite"), "sizey", starSize.y);
 
 		myPosition = { 0.f, 0.f };
 		myGruntUnit = Prism::ModelLoader::GetInstance()->LoadSprite(gruntUnitPath, unitSize);
@@ -72,23 +92,40 @@ namespace GUI
 		myTankPortrait = Prism::ModelLoader::GetInstance()->LoadSprite(tankPortraitPath, portraitSize);
 		myBuildingPortrait = Prism::ModelLoader::GetInstance()->LoadSprite(buildingPortraitPath, portraitSize);
 		myStatsSprite = Prism::ModelLoader::GetInstance()->LoadSprite(statsSpritePath, statsSize);
-		myBuildingTimer = new BarWidget(myBuilding.GetMaxBuildTime(), myBuilding.GetCurrentBuildTime(), { unitSize.x * 4.f, unitSize.y / 2.f }, { 0.f, 0.f, 1.f, 1.f });
+		myUpgradeStar = Prism::ModelLoader::GetInstance()->LoadSprite(starSpritePath, starSize);
 
 		int maxQueue = aPlayer->GetBuildingComponent().GetMaxQueue();
-		CU::Vector2<float> queuePosition = myPortraitPosition;
-		queuePosition.x += portraitSize.x;
+		//CU::Vector2<float> queuePosition = myPortraitPosition;
+		//queuePosition.x += portraitSize.x;
 
 		for (int i = 0; i < maxQueue; i++)
 		{
+			int index = i;
+
+			CU::Vector2<float> position = abortPosition;
 			ButtonWidget* abortButton = new ButtonWidget(aReader, abortButtonElement, aPlayer);
 
-			CU::Vector2<float> position = queuePosition + abortButton->GetSize() / 2.f;
-			position.x += abortButton->GetSize().x * float(i);
+			if (i >= abortButtonsPerRow)
+			{
+				position.y -= abortButton->GetSize().y;
+				index -= abortButtonsPerRow;
+			}
+
+			position += abortButton->GetSize() / 2.f;
+			position.x += abortButton->GetSize().x * float(index);
 
 			abortButton->SetPosition(position);
 			abortButton->SetEvent(new OnClickMessage(eOnClickEvent::ABORT_QUEUE, i));
 			myQueueButtons.Add(abortButton);
 		}
+
+		// has to be newed after abortbuttons:
+
+		CU::Vector2<float> timerSize(myQueueButtons[0]->GetSize().x * float(abortButtonsPerRow), myQueueButtons[0]->GetSize().y / 2.f);
+
+		myBuildingTimer = new BarWidget(myPlayerBuilding.GetMaxBuildTime(), myPlayerBuilding.GetCurrentBuildTime(), timerSize, PLAYER_COLOR);
+		myActiveQueueOverlay = Prism::ModelLoader::GetInstance()->LoadSprite(activeQueueOverlaySpritePath
+			, myQueueButtons[0]->GetSize(), myQueueButtons[0]->GetSize() / 2.f); 
 	}
 
 	UnitInfoWidget::~UnitInfoWidget()
@@ -102,6 +139,8 @@ namespace GUI
 		SAFE_DELETE(myBuildingPortrait);
 		SAFE_DELETE(myStatsSprite);
 		SAFE_DELETE(myBuildingTimer);
+		SAFE_DELETE(myActiveQueueOverlay);
+		SAFE_DELETE(myUpgradeStar);
 		myQueueButtons.DeleteAll();
 	}
 
@@ -111,6 +150,11 @@ namespace GUI
 		if (myIsUnitSelected == true)
 		{
 			mySelectedType = myUnits[0]->GetType();
+		}
+
+		for (int i = myPlayerBuilding.GetQueue().Size(); i < myQueueButtons.Size(); i++)
+		{
+			myQueueButtons[i]->OnMouseExit(); // to prevent buttons getting stuck on hover image
 		}
 	}
 
@@ -162,6 +206,13 @@ namespace GUI
 		myBuildingTimer->OnResize(aNewWindowSize, anOldWindowSize, aIsFullScreen);
 		myTextScale = (myTextScale / anOldWindowSize.x) * aNewWindowSize.x;
 
+		for (int i = 0; i < myQueueButtons.Size(); i++)
+		{
+			myQueueButtons[i]->OnResize(aNewWindowSize, anOldWindowSize, aIsFullScreen);
+		}
+
+		myActiveQueueOverlay->SetSize(myQueueButtons[0]->GetSize(), myQueueButtons[0]->GetSize() / 2.f);
+
 		if (myIsFullscreen == false)
 		{
 			CU::Vector2<float> unitRatioSize = myGruntUnit->GetSize() / anOldWindowSize.x;
@@ -177,6 +228,9 @@ namespace GUI
 			myUnitPosition = (myUnitPosition / anOldWindowSize.x) * aNewWindowSize.x;
 			myPortraitPosition = (myPortraitPosition / anOldWindowSize.x) * aNewWindowSize.x;
 			myStatsSprite->SetSize((myStatsSprite->GetSize() / anOldWindowSize.x) * aNewWindowSize.x, { 0.f, 0.f });
+			myTimerPosition = (myTimerPosition / anOldWindowSize.x) * aNewWindowSize.x;
+			myUpgradeStarPosition = (myUpgradeStarPosition / anOldWindowSize.x) * aNewWindowSize.x;
+			myUpgradeStar->SetSize((myUpgradeStar->GetSize() / anOldWindowSize.x) * aNewWindowSize.x, { 0.f, 0.f });
 		}
 		else
 		{
@@ -193,12 +247,15 @@ namespace GUI
 			myUnitPosition = (myUnitPosition / anOldWindowSize) * aNewWindowSize;
 			myPortraitPosition = (myPortraitPosition / anOldWindowSize) * aNewWindowSize;
 			myStatsSprite->SetSize((myStatsSprite->GetSize() / anOldWindowSize) * aNewWindowSize, { 0.f, 0.f });
+			myTimerPosition = (myTimerPosition / anOldWindowSize) * aNewWindowSize;
+			myUpgradeStarPosition = (myUpgradeStarPosition / anOldWindowSize) * aNewWindowSize;
+			myUpgradeStar->SetSize((myUpgradeStar->GetSize() / anOldWindowSize) * aNewWindowSize, { 0.f, 0.f });
 		}
 	}
 
 	Widget*	UnitInfoWidget::MouseIsOver(const CU::Vector2<float>& aPosition)
 	{
-		const CU::GrowingArray<BuildInfo>& queue = myBuilding.GetQueue();
+		const CU::GrowingArray<BuildInfo>& queue = myPlayerBuilding.GetQueue();
 
 		for (int i = 0; i < queue.Size(); i++)
 		{
@@ -216,19 +273,41 @@ namespace GUI
 	{
 		myBuildingPortrait->Render(myPosition + aParentPosition + myPortraitPosition);
 
-		if (myBuilding.GetEntityToSpawn() != eEntityType::EMPTY)
+		if (myPlayerBuilding.GetEntityToSpawn() != eEntityType::EMPTY)
 		{
 			myBuildingTimer->Update(0.f);
-			CU::Vector2<float> position = myPosition + aParentPosition + myUnitPosition + (myBuildingTimer->GetSize() / 2.f);
-			myBuildingTimer->Render(position);
-			position.x += myBuildingTimer->GetSize().x + 10.f;
-			Prism::Engine::GetInstance()->PrintText(myBuilding.GetSpawnQueueSize(), position, Prism::eTextType::RELEASE_TEXT, myTextScale);
+			//CU::Vector2<float> position = myPosition + aParentPosition + myUnitPosition + (myBuildingTimer->GetSize() / 2.f);
+			myBuildingTimer->Render(myPosition + aParentPosition + myTimerPosition);
+			//position.x += myBuildingTimer->GetSize().x + 10.f;
+			//Prism::Engine::GetInstance()->PrintText(myBuilding.GetSpawnQueueSize(), position, Prism::eTextType::DEBUG_TEXT, myTextScale);
 
-			const CU::GrowingArray<BuildInfo>& queue = myBuilding.GetQueue();
+			const CU::GrowingArray<BuildInfo>& queue = myPlayerBuilding.GetQueue();
+			CU::Vector2<float> portraitScale = myQueueButtons[0]->GetSize() / myGruntPortrait->GetSize();
 
 			for (int i = 0; i < queue.Size(); i++)
 			{
 				myQueueButtons[i]->Render(myPosition + aParentPosition);
+
+				CU::Vector2<float> portraitPosition = (myQueueButtons[i]->GetPosition() - 
+					(myQueueButtons[i]->GetSize() / 2.f)) + (myPosition + aParentPosition);
+
+				switch (queue[i].myUnit)
+				{
+				case eUnitType::GRUNT:
+					myGruntPortrait->Render(portraitPosition, portraitScale);
+					break;
+				case eUnitType::RANGER:
+					myRangerPortrait->Render(portraitPosition, portraitScale);
+					break;
+				case eUnitType::TANK:
+					myTankPortrait->Render(portraitPosition, portraitScale);
+					break;
+				}
+
+				if (i == 0)
+				{
+					myActiveQueueOverlay->Render(myQueueButtons[i]->GetPosition() + myPosition + aParentPosition);
+				}
 			}
 		}
 	}
@@ -282,8 +361,25 @@ namespace GUI
 
 		if (myUnits[0]->GetUnitType() != eUnitType::NON_ATTACK_TUTORIAL)
 		{
-			Prism::Engine::GetInstance()->PrintText(myBuilding.GetUpgradeLevel(myUnits[0]->GetUnitType()), upgradePosition
-				, Prism::eTextType::RELEASE_TEXT, 1.f, myUnits[0]->GetOwner() == eOwnerType::PLAYER ? CU::Vector4<float>(1.f, 1.f, 1.f, 1.f) : myEnemyColor);
+			CU::Vector4<float> color = { 1.f, 1.f, 1.f, 1.f };
+			int upgradeLevel = 0;
+
+			if (myUnits[0]->GetOwner() == eOwnerType::PLAYER)
+			{
+				upgradeLevel = myPlayerBuilding.GetUpgradeLevel(myUnits[0]->GetUnitType());
+			}
+			else if (myUnits[0]->GetOwner() == eOwnerType::ENEMY)
+			{
+				upgradeLevel = myEnemyBuilding.GetUpgradeLevel(myUnits[0]->GetUnitType());
+				color = myEnemyColor;
+			}
+
+			for (; upgradeLevel > 0; --upgradeLevel)
+			{
+				CU::Vector2<float> starPosition = myPosition + aParentPosition + myUpgradeStarPosition;
+				starPosition.x += myUpgradeStar->GetSize().x * float(upgradeLevel - 1);
+				myUpgradeStar->Render(starPosition, { 1.f, 1.f }, color);
+			}
 		}
 
 		portraitPosition.y -= myGruntPortrait->GetSize().y / 3.5f;
@@ -377,14 +473,14 @@ namespace GUI
 			CU::Vector2<float> position = { (myPosition.x + portrait->GetSize().x * x) + (x * 10.f), myPosition.y - portrait->GetSize().y * y - y * 10.f };
 			position += aParentPosition + myUnitPosition;
 
-			CU::Vector2<float> upgradePosition = position;
-			upgradePosition.x += portrait->GetSize().x * 0.7f;
-			upgradePosition.y += portrait->GetSize().y * 0.15f;
+			//CU::Vector2<float> upgradePosition = position;
+			//upgradePosition.x += portrait->GetSize().x * 0.7f;
+			//upgradePosition.y += portrait->GetSize().y * 0.15f;
 
 			portrait->Render(position, { 1.f, 1.f }, color);
 			position += portrait->GetSize() * 0.2f;
 			myUnits[i]->GetComponent<PromotionComponent>()->RenderPromotion(position, { 0.7f, 0.7f });
-			Prism::Engine::GetInstance()->PrintText(myBuilding.GetUpgradeLevel(myUnits[i]->GetUnitType()), upgradePosition, Prism::eTextType::RELEASE_TEXT, 0.8f);
+			//Prism::Engine::GetInstance()->PrintText(myBuilding.GetUpgradeLevel(myUnits[i]->GetUnitType()), upgradePosition, Prism::eTextType::RELEASE_TEXT, 0.8f);
 		}
 	}
 }

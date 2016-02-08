@@ -3,10 +3,12 @@
 #include "CollisionComponent.h"
 #include "GrenadeComponent.h"
 #include <Intersection.h>
+#include <TutorialMessage.h>
 #include <PostMaster.h>
 #include "PollingStation.h"
 #include <SpawnUnitMessage.h>
 #include <UpgradeUnitMessage.h>
+#include <ResourceMessage.h>
 
 BuildingComponent::BuildingComponent(Entity& aEntity, BuildingComponentData& aData)
 	: Component(aEntity)
@@ -43,7 +45,7 @@ void BuildingComponent::Reset()
 
 	CU::Vector2<float> forward(myEntity.GetOrientation().GetForward().x, myEntity.GetOrientation().GetForward().z);
 	mySpawnPoint = myEntity.GetPosition() + (-forward * 14.f);
-	myRallyPoint = myEntity.GetPosition() + (-forward * 15.f);
+	myRallyPoint = myEntity.GetPosition() + (-forward * 25.f);
 }
 
 void BuildingComponent::Update(float aDeltaTime)
@@ -216,6 +218,10 @@ void BuildingComponent::HandleMineField()
 		Entity* toThrowAt = myUnitsInMineField[rand() % myUnitsInMineField.Size()];
 		CU::Vector3<float> throwPos(toThrowAt->GetPosition().x, 1.f, toThrowAt->GetPosition().y);
 		myEntity.GetComponent<GrenadeComponent>()->ThrowGrenade(throwPos);
+		if (myEntity.GetOwner() == eOwnerType::ENEMY)
+		{
+			PostMaster::GetInstance()->SendMessage(TutorialMessage(eTutorialAction::ENEMY_BASE));
+		}
 	}
 
 }
@@ -248,5 +254,14 @@ void BuildingComponent::CheckUnitsForAdd(const CU::GrowingArray<Entity*>& someUn
 				someUnitsOut.Add(current);
 			}
 		}
+	}
+}
+
+void BuildingComponent::Abort(int aIndex)
+{
+	if (myBuildQueue.Size() >= aIndex)
+	{
+		PostMaster::GetInstance()->SendMessage(ResourceMessage(myEntity.myOwner, GetUnitCost(myBuildQueue[aIndex].myUnit)));
+		myBuildQueue.RemoveNonCyclicAtIndex(aIndex);
 	}
 }

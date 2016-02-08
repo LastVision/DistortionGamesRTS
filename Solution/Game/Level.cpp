@@ -27,6 +27,7 @@
 #include <Terrain.h>
 #include <ToggleRenderLinesMessage.h>
 #include "Tutorial.h"
+#include <TriggerComponent.h>
 
 Level::Level(const Prism::Camera& aCamera, Prism::Terrain* aTerrain, GUI::Cursor* aCursor, eDifficulty aDifficulty)
 	: myEntities(64)
@@ -35,6 +36,8 @@ Level::Level(const Prism::Camera& aCamera, Prism::Terrain* aTerrain, GUI::Cursor
 	, myMaxVictoryPoint(-1)
 	, myHasToldPlayerAboutWinning(false)
 	, myHasToldPlayerAboutLosing(false)
+	, myIsFirstFrame(false)
+	, myIsSecondFrame(false)
 {
 	EntityFactory::GetInstance()->LoadEntities("Data/Resource/Entity/LI_entity.xml");
 	myEmitterManager = new EmitterManager(aCamera);
@@ -60,6 +63,7 @@ Level::Level(const Prism::Camera& aCamera, Prism::Terrain* aTerrain, GUI::Cursor
 	FogOfWarMap::GetInstance()->SetFogOfWarHelperTexture(myFogOfWarHelper->GetTexture());
 
 	Prism::Audio::AudioInterface::GetInstance()->PostEvent("Play_Ambience", 0);
+
 }
 
 Level::~Level()
@@ -85,6 +89,7 @@ Level::~Level()
 	LUA::ScriptSystem::GetInstance()->Destroy();
 
 	Prism::Audio::AudioInterface::GetInstance()->PostEvent("Stop_Ambience", 0);
+	Prism::Audio::AudioInterface::GetInstance()->PostEvent("Stop_Music", 0);
 }
 
 void Level::LoadTutorial(const Prism::Camera& aCamera, const std::string& aTutorialPath)
@@ -96,6 +101,22 @@ bool Level::Update(float aDeltaTime, Prism::Camera& aCamera)
 {
 	//CU::Vector3<float> lightDir(myLight->GetCurrentDir().x, myLight->GetCurrentDir().y, myLight->GetCurrentDir().z);
 	//myLight->SetDir(lightDir * CU::Matrix44<float>::CreateRotateAroundZ(-3.14f * aDeltaTime / 3.f));
+
+	if (myIsFirstFrame == false)
+	{
+		myIsFirstFrame = true;
+	}
+	if (myIsFirstFrame == true && myIsSecondFrame == false)
+	{
+		const CU::GrowingArray<Entity*>& points = PollingStation::GetInstance()->GetResourcePoints();
+		for (int i = 0; i < points.Size(); ++i)
+		{
+			points[i]->GetComponent<TriggerComponent>()->StartSound();
+		}
+		Prism::Audio::AudioInterface::GetInstance()->PostEvent("Stop_Loading", 0);
+		Prism::Audio::AudioInterface::GetInstance()->PostEvent("Play_Music", 0);
+		myIsSecondFrame = true;
+	}
 
 	myShadowLight->UpdateOrientation();
 	myShadowLight->GetCamera()->Update(aDeltaTime);
@@ -199,7 +220,7 @@ void Level::ReceiveMessage(const ToggleRenderLinesMessage& aMessage)
 	}
 }
 
-void Level::ReceiveMessage(const ToggleFogOfWarMessage& aMessage)
+void Level::ReceiveMessage(const ToggleFogOfWarMessage&)
 {
 	FogOfWarMap::GetInstance()->ToggleFogOfWar();
 	myShowFogOfWar = !myShowFogOfWar;

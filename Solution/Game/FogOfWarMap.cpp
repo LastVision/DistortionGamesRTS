@@ -138,6 +138,7 @@ void FogOfWarMap::ToggleFogOfWar()
 
 void FogOfWarMap::SetFogOfWarHelperTexture(Prism::Texture* aTexture)
 {
+	aTexture;
 	//myFogOfWarHelperTexture = aTexture;
 	//mySprite = Prism::ModelLoader::GetInstance()->LoadSprite(myFogOfWarHelperTexture->GetTexture(), { 600.f, 300.f }, { 0.f, 0.f });
 }

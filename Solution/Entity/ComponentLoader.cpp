@@ -59,24 +59,18 @@ void ComponentLoader::LoadAnimationComponent(XMLReader& aDocument, tinyxml2::XML
 		std::string elementName = CU::ToLower(e->Name());
 		if (elementName == CU::ToLower("Model"))
 		{
-			std::string modelPath;
-			std::string effectPath;
-			aDocument.ForceReadAttribute(e, "modelPath", modelPath);
-			aDocument.ForceReadAttribute(e, "shaderPath", effectPath);
-			aOutputData.myModelPath = modelPath.c_str();
-			aOutputData.myEffectPath = effectPath.c_str();
+			aDocument.ForceReadAttribute(e, "modelPath", aOutputData.myModelPath);
+			aDocument.ForceReadAttribute(e, "shaderPath", aOutputData.myEffectPath);
 		}
 		else if (elementName == CU::ToLower("Animation"))
 		{
 			AnimationLoadData newAnimation;
-			std::string animPath;
 			int animState;
 
-			aDocument.ForceReadAttribute(e, "path", animPath);
+			aDocument.ForceReadAttribute(e, "path", newAnimation.myAnimationPath);
 			aDocument.ForceReadAttribute(e, "state", animState);
 			aDocument.ForceReadAttribute(e, "loop", newAnimation.myLoopFlag);
 			aDocument.ForceReadAttribute(e, "resetTime", newAnimation.myResetTimeOnRestart);
-			newAnimation.myAnimationPath = animPath.c_str();
 			newAnimation.myEntityState = static_cast<eEntityState>(animState);
 
 			aOutputData.myAnimations.Insert(static_cast<int>(newAnimation.myEntityState), newAnimation);
@@ -205,12 +199,8 @@ void ComponentLoader::LoadGraphicsComponent(XMLReader& aDocument, tinyxml2::XMLE
 		std::string elementName = CU::ToLower(e->Name());
 		if (elementName == CU::ToLower("Model"))
 		{
-			std::string modelPath;
-			std::string effectPath;
-			aDocument.ForceReadAttribute(e, "modelPath", modelPath);
-			aDocument.ForceReadAttribute(e, "shaderPath", effectPath);
-			aOutputData.myModelPath = modelPath.c_str();
-			aOutputData.myEffectPath = effectPath.c_str();
+			aDocument.ForceReadAttribute(e, "modelPath", aOutputData.myModelPath);
+			aDocument.ForceReadAttribute(e, "shaderPath", aOutputData.myEffectPath);
 		}
 		else
 		{
@@ -336,21 +326,20 @@ void ComponentLoader::LoadPromotionComponent(XMLReader& aDocument, tinyxml2::XML
 void ComponentLoader::LoadSelectionComponent(XMLReader& aDocument, tinyxml2::XMLElement* aSourceElement, SelectionComponentData& aOutputData)
 {
 	aOutputData.myExistsInEntity = true;
+	aOutputData.myScale = 1.f;
 
 	for (tinyxml2::XMLElement* e = aDocument.FindFirstChild(aSourceElement); e != nullptr; e = aDocument.FindNextElement(e))
 	{
 		std::string elementName = CU::ToLower(e->Name());
 		if (elementName == CU::ToLower("Hover"))
 		{
-			std::string selectedPath;
-			std::string hoveredPath;
-			std::string effectPath;
-			aDocument.ForceReadAttribute(e, "selectedPath", selectedPath);
-			aDocument.ForceReadAttribute(e, "hoveredPath", hoveredPath);
-			aDocument.ForceReadAttribute(e, "shaderPath", effectPath);
-			aOutputData.mySelectedPath = selectedPath.c_str();
-			aOutputData.myHoveredPath = hoveredPath.c_str();
-			aOutputData.myEffectPath = effectPath.c_str();
+			aDocument.ForceReadAttribute(e, "selectedPath", aOutputData.mySelectedPath);
+			aDocument.ForceReadAttribute(e, "hoveredPath", aOutputData.myHoveredPath);
+			aDocument.ForceReadAttribute(e, "shaderPath", aOutputData.myEffectPath);
+		}
+		else if (elementName == CU::ToLower("Scale"))
+		{
+			aDocument.ForceReadAttribute(e, "value", aOutputData.myScale);
 		}
 		else
 		{

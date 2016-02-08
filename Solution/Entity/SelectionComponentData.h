@@ -1,9 +1,10 @@
 #pragma once
-
+#include <string>
 struct SelectionComponentData
 {
 	bool myExistsInEntity = false;
-	const char* mySelectedPath;
-	const char* myHoveredPath;
-	const char* myEffectPath;
+	std::string mySelectedPath;
+	std::string myHoveredPath;
+	std::string myEffectPath;
+	float myScale;
 };

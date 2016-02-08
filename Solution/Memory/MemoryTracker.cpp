@@ -4,6 +4,8 @@
 #include <sstream>
 #include <mutex>
 
+
+#ifdef ENABLE_MEMORY_TRACKER
 #define MAX_ALLOCATIONS 2500000
 
 void* operator new(size_t aBytes)
@@ -29,19 +31,16 @@ void operator delete[](void* aAddress) throw()
 {
 	Prism::MemoryTracker::GetInstance()->Remove(aAddress);
 }
+#endif
 
 namespace Prism
 {
 	MemoryTracker* MemoryTracker::myInstance = nullptr;
 
-	void MemoryTracker::Create()
-	{
-		myInstance = new MemoryTracker();
-	}
-
 	void MemoryTracker::Destroy()
 	{
 		delete myInstance;
+		myInstance = nullptr;
 	}
 
 	MemoryTracker* MemoryTracker::GetInstance()
@@ -51,8 +50,10 @@ namespace Prism
 			myInstance = static_cast<MemoryTracker*>(malloc(sizeof(MemoryTracker)));
 			myInstance = new(myInstance)MemoryTracker();
 
+#ifdef ENABLE_MEMORY_TRACKER
 			myInstance->myMutex = static_cast<std::recursive_mutex*>(malloc(sizeof(std::recursive_mutex)));
 			myInstance->myMutex = new(myInstance->myMutex)std::recursive_mutex();
+#endif
 		}
 
 		return myInstance;
@@ -60,6 +61,7 @@ namespace Prism
 
 	void MemoryTracker::Allocate(int aLine, const char* aFile, const char* aFunction)
 	{
+#ifdef ENABLE_MEMORY_TRACKER
 		if (myMutex != nullptr)
 		{
 			myMutex->lock();
@@ -89,15 +91,19 @@ namespace Prism
 		{
 			myMutex->unlock();
 		}
+#endif
 	}
 
 	void MemoryTracker::Free(void* aAddress)
 	{
+#ifdef ENABLE_MEMORY_TRACKER
 		Remove(aAddress);
+#endif
 	}
 
 	void MemoryTracker::DumpToFile()
 	{
+#ifdef ENABLE_MEMORY_TRACKER
 		DL_PRINT_VA("--- MEMORY LEAKS ---\n");
 		DL_PRINT_VA("Bytes:\tLine:\tFile:\t\t\t\t\t\tFunction:");
 
@@ -114,10 +120,12 @@ namespace Prism
 
 		DL_ASSERT_VA("\nMEMORYLEAK!\nFile: %s\nFunction: %s\nLine: %i\n\nTotal Leaks: %i"
 			, shortPath, myData[0].myFunctionName, myData[0].myLine, myAllocations);
+#endif
 	}
 
 	void MemoryTracker::Add(void* aAddress, size_t aBytes, eMemoryType aMemoryType)
 	{
+#ifdef ENABLE_MEMORY_TRACKER
 		if (myMutex != nullptr)
 		{
 			myMutex->lock();
@@ -158,10 +166,12 @@ namespace Prism
 		{
 			myMutex->unlock();
 		}
+#endif
 	}
 
 	void MemoryTracker::Remove(void* aAddress, bool aLock)
 	{
+#ifdef ENABLE_MEMORY_TRACKER
 		if (aLock == true && myMutex != nullptr)
 		{
 			myMutex->lock();
@@ -182,6 +192,7 @@ namespace Prism
 		{
 			myMutex->unlock();
 		}
+#endif
 	}
 
 	MemoryTracker::MemoryTracker()
@@ -189,12 +200,15 @@ namespace Prism
 		, myAllocations(0)
 		, myRuntime(false)
 	{
+#ifdef ENABLE_MEMORY_TRACKER
 		myData = reinterpret_cast<MemoryData*>(::malloc(sizeof(MemoryData) * MAX_ALLOCATIONS));
+#endif
 	}
 
 
 	MemoryTracker::~MemoryTracker()
 	{
+#ifdef ENABLE_MEMORY_TRACKER
 		if (myAllocations > 0)
 		{
 			DumpToFile();
@@ -203,5 +217,6 @@ namespace Prism
 
 		::free(myMutex);
 		myMutex = nullptr;
+#endif
 	}
 }

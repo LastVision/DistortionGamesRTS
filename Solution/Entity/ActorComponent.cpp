@@ -2,12 +2,13 @@
 #include "stdafx.h"
 
 #include "ActorComponent.h"
+//#include "ActorComponentData.h"
 #include <Animation.h>
+#include "AnimationComponent.h"
 #include <ArtifactMessage.h>
 #include "AudioInterface.h"
 #include "BehaviorNote.h"
 #include "BlendedBehavior.h"
-//#include "ActorComponentData.h"
 #include "../Game/FogOfWarMap.h"
 #include "ControllerComponent.h"
 #include <EmitterMessage.h>
@@ -20,7 +21,7 @@
 #include "KilledPromotedMessage.h"
 #include <ModelLoader.h>
 #include <Terrain.h>
-#include "AnimationComponent.h"
+#include <TutorialMessage.h>
 #include "PollingStation.h"
 #include <PostMaster.h>
 #include "PromotionComponent.h"
@@ -172,6 +173,7 @@ void ActorComponent::Update(float aDelta)
 				if (myEntity.GetOwner() == eOwnerType::PLAYER)
 				{
 					PostMaster::GetInstance()->SendMessage(InWorldTextMessage("artifact pickup", myEntity.GetPosition()));
+					PostMaster::GetInstance()->SendMessage(TutorialMessage(eTutorialAction::ARTIFACT));
 				}
 
 				PostMaster::GetInstance()->SendMessage(ArtifactMessage(myEntity.GetOwner(), 1));
@@ -410,6 +412,13 @@ void ActorComponent::AttackTarget(Entity* aTarget, float aDelta)
 		{
 			myEntity.SetState(eEntityState::THROW);
 			myEntity.GetComponent<GrenadeComponent>()->ThrowGrenade(aTarget->GetOrientation().GetPos());
+			if (FogOfWarMap::GetInstance()->IsVisible(myEntity.GetPosition()) == true && rand() % 2 == 0)
+			{
+				Prism::Audio::AudioInterface::GetInstance()->PostEvent("Grunt_ThrowGrenade"
+					, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+
+				PostMaster::GetInstance()->SendMessage(InWorldTextMessage("Grenade!", myEntity.GetPosition(), { 1.f, 0.88f, 0.f, 1.f }));
+			}
 		}
 		else
 		{
@@ -458,7 +467,11 @@ void ActorComponent::AttackTarget(Entity* aTarget, float aDelta)
 			&& myRangerOneShotTimer <= 0.f)
 		{
 			myRangerOneShotTimer = myRangerOneShotCooldown;
-			targetSurvived = targetHealth->TakeDamageAndCheckSurvive(targetHealth->GetMaxHealth() * 2.f);
+			targetSurvived = targetHealth->TakeDamageAndCheckSurvive((targetHealth->GetMaxHealth() * 0.75f) + targetHealth->GetArmor());
+
+			PostMaster::GetInstance()->SendMessage(InWorldTextMessage("Critical hit!", aTarget->GetPosition(), { 1.f, 0.88f, 0.f, 1.f }));
+			
+
 		}
 		else
 		{
@@ -506,7 +519,7 @@ void ActorComponent::LookInDirection(const CU::Vector2<float>& aDirection, float
 
 		if (aTurnInstant == false)
 		{
-			float limit = (M_PI)* aDelta;
+			float limit = static_cast<float>((M_PI)) * aDelta;
 			if (angle > limit)
 			{
 				angle = limit;

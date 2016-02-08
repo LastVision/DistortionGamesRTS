@@ -112,7 +112,7 @@ const eStateStatus InGameState::Update(const float& aDeltaTime)
 	UpdateCamera(aDeltaTime, myLevel->GetCameraMoveVector());
 
 
-#ifndef _DEBUG
+//#ifndef _DEBUG
 	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_ESCAPE))
 	{
 		bool oldRuntime = Prism::MemoryTracker::GetInstance()->GetRunTime();
@@ -122,12 +122,12 @@ const eStateStatus InGameState::Update(const float& aDeltaTime)
 
 		Prism::MemoryTracker::GetInstance()->SetRunTime(oldRuntime);
 	}
-#endif
-#ifdef _DEBUG
-	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_ESCAPE) || myIsShuttingDown == true || myIsComplete == true)
-#else
+//#endif
+//#ifdef _DEBUG
+	//if (CU::InputWrapper::GetInstance()->KeyDown(DIK_ESCAPE) || myIsShuttingDown == true || myIsComplete == true)
+//#else
 	if (myIsShuttingDown == true || myIsComplete == true)
-#endif
+//#endif
 	{
 		myIsActiveState = false;
 		SAFE_DELETE(myLevel);
@@ -185,12 +185,8 @@ const eStateStatus InGameState::Update(const float& aDeltaTime)
 void InGameState::Render()
 {
 	VTUNE_EVENT_BEGIN(VTUNE::GAME_RENDER);
-	myLevel->Render(*myCamera);
 
-	if (myIsActiveState == true)
-	{
-		Prism::DebugDrawer::GetInstance()->Render(*myCamera); //Have to be last
-	}
+	myLevel->Render(*myCamera);
 
 	VTUNE_EVENT_END();
 }
