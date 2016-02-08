@@ -1,6 +1,10 @@
 #pragma once
 #include "MemoryStatistics.h"
 #include <thread>
+
+
+#define ENABLE_MEMORY_TRACKER
+
 namespace std
 {
 	class recursive_mutex;
@@ -32,10 +36,12 @@ namespace Prism
 
 	class MemoryTracker
 	{
+#ifdef ENABLE_MEMORY_TRACKER
 		friend void* ::operator new(size_t aBytes);
 		friend void* ::operator new[](size_t aBytes);
 		friend void ::operator delete(void* aAddress);
 		friend void ::operator delete[](void* aAddress);
+#endif
 	public:
 		static void Destroy();
 		static MemoryTracker* GetInstance();

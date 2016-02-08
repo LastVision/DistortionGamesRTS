@@ -2,12 +2,13 @@
 #include "stdafx.h"
 
 #include "ActorComponent.h"
+//#include "ActorComponentData.h"
 #include <Animation.h>
+#include "AnimationComponent.h"
 #include <ArtifactMessage.h>
 #include "AudioInterface.h"
 #include "BehaviorNote.h"
 #include "BlendedBehavior.h"
-//#include "ActorComponentData.h"
 #include "../Game/FogOfWarMap.h"
 #include "ControllerComponent.h"
 #include <EmitterMessage.h>
@@ -20,7 +21,7 @@
 #include "KilledPromotedMessage.h"
 #include <ModelLoader.h>
 #include <Terrain.h>
-#include "AnimationComponent.h"
+#include <TutorialMessage.h>
 #include "PollingStation.h"
 #include <PostMaster.h>
 #include "PromotionComponent.h"
@@ -172,6 +173,7 @@ void ActorComponent::Update(float aDelta)
 				if (myEntity.GetOwner() == eOwnerType::PLAYER)
 				{
 					PostMaster::GetInstance()->SendMessage(InWorldTextMessage("artifact pickup", myEntity.GetPosition()));
+					PostMaster::GetInstance()->SendMessage(TutorialMessage(eTutorialAction::ARTIFACT));
 				}
 
 				PostMaster::GetInstance()->SendMessage(ArtifactMessage(myEntity.GetOwner(), 1));

@@ -29,6 +29,7 @@ namespace Prism
 		, myDebugTexts(16)
 		, myTextsNew(256)
 		, myShowDebugText(false)
+		, myShouldRenderText(true)
 	{
 		myModelFactory = new FBXFactory();
 		myWireframeIsOn = false;
@@ -97,15 +98,18 @@ namespace Prism
 		DEBUG_PRINT(MemoryTracker::GetInstance()->GetRunTime());
 		DEBUG_PRINT(GetWindowSize());
 
-		for (int i = 0; i < myTexts.Size(); ++i)
+		if (myShouldRenderText == true)
 		{
-			if (myIsLoading == false)
+			for (int i = 0; i < myTexts.Size(); ++i)
 			{
-				myText->SetText(myTexts[i].myText);
-				myText->SetPosition(myTexts[i].myPosition);
-				myText->SetScale({ myTexts[i].myScale, myTexts[i].myScale });
-				myText->SetColor(myTexts[i].myColor);
-				myText->Render();
+				if (myIsLoading == false)
+				{
+					myText->SetText(myTexts[i].myText);
+					myText->SetPosition(myTexts[i].myPosition);
+					myText->SetScale({ myTexts[i].myScale, myTexts[i].myScale });
+					myText->SetColor(myTexts[i].myColor);
+					myText->Render();
+				}
 			}
 		}
 		myTexts.RemoveAll();
@@ -421,6 +425,11 @@ namespace Prism
 	void Engine::DisableCulling()
 	{
 		myDirectX->DisableCulling();
+	}
+
+	void Engine::SetShouldRenderText(bool aStatus)
+	{
+		myShouldRenderText = aStatus;
 	}
 
 	void Engine::StartFade(float aDuration)
