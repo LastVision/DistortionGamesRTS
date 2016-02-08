@@ -74,8 +74,14 @@ private:
 	bool myRenderNavMeshLines;
 	bool myShowFogOfWar;
 
-	bool myHasToldPlayerAboutWinning;
-	bool myHasToldPlayerAboutLosing;
+	bool myHasToldPlayerAboutWinningIn50;
+	bool myHasToldPlayerAboutLosingIn50;
+	bool myHasToldPlayerAboutWinningIn100;
+	bool myHasToldPlayerAboutLosingIn100;
+	bool myHasToldPlayerAboutWinningIn200;
+	bool myHasToldPlayerAboutLosingIn200;
+	bool myHasToldPlayerAboutWinningIn300;
+	bool myHasToldPlayerAboutLosingIn300;
 
 	bool myIsFirstFrame;
 	bool myIsSecondFrame;
