@@ -7,6 +7,11 @@ namespace GUI
 	class Cursor;
 }
 
+namespace Prism
+{
+	class Camera;
+}
+
 class Game : public Subscriber
 {
 public:
@@ -27,6 +32,8 @@ private:
 	void operator=(Game& aApp) = delete;
 
 	GUI::Cursor* myCursor;
+	Prism::Camera* myCamera;
+	CU::Matrix44<float> myCameraOrientation;
 
 	HWND* myWindowHandler;
 

@@ -51,6 +51,8 @@ Game::Game()
 
 	SetCursorPos(Prism::Engine::GetInstance()->GetWindowSizeInt().x / 2, Prism::Engine::GetInstance()->GetWindowSizeInt().y / 2);
 	myStateStack.SetCursor(myCursor);
+
+	myCamera = new Prism::Camera(myCameraOrientation);
 }
 
 Game::~Game()
@@ -66,6 +68,8 @@ Game::~Game()
 	PostMaster::Destroy();
 	myStateStack.Clear();
 	Prism::DebugDrawer::Destroy();
+
+	SAFE_DELETE(myCamera);
 }
 
 bool Game::Init(HWND& aHwnd)
@@ -137,6 +141,7 @@ bool Game::Update()
 	myCursor->Update();
 	myCursor->Render();
 	
+	Prism::DebugDrawer::GetInstance()->Render(*myCamera); //Have to be last
 	return true;
 }
 
