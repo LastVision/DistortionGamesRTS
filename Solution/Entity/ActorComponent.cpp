@@ -459,6 +459,10 @@ void ActorComponent::AttackTarget(Entity* aTarget, float aDelta)
 		{
 			myRangerOneShotTimer = myRangerOneShotCooldown;
 			targetSurvived = targetHealth->TakeDamageAndCheckSurvive((targetHealth->GetMaxHealth() * 0.75f) + targetHealth->GetArmor());
+
+			PostMaster::GetInstance()->SendMessage(InWorldTextMessage("Critical hit!", aTarget->GetPosition(), { 1.f, 0.88f, 0.f, 1.f }));
+			
+
 		}
 		else
 		{
