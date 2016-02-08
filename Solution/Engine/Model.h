@@ -53,7 +53,7 @@ namespace Prism
 		void SetFileName(const std::string& aFileName) override;
 
 	private:
-		
+		void operator=(Model&) = delete;
 		void InitInstancingBuffers();
 		void SetupInstancingBuffers();
 
