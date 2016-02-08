@@ -15,7 +15,7 @@ namespace Prism
 
 	TransformationNodeInstance::~TransformationNodeInstance()
 	{
-		delete myTransformationNode;
+		SAFE_DELETE(myTransformationNode);
 		if (myChildren.Size() > 0)
 		{
 			myChildren.DeleteAll();

@@ -4,10 +4,11 @@
 #include "CollisionComponent.h"
 #include "CommonHelper.h"
 #include <EmitterMessage.h>
+#include <Intersection.h>
 #include "MathHelper.h"
 #include "TriggerComponent.h"
 #include <TriggerMessage.h>
-#include <Intersection.h>
+#include <TutorialMessage.h>
 #include "PollingStation.h"
 #include <PostMaster.h>
 #include <MinimapEventMessage.h>
@@ -78,7 +79,7 @@ void TriggerComponent::CheckUnitsForRemove(CU::GrowingArray<Entity*>& someUnits)
 
 void TriggerComponent::CheckUnitsForAdd(const CU::GrowingArray<Entity*>& someUnits
 	, CU::GrowingArray<Entity*>& someUnitsOut) const
-{
+{ 
 	for (int i = 0; i < someUnits.Size(); ++i)
 	{
 		Entity* current = someUnits[i];
@@ -185,11 +186,13 @@ eOwnerType TriggerComponent::ModifyOwnership(eOwnerType anOwner, float aModifyVa
 				if (myType == eTriggerType::VICTORY)
 				{
 					PostMaster::GetInstance()->SendMessage(EmitterMessage("victory_point_capture", myEntity.GetOrientation().GetPos()));
+					PostMaster::GetInstance()->SendMessage(TutorialMessage(eTutorialAction::VICTORY_POINT));
 					PostMaster::GetInstance()->SendMessage(NotificationMessage("Victory point captured."));
 				}
 				else if (myType == eTriggerType::RESOURCE)
 				{
 					PostMaster::GetInstance()->SendMessage(EmitterMessage("resource_point_capture", myEntity.GetOrientation().GetPos()));
+					PostMaster::GetInstance()->SendMessage(TutorialMessage(eTutorialAction::RESOURCE_POINT));
 					PostMaster::GetInstance()->SendMessage(NotificationMessage("Resource point captured."));
 				}
 				PostMaster::GetInstance()->SendMessage(InWorldTextMessage("Captured", myEntity.GetPosition()));
@@ -209,7 +212,7 @@ eOwnerType TriggerComponent::ModifyOwnership(eOwnerType anOwner, float aModifyVa
 
 		myEntity.SetOwner(anOwner);
 		myGainingPointsOwner = anOwner;
-
+		
 	}
 
 	return myGainingPointsOwner;

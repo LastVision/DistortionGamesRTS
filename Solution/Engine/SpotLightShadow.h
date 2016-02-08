@@ -25,6 +25,8 @@ namespace Prism
 		CU::Matrix44<float> GetMVP() const;
 
 	private:
+		void operator=(SpotLightShadow&) = delete;
+
 		Camera* myCamera;
 		Texture* myTexture;
 		CU::Matrix44<float> myBiasMatrix;

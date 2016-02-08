@@ -35,6 +35,7 @@ void HelpState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCurso
 void HelpState::EndState()
 {
 	myIsActiveState = false;
+	Prism::Engine::GetInstance()->SetShouldRenderText(true);
 }
 
 void HelpState::OnResize(int aWidth, int aHeight)
@@ -60,6 +61,7 @@ const eStateStatus HelpState::Update(const float& aDeltaTime)
 
 void HelpState::Render()
 {
+	Prism::Engine::GetInstance()->SetShouldRenderText(false);
 	myGUIManager->Render();
 }
 

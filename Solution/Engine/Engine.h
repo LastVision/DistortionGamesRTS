@@ -97,6 +97,8 @@ namespace Prism
 		bool UsePBLPixelShader();
 		void TogglePBLPixelShader();
 
+		void SetShouldRenderText(bool aStatus);
+
 		void StartFade(float aDuration);
 
 		bool myWireframeShouldShow;
@@ -118,6 +120,7 @@ namespace Prism
 		
 		bool myWireframeIsOn;
 		bool myUsePBLPixelShader;
+		bool myShouldRenderText;
 		
 
 		DirectX* myDirectX;
