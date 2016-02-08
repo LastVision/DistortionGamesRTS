@@ -458,7 +458,7 @@ void ActorComponent::AttackTarget(Entity* aTarget, float aDelta)
 			&& myRangerOneShotTimer <= 0.f)
 		{
 			myRangerOneShotTimer = myRangerOneShotCooldown;
-			targetSurvived = targetHealth->TakeDamageAndCheckSurvive(targetHealth->GetMaxHealth() * 2.f);
+			targetSurvived = targetHealth->TakeDamageAndCheckSurvive((targetHealth->GetMaxHealth() * 0.75f) + targetHealth->GetArmor());
 		}
 		else
 		{
