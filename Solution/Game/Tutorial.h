@@ -16,26 +16,40 @@ public:
 	void ReceiveMessage(const TutorialMessage& aMessage) override;
 
 private:
-	
+	void CheckIfCompletedGlobalTutorial();
 
-	enum class Action
+	enum class eAction
 	{
 		CLICK,
 		ATTACK,
 		SELECT,
 		MOVE_CAMERA,
+		ARTIFACT,
+		RESOURCE_POINT,
+		VICTORY_POINT,
+		ENEMY_BASE,
 	};
 
 	struct Mission
 	{
 		Mission() {}
-		Mission(Prism::Text* aText, Action anAction, float aTime) : myText(aText), myAction(anAction), myTime(aTime) {}
+		Mission(Prism::Text* aText, eAction anAction, float aTime) 
+			: myText(aText)
+			, myAction(anAction)
+			, myTime(aTime)
+			, myIsDone(false) 
+			, myIsActive(true)
+		{}
+
 		Prism::Text* myText;
-		Action myAction;
+		eAction myAction;
 		float myTime;
+		bool myIsDone;
+		bool myIsActive;
 	};
 
-	Action GetAction(const std::string& anAction) const;
+	eAction GetAction(const std::string& anAction) const;
+	eAction GetSpecialAction(const std::string& anAction) const;
 
 	void operator=(Tutorial&) = delete;
 
@@ -52,5 +66,10 @@ private:
 	int myCurrentMission;
 	bool myMissionComplete;
 	bool myActive;
+
+	Mission* myArtifactMission;
+	Mission* myVictoryPointMission;
+	Mission* myResourcePointMission;
+	Mission* myEnemyBaseMission;
 };
 

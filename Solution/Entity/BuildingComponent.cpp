@@ -3,6 +3,7 @@
 #include "CollisionComponent.h"
 #include "GrenadeComponent.h"
 #include <Intersection.h>
+#include <TutorialMessage.h>
 #include <PostMaster.h>
 #include "PollingStation.h"
 #include <SpawnUnitMessage.h>
@@ -216,6 +217,10 @@ void BuildingComponent::HandleMineField()
 		Entity* toThrowAt = myUnitsInMineField[rand() % myUnitsInMineField.Size()];
 		CU::Vector3<float> throwPos(toThrowAt->GetPosition().x, 1.f, toThrowAt->GetPosition().y);
 		myEntity.GetComponent<GrenadeComponent>()->ThrowGrenade(throwPos);
+		if (myEntity.GetOwner() == eOwnerType::ENEMY)
+		{
+			PostMaster::GetInstance()->SendMessage(TutorialMessage(eTutorialAction::ENEMY_BASE));
+		}
 	}
 
 }

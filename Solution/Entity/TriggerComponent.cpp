@@ -4,10 +4,11 @@
 #include "CollisionComponent.h"
 #include "CommonHelper.h"
 #include <EmitterMessage.h>
+#include <Intersection.h>
 #include "MathHelper.h"
 #include "TriggerComponent.h"
 #include <TriggerMessage.h>
-#include <Intersection.h>
+#include <TutorialMessage.h>
 #include "PollingStation.h"
 #include <PostMaster.h>
 #include <MinimapEventMessage.h>
@@ -157,10 +158,12 @@ eOwnerType TriggerComponent::ModifyOwnership(eOwnerType anOwner, float aModifyVa
 				if (myType == eTriggerType::VICTORY)
 				{
 					PostMaster::GetInstance()->SendMessage(EmitterMessage("victory_point_capture", myEntity.GetOrientation().GetPos()));
+					PostMaster::GetInstance()->SendMessage(TutorialMessage(eTutorialAction::VICTORY_POINT));
 				}
 				else if (myType == eTriggerType::RESOURCE)
 				{
 					PostMaster::GetInstance()->SendMessage(EmitterMessage("resource_point_capture", myEntity.GetOrientation().GetPos()));
+					PostMaster::GetInstance()->SendMessage(TutorialMessage(eTutorialAction::RESOURCE_POINT));
 				}
 			}
 			else if (anOwner == eOwnerType::ENEMY)

@@ -2,7 +2,11 @@
 #include "Message.h"
 enum class eTutorialAction
 {
-	CLICK
+	CLICK,
+	ARTIFACT,
+	ENEMY_BASE,
+	RESOURCE_POINT,
+	VICTORY_POINT,
 };
 
 struct TutorialMessage : public Message

@@ -21,6 +21,10 @@ Tutorial::Tutorial(const std::string& aXMLPath, const PlayerDirector* aPlayer, c
 	, myCurrentMission(0)
 	, myMissionComplete(false)
 	, myActive(true)
+	, myArtifactMission(nullptr)
+	, myVictoryPointMission(nullptr)
+	, myResourcePointMission(nullptr)
+	, myEnemyBaseMission(nullptr)
 {
 	myPreviousNeutralCount = myNeutral->GetUnitCount();
 	myPreviousCameraPosition = myCameraOrientation.GetPos();
@@ -45,6 +49,44 @@ Tutorial::Tutorial(const std::string& aXMLPath, const PlayerDirector* aPlayer, c
 		text->SetText(textString);
 		myMissions.Add(Mission(text, GetAction(typeString), time));
 	}
+
+	element = reader.FindNextElement(element, "globalTutorial");
+	if (element != nullptr)
+	{
+		for (tinyxml2::XMLElement* mission = reader.FindFirstChild(element, "mission"); mission != nullptr;
+			mission = reader.FindNextElement(mission, "mission"))
+		{
+			float time = myMaxTime;
+			std::string typeString;
+			reader.ForceReadAttribute(mission, "type", typeString);
+			reader.ReadAttribute(mission, "time", time);
+
+			std::string textString = reader.ForceFindFirstChild(mission, "text")->GetText();
+			Prism::Text* text = new Prism::Text(*Prism::Engine::GetInstance()->GetFont(Prism::eFont::DIALOGUE));
+			text->SetText(textString);
+
+			eAction type = GetSpecialAction(typeString);
+
+			switch (type)
+			{
+			case Tutorial::eAction::ARTIFACT:
+				myArtifactMission = new Mission(text, type, time);
+				break;
+			case Tutorial::eAction::RESOURCE_POINT:
+				myResourcePointMission = new Mission(text, type, time);
+				break;
+			case Tutorial::eAction::VICTORY_POINT:
+				myVictoryPointMission = new Mission(text, type, time);
+				break;
+			case Tutorial::eAction::ENEMY_BASE:
+				myEnemyBaseMission = new Mission(text, type, time);
+				break;
+			default:
+				SAFE_DELETE(text);
+				break;
+			}
+		}
+	}
 	reader.CloseDocument();
 
 	myCurrentTime = myMaxTime;
@@ -65,10 +107,19 @@ Tutorial::~Tutorial()
 	{
 		SAFE_DELETE(myMissions[i].myText);
 	}
+	SAFE_DELETE(myArtifactMission->myText);
+	SAFE_DELETE(myEnemyBaseMission->myText);
+	SAFE_DELETE(myResourcePointMission->myText);
+	SAFE_DELETE(myVictoryPointMission->myText);
+	SAFE_DELETE(myArtifactMission);
+	SAFE_DELETE(myEnemyBaseMission);
+	SAFE_DELETE(myResourcePointMission);
+	SAFE_DELETE(myVictoryPointMission);
 }
 
 void Tutorial::Update(float aDeltaTime)
 {
+	CheckIfCompletedGlobalTutorial();
 	if (myActive == false)
 	{
 		myPlayer->GetBuilding().SetSelectable(true);
@@ -79,24 +130,24 @@ void Tutorial::Update(float aDeltaTime)
 	{
 		switch (myMissions[myCurrentMission].myAction)
 		{
-		case Action::ATTACK:
+		case eAction::ATTACK:
 			if (myNeutral->GetActiveUnitsSize() < myPreviousNeutralCount)
 			{
 				myMissionComplete = true;
 			}
 			break;
-		case Action::CLICK:
-			PostMaster::GetInstance()->SendMessage(GameStateMessage(eGameState::CLICKABLE_STATE, myMaxTime, 
+		case eAction::CLICK:
+			PostMaster::GetInstance()->SendMessage(GameStateMessage(eGameState::CLICKABLE_STATE, myMaxTime,
 				myMissions[myCurrentMission].myText));
 			myMissionComplete = true;
 			break;
-		case Action::MOVE_CAMERA:
+		case eAction::MOVE_CAMERA:
 			if (myCameraOrientation.GetPos() != myPreviousCameraPosition)
 			{
 				myMissionComplete = true;
 			}
 			break;
-		case Action::SELECT:
+		case eAction::SELECT:
 			if (myPlayer->GetSelectedUnits().Size() > 0)
 			{
 				myMissionComplete = true;
@@ -141,27 +192,112 @@ void Tutorial::ReceiveMessage(const TutorialMessage& aMessage)
 		myMissionComplete = true;
 		myCurrentTime = 0;
 	}
+	else if (aMessage.myAction == eTutorialAction::ARTIFACT)
+	{
+		if (myArtifactMission != nullptr)
+		{
+			myArtifactMission->myIsDone = true;
+		}
+	}
+	else if (aMessage.myAction == eTutorialAction::RESOURCE_POINT)
+	{
+		if (myResourcePointMission != nullptr)
+		{
+			myResourcePointMission->myIsDone = true;
+		}
+	}
+	else if (aMessage.myAction == eTutorialAction::VICTORY_POINT)
+	{
+		if (myVictoryPointMission != nullptr)
+		{
+			myVictoryPointMission->myIsDone = true;
+		}
+	}
+	else if (aMessage.myAction == eTutorialAction::ENEMY_BASE)
+	{
+		if (myEnemyBaseMission != nullptr)
+		{
+			myEnemyBaseMission->myIsDone = true;
+		}
+	}
 }
 
-Tutorial::Action Tutorial::GetAction(const std::string& anAction) const
+void Tutorial::CheckIfCompletedGlobalTutorial()
+{
+	if (myArtifactMission == nullptr && myEnemyBaseMission == nullptr &&
+		myResourcePointMission == nullptr && myVictoryPointMission == nullptr)
+	{
+		return;
+	}
+
+	if (myArtifactMission != nullptr && myArtifactMission->myIsDone == true && myArtifactMission->myIsActive == true)
+	{
+		PostMaster::GetInstance()->SendMessage(GameStateMessage(eGameState::CLICKABLE_STATE, myArtifactMission->myTime,
+			myArtifactMission->myText));
+		myArtifactMission->myIsActive = false;
+	}
+	if (myEnemyBaseMission != nullptr && myEnemyBaseMission->myIsDone == true && myEnemyBaseMission->myIsActive == true)
+	{
+		PostMaster::GetInstance()->SendMessage(GameStateMessage(eGameState::CLICKABLE_STATE, myEnemyBaseMission->myTime,
+			myEnemyBaseMission->myText));
+		myEnemyBaseMission->myIsActive = false;
+	}
+	if (myResourcePointMission != nullptr && myResourcePointMission->myIsDone == true && myResourcePointMission->myIsActive == true)
+	{
+		PostMaster::GetInstance()->SendMessage(GameStateMessage(eGameState::CLICKABLE_STATE, myResourcePointMission->myTime,
+			myResourcePointMission->myText));
+		myResourcePointMission->myIsActive = false;
+	}
+	if (myVictoryPointMission != nullptr && myVictoryPointMission->myIsDone == true && myVictoryPointMission->myIsActive == true)
+	{
+		PostMaster::GetInstance()->SendMessage(GameStateMessage(eGameState::CLICKABLE_STATE, myVictoryPointMission->myTime,
+			myVictoryPointMission->myText));
+		myVictoryPointMission->myIsActive = false;
+	}
+}
+
+Tutorial::eAction Tutorial::GetAction(const std::string& anAction) const
 {
 	if (anAction == "click")
 	{
-		return Action::CLICK;
+		return eAction::CLICK;
 	}
 	else if (anAction == "select")
 	{
-		return Action::SELECT;
+		return eAction::SELECT;
 	}
 	else if (anAction == "move_camera")
 	{
-		return Action::MOVE_CAMERA;
+		return eAction::MOVE_CAMERA;
 	}
 	else if (anAction == "attack")
 	{
-		return Action::ATTACK;
+		return eAction::ATTACK;
 	}
 
 	DL_ASSERT("Action not found.");
-	return Action::CLICK;
+	return eAction::CLICK;
+}
+
+Tutorial::eAction Tutorial::GetSpecialAction(const std::string& anAction) const
+{
+	if (anAction == "artifact")
+	{
+		return eAction::ARTIFACT;
+	}
+	else if (anAction == "victorypoint")
+	{
+		return eAction::VICTORY_POINT;
+	}
+	else if (anAction == "resourcepoint")
+	{
+		return eAction::RESOURCE_POINT;
+	}
+	else if (anAction == "enemybase")
+	{
+		return eAction::ENEMY_BASE;
+	}
+
+	DL_ASSERT("Action not found.");
+	return eAction::CLICK;
 }
