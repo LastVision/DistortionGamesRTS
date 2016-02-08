@@ -66,7 +66,7 @@ namespace GUI
 		myEventSprite = Prism::ModelLoader::GetInstance()->LoadSprite(eventPath, { 20.f, 20.f }, { 10.f, 10.f });
 
 		CU::Vector2<float> cameraSize = { mySize.x / 2.f, mySize.y / 4.f };
-		
+
 		myCameraFrustum = Prism::ModelLoader::GetInstance()->LoadSprite(cameraPath, cameraSize, cameraSize / 2.f);
 
 		PostMaster::GetInstance()->Subscribe(eMessageType::MINIMAP_EVENT, this);
@@ -95,7 +95,7 @@ namespace GUI
 		SAFE_DELETE(myCameraFrustum);
 		SAFE_DELETE(myEventSprite);
 	}
-	
+
 	void MiniMapWidget::Update(float aDelta)
 	{
 		for (int i = 0; i < myEventSprites.Size(); ++i)
@@ -115,19 +115,19 @@ namespace GUI
 	{
 		myPlaceholderSprite->Render(aParentPosition + myPosition);
 
-		RenderUnits(aParentPosition);
 		RenderResourcePoints(aParentPosition);
 		RenderVictoryPoints(aParentPosition);
 		RenderBases(aParentPosition);
+		RenderUnits(aParentPosition);
 		//RenderArtifacts(aParentPosition);
-		
+
 		CU::Vector2<float> cameraPosition = { myCameraOrientation->GetPos().x, myCameraOrientation->GetPos().z };
 		cameraPosition /= 255.f;
 		cameraPosition *= mySize;
 		cameraPosition.x += myCameraFrustum->GetSize().x / 4.f;
 		cameraPosition.y += myCameraFrustum->GetSize().y * 1.4f;
 		myCameraFrustum->Render(cameraPosition);
-		
+
 		//if (myShouldRenderEvent == true)
 		//{
 		//	//if (static_cast<int>(myEventTimer) % 2 == 0)
@@ -147,7 +147,7 @@ namespace GUI
 				float scale = 1.f + 5 * log(myEventSprites[i].myEventTimer + 1.f);
 				myEventSprites[i].myEventSprite->Render(aParentPosition + myPosition + position
 					, { scale, scale }, { 1.f, 1.f, 1.f, 1.f - (myEventSprites[i].myEventTimer * 85.f / 255.f) });
-				
+
 			}
 		}
 	}
@@ -158,7 +158,7 @@ namespace GUI
 		{
 			CU::Vector2<float> position = aPosition - myPosition;
 			position /= mySize;
-			PostMaster::GetInstance()->SendMessage(MoveCameraMessage(position,eHowToHandleMovement::ZERO_TO_ONE));
+			PostMaster::GetInstance()->SendMessage(MoveCameraMessage(position, eHowToHandleMovement::ZERO_TO_ONE));
 		}
 	}
 
@@ -228,16 +228,13 @@ namespace GUI
 
 		for (int i = 0; i < playerUnits.Size(); i++)
 		{
-			if (FogOfWarMap::GetInstance()->IsVisible(playerUnits[i]->GetPosition()))
+			CU::Vector4<float> color = PLAYER_COLOR;
+			if (playerUnits[i]->IsSelected() == true)
 			{
-				CU::Vector4<float> color = PLAYER_COLOR;
-				if (playerUnits[i]->IsSelected() == true)
-				{
-					color = { 1.f, 1.f, 1.f, 1.f };
-				}
-				CU::Vector2<float> position = (playerUnits[i]->GetPosition() / 255.f) * mySize;
-				myUnitSprite->Render(aParentPosition + myPosition + position, { 1.f, 1.f }, color);
+				color = { 1.f, 1.f, 1.f, 1.f };
 			}
+			CU::Vector2<float> position = (playerUnits[i]->GetPosition() / 255.f) * mySize;
+			myUnitSprite->Render(aParentPosition + myPosition + position, { 1.f, 1.f }, color);
 		}
 
 		for (int i = 0; i < enemyUnits.Size(); i++)
