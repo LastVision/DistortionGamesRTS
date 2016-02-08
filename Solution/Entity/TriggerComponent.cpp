@@ -12,7 +12,8 @@
 #include <PostMaster.h>
 #include <MinimapEventMessage.h>
 #include "SoundComponent.h"
-
+#include <InWorldTextMessage.h>
+#include <NotificationMessage.h>
 
 #include "../Game/FogOfWarMap.h"
 
@@ -77,7 +78,7 @@ void TriggerComponent::CheckUnitsForRemove(CU::GrowingArray<Entity*>& someUnits)
 
 void TriggerComponent::CheckUnitsForAdd(const CU::GrowingArray<Entity*>& someUnits
 	, CU::GrowingArray<Entity*>& someUnitsOut) const
-{ 
+{
 	for (int i = 0; i < someUnits.Size(); ++i)
 	{
 		Entity* current = someUnits[i];
@@ -131,6 +132,24 @@ eOwnerType TriggerComponent::ModifyOwnership(eOwnerType anOwner, float aModifyVa
 	}
 	else
 	{
+		if (FogOfWarMap::GetInstance()->IsVisible(myEntity.GetPosition()) && myHasSentEventMessage == false && myGainingPointsOwner == eOwnerType::PLAYER)
+		{
+			if (myType == eTriggerType::RESOURCE)
+			{
+				PostMaster::GetInstance()->SendMessage(NotificationMessage("The enemy is taking over your resource point."));
+				PostMaster::GetInstance()->SendMessage(MinimapEventMessage(myEntity.GetPosition(), MinimapEventType::eRESOURCE_POINT));
+			}
+			else if (myType == eTriggerType::VICTORY)
+			{
+				PostMaster::GetInstance()->SendMessage(NotificationMessage("The enemy is taking over your victory point."));
+				PostMaster::GetInstance()->SendMessage(MinimapEventMessage(myEntity.GetPosition(), MinimapEventType::eVICTORY_POINT));
+			}
+			else
+			{
+				DL_ASSERT("INVALID TYPE IN TRIGGER");
+			}
+			myHasSentEventMessage = true;
+		}
 		myOwnershipRatio -= aModifyValue;
 	}
 
@@ -138,6 +157,20 @@ eOwnerType TriggerComponent::ModifyOwnership(eOwnerType anOwner, float aModifyVa
 
 	if (myOwnershipRatio == 0.f)
 	{
+		if (myGainingPointsOwner == eOwnerType::PLAYER)
+		{
+			if (myType == eTriggerType::RESOURCE)
+			{
+				PostMaster::GetInstance()->SendMessage(NotificationMessage("Resource point lost."));
+				PostMaster::GetInstance()->SendMessage(InWorldTextMessage("Lost", myEntity.GetPosition()));
+
+			}
+			else if (myType == eTriggerType::VICTORY)
+			{
+				PostMaster::GetInstance()->SendMessage(NotificationMessage("Victory point lost."));
+				PostMaster::GetInstance()->SendMessage(InWorldTextMessage("Lost", myEntity.GetPosition()));
+			}
+		}
 		myHasSentEventMessage = false;
 		myEntity.SetOwner(eOwnerType::NEUTRAL);
 		myGainingPointsOwner = eOwnerType::NEUTRAL;
@@ -152,11 +185,14 @@ eOwnerType TriggerComponent::ModifyOwnership(eOwnerType anOwner, float aModifyVa
 				if (myType == eTriggerType::VICTORY)
 				{
 					PostMaster::GetInstance()->SendMessage(EmitterMessage("victory_point_capture", myEntity.GetOrientation().GetPos()));
+					PostMaster::GetInstance()->SendMessage(NotificationMessage("Victory point captured."));
 				}
 				else if (myType == eTriggerType::RESOURCE)
 				{
 					PostMaster::GetInstance()->SendMessage(EmitterMessage("resource_point_capture", myEntity.GetOrientation().GetPos()));
+					PostMaster::GetInstance()->SendMessage(NotificationMessage("Resource point captured."));
 				}
+				PostMaster::GetInstance()->SendMessage(InWorldTextMessage("Captured", myEntity.GetPosition()));
 			}
 			else if (anOwner == eOwnerType::ENEMY)
 			{
@@ -173,7 +209,7 @@ eOwnerType TriggerComponent::ModifyOwnership(eOwnerType anOwner, float aModifyVa
 
 		myEntity.SetOwner(anOwner);
 		myGainingPointsOwner = anOwner;
-		
+
 	}
 
 	return myGainingPointsOwner;
