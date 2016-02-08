@@ -36,9 +36,12 @@ namespace GUI
 		std::string tankPortraitPath = "";
 		std::string buildingPortraitPath = "";
 		std::string statsSpritePath = "";
+		std::string activeQueueOverlaySpritePath = "";
 		CU::Vector2<float> unitSize;
 		CU::Vector2<float> portraitSize;
 		CU::Vector2<float> statsSize;
+		CU::Vector2<float> abortPosition;
+		int abortButtonsPerRow = 0;
 
 		tinyxml2::XMLElement* abortButtonElement = aReader->FindFirstChild(anXMLElement, "widget");
 
@@ -62,6 +65,12 @@ namespace GUI
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "tankportrait"), "path", tankPortraitPath);
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "buildingportrait"), "path", buildingPortraitPath);
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "statssprite"), "path", statsSpritePath);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "abortbuttonposition"), "x", abortPosition.x);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "abortbuttonposition"), "y", abortPosition.y);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "timerposition"), "x", myTimerPosition.x);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "timerposition"), "y", myTimerPosition.y);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "abortbuttonsperrow"), "value", abortButtonsPerRow);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "activequeueoverlay"), "path", activeQueueOverlaySpritePath);
 
 		myPosition = { 0.f, 0.f };
 		myGruntUnit = Prism::ModelLoader::GetInstance()->LoadSprite(gruntUnitPath, unitSize);
@@ -72,23 +81,39 @@ namespace GUI
 		myTankPortrait = Prism::ModelLoader::GetInstance()->LoadSprite(tankPortraitPath, portraitSize);
 		myBuildingPortrait = Prism::ModelLoader::GetInstance()->LoadSprite(buildingPortraitPath, portraitSize);
 		myStatsSprite = Prism::ModelLoader::GetInstance()->LoadSprite(statsSpritePath, statsSize);
-		myBuildingTimer = new BarWidget(myBuilding.GetMaxBuildTime(), myBuilding.GetCurrentBuildTime(), { unitSize.x * 4.f, unitSize.y / 2.f }, { 0.f, 0.f, 1.f, 1.f });
 
 		int maxQueue = aPlayer->GetBuildingComponent().GetMaxQueue();
-		CU::Vector2<float> queuePosition = myPortraitPosition;
-		queuePosition.x += portraitSize.x;
+		//CU::Vector2<float> queuePosition = myPortraitPosition;
+		//queuePosition.x += portraitSize.x;
 
 		for (int i = 0; i < maxQueue; i++)
 		{
+			int index = i;
+
+			CU::Vector2<float> position = abortPosition;
 			ButtonWidget* abortButton = new ButtonWidget(aReader, abortButtonElement, aPlayer);
 
-			CU::Vector2<float> position = queuePosition + abortButton->GetSize() / 2.f;
-			position.x += abortButton->GetSize().x * float(i);
+			if (i >= abortButtonsPerRow)
+			{
+				position.y -= abortButton->GetSize().y;
+				index -= abortButtonsPerRow;
+			}
+
+			position += abortButton->GetSize() / 2.f;
+			position.x += abortButton->GetSize().x * float(index);
 
 			abortButton->SetPosition(position);
 			abortButton->SetEvent(new OnClickMessage(eOnClickEvent::ABORT_QUEUE, i));
 			myQueueButtons.Add(abortButton);
 		}
+
+		// has to be newed after abortbuttons:
+
+		CU::Vector2<float> timerSize(myQueueButtons[0]->GetSize().x * float(abortButtonsPerRow), myQueueButtons[0]->GetSize().y / 2.f);
+
+		myBuildingTimer = new BarWidget(myBuilding.GetMaxBuildTime(), myBuilding.GetCurrentBuildTime(), timerSize, { 0.f, 0.f, 1.f, 1.f });
+		myActiveQueueOverlay = Prism::ModelLoader::GetInstance()->LoadSprite(activeQueueOverlaySpritePath
+			, myQueueButtons[0]->GetSize(), myQueueButtons[0]->GetSize() / 2.f); 
 	}
 
 	UnitInfoWidget::~UnitInfoWidget()
@@ -102,6 +127,7 @@ namespace GUI
 		SAFE_DELETE(myBuildingPortrait);
 		SAFE_DELETE(myStatsSprite);
 		SAFE_DELETE(myBuildingTimer);
+		SAFE_DELETE(myActiveQueueOverlay);
 		myQueueButtons.DeleteAll();
 	}
 
@@ -167,6 +193,13 @@ namespace GUI
 		myBuildingTimer->OnResize(aNewWindowSize, anOldWindowSize, aIsFullScreen);
 		myTextScale = (myTextScale / anOldWindowSize.x) * aNewWindowSize.x;
 
+		for (int i = 0; i < myQueueButtons.Size(); i++)
+		{
+			myQueueButtons[i]->OnResize(aNewWindowSize, anOldWindowSize, aIsFullScreen);
+		}
+
+		myActiveQueueOverlay->SetSize(myQueueButtons[0]->GetSize(), myQueueButtons[0]->GetSize() / 2.f);
+
 		if (myIsFullscreen == false)
 		{
 			CU::Vector2<float> unitRatioSize = myGruntUnit->GetSize() / anOldWindowSize.x;
@@ -182,6 +215,7 @@ namespace GUI
 			myUnitPosition = (myUnitPosition / anOldWindowSize.x) * aNewWindowSize.x;
 			myPortraitPosition = (myPortraitPosition / anOldWindowSize.x) * aNewWindowSize.x;
 			myStatsSprite->SetSize((myStatsSprite->GetSize() / anOldWindowSize.x) * aNewWindowSize.x, { 0.f, 0.f });
+			myTimerPosition = (myTimerPosition / anOldWindowSize.x) * aNewWindowSize.x;
 		}
 		else
 		{
@@ -198,6 +232,7 @@ namespace GUI
 			myUnitPosition = (myUnitPosition / anOldWindowSize) * aNewWindowSize;
 			myPortraitPosition = (myPortraitPosition / anOldWindowSize) * aNewWindowSize;
 			myStatsSprite->SetSize((myStatsSprite->GetSize() / anOldWindowSize) * aNewWindowSize, { 0.f, 0.f });
+			myTimerPosition = (myTimerPosition / anOldWindowSize) * aNewWindowSize;
 		}
 	}
 
@@ -224,10 +259,10 @@ namespace GUI
 		if (myBuilding.GetEntityToSpawn() != eEntityType::EMPTY)
 		{
 			myBuildingTimer->Update(0.f);
-			CU::Vector2<float> position = myPosition + aParentPosition + myUnitPosition + (myBuildingTimer->GetSize() / 2.f);
-			myBuildingTimer->Render(position);
-			position.x += myBuildingTimer->GetSize().x + 10.f;
-			Prism::Engine::GetInstance()->PrintText(myBuilding.GetSpawnQueueSize(), position, Prism::eTextType::RELEASE_TEXT, myTextScale);
+			//CU::Vector2<float> position = myPosition + aParentPosition + myUnitPosition + (myBuildingTimer->GetSize() / 2.f);
+			myBuildingTimer->Render(myPosition + aParentPosition + myTimerPosition);
+			//position.x += myBuildingTimer->GetSize().x + 10.f;
+			//Prism::Engine::GetInstance()->PrintText(myBuilding.GetSpawnQueueSize(), position, Prism::eTextType::DEBUG_TEXT, myTextScale);
 
 			const CU::GrowingArray<BuildInfo>& queue = myBuilding.GetQueue();
 			CU::Vector2<float> portraitScale = myQueueButtons[0]->GetSize() / myGruntPortrait->GetSize();
@@ -250,6 +285,11 @@ namespace GUI
 				case eUnitType::TANK:
 					myTankPortrait->Render(portraitPosition, portraitScale);
 					break;
+				}
+
+				if (i == 0)
+				{
+					myActiveQueueOverlay->Render(myQueueButtons[i]->GetPosition() + myPosition + aParentPosition);
 				}
 			}
 		}
