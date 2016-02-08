@@ -204,13 +204,11 @@ void BuildingComponent::HandleMineField()
 	CheckUnitsForRemove(myUnitsInMineField);
 	if (myEntity.GetOwner() == eOwnerType::PLAYER)
 	{
-		CheckUnitsForAdd(PollingStation::GetInstance()->GetUnits(eOwnerType::NEUTRAL), myUnitsInMineField);
 		CheckUnitsForAdd(PollingStation::GetInstance()->GetUnits(eOwnerType::ENEMY), myUnitsInMineField);
 	}
 	else if (myEntity.GetOwner() == eOwnerType::ENEMY)
 	{
 		CheckUnitsForAdd(PollingStation::GetInstance()->GetUnits(eOwnerType::PLAYER), myUnitsInMineField);
-		CheckUnitsForAdd(PollingStation::GetInstance()->GetUnits(eOwnerType::NEUTRAL), myUnitsInMineField);
 	}
 	
 	if (myUnitsInMineField.Size() > 0)
