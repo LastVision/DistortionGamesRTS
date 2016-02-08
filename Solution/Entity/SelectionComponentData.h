@@ -6,4 +6,5 @@ struct SelectionComponentData
 	const char* mySelectedPath;
 	const char* myHoveredPath;
 	const char* myEffectPath;
+	float myScale;
 };

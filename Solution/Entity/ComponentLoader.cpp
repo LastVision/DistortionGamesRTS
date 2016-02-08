@@ -336,6 +336,7 @@ void ComponentLoader::LoadPromotionComponent(XMLReader& aDocument, tinyxml2::XML
 void ComponentLoader::LoadSelectionComponent(XMLReader& aDocument, tinyxml2::XMLElement* aSourceElement, SelectionComponentData& aOutputData)
 {
 	aOutputData.myExistsInEntity = true;
+	aOutputData.myScale = 1.f;
 
 	for (tinyxml2::XMLElement* e = aDocument.FindFirstChild(aSourceElement); e != nullptr; e = aDocument.FindNextElement(e))
 	{
@@ -351,6 +352,10 @@ void ComponentLoader::LoadSelectionComponent(XMLReader& aDocument, tinyxml2::XML
 			aOutputData.mySelectedPath = selectedPath.c_str();
 			aOutputData.myHoveredPath = hoveredPath.c_str();
 			aOutputData.myEffectPath = effectPath.c_str();
+		}
+		else if (elementName == CU::ToLower("Scale"))
+		{
+			aDocument.ForceReadAttribute(e, "value", aOutputData.myScale);
 		}
 		else
 		{
