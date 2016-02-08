@@ -173,7 +173,7 @@ void MainMenuState::ReceiveMessage(const OnClickMessage& aMessage)
 		case eOnClickEvent::GAME_CREDIT:
 			Prism::MemoryTracker::GetInstance()->SetRunTime(false);
 			PostMaster::GetInstance()->UnSubscribe(eMessageType::ON_CLICK, this);
-			myStateStack->PushMainGameState(new CreditMenuState());
+			myStateStack->PushSubGameState(new CreditMenuState());
 			break;
 		case eOnClickEvent::GAME_HELP:
 		{

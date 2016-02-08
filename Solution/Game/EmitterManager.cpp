@@ -171,6 +171,10 @@ void EmitterManager::ReceiveMessage(const EmitterMessage& aMessage)
 				instance->SetSize(aMessage.mySize);
 			}
 
+			if (aMessage.myShouldKillEmitter == true)
+			{
+				instance->SetEmitterLifeTime(aMessage.myEmitterLifeTime);
+			}
 		}
 		myEmitters[particleType]->myFinishedGroups[index] = UNFINISHED;
 		myEmitters[particleType]->myFinishedCount--;
