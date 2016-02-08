@@ -18,8 +18,6 @@ namespace GUI
 		, const bool& aCantClickOn, int aLevelID)
 		: Widget()
 		, myCantClickOn(aCantClickOn)
-		, myShouldRenderEvent(false)
-		, myEventTime(5.f)
 		, myEventSprites(8)
 		, myCurrentEventSprite(0)
 	{
@@ -77,7 +75,7 @@ namespace GUI
 			MiniMapEvent toAdd;
 			toAdd.myEventPosition = { 128.f, 128.f };
 			toAdd.myEventSprite = myEventSprite;
-			toAdd.myEventTime = 5.f;
+			toAdd.myEventTime = 3.f;
 			toAdd.myEventTimer = 0.f;
 			toAdd.myShouldRenderEvent = false;
 			myEventSprites.Add(toAdd);
@@ -99,19 +97,12 @@ namespace GUI
 	
 	void MiniMapWidget::Update(float aDelta)
 	{
-		if (myShouldRenderEvent == true)
-		{
-			myEventTimer += aDelta;
-		}
-
-		if (myEventTimer > myEventTime)
-		{
-			myShouldRenderEvent = false;
-		}
-
 		for (int i = 0; i < myEventSprites.Size(); ++i)
 		{
-			myEventSprites[i].myEventTimer += aDelta;
+			if (myEventSprites[i].myShouldRenderEvent == true)
+			{
+				myEventSprites[i].myEventTimer += aDelta;
+			}
 			if (myEventSprites[i].myEventTimer > myEventSprites[i].myEventTime)
 			{
 				myEventSprites[i].myShouldRenderEvent = false;
@@ -152,9 +143,9 @@ namespace GUI
 			{
 
 				CU::Vector2<float> position = (myEventSprites[i].myEventPosition / 255.f) * mySize;
-				float scale = 2 + 5 * log(myEventSprites[i].myEventTimer + 1);
+				float scale = 1.f + 5 * log(myEventSprites[i].myEventTimer + 1.f);
 				myEventSprites[i].myEventSprite->Render(aParentPosition + myPosition + position
-					, { scale, scale }, { 1.f, 1.f, 1.f, 1.f - (myEventSprites[i].myEventTimer * 51.f / 255.f) });
+					, { scale, scale }, { 1.f, 1.f, 1.f, 1.f - (myEventSprites[i].myEventTimer * 85.f / 255.f) });
 				
 			}
 		}
