@@ -15,6 +15,7 @@ namespace Prism
 	{
 		CU::GrowingArray<CU::Matrix44<float>> myMatrices;
 		CU::GrowingArray<CU::Vector3<float>> myScales;
+		CU::GrowingArray<float> myHeights;
 	};
 	typedef std::unordered_map<Model*, ModelData> ModelMap;
 
@@ -25,7 +26,7 @@ namespace Prism
 
 		void SetCamera(const Camera* aCamera);
 		void AddModel(eOwnerType aOwner, Model* aModel, const CU::Matrix44<float>& aWorldMatrix
-			, const CU::Vector3<float>& aScale);
+			, const CU::Vector3<float>& aScale, float aHeight);
 
 		void Render(CU::StaticArray<DirectionalLightData, NUMBER_OF_DIRECTIONAL_LIGHTS>& someLights, bool aIsDepthRender);
 
