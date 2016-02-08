@@ -13,14 +13,16 @@ namespace CSharpUtilities.Components
         protected Point myLocation;
         protected Size mySize;
         protected String myPanelName;
+        protected Components.IO.ComponentIO myIO;
 
-        public BaseComponent(Point aLocation, Size aSize, string aText, string aPanelName)
+        public BaseComponent(Point aLocation, Size aSize, Components.IO.ComponentIO aIO, string aPanelName)
         {
             myLocation = aLocation;
             mySize = aSize;
             myPanelName = aPanelName;
+            myIO = aIO;
 
-            InitializeComponents(aText);
+            InitializeComponents(myIO.myIOElementName);
         }
 
         abstract protected void InitializeComponents(string aText);

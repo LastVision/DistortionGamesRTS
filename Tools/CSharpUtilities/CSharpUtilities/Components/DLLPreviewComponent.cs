@@ -15,8 +15,8 @@ namespace CSharpUtilities.Components
 
         private bool myUseText;
 
-        public DLLPreviewComponent(Point aLocation, Size aSize, string aText, string aPanelName, bool aUseText = false)
-            : base(aLocation, aSize, aText, aPanelName)
+        public DLLPreviewComponent(Point aLocation, Size aSize, IO.ComponentIO aIO, string aPanelName, bool aUseText = false)
+            : base(aLocation, aSize, aIO, aPanelName)
         {
             myUseText = aUseText;
         }

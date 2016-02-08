@@ -28,10 +28,10 @@ namespace CSharpUtilities.Components
 
         private bool myOneToOneScaleFlag = false;
 
-        public SliderComponent(Point aLocation, Size aSize, string aText, string aPanelName, 
+        public SliderComponent(Point aLocation, Size aSize, IO.ComponentIO aIO, string aPanelName, 
             float aMinValue, float aMaxValue, float aStartValue, bool aOneToOneFlag = false, 
             float aDownScaleMinValue = -1.0f, float aDownScaleMaxValue = 1.0f)
-            : base(aLocation, aSize, aText, aPanelName)
+            : base(aLocation, aSize, aIO, aPanelName)
         {
             myOneToOneScaleFlag = aOneToOneFlag;
 

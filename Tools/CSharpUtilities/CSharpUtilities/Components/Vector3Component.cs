@@ -16,8 +16,8 @@ namespace CSharpUtilities.Components
         private NumericTextComponent myYText;
         private NumericTextComponent myZText;
 
-        public Vector3Component(Point aLocation, Size aSize, string aText, string aPanelName)
-            : base(aLocation, aSize, aText, aPanelName)
+        public Vector3Component(Point aLocation, Size aSize, IO.ComponentIO aIO, string aPanelName)
+            : base(aLocation, aSize, aIO, aPanelName)
         {
 
         }
@@ -30,9 +30,9 @@ namespace CSharpUtilities.Components
             myLabel.Location = new Point(myLocation.X, myLocation.Y);
             myLabel.Size = new Size(textSize, mySize.Height);
 
-            myXText = new NumericTextComponent(new Point(myLocation.X + textSize, myLocation.Y), new Size(60, mySize.Height), "X", myPanelName);
-            myYText = new NumericTextComponent(new Point(myLocation.X + textSize + 60, myLocation.Y), new Size(60, mySize.Height), "Y", myPanelName);
-            myZText = new NumericTextComponent(new Point(myLocation.X + textSize + 120, myLocation.Y), new Size(60, mySize.Height), "Z", myPanelName);
+            myXText = new NumericTextComponent(new Point(myLocation.X + textSize, myLocation.Y), new Size(60, mySize.Height), myIO, myPanelName);
+            myYText = new NumericTextComponent(new Point(myLocation.X + textSize + 60, myLocation.Y), new Size(60, mySize.Height), myIO, myPanelName);
+            myZText = new NumericTextComponent(new Point(myLocation.X + textSize + 120, myLocation.Y), new Size(60, mySize.Height), myIO, myPanelName);
 
         }
 
