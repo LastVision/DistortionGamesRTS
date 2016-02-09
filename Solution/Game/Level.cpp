@@ -208,8 +208,8 @@ void Level::Render(Prism::Camera& aCamera)
 {
 	Prism::Engine::GetInstance()->SetClearColor({ 0.2f, 0.2f, 0.2f, 1.f });
 	myScene->CalcShouldRender(aCamera);
-	//myAI->GetBuilding().SetShouldRender(true);
-	//myPlayer->GetBuilding().SetShouldRender(true);
+	myAI->GetBuilding().SetShouldRender(true);
+	myPlayer->GetBuilding().SetShouldRender(true);
 
 	if (GameSettingsSingleton::GetInstance()->GetShouldUseShadows() == true)
 	{
@@ -261,6 +261,8 @@ void Level::OnResize(int aWidth, int aHeigth)
 	myRenderer->OnResize(static_cast<float>(aWidth), static_cast<float>(aHeigth));
 	myFogOfWarHelper->OnResize(static_cast<float>(aWidth), static_cast<float>(aHeigth));
 	myShadowLight->OnResize(static_cast<float>(aWidth), static_cast<float>(aHeigth));
+
+	myScene->OnResize(aWidth, aHeigth);
 }
 
 void Level::ReceiveMessage(const ToggleRenderLinesMessage& aMessage)

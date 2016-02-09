@@ -25,6 +25,7 @@ Prism::Scene::Scene(const Camera& aCamera, Terrain& aTerrain)
 	: myCamera(&aCamera)
 	, myViewCamera(nullptr)
 	, myTerrain(aTerrain)
+	, myRenderRadius(-10.f)
 #ifdef SCENE_USE_OCTREE
 	, myOctree(new Octree(6))
 #endif
@@ -239,6 +240,23 @@ void Prism::Scene::Render(bool aRenderNavMeshLines, Texture* aFogOfWarTexture, S
 	}
 }
 
+void Prism::Scene::OnResize(int aWidth, int aHeigth)
+{
+	float ratio = static_cast<float>(aWidth) / static_cast<float>(aHeigth);
+
+	myRenderRadius = -10.f;
+
+	float epsilon = 0.1f;
+	if (ratio + epsilon >= 16.f / 9.f)
+	{
+		myRenderRadius = -17.f;
+	}
+	else if (ratio + epsilon >= 16.f / 10.f)
+	{
+		myRenderRadius = -15.f;
+	}
+}
+
 void Prism::Scene::AddInstance(Instance* aInstance, bool aIsSelectionRing)
 {
 	if(aIsSelectionRing == true)
@@ -290,20 +308,12 @@ void Prism::Scene::SetViewCamera(const Camera& aCamera)
 
 void Prism::Scene::CalcShouldRender(const Prism::Camera& aCamera)
 {
-	static float radius = -25.9;
-	CU::InputWrapper::GetInstance()->TweakValue(radius, 0.1f, 1.f, DIK_I, DIK_K);
-	DEBUG_PRINT(radius);
-
-	static CU::Vector3<float> offset = CU::Vector3<float>(-0.5f, 0.f, 0.f);
-	CU::InputWrapper::GetInstance()->TweakValue(offset.x, 0.1f, 1.f, DIK_U, DIK_J);
-	CU::InputWrapper::GetInstance()->TweakValue(offset.z, 0.1f, 1.f, DIK_Y, DIK_H);
-	DEBUG_PRINT(offset);
-
+	DEBUG_PRINT(myRenderRadius);
 
 	for (int i = 0; i < myInstances.Size(); ++i)
 	{
 		if (myInstances[i]->GetShouldRender() == true &&
-			aCamera.GetFrustum().Inside(myInstances[i]->GetPosition() + offset, radius) == false)
+			aCamera.GetFrustum().Inside(myInstances[i]->GetPosition(), myRenderRadius) == false)
 		{
 			myInstances[i]->SetShouldRender(false);
 		}
