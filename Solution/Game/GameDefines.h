@@ -12,8 +12,9 @@
 
 #ifdef _DEBUG
 
-//#undef LOAD_PROPS
-//#undef USE_WEATHER
+#undef LOAD_PROPS
+#undef USE_WEATHER
+#undef USE_SHADOW
 
 #endif
 
