@@ -175,6 +175,7 @@ void ActorComponent::Update(float aDelta)
 				{
 					PostMaster::GetInstance()->SendMessage(InWorldTextMessage("artifact pickup", myEntity.GetPosition()));
 					PostMaster::GetInstance()->SendMessage(TutorialMessage(eTutorialAction::ARTIFACT));
+					Prism::Audio::AudioInterface::GetInstance()->PostEvent("victoryGain", 0);
 				}
 
 				PostMaster::GetInstance()->SendMessage(ArtifactMessage(myEntity.GetOwner(), 1));
@@ -435,7 +436,7 @@ void ActorComponent::AttackTarget(Entity* aTarget, float aDelta)
 	}
 	else if (myEntity.GetUnitType() == eUnitType::RANGER)
 	{
-		if (myRangerOneShotTimer <= 0.f)
+		if (myEntity.GetComponent<PromotionComponent>()->GetPromoted() == true && myRangerOneShotTimer <= 0.f)
 		{
 			if (FogOfWarMap::GetInstance()->IsVisible(myEntity.GetPosition()) == true)
 			{
