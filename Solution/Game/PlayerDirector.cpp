@@ -1161,7 +1161,7 @@ void PlayerDirector::SelectOrHoverEntity(Entity* aEntity, bool &aSelected, bool 
 	aEntity->SetHovered(false);
 
 	bool unitCollided = false;
-	if (myRenderDragSelection == true)
+	if (myRenderDragSelection == true && (myLeftMouseUp == true || myLeftMousePressed == true))
 	{
 		CU::Vector2<float> position1(myDragSelectionPositions[0].x, myDragSelectionPositions[0].z);
 		CU::Vector2<float> position2(myDragSelectionPositions[2].x, myDragSelectionPositions[2].z);
