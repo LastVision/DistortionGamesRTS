@@ -237,6 +237,7 @@ void Level::Render(Prism::Camera& aCamera)
 	}
 	myRenderer->FinalRender();
 
+	Prism::DebugDrawer::GetInstance()->RenderLinesToScreen(aCamera);
 
 	myPlayer->RenderHealthBars(aCamera);
 	myAI->RenderHealthBars(aCamera);

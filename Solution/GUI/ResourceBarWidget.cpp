@@ -95,7 +95,7 @@ namespace GUI
 
 		if (myGainAnimation != nullptr)
 		{
-			myGainAnimation->Render(myPosition + aParentPosition);
+			myGainAnimation->Render(myPosition + aParentPosition + myTextPosition);
 		}
 
 		Prism::Engine::GetInstance()->PrintText(*myValue, myPosition + aParentPosition + myTextPosition, Prism::eTextType::RELEASE_TEXT);
