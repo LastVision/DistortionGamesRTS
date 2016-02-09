@@ -21,6 +21,7 @@ OptionsState::~OptionsState()
 {
 	SAFE_DELETE(myGUIManager);
 	SAFE_DELETE(myMusicText);
+	SAFE_DELETE(myShadowText);
 	SAFE_DELETE(mySfxText);
 	myCursor = nullptr;
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::ON_CLICK, this);
@@ -40,7 +41,17 @@ void OptionsState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCu
 
 	myMusicText = new Prism::Text(*Prism::Engine::GetInstance()->GetFont(Prism::eFont::DIALOGUE));
 	mySfxText = new Prism::Text(*Prism::Engine::GetInstance()->GetFont(Prism::eFont::DIALOGUE));
+	myShadowText = new Prism::Text(*Prism::Engine::GetInstance()->GetFont(Prism::eFont::DIALOGUE));
 	OnResize(windowSize.x, windowSize.y);
+
+	if (GameSettingsSingleton::GetInstance()->GetShouldUseShadows() == true)
+	{
+		myShadowText->SetText("Shadows: ON");
+	}
+	else
+	{
+		myShadowText->SetText("Shadows: OFF");
+	}
 	
 	//CU::Vector2<float> floatScreenPos(windowSize.x, windowSize.y);
 	//myMusicText->SetPosition({ floatScreenPos.x * 0.5f - 120, floatScreenPos.y * 0.5f });
@@ -65,8 +76,10 @@ void OptionsState::OnResize(int aWidth, int aHeight)
 	GUI::WidgetContainer* widgetCont = reinterpret_cast<GUI::WidgetContainer*>(myGUIManager->GetWidgetContainer()->At(0));
 	CU::Vector2<float> firstRow = widgetCont->At(2)->GetPosition();
 	CU::Vector2<float> secondRow = widgetCont->At(0)->GetPosition();
-	myMusicText->SetPosition({ firstRow.x - 280.f, firstRow.y - (widgetCont->At(0)->GetSize().y * 0.25f)});
-	mySfxText->SetPosition({ secondRow.x - 280.f, secondRow.y - (widgetCont->At(2)->GetSize().y * 0.25f) });
+	CU::Vector2<float> fourthRow = widgetCont->At(4)->GetPosition();
+	myMusicText->SetPosition({ firstRow.x - 300.f, firstRow.y - (widgetCont->At(0)->GetSize().y * 0.25f)});
+	mySfxText->SetPosition({ secondRow.x - 300.f, secondRow.y - (widgetCont->At(2)->GetSize().y * 0.25f) });
+	myShadowText->SetPosition({ fourthRow.x - 300.f, fourthRow.y });
 }
 
 const eStateStatus OptionsState::Update(const float& aDeltaTime)
@@ -103,6 +116,7 @@ void OptionsState::Render()
 	myGUIManager->Render();
 	myMusicText->Render();
 	mySfxText->Render();
+	myShadowText->Render();
 }
 
 void OptionsState::ResumeState()
@@ -131,6 +145,14 @@ void OptionsState::ReceiveMessage(const OnClickMessage& aMessage)
 		case eOnClickEvent::TOGGLE_SHADOWS:
 		{
 			GameSettingsSingleton::GetInstance()->ToggleShadows();
+			if (GameSettingsSingleton::GetInstance()->GetShouldUseShadows() == true)
+			{
+				myShadowText->SetText("Shadows: ON");
+			}
+			else
+			{
+				myShadowText->SetText("Shadows: OFF");
+			}
 		}
 			break;
 		case eOnClickEvent::GAME_QUIT:
