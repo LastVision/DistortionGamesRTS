@@ -9,7 +9,7 @@ namespace GUI
 
 namespace Prism
 {
-	class Text;;
+	class Text;
 }
 
 class OptionsState : public GameState, public Subscriber

@@ -41,6 +41,7 @@ public:
 	void AddTotem(Entity* aTotem);
 	Entity* GetTotem();
 
+
 private:
 	PollingStation();
 	~PollingStation();
@@ -65,4 +66,5 @@ private:
 
 	static PollingStation* myInstance;
 };
+
 

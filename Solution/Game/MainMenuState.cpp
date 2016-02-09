@@ -4,6 +4,7 @@
 #include "CreditMenuState.h"
 #include <FadeMessage.h>
 #include <GUIManager.h>
+#include "GameSettingsSingleton.h"
 #include "HelpState.h"
 #include "InGameState.h"
 #include <InputWrapper.h>
@@ -13,6 +14,7 @@
 #include <OnClickMessage.h>
 #include "OptionsState.h"
 #include <PostMaster.h>
+#include <PollingStation.h>
 #include "SplashState.h"
 #include "StateStackProxy.h"
 #include <SpriteProxy.h>
@@ -50,6 +52,8 @@ MainMenuState::MainMenuState()
 
 	myGUIPosition = myGUIStartPosition;
 
+
+
 }
 
 MainMenuState::~MainMenuState()
@@ -59,6 +63,7 @@ MainMenuState::~MainMenuState()
 	SAFE_DELETE(myGUIManager);
 	myCursor = nullptr;
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::ON_CLICK, this);
+	GameSettingsSingleton::Destroy();
 }
 
 void MainMenuState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCursor)
@@ -73,6 +78,8 @@ void MainMenuState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aC
 	CU::Vector2<int> windowSize = Prism::Engine::GetInstance()->GetWindowSizeInt();
 	OnResize(windowSize.x, windowSize.y);
 	myHasRunOnce = false;
+
+	GameSettingsSingleton::GetInstance();
 }
 
 void MainMenuState::EndState()

@@ -120,6 +120,7 @@
     <ClCompile Include="OptionsState.cpp">
       <Filter>StateStack</Filter>
     </ClCompile>
+    <ClCompile Include="GameSettingsSingleton.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -251,6 +252,7 @@
     <ClInclude Include="OptionsState.h">
       <Filter>StateStack</Filter>
     </ClInclude>
+    <ClInclude Include="GameSettingsSingleton.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="PreCompile">

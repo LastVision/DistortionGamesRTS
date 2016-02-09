@@ -394,6 +394,7 @@ PollingStation::PollingStation()
 	, myVictoryAndResourcePoints(20)
 	, myProps(128)
 {
+
 }
 
 

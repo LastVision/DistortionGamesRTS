@@ -9,6 +9,7 @@
 //#define CLICK_EXPLOSION
 #define USE_DIFFICULTY
 
+
 #ifdef _DEBUG
 
 #undef LOAD_PROPS
