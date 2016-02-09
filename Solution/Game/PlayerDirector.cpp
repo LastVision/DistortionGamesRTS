@@ -1100,11 +1100,17 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 				else if (mySelectedAction == eSelectedAction::ATTACK_MOVE && myLeftMouseUp == true)
 				{
 					controller->AttackMove(firstTargetPos, !myShiftPressed, myHasPlayedSound);
+					myConfirmationPosition = myCursor->GetMousePosition();
+					myConfimrationAnimation->RestartAnimation();
+					myConfimrationCameraPosition = aCamera.GetOrientation().GetPos();
 					hasDoneAction = true;
 				}
 				else if ((mySelectedAction == eSelectedAction::MOVE && myLeftMouseUp) || myRightClicked)
 				{
 					controller->MoveTo(firstTargetPos, !myShiftPressed, myHasPlayedSound);
+					myConfirmationPosition = myCursor->GetMousePosition();
+					myConfimrationAnimation->RestartAnimation();
+					myConfimrationCameraPosition = aCamera.GetOrientation().GetPos();
 					hasDoneAction = true;
 				}
 			}
@@ -1195,8 +1201,11 @@ void PlayerDirector::SelectOrHoverEntity(Entity* aEntity, bool &aSelected, bool 
 		}
 		else
 		{
-			aEntity->SetHovered(true);
-			aHovered = true;
+			if (aEntity->IsSelectable() == true)
+			{
+				aEntity->SetHovered(true);
+				aHovered = true;
+			}
 		}
 	}
 }

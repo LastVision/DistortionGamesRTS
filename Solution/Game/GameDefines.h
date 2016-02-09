@@ -4,10 +4,11 @@
 #define AMOUNT_OF_UPGRADES 3
 #define PLAYER_COLOR { 0.f, 0.35f, 0.75f, 1.f }
 
-#define USE_SHADOW
+//#define USE_SHADOW
 #define LOAD_PROPS
 //#define CLICK_EXPLOSION
 #define USE_DIFFICULTY
+
 
 #ifdef _DEBUG
 

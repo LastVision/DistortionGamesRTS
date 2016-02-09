@@ -215,6 +215,7 @@
     <ClInclude Include="FogOfWarMap.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameDefines.h" />
+    <ClInclude Include="GameSettingsSingleton.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="GoalMap.h" />
     <ClInclude Include="HelpState.h" />
@@ -260,6 +261,7 @@
     <ClCompile Include="EmitterManager.cpp" />
     <ClCompile Include="FogOfWarMap.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameSettingsSingleton.cpp" />
     <ClCompile Include="GoalMap.cpp" />
     <ClCompile Include="HelpState.cpp" />
     <ClCompile Include="InfluenceMap.cpp" />

@@ -13,12 +13,13 @@
 #include <FogOfWarHelper.h>
 #include "FogOfWarMap.h"
 #include <GameStateMessage.h>
+#include <PollingStation.h>
 #include <InputWrapper.h>
 #include "Level.h"
 #include "NeutralDirector.h"
 #include <NotificationMessage.h>
 #include "PlayerDirector.h"
-#include "PollingStation.h"
+#include "GameSettingsSingleton.h"
 #include <PostMaster.h>
 #include <Renderer.h>
 #include <Scene.h>
@@ -206,9 +207,10 @@ bool Level::Update(float aDeltaTime, Prism::Camera& aCamera)
 void Level::Render(Prism::Camera& aCamera)
 {
 	Prism::Engine::GetInstance()->SetClearColor({ 0.2f, 0.2f, 0.2f, 1.f });
-#ifdef USE_SHADOW
-	myRenderer->ProcessShadow(myShadowLight, myScene);
-#endif
+	if (GameSettingsSingleton::GetInstance()->GetShouldUseShadows() == true)
+	{
+		myRenderer->ProcessShadow(myShadowLight, myScene);
+	}
 
 	if (myShowFogOfWar == true)
 	{
@@ -235,6 +237,7 @@ void Level::Render(Prism::Camera& aCamera)
 	}
 	myRenderer->FinalRender();
 
+	Prism::DebugDrawer::GetInstance()->RenderLinesToScreen(aCamera);
 
 	myPlayer->RenderHealthBars(aCamera);
 	myAI->RenderHealthBars(aCamera);

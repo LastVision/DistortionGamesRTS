@@ -9,7 +9,7 @@ namespace GUI
 
 namespace Prism
 {
-	class Text;;
+	class Text;
 }
 
 class OptionsState : public GameState, public Subscriber
@@ -32,6 +32,7 @@ private:
 	GUI::GUIManager* myGUIManager;
 	Prism::Text* myMusicText;
 	Prism::Text* mySfxText;
+	Prism::Text* myShadowText;
 
 	int myMusicVolume;
 	int mySfxVolume;

@@ -420,20 +420,20 @@ namespace GUI
 		myStatsSprite->Render(position, { 1.f, 1.f }, myUnits[0]->GetOwner() == eOwnerType::PLAYER ?
 			CU::Vector4<float>(1.f, 1.f, 1.f, 1.f) : myEnemyColor);
 
-		position.x += myStatsSprite->GetSize().x / 20.f;
-		position.y -= myStatsSprite->GetSize().y / 2.f;
+		position.x += myStatsSprite->GetSize().x * 0.025f;
+		position.y -= myStatsSprite->GetSize().y * 0.5f;
 		Prism::Engine::GetInstance()->PrintText(myUnits[0]->GetComponent<HealthComponent>()->GetArmor()
 			, position, Prism::eTextType::RELEASE_TEXT, 1.f, color);
 
-		position.x += myStatsSprite->GetSize().x / 3.f;
+		position.x += myStatsSprite->GetSize().x * 0.17f;
 		Prism::Engine::GetInstance()->PrintText(myUnits[0]->GetComponent<ActorComponent>()->GetAttackDamage()
 			, position, Prism::eTextType::RELEASE_TEXT, 1.f, color);
 
-		position.x += myStatsSprite->GetSize().x / 3.f;
+		position.x += myStatsSprite->GetSize().x * 0.17f;
 		Prism::Engine::GetInstance()->PrintText(myUnits[0]->GetMaxSpeed()
 			, position, Prism::eTextType::RELEASE_TEXT, 1.f, color);
 
-		position.x += myStatsSprite->GetSize().x / 3.f;
+		position.x += myStatsSprite->GetSize().x * 0.17f;
 		Prism::Engine::GetInstance()->PrintText(myUnits[0]->GetComponent<ActorComponent>()->GetAttackSpeed()
 			, position, Prism::eTextType::RELEASE_TEXT, 1.f, color);
 	}
