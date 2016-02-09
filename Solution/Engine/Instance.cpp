@@ -212,6 +212,11 @@ void Prism::Instance::SetShouldRender(bool aStatus)
 	myShouldRender = aStatus;
 }
 
+bool Prism::Instance::GetShouldRender() const
+{
+	return myShouldRender;
+}
+
 Prism::ModelProxy& Prism::Instance::GetModel()
 {
 	return myProxy;

@@ -45,8 +45,20 @@ namespace Prism
 
 	void Camera::OnResize(const int aWidth, const int aHeight)
 	{
-		
-		myProjectionMatrix = CU::Matrix44<float>::CreateProjectionMatrixLH(myNear, myFar, static_cast<float>(aHeight) / static_cast<float>(aWidth), myFOV);
+		static bool extra = true;
+
+		float extraFov = 1.f;
+		if (extra == true)
+		{
+			extraFov = 1.1f;
+			extra = false;
+		}
+		else
+		{
+			extra = true;
+		}
+
+		myProjectionMatrix = CU::Matrix44<float>::CreateProjectionMatrixLH(myNear, myFar, static_cast<float>(aHeight) / static_cast<float>(aWidth), myFOV * extraFov);
 		myProjectionMatrixNonInverted = CU::InverseSimple(myProjectionMatrix);
 		myFrustum->OnResize(myNear, myFar);
 	}
@@ -102,6 +114,12 @@ namespace Prism
 
 		myViewProjectionMatrix = CU::InverseSimple(myOrientation) * myProjectionMatrix;
 		myFrustum->Update();
+
+
+		if (CU::InputWrapper::GetInstance()->KeyUp(DIK_N) && myFar < 1000.f)
+		{
+			OnResize(Engine::GetInstance()->GetWindowSizeInt().x, Engine::GetInstance()->GetWindowSizeInt().y);
+		}
 
 		DEBUG_PRINT(myOrientation.GetPos());
 	}

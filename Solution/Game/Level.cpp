@@ -207,6 +207,10 @@ bool Level::Update(float aDeltaTime, Prism::Camera& aCamera)
 void Level::Render(Prism::Camera& aCamera)
 {
 	Prism::Engine::GetInstance()->SetClearColor({ 0.2f, 0.2f, 0.2f, 1.f });
+	myScene->CalcShouldRender(aCamera);
+	myAI->GetBuilding().SetShouldRender(true);
+	myPlayer->GetBuilding().SetShouldRender(true);
+
 	if (GameSettingsSingleton::GetInstance()->GetShouldUseShadows() == true)
 	{
 		myRenderer->ProcessShadow(myShadowLight, myScene);

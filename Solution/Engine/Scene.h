@@ -37,6 +37,8 @@ namespace Prism
 		void SetCamera(const Camera& aCamera);
 		void SetViewCamera(const Camera& aCamera);
 		const Camera* GetCamera() const;
+
+		void CalcShouldRender(const Prism::Camera& aCamera);
 		
 	private:
 		void operator=(Scene&) = delete;

@@ -108,6 +108,22 @@ void CU::InputWrapper::ToggleWindowActive()
 	}
 }
 
+void CU::InputWrapper::TweakValue(float& aValue, float aRate, float aDeltaTime
+	, unsigned int aIncreaseKey, unsigned int aDecreaseKey) const
+{
+	if (myInstance != nullptr)
+	{
+		if (KeyIsPressed(aIncreaseKey))
+		{
+			aValue += aRate * aDeltaTime;
+		}
+		else if (KeyIsPressed(aDecreaseKey))
+		{
+			aValue -= aRate * aDeltaTime;
+		}
+	}
+}
+
 
 void CU::InputWrapper::PauseDeltaRecording()
 {

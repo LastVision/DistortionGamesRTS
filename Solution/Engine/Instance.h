@@ -48,6 +48,7 @@ namespace Prism
 		void ActivateAlbedo(eOwnerType aOwner);
 
 		void SetShouldRender(bool aStatus);
+		bool GetShouldRender() const;
 
 		ModelProxy& GetModel();
 		const CU::Matrix44f& GetOrientation() const;

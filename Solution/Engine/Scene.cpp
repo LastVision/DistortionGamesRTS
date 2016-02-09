@@ -15,6 +15,7 @@
 #include <XMLReader.h>
 #include "InstancingHelper.h"
 
+#include <InputWrapper.h>
 
 #ifdef SCENE_USE_OCTREE
 #include "Octree.h"
@@ -120,7 +121,7 @@ void Prism::Scene::Render(bool aRenderNavMeshLines)
 
 	for (int i = 0; i < myInstances.Size(); ++i)
 	{
-		if (myViewCamera->GetFrustum().Inside(myInstances[i]->GetPosition(), -23.f) == true)
+		//if (myViewCamera->GetFrustum().Inside(myInstances[i]->GetPosition(), RENDER_CLIPPING_RADIUS) == true)
 		{
 			myInstances[i]->Render(*myCamera, *myInstancingHelper, true);
 		}
@@ -203,12 +204,16 @@ void Prism::Scene::Render(bool aRenderNavMeshLines, Texture* aFogOfWarTexture, S
 	int visibleInstances = 0;
 	for (int i = 0; i < myInstances.Size(); ++i)
 	{
-		if (myCamera->GetFrustum().Inside(myInstances[i]->GetPosition(), -23.f) == true)
+		//if (myCamera->GetFrustum().Inside(myInstances[i]->GetPosition(), RENDER_CLIPPING_RADIUS) == true)
 		{
 			myInstances[i]->UpdateDirectionalLights(myDirectionalLightData);
 			myInstances[i]->UpdateSpotLights(mySpotLightData);
 			myInstances[i]->Render(*myCamera, *myInstancingHelper, false);
-			++visibleInstances;
+
+			if (myInstances[i]->GetShouldRender())
+			{
+				++visibleInstances;
+			}
 		}
 	}
 
@@ -226,6 +231,12 @@ void Prism::Scene::Render(bool aRenderNavMeshLines, Texture* aFogOfWarTexture, S
 	}
 
 	myInstancingHelper->Render(myDirectionalLightData, false);
+
+
+	for (int i = 0; i < myInstances.Size(); ++i)
+	{
+		myInstances[i]->SetShouldRender(true);
+	}
 }
 
 void Prism::Scene::AddInstance(Instance* aInstance, bool aIsSelectionRing)
@@ -275,6 +286,28 @@ void Prism::Scene::SetCamera(const Camera& aCamera)
 void Prism::Scene::SetViewCamera(const Camera& aCamera)
 {
 	myViewCamera = &aCamera;
+}
+
+void Prism::Scene::CalcShouldRender(const Prism::Camera& aCamera)
+{
+	static float radius = -21.2f;
+	CU::InputWrapper::GetInstance()->TweakValue(radius, 0.1f, 1.f, DIK_I, DIK_K);
+	DEBUG_PRINT(radius);
+
+	static CU::Vector3<float> offset;
+	CU::InputWrapper::GetInstance()->TweakValue(offset.x, 0.1f, 1.f, DIK_U, DIK_J);
+	CU::InputWrapper::GetInstance()->TweakValue(offset.z, 0.1f, 1.f, DIK_Y, DIK_H);
+	DEBUG_PRINT(offset);
+
+
+	for (int i = 0; i < myInstances.Size(); ++i)
+	{
+		if (myInstances[i]->GetShouldRender() == true &&
+			aCamera.GetFrustum().Inside(myInstances[i]->GetPosition() + offset, radius) == false)
+		{
+			myInstances[i]->SetShouldRender(false);
+		}
+	}
 }
 
 void Prism::Scene::RemoveInstance(Instance* aInstance, bool aIsSelectionRing)

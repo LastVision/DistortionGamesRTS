@@ -37,6 +37,9 @@ namespace CU
 		void PauseDeltaRecording();
 		void ResumeDeltaRecording();
 		void ToggleWindowActive();
+
+		void TweakValue(float& aValue, float aRate, float aDeltaTime
+			, unsigned int aIncreaseKey, unsigned int aDecreaseKey) const;
 	private:
 		InputWrapper();
 		~InputWrapper();
