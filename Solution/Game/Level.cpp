@@ -156,7 +156,7 @@ bool Level::Update(float aDeltaTime, Prism::Camera& aCamera)
 	DoFogCulling();
 	if (globalUseParticles == true)
 	{
-	myEmitterManager->UpdateEmitters(aDeltaTime, CU::Matrix44f());
+		myEmitterManager->UpdateEmitters(aDeltaTime, CU::Matrix44f());
 	}
 	if (myHasToldPlayerAboutWinningIn50 == false && myPlayer->GetVictoryPoints() >= myMaxVictoryPoint - 50)
 	{
@@ -222,25 +222,26 @@ void Level::Render(Prism::Camera& aCamera)
 	if (globalUseParticles == true)
 	{
 		myEmitterManager->RenderEmitters();
-		//myAI->RenderMaps(aCamera);
-
-		if (myShowFogOfWar == true)
-		{
-			myRenderer->EndScene(Prism::ePostProcessing::BLOOM | Prism::ePostProcessing::FOG_OF_WAR, myFogOfWarHelper->GetTexture());
-		}
-		else
-		{
-			myRenderer->EndScene(Prism::ePostProcessing::BLOOM, myFogOfWarHelper->GetTexture());
-		}
-		myRenderer->FinalRender();
-
-
-		myPlayer->RenderHealthBars(aCamera);
-		myAI->RenderHealthBars(aCamera);
-		myNeutralDirector->RenderHealthBars(aCamera);
-
-		myPlayer->Render(aCamera);
 	}
+	//myAI->RenderMaps(aCamera);
+
+	if (myShowFogOfWar == true)
+	{
+		myRenderer->EndScene(Prism::ePostProcessing::BLOOM | Prism::ePostProcessing::FOG_OF_WAR, myFogOfWarHelper->GetTexture());
+	}
+	else
+	{
+		myRenderer->EndScene(Prism::ePostProcessing::BLOOM, myFogOfWarHelper->GetTexture());
+	}
+	myRenderer->FinalRender();
+
+
+	myPlayer->RenderHealthBars(aCamera);
+	myAI->RenderHealthBars(aCamera);
+	myNeutralDirector->RenderHealthBars(aCamera);
+
+	myPlayer->Render(aCamera);
+
 }
 
 void Level::OnResize(int aWidth, int aHeigth)
