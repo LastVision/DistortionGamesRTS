@@ -117,7 +117,7 @@ namespace Prism
 
 	void Effect::SetTexture(Texture* aTexture)
 	{
-		myTexture->SetResource(aTexture->GetShaderView());
+		myTexture->SetResource(aTexture ? aTexture->GetShaderView() : nullptr);
 	}
 
 	void Effect::SetAmbientHue(CU::Vector4f aVector)
@@ -135,7 +135,7 @@ namespace Prism
 
 	void Effect::SetFogOfWarTexture(Texture* aFogOfWarTexture)
 	{
-		myFogOfWarTexture->SetResource(aFogOfWarTexture->GetShaderView());
+		myFogOfWarTexture->SetResource(aFogOfWarTexture ? aFogOfWarTexture->GetShaderView() : nullptr);
 	}
 
 	void Effect::SetShadowDepthTexture(Texture* aLightDepthTexture)

@@ -84,11 +84,11 @@ void Prism::Scene::Render(bool aRenderNavMeshLines)
 		mySpotLightData[i].myCone = mySpotLights[i]->GetCone();
 	}
 
-	myTerrain.GetEffect()->UpdateDirectionalLights(myDirectionalLightData);
-	myTerrain.GetIce()->GetEffect()->UpdateDirectionalLights(myDirectionalLightData);
+	//myTerrain.GetEffect()->UpdateDirectionalLights(myDirectionalLightData);
+	//myTerrain.GetIce()->GetEffect()->UpdateDirectionalLights(myDirectionalLightData);
 	//myTerrain.UpdatePointLights(myPointLightData);
 	//myTerrain.UpdateSpotLights(mySpotLightData);
-	myTerrain.Render(*myCamera, aRenderNavMeshLines, true);
+	//myTerrain.Render(*myCamera, aRenderNavMeshLines, true);
 
 #ifdef SCENE_USE_OCTREE
 	myOctree->Update();
@@ -164,6 +164,9 @@ void Prism::Scene::Render(bool aRenderNavMeshLines, Texture* aFogOfWarTexture, S
 	myTerrain.GetEffect()->UpdateSpotLights(mySpotLightData);
 	myTerrain.GetIce()->GetEffect()->UpdateSpotLights(mySpotLightData);
 	myTerrain.Render(*myCamera, aRenderNavMeshLines, false);
+
+	myTerrain.GetEffect()->SetFogOfWarTexture(nullptr);
+	myTerrain.GetIce()->GetEffect()->SetFogOfWarTexture(nullptr);
 
 #ifdef SCENE_USE_OCTREE
 	myOctree->Update();

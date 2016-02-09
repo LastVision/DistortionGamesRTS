@@ -174,6 +174,8 @@ namespace Prism
 				Engine::GetInstance()->GetContex()->DrawIndexed(mySurfaces[s]->GetIndexCount()
 					, mySurfaces[s]->GetVertexStart(), 0);
 			}
+
+			mySurfaces[s]->DeActivate();
 		}
 	}
 
