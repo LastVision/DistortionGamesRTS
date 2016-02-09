@@ -47,6 +47,8 @@ private:
 	CU::GrowingArray<Entity*> myUnits;
 	bool myDisapearing;
 	CU::Vector3<float> myDisapearVector;
+
+	bool myPlaced;
 };
 
 inline eComponentType TotemComponent::GetTypeStatic()

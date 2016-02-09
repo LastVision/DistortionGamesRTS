@@ -29,6 +29,7 @@ TotemComponent::TotemComponent(Entity& aEntity, TotemComponentData& aData)
 	, myActive(false)
 	, myEffectActive(false)
 	, myDisapearing(false)
+	, myPlaced(false)
 {
 	myOriginalPosition = myEntity.GetOrientation().GetPos();
 }
@@ -39,9 +40,12 @@ TotemComponent::~TotemComponent()
 
 void TotemComponent::Update(float aDeltaTime)
 {
-	myAlpha += aDeltaTime;
-	myCurrentCooldown -= aDeltaTime;
-	myDuration += aDeltaTime;
+	if (myPlaced)
+	{
+		myAlpha += aDeltaTime;
+		myDuration += aDeltaTime;
+		myCurrentCooldown -= aDeltaTime;
+	}
 
 	CheckUnitsForRemove(myUnits);
 
@@ -181,5 +185,6 @@ void TotemComponent::SetTargetPosition(const CU::Vector3f& aTargetPosition)
 		myDisapearing = false;
 		myCurrentCooldown = myOriginalCooldown;
 		myDuration = 0.f;
+		myPlaced = true;
 	}
 }
