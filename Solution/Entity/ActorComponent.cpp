@@ -435,7 +435,7 @@ void ActorComponent::AttackTarget(Entity* aTarget, float aDelta)
 	}
 	else if (myEntity.GetUnitType() == eUnitType::RANGER)
 	{
-		if (myRangerOneShotTimer <= 0.f)
+		if (myEntity.GetComponent<PromotionComponent>()->GetPromoted() == true && myRangerOneShotTimer <= 0.f)
 		{
 			if (FogOfWarMap::GetInstance()->IsVisible(myEntity.GetPosition()) == true)
 			{

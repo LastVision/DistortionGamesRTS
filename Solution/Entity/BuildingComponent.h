@@ -58,6 +58,8 @@ public:
 
 	const CU::GrowingArray<BuildInfo>& GetQueue() const;
 
+	int GetTotalQueueSupplyCost() const;
+
 private:
 	
 	void UpdateUpgradeCooldown(float aDelta, eUnitType aUnit);
