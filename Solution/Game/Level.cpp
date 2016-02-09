@@ -75,7 +75,6 @@ Level::~Level()
 {
 	myEntities.DeleteAll();
 	SAFE_DELETE(myTutorial);
-	SAFE_DELETE(myEmitterManager);
 	SAFE_DELETE(myTerrain);
 	SAFE_DELETE(myLight);
 	SAFE_DELETE(myPlayer);
@@ -95,6 +94,7 @@ Level::~Level()
 
 	Prism::Audio::AudioInterface::GetInstance()->PostEvent("Stop_Ambience", 0);
 	Prism::Audio::AudioInterface::GetInstance()->PostEvent("Stop_Music", 0);
+	SAFE_DELETE(myEmitterManager);
 }
 
 void Level::LoadTutorial(const Prism::Camera& aCamera, const std::string& aTutorialPath)
@@ -154,9 +154,10 @@ bool Level::Update(float aDeltaTime, Prism::Camera& aCamera)
 
 	FogOfWarMap::GetInstance()->Update(aDeltaTime);
 	DoFogCulling();
-#ifdef USE_PARTICLES
+	if (globalUseParticles == true)
+	{
 	myEmitterManager->UpdateEmitters(aDeltaTime, CU::Matrix44f());
-#endif
+	}
 	if (myHasToldPlayerAboutWinningIn50 == false && myPlayer->GetVictoryPoints() >= myMaxVictoryPoint - 50)
 	{
 		myHasToldPlayerAboutWinningIn50 = true;
@@ -217,27 +218,29 @@ void Level::Render(Prism::Camera& aCamera)
 
 	myRenderer->BeginScene();
 	myScene->Render(myRenderNavMeshLines, myFogOfWarHelper->GetTexture(), myShadowLight);
-#ifdef USE_PARTICLES
-	myEmitterManager->RenderEmitters();
-#endif
-	//myAI->RenderMaps(aCamera);
 
-	if (myShowFogOfWar == true)
+	if (globalUseParticles == true)
 	{
-		myRenderer->EndScene(Prism::ePostProcessing::BLOOM | Prism::ePostProcessing::FOG_OF_WAR, myFogOfWarHelper->GetTexture());
-	}
-	else
-	{
-		myRenderer->EndScene(Prism::ePostProcessing::BLOOM, myFogOfWarHelper->GetTexture());
-	}
-	myRenderer->FinalRender();
+		myEmitterManager->RenderEmitters();
+		//myAI->RenderMaps(aCamera);
 
-	
-	myPlayer->RenderHealthBars(aCamera);
-	myAI->RenderHealthBars(aCamera);
-	myNeutralDirector->RenderHealthBars(aCamera);
-	
-	myPlayer->Render(aCamera);
+		if (myShowFogOfWar == true)
+		{
+			myRenderer->EndScene(Prism::ePostProcessing::BLOOM | Prism::ePostProcessing::FOG_OF_WAR, myFogOfWarHelper->GetTexture());
+		}
+		else
+		{
+			myRenderer->EndScene(Prism::ePostProcessing::BLOOM, myFogOfWarHelper->GetTexture());
+		}
+		myRenderer->FinalRender();
+
+
+		myPlayer->RenderHealthBars(aCamera);
+		myAI->RenderHealthBars(aCamera);
+		myNeutralDirector->RenderHealthBars(aCamera);
+
+		myPlayer->Render(aCamera);
+	}
 }
 
 void Level::OnResize(int aWidth, int aHeigth)

@@ -45,5 +45,9 @@ private:
 
 	void operator=(const EmitterManager&) = delete;
 
+
+
+
+
 };
 

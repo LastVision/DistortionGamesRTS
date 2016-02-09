@@ -178,7 +178,8 @@ void ActorComponent::Update(float aDelta)
 				}
 
 				PostMaster::GetInstance()->SendMessage(ArtifactMessage(myEntity.GetOwner(), 1));
-				PostMaster::GetInstance()->SendMessage(EmitterMessage("artifact_pickup", myEntity.GetOrientation().GetPos(), true, 1.f));
+				PostMaster::GetInstance()->SendMessage(EmitterMessage("artifact_pickup", myEntity.GetOrientation().GetPos()));
+				//PostMaster::GetInstance()->SendMessage(EmitterMessage("artifact_glow", true, 1.f));
 				PollingStation::GetInstance()->DeleteArtifact(artifacts[i]);
 			}
 		}
@@ -413,11 +414,13 @@ void ActorComponent::AttackTarget(Entity* aTarget, float aDelta)
 		{
 			myEntity.SetState(eEntityState::THROW);
 			myEntity.GetComponent<GrenadeComponent>()->ThrowGrenade(aTarget->GetOrientation().GetPos());
-			if (FogOfWarMap::GetInstance()->IsVisible(myEntity.GetPosition()) == true && rand() % 2 == 0)
+			if (FogOfWarMap::GetInstance()->IsVisible(myEntity.GetPosition()) == true)
 			{
-				Prism::Audio::AudioInterface::GetInstance()->PostEvent("Grunt_ThrowGrenade"
-					, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
-
+				if (rand() % 2 == 0)
+				{
+					Prism::Audio::AudioInterface::GetInstance()->PostEvent("Grunt_ThrowGrenade"
+						, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+				}
 				PostMaster::GetInstance()->SendMessage(InWorldTextMessage("Grenade!", myEntity.GetPosition(), { 1.f, 0.88f, 0.f, 1.f }));
 			}
 		}
@@ -468,10 +471,17 @@ void ActorComponent::AttackTarget(Entity* aTarget, float aDelta)
 			&& myRangerOneShotTimer <= 0.f)
 		{
 			myRangerOneShotTimer = myRangerOneShotCooldown;
-			targetSurvived = targetHealth->TakeDamageAndCheckSurvive((targetHealth->GetMaxHealth() * 0.75f) + targetHealth->GetArmor());
+			targetSurvived = targetHealth->TakeDamageAndCheckSurvive((targetHealth->GetMaxHealth() * 0.5f) + targetHealth->GetArmor());
 
-			PostMaster::GetInstance()->SendMessage(InWorldTextMessage("Critical hit!", aTarget->GetPosition(), { 1.f, 0.88f, 0.f, 1.f }));
-
+			if (FogOfWarMap::GetInstance()->IsVisible(myEntity.GetPosition()) == true )
+			{
+				if (rand() % 2 == 0)
+				{
+					Prism::Audio::AudioInterface::GetInstance()->PostEvent("Ranger_OneShotTalk"
+						, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+				}
+				PostMaster::GetInstance()->SendMessage(InWorldTextMessage("Critical hit!", aTarget->GetPosition(), { 1.f, 0.88f, 0.f, 1.f }));
+			}
 
 		}
 		else

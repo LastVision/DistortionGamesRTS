@@ -124,9 +124,10 @@ Level* LevelFactory::LoadCurrentLevel(bool aPauseModelLoader, eDifficulty aDiffi
 	weatherPosition.z = 136.f;
 	weatherPosition.y = 10.f;
 	weatherPosition.x = 126.f;
-#ifdef USE_WEATHER
-	PostMaster::GetInstance()->SendMessage(EmitterMessage("weather_snow", weatherPosition, true));
-#endif
+	if (globalUseWeather == true)
+	{
+		PostMaster::GetInstance()->SendMessage(EmitterMessage("weather_snow", weatherPosition, true));
+	}
 
 	myCurrentLevel->LoadTutorial(myCamera, tutorialPath); // needs to be after InitGUI
 
@@ -242,7 +243,7 @@ void LevelFactory::ReadLevel(const std::string& aLevelPath, std::string& aTutori
 #ifndef USE_BINARY_TERRAIN
 	LoadCutBoxes(reader, levelElement);
 #endif
-	LoadParticles(reader, levelElement); 
+	LoadParticles(reader, levelElement);
 
 	//modelLoader->UnPause();
 	//modelLoader->WaitUntilFinished();
@@ -452,7 +453,7 @@ void LevelFactory::LoadUnits(XMLReader& aReader, tinyxml2::XMLElement* aLevelEle
 		PostMaster::GetInstance()->SendMessage(SpawnUnitMessage(EntityEnumConverter::ConvertStringToUnitType(unitType)
 			, EntityEnumConverter::ConvertStringToOwnerType(owner)
 			, { creepPosition.x, creepPosition.z }
-			, { creepPosition.x, creepPosition.z }));
+		, { creepPosition.x, creepPosition.z }));
 	}
 }
 
@@ -633,6 +634,8 @@ void LevelFactory::LoadArtifacts(XMLReader& aReader, tinyxml2::XMLElement* aLeve
 		myCurrentLevel->myEntities.GetLast()->AddToScene();
 
 		PollingStation::GetInstance()->AddArtifact(myCurrentLevel->myEntities.GetLast());
+		PostMaster::GetInstance()->SendMessage(EmitterMessage("artifact_glow", true
+			, myCurrentLevel->myEntities.GetLast()->GetId()));
 	}
 }
 

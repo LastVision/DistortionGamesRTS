@@ -3,6 +3,7 @@
 #include <AudioInterface.h>
 #include "ControllerComponent.h"
 #include "CollisionComponent.h"
+#include "../Game/FogOfWarMap.h"
 #include "EnrageComponent.h"
 #include "HealthComponent.h"
 #include "Intersection.h"
@@ -92,7 +93,10 @@ void EnrageComponent::Activate()
 	{
 		HealthComponent* health = myEntity.GetComponent<HealthComponent>();
 		ActorComponent* actor = myEntity.GetComponent<ActorComponent>();
-		PostMaster::GetInstance()->SendMessage(InWorldTextMessage("Enrage!", myEntity.GetPosition(), { 1.f, 0.88f, 0.f, 1.f }));
+		if (FogOfWarMap::GetInstance()->IsVisible(myEntity.GetPosition()) == true)
+		{
+			PostMaster::GetInstance()->SendMessage(InWorldTextMessage("Enrage!", myEntity.GetPosition(), { 1.f, 0.88f, 0.f, 1.f }));
+		}
 
 		myIsActive = true;
 		myCurrentDuration = myData.myDuration;

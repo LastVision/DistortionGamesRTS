@@ -261,6 +261,12 @@ namespace GUI
 			aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "onclick"), "id", ID);
 			myClickEvent = new OnClickMessage(eOnClickEvent::SPAWN_UNIT, ID);
 		}
+		else if (clickEvent == "spawn_locked_unit")
+		{
+			int ID = -1;
+			aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "onclick"), "id", ID);
+			myClickEvent = new OnClickMessage(eOnClickEvent::SPAWN_LOCKED_UNIT, ID);
+		}
 		else if (clickEvent == "select_control_group")
 		{
 			int index = -1;
@@ -273,11 +279,25 @@ namespace GUI
 			aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "onclick"), "id", unitID);
 			myClickEvent = new OnClickMessage(eOnClickEvent::UPGRADE_UNIT, unitID);
 		}
-		else if (clickEvent == "spawn_locked_unit")
+		else if (clickEvent == "IncreaseVolume")
 		{
-			int ID = -1;
-			aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "onclick"), "id", ID);
-			myClickEvent = new OnClickMessage(eOnClickEvent::SPAWN_LOCKED_UNIT, ID);
+			myClickEvent = new OnClickMessage(eOnClickEvent::INCREASEVOLUME);
+		}
+		else if (clickEvent == "LowerVolume")
+		{
+			myClickEvent = new OnClickMessage(eOnClickEvent::LOWERVOLUME);
+		}
+		else if (clickEvent == "IncreaseMusic")
+		{
+			myClickEvent = new OnClickMessage(eOnClickEvent::INCREASEMUSIC);
+		}
+		else if (clickEvent == "LowerMusic")
+		{
+			myClickEvent = new OnClickMessage(eOnClickEvent::LOWERMUSIC);
+		}
+		else if (clickEvent == "options_menu")
+		{
+			myClickEvent = new OnClickMessage(eOnClickEvent::OPTIONS_MENU);
 		}
 		else
 		{

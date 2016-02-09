@@ -117,6 +117,9 @@
     <ClCompile Include="DifficultySelectState.cpp">
       <Filter>StateStack</Filter>
     </ClCompile>
+    <ClCompile Include="OptionsState.cpp">
+      <Filter>StateStack</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -243,6 +246,9 @@
       <Filter>StateStack</Filter>
     </ClInclude>
     <ClInclude Include="DifficultySelectState.h">
+      <Filter>StateStack</Filter>
+    </ClInclude>
+    <ClInclude Include="OptionsState.h">
       <Filter>StateStack</Filter>
     </ClInclude>
   </ItemGroup>
