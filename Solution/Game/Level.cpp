@@ -221,26 +221,26 @@ void Level::Render(Prism::Camera& aCamera)
 
 	if (globalUseParticles == true)
 	{
-	myEmitterManager->RenderEmitters();
-#endif
-	//myAI->RenderMaps(aCamera);
+		myEmitterManager->RenderEmitters();
+		//myAI->RenderMaps(aCamera);
 
-	if (myShowFogOfWar == true)
-	{
-		myRenderer->EndScene(Prism::ePostProcessing::BLOOM | Prism::ePostProcessing::FOG_OF_WAR, myFogOfWarHelper->GetTexture());
-	}
-	else
-	{
-		myRenderer->EndScene(Prism::ePostProcessing::BLOOM, myFogOfWarHelper->GetTexture());
-	}
-	myRenderer->FinalRender();
+		if (myShowFogOfWar == true)
+		{
+			myRenderer->EndScene(Prism::ePostProcessing::BLOOM | Prism::ePostProcessing::FOG_OF_WAR, myFogOfWarHelper->GetTexture());
+		}
+		else
+		{
+			myRenderer->EndScene(Prism::ePostProcessing::BLOOM, myFogOfWarHelper->GetTexture());
+		}
+		myRenderer->FinalRender();
 
-	
-	myPlayer->RenderHealthBars(aCamera);
-	myAI->RenderHealthBars(aCamera);
-	myNeutralDirector->RenderHealthBars(aCamera);
-	
-	myPlayer->Render(aCamera);
+
+		myPlayer->RenderHealthBars(aCamera);
+		myAI->RenderHealthBars(aCamera);
+		myNeutralDirector->RenderHealthBars(aCamera);
+
+		myPlayer->Render(aCamera);
+	}
 }
 
 void Level::OnResize(int aWidth, int aHeigth)
