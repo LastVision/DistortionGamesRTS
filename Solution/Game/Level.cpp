@@ -219,7 +219,7 @@ void Level::Render(Prism::Camera& aCamera)
 	myScene->Render(myRenderNavMeshLines, myFogOfWarHelper->GetTexture(), myShadowLight);
 	myEmitterManager->RenderEmitters();
 
-	myAI->RenderMaps(aCamera);
+	//myAI->RenderMaps(aCamera);
 
 	if (myShowFogOfWar == true)
 	{
