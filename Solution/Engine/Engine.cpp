@@ -332,7 +332,7 @@ namespace Prism
 		return true;
 	}
 
-	void Engine::PrintText(const std::string& aText, const CU::Vector2<float>& aPosition, eTextType aTextType, float aScale, CU::Vector4<float> aColor)
+	float Engine::PrintText(const std::string& aText, const CU::Vector2<float>& aPosition, eTextType aTextType, float aScale, CU::Vector4<float> aColor)
 	{
 		TextCommand toAdd;
 		toAdd.myText = aText;
@@ -347,6 +347,10 @@ namespace Prism
 		{
 			myDebugTexts.Add(toAdd);
 		}
+
+
+
+		return myText->GetWidth();
 	}
 
 	void Engine::PrintText(float aNumber, const CU::Vector2<float>& aPosition, eTextType aTextType, float aScale, CU::Vector4<float> aColor)

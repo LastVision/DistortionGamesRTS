@@ -84,17 +84,17 @@ void HealthComponent::Update(float aDelta)
 		{
 			myIsHealing = PollingStation::GetInstance()->GetTotem()->GetComponent<TotemComponent>()->GetIsInside(&myEntity);
 		}
-		
+
 	}
 }
 
 bool HealthComponent::TakeDamageAndCheckSurvive(float aDamage)
 {
 	DL_ASSERT_EXP(aDamage >= 0, "Cant take negative damage, use Heal for healing if that was your intention");
+	PostMaster::GetInstance()->SendMessage(EmitterMessage("OnHit", myEntity.GetId()));
 
 	if (FogOfWarMap::GetInstance()->IsVisible(myEntity.GetPosition()) && myEntity.GetOwner() == eOwnerType::PLAYER)
 	{
-		PostMaster::GetInstance()->SendMessage(EmitterMessage("OnHit", myEntity.GetId()));
 		PostMaster::GetInstance()->SendMessage(MinimapEventMessage(myEntity.GetPosition(), MinimapEventType::eUNIT_ATTACKED));
 	}
 
