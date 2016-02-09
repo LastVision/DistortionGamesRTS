@@ -95,7 +95,8 @@ void EmitterManager::RenderEmitters()
 
 			for (int j = 0; j < myEmitterList[i]->myEmitters[k].Size(); ++j)
 			{
-				if (myEmitterList[i]->myEmitters[k][j]->IsActive() == false)
+					Prism::ParticleEmitterInstance* instance = myEmitterList[i]->myEmitters[k][j];
+					if (instance->IsActive() == false)
 				{
 					finished++;
 
@@ -108,12 +109,14 @@ void EmitterManager::RenderEmitters()
 							myEmitterList[i]->myGroupIsActive = false;
 						}
 					}
-				
 					continue;
 				}
 				else
 				{
-					myEmitterList[i]->myEmitters[k][j]->Render();
+					if (FogOfWarMap::GetInstance()->IsVisible({ instance->GetPosition() }) == true || instance->GetShouldAlwaysShow() == true)
+					{
+						instance->Render();
+					}
 				}
 			}
 		}
@@ -124,7 +127,16 @@ void EmitterManager::ReceiveMessage(const EmitterMessage& aMessage)
 {
 	CU::Vector3f position = aMessage.myPosition;
 
-	if (FogOfWarMap::GetInstance()->IsVisible({ position.x, position.z }) == true || aMessage.myShouldAlwaysShow == true)
+	if (aMessage.myEmitter != nullptr)
+	{
+		if (aMessage.myShouldKillEmitter == true)
+		{
+			aMessage.myEmitter->KillEmitter(2.f);
+		}
+	}
+
+
+	if (FogOfWarMap::GetInstance()->IsVisible({ position.x, position.z }) == true || aMessage.myShouldAlwaysShow == true || aMessage.myIsArtifact)
 	{
 		if (aMessage.myEntityID != -1)
 		{
@@ -150,10 +162,16 @@ void EmitterManager::ReceiveMessage(const EmitterMessage& aMessage)
 			if (aMessage.myEntityID != -1)
 			{
 				instance->SetEntity(EntityId::GetInstance()->GetEntity(aMessage.myEntityID));
+				instance->GetEntity()->AddEmitter(instance);
 			}
 			else
 			{
 				instance->SetEntity(nullptr);
+			}
+
+			if (aMessage.myShouldAlwaysShow == true)
+			{
+				instance->SetShouldAlwaysShow(true);
 			}
 
 			instance->SetPosition(position);

@@ -9,6 +9,7 @@ namespace Prism
 	class Scene;
 	class Terrain;
 	enum class eOctreeType;
+	class ParticleEmitterInstance;
 }
 
 class Component;
@@ -94,9 +95,14 @@ public:
 
 	const bool IsInScene() const;
 
+	void AddEmitter(Prism::ParticleEmitterInstance* anEmitterConnection);
+
 private:
 	void operator=(Entity&) = delete;
 	CU::StaticArray<Component*, static_cast<int>(eComponentType::_COUNT)> myComponents;
+
+	Prism::ParticleEmitterInstance* myEmitterConnection;
+
 	int myId;
 	
 	bool myAlive;

@@ -35,6 +35,7 @@ namespace Prism
 
 		void SetRadius(float aRadius);
 		void SetSize(const CU::Vector3f& aSize);
+		void KillEmitter(float aKillTime);
 
 	private:
 
@@ -79,6 +80,7 @@ namespace Prism
 			HOLLOW,
 			ACTIVE,
 			CIRCLE,
+			EMITTERLIFE,
 			_COUNT
 		};
 
