@@ -32,6 +32,7 @@
 #include <ToggleGUIMessage.h>
 #include <ToggleBuildTimeMessage.h>
 #include <TotemComponent.h>
+#include <SoundComponent.h>
 #include <ModelLoader.h>
 #include <SpawnUnitMessage.h>
 #include <SpriteProxy.h>
@@ -272,8 +273,8 @@ void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 	DEBUG_PRINT(myHasUnlockedTank);
 	//Prism::Audio::AudioInterface::GetInstance()->SetListenerPosition(aCamera.GetOrientation().GetPos().x
 	//	, aCamera.GetOrientation().GetPos().y, aCamera.GetOrientation().GetPos().z);
-	Prism::Audio::AudioInterface::GetInstance()->SetListenerPosition(aCamera.GetOrientation().GetPos().x
-		, 7.5f, aCamera.GetOrientation().GetPos().z + 25.f);
+	Prism::Audio::AudioInterface::GetInstance()->SetListenerPosition(aCamera.GetOrientation().GetPos().x + 10
+		, 7.5f, aCamera.GetOrientation().GetPos().z + 30.f);
 
 #ifndef RELEASE_BUILD
 	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_G) == true)
@@ -752,7 +753,7 @@ bool PlayerDirector::CanUpgrade(int aUnitType) const
 
 bool PlayerDirector::CanAffordSupply(int aSupplyCost) const
 {
-	if (aSupplyCost + myUnitCount > myUnitCap)
+	if (aSupplyCost + myUnitCount + myBuilding->GetComponent<BuildingComponent>()->GetTotalQueueSupplyCost() > myUnitCap)
 	{
 		return false;
 	}
@@ -1088,7 +1089,7 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 					controller->AttackTarget(hoveredEnemy, !myShiftPressed, myHasPlayedSound);
 					hasDoneAction = true;
 				}
-				else if (mySelectedAction == eSelectedAction::ATTACK_MOVE && myRightClicked == true)
+				else if (mySelectedAction == eSelectedAction::ATTACK_MOVE && myLeftMouseUp == true)
 				{
 					controller->AttackMove(firstTargetPos, !myShiftPressed, myHasPlayedSound);
 					hasDoneAction = true;
@@ -1210,6 +1211,12 @@ void PlayerDirector::SelectAllUnits()
 void PlayerDirector::PlaceRallyPoint(CU::Vector2<float> aWorldPosition)
 {
 	// check if inside navmesh 
+	if (myTerrain.GetPathFinder()->IsOutside(aWorldPosition) == true)
+	{
+		myCurrentCancleCursorTime = myCancleCursorTime;
+		myCursor->SetCurrentCursor(eCursorType::CANCEL);
+		return;
+	}
 
 	myBuilding->GetComponent<BuildingComponent>()->SetRallyPoint(aWorldPosition);
 
@@ -1217,6 +1224,9 @@ void PlayerDirector::PlaceRallyPoint(CU::Vector2<float> aWorldPosition)
 	CU::Matrix44f rallyOrientation = myRallyPoint->GetOrientation();
 	myTerrain.CalcEntityHeight(rallyOrientation);
 	myRallyPoint->SetPosition(rallyOrientation.GetPos());
+
+	Prism::Audio::AudioInterface::GetInstance()->PostEvent("Place_RallyPoint"
+		, myRallyPoint->GetComponent<SoundComponent>()->GetAudioSFXID());
 }
 
 void PlayerDirector::PlaceTotem(const CU::Vector3f& aPositionInWorld)

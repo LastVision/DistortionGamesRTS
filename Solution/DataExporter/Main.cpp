@@ -38,6 +38,7 @@
 #include "DGFXReader.h"
 #include <DL_Debug.h>
 #include <Engine.h>
+#include "LevelReader.h"
 #include "TerrainReader.h"
 #include "IReader.h"
 #include <TimerManager.h>
@@ -55,7 +56,7 @@ int main(int argC,      // Number of strings in array argv
 {
 	bool convertDGFX = false;
 	bool calcCollisionRadius = false;
-	bool createTerrainAndNavMesh = false;
+	bool createTerrainAndNavMesh = true;
 	for (int i = 0; i < argC; ++i)
 	{
 		std::string command(argV[i]);
@@ -112,6 +113,10 @@ int main(int argC,      // Number of strings in array argv
 
 		reader->ReadFile("Data/Level/LI_level.xml");
 
+		delete reader;
+
+		reader = new LevelReader();
+		reader->ReadFile("Data/Level/LI_level.xml");
 		delete reader;
 
 		std::cout << "\n---| Terrain and NavMesh Done |---\n" << std::endl;

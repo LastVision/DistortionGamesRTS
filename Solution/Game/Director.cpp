@@ -155,7 +155,7 @@ bool Director::SpawnUnit(eUnitType aUnitType)
 	}
 
 	BuildingComponent* building = myBuilding->GetComponent<BuildingComponent>();
-	if (myUnitCount + building->GetUnitSupplyCost(aUnitType) > myUnitCap)
+	if (myUnitCount + building->GetTotalQueueSupplyCost() + building->GetUnitSupplyCost(aUnitType) > myUnitCap)
 	{
 		PostMaster::GetInstance()->SendMessage(NotificationMessage("Not enough supply."));
 		return false;

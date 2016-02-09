@@ -383,15 +383,19 @@ namespace GUI
 			}
 		}
 
-		portraitPosition.y -= myGruntPortrait->GetSize().y / 3.5f;
-		portraitPosition.x += myGruntPortrait->GetSize().x / 3.f;
+		portraitPosition.y -= myGruntPortrait->GetSize().y * 0.32f;
+		//portraitPosition.x += myGruntPortrait->GetSize().x / 3.f;
 
 		std::string currentHealth = std::to_string(int(myUnits[0]->GetComponent<HealthComponent>()->GetCurrentHealth()));
-		Prism::Engine::GetInstance()->PrintText(currentHealth, portraitPosition, Prism::eTextType::RELEASE_TEXT, myTextScale, color);
+		//Prism::Engine::GetInstance()->PrintText(currentHealth, portraitPosition, Prism::eTextType::RELEASE_TEXT, 1.f, color);
 
-		std::string maxHealth = "/" + std::to_string(int(myUnits[0]->GetComponent<HealthComponent>()->GetMaxHealth()));
-		Prism::Engine::GetInstance()->PrintText(maxHealth, { portraitPosition.x + 25.f, portraitPosition.y }
-		, Prism::eTextType::RELEASE_TEXT, myTextScale, color);
+		//std::string maxHealth = "/" + std::to_string(int(myUnits[0]->GetComponent<HealthComponent>()->GetMaxHealth()));
+
+		currentHealth.append("/" + std::to_string(int(myUnits[0]->GetComponent<HealthComponent>()->GetMaxHealth())));
+		Prism::Engine::GetInstance()->PrintText(currentHealth, { portraitPosition.x, portraitPosition.y }
+		, Prism::eTextType::RELEASE_TEXT, 1.f, color);
+
+
 
 		color.x = 1.f;
 		color.y = 1.f;
@@ -419,15 +423,15 @@ namespace GUI
 		position.x += myStatsSprite->GetSize().x / 20.f;
 		position.y -= myStatsSprite->GetSize().y / 2.f;
 		Prism::Engine::GetInstance()->PrintText(myUnits[0]->GetComponent<HealthComponent>()->GetArmor()
-			, position, Prism::eTextType::RELEASE_TEXT, myTextScale, color);
+			, position, Prism::eTextType::RELEASE_TEXT, 1.f, color);
 
 		position.x += myStatsSprite->GetSize().x / 3.f;
 		Prism::Engine::GetInstance()->PrintText(myUnits[0]->GetComponent<ActorComponent>()->GetAttackDamage()
-			, position, Prism::eTextType::RELEASE_TEXT, myTextScale, color);
+			, position, Prism::eTextType::RELEASE_TEXT, 1.f, color);
 
 		position.x += myStatsSprite->GetSize().x / 3.f;
 		Prism::Engine::GetInstance()->PrintText(myUnits[0]->GetMaxSpeed()
-			, position, Prism::eTextType::RELEASE_TEXT, myTextScale, color);
+			, position, Prism::eTextType::RELEASE_TEXT, 1.f, color);
 	}
 
 	void UnitInfoWidget::RenderUnitGroupInfo(const CU::Vector2<float>& aParentPosition)

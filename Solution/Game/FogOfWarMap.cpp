@@ -11,7 +11,7 @@
 #include <Texture.h>
 
 #define OUTER_RING 10.f
-#define MIN_DARKNESS 0.5f
+#define MIN_DARKNESS 0.4f
 
 FogOfWarMap* FogOfWarMap::myInstance = nullptr;
 FogOfWarMap* FogOfWarMap::GetInstance()

@@ -27,7 +27,7 @@ namespace Prism
 		, myInited(false)
 		, myParent(nullptr)
 		, myVertexCount(0)
-		, myMaxInstances(512)
+		, myMaxInstances(0)
 		, myInstancingMatrixBuffer(nullptr)
 		, myInstancingScaleBuffer(nullptr)
 		, myInstancingHeightBuffer(nullptr)
@@ -61,10 +61,11 @@ namespace Prism
 		}
 	}
 
-	void Model::Init()
+	void Model::Init(int aMaxInstances)
 	{
 		DL_ASSERT_EXP(myInited == false, "Tried to Init a model twice");
 
+		myMaxInstances = aMaxInstances;
 		if (myIsNULLObject == false)
 		{
 			const int size = myVertexFormat.Size() + 6;
@@ -100,7 +101,7 @@ namespace Prism
 		for (int i = 0; i < myChildren.Size(); ++i)
 		{
 			myChildren[i]->myFileName = myFileName;
-			myChildren[i]->Init();
+			myChildren[i]->Init(myMaxInstances);
 		}
 
 
@@ -383,7 +384,7 @@ namespace Prism
 		}
 		else
 		{
-			DL_ASSERT_EXP(someWorldMatrices.Size() < myMaxInstances, "Tried to instance to many instances");
+			DL_ASSERT_EXP(someWorldMatrices.Size() <= myMaxInstances, "Tried to instance to many instances");
 
 			D3D11_MAPPED_SUBRESOURCE mappedResource;
 			ID3D11DeviceContext* context = Engine::GetInstance()->GetContex();

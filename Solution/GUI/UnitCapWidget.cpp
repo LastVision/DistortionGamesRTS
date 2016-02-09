@@ -30,7 +30,7 @@ namespace GUI
 
 		ss << myUnitCount << "/" << myUnitCap;
 
-		Prism::Engine::GetInstance()->PrintText(ss.str(), myPosition + aParentPosition, Prism::eTextType::RELEASE_TEXT, myTextScale);
+		Prism::Engine::GetInstance()->PrintText(ss.str(), myPosition + aParentPosition, Prism::eTextType::RELEASE_TEXT);
 	}
 
 	void UnitCapWidget::OnResize(const CU::Vector2<float>& aNewWindowSize, const CU::Vector2<float>& anOldWindowSize, bool aIsFullScreen)

@@ -132,8 +132,8 @@ namespace GUI
 
 			if (action == "totem")
 			{
-				myTooltipInfo->myCooldown = &aPlayer->GetTotemMaxCooldown();
-				myTooltipInfo->myCooldownType = eCooldownType::TOTEM;
+				//myTooltipInfo->myCooldown = &aPlayer->GetTotemMaxCooldown();
+				//myTooltipInfo->myCooldownType = eCooldownType::TOTEM;
 			}
 			else if (action == "spawn_grunt")
 			{
