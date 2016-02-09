@@ -299,6 +299,10 @@ namespace GUI
 		{
 			myClickEvent = new OnClickMessage(eOnClickEvent::OPTIONS_MENU);
 		}
+		else if (clickEvent == "toggle_shadows")
+		{
+			myClickEvent = new OnClickMessage(eOnClickEvent::TOGGLE_SHADOWS);
+		}
 		else
 		{
 			std::string message = "[ButtonWidget]: No onclick event named " + clickEvent;

@@ -32,6 +32,7 @@ enum class eOnClickEvent
 	INCREASEMUSIC,
 	LOWERMUSIC,
 	OPTIONS_MENU,
+	TOGGLE_SHADOWS,
 };
 
 struct OnClickMessage : public Message

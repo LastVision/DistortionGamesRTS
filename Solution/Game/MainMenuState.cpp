@@ -13,6 +13,7 @@
 #include <OnClickMessage.h>
 #include "OptionsState.h"
 #include <PostMaster.h>
+#include <PollingStation.h>
 #include "SplashState.h"
 #include "StateStackProxy.h"
 #include <SpriteProxy.h>
@@ -50,6 +51,8 @@ MainMenuState::MainMenuState()
 
 	myGUIPosition = myGUIStartPosition;
 
+
+
 }
 
 MainMenuState::~MainMenuState()
@@ -73,6 +76,8 @@ void MainMenuState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aC
 	CU::Vector2<int> windowSize = Prism::Engine::GetInstance()->GetWindowSizeInt();
 	OnResize(windowSize.x, windowSize.y);
 	myHasRunOnce = false;
+
+	PollingStation::GetInstance();
 }
 
 void MainMenuState::EndState()

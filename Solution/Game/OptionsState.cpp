@@ -4,6 +4,7 @@
 #include "GUIManager.h"
 #include "InputWrapper.h"
 #include "PostMaster.h"
+#include <PollingStation.h>
 #include "OnClickMessage.h"
 #include "InGameState.h"
 #include "HelpState.h"
@@ -119,6 +120,11 @@ void OptionsState::ReceiveMessage(const OnClickMessage& aMessage)
 			break;
 		case eOnClickEvent::LOWERMUSIC:
 			Prism::Audio::AudioInterface::GetInstance()->PostEvent("LowerMusic", 0);
+			break;
+		case eOnClickEvent::TOGGLE_SHADOWS:
+		{
+			PollingStation::GetInstance()->ToggleShadows();
+		}
 			break;
 		case eOnClickEvent::GAME_QUIT:
 			myIsActiveState = false;
