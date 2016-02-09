@@ -145,7 +145,10 @@ void EmitterManager::ReceiveMessage(const EmitterMessage& aMessage)
 		}
 
 		std::string particleType = CU::ToLower(aMessage.myParticleTypeString);
-
+		if (particleType == "")
+		{
+			return;
+		}
 		DL_ASSERT_EXP(myEmitters.find(particleType) != myEmitters.end(), "Effect did not exist!");
 
 		if (myEmitters[particleType]->myCurrentIndex > (PREALLOCATED_EMITTERGROUP - 1))

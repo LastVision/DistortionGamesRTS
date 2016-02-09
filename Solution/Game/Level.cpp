@@ -75,7 +75,6 @@ Level::~Level()
 {
 	myEntities.DeleteAll();
 	SAFE_DELETE(myTutorial);
-	SAFE_DELETE(myEmitterManager);
 	SAFE_DELETE(myTerrain);
 	SAFE_DELETE(myLight);
 	SAFE_DELETE(myPlayer);
@@ -95,6 +94,7 @@ Level::~Level()
 
 	Prism::Audio::AudioInterface::GetInstance()->PostEvent("Stop_Ambience", 0);
 	Prism::Audio::AudioInterface::GetInstance()->PostEvent("Stop_Music", 0);
+	SAFE_DELETE(myEmitterManager);
 }
 
 void Level::LoadTutorial(const Prism::Camera& aCamera, const std::string& aTutorialPath)
