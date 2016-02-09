@@ -178,7 +178,8 @@ void ActorComponent::Update(float aDelta)
 				}
 
 				PostMaster::GetInstance()->SendMessage(ArtifactMessage(myEntity.GetOwner(), 1));
-				PostMaster::GetInstance()->SendMessage(EmitterMessage("artifact_pickup", myEntity.GetOrientation().GetPos(), true, 1.f));
+				PostMaster::GetInstance()->SendMessage(EmitterMessage("artifact_pickup", myEntity.GetOrientation().GetPos()));
+				//PostMaster::GetInstance()->SendMessage(EmitterMessage("artifact_glow", true, 1.f));
 				PollingStation::GetInstance()->DeleteArtifact(artifacts[i]);
 			}
 		}

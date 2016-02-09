@@ -17,3 +17,6 @@
 #endif
 
 #define USE_DIFFICULTY
+
+const bool globalUseParticles = true;
+const bool globalUseWeather = true;

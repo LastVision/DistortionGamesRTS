@@ -10,18 +10,6 @@
 #include <TextureContainer.h>
 #include <Engine.h>
 
-#define IS_ACTIVE 1
-#define IS_NOT_ACTIVE 0
-
-#define USE_ALPHA_DELTA 1
-#define DONT_USE_ALPA_DELTA 0
-
-#define IS_HOLLOW 1
-#define IS_NOT_HOLLOW 0
-
-#define IS_CIRCLE 1
-#define IS_NOT_CIRCLE 0
-
 namespace Prism
 {
 	ParticleEmitterInstance::ParticleEmitterInstance(ParticleEmitterData* someData, bool anAllowManyParticles)
@@ -60,39 +48,49 @@ namespace Prism
 
 		if (myParticleEmitterData->myUseAlphaDelta == true)
 		{
-			myStates[ALPHADELTA] = USE_ALPHA_DELTA;
+			myStates[ALPHADELTA] = TRUE;
 		}
 		else
 		{
-			myStates[ALPHADELTA] = USE_ALPHA_DELTA;
+			myStates[ALPHADELTA] = FALSE;
 		}
 
 		if (myParticleEmitterData->myIsActiveAtStart == true)
 		{
-			myStates[ACTIVE] = IS_ACTIVE;
+			myStates[ACTIVE] = TRUE;
 		}
 		else
 		{
-			myStates[ACTIVE] = IS_NOT_ACTIVE;
+			myStates[ACTIVE] = FALSE;
 		}
 
 		if (myParticleEmitterData->myIsHollow == true)
 		{
-			myStates[HOLLOW] = IS_HOLLOW;
+			myStates[HOLLOW] = TRUE;
 		}
 		else
 		{
-			myStates[HOLLOW] = IS_NOT_HOLLOW;
+			myStates[HOLLOW] = FALSE;
 		}
 
 		if (myParticleEmitterData->myIsCircle == true)
 		{
-			myStates[CIRCLE] = IS_CIRCLE;
+			myStates[CIRCLE] = TRUE;
 		}
 		else
 		{
-			myStates[CIRCLE] = IS_NOT_CIRCLE;
+			myStates[CIRCLE] = FALSE;
 		}
+
+		if (myParticleEmitterData->myUseEmitterLifeTime == true)
+		{
+			myStates[EMITTERLIFE] = TRUE;
+		}
+		else
+		{
+			myStates[EMITTERLIFE] = FALSE;
+		}
+
 		myEmitterLife = myParticleEmitterData->myEmitterLifeTime;
 		
 		CreateVertexBuffer();
@@ -191,13 +189,13 @@ namespace Prism
 
 	void ParticleEmitterInstance::UpdateEmitter(float aDeltaTime, const CU::Matrix44f& aWorldMatrix)
 	{
-		if (myStates[ACTIVE] == IS_ACTIVE)
+		if (myStates[ACTIVE] == TRUE)
 		{
 		myEmissionTime -= aDeltaTime;
 		myEmitterLife -= aDeltaTime;
 
 
-		if (myEmissionTime <= 0.f && (myEmitterLife > 0.f || myParticleEmitterData->myUseEmitterLifeTime == false))
+		if (myEmissionTime <= 0.f && (myEmitterLife > 0.f || myStates[EMITTERLIFE] == FALSE))
 		{
 			EmitParticle(aWorldMatrix);
 			myEmissionTime = myParticleEmitterData->myEmissionRate;
@@ -205,11 +203,11 @@ namespace Prism
 
 			UpdateParticle(aDeltaTime);
 
-		if (myParticleEmitterData->myUseEmitterLifeTime == true)
+			if (myStates[EMITTERLIFE] == TRUE)
 		{
 			if (myEmitterLife <= 0.f && myLiveParticleCount <= 0)
 			{
-				myStates[ACTIVE] = IS_NOT_ACTIVE;
+				myStates[ACTIVE] = FALSE;
 			}
 		}
 	}
@@ -223,7 +221,7 @@ namespace Prism
 
 			myGraphicalParticles[i].myPosition += myLogicalParticles[i].myVelocity * aDeltaTime;
 
-			if (myStates[ALPHADELTA] == USE_ALPHA_DELTA)
+			if (myStates[ALPHADELTA] == TRUE)
 			{
 				myGraphicalParticles[i].myAlpha += myParticleEmitterData->myData.myAlphaDelta * aDeltaTime;
 			}
@@ -265,18 +263,18 @@ namespace Prism
 			myGraphicalParticles[myParticleIndex].myColor = myParticleEmitterData->myData.myStartColor;
 
 			#pragma	region		Shape
-			if (myStates[CIRCLE] == IS_CIRCLE && myStates[HOLLOW] == IS_HOLLOW)
+			if (myStates[CIRCLE] == TRUE && myStates[HOLLOW] == TRUE)
 			{
 				CU::Vector3<float> pos = CreateCirclePositions();
 				myGraphicalParticles[myParticleIndex].myPosition = aWorldMatrix.GetPos() + pos;
 			}
-			else if (myStates[CIRCLE] == IS_CIRCLE)
+			else if (myStates[CIRCLE] == TRUE)
 			{
 				CU::Vector3<float> pos = CreateCirclePositions();
 				myGraphicalParticles[myParticleIndex].myPosition = CU::Math::RandomVector(aWorldMatrix.GetPos() - pos
 					, aWorldMatrix.GetPos() + pos);
 			}
-			else if (myStates[HOLLOW] == IS_HOLLOW)
+			else if (myStates[HOLLOW] == TRUE)
 			{
 				CU::Vector3<float> pos = CreateHollowSquare();
 				myGraphicalParticles[myParticleIndex].myPosition = aWorldMatrix.GetPos() + pos;
@@ -403,13 +401,13 @@ namespace Prism
 
 	void ParticleEmitterInstance::Activate()
 	{
-		myStates[ACTIVE] = IS_ACTIVE;
+		myStates[ACTIVE] = TRUE;
 		myEmitterLife = myParticleEmitterData->myEmitterLifeTime;
 	}
 
 	bool ParticleEmitterInstance::IsActive()
 	{
-		if (myStates[ACTIVE] == IS_ACTIVE)
+		if (myStates[ACTIVE] == TRUE)
 		{
 			return true;
 		}
@@ -455,6 +453,17 @@ namespace Prism
 	void ParticleEmitterInstance::SetSize(const CU::Vector3f& aSize)
 	{
 		myParticleEmitterData->myEmitterSize = aSize;
+	}
+
+
+	void ParticleEmitterInstance::KillEmitter(float aKillTime)
+	{
+		myEmitterLife = aKillTime;
+		myStates[EMITTERLIFE] = TRUE;
+		if (myEntity != nullptr)
+		{
+			myEntity = nullptr;
+		}
 	}
 
 }

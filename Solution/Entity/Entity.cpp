@@ -19,7 +19,8 @@
 #include "TotemComponent.h"
 #include "TriggerComponent.h"
 #include <Instance.h>
-
+#include <EmitterMessage.h>
+#include <PostMaster.h>
 Entity::Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& aEntityData
 		, Prism::Scene& aScene, const CU::Vector3<float>& aStartPosition, const Prism::Terrain& aTerrain
 		, const CU::Vector3f& aRotation, const CU::Vector3f& aScale, eUnitType aUnitType)
@@ -31,6 +32,7 @@ Entity::Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& a
 	, myType(aEntityData.myType)
 	, myPosition({aStartPosition.x, aStartPosition.z})
 	, myUnitType(aUnitType)
+	, myEmitterConnection(nullptr)
 {
 	myId = EntityId::GetInstance()->GetId(this);
 	for (int i = 0; i < static_cast<int>(eComponentType::_COUNT); ++i)
@@ -145,6 +147,8 @@ Entity::Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& a
 
 Entity::~Entity()
 {
+	PostMaster::GetInstance()->SendMessage(EmitterMessage(myEmitterConnection, true));
+
 	if (myIsInScene == true)
 	{
 		RemoveFromScene();
@@ -376,6 +380,11 @@ CU::GrowingArray<CU::Vector2<float>> Entity::GetCutMesh() const
 	points.Add({ pos.x + halfWidth, pos.y + halfWidth });
 	points.Add({ pos.x + halfWidth, pos.y - halfWidth });
 	return points;
+}
+
+void Entity::AddEmitter(Prism::ParticleEmitterInstance* anEmitterConnection)
+{
+	myEmitterConnection = anEmitterConnection;
 }
 
 void Entity::SetPosition(const CU::Vector3f& aPosition)
