@@ -261,6 +261,12 @@ namespace GUI
 			aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "onclick"), "id", ID);
 			myClickEvent = new OnClickMessage(eOnClickEvent::SPAWN_UNIT, ID);
 		}
+		else if (clickEvent == "spawn_locked_unit")
+		{
+			int ID = -1;
+			aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "onclick"), "id", ID);
+			myClickEvent = new OnClickMessage(eOnClickEvent::SPAWN_LOCKED_UNIT, ID);
+		}
 		else if (clickEvent == "select_control_group")
 		{
 			int index = -1;
