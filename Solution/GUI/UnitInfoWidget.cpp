@@ -432,6 +432,10 @@ namespace GUI
 		position.x += myStatsSprite->GetSize().x / 3.f;
 		Prism::Engine::GetInstance()->PrintText(myUnits[0]->GetMaxSpeed()
 			, position, Prism::eTextType::RELEASE_TEXT, 1.f, color);
+
+		position.x += myStatsSprite->GetSize().x / 3.f;
+		Prism::Engine::GetInstance()->PrintText(myUnits[0]->GetComponent<ActorComponent>()->GetAttackSpeed()
+			, position, Prism::eTextType::RELEASE_TEXT, 1.f, color);
 	}
 
 	void UnitInfoWidget::RenderUnitGroupInfo(const CU::Vector2<float>& aParentPosition)
