@@ -95,8 +95,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPTSTR, int aNumberCommands)
 	globalPreviousFullscreenState = Prism::Engine::GetInstance()->IsFullscreen();
 
 #ifdef RELEASE_BUILD
-	Prism::Engine::GetInstance()->SetFullscreen(false);
-	globalPreviousFullscreenState = false;
+	Prism::Engine::GetInstance()->SetFullscreen(true);
+	globalPreviousFullscreenState = true;
 #endif
 
 	MSG msg;
@@ -174,7 +174,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 					}
 #ifdef RELEASE_BUILD
-					//Prism::Engine::GetInstance()->SetFullscreen(true);
+					Prism::Engine::GetInstance()->SetFullscreen(true);
 #endif
 
 					globalIsActive = true;
@@ -281,8 +281,6 @@ bool ReadSetup(Prism::SetupInfo& aSetup, const std::string& aFilePath)
 #ifndef RELEASE_BUILD
 	windowed = true;
 #endif
-
-	windowed = true;
 
 	aSetup.myScreenWidth = width;
 	aSetup.myScreenHeight = height;
