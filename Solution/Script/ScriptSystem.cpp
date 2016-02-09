@@ -53,7 +53,9 @@ namespace LUA
 
 	void ScriptSystem::Init(const std::string& aLuaPath, const std::function<void()>& aRegisterFunction)
 	{
+#ifndef RELEASE_BUILD
 		myOutputFile.open("luaOutput.txt", std::ios::out);
+#endif
 		myCppRegisterFunction = aRegisterFunction;
 		if (myLuaState != nullptr)
 		{
@@ -198,8 +200,10 @@ namespace LUA
 
 	void ScriptSystem::PrintToFile(const std::string& aString)
 	{
+#ifndef RELEASE_BUILD
 		myOutputFile << aString << std::endl;
 		myOutputFile.flush();
+#endif
 	}
 
 	void ScriptSystem::ReInit(const std::string&)
@@ -313,6 +317,7 @@ namespace LUA
 
 	void ScriptSystem::PrintDocumentation()
 	{
+#ifndef RELEASE_BUILD
 		std::fstream file;
 		file.open("exposedScriptFunctions.lua", std::ios::out);
 
@@ -327,6 +332,7 @@ namespace LUA
 		file << "end";
 		file.flush();
 		file.close();
+#endif
 	}
 
 #undef min

@@ -104,7 +104,7 @@ void TextEventManager::Render()
 		{
 			myInWorldTexts[i]->myText->SetPosition(Get2DPosition(myInWorldTexts[i]->myInWorldPosition));
 			myInWorldTexts[i]->myText->SetColor(myInWorldTexts[i]->myColor);
-			myInWorldTexts[i]->myText->SetScale({ myTextScale, myTextScale });
+			myInWorldTexts[i]->myText->SetScale({ 1.f, 1.f });
 			myInWorldTexts[i]->myText->Render();
 		}
 	}
@@ -117,7 +117,7 @@ void TextEventManager::Render()
 		{
 			myNotifications[i]->myText->SetPosition(position);
 			myNotifications[i]->myText->SetColor(myNotifications[i]->myColor);
-			myNotifications[i]->myText->SetScale({ myTextScale, myTextScale });
+			myNotifications[i]->myText->SetScale({ 1.f, 1.f });
 			myNotifications[i]->myText->Render();
 			position.y -= 20.f;
 		}
