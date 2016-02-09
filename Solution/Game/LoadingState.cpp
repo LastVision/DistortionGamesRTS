@@ -53,7 +53,7 @@ void LoadingState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCu
 
 void LoadingState::EndState()
 {
-	
+
 }
 
 const eStateStatus LoadingState::Update(const float& aDeltaTime)
@@ -141,18 +141,19 @@ void LoadingState::Render()
 	myBackground->Render(windowSize * 0.5f);
 
 	//myText->Render();
-	
+
 	if (Prism::ModelLoader::GetInstance()->IsLoading() == false)
 	{
 		Prism::Engine::GetInstance()->PrintText("Press Enter to begin."
-			, windowSize * 0.5f, Prism::eTextType::RELEASE_TEXT
+			, { windowSize.x * 0.5f - 150.f, windowSize.y  * 0.5f - 350.f }, Prism::eTextType::RELEASE_TEXT
 			, 1.f, { 1.f, 1.f, 1.f, myFinishedTextAlpha });
 	}
 
-	myRotatingThing->Render(windowSize * 0.5f + 250.f
-	, { myRotatingThingScale, myRotatingThingScale });
-	myRotatingThing2->Render(windowSize * 0.5f + 250.f
-	, { myRotatingThingScale, myRotatingThingScale });
+	CU::Vector2<float> position = { windowSize.x * 0.5f + 650.f, windowSize.y *0.5f - 350.f };
+	CU::Vector2<float> scale = { myRotatingThingScale * 0.5f, myRotatingThingScale * 0.5f };
+
+	myRotatingThing->Render(position, scale);
+	myRotatingThing2->Render(position, scale);
 }
 
 void LoadingState::ResumeState()

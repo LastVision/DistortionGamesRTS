@@ -9,6 +9,7 @@
 #include "InGameState.h"
 #include "HelpState.h"
 #include <Text.h>
+#include <WidgetContainer.h>
 
 OptionsState::OptionsState()
 	: myGUIManager(nullptr)
@@ -36,14 +37,14 @@ void OptionsState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCu
 	myGUIManager = new GUI::GUIManager(myCursor, "Data/Resource/GUI/GUI_options_menu.xml", nullptr, nullptr, nullptr, -1);
 
 	CU::Vector2<int> windowSize = Prism::Engine::GetInstance()->GetWindowSizeInt();
-	OnResize(windowSize.x, windowSize.y);
 
 	myMusicText = new Prism::Text(*Prism::Engine::GetInstance()->GetFont(Prism::eFont::DIALOGUE));
 	mySfxText = new Prism::Text(*Prism::Engine::GetInstance()->GetFont(Prism::eFont::DIALOGUE));
+	OnResize(windowSize.x, windowSize.y);
 	
-	CU::Vector2<float> floatScreenPos(windowSize.x, windowSize.y);
-	myMusicText->SetPosition({ floatScreenPos.x * 0.5f - 120, floatScreenPos.y * 0.5f });
-	mySfxText->SetPosition({ floatScreenPos.x * 0.5f - 120, floatScreenPos.y * 0.5f + 60.f });
+	//CU::Vector2<float> floatScreenPos(windowSize.x, windowSize.y);
+	//myMusicText->SetPosition({ floatScreenPos.x * 0.5f - 120, floatScreenPos.y * 0.5f });
+	//mySfxText->SetPosition({ floatScreenPos.x * 0.5f - 120, floatScreenPos.y * 0.5f + 60.f });
 
 	myMusicVolume = Prism::Audio::AudioInterface::GetInstance()->GetMusicVolume();
 	mySfxVolume = Prism::Audio::AudioInterface::GetInstance()->GetSFXVolume();
@@ -60,6 +61,12 @@ void OptionsState::EndState()
 void OptionsState::OnResize(int aWidth, int aHeight)
 {
 	myGUIManager->OnResize(aWidth, aHeight);
+	CU::Vector2<float> floatScreenPos(aWidth, aHeight);
+	GUI::WidgetContainer* widgetCont = reinterpret_cast<GUI::WidgetContainer*>(myGUIManager->GetWidgetContainer()->At(0));
+	CU::Vector2<float> firstRow = widgetCont->At(2)->GetPosition();
+	CU::Vector2<float> secondRow = widgetCont->At(0)->GetPosition();
+	myMusicText->SetPosition({ firstRow.x - 280.f, firstRow.y - (widgetCont->At(0)->GetSize().y * 0.25f)});
+	mySfxText->SetPosition({ secondRow.x - 280.f, secondRow.y - (widgetCont->At(2)->GetSize().y * 0.25f) });
 }
 
 const eStateStatus OptionsState::Update(const float& aDeltaTime)
