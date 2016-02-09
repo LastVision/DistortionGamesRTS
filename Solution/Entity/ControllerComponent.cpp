@@ -27,6 +27,12 @@ ControllerComponent::ControllerComponent(Entity& aEntity, ControllerComponentDat
 	, myLastValidTriangle(nullptr)
 	, myCurrentTriangleTimer(0.f)
 	, myTriangleTimer(0.25f)
+	, myOwnerType(myEntity.GetOwner())
+	, myStartNewAction(true)
+	, myFirstFrame(true)
+	, mySecondFrame(false)
+	, myIsReady(false)
+	, myFoundPath(false)
 {
 }
 

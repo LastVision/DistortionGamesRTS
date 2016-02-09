@@ -11,8 +11,31 @@
 namespace Prism
 {
 	ParticleEmitterData::ParticleEmitterData()
-		: myInputLayout(nullptr)
-		, myUseEmitterLifeTime(true)
+		: myTexture(nullptr)
+		, myEffect(nullptr)
+		, myFileName("not initialized")
+		, myInputLayout(nullptr)
+		, myTechniqueDesc(nullptr)
+		, myMinRotation(0.f)
+		, myMaxRotation(0.f)
+		, myRotationDelta(0.f)
+		, mySpeedMultiplier(0.f)
+		, myEffectName("not initialized")
+		, myTextureName("not initialized")
+		, myParticlesLifeTime(0.f)
+		, myEmitterLifeTime(0.f)
+		, myEmissionLifeTime(0.f)
+		, myEmissionRate(0.f)
+		, myEmissionRateDelta(0.f)
+		, myMinScale(0.f)
+		, myMaxScale(0.f)
+		, myParticlesPerEmitt(0)
+		, myMaxParticleAmount(0)
+		, myIsActiveAtStart(false)
+		, myUseEmitterLifeTime(false)
+		, myUseAlphaDelta(false)
+		, myIsHollow(false)
+		, myIsCircle(false)
 	{
 	}
 
@@ -81,7 +104,10 @@ namespace Prism
 		{
 			myUseEmitterLifeTime = false;
 		}
-
+		else
+		{
+			myUseEmitterLifeTime = true;
+		}
 		element = read.ForceFindFirstChild(emitter, "EmittsPerSecond");
 		read.ReadAttribute(element, "value", myEmissionRate);
 		myEmissionRate = 1 / myEmissionRate;

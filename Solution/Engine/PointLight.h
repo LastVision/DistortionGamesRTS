@@ -8,6 +8,7 @@ namespace Prism
 	class PointLight
 	{
 	public:
+		PointLight();
 		void Initiate();
 		void Render(Camera* aCamera);
 		void Update();

@@ -3,7 +3,14 @@
 
 struct ParticleData
 {
-
+	ParticleData()
+		: myLifeTime(0.f)
+		, myMaxStartSize(0.f)
+		, myMinStartSize(0.f)
+		, mySizeDelta(0.f)
+		, myStartAlpha(0.f)
+		, myAlphaDelta(0.f)
+	{}
 	CU::Vector3f myMaxVelocity;
 	CU::Vector3f myMinVelocity;
 
@@ -28,7 +35,7 @@ struct GraphicalParticle
 		: myAlpha(0.0f)
 		, mySize(0.0f)
 		, myLifeTime(10.0f)
-		, myRotation(0.f)
+		, myRotation(0.0f)
 	{
 	}
 
@@ -47,9 +54,10 @@ struct GraphicalParticle
 struct LogicalParticle
 {
 	LogicalParticle()
-		: mySpeed(0)
+		: mySpeed(0.0f)
 		, myIsAlive(false)
-		, myRotation(0)
+		, myRotation(0.0f)
+		, myRotationDelta(0.0f)
 	{
 	}
 	~LogicalParticle()

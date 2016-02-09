@@ -12,6 +12,8 @@
 PromotionComponent::PromotionComponent(Entity& aEntity, PromotionComponentData& aData)
 	: Component(aEntity)
 	, myKillCount(aData.myKillCount)
+	, myIsPromoted(false)
+	, myCurrentKillCount(0)
 {
 	CU::Vector2<float> size(32.f, 32.f);
 	mySprite = Prism::ModelLoader::GetInstance()->LoadSprite(

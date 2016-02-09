@@ -330,6 +330,8 @@ void ConsoleHistoryManager::AddHistory(const std::string& aCommand, eHistoryType
 
 
 History::History()
+	: myType(eHistoryType::ERROR)
+	, myRenderText(nullptr)
 {
 }
 

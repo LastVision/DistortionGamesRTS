@@ -162,13 +162,10 @@ namespace Prism
 #endif
 	}
 
-	void DebugDrawer::Render(const Camera& aCamera)
+
+	void DebugDrawer::RenderTextToScreen()
 	{
 		Engine::GetInstance()->DisableZBuffer();
-
-		myLine3DRenderer->Render(my3DLines, aCamera);
-		myCube3DRenderer->Render(aCamera);
-
 		CU::Vector2<float> window(Engine::GetInstance()->GetWindowSize());
 
 		float rowHeight = 28.f;
@@ -181,11 +178,20 @@ namespace Prism
 			textPos.y -= rowHeight;
 		}
 #endif
-		my3DLines.RemoveAll();
 		myDebugTexts.RemoveAll();
+		Engine::GetInstance()->EnableZBuffer();
+	}
+
+	void DebugDrawer::RenderLinesToScreen(const Camera& aCamera)
+	{
+		Engine::GetInstance()->DisableZBuffer();
+
+		myLine3DRenderer->Render(my3DLines, aCamera);
+		myCube3DRenderer->Render(aCamera);
+		
+		my3DLines.RemoveAll();
 
 		Engine::GetInstance()->EnableZBuffer();
-
 	}
 
 	DebugDrawer::DebugDrawer()

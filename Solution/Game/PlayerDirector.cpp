@@ -73,6 +73,9 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 	, myCancleCursorTime(0.5f)
 	, myConfimrationAnimation(nullptr)
 	, myRallypointVisible(false)
+	, myShiftPressed(false)
+	, myRightClicked(false)
+	, myTextEventManager(nullptr)
 {
 	myAudioSFXID = Prism::Audio::AudioInterface::GetInstance()->GetUniqueID();
 	myDragSelectionPositions.Reserve(4);
@@ -761,6 +764,11 @@ bool PlayerDirector::CanAffordArtifact(int aCost) const
 	}
 
 	return true;
+}
+
+bool PlayerDirector::CanCastTotem() const
+{
+	return myTotem->GetComponent<TotemComponent>()->CanActivate();
 }
 
 void PlayerDirector::UpdateInputs()

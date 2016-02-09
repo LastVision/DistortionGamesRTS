@@ -29,6 +29,8 @@ MainMenuState::MainMenuState()
 	, myGUIEndPosition(0.f, 0.f)
 	, myGUIStartPosition(-512.f, 0.f)
 	, myLogoDone(false)
+	, myGUIManager(nullptr)
+	, myHasRunOnce(false)
 {
 	CU::Vector2<float> logoSize(512.f, 512.f);
 	myLogo = Prism::ModelLoader::GetInstance()->LoadSprite("Data/Resource/Texture/Menu/MainMenu/T_gamelogo.dds"
@@ -171,7 +173,7 @@ void MainMenuState::ReceiveMessage(const OnClickMessage& aMessage)
 		case eOnClickEvent::GAME_CREDIT:
 			Prism::MemoryTracker::GetInstance()->SetRunTime(false);
 			PostMaster::GetInstance()->UnSubscribe(eMessageType::ON_CLICK, this);
-			myStateStack->PushMainGameState(new CreditMenuState());
+			myStateStack->PushSubGameState(new CreditMenuState());
 			break;
 		case eOnClickEvent::GAME_HELP:
 		{

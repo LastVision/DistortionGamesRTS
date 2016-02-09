@@ -45,7 +45,9 @@ namespace Prism
 		void ActivateAlbedo(eOwnerType aOwner);
 		
 		bool SetGPUState(const CU::GrowingArray<CU::Matrix44<float>>& someWorldMatrices
-			, const CU::GrowingArray<CU::Vector3<float>>& someScales, eOwnerType aOwner);
+			, const CU::GrowingArray<CU::Vector3<float>>& someScales
+			, const CU::GrowingArray<float>& someHeights
+			, eOwnerType aOwner);
 		int GetIndexCount();
 		int GetVertexStart();
 
@@ -77,7 +79,8 @@ namespace Prism
 		D3D11_BUFFER_DESC* myInstancingBufferDesc;
 		VertexBufferWrapper* myInstancingMatrixBuffer;
 		VertexBufferWrapper* myInstancingScaleBuffer;
-		ID3D11Buffer* myVertexBuffers[3];
+		VertexBufferWrapper* myInstancingHeightBuffer;
+		ID3D11Buffer* myVertexBuffers[4];
 		const int myMaxInstances;
 	};
 

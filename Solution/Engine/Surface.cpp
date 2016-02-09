@@ -10,7 +10,17 @@
 namespace Prism
 {
 	Surface::Surface()
+		: myPrimitiveTopologyType(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST)
+		, myVertexStart(0)
+		, myVertexCount(0)
+		, myIndexStart(0)
+		, myIndexCount(0)
+		, myEffect(nullptr)
 	{
+		myOwnerAlbedoTextures[0] = nullptr;
+		myOwnerAlbedoTextures[1] = nullptr;
+		myOwnerAlbedoTextures[2] = nullptr;
+
 		myResourceViews.Init(8);
 		myShaderVariables.Init(8);
 
@@ -111,13 +121,14 @@ namespace Prism
 	{
 		//return;
 
-		DL_ASSERT_EXP(aOwner != eOwnerType::NOT_USED, "NOT_USED cannot be used to ActivateAlbedo");
 
 		if (myOwnerAlbedoTextures[0] == nullptr || myOwnerAlbedoTextures[1] == nullptr
 			|| myOwnerAlbedoTextures[2] == nullptr)
 		{
 			return;
 		}
+
+		DL_ASSERT_EXP(aOwner != eOwnerType::NOT_USED, "NOT_USED cannot be used to ActivateAlbedo");
 
 		for (int i = 0; i < myShaderResourceNames.Size(); ++i)
 		{

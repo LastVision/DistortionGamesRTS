@@ -15,9 +15,36 @@ namespace Prism
 {
 	
 	Effect::Effect()
+		: myTechnique(nullptr)
+		, myCameraPosition(nullptr)
+		, myProjectionMatrix(nullptr)
+		, myViewMatrix(nullptr)
+		, myWorldMatrix(nullptr)
+		, myViewProjectionMatrix(nullptr)
+		, myShadowMVP(nullptr)
+		, myEyePosition(nullptr)
+		, myTotalTime(nullptr)
+		, myPlayerVariable(nullptr)
+		, myColor(nullptr)
+		, myScaleVector(nullptr)
+		, myAmbientHue(nullptr)
+		, myDirectionalLight(nullptr)
+		, myPointLight(nullptr)
+		, mySpotLight(nullptr)
+		, myTexture(nullptr)
+		, myFogOfWarTexture(nullptr)
+		, myShadowDepthTexture(nullptr)
+		, mySpritePosAndScale(nullptr)
+		, mySpriteOrientation(nullptr)
+		, myStreakDiffuse(nullptr)
+		, myStreakSizeDelta(nullptr)
+		, myStreakStartAlpha(nullptr)
+		, myStreakAlphaDelta(nullptr)
+		, myBonesArray(nullptr)
+		, myFileName("not initilized")
+		, myEffectListeners(512)
+		, myEffect(nullptr)
 	{
-		myEffectListeners.Init(512);
-		myEffect = nullptr;
 	}
 
 	Effect::~Effect()

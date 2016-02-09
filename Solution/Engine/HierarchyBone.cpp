@@ -10,6 +10,7 @@ namespace Prism
 		: myCurrentAnimation(nullptr)
 		, myResultMatrix(nullptr)
 		, myBoneMatrix(nullptr)
+		, myBoneID(0)
 	{
 		//We cannot init myChildren here, because stackoverflow
 		//will get inited by BuildBoneHierarchy in FBXFactory

@@ -9,6 +9,7 @@ namespace Prism
 	TransformationNodeInstance::TransformationNodeInstance()
 		: myTransformationNode(nullptr)
 		, myChildren(4)
+		, myElapsedTime(0.f)
 	{
 	}
 

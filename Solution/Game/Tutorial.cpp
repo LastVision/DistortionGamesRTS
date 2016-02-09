@@ -131,6 +131,7 @@ Tutorial::~Tutorial()
 
 void Tutorial::Update(float aDeltaTime)
 {
+	myCurrentTime -= aDeltaTime;
 	CheckIfCompletedGlobalTutorial();
 	if (myActive == false)
 	{
@@ -168,7 +169,6 @@ void Tutorial::Update(float aDeltaTime)
 		}
 	}
 
-	myCurrentTime -= aDeltaTime;
 	if (myCurrentTime < 0)
 	{
 		if (myMissionComplete == true)
@@ -241,30 +241,34 @@ void Tutorial::CheckIfCompletedGlobalTutorial()
 	{
 		return;
 	}
+	if (myCurrentTime < 0 && myActive == false)
+	{
+		PostMaster::GetInstance()->SendMessage(TextMessage(nullptr, false));
+	}
 
 	if (myArtifactMission != nullptr && myArtifactMission->myIsDone == true && myArtifactMission->myIsActive == true)
 	{
-		PostMaster::GetInstance()->SendMessage(GameStateMessage(eGameState::CLICKABLE_STATE, myArtifactMission->myTime,
-			myArtifactMission->myText));
+		PostMaster::GetInstance()->SendMessage(TextMessage(myArtifactMission->myText));
 		myArtifactMission->myIsActive = false;
+		myCurrentTime = myArtifactMission->myTime;
 	}
 	if (myEnemyBaseMission != nullptr && myEnemyBaseMission->myIsDone == true && myEnemyBaseMission->myIsActive == true)
 	{
-		PostMaster::GetInstance()->SendMessage(GameStateMessage(eGameState::CLICKABLE_STATE, myEnemyBaseMission->myTime,
-			myEnemyBaseMission->myText));
+		PostMaster::GetInstance()->SendMessage(TextMessage(myEnemyBaseMission->myText));
 		myEnemyBaseMission->myIsActive = false;
+		myCurrentTime = myEnemyBaseMission->myTime;
 	}
 	if (myResourcePointMission != nullptr && myResourcePointMission->myIsDone == true && myResourcePointMission->myIsActive == true)
 	{
-		PostMaster::GetInstance()->SendMessage(GameStateMessage(eGameState::CLICKABLE_STATE, myResourcePointMission->myTime,
-			myResourcePointMission->myText));
+		PostMaster::GetInstance()->SendMessage(TextMessage(myResourcePointMission->myText));
 		myResourcePointMission->myIsActive = false;
+		myCurrentTime = myResourcePointMission->myTime;
 	}
 	if (myVictoryPointMission != nullptr && myVictoryPointMission->myIsDone == true && myVictoryPointMission->myIsActive == true)
 	{
-		PostMaster::GetInstance()->SendMessage(GameStateMessage(eGameState::CLICKABLE_STATE, myVictoryPointMission->myTime,
-			myVictoryPointMission->myText));
+		PostMaster::GetInstance()->SendMessage(TextMessage(myVictoryPointMission->myText));
 		myVictoryPointMission->myIsActive = false;
+		myCurrentTime = myVictoryPointMission->myTime;
 	}
 }
 

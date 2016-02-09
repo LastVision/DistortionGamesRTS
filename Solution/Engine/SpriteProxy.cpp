@@ -20,7 +20,7 @@ namespace Prism
 		}
 	}
 
-	void SpriteProxy::SetSize(const CU::Vector2<float> aTextureSize, const CU::Vector2<float>& aHotSpot)
+	void SpriteProxy::SetSize(const CU::Vector2<float>& aTextureSize, const CU::Vector2<float>& aHotSpot)
 	{
 		mySize = aTextureSize;
 		myHotspot = aHotSpot;
@@ -36,7 +36,7 @@ namespace Prism
 		return mySize;
 	}
 
-	void SpriteProxy::SetUVZeroToOne(const CU::Vector2<float> aTopLeft, const CU::Vector2<float>& aRightBottom)
+	void SpriteProxy::SetUVZeroToOne(const CU::Vector2<float>& aTopLeft, const CU::Vector2<float>& aRightBottom)
 	{
 		if (aTopLeft.x < 0.f || aTopLeft.x > 1.f || aTopLeft.y < 0.f || aTopLeft.y > 1.f ||
 			aRightBottom.x < 0.f || aRightBottom.x > 1.f || aRightBottom.y < 0.f || aRightBottom.y > 1.f)

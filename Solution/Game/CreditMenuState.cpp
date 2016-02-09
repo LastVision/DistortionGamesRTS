@@ -7,6 +7,7 @@
 #include "InGameState.h"
 
 CreditMenuState::CreditMenuState()
+	: myGUIManager(nullptr)
 {
 }
 
@@ -22,6 +23,7 @@ void CreditMenuState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* 
 {
 	PostMaster::GetInstance()->Subscribe(eMessageType::ON_CLICK, this);
 	myIsActiveState = true;
+	myIsLetThrough = true;
 	myStateStatus = eStateStatus::eKeepState;
 	myStateStack = aStateStackProxy;
 	myCursor = aCursor;
@@ -48,7 +50,7 @@ const eStateStatus CreditMenuState::Update(const float& aDeltaTime)
 	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_ESCAPE) == true)
 	{
 		myIsActiveState = false;
-		return eStateStatus::ePopMainState;
+		return eStateStatus::ePopSubState;
 	}
 
 	myGUIManager->Update(aDeltaTime);
@@ -78,7 +80,7 @@ void CreditMenuState::ReceiveMessage(const OnClickMessage& aMessage)
 			myStateStack->PushMainGameState(new InGameState(aMessage.myID));
 			break;*/
 		case eOnClickEvent::GAME_QUIT:
-			myStateStatus = eStateStatus::ePopMainState;
+			myStateStatus = eStateStatus::ePopSubState;
 			break;
 		default:
 			DL_ASSERT("Unknown event type.");

@@ -27,9 +27,10 @@ namespace Prism
 		, myInited(false)
 		, myParent(nullptr)
 		, myVertexCount(0)
-		, myMaxInstances(8192)
+		, myMaxInstances(4096)
 		, myInstancingMatrixBuffer(nullptr)
 		, myInstancingScaleBuffer(nullptr)
+		, myInstancingHeightBuffer(nullptr)
 	{
 		myInstancingBufferDesc = new D3D11_BUFFER_DESC();
 	}
@@ -52,6 +53,12 @@ namespace Prism
 			myInstancingScaleBuffer->myVertexBuffer->Release();
 			delete myInstancingScaleBuffer;
 		}
+
+		if (myInstancingHeightBuffer != nullptr && myInstancingHeightBuffer->myVertexBuffer != nullptr)
+		{
+			myInstancingHeightBuffer->myVertexBuffer->Release();
+			delete myInstancingHeightBuffer;
+		}
 	}
 
 	void Model::Init()
@@ -60,7 +67,7 @@ namespace Prism
 
 		if (myIsNULLObject == false)
 		{
-			const int size = myVertexFormat.Size() + 5;
+			const int size = myVertexFormat.Size() + 6;
 			D3D11_INPUT_ELEMENT_DESC* vertexDesc = new D3D11_INPUT_ELEMENT_DESC[size];
 			for (int i = 0; i < myVertexFormat.Size(); ++i)
 			{
@@ -73,6 +80,7 @@ namespace Prism
 			vertexDesc[myVertexFormat.Size() + 3] = { "myWorld", 3, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 48, D3D11_INPUT_PER_INSTANCE_DATA, 1 };
 
 			vertexDesc[myVertexFormat.Size() + 4] = { "myScale", 0, DXGI_FORMAT_R32G32B32_FLOAT, 2, 0, D3D11_INPUT_PER_INSTANCE_DATA, 1 };
+			vertexDesc[myVertexFormat.Size() + 5] = { "myHeight", 0, DXGI_FORMAT_R32_FLOAT, 3, 0, D3D11_INPUT_PER_INSTANCE_DATA, 1 };
 
 			EvaluateEffectTechnique(true);
 			InitInputLayout(vertexDesc, size, "Model::InputLayout");
@@ -359,7 +367,9 @@ namespace Prism
 	}
 
 	bool Model::SetGPUState(const CU::GrowingArray<CU::Matrix44<float>>& someWorldMatrices
-		, const CU::GrowingArray<CU::Vector3<float>>& someScales, eOwnerType aOwner)
+		, const CU::GrowingArray<CU::Vector3<float>>& someScales
+		, const CU::GrowingArray<float>& someHeights
+		, eOwnerType aOwner)
 	{
 		DL_ASSERT_EXP(mySurfaces.Size() < 2, "We do not support several surfaces yet");
 
@@ -369,7 +379,7 @@ namespace Prism
 			{
 				return false;
 			}
-			return myChildren[0]->SetGPUState(someWorldMatrices, someScales, aOwner);
+			return myChildren[0]->SetGPUState(someWorldMatrices, someScales, someHeights, aOwner);
 		}
 		else
 		{
@@ -421,19 +431,40 @@ namespace Prism
 				return false;
 			}
 
+			context->Map(myInstancingHeightBuffer->myVertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+			if (mappedResource.pData != nullptr)
+			{
+				float* data = (float*)mappedResource.pData;
+				if (someHeights.Size() > 0)
+				{
+					memcpy(data, &someHeights[0], sizeof(float) * someHeights.Size());
+				}
 
+				/*for (int i = 0; i < someScales.Size(); ++i)
+				{
+				data[i] = someScales[i];
+				}*/
+
+				context->Unmap(myInstancingHeightBuffer->myVertexBuffer, 0);
+			}
+			else
+			{
+				DL_ASSERT("Failed to Map InstancingHeight Buffer");
+				return false;
+			}
 
 			myVertexBuffers[0] = myVertexBuffer->myVertexBuffer;
 			myVertexBuffers[1] = myInstancingMatrixBuffer->myVertexBuffer;
 			myVertexBuffers[2] = myInstancingScaleBuffer->myVertexBuffer;
+			myVertexBuffers[3] = myInstancingHeightBuffer->myVertexBuffer;
 
-			UINT strides[3] = { myVertexBuffer->myStride, myInstancingMatrixBuffer->myStride, myInstancingScaleBuffer->myStride };
-			UINT offsets[3] = { 0, 0, 0 };
-			context->IASetVertexBuffers(0, 3, myVertexBuffers, strides, offsets);
+			UINT strides[4] = { myVertexBuffer->myStride, myInstancingMatrixBuffer->myStride
+				, myInstancingScaleBuffer->myStride, myInstancingHeightBuffer->myStride };
+			UINT offsets[4] = { 0, 0, 0, 0 };
+			context->IASetVertexBuffers(0, 4, myVertexBuffers, strides, offsets);
 			context->IASetIndexBuffer(myIndexBuffer->myIndexBuffer
 				, myIndexBuffer->myIndexBufferFormat, myIndexBuffer->myByteOffset);
 			context->IASetInputLayout(myVertexLayout);
-
 
 			ActivateAlbedo(aOwner);
 			mySurfaces[0]->Activate();
@@ -510,7 +541,7 @@ namespace Prism
 
 	void Model::InitInstancingBuffers()
 	{
-		ZeroMemory(myInstancingBufferDesc, sizeof(myInstancingBufferDesc));
+		ZeroMemory(myInstancingBufferDesc, sizeof(*myInstancingBufferDesc));
 		myInstancingBufferDesc->Usage = D3D11_USAGE_DYNAMIC;
 		myInstancingBufferDesc->BindFlags = D3D11_BIND_VERTEX_BUFFER;
 		myInstancingBufferDesc->CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
@@ -529,6 +560,12 @@ namespace Prism
 		myInstancingScaleBuffer->myByteOffset = 0;
 		myInstancingScaleBuffer->myStartSlot = 0;
 		myInstancingScaleBuffer->myNumberOfBuffers = 1;
+
+		myInstancingHeightBuffer = new VertexBufferWrapper();
+		myInstancingHeightBuffer->myStride = sizeof(float);
+		myInstancingHeightBuffer->myByteOffset = 0;
+		myInstancingHeightBuffer->myStartSlot = 0;
+		myInstancingHeightBuffer->myNumberOfBuffers = 1;
 	}
 
 	void Model::SetupInstancingBuffers()
@@ -557,5 +594,17 @@ namespace Prism
 			DL_ASSERT("Model::SetupInstancingBuffer: Failed to setup myInstancingScaleBuffer");
 		}
 		Engine::GetInstance()->SetDebugName(myInstancingScaleBuffer->myVertexBuffer, "Model::myInstancingScaleBuffer->myVertexBuffer");
+
+		if (myInstancingHeightBuffer->myVertexBuffer != nullptr)
+			myInstancingHeightBuffer->myVertexBuffer->Release();
+
+		myInstancingBufferDesc->ByteWidth = sizeof(float) * myMaxInstances;
+		hr = Engine::GetInstance()->GetDevice()->CreateBuffer(myInstancingBufferDesc, nullptr
+			, &myInstancingHeightBuffer->myVertexBuffer);
+		if (FAILED(hr) != S_OK)
+		{
+			DL_ASSERT("Model::SetupInstancingBuffer: Failed to setup myInstancingHeightBuffer");
+		}
+		Engine::GetInstance()->SetDebugName(myInstancingHeightBuffer->myVertexBuffer, "Model::myInstancingHeightBuffer->myVertexBuffer");
 	}
 }

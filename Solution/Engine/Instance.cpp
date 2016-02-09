@@ -20,6 +20,9 @@ Prism::Instance::Instance(ModelProxy& aModel, const CU::Matrix44<float>& anOrien
 	, myHierarchyIsBuilt(false)
 	, myShouldRender(true)
 	, mySelectionColor(0.f, 0.f, 1.f, 0.1f)
+	, myAnimation(nullptr)
+	, myTotalTime(0.f)
+	, myOwnerType(eOwnerType::NOT_USED)
 {
 }
 
@@ -107,7 +110,7 @@ void Prism::Instance::Render(const Camera& aCamera, InstancingHelper& aInstancin
 		else
 		{
 			Model* toRender = myProxy.myModel->GetRealModel(myOrientation.GetPos(), aCamera.GetOrientation().GetPos());
-			aInstancingHelper.AddModel(myOwnerType, toRender, myOrientation, myScale);
+			aInstancingHelper.AddModel(myOwnerType, toRender, myOrientation, myScale, myOrientation.GetPos().y);
 		}
 	}
 }

@@ -164,12 +164,14 @@ eOwnerType TriggerComponent::ModifyOwnership(eOwnerType anOwner, float aModifyVa
 			{
 				PostMaster::GetInstance()->SendMessage(NotificationMessage("Resource point lost."));
 				PostMaster::GetInstance()->SendMessage(InWorldTextMessage("Lost", myEntity.GetPosition()));
+				PostMaster::GetInstance()->SendMessage(MinimapEventMessage(myEntity.GetPosition(), MinimapEventType::eRESOURCE_POINT));
 
 			}
 			else if (myType == eTriggerType::VICTORY)
 			{
 				PostMaster::GetInstance()->SendMessage(NotificationMessage("Victory point lost."));
 				PostMaster::GetInstance()->SendMessage(InWorldTextMessage("Lost", myEntity.GetPosition()));
+				PostMaster::GetInstance()->SendMessage(MinimapEventMessage(myEntity.GetPosition(), MinimapEventType::eVICTORY_POINT));
 			}
 		}
 		myHasSentEventMessage = false;

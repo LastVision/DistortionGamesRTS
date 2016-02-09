@@ -5,6 +5,7 @@
 #include "Console.h"
 #include <ColoursForBG.h>
 #include "ConsoleState.h"
+#include "CreditMenuState.h"
 #include <EffectContainer.h>
 #include <Engine.h>
 #include <Entity.h>
@@ -38,6 +39,13 @@ InGameState::InGameState(int aLevelIndex, eDifficulty aDifficulty)
 	, myStartLevelIndex(aLevelIndex)
 	, myIsFirstFrame(true)
 	, myDifficulty(aDifficulty)
+	, myLevel(nullptr)
+	, myLevelFactory(nullptr)
+	, myGUIManager(nullptr)
+	, myMessageScreen(nullptr)
+	, myIsComplete(false)
+	, myIsShuttingDown(false)
+	, myCinematicIndex(0)
 {
 	myIsActiveState = false;
 	myIsPlayerCinematic = false;
@@ -126,12 +134,20 @@ const eStateStatus InGameState::Update(const float& aDeltaTime)
 //#ifdef _DEBUG
 	//if (CU::InputWrapper::GetInstance()->KeyDown(DIK_ESCAPE) || myIsShuttingDown == true || myIsComplete == true)
 //#else
-	if (myIsShuttingDown == true || myIsComplete == true)
+	if (myIsShuttingDown == true)
 //#endif
 	{
 		myIsActiveState = false;
 		SAFE_DELETE(myLevel);
 		return eStateStatus::ePopMainState;
+	}
+	if (myIsComplete == true)
+	{
+		bool runtime = Prism::MemoryTracker::GetInstance()->GetRunTime();
+		Prism::MemoryTracker::GetInstance()->SetRunTime(false);
+		myStateStack->PushSubGameState(new CreditMenuState());
+		Prism::MemoryTracker::GetInstance()->SetRunTime(runtime);
+		return eStateStatus::eKeepState;
 	}
 
 	if (CU::InputWrapper::GetInstance()->KeyUp(DIK_GRAVE) == true || myShouldReOpenConsole == true)
@@ -187,6 +203,8 @@ void InGameState::Render()
 	VTUNE_EVENT_BEGIN(VTUNE::GAME_RENDER);
 
 	myLevel->Render(*myCamera);
+	Prism::DebugDrawer::GetInstance()->RenderLinesToScreen(*myCamera); //Have to be last
+
 
 	VTUNE_EVENT_END();
 }
@@ -272,7 +290,10 @@ void InGameState::ReceiveMessage(const OnClickMessage& aMessage)
 			RestartLevel();
 			break;
 		case eOnClickEvent::GAME_WIN:
-			CompleteGame();
+			if (myIsComplete == false)
+			{
+				CompleteGame();
+			}
 			break;
 		case eOnClickEvent::SPAWN_UNIT:
 			myLevel->SpawnUnit(static_cast<eUnitType>(aMessage.myID - 1));
@@ -299,7 +320,6 @@ void InGameState::ReceiveMessage(const MoveCameraMessage& aMessage)
 	{
 		DL_ASSERT("UNKNOWN HANDLINGTYPE OF CAMERAMOVEMENT");
 	}
-	float offset = 50.f;
 
 	if (myLevel->GetPlayer()->GetSelectedAction() == eSelectedAction::ATTACK_MOVE)
 	{
@@ -307,6 +327,7 @@ void InGameState::ReceiveMessage(const MoveCameraMessage& aMessage)
 	}
 	else
 	{
+		float offset = 50.f;
 		position.y -= offset;
 		myCamera->SetPosition({ position.x, myCamera->GetOrientation().GetPos().y, position.y });
 		CapCameraToTerrain();

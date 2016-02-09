@@ -34,8 +34,14 @@ Level::Level(const Prism::Camera& aCamera, Prism::Terrain* aTerrain, GUI::Cursor
 	, myRenderNavMeshLines(false)
 	, myShowFogOfWar(true)
 	, myMaxVictoryPoint(-1)
-	, myHasToldPlayerAboutWinning(false)
-	, myHasToldPlayerAboutLosing(false)
+	, myHasToldPlayerAboutWinningIn50(false)
+	, myHasToldPlayerAboutLosingIn50(false)
+	, myHasToldPlayerAboutWinningIn100(false)
+	, myHasToldPlayerAboutLosingIn100(false)
+	, myHasToldPlayerAboutWinningIn200(false)
+	, myHasToldPlayerAboutLosingIn200(false)
+	, myHasToldPlayerAboutWinningIn300(false)
+	, myHasToldPlayerAboutLosingIn300(false)
 	, myIsFirstFrame(false)
 	, myIsSecondFrame(false)
 {
@@ -152,18 +158,47 @@ bool Level::Update(float aDeltaTime, Prism::Camera& aCamera)
 
 	myEmitterManager->UpdateEmitters(aDeltaTime, CU::Matrix44f());
 
-	if (myHasToldPlayerAboutWinning == false && myPlayer->GetVictoryPoints() >= myMaxVictoryPoint - 100)
+	if (myHasToldPlayerAboutWinningIn50 == false && myPlayer->GetVictoryPoints() >= myMaxVictoryPoint - 50)
 	{
-		myHasToldPlayerAboutWinning = true;
-		PostMaster::GetInstance()->SendMessage(NotificationMessage("You have 100 victory points left.", { 1.f, 1.f, 1.f, 1.f }));
+		myHasToldPlayerAboutWinningIn50 = true;
+		PostMaster::GetInstance()->SendMessage(NotificationMessage("You have 50 victory points left to victory.", { 1.f, 1.f, 1.f, 1.f }));
+	}
+	else if (myHasToldPlayerAboutWinningIn100 == false && myPlayer->GetVictoryPoints() >= myMaxVictoryPoint - 100)
+	{
+		myHasToldPlayerAboutWinningIn100 = true;
+		PostMaster::GetInstance()->SendMessage(NotificationMessage("You have 100 victory points left to victory.", { 1.f, 1.f, 1.f, 1.f }));
+	}
+	else if (myHasToldPlayerAboutWinningIn200 == false && myPlayer->GetVictoryPoints() >= myMaxVictoryPoint - 200)
+	{
+		myHasToldPlayerAboutWinningIn200 = true;
+		PostMaster::GetInstance()->SendMessage(NotificationMessage("You have 200 victory points left to victory.", { 1.f, 1.f, 1.f, 1.f }));
+	}
+	else if (myHasToldPlayerAboutWinningIn300 == false && myPlayer->GetVictoryPoints() >= myMaxVictoryPoint - 300)
+	{
+		myHasToldPlayerAboutWinningIn300 = true;
+		PostMaster::GetInstance()->SendMessage(NotificationMessage("You have 300 victory points left to victory.", { 1.f, 1.f, 1.f, 1.f }));
 	}
 
-	if (myHasToldPlayerAboutLosing == false && myAI->GetVictoryPoints() >= myMaxVictoryPoint - 100)
+	if (myHasToldPlayerAboutLosingIn50 == false && myAI->GetVictoryPoints() >= myMaxVictoryPoint - 50)
 	{
-		myHasToldPlayerAboutLosing = true;
-		PostMaster::GetInstance()->SendMessage(NotificationMessage("Enemy has 100 victory points left.", { 1.f, 0.5f, 0.5f, 1.f }));
+		myHasToldPlayerAboutLosingIn50 = true;
+		PostMaster::GetInstance()->SendMessage(NotificationMessage("Enemy has 50 victory points left to victory.", { 1.f, 0.5f, 0.5f, 1.f }));
 	}
-
+	else if (myHasToldPlayerAboutLosingIn100 == false && myAI->GetVictoryPoints() >= myMaxVictoryPoint - 100)
+	{
+		myHasToldPlayerAboutLosingIn100 = true;
+		PostMaster::GetInstance()->SendMessage(NotificationMessage("Enemy has 100 victory points left to victory.", { 1.f, 0.5f, 0.5f, 1.f }));
+	}
+	else if (myHasToldPlayerAboutLosingIn200 == false && myAI->GetVictoryPoints() >= myMaxVictoryPoint - 200)
+	{
+		myHasToldPlayerAboutLosingIn200 = true;
+		PostMaster::GetInstance()->SendMessage(NotificationMessage("Enemy has 200 victory points left to victory.", { 1.f, 0.5f, 0.5f, 1.f }));
+	}
+	else if (myHasToldPlayerAboutLosingIn300 == false && myAI->GetVictoryPoints() >= myMaxVictoryPoint - 300)
+	{
+		myHasToldPlayerAboutLosingIn300 = true;
+		PostMaster::GetInstance()->SendMessage(NotificationMessage("Enemy has 300 victory points left to victory.", { 1.f, 0.5f, 0.5f, 1.f }));
+	}
 
 	return true;
 }

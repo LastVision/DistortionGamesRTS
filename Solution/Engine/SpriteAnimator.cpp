@@ -6,6 +6,10 @@
 namespace Prism
 {
 	SpriteAnimator::SpriteAnimator(std::string aXMLPath)
+		: myTimeSinceLastFrame(0.f)
+		, myCurrentFrame(0)
+		, myCurrentAnimation(nullptr)
+		, emptySprite(nullptr)
 	{
 		myAnimations.Init(1);
 

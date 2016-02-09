@@ -13,6 +13,7 @@
 #endif
 
 LevelSelectState::LevelSelectState()
+	: myGUIManager(nullptr)
 {
 }
 

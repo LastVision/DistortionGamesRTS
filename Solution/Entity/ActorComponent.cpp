@@ -28,7 +28,7 @@
 #include "SoundComponent.h"
 
 ActorComponent::ActorComponent(Entity& aEntity, ActorComponentData& aData, const Prism::Terrain& aTerrain
-		, const EntityCommandData& aCurrentCommand)
+	, const EntityCommandData& aCurrentCommand)
 	: Component(aEntity)
 	, myTerrain(aTerrain)
 	, myVisionRange(aData.myVisionRange)
@@ -51,6 +51,7 @@ ActorComponent::ActorComponent(Entity& aEntity, ActorComponentData& aData, const
 	, myMuzzleTimer(0)
 	, myMuzzleTimerShow(0)
 	, myMuzzleFrameTimer(0)
+	, myIsDone(false)
 {
 	myEntity.myMaxSpeed = aData.myMoveSpeed;
 
@@ -177,7 +178,7 @@ void ActorComponent::Update(float aDelta)
 				}
 
 				PostMaster::GetInstance()->SendMessage(ArtifactMessage(myEntity.GetOwner(), 1));
-				PostMaster::GetInstance()->SendMessage(EmitterMessage("artifact_pickup", myEntity.GetOrientation().GetPos()));
+				PostMaster::GetInstance()->SendMessage(EmitterMessage("artifact_pickup", myEntity.GetOrientation().GetPos(), true, 1.f));
 				PollingStation::GetInstance()->DeleteArtifact(artifacts[i]);
 			}
 		}
@@ -231,7 +232,7 @@ void ActorComponent::DoStop(float aDelta)
 			}
 		}
 	}
-	
+
 	if (attacking == false)
 	{
 
@@ -402,7 +403,7 @@ void ActorComponent::AttackTarget(Entity* aTarget, float aDelta)
 	}
 	myEntity.SetState(eEntityState::ATTACK);
 	LookInDirection(aTarget->GetPosition() - myEntity.GetPosition(), aDelta, true);
-	
+
 	myAttackTimer = myAttackRechargeTime;
 
 	if (myEntity.GetUnitType() == eUnitType::GRUNT)
@@ -470,7 +471,7 @@ void ActorComponent::AttackTarget(Entity* aTarget, float aDelta)
 			targetSurvived = targetHealth->TakeDamageAndCheckSurvive((targetHealth->GetMaxHealth() * 0.75f) + targetHealth->GetArmor());
 
 			PostMaster::GetInstance()->SendMessage(InWorldTextMessage("Critical hit!", aTarget->GetPosition(), { 1.f, 0.88f, 0.f, 1.f }));
-			
+
 
 		}
 		else
@@ -490,10 +491,10 @@ void ActorComponent::AttackTarget(Entity* aTarget, float aDelta)
 	{
 		myEntity.GetComponent<PromotionComponent>()->EnemyKilled();
 		myBehavior->SetTarget(myEntity.GetPosition());
-		PostMaster::GetInstance()->SendMessage(KillUnitMessage(static_cast<int>(aTarget->GetUnitType()), 
+		PostMaster::GetInstance()->SendMessage(KillUnitMessage(static_cast<int>(aTarget->GetUnitType()),
 			static_cast<int>(aTarget->GetOwner()), aTarget->GetComponent<ControllerComponent>()->GetTargetPosition()
 			, static_cast<int>(myEntity.GetOwner())));
-		
+
 		if (aTarget->GetComponent<PromotionComponent>()->GetPromoted() == true)
 		{
 			PostMaster::GetInstance()->SendMessage(KilledPromotedMessage(myEntity.GetOwner(), 10, aTarget->GetPosition()));
@@ -567,7 +568,7 @@ void ActorComponent::MuzzleFlash(float aDelta)
 				myCurrentMuzzleFlash = 0;
 			}
 		}
-		
+
 		myMuzzleFlashes[myCurrentMuzzleFlash]->SetShouldRender(true);
 
 		CU::Vector4<float> muzzlePosition;
@@ -589,7 +590,7 @@ void ActorComponent::MuzzleFlash(float aDelta)
 			break;
 		}
 
-		
+
 		if (myMuzzleTimer < 0)
 		{
 			myMuzzleTimer = 1.85f;

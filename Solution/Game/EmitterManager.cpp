@@ -63,7 +63,7 @@ void EmitterManager::UpdateEmitters(float aDeltaTime, CU::Matrix44f aWorldMatrix
 
 				if (instance->IsActive() == false)
 				{
-					break;
+					continue;
 				}
 				if (instance->GetEntity() != nullptr)
 				{
@@ -78,7 +78,7 @@ void EmitterManager::UpdateEmitters(float aDeltaTime, CU::Matrix44f aWorldMatrix
 
 void EmitterManager::RenderEmitters()
 {
-
+	int finished = 0;
 	Prism::ParticleDataContainer::GetInstance()->SetGPUData(myCamera);
 	for (int i = 0; i < myEmitterList.Size(); ++i)
 	{
@@ -95,18 +95,26 @@ void EmitterManager::RenderEmitters()
 
 			for (int j = 0; j < myEmitterList[i]->myEmitters[k].Size(); ++j)
 			{
-
 				if (myEmitterList[i]->myEmitters[k][j]->IsActive() == false)
 				{
-					myEmitterList[i]->myFinishedCount++;
-					myEmitterList[i]->myFinishedGroups[k] = FINISHED;
-					if (myEmitterList[i]->myFinishedCount >= PREALLOCATED_EMITTERGROUP)
+					finished++;
+
+					if (finished >= myEmitterList[i]->myEmitters[k].Size())
 					{
-						myEmitterList[i]->myGroupIsActive = false;
+						myEmitterList[i]->myFinishedCount++;
+						myEmitterList[i]->myFinishedGroups[k] = FINISHED;
+						if (myEmitterList[i]->myFinishedCount >= PREALLOCATED_EMITTERGROUP)
+						{
+							myEmitterList[i]->myGroupIsActive = false;
+						}
 					}
-					break;
+				
+					continue;
 				}
-				myEmitterList[i]->myEmitters[k][j]->Render();
+				else
+				{
+					myEmitterList[i]->myEmitters[k][j]->Render();
+				}
 			}
 		}
 	}
@@ -128,7 +136,7 @@ void EmitterManager::ReceiveMessage(const EmitterMessage& aMessage)
 
 		DL_ASSERT_EXP(myEmitters.find(particleType) != myEmitters.end(), "Effect did not exist!");
 
-		if (myEmitters[particleType]->myCurrentIndex >= PREALLOCATED_EMITTERGROUP)
+		if (myEmitters[particleType]->myCurrentIndex > (PREALLOCATED_EMITTERGROUP - 1))
 		{
 			myEmitters[particleType]->myCurrentIndex = 0;
 		}
@@ -163,6 +171,10 @@ void EmitterManager::ReceiveMessage(const EmitterMessage& aMessage)
 				instance->SetSize(aMessage.mySize);
 			}
 
+			if (aMessage.myShouldKillEmitter == true)
+			{
+				instance->SetEmitterLifeTime(aMessage.myEmitterLifeTime);
+			}
 		}
 		myEmitters[particleType]->myFinishedGroups[index] = UNFINISHED;
 		myEmitters[particleType]->myFinishedCount--;
@@ -191,6 +203,7 @@ void EmitterManager::ReadListOfLists(const std::string& aPath)
 			for (short i = 0; i < PREALLOCATED_EMITTERGROUP; ++i)
 			{
 				ReadList(entityPath, ID, i);
+
 			}
 		}
 	}
@@ -232,7 +245,8 @@ void EmitterManager::ReadList(const std::string& aPath, const std::string& anID,
 EmitterData::EmitterData(const std::string& aType)
 	: myType(aType)
 	, myCurrentIndex(0)
-	, myFinishedCount(0)
+	, myFinishedCount(PREALLOCATED_EMITTERGROUP)
+	, myGroupIsActive(false)
 {
 	for (int i = 0; i < PREALLOCATED_EMITTERGROUP; ++i)
 	{

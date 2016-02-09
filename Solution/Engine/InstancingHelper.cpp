@@ -18,16 +18,18 @@ namespace Prism
 	}
 
 	void InstancingHelper::AddModel(eOwnerType aOwner, Model* aModel, const CU::Matrix44<float>& aWorldMatrix
-		, const CU::Vector3<float>& aScale)
+		, const CU::Vector3<float>& aScale, float aHeight)
 	{
 		if (myRenderInfo[aOwner].find(aModel) == myRenderInfo[aOwner].end())
 		{
 			myRenderInfo[aOwner][aModel].myMatrices.Init(128);
 			myRenderInfo[aOwner][aModel].myScales.Init(128);
+			myRenderInfo[aOwner][aModel].myHeights.Init(128);
 		}
 
 		myRenderInfo[aOwner][aModel].myMatrices.Add(aWorldMatrix);
 		myRenderInfo[aOwner][aModel].myScales.Add(aScale);
+		myRenderInfo[aOwner][aModel].myHeights.Add(aHeight);
 	}
 
 	void InstancingHelper::Render(CU::StaticArray<DirectionalLightData, NUMBER_OF_DIRECTIONAL_LIGHTS>& someLights
@@ -44,6 +46,7 @@ namespace Prism
 				Model* currModel = modelData->first;
 				CU::GrowingArray<CU::Matrix44<float>>& matrices = modelData->second.myMatrices;
 				CU::GrowingArray<CU::Vector3<float>>& scales = modelData->second.myScales;
+				CU::GrowingArray<float>& heights = modelData->second.myHeights;
 
 				Effect* currEffect = currModel->GetEffect();
 				if (currEffect != oldEffect)
@@ -56,7 +59,7 @@ namespace Prism
 					currEffect->UpdateDirectionalLights(someLights);
 				}
 
-				if (currModel->SetGPUState(matrices, scales, it->first))
+				if (currModel->SetGPUState(matrices, scales, heights, it->first))
 				{
 					//currModel->ActivateAlbedo(it->first);
 
@@ -83,6 +86,7 @@ namespace Prism
 				
 				matrices.RemoveAll();
 				scales.RemoveAll();
+				heights.RemoveAll();
 			}
 		}
 	}

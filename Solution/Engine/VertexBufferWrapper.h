@@ -6,7 +6,13 @@ namespace Prism
 {
 	struct VertexBufferWrapper
 	{
-		VertexBufferWrapper() : myVertexBuffer(nullptr){}
+		VertexBufferWrapper()
+			: myByteOffset(0)
+			, myNumberOfBuffers(0)
+			, myStartSlot(0)
+			, myStride(0)
+			, myVertexBuffer(nullptr)
+		{}
 		unsigned int myByteOffset;
 		int myNumberOfBuffers;
 		int myStartSlot;

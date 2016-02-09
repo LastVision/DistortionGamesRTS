@@ -15,8 +15,8 @@ namespace CSharpUtilities.Components
 
         private bool myDigitOnlyFlag;
 
-        public NumericTextComponent(Point aLocation, Size aSize, string aText, string aPanelName, bool aDigitOnlyFlag = true)
-            : base(aLocation, aSize, aText, aPanelName)
+        public NumericTextComponent(Point aLocation, Size aSize, IO.ComponentIO aIO, string aPanelName, bool aDigitOnlyFlag = true)
+            : base(aLocation, aSize, aIO, aPanelName)
         {
             myDigitOnlyFlag = aDigitOnlyFlag;
         }
