@@ -32,6 +32,7 @@
 #include <ToggleGUIMessage.h>
 #include <ToggleBuildTimeMessage.h>
 #include <TotemComponent.h>
+#include <SoundComponent.h>
 #include <ModelLoader.h>
 #include <SpawnUnitMessage.h>
 #include <SpriteProxy.h>
@@ -1217,6 +1218,9 @@ void PlayerDirector::PlaceRallyPoint(CU::Vector2<float> aWorldPosition)
 	CU::Matrix44f rallyOrientation = myRallyPoint->GetOrientation();
 	myTerrain.CalcEntityHeight(rallyOrientation);
 	myRallyPoint->SetPosition(rallyOrientation.GetPos());
+
+	Prism::Audio::AudioInterface::GetInstance()->PostEvent("Place_RallyPoint"
+		, myRallyPoint->GetComponent<SoundComponent>()->GetAudioSFXID());
 }
 
 void PlayerDirector::PlaceTotem(const CU::Vector3f& aPositionInWorld)
