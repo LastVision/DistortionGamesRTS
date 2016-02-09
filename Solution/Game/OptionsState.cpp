@@ -74,11 +74,11 @@ void OptionsState::OnResize(int aWidth, int aHeight)
 	myGUIManager->OnResize(aWidth, aHeight);
 	CU::Vector2<float> floatScreenPos(aWidth, aHeight);
 	GUI::WidgetContainer* widgetCont = reinterpret_cast<GUI::WidgetContainer*>(myGUIManager->GetWidgetContainer()->At(0));
-	CU::Vector2<float> firstRow = widgetCont->At(2)->GetPosition();
-	CU::Vector2<float> secondRow = widgetCont->At(0)->GetPosition();
-	CU::Vector2<float> fourthRow = widgetCont->At(4)->GetPosition();
-	myMusicText->SetPosition({ firstRow.x - 300.f, firstRow.y - (widgetCont->At(0)->GetSize().y * 0.25f)});
-	mySfxText->SetPosition({ secondRow.x - 300.f, secondRow.y - (widgetCont->At(2)->GetSize().y * 0.25f) });
+	CU::Vector2<float> firstRow = widgetCont->At(3)->GetPosition();
+	CU::Vector2<float> secondRow = widgetCont->At(1)->GetPosition();
+	CU::Vector2<float> fourthRow = widgetCont->At(5)->GetPosition();
+	myMusicText->SetPosition({ firstRow.x - 300.f, firstRow.y - (widgetCont->At(1)->GetSize().y * 0.25f)});
+	mySfxText->SetPosition({ secondRow.x - 300.f, secondRow.y - (widgetCont->At(3)->GetSize().y * 0.25f) });
 	myShadowText->SetPosition({ fourthRow.x - 300.f, fourthRow.y });
 }
 
