@@ -219,7 +219,7 @@ void Level::Render(Prism::Camera& aCamera)
 #ifdef USE_PARTICLES
 	myEmitterManager->RenderEmitters();
 #endif
-	myAI->RenderMaps(aCamera);
+	//myAI->RenderMaps(aCamera);
 
 	if (myShowFogOfWar == true)
 	{
