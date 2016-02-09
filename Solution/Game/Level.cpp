@@ -154,9 +154,10 @@ bool Level::Update(float aDeltaTime, Prism::Camera& aCamera)
 
 	FogOfWarMap::GetInstance()->Update(aDeltaTime);
 	DoFogCulling();
-#ifdef USE_PARTICLES
-	myEmitterManager->UpdateEmitters(aDeltaTime, CU::Matrix44f());
-#endif
+	if (globalUseParticles == true)
+	{
+		myEmitterManager->UpdateEmitters(aDeltaTime, CU::Matrix44f());
+	}
 	if (myHasToldPlayerAboutWinningIn50 == false && myPlayer->GetVictoryPoints() >= myMaxVictoryPoint - 50)
 	{
 		myHasToldPlayerAboutWinningIn50 = true;
@@ -216,9 +217,12 @@ void Level::Render(Prism::Camera& aCamera)
 
 	myRenderer->BeginScene();
 	myScene->Render(myRenderNavMeshLines, myFogOfWarHelper->GetTexture(), myShadowLight);
-#ifdef USE_PARTICLES
-	myEmitterManager->RenderEmitters();
-#endif
+
+	if (globalUseParticles == true)
+	{
+		myEmitterManager->RenderEmitters();
+	}	
+
 	myAI->RenderMaps(aCamera);
 
 	if (myShowFogOfWar == true)
@@ -231,11 +235,11 @@ void Level::Render(Prism::Camera& aCamera)
 	}
 	myRenderer->FinalRender();
 
-	
+
 	myPlayer->RenderHealthBars(aCamera);
 	myAI->RenderHealthBars(aCamera);
 	myNeutralDirector->RenderHealthBars(aCamera);
-	
+
 	myPlayer->Render(aCamera);
 }
 
