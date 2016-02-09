@@ -17,7 +17,7 @@ struct EmitterMessage : public Message
 	EmitterMessage(const std::string& aParticleType, bool aShouldKillEmitter, float aKilTime);
 	EmitterMessage(const std::string& aParticleType, const CU::Vector3f& aPosition, bool aShouldAlwaysShow);
 	EmitterMessage(const std::string& aParticleType, bool aIsArtifact, int aEntityID);
-	EmitterMessage(const std::string& aParticleType, Prism::Camera* aCamera, const CU::Vector3f& aPosition = CU::Vector3f());
+	EmitterMessage(const std::string& aParticleType, Prism::Camera* aCamera, bool aShouldAlwaysShow);
 	EmitterMessage(const std::string& aParticleType, const CU::Vector3f& aPosition, float anEmitterLifeTime);
 	EmitterMessage(const std::string& aParticleType, const CU::Vector3f& aPosition, float anEmitterLifeTime, const CU::Vector3f& aSize);
 	EmitterMessage(const std::string& aParticleType, const CU::Vector3f& aPosition, float anEmitterLifeTime, float aRadius);
@@ -96,16 +96,16 @@ inline EmitterMessage::EmitterMessage(const std::string& aParticleType, bool aIs
 {
 }
 
-inline EmitterMessage::EmitterMessage(const std::string& aParticleType, Prism::Camera* aCamera, const CU::Vector3f& aPosition)
+inline EmitterMessage::EmitterMessage(const std::string& aParticleType, Prism::Camera* aCamera, bool aShouldAlwaysShow)
 	: Message(eMessageType::PARTICLE)
 	, myParticleTypeString(aParticleType)
-	, myPosition(aPosition)
+	, myPosition({0.f,0.f,0.f})
 	, myEntityID(-1)
 	, myCamera(aCamera)
 	, myEmitterLifeTime(0.f)
 	, mySize({ 0.f, 0.f, 0.f })
 	, myRadius(0.f)
-	, myShouldAlwaysShow(false)
+	, myShouldAlwaysShow(aShouldAlwaysShow)
 	, myShouldKillEmitter(false)
 	, myIsArtifact(false)
 	, myEmitter(nullptr)

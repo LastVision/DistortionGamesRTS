@@ -10,7 +10,8 @@
 #include <TimerManager.h>
 #include "CommonHelper.h"
 #include "FogOfWarMap.h"
-
+#include <Camera.h>
+#include <Frustum.h>
 #define FINISHED 0
 #define UNFINISHED 1
 
@@ -70,6 +71,12 @@ void EmitterManager::UpdateEmitters(float aDeltaTime, CU::Matrix44f aWorldMatrix
 					instance->SetPosition({ instance->GetEntity()->GetOrientation().GetPos().x, 3.f
 						, instance->GetEntity()->GetOrientation().GetPos().z });
 				}
+				if (instance->GetCamera() != nullptr)
+				{
+					CU::Vector3<float> pos = instance->GetCamera()->GetOrientation().GetPos();
+					instance->SetPosition({ pos.x, pos.y -50.f, pos.z+65.f});
+
+				}
 				instance->Update(aDeltaTime, aWorldMatrix);
 			}
 		}
@@ -95,8 +102,8 @@ void EmitterManager::RenderEmitters()
 
 			for (int j = 0; j < myEmitterList[i]->myEmitters[k].Size(); ++j)
 			{
-					Prism::ParticleEmitterInstance* instance = myEmitterList[i]->myEmitters[k][j];
-					if (instance->IsActive() == false)
+				Prism::ParticleEmitterInstance* instance = myEmitterList[i]->myEmitters[k][j];
+				if (instance->IsActive() == false)
 				{
 					finished++;
 
@@ -143,6 +150,7 @@ void EmitterManager::ReceiveMessage(const EmitterMessage& aMessage)
 			position = EntityId::GetInstance()->GetEntity(aMessage.myEntityID)->GetOrientation().GetPos();
 			position.y += 2;
 		}
+
 
 		std::string particleType = CU::ToLower(aMessage.myParticleTypeString);
 		if (particleType == "")
@@ -196,6 +204,12 @@ void EmitterManager::ReceiveMessage(const EmitterMessage& aMessage)
 			{
 				instance->SetEmitterLifeTime(aMessage.myEmitterLifeTime);
 			}
+
+			if (aMessage.myCamera != nullptr)
+			{
+				instance->SetCamera(aMessage.myCamera);
+			}
+
 		}
 		myEmitters[particleType]->myFinishedGroups[index] = UNFINISHED;
 		myEmitters[particleType]->myFinishedCount--;

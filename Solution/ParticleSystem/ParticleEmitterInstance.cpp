@@ -19,6 +19,7 @@ namespace Prism
 		, myLiveParticleCount(0)
 		, myAlwaysShow(false)
 		, myHasEmitted(false)
+		, myParticleToGraphicsCard(256)
 	{
 		myStates.reset();
 		myParticleEmitterData = someData;
@@ -92,7 +93,7 @@ namespace Prism
 		}
 
 		myEmitterLife = myParticleEmitterData->myEmitterLifeTime;
-		
+
 		CreateVertexBuffer();
 	}
 
@@ -113,11 +114,12 @@ namespace Prism
 
 	void ParticleEmitterInstance::Render()
 	{
-		UpdateVertexBuffer();
+		int toGraphicsCard = UpdateVertexBuffer();
 		myParticleEmitterData->myEffect->SetTexture(TextureContainer::GetInstance()->GetTexture(myParticleEmitterData->myTextureName));
-		myParticleEmitterData->myEffect->SetWorldMatrix(myOrientation);
+		//myParticleEmitterData->myEffect->SetWorldMatrix(myOrientation);
 
-		Engine::GetInstance()->GetContex()->IASetVertexBuffers(
+		ID3D11DeviceContext* context = Engine::GetInstance()->GetContex();
+		context->IASetVertexBuffers(
 			myVertexWrapper->myStartSlot
 			, myVertexWrapper->myNumberOfBuffers
 			, &myVertexWrapper->myVertexBuffer
@@ -126,8 +128,8 @@ namespace Prism
 
 		for (UINT i = 0; i < myParticleEmitterData->myTechniqueDesc->Passes; ++i)
 		{
-			myParticleEmitterData->myEffect->GetTechnique(false)->GetPassByIndex(i)->Apply(0, Engine::GetInstance()->GetContex());
-			Engine::GetInstance()->GetContex()->Draw(myGraphicalParticles.Size(), 0);
+			myParticleEmitterData->myEffect->GetTechnique(false)->GetPassByIndex(i)->Apply(0, context);
+			context->Draw(myGraphicalParticles.Size(), 0);
 		}
 
 	}
@@ -171,8 +173,21 @@ namespace Prism
 
 	}
 
-	void ParticleEmitterInstance::UpdateVertexBuffer()
+	int ParticleEmitterInstance::UpdateVertexBuffer()
 	{
+		/*for (unsigned int i = 0; i < myGraphicalParticles.Size(); ++i)
+		{
+		if (myGraphicalParticles[i].myAlpha > 0.0f)
+		{
+		myParticleToGraphicsCard.Add(myGraphicalParticles[i]);
+		}
+		}
+
+		if (myParticleToGraphicsCard.Size() <= 0)
+		{
+		return 0;
+		}*/
+
 		D3D11_MAPPED_SUBRESOURCE mappedResource;
 		Engine::GetInstance()->GetContex()->Map(myVertexWrapper->myVertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 
@@ -185,32 +200,35 @@ namespace Prism
 			memcpy(data, &myGraphicalParticles[0], sizeof(GraphicalParticle)* myGraphicalParticles.Size());
 		}
 		Engine::GetInstance()->GetContex()->Unmap(myVertexWrapper->myVertexBuffer, 0);
+
+
+		return myParticleToGraphicsCard.Size();
 	}
 
 	void ParticleEmitterInstance::UpdateEmitter(float aDeltaTime, const CU::Matrix44f& aWorldMatrix)
 	{
 		if (myStates[ACTIVE] == TRUE)
 		{
-		myEmissionTime -= aDeltaTime;
-		myEmitterLife -= aDeltaTime;
+			myEmissionTime -= aDeltaTime;
+			myEmitterLife -= aDeltaTime;
 
 
-		if (myEmissionTime <= 0.f && (myEmitterLife > 0.f || myStates[EMITTERLIFE] == FALSE))
-		{
-			EmitParticle(aWorldMatrix);
-			myEmissionTime = myParticleEmitterData->myEmissionRate;
-		}
+			if (myEmissionTime <= 0.f && (myEmitterLife > 0.f || myStates[EMITTERLIFE] == FALSE))
+			{
+				EmitParticle(myOrientation);
+				myEmissionTime = myParticleEmitterData->myEmissionRate;
+			}
 
 			UpdateParticle(aDeltaTime);
 
 			if (myStates[EMITTERLIFE] == TRUE)
-		{
-			if (myEmitterLife <= 0.f && myLiveParticleCount <= 0)
 			{
-				myStates[ACTIVE] = FALSE;
+				if (myEmitterLife <= 0.f && myLiveParticleCount <= 0)
+				{
+					myStates[ACTIVE] = FALSE;
+				}
 			}
 		}
-	}
 	}
 
 	void ParticleEmitterInstance::UpdateParticle(float aDeltaTime)
@@ -262,7 +280,7 @@ namespace Prism
 
 			myGraphicalParticles[myParticleIndex].myColor = myParticleEmitterData->myData.myStartColor;
 
-			#pragma	region		Shape
+#pragma	region		Shape
 			if (myStates[CIRCLE] == TRUE && myStates[HOLLOW] == TRUE)
 			{
 				CU::Vector3<float> pos = CreateCirclePositions();
@@ -285,7 +303,7 @@ namespace Prism
 					CU::Math::RandomVector(aWorldMatrix.GetPos() - myParticleEmitterData->myEmitterSize
 					, aWorldMatrix.GetPos() + myParticleEmitterData->myEmitterSize);
 			}
-			#pragma endregion
+#pragma endregion
 
 			myGraphicalParticles[myParticleIndex].myLifeTime = myParticleEmitterData->myParticlesLifeTime;
 
@@ -464,6 +482,18 @@ namespace Prism
 		{
 			myEntity = nullptr;
 		}
+	}
+
+
+	void ParticleEmitterInstance::SetCamera(Camera* aCamera)
+	{
+		myCamera = aCamera;
+	}
+
+
+	Camera* ParticleEmitterInstance::GetCamera()
+	{
+		return myCamera;
 	}
 
 }
