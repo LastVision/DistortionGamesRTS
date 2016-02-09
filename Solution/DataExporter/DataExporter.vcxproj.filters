@@ -14,6 +14,9 @@
     <ClCompile Include="TerrainReader.cpp">
       <Filter>Reader</Filter>
     </ClCompile>
+    <ClCompile Include="LevelReader.cpp">
+      <Filter>Reader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dirent.h" />
@@ -27,6 +30,9 @@
       <Filter>Reader</Filter>
     </ClInclude>
     <ClInclude Include="TerrainReader.h">
+      <Filter>Reader</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelReader.h">
       <Filter>Reader</Filter>
     </ClInclude>
   </ItemGroup>

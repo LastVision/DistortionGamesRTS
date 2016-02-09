@@ -73,6 +73,8 @@ namespace Prism
 		~ModelLoader();
 
 		void StartPrefetching();
+		void LoadInstancedCount();
+		int GetInstancedCount(const std::string& aModelPath);
 
 		bool CheckIfWorking();
 		void WaitUntilCopyIsAllowed();
@@ -101,6 +103,7 @@ namespace Prism
 		CU::GrowingArray<Model*> myNonFXBModels;
 		std::unordered_map<std::string, ModelProxy*> myModelProxies;
 		std::unordered_map<std::string, Sprite*> mySprites;
+		std::unordered_map<std::string, int> myInstancedCount;
 
 		static ModelLoader* myInstance;
 	};
