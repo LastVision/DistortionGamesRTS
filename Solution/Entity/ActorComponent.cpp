@@ -175,6 +175,7 @@ void ActorComponent::Update(float aDelta)
 				{
 					PostMaster::GetInstance()->SendMessage(InWorldTextMessage("artifact pickup", myEntity.GetPosition()));
 					PostMaster::GetInstance()->SendMessage(TutorialMessage(eTutorialAction::ARTIFACT));
+					Prism::Audio::AudioInterface::GetInstance()->PostEvent("victoryGain", 0);
 				}
 
 				PostMaster::GetInstance()->SendMessage(ArtifactMessage(myEntity.GetOwner(), 1));
