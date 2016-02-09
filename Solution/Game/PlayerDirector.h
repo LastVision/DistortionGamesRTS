@@ -173,6 +173,8 @@ private:
 	CU::Vector3<float> myConfimrationCameraPosition;
 
 	TextEventManager* myTextEventManager;
+
+	bool myIsFirstFrame;
 };
 
 inline const CU::GrowingArray<Entity*>& PlayerDirector::GetSelectedUnits() const

@@ -126,9 +126,8 @@ Level* LevelFactory::LoadCurrentLevel(bool aPauseModelLoader, eDifficulty aDiffi
 	weatherPosition.x = 126.f;
 	if (globalUseWeather == true)
 	{
-		//PostMaster::GetInstance()->SendMessage(EmitterMessage("weather_snow", weatherPosition, true));
-
-		PostMaster::GetInstance()->SendMessage(EmitterMessage("weather_snow", &myCamera, true));
+		PostMaster::GetInstance()->SendMessage(EmitterMessage("weather_snow", weatherPosition, true));
+		//PostMaster::GetInstance()->SendMessage(EmitterMessage("weather_snow", &myCamera, true));
 	}
 
 	myCurrentLevel->LoadTutorial(myCamera, tutorialPath); // needs to be after InitGUI

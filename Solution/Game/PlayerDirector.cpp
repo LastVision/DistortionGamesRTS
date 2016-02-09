@@ -77,6 +77,7 @@ PlayerDirector::PlayerDirector(const Prism::Terrain& aTerrain, Prism::Scene& aSc
 	, myShiftPressed(false)
 	, myRightClicked(false)
 	, myTextEventManager(nullptr)
+	, myIsFirstFrame(true)
 {
 	myAudioSFXID = Prism::Audio::AudioInterface::GetInstance()->GetUniqueID();
 	myDragSelectionPositions.Reserve(4);
@@ -198,6 +199,11 @@ void PlayerDirector::InitGUI(const AIDirector* anAI, const Prism::Camera& aCamer
 
 void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 {
+	if (myIsFirstFrame == true)
+	{
+		myIsFirstFrame = false;
+		myRenderDragSelection = false;
+	}
 	if (myCursor->GetCurrentCursor() == eCursorType::ATTACK ||
 		(myCursor->GetCurrentCursor() != eCursorType::TOTEM && myCursor->GetCurrentCursor() != eCursorType::CANCEL
 		&& (myBuilding->IsSelected() == true || mySelectedUnits.Size() == 0))) // if units have died
