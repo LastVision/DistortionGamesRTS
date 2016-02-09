@@ -1088,7 +1088,7 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 					controller->AttackTarget(hoveredEnemy, !myShiftPressed, myHasPlayedSound);
 					hasDoneAction = true;
 				}
-				else if (mySelectedAction == eSelectedAction::ATTACK_MOVE && myLeftMouseUp == true)
+				else if (mySelectedAction == eSelectedAction::ATTACK_MOVE && myRightClicked == true)
 				{
 					controller->AttackMove(firstTargetPos, !myShiftPressed, myHasPlayedSound);
 					hasDoneAction = true;

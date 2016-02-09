@@ -156,7 +156,7 @@ bool Level::Update(float aDeltaTime, Prism::Camera& aCamera)
 	DoFogCulling();
 	if (globalUseParticles == true)
 	{
-		myEmitterManager->UpdateEmitters(aDeltaTime, CU::Matrix44f());
+	myEmitterManager->UpdateEmitters(aDeltaTime, CU::Matrix44f());
 	}
 	if (myHasToldPlayerAboutWinningIn50 == false && myPlayer->GetVictoryPoints() >= myMaxVictoryPoint - 50)
 	{
@@ -206,8 +206,9 @@ bool Level::Update(float aDeltaTime, Prism::Camera& aCamera)
 void Level::Render(Prism::Camera& aCamera)
 {
 	Prism::Engine::GetInstance()->SetClearColor({ 0.2f, 0.2f, 0.2f, 1.f });
-
+#ifdef USE_SHADOW
 	myRenderer->ProcessShadow(myShadowLight, myScene);
+#endif
 
 	if (myShowFogOfWar == true)
 	{
@@ -220,10 +221,9 @@ void Level::Render(Prism::Camera& aCamera)
 
 	if (globalUseParticles == true)
 	{
-		myEmitterManager->RenderEmitters();
-	}	
-
-	myAI->RenderMaps(aCamera);
+	myEmitterManager->RenderEmitters();
+#endif
+	//myAI->RenderMaps(aCamera);
 
 	if (myShowFogOfWar == true)
 	{
@@ -235,11 +235,11 @@ void Level::Render(Prism::Camera& aCamera)
 	}
 	myRenderer->FinalRender();
 
-
+	
 	myPlayer->RenderHealthBars(aCamera);
 	myAI->RenderHealthBars(aCamera);
 	myNeutralDirector->RenderHealthBars(aCamera);
-
+	
 	myPlayer->Render(aCamera);
 }
 
