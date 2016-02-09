@@ -605,6 +605,8 @@ void PlayerDirector::SelectUnit(Entity* anEntity)
 		}
 		else
 		{
+			anEntity->SetSelect(false);
+			anEntity->SetHovered(false);
 			return;
 		}
 	}
