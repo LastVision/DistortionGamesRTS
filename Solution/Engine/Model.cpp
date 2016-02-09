@@ -27,7 +27,7 @@ namespace Prism
 		, myInited(false)
 		, myParent(nullptr)
 		, myVertexCount(0)
-		, myMaxInstances(4096)
+		, myMaxInstances(512)
 		, myInstancingMatrixBuffer(nullptr)
 		, myInstancingScaleBuffer(nullptr)
 		, myInstancingHeightBuffer(nullptr)
