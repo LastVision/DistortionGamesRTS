@@ -390,7 +390,9 @@ void LevelFactory::LoadProps(XMLReader& aReader, tinyxml2::XMLElement* aLevelEle
 		aReader.ForceReadAttribute(propElement, "Y", propPosition.y);
 		aReader.ForceReadAttribute(propElement, "Z", propPosition.z);
 
+#ifndef _DEBUG
 		DL_ASSERT_EXP(propPosition.x >= 0.f && propPosition.z >= 0.f, CU::Concatenate("Found %s outside Map", propType.c_str()));
+#endif
 
 		propElement = aReader.ForceFindFirstChild(entityElement, "rotation");
 		CU::Vector3<float> propRotation;
