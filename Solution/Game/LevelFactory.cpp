@@ -693,7 +693,7 @@ void LevelFactory::LoadParticles(XMLReader& aReader, tinyxml2::XMLElement* aLeve
 		aReader.ForceReadAttribute(propElement, "Y", propPosition.y);
 		aReader.ForceReadAttribute(propElement, "Z", propPosition.z);
 
-		PostMaster::GetInstance()->SendMessage(EmitterMessage(particleType, propPosition));
+		PostMaster::GetInstance()->SendMessage(EmitterMessage(particleType, propPosition, true));
 	}
 }
 

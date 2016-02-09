@@ -117,7 +117,7 @@ const eStateStatus InGameState::Update(const float& aDeltaTime)
 		return eStateStatus::eKeepState;
 	}
 #endif
-	UpdateCamera(aDeltaTime, myLevel->GetCameraMoveVector());
+	
 
 
 //#ifndef _DEBUG
@@ -193,8 +193,8 @@ const eStateStatus InGameState::Update(const float& aDeltaTime)
 		LUA::ScriptSystem::GetInstance()->CallFunction("UpdateCinematic", { { aDeltaTime }, { float(myCinematicIndex) } });
 	}
 
-
 	LUA::ScriptSystem::GetInstance()->Update();
+	UpdateCamera(aDeltaTime, myLevel->GetCameraMoveVector());
 	return myStateStatus;
 }
 
