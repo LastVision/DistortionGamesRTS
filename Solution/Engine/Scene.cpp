@@ -5,6 +5,7 @@
 #include "Defines.h"
 #include "DirectionalLight.h"
 #include "EngineEnums.h"
+#include "Frustum.h"
 #include "Ice.h"
 #include "Instance.h"
 #include "PointLight.h"
@@ -14,12 +15,14 @@
 #include <XMLReader.h>
 #include "InstancingHelper.h"
 
+
 #ifdef SCENE_USE_OCTREE
 #include "Octree.h"
 #endif
 
 Prism::Scene::Scene(const Camera& aCamera, Terrain& aTerrain)
 	: myCamera(&aCamera)
+	, myViewCamera(nullptr)
 	, myTerrain(aTerrain)
 #ifdef SCENE_USE_OCTREE
 	, myOctree(new Octree(6))
@@ -117,7 +120,10 @@ void Prism::Scene::Render(bool aRenderNavMeshLines)
 
 	for (int i = 0; i < myInstances.Size(); ++i)
 	{
-		myInstances[i]->Render(*myCamera, *myInstancingHelper, true);
+		if (myViewCamera->GetFrustum().Inside(myInstances[i]->GetPosition(), -23.f) == true)
+		{
+			myInstances[i]->Render(*myCamera, *myInstancingHelper, true);
+		}
 	}
 
 	myInstancingHelper->Render(myDirectionalLightData, true);
@@ -193,12 +199,26 @@ void Prism::Scene::Render(bool aRenderNavMeshLines, Texture* aFogOfWarTexture, S
 	myInstances[i]->Render(myCamera);
 	}*/
 
+	static int maxVisibileInstances = 0;
+	int visibleInstances = 0;
 	for (int i = 0; i < myInstances.Size(); ++i)
 	{
-		myInstances[i]->UpdateDirectionalLights(myDirectionalLightData);
-		myInstances[i]->UpdateSpotLights(mySpotLightData);
-		myInstances[i]->Render(*myCamera, *myInstancingHelper, false);
+		if (myCamera->GetFrustum().Inside(myInstances[i]->GetPosition(), -23.f) == true)
+		{
+			myInstances[i]->UpdateDirectionalLights(myDirectionalLightData);
+			myInstances[i]->UpdateSpotLights(mySpotLightData);
+			myInstances[i]->Render(*myCamera, *myInstancingHelper, false);
+			++visibleInstances;
+		}
 	}
+
+	if (visibleInstances > maxVisibileInstances)
+	{
+		maxVisibileInstances = visibleInstances;
+	}
+
+	DEBUG_PRINT(visibleInstances);
+	DEBUG_PRINT(maxVisibileInstances);
 
 	for (int i = 0; i < mySelectionCircles.Size(); ++i)
 	{
@@ -250,6 +270,11 @@ void Prism::Scene::SetCamera(const Camera& aCamera)
 {
 	myCamera = &aCamera;
 	myInstancingHelper->SetCamera(myCamera);
+}
+
+void Prism::Scene::SetViewCamera(const Camera& aCamera)
+{
+	myViewCamera = &aCamera;
 }
 
 void Prism::Scene::RemoveInstance(Instance* aInstance, bool aIsSelectionRing)

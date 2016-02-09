@@ -91,6 +91,7 @@ namespace Prism
 
 		Engine::GetInstance()->GetContex()->OMSetRenderTargets(1, &view, aShadowSpotLight->GetTexture()->GetDepthStencilView());
 		const Camera* oldCamera = aScene->GetCamera();
+		aScene->SetViewCamera(*oldCamera);
 		aScene->SetCamera(*aShadowSpotLight->GetCamera());
 
 		aScene->Render(false);

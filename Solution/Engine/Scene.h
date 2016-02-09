@@ -35,6 +35,7 @@ namespace Prism
 		void RemoveInstance(Instance* aInstance, bool aIsSelectionRing = false);
 
 		void SetCamera(const Camera& aCamera);
+		void SetViewCamera(const Camera& aCamera);
 		const Camera* GetCamera() const;
 		
 	private:
@@ -51,6 +52,7 @@ namespace Prism
 		InstancingHelper* myInstancingHelper;
 
 		const Camera* myCamera;
+		const Camera* myViewCamera;
 		Terrain& myTerrain;
 
 		CU::StaticArray<DirectionalLightData, NUMBER_OF_DIRECTIONAL_LIGHTS> myDirectionalLightData;

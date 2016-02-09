@@ -4,13 +4,13 @@
 #include "Frustum.h"
 #include <xnamath.h>
 #include <XMLReader.h>
-
+#include <InputWrapper.h>
 namespace Prism
 {
 	Camera::Camera(CU::Matrix44f& aPlayerMatrix)
 		: myOrientation(aPlayerMatrix)
 		, myNear(0.1f)
-		, myFar(1000.f)
+		, myFar(128.f)
 		, myShakeCamera(false)
 		, myCurrentShake(0.f)
 		, myMaxShake(0.f)
@@ -55,6 +55,7 @@ namespace Prism
 	{
 		aWidth;
 		aHeight;
+		myFar = 1000.f;
 		//float screenAspect = aWidth / aHeight;
 		//myFOV = 3.14f / 2.f;
 		myProjectionMatrix = CU::Matrix44<float>::CreateOrthogonalMatrixLH(90.f, 90.f, myNear, myFar);
@@ -100,7 +101,6 @@ namespace Prism
 		}
 
 		myViewProjectionMatrix = CU::InverseSimple(myOrientation) * myProjectionMatrix;
-
 		myFrustum->Update();
 
 		DEBUG_PRINT(myOrientation.GetPos());
