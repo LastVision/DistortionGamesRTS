@@ -211,6 +211,10 @@ void Level::Render(Prism::Camera& aCamera)
 	{
 		myRenderer->ProcessShadow(myShadowLight, myScene);
 	}
+	else
+	{
+		myShadowLight->ClearTexture();
+	}
 
 	if (myShowFogOfWar == true)
 	{
