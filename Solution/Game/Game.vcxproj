@@ -228,6 +228,7 @@
     <ClInclude Include="MainMenuState.h" />
     <ClInclude Include="MessageState.h" />
     <ClInclude Include="NeutralDirector.h" />
+    <ClInclude Include="OptionsState.h" />
     <ClInclude Include="PlayerDirector.h" />
     <ClInclude Include="ScriptInterface.h" />
     <ClInclude Include="SplashState.h" />
@@ -271,6 +272,7 @@
     <ClCompile Include="MainMenuState.cpp" />
     <ClCompile Include="MessageState.cpp" />
     <ClCompile Include="NeutralDirector.cpp" />
+    <ClCompile Include="OptionsState.cpp" />
     <ClCompile Include="PlayerDirector.cpp" />
     <ClCompile Include="ScriptInterface.cpp" />
     <ClCompile Include="SplashState.cpp" />

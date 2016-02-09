@@ -53,6 +53,7 @@ void FogOfWarMap::Update(float aDelta)
 		//myGrid[i] -= (myGrid[i] * 0.5f) * aDelta;
 		myGrid[i] *= 0.99f;
 		myGrid[i] = fmaxf(myGrid[i], MIN_DARKNESS);
+		myPlane->SetVertexColor(i, GetColor(myGrid[i] / myMaxValue));
 	}
 
 	if (PollingStation::GetInstance()->GetBase(eOwnerType::PLAYER)->IsSelectable() == true)
@@ -113,10 +114,10 @@ void FogOfWarMap::UpdateRenderPlane()
 {
 	myPlane->StartModify();
 
-	for (int i = 0; i < myGrid.Size(); ++i)
+	/*for (int i = 0; i < myGrid.Size(); ++i)
 	{
 		myPlane->SetVertexColor(i, GetColor(myGrid[i]/myMaxValue));
-	}
+	}*/
 
 	myPlane->EndModify();
 }
