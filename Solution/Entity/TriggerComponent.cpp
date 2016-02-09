@@ -197,6 +197,7 @@ eOwnerType TriggerComponent::ModifyOwnership(eOwnerType anOwner, float aModifyVa
 					PostMaster::GetInstance()->SendMessage(TutorialMessage(eTutorialAction::RESOURCE_POINT));
 					PostMaster::GetInstance()->SendMessage(NotificationMessage("Resource point captured."));
 				}
+				Prism::Audio::AudioInterface::GetInstance()->PostEvent("victoryGain", 0);
 				PostMaster::GetInstance()->SendMessage(InWorldTextMessage("Captured", myEntity.GetPosition()));
 			}
 			else if (anOwner == eOwnerType::ENEMY)
