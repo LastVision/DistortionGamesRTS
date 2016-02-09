@@ -1210,6 +1210,12 @@ void PlayerDirector::SelectAllUnits()
 void PlayerDirector::PlaceRallyPoint(CU::Vector2<float> aWorldPosition)
 {
 	// check if inside navmesh 
+	if (myTerrain.GetPathFinder()->IsOutside(aWorldPosition) == true)
+	{
+		myCurrentCancleCursorTime = myCancleCursorTime;
+		myCursor->SetCurrentCursor(eCursorType::CANCEL);
+		return;
+	}
 
 	myBuilding->GetComponent<BuildingComponent>()->SetRallyPoint(aWorldPosition);
 
