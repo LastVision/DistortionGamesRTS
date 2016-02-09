@@ -48,7 +48,6 @@ Level::Level(const Prism::Camera& aCamera, Prism::Terrain* aTerrain, GUI::Cursor
 	EntityFactory::GetInstance()->LoadEntities("Data/Resource/Entity/LI_entity.xml");
 	myEmitterManager = new EmitterManager(aCamera);
 	myTerrain = aTerrain;
-
 	myScene = new Prism::Scene(aCamera, *myTerrain);
 
 	PostMaster::GetInstance()->Subscribe(eMessageType::TOGGLE_RENDER_LINES, this);
@@ -155,9 +154,9 @@ bool Level::Update(float aDeltaTime, Prism::Camera& aCamera)
 
 	FogOfWarMap::GetInstance()->Update(aDeltaTime);
 	DoFogCulling();
-
+#ifdef USE_PARTICLES
 	myEmitterManager->UpdateEmitters(aDeltaTime, CU::Matrix44f());
-
+#endif
 	if (myHasToldPlayerAboutWinningIn50 == false && myPlayer->GetVictoryPoints() >= myMaxVictoryPoint - 50)
 	{
 		myHasToldPlayerAboutWinningIn50 = true;
@@ -217,8 +216,9 @@ void Level::Render(Prism::Camera& aCamera)
 
 	myRenderer->BeginScene();
 	myScene->Render(myRenderNavMeshLines, myFogOfWarHelper->GetTexture(), myShadowLight);
+#ifdef USE_PARTICLES
 	myEmitterManager->RenderEmitters();
-
+#endif
 	myAI->RenderMaps(aCamera);
 
 	if (myShowFogOfWar == true)
