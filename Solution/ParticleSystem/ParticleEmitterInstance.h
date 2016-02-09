@@ -36,11 +36,12 @@ namespace Prism
 		void SetRadius(float aRadius);
 		void SetSize(const CU::Vector3f& aSize);
 		void KillEmitter(float aKillTime);
-
+		void SetCamera(Camera* aCamera);
+		Camera* GetCamera();
 	private:
 
 		void CreateVertexBuffer();
-		void UpdateVertexBuffer();
+		int UpdateVertexBuffer();
 
 		void UpdateEmitter(float aDeltaTime, const CU::Matrix44f& aWorldMatrix);
 		void UpdateParticle(float aDeltaTime);
@@ -53,6 +54,7 @@ namespace Prism
 		CU::Vector3<float> CreateHollowSquare();
 
 
+		CU::GrowingArray<GraphicalParticle> myParticleToGraphicsCard;
 
 		CU::GrowingArray<LogicalParticle> myLogicalParticles;
 		CU::GrowingArray<GraphicalParticle> myGraphicalParticles;
@@ -71,6 +73,8 @@ namespace Prism
 
 		bool myAlwaysShow;
 		bool myHasEmitted;
+
+		Camera* myCamera;
 
 		Entity* myEntity;
 
