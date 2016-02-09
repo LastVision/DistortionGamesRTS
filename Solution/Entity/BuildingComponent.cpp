@@ -268,3 +268,18 @@ void BuildingComponent::Abort(int aIndex)
 		myBuildQueue.RemoveNonCyclicAtIndex(aIndex);
 	}
 }
+
+int BuildingComponent::GetTotalQueueSupplyCost() const
+{
+	int total = 0;
+
+	for (int i = 0; i < myBuildQueue.Size(); i++)
+	{
+		if (myBuildQueue[i].myIsUpgrade == false)
+		{
+			total += myUnitSupplyCosts[static_cast<int>(myBuildQueue[i].myUnit)];
+		}
+	}
+
+	return total;
+}
