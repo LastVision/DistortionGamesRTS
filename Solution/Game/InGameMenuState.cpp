@@ -37,7 +37,7 @@ void InGameMenuState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* 
 
 void InGameMenuState::EndState()
 {
-
+	myIsActiveState = false;
 }
 
 void InGameMenuState::OnResize(int aWidth, int aHeight)

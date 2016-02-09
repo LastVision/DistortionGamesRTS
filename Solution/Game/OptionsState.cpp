@@ -66,7 +66,7 @@ void OptionsState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCu
 
 void OptionsState::EndState()
 {
-
+	myIsActiveState = false;
 }
 
 void OptionsState::OnResize(int aWidth, int aHeight)
@@ -155,12 +155,10 @@ void OptionsState::ReceiveMessage(const OnClickMessage& aMessage)
 			}
 		}
 			break;
-		case eOnClickEvent::GAME_QUIT:
+		case eOnClickEvent::RESUME_GAME:
 			myIsActiveState = false;
 			myStateStatus = eStateStatus::ePopSubState;
 			break;
-
-
 		default:
 			break;
 		}
