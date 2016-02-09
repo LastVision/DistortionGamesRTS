@@ -17,19 +17,15 @@ namespace GUI
 	{
 		std::string valueSpritePath = "";
 		std::string value = "";
-		CU::Vector2<float> size;
-		CU::Vector2<float> position;
-		CU::Vector2<float> textposition;
 		CU::Vector2<float> valueSpriteSize;
-		CU::Vector2<float> valueSpritePosition;
 
-		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "size"), "x", size.x);
-		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "size"), "y", size.y);
-		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "position"), "x", position.x);
-		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "position"), "y", position.y);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "size"), "x", mySize.x);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "size"), "y", mySize.y);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "position"), "x", myPosition.x);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "position"), "y", myPosition.y);
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "value"), "type", value);
-		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "value"), "positionx", textposition.x);
-		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "value"), "positiony", textposition.y);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "value"), "positionx", myTextPosition.x);
+		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "value"), "positiony", myTextPosition.y);
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "textscale"), "value", myTextScale);
 
 		tinyxml2::XMLElement* spriteElement = aReader->FindFirstChild(anXMLElement, "valuesprite");
@@ -38,12 +34,10 @@ namespace GUI
 			aReader->ForceReadAttribute(spriteElement, "path", valueSpritePath);
 			aReader->ForceReadAttribute(spriteElement, "sizex", valueSpriteSize.x);
 			aReader->ForceReadAttribute(spriteElement, "sizey", valueSpriteSize.y);
-			aReader->ForceReadAttribute(spriteElement, "positionx", valueSpritePosition.x);
-			aReader->ForceReadAttribute(spriteElement, "positiony", valueSpritePosition.y);
-			myValueSprite = Prism::ModelLoader::GetInstance()->LoadSprite(valueSpritePath, valueSpriteSize);
+			aReader->ForceReadAttribute(spriteElement, "positionx", mySpritePosition.x);
+			aReader->ForceReadAttribute(spriteElement, "positiony", mySpritePosition.y);
 
-			//myValueSprite = new Prism::Sprite(valueSpritePath, valueSpriteSize);
-			mySpritePosition = valueSpritePosition;
+			myValueSprite = Prism::ModelLoader::GetInstance()->LoadSprite(valueSpritePath, valueSpriteSize);
 		}
 
 		if (value == "player_gold")
@@ -70,10 +64,6 @@ namespace GUI
 		{
 			assert("Wrong type in resourcebar XML");
 		}
-
-		mySize = size;
-		myPosition = position;
-		myTextPosition = textposition;
 	}
 
 	ResourceBarWidget::~ResourceBarWidget()
