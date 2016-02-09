@@ -28,6 +28,7 @@ TotemComponent::TotemComponent(Entity& aEntity, TotemComponentData& aData)
 	, myAlpha(0.f)
 	, myActive(false)
 	, myEffectActive(false)
+	, myDisapearing(false)
 {
 	myOriginalPosition = myEntity.GetOrientation().GetPos();
 }
@@ -43,64 +44,74 @@ void TotemComponent::Update(float aDeltaTime)
 	myDuration += aDeltaTime;
 
 	CheckUnitsForRemove(myUnits);
-	CheckUnitsForAdd(PollingStation::GetInstance()->GetUnits(myEntity.GetOwner()), myUnits);
 
-	if (myDuration >= myEndTime)
+	if (myDisapearing == true)
 	{
-		Prism::Audio::AudioInterface::GetInstance()->PostEvent("Stop_Totem"
-			, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
-		myActive = false;
-		myEntity.SetPosition(myOriginalPosition);
-		for (int i = 0; i < myUnits.Size(); ++i)
-		{
-			myUnits[i]->GetComponent<HealthComponent>()->SetIsHealing(false);
-		}
+		myDisapearVector += CU::Vector3<float>(0, -aDeltaTime, 0);
+		myEntity.SetPosition(myEntity.GetOrientation().GetPos() + myDisapearVector);
 	}
 	else
 	{
-		if (myHasReachedTarget == true && myActive == true)
+		CheckUnitsForAdd(PollingStation::GetInstance()->GetUnits(myEntity.GetOwner()), myUnits);
+
+		if (myDuration >= myEndTime)
+		{
+			Prism::Audio::AudioInterface::GetInstance()->PostEvent("Stop_Totem"
+				, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+			myActive = false;
+			//myEntity.SetPosition({ 1.f, 100.f, 128.f });
+			myDisapearing = true;
+			for (int i = 0; i < myUnits.Size(); ++i)
+			{
+				myUnits[i]->GetComponent<HealthComponent>()->SetIsHealing(false);
+			}
+		}
+		else
+		{
+			if (myHasReachedTarget == true && myActive == true)
+			{
+				for (int i = 0; i < myUnits.Size(); ++i)
+				{
+					myUnits[i]->GetComponent<HealthComponent>()->SetIsHealing(true);
+				}
+				if (myEffectActive == false)
+				{
+					PostMaster::GetInstance()->SendMessage(EmitterMessage("totem_healing", myTargetPosition, myEndTime, myRadius));
+					myEffectActive = true;
+				}
+			}
+		}
+
+		if (myActive == true)
 		{
 			for (int i = 0; i < myUnits.Size(); ++i)
 			{
-				myUnits[i]->GetComponent<HealthComponent>()->SetIsHealing(true);
+				myUnits[i]->GetComponent<HealthComponent>()->Heal(myHealPerSecond*aDeltaTime);
 			}
-			if (myEffectActive == false)
-			{
-				PostMaster::GetInstance()->SendMessage(EmitterMessage("totem_healing", myTargetPosition, myEndTime, myRadius));
-				myEffectActive = true;
-			}
-		}
-	}
 
-	if (myActive == true)
-	{
-		for (int i = 0; i < myUnits.Size(); ++i)
+		}
+
+		if (myHasReachedTarget == false)
 		{
-			myUnits[i]->GetComponent<HealthComponent>()->Heal(myHealPerSecond*aDeltaTime);
+			myEntity.SetPosition(CU::Math::Lerp<CU::Vector3f>(myOriginalPosition, myTargetPosition, myAlpha));
 		}
 
-	}
 
-	if (myHasReachedTarget == false)
-	{
-		myEntity.SetPosition(CU::Math::Lerp<CU::Vector3f>(myOriginalPosition, myTargetPosition, myAlpha));
-	}
-
-
-	if (myAlpha >= 1.2f && myHasReachedTarget == false)
-	{
-		myHasReachedTarget = true;
-		myActive = true;
-		myEffectActive = false;
-		//if (myAlpha >= myOriginalCooldown)
-		//{
-		//	myActive = false;
-		//	myEntity.SetPosition(myOriginalPosition);
-		//}
-		Prism::Audio::AudioInterface::GetInstance()->PostEvent("Totem_HitGround"
-			, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
-		Prism::Audio::AudioInterface::GetInstance()->PostEvent("Play_Totem"
-			, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+		if (myAlpha >= 1.2f && myHasReachedTarget == false)
+		{
+			myHasReachedTarget = true;
+			myActive = true;
+			myEffectActive = false;
+			//if (myAlpha >= myOriginalCooldown)
+			//{
+			//	myActive = false;
+			//	myEntity.SetPosition(myOriginalPosition);
+			//}
+			Prism::Audio::AudioInterface::GetInstance()->PostEvent("Totem_HitGround"
+				, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+			Prism::Audio::AudioInterface::GetInstance()->PostEvent("Play_Totem"
+				, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+		}
 	}
 }
 
@@ -164,8 +175,10 @@ void TotemComponent::SetTargetPosition(const CU::Vector3f& aTargetPosition)
 		myOriginalPosition.x = aTargetPosition.x;
 		myOriginalPosition.z = aTargetPosition.z;
 		myHasReachedTarget = false;
+		myDisapearVector = CU::Vector3<float>();
 		myAlpha = 0.f;
 		myActive = false;
+		myDisapearing = false;
 		myCurrentCooldown = myOriginalCooldown;
 		myDuration = 0.f;
 	}
