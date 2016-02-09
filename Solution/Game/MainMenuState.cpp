@@ -11,6 +11,7 @@
 #include "MainMenuState.h"
 #include <ModelLoader.h>
 #include <OnClickMessage.h>
+#include "OptionsState.h"
 #include <PostMaster.h>
 #include "SplashState.h"
 #include "StateStackProxy.h"
@@ -181,6 +182,15 @@ void MainMenuState::ReceiveMessage(const OnClickMessage& aMessage)
 			Prism::MemoryTracker::GetInstance()->SetRunTime(false);
 			PostMaster::GetInstance()->UnSubscribe(eMessageType::ON_CLICK, this);
 			myStateStack->PushSubGameState(new HelpState());
+			Prism::MemoryTracker::GetInstance()->SetRunTime(oldRuntime);
+			break;
+		}
+		case eOnClickEvent::OPTIONS_MENU:
+		{
+			bool oldRuntime = Prism::MemoryTracker::GetInstance()->GetRunTime();
+			Prism::MemoryTracker::GetInstance()->SetRunTime(false);
+			PostMaster::GetInstance()->UnSubscribe(eMessageType::ON_CLICK, this);
+			myStateStack->PushSubGameState(new OptionsState());
 			Prism::MemoryTracker::GetInstance()->SetRunTime(oldRuntime);
 			break;
 		}

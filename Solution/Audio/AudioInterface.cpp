@@ -14,8 +14,8 @@ namespace Prism
 		AudioInterface* AudioInterface::myInstance = nullptr;
 		AudioInterface::AudioInterface()
 			:myWwiseManager(nullptr)
-			, mySFXVolume(90)
-			, myMusicVolume(80)
+			, mySFXVolume(80)
+			, myMusicVolume(70)
 			, myVoiceVolume(90)
 		{	
 		}

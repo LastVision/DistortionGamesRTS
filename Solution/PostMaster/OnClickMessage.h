@@ -26,6 +26,11 @@ enum class eOnClickEvent
 	UPGRADE_UNIT,
 	RESUME_GAME,
 	ABORT_QUEUE,
+	INCREASEVOLUME,
+	LOWERVOLUME,
+	INCREASEMUSIC,
+	LOWERMUSIC,
+	OPTIONS_MENU,
 };
 
 struct OnClickMessage : public Message

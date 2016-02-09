@@ -4,6 +4,7 @@
 #include "InputWrapper.h"
 #include "PostMaster.h"
 #include "OnClickMessage.h"
+#include "OptionsState.h"
 #include "InGameState.h"
 #include "HelpState.h"
 
@@ -79,6 +80,15 @@ void InGameMenuState::ReceiveMessage(const OnClickMessage& aMessage)
 			myIsActiveState = false;
 			myStateStatus = eStateStatus::ePopSubState;
 			break;
+		case eOnClickEvent::OPTIONS_MENU:
+		{
+			myIsActiveState = false;
+			bool oldRuntime = Prism::MemoryTracker::GetInstance()->GetRunTime();
+			Prism::MemoryTracker::GetInstance()->SetRunTime(false);
+			myStateStack->PushSubGameState(new OptionsState());
+			Prism::MemoryTracker::GetInstance()->SetRunTime(oldRuntime);
+			break;
+		}
 		case eOnClickEvent::GAME_QUIT:
 			myIsActiveState = false;
 			myStateStatus = eStateStatus::ePopMainState;
