@@ -383,15 +383,19 @@ namespace GUI
 			}
 		}
 
-		portraitPosition.y -= myGruntPortrait->GetSize().y / 3.5f;
-		portraitPosition.x += myGruntPortrait->GetSize().x / 3.f;
+		portraitPosition.y -= myGruntPortrait->GetSize().y * 0.32f;
+		//portraitPosition.x += myGruntPortrait->GetSize().x / 3.f;
 
 		std::string currentHealth = std::to_string(int(myUnits[0]->GetComponent<HealthComponent>()->GetCurrentHealth()));
-		Prism::Engine::GetInstance()->PrintText(currentHealth, portraitPosition, Prism::eTextType::RELEASE_TEXT, 1.f, color);
+		//Prism::Engine::GetInstance()->PrintText(currentHealth, portraitPosition, Prism::eTextType::RELEASE_TEXT, 1.f, color);
 
-		std::string maxHealth = "/" + std::to_string(int(myUnits[0]->GetComponent<HealthComponent>()->GetMaxHealth()));
-		Prism::Engine::GetInstance()->PrintText(maxHealth, { portraitPosition.x + 30.f, portraitPosition.y }
+		//std::string maxHealth = "/" + std::to_string(int(myUnits[0]->GetComponent<HealthComponent>()->GetMaxHealth()));
+
+		currentHealth.append("/" + std::to_string(int(myUnits[0]->GetComponent<HealthComponent>()->GetMaxHealth())));
+		Prism::Engine::GetInstance()->PrintText(currentHealth, { portraitPosition.x, portraitPosition.y }
 		, Prism::eTextType::RELEASE_TEXT, 1.f, color);
+
+
 
 		color.x = 1.f;
 		color.y = 1.f;
