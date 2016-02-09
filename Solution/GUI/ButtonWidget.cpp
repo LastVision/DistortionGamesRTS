@@ -273,6 +273,12 @@ namespace GUI
 			aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "onclick"), "id", unitID);
 			myClickEvent = new OnClickMessage(eOnClickEvent::UPGRADE_UNIT, unitID);
 		}
+		else if (clickEvent == "spawn_locked_unit")
+		{
+			int ID = -1;
+			aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "onclick"), "id", ID);
+			myClickEvent = new OnClickMessage(eOnClickEvent::SPAWN_LOCKED_UNIT, ID);
+		}
 		else
 		{
 			std::string message = "[ButtonWidget]: No onclick event named " + clickEvent;
