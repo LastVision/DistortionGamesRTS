@@ -41,9 +41,6 @@ public:
 	void AddTotem(Entity* aTotem);
 	Entity* GetTotem();
 
-	void ToggleShadows();
-	bool GetShouldUseShadows() const;
-
 
 private:
 	PollingStation();
@@ -68,16 +65,6 @@ private:
 	Entity* myPlayerTotem;
 
 	static PollingStation* myInstance;
-	bool myShouldUseShadows;
 };
 
-inline void PollingStation::ToggleShadows()
-{
-	myShouldUseShadows = !myShouldUseShadows;
-}
-
-inline bool PollingStation::GetShouldUseShadows() const
-{
-	return myShouldUseShadows;
-}
 

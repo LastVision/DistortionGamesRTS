@@ -4,7 +4,7 @@
 #include "GUIManager.h"
 #include "InputWrapper.h"
 #include "PostMaster.h"
-#include <PollingStation.h>
+#include "../Game/GameSettingsSingleton.h"
 #include "OnClickMessage.h"
 #include "InGameState.h"
 #include "HelpState.h"
@@ -123,7 +123,7 @@ void OptionsState::ReceiveMessage(const OnClickMessage& aMessage)
 			break;
 		case eOnClickEvent::TOGGLE_SHADOWS:
 		{
-			PollingStation::GetInstance()->ToggleShadows();
+			GameSettingsSingleton::GetInstance()->ToggleShadows();
 		}
 			break;
 		case eOnClickEvent::GAME_QUIT:

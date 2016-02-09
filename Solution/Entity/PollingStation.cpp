@@ -393,7 +393,6 @@ PollingStation::PollingStation()
 	, myArtifacts(20)
 	, myVictoryAndResourcePoints(20)
 	, myProps(128)
-	, myShouldUseShadows(true)
 {
 
 }
