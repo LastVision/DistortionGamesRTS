@@ -32,6 +32,7 @@
 #include <ToggleGUIMessage.h>
 #include <ToggleBuildTimeMessage.h>
 #include <TotemComponent.h>
+#include <SoundComponent.h>
 #include <ModelLoader.h>
 #include <SpawnUnitMessage.h>
 #include <SpriteProxy.h>
@@ -272,8 +273,8 @@ void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 	DEBUG_PRINT(myHasUnlockedTank);
 	//Prism::Audio::AudioInterface::GetInstance()->SetListenerPosition(aCamera.GetOrientation().GetPos().x
 	//	, aCamera.GetOrientation().GetPos().y, aCamera.GetOrientation().GetPos().z);
-	Prism::Audio::AudioInterface::GetInstance()->SetListenerPosition(aCamera.GetOrientation().GetPos().x
-		, 7.5f, aCamera.GetOrientation().GetPos().z + 25.f);
+	Prism::Audio::AudioInterface::GetInstance()->SetListenerPosition(aCamera.GetOrientation().GetPos().x + 10
+		, 7.5f, aCamera.GetOrientation().GetPos().z + 30.f);
 
 #ifndef RELEASE_BUILD
 	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_G) == true)
@@ -1223,6 +1224,9 @@ void PlayerDirector::PlaceRallyPoint(CU::Vector2<float> aWorldPosition)
 	CU::Matrix44f rallyOrientation = myRallyPoint->GetOrientation();
 	myTerrain.CalcEntityHeight(rallyOrientation);
 	myRallyPoint->SetPosition(rallyOrientation.GetPos());
+
+	Prism::Audio::AudioInterface::GetInstance()->PostEvent("Place_RallyPoint"
+		, myRallyPoint->GetComponent<SoundComponent>()->GetAudioSFXID());
 }
 
 void PlayerDirector::PlaceTotem(const CU::Vector3f& aPositionInWorld)

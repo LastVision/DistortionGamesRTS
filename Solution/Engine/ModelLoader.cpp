@@ -54,6 +54,7 @@ namespace Prism
 		myInactiveBuffer = 1;
 
 		StartPrefetching();
+		LoadInstancedCount();
 	}
 
 	ModelLoader::~ModelLoader()
@@ -127,6 +128,39 @@ namespace Prism
 			file.close();
 		}
 #endif
+	}
+
+	void ModelLoader::LoadInstancedCount()
+	{
+		std::ifstream file;
+		file.open("GeneratedData/modelcount.bin");
+		DL_ASSERT_EXP(file.is_open(), "Failed to open modelcount.bin, did you run Terrain-Tool?");
+		if (file.is_open())
+		{
+			std::string name;
+			int count;
+
+			while (file >> name)
+			{
+				file >> count;
+				myInstancedCount[name] = count;
+			}
+		}
+	}
+
+	int ModelLoader::GetInstancedCount(const std::string& aModelPath)
+	{
+		std::string name = aModelPath.substr(0, aModelPath.rfind("."));
+		name = name.substr(aModelPath.rfind("/")+1, aModelPath.length());
+
+		DL_ASSERT_EXP(myInstancedCount.find(name) != myInstancedCount.end()
+			, CU::Concatenate("GetInstancedCount on %s failed", aModelPath.c_str()));
+		if (myInstancedCount.find(name) == myInstancedCount.end())
+		{
+			return 256;
+		}
+
+		return myInstancedCount[name];
 	}
 
 	void ModelLoader::Run()
@@ -534,12 +568,13 @@ namespace Prism
 		Model* model = myDGFXLoader->LoadModel(someData.myModelPath);
 		model->SetEffect(EffectContainer::GetInstance()->GetEffect(someData.myEffectPath));
 		model->myFileName = someData.myModelPath;
-		model->Init();
+
+		model->Init(GetInstancedCount(someData.myModelPath));
 #else
 		Model* model = myModelFactory->LoadModel(someData.myModelPath.c_str());
 		model->SetEffect(EffectContainer::GetInstance()->GetEffect(someData.myEffectPath));
 		model->myFileName = someData.myModelPath;
-		model->Init();
+		model->Init(GetInstancedCount(someData.myModelPath));
 #endif
 
 		someData.myModelProxy->SetModel(model);

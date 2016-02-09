@@ -6,17 +6,20 @@
 
 #define USE_SHADOW
 #define LOAD_PROPS
-#define USE_WEATHER
 //#define CLICK_EXPLOSION
-#define USE_PARTICLES
+#define USE_DIFFICULTY
+
 #ifdef _DEBUG
 
 #undef LOAD_PROPS
-#undef USE_WEATHER
+#undef USE_SHADOW
 
-#endif
+const bool globalUseParticles = false;
+const bool globalUseWeather = false;
 
-#define USE_DIFFICULTY
+#else
 
 const bool globalUseParticles = true;
 const bool globalUseWeather = true;
+
+#endif
