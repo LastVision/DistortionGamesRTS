@@ -1195,8 +1195,11 @@ void PlayerDirector::SelectOrHoverEntity(Entity* aEntity, bool &aSelected, bool 
 		}
 		else
 		{
-			aEntity->SetHovered(true);
-			aHovered = true;
+			if (aEntity->IsSelectable() == true)
+			{
+				aEntity->SetHovered(true);
+				aHovered = true;
+			}
 		}
 	}
 }
