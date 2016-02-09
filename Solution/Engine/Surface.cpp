@@ -237,4 +237,12 @@ namespace Prism
 			myShaderVariables[i]->SetResource(myResourceViews[i]);
 		}
 	}
+
+	void Surface::DeActivate()
+	{
+		for (int i = 0; i < myShaderVariables.Size(); ++i)
+		{
+			myShaderVariables[i]->SetResource(nullptr);
+		}
+	}
 }

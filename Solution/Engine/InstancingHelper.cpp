@@ -76,9 +76,11 @@ namespace Prism
 						tech->GetPassByIndex(j)->Apply(0, context);
 						context->DrawIndexedInstanced(currModel->GetIndexCount(), matrices.Size()
 							, 0, currModel->GetVertexStart(), 0);
-					}
-				}
 
+					}
+					currModel->DeActivateSurfaces();
+				}
+				
 				matrices.RemoveAll();
 				scales.RemoveAll();
 			}

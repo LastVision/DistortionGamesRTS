@@ -350,6 +350,14 @@ namespace Prism
 		}
 	}
 
+	void Model::DeActivateSurfaces()
+	{
+		for (int i = 0; i < mySurfaces.Size(); ++i)
+		{
+			mySurfaces[i]->DeActivate();
+		}
+	}
+
 	bool Model::SetGPUState(const CU::GrowingArray<CU::Matrix44<float>>& someWorldMatrices
 		, const CU::GrowingArray<CU::Vector3<float>>& someScales, eOwnerType aOwner)
 	{

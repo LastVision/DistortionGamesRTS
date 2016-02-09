@@ -376,7 +376,7 @@ namespace Prism
 			else if (type == eVertexLayout::VERTEX_BONEID)
 			{
 				desc->SemanticName = "BONES";
-				desc->Format = DXGI_FORMAT_R32G32B32A32_SINT;
+				desc->Format = DXGI_FORMAT_R32G32B32A32_UINT;
 			}
 			else if (type == eVertexLayout::VERTEX_COLOR)
 			{

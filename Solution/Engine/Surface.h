@@ -36,6 +36,7 @@ namespace Prism{
 		void ActivateAlbedo(eOwnerType aOwner);
 
 		void Activate();
+		void DeActivate();
 		void ReloadSurface();
 
 		bool GetEmissive() const;
