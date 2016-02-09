@@ -753,7 +753,7 @@ bool PlayerDirector::CanUpgrade(int aUnitType) const
 
 bool PlayerDirector::CanAffordSupply(int aSupplyCost) const
 {
-	if (aSupplyCost + myUnitCount > myUnitCap)
+	if (aSupplyCost + myUnitCount + myBuilding->GetComponent<BuildingComponent>()->GetTotalQueueSupplyCost() > myUnitCap)
 	{
 		return false;
 	}
