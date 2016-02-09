@@ -290,11 +290,11 @@ void Prism::Scene::SetViewCamera(const Camera& aCamera)
 
 void Prism::Scene::CalcShouldRender(const Prism::Camera& aCamera)
 {
-	static float radius = -21.2f;
+	static float radius = -25.9;
 	CU::InputWrapper::GetInstance()->TweakValue(radius, 0.1f, 1.f, DIK_I, DIK_K);
 	DEBUG_PRINT(radius);
 
-	static CU::Vector3<float> offset;
+	static CU::Vector3<float> offset = CU::Vector3<float>(-0.5f, 0.f, 0.f);
 	CU::InputWrapper::GetInstance()->TweakValue(offset.x, 0.1f, 1.f, DIK_U, DIK_J);
 	CU::InputWrapper::GetInstance()->TweakValue(offset.z, 0.1f, 1.f, DIK_Y, DIK_H);
 	DEBUG_PRINT(offset);

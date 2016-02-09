@@ -5,7 +5,6 @@
 #define NUMBER_OF_SPOT_LIGHTS 3
 #define MAX_NR_OF_BONES 32
 #define OCTREE_WIDTH 10000.f
-#define RENDER_CLIPPING_RADIUS -22.5f
 
 //If we get random crashes in .exes undefine USE_DGFX
 #define USE_DGFX
