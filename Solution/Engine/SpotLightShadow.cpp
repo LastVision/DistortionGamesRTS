@@ -51,7 +51,7 @@ namespace Prism
 		SetColor({ 0.6838235f, 0.7383367f, 1.f, 0.2f });
 		
 		SetPosition({ 0.f, 0.f, 0.f, 1.f });
-		myOrientation = CU::Matrix44<float>::CreateRotateAroundX(3.14f * 2.f / 3.f);
+		myOrientation = CU::Matrix44<float>::CreateRotateAroundX(3.14f / 3.f);
 		myOrientation *= CU::Matrix44<float>::CreateRotateAroundZ(-3.14f / 4.f);
 		myOrientation.SetPos({ 0.f, 75.f, 0.f, 1.f });
 		Update();
@@ -77,7 +77,7 @@ namespace Prism
 
 	void SpotLightShadow::UpdateOrientation()
 	{
-		myOrientation.SetPos(myPlayerOrientation.GetPos() + CU::Vector3<float>(90.f, 20.f, 130.f));
+		myOrientation.SetPos(myPlayerOrientation.GetPos() + CU::Vector3<float>(90.f, 20.f, 0.f));
 	}
 
 	void SpotLightShadow::ClearTexture()
