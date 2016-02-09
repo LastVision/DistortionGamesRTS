@@ -27,7 +27,7 @@ namespace Prism
 		, myInited(false)
 		, myParent(nullptr)
 		, myVertexCount(0)
-		, myMaxInstances(4096)
+		, myMaxInstances(512)
 		, myInstancingMatrixBuffer(nullptr)
 		, myInstancingScaleBuffer(nullptr)
 		, myInstancingHeightBuffer(nullptr)
@@ -355,6 +355,14 @@ namespace Prism
 		for (int i = 0; i < myChildren.Size(); ++i)
 		{
 			myChildren[i]->ActivateAlbedo(aOwner);
+		}
+	}
+
+	void Model::DeActivateSurfaces()
+	{
+		for (int i = 0; i < mySurfaces.Size(); ++i)
+		{
+			mySurfaces[i]->DeActivate();
 		}
 	}
 

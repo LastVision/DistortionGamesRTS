@@ -3,7 +3,7 @@
 #define NUMBER_OF_DIRECTIONAL_LIGHTS 2
 #define NUMBER_OF_POINT_LIGHTS 3
 #define NUMBER_OF_SPOT_LIGHTS 3
-#define MAX_NR_OF_BONES 64
+#define MAX_NR_OF_BONES 32
 #define OCTREE_WIDTH 10000.f
 
 //If we get random crashes in .exes undefine USE_DGFX

@@ -153,24 +153,24 @@ namespace GUI
 			else if (action == "upgrade_grunt")
 			{
 				DL_ASSERT_EXP(upgradeLevel != -1, "[ButtonWidget] action 'upgrade_grunt' needs an 'upgradelevel'");
-				myTooltipInfo->myCooldown = &aPlayer->GetUpgradeMaxCooldown(0);
-				myTooltipInfo->myCooldownType = eCooldownType::UPGRADE;
+				//myTooltipInfo->myCooldown = &aPlayer->GetUpgradeMaxCooldown(0);
+				//myTooltipInfo->myCooldownType = eCooldownType::UPGRADE;
 				myTooltipInfo->myUpgradeLevel = 0;
 				myTooltipInfo->myArftifactCost = &aPlayer->GetUpgradeCost(0, upgradeLevel);
 			}
 			else if (action == "upgrade_ranger")
 			{
 				DL_ASSERT_EXP(upgradeLevel != -1, "[ButtonWidget] action 'upgrade_ranger' needs an 'upgradelevel'");
-				myTooltipInfo->myCooldown = &aPlayer->GetUpgradeMaxCooldown(1);
-				myTooltipInfo->myCooldownType = eCooldownType::UPGRADE;
+				//myTooltipInfo->myCooldown = &aPlayer->GetUpgradeMaxCooldown(1);
+				//myTooltipInfo->myCooldownType = eCooldownType::UPGRADE;
 				myTooltipInfo->myUpgradeLevel = 1;
 				myTooltipInfo->myArftifactCost = &aPlayer->GetUpgradeCost(1, upgradeLevel);
 			}
 			else if (action == "upgrade_tank")
 			{
 				DL_ASSERT_EXP(upgradeLevel != -1, "[ButtonWidget] action 'upgrade_tank' needs an 'upgradelevel'");
-				myTooltipInfo->myCooldown = &aPlayer->GetUpgradeMaxCooldown(2);
-				myTooltipInfo->myCooldownType = eCooldownType::UPGRADE;
+				//myTooltipInfo->myCooldown = &aPlayer->GetUpgradeMaxCooldown(2);
+				//myTooltipInfo->myCooldownType = eCooldownType::UPGRADE;
 				myTooltipInfo->myUpgradeLevel = 2;
 				myTooltipInfo->myArftifactCost = &aPlayer->GetUpgradeCost(2, upgradeLevel);
 			}
@@ -272,6 +272,12 @@ namespace GUI
 			int unitID = -1;
 			aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "onclick"), "id", unitID);
 			myClickEvent = new OnClickMessage(eOnClickEvent::UPGRADE_UNIT, unitID);
+		}
+		else if (clickEvent == "spawn_locked_unit")
+		{
+			int ID = -1;
+			aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "onclick"), "id", ID);
+			myClickEvent = new OnClickMessage(eOnClickEvent::SPAWN_LOCKED_UNIT, ID);
 		}
 		else
 		{

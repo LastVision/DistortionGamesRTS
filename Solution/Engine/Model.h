@@ -41,6 +41,7 @@ namespace Prism
 
 		void Render(const CU::Matrix44<float>& aOrientation, const CU::Vector3<float>& aCameraPosition, bool aIsDepthRender);
 
+		void DeActivateSurfaces();
 		void ActivateAlbedo(eOwnerType aOwner);
 		
 		bool SetGPUState(const CU::GrowingArray<CU::Matrix44<float>>& someWorldMatrices

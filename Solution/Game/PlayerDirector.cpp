@@ -456,6 +456,20 @@ void PlayerDirector::ReceiveMessage(const OnClickMessage& aMessage)
 		myBuilding->GetComponent<BuildingComponent>()->Abort(aMessage.myID);
 		return;
 	}
+	else if (aMessage.myEvent == eOnClickEvent::SPAWN_LOCKED_UNIT)
+	{
+		switch (aMessage.myID)
+		{
+		case 1:
+			PostMaster::GetInstance()->SendMessage(NotificationMessage("Ranger is not unlocked yet."));
+			break;
+		case 2:
+			PostMaster::GetInstance()->SendMessage(NotificationMessage("Tank is not unlocked yet."));
+			break;
+		}
+		return;
+	}
+
 
 	if (mySelectedUnits.Size() > 0 && mySelectedUnits[0]->GetOwner() == myOwner)
 	{

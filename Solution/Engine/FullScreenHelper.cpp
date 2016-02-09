@@ -130,6 +130,7 @@ namespace Prism
 
 		myRenderToTextureData.mySource->SetResource(aSource->GetShaderView());
 		Render(myRenderToTextureData.myEffect);
+		myRenderToTextureData.mySource->SetResource(nullptr);
 	}
 
 	void FullScreenHelper::RenderToScreen(Texture* aSource, Texture* aDepth)
@@ -143,6 +144,7 @@ namespace Prism
 
 		myRenderToTextureData.mySource->SetResource(aSource->GetShaderView());
 		Render(myRenderToTextureData.myEffect);
+		myRenderToTextureData.mySource->SetResource(nullptr);
 	}
 
 	void FullScreenHelper::CopyTexture(Texture* aSource, Texture* aTarget)
@@ -176,6 +178,9 @@ namespace Prism
 		{
 			Render(myCombineData.myEffect, "NoDepth");
 		}
+		myCombineData.mySourceA->SetResource(nullptr);
+		myCombineData.mySourceB->SetResource(nullptr);
+
 	}
 
 	void FullScreenHelper::CombineTextures(Texture* aSourceA, Texture* aDepthA
@@ -197,6 +202,11 @@ namespace Prism
 		Engine::GetInstance()->GetContex()->OMSetRenderTargets(1, &target, depth);
 
 		Render(myCombineData.myEffect, "NoDepth");
+
+		myCombineData.mySourceA->SetResource(nullptr);
+		myCombineData.myDepthA->SetResource(nullptr);
+		myCombineData.mySourceB->SetResource(nullptr);
+		myCombineData.myDepthB->SetResource(nullptr);
 	}
 
 	void FullScreenHelper::CreateCombineData()
@@ -383,6 +393,7 @@ namespace Prism
 		myBloomData.myBloomVariable->SetResource(myBloomData.myMiddleMan->GetShaderView());
 
 		Render(myBloomData.myBloomEffect, "BLOOM_Y");
+		myBloomData.myBloomVariable->SetResource(nullptr);
 	}
 
 	void FullScreenHelper::OnResize(float aWidth, float aHeight)
@@ -405,5 +416,8 @@ namespace Prism
 		myFogOfWarEffect->SetTexture(aWorldTexture);
 
 		Render(myFogOfWarEffect, "Render");
+
+		myFogOfWarEffect->SetFogOfWarTexture(nullptr);
+		myFogOfWarEffect->SetTexture(nullptr);
 	}
 }

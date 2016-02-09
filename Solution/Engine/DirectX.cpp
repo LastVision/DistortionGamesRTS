@@ -275,7 +275,7 @@ bool Prism::DirectX::D3DSwapChainSetup()
 		D3D_DRIVER_TYPE_HARDWARE,
 		NULL,
 #ifdef RELEASE_BUILD
-		NULL,
+		D3D11_CREATE_DEVICE_DEBUG,
 #else
 		D3D11_CREATE_DEVICE_DEBUG,
 #endif
