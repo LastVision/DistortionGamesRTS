@@ -41,8 +41,8 @@ void OptionsState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCu
 	mySfxText = new Prism::Text(*Prism::Engine::GetInstance()->GetFont(Prism::eFont::DIALOGUE));
 	
 	CU::Vector2<float> floatScreenPos(windowSize.x, windowSize.y);
-	myMusicText->SetPosition({ floatScreenPos.x * 0.5f - 60, floatScreenPos.y * 0.5f });
-	mySfxText->SetPosition({ floatScreenPos.x * 0.5f - 60, floatScreenPos.y * 0.5f + 60.f });
+	myMusicText->SetPosition({ floatScreenPos.x * 0.5f - 120, floatScreenPos.y * 0.5f });
+	mySfxText->SetPosition({ floatScreenPos.x * 0.5f - 120, floatScreenPos.y * 0.5f + 60.f });
 
 	myMusicVolume = Prism::Audio::AudioInterface::GetInstance()->GetMusicVolume();
 	mySfxVolume = Prism::Audio::AudioInterface::GetInstance()->GetSFXVolume();
