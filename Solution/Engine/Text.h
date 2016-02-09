@@ -39,9 +39,9 @@ inline void Prism::Text::SetPosition(const CU::Vector2<float>& aPosition)
 	myPosition.y -= Engine::GetInstance()->GetWindowSize().y;
 }
 
-inline void Prism::Text::SetScale(const CU::Vector2<float>&)
+inline void Prism::Text::SetScale(const CU::Vector2<float>& aScale)
 {
-	myScale = { 1.f, 1.f }; // scaling doesn't work, gets pixelated
+	myScale = aScale;
 }
 
 inline void Prism::Text::SetColor(const CU::Vector4<float>& aColor)
