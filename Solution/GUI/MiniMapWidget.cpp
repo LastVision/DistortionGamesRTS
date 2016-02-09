@@ -119,7 +119,7 @@ namespace GUI
 		RenderVictoryPoints(aParentPosition);
 		RenderBases(aParentPosition);
 		RenderUnits(aParentPosition);
-		//RenderArtifacts(aParentPosition);
+		RenderArtifacts(aParentPosition);
 
 		CU::Vector2<float> cameraPosition = { myCameraOrientation->GetPos().x, myCameraOrientation->GetPos().z };
 		cameraPosition /= 255.f;
