@@ -245,8 +245,10 @@ namespace Prism
 			}
 			else
 			{
-				myGraphicalParticles[i].myAlpha -= myGraphicalParticles[i].myLifeTime * aDeltaTime;
+
+				myGraphicalParticles[i].myAlpha = myGraphicalParticles[i].myLifeTime / myParticleEmitterData->myParticlesLifeTime;
 			}
+
 			if (myGraphicalParticles[i].mySize >= 0.f)
 			{
 				myGraphicalParticles[i].mySize += myParticleEmitterData->myData.mySizeDelta * aDeltaTime;
