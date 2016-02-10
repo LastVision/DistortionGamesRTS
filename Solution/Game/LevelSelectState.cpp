@@ -8,6 +8,8 @@
 #include <PostMaster.h>
 #include "StateStackProxy.h"
 #include <FadeMessage.h>
+#include <ModelLoader.h>
+#include <SpriteProxy.h>
 
 #ifdef USE_DIFFICULTY
 #include "DifficultySelectState.h"
@@ -16,6 +18,17 @@
 LevelSelectState::LevelSelectState()
 	: myGUIManager(nullptr)
 {
+	CU::Vector2<float> logoSize(512.f, 512.f);
+	myLogo = Prism::ModelLoader::GetInstance()->LoadSprite("Data/Resource/Texture/Menu/MainMenu/T_gamelogo.dds"
+		, logoSize, logoSize * 0.5f);
+	myLogoDust = Prism::ModelLoader::GetInstance()->LoadSprite("Data/Resource/Texture/Menu/MainMenu/T_gamelogo_dust.dds"
+		, logoSize, logoSize * 0.5f);
+
+	myWindowSize = CU::Vector2<float>(float(Prism::Engine::GetInstance()->GetWindowSize().x)
+		, float(Prism::Engine::GetInstance()->GetWindowSize().y));
+
+	myLogoEndPosition.x = myWindowSize.x * 0.5f;
+	myLogoEndPosition.y = myWindowSize.y - (myLogo->GetSize().y * 0.5f) + 25.f;
 }
 
 LevelSelectState::~LevelSelectState()
@@ -63,6 +76,8 @@ const eStateStatus LevelSelectState::Update(const float& aDeltaTime)
 void LevelSelectState::Render()
 {
 	myGUIManager->Render();
+	myLogo->Render(myLogoEndPosition);
+	myLogoDust->Render(myLogoEndPosition, CU::Vector2<float>(1.f, 1.f), CU::Vector4<float>(1.f, 1.f, 1.f, 1.f));
 }
 
 void LevelSelectState::ResumeState()
