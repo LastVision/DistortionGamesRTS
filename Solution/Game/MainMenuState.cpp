@@ -123,6 +123,7 @@ const eStateStatus MainMenuState::Update(const float& aDeltaTime)
 			{
 				myLogoDone = true;
 				myMenuAlpha = 0.f;
+				Prism::Audio::AudioInterface::GetInstance()->PostEvent("Logo_Thud", 0);
 			}
 			if (myGUIPosition.x < 0.f)
 			{
