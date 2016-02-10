@@ -139,7 +139,7 @@ void EmitterManager::ReceiveMessage(const EmitterMessage& aMessage)
 	{
 		if (aMessage.myShouldKillEmitter == true)
 		{
-			aMessage.myEmitter->KillEmitter(2.f);
+			aMessage.myEmitter->KillEmitter(1.f);
 		}
 	}
 
