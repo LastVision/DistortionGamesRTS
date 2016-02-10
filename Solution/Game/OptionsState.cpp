@@ -102,8 +102,8 @@ void OptionsState::OnResize(int aWidth, int aHeight)
 	}
 	myMusicText->SetPosition({ firstRow.x - moveAmount, firstRow.y - (widgetCont->At(1)->GetSize().y * 0.25f) });
 	mySfxText->SetPosition({ secondRow.x - moveAmount, secondRow.y - (widgetCont->At(3)->GetSize().y * 0.25f) });
-	myVoiceText->SetPosition({ thirdRow.x - moveAmount, thirdRow.y - (widgetCont->At(5)->GetSize().y * 0.25f) });
-	myShadowText->SetPosition({ fourthRow.x - moveAmount, fourthRow.y });
+	myVoiceText->SetPosition({ thirdRow.x - moveAmount, thirdRow.y - (widgetCont->At(5)->GetSize().y * 0.2f) });
+	myShadowText->SetPosition({ fourthRow.x - moveAmount, fourthRow.y - (widgetCont->At(7)->GetSize().y * 0.10f) });
 }
 
 const eStateStatus OptionsState::Update(const float& aDeltaTime)

@@ -241,11 +241,25 @@ void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 		}
 		if (CU::InputWrapper::GetInstance()->KeyDown(DIK_W) == true)
 		{
-			SpawnUnit(eUnitType::RANGER);
+			if (myHasUnlockedRanger == true)
+			{
+				SpawnUnit(eUnitType::RANGER);
+			}
+			else
+			{
+				PostMaster::GetInstance()->SendMessage(NotificationMessage("Ranger is not unlocked yet."));
+			}
 		}
 		if (CU::InputWrapper::GetInstance()->KeyDown(DIK_E) == true)
 		{
-			SpawnUnit(eUnitType::TANK);
+			if (myHasUnlockedTank == true)
+			{
+				SpawnUnit(eUnitType::TANK);
+			}
+			else
+			{
+				PostMaster::GetInstance()->SendMessage(NotificationMessage("Tank is not unlocked yet."));
+			}
 		}
 		if (CU::InputWrapper::GetInstance()->KeyDown(DIK_A) == true)
 		{
@@ -253,13 +267,27 @@ void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 		}
 		if (CU::InputWrapper::GetInstance()->KeyDown(DIK_S) == true)
 		{
-			UpgradeUnit(eUnitType::RANGER);
+			if (myHasUnlockedRanger == true)
+			{
+				UpgradeUnit(eUnitType::RANGER);
+			}
+			else
+			{
+				PostMaster::GetInstance()->SendMessage(NotificationMessage("Ranger is not unlocked yet."));
+			}
 		}
 		if (CU::InputWrapper::GetInstance()->KeyDown(DIK_D) == true)
 		{
-			UpgradeUnit(eUnitType::TANK);
+			if (myHasUnlockedTank == true)
+			{
+				UpgradeUnit(eUnitType::TANK);
+			}
+			else
+			{
+				PostMaster::GetInstance()->SendMessage(NotificationMessage("Tank is not unlocked yet."));
+			}
 		}
-	}
+		}
 
 	myCurrentDoubleClickTimer -= aDeltaTime;
 	if (myCurrentDoubleClickTimer <= 0 && myHasDoubleClicked == true)
@@ -388,7 +416,7 @@ void PlayerDirector::Update(float aDeltaTime, const Prism::Camera& aCamera)
 	myTextEventManager->Update(aDeltaTime);
 
 	myRallypointVisible = myBuilding->IsSelected();
-}
+	}
 
 void PlayerDirector::Render(const Prism::Camera& aCamera)
 {
@@ -682,8 +710,8 @@ CU::Vector3<float> PlayerDirector::CalcCursorWorldPosition(const CU::Vector2<flo
 		{
 			myTweakValueX += 0.1f;
 			myTweakValueY += 0.1f;
-		}
 	}
+}
 	if (CU::InputWrapper::GetInstance()->KeyIsPressed(DIK_K) == true)
 	{
 		myTweakValueX -= 0.001f;
@@ -1027,24 +1055,24 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 
 		PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
 		pos.x += 5.f;
-	/*	PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
-		pos.x += 5.f;
-		pos.z += 5.f;
-		PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
-		pos.x += 5.f;
-		pos.z -= 5.f;
-		PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
-		pos.x -= 5.f;
-		pos.z -= 5.f;
-		PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
-		pos.x -= 5.f;
-		pos.z += 5.f;
-		PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
-		pos.x -= 5.f;
-		PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
-		pos.z += 5.f;
-		PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
-		pos.z -= 5.f;*/
+		/*	PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
+			pos.x += 5.f;
+			pos.z += 5.f;
+			PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
+			pos.x += 5.f;
+			pos.z -= 5.f;
+			PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
+			pos.x -= 5.f;
+			pos.z -= 5.f;
+			PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
+			pos.x -= 5.f;
+			pos.z += 5.f;
+			PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
+			pos.x -= 5.f;
+			PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
+			pos.z += 5.f;
+			PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
+			pos.z -= 5.f;*/
 #endif
 	}
 
@@ -1067,46 +1095,46 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 
 		PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
 		pos.x += 5.f;
-	/*	PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
-		pos.x += 5.f;
-		pos.z += 5.f;
-		PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
-		pos.x += 5.f;
-		pos.z -= 5.f;
-		PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
-		pos.x -= 5.f;
-		pos.z -= 5.f;
-		PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
-		pos.x -= 5.f;
-		pos.z += 5.f;
-		PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
-		pos.x -= 5.f;
-		PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
-		pos.z += 5.f;
-		PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
-		pos.z -= 5.f;
+		/*	PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
+			pos.x += 5.f;
+			pos.z += 5.f;
+			PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
+			pos.x += 5.f;
+			pos.z -= 5.f;
+			PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
+			pos.x -= 5.f;
+			pos.z -= 5.f;
+			PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
+			pos.x -= 5.f;
+			pos.z += 5.f;
+			PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
+			pos.x -= 5.f;
+			PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
+			pos.z += 5.f;
+			PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
+			pos.z -= 5.f;
 
-		
-		PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
-		pos.x += 7.5f;
-		PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
-		pos.x += 7.5f;
-		pos.z += 7.5f;
-		PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
-		pos.x += 7.5f;
-		pos.z -= 7.5f;
-		PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
-		pos.x -= 7.5f;
-		pos.z -= 7.5f;
-		PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
-		pos.x -= 7.5f;
-		pos.z += 7.5f;
-		PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
-		pos.x -= 7.5f;
-		PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
-		pos.z += 7.5f;
-		PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
-		pos.z -= 7.5f;*/
+
+			PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
+			pos.x += 7.5f;
+			PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
+			pos.x += 7.5f;
+			pos.z += 7.5f;
+			PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
+			pos.x += 7.5f;
+			pos.z -= 7.5f;
+			PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
+			pos.x -= 7.5f;
+			pos.z -= 7.5f;
+			PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
+			pos.x -= 7.5f;
+			pos.z += 7.5f;
+			PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
+			pos.x -= 7.5f;
+			PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
+			pos.z += 7.5f;
+			PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
+			pos.z -= 7.5f;*/
 #endif
 		if (myMouseIsOverGUI == true)
 		{
@@ -1164,7 +1192,7 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 		else
 		{
 			hoveredEnemy = nullptr;
-		}		
+		}
 	}
 
 	bool hasSelected = false;
