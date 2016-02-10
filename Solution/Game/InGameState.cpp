@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+#include <AudioInterface.h>
 #include <Camera.h>
 #include "ClickableState.h"
 #include "Console.h"
@@ -358,6 +359,8 @@ void InGameState::SetLevel()
 
 void InGameState::RestartLevel()
 {
+	Prism::Audio::AudioInterface::GetInstance()->PostEvent("FadeForWinLoose", 0);
+	Prism::Audio::AudioInterface::GetInstance()->PostEvent("PlayLoose", 0);
 	bool runtime = Prism::MemoryTracker::GetInstance()->GetRunTime();
 	Prism::MemoryTracker::GetInstance()->SetRunTime(false);
 	GameStateMessage* newEvent = new GameStateMessage(eGameState::RELOAD_LEVEL);
@@ -367,6 +370,8 @@ void InGameState::RestartLevel()
 
 void InGameState::CompleteLevel()
 {
+	Prism::Audio::AudioInterface::GetInstance()->PostEvent("FadeForWinLoose", 0);
+	Prism::Audio::AudioInterface::GetInstance()->PostEvent("PlayWin", 0);
 	bool runtime = Prism::MemoryTracker::GetInstance()->GetRunTime();
 	Prism::MemoryTracker::GetInstance()->SetRunTime(false);
 	GameStateMessage* newEvent = new GameStateMessage(eGameState::LOAD_NEXT_LEVEL);
@@ -376,6 +381,10 @@ void InGameState::CompleteLevel()
 
 void InGameState::CompleteGame()
 {
+	Prism::Audio::AudioInterface::GetInstance()->PostEvent("FadeForWinLoose", 0);
+	Prism::Audio::AudioInterface::GetInstance()->PostEvent("PlayWin", 0);
+	//Fadea ut levelmusiken
+	//Spela win 
 	ShowMessage("Data/Resource/Texture/Menu/T_background_completed_game.dds", { 1024, 1024 }, "Press [space] to continue.");
 	myIsComplete = true;
 }
