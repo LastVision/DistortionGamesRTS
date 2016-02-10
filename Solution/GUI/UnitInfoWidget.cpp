@@ -187,7 +187,13 @@ namespace GUI
 		{
 			for (int i = 0; i < myUnits.Size(); i++)
 			{
-				CU::Vector2<float> position = { (myGruntUnit->GetSize().x * i) + (i * 10.f), 0.f };
+
+				int x = i % 4;
+				int y = i / 4;
+
+				CU::Vector2<float> position = { (myPosition.x + myGruntUnit->GetSize().x * x) + (x * 10.f), myPosition.y - myGruntUnit->GetSize().y * y - y * 10.f };
+
+				//CU::Vector2<float> position = { (myGruntUnit->GetSize().x * i) + (i * 10.f), 0.f };
 				position += myUnitPosition + myParent->GetPosition(); // hitta bättre lösning för detta
 
 				if (aPosition.x >= position.x &&
