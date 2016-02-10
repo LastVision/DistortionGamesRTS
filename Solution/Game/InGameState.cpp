@@ -7,6 +7,7 @@
 #include <ColoursForBG.h>
 #include "ConsoleState.h"
 #include "CreditMenuState.h"
+#include <Cursor.h>
 #include <EffectContainer.h>
 #include <Engine.h>
 #include <Entity.h>
@@ -84,7 +85,6 @@ void InGameState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCur
 	myCursor = aCursor;
 	myLevelFactory = new LevelFactory("Data/Level/LI_level.xml", *myCamera, myCursor);
 	myLevel = myLevelFactory->LoadLevel(myStartLevelIndex, false, myDifficulty);
-
 
 
 	CU::Vector2<int> windowSize = Prism::Engine::GetInstance()->GetWindowSizeInt();

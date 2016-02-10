@@ -61,9 +61,10 @@ void PostMaster::SendMessage(const Message& aMessage)
 	{
 		for (int i = 0; i < subscribers.Size(); ++i)
 		{
+			bool letThrough = subscribers[i].myLetThrough;
 			subscribers[i].mySubscriber->ReceiveMessage(aMessage);
 
-			if (subscribers[i].myLetThrough == false)
+			if (letThrough == false)
 			{
 				return;
 			}

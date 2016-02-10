@@ -8,6 +8,7 @@
 #include <PostMaster.h>
 #include "StateStackProxy.h"
 #include <FadeMessage.h>
+#include <Cursor.h>
 
 DifficultySelectState::DifficultySelectState(int aLevelindex)
 	: myLevelIndex(aLevelindex)
@@ -121,6 +122,7 @@ void DifficultySelectState::ReceiveMessage(const OnClickMessage& aMessage)
 			myDifficulty = eDifficulty::EASY;
 			myIsFading = true;
 			PostMaster::GetInstance()->SendMessage(FadeMessage(1.f / 3.f));
+			myCursor->SetShouldRender(false);
 			//myStateStack->PushSubGameState(new InGameState(myLevelIndex, eDifficulty::EASY));
 			break;
 		case eOnClickEvent::GAME_START_NORMAL:
@@ -129,6 +131,7 @@ void DifficultySelectState::ReceiveMessage(const OnClickMessage& aMessage)
 			myDifficulty = eDifficulty::NORMAL;
 			myIsFading = true;
 			PostMaster::GetInstance()->SendMessage(FadeMessage(1.f / 3.f));
+			myCursor->SetShouldRender(false);
 			//myStateStack->PushSubGameState(new InGameState(myLevelIndex, eDifficulty::NORMAL));
 			break;
 		case eOnClickEvent::GAME_START_HARD:
@@ -137,6 +140,7 @@ void DifficultySelectState::ReceiveMessage(const OnClickMessage& aMessage)
 			myDifficulty = eDifficulty::HARD;
 			myIsFading = true;
 			PostMaster::GetInstance()->SendMessage(FadeMessage(1.f / 3.f));
+			myCursor->SetShouldRender(false);
 			//myStateStack->PushSubGameState(new InGameState(myLevelIndex, eDifficulty::HARD));
 			break;
 		case eOnClickEvent::GAME_QUIT:
