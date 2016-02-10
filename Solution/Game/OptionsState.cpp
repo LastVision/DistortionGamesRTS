@@ -77,9 +77,25 @@ void OptionsState::OnResize(int aWidth, int aHeight)
 	CU::Vector2<float> firstRow = widgetCont->At(3)->GetPosition();
 	CU::Vector2<float> secondRow = widgetCont->At(1)->GetPosition();
 	CU::Vector2<float> fourthRow = widgetCont->At(5)->GetPosition();
-	myMusicText->SetPosition({ firstRow.x - 320.f, firstRow.y - (widgetCont->At(1)->GetSize().y * 0.25f)});
-	mySfxText->SetPosition({ secondRow.x - 320.f, secondRow.y - (widgetCont->At(3)->GetSize().y * 0.25f) });
-	myShadowText->SetPosition({ fourthRow.x - 320.f, fourthRow.y });
+	float moveAmount = 320.f;
+	float ratio = static_cast<float>(aWidth) / static_cast<float>(aHeight);
+
+	float epsilon = 0.1f;
+	if (ratio + epsilon >= 16.f / 9.f)
+	{
+		moveAmount = 320.f;
+	}
+	else if (ratio + epsilon >= 16.f / 10.f)
+	{
+		moveAmount = 320.f;
+	}
+	else
+	{
+		moveAmount = 220.f;
+	}
+	myMusicText->SetPosition({ firstRow.x - moveAmount, firstRow.y - (widgetCont->At(1)->GetSize().y * 0.25f) });
+	mySfxText->SetPosition({ secondRow.x - moveAmount, secondRow.y - (widgetCont->At(3)->GetSize().y * 0.25f) });
+	myShadowText->SetPosition({ fourthRow.x - moveAmount, fourthRow.y });
 }
 
 const eStateStatus OptionsState::Update(const float& aDeltaTime)
