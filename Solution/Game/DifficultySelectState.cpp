@@ -7,16 +7,22 @@
 #include <OnClickMessage.h>
 #include <PostMaster.h>
 #include "StateStackProxy.h"
+#include <FadeMessage.h>
 
 DifficultySelectState::DifficultySelectState(int aLevelindex)
-	: myLevelindex(aLevelindex)
+	: myLevelIndex(aLevelindex)
 	, myGUIManager(nullptr)
+	, myFadingGUIManager(nullptr)
+	, myFadeTimer(0.f)
+	, myIsFading(false)
+	, myHasRenderedFadingGUI(false)
 {
 }
 
 DifficultySelectState::~DifficultySelectState()
 {
 	SAFE_DELETE(myGUIManager);
+	SAFE_DELETE(myFadingGUIManager);
 	myCursor = nullptr;
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::ON_CLICK, this);
 }
@@ -29,9 +35,15 @@ void DifficultySelectState::InitState(StateStackProxy* aStateStackProxy, GUI::Cu
 	myStateStack = aStateStackProxy;
 	myCursor = aCursor;
 	myGUIManager = new GUI::GUIManager(myCursor, "Data/Resource/GUI/GUI_difficulty_select.xml", nullptr, nullptr, nullptr, -1);
+	myFadingGUIManager = new GUI::GUIManager(myCursor, "Data/Resource/GUI/GUI_loading_screen.xml", nullptr, nullptr, nullptr, -1);
 
 	CU::Vector2<int> windowSize = Prism::Engine::GetInstance()->GetWindowSizeInt();
 	OnResize(windowSize.x, windowSize.y);
+
+	PostMaster::GetInstance()->SendMessage(FadeMessage(1.f / 3.f));
+	myFadeTimer = 1.f / 3.f;
+	myIsFading = false;
+	myHasRenderedFadingGUI = false;
 }
 
 void DifficultySelectState::EndState()
@@ -49,24 +61,52 @@ const eStateStatus DifficultySelectState::Update(const float& aDeltaTime)
 		return eStateStatus::ePopMainState;
 	}
 
-	myGUIManager->Update(aDeltaTime);
+	
+
+	if (myIsFading == true)
+	{
+		myFadeTimer -= aDeltaTime;
+		if (myFadeTimer < 0.f)
+		{
+			myStateStack->PushSubGameState(new InGameState(myLevelIndex, myDifficulty));
+			myFadeTimer = 0.f;
+		}
+	}
+	else
+	{
+		myGUIManager->Update(aDeltaTime);
+	}
 
 	return myStateStatus;
 }
 
 void DifficultySelectState::Render()
 {
-	myGUIManager->Render();
+	
+	if (myIsFading == true)
+	{
+		myFadingGUIManager->Render();
+	}
+	else
+	{
+		myGUIManager->Render();
+
+	}
 }
 
 void DifficultySelectState::ResumeState()
 {
 	PostMaster::GetInstance()->Subscribe(eMessageType::ON_CLICK, this);
+	PostMaster::GetInstance()->SendMessage(FadeMessage(1.f / 3.f));
+	myFadeTimer = 1.f / 3.f;
+	myIsFading = false;
+	myHasRenderedFadingGUI = false;
 }
 
 void DifficultySelectState::OnResize(int aWidth, int aHeight)
 {
 	myGUIManager->OnResize(aWidth, aHeight);
+	myFadingGUIManager->OnResize(aWidth, aHeight);
 }
 
 void DifficultySelectState::ReceiveMessage(const OnClickMessage& aMessage)
@@ -78,17 +118,26 @@ void DifficultySelectState::ReceiveMessage(const OnClickMessage& aMessage)
 		case eOnClickEvent::GAME_START_EASY:
 			////Prism::MemoryTracker::GetInstance()->SetRunTime(false);
 			PostMaster::GetInstance()->UnSubscribe(eMessageType::ON_CLICK, this);
-			myStateStack->PushSubGameState(new InGameState(myLevelindex, eDifficulty::EASY));
+			myDifficulty = eDifficulty::EASY;
+			myIsFading = true;
+			PostMaster::GetInstance()->SendMessage(FadeMessage(1.f / 3.f));
+			//myStateStack->PushSubGameState(new InGameState(myLevelIndex, eDifficulty::EASY));
 			break;
 		case eOnClickEvent::GAME_START_NORMAL:
 			////Prism::MemoryTracker::GetInstance()->SetRunTime(false);
 			PostMaster::GetInstance()->UnSubscribe(eMessageType::ON_CLICK, this);
-			myStateStack->PushSubGameState(new InGameState(myLevelindex, eDifficulty::NORMAL));
+			myDifficulty = eDifficulty::NORMAL;
+			myIsFading = true;
+			PostMaster::GetInstance()->SendMessage(FadeMessage(1.f / 3.f));
+			//myStateStack->PushSubGameState(new InGameState(myLevelIndex, eDifficulty::NORMAL));
 			break;
 		case eOnClickEvent::GAME_START_HARD:
 			////Prism::MemoryTracker::GetInstance()->SetRunTime(false);
 			PostMaster::GetInstance()->UnSubscribe(eMessageType::ON_CLICK, this);
-			myStateStack->PushSubGameState(new InGameState(myLevelindex, eDifficulty::HARD));
+			myDifficulty = eDifficulty::HARD;
+			myIsFading = true;
+			PostMaster::GetInstance()->SendMessage(FadeMessage(1.f / 3.f));
+			//myStateStack->PushSubGameState(new InGameState(myLevelIndex, eDifficulty::HARD));
 			break;
 		case eOnClickEvent::GAME_QUIT:
 			myStateStatus = eStateStatus::ePopMainState;

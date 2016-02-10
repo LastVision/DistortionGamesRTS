@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include <Camera.h>
 #include <Engine.h>
-//#include "FadeMessage.h"
+#include "FadeMessage.h"
 #include "GameStateMessage.h"
 #include "MessageState.h"
 #include <ModelLoader.h>
@@ -45,12 +45,11 @@ void MessageState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCu
 
 	OnResize(Prism::Engine::GetInstance()->GetWindowSizeInt().x, Prism::Engine::GetInstance()->GetWindowSizeInt().y);
 	//PostMaster::GetInstance()->SendMessage(FadeMessage(1.f / 3.f));
-
 }
 
 void MessageState::EndState()
 {
-	//PostMaster::GetInstance()->SendMessage(FadeMessage(1.f / 3.f));
+	
 }
 
 const eStateStatus MessageState::Update(const float&)

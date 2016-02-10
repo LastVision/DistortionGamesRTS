@@ -5,7 +5,7 @@
 #include "InputWrapper.h"
 #include "OnClickMessage.h"
 #include "PostMaster.h"
-
+#include <FadeMessage.h>
 HelpState::HelpState()
 	: myGUIManager(nullptr)
 {
@@ -31,6 +31,8 @@ void HelpState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCurso
 
 	CU::Vector2<int> windowSize = Prism::Engine::GetInstance()->GetWindowSizeInt();
 	OnResize(windowSize.x, windowSize.y);
+
+	PostMaster::GetInstance()->SendMessage(FadeMessage(1.f / 3.f));
 }
 
 void HelpState::EndState()
@@ -71,6 +73,7 @@ void HelpState::Render()
 void HelpState::ResumeState()
 {
 	myIsActiveState = true;
+	PostMaster::GetInstance()->SendMessage(FadeMessage(1.f / 3.f));
 }
 
 void HelpState::ReceiveMessage(const OnClickMessage& aMessage)

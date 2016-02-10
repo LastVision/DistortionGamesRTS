@@ -38,6 +38,11 @@ public:
 
 private:
 	GUI::GUIManager* myGUIManager;
-	int myLevelindex;
+	GUI::GUIManager* myFadingGUIManager;
+	int myLevelIndex;
+	eDifficulty myDifficulty;
+	float myFadeTimer;
+	bool myIsFading;
+	bool myHasRenderedFadingGUI;
 };
 

@@ -7,6 +7,7 @@
 #include <OnClickMessage.h>
 #include <PostMaster.h>
 #include "StateStackProxy.h"
+#include <FadeMessage.h>
 
 #ifdef USE_DIFFICULTY
 #include "DifficultySelectState.h"
@@ -35,6 +36,8 @@ void LevelSelectState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor*
 
 	CU::Vector2<int> windowSize = Prism::Engine::GetInstance()->GetWindowSizeInt();
 	OnResize(windowSize.x, windowSize.y);
+
+	PostMaster::GetInstance()->SendMessage(FadeMessage(1.f / 3.f));
 }
 
 void LevelSelectState::EndState()
@@ -65,6 +68,7 @@ void LevelSelectState::Render()
 void LevelSelectState::ResumeState()
 {
 	PostMaster::GetInstance()->Subscribe(eMessageType::ON_CLICK, this);
+	PostMaster::GetInstance()->SendMessage(FadeMessage(1.f / 3.f));
 }
 
 void LevelSelectState::OnResize(int aWidth, int aHeight)

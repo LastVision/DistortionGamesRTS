@@ -7,6 +7,7 @@
 #include "OptionsState.h"
 #include "InGameState.h"
 #include "HelpState.h"
+#include <FadeMessage.h>
 
 InGameMenuState::InGameMenuState()
 	: myGUIManager(nullptr)
@@ -33,6 +34,8 @@ void InGameMenuState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* 
 
 	CU::Vector2<int> windowSize = Prism::Engine::GetInstance()->GetWindowSizeInt();
 	OnResize(windowSize.x, windowSize.y);
+
+	PostMaster::GetInstance()->SendMessage(FadeMessage(1.f / 3.f));
 }
 
 void InGameMenuState::EndState()
@@ -68,6 +71,7 @@ void InGameMenuState::Render()
 void InGameMenuState::ResumeState()
 {
 	myIsActiveState = true;
+	PostMaster::GetInstance()->SendMessage(FadeMessage(1.f / 3.f));
 }
 
 void InGameMenuState::ReceiveMessage(const OnClickMessage& aMessage)

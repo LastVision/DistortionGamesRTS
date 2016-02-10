@@ -10,7 +10,7 @@
 #include "HelpState.h"
 #include <Text.h>
 #include <WidgetContainer.h>
-
+#include <FadeMessage.h>
 OptionsState::OptionsState()
 	: myGUIManager(nullptr)
 {
@@ -65,6 +65,8 @@ void OptionsState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCu
 
 	myMusicText->SetText("Music: " + std::to_string(myMusicVolume));
 	mySfxText->SetText("SFX: " + std::to_string(mySfxVolume));
+
+	PostMaster::GetInstance()->SendMessage(FadeMessage(1.f / 3.f));
 	myVoiceText->SetText("Voice: " + std::to_string(myVoiceVolume));
 }
 
@@ -152,6 +154,7 @@ void OptionsState::Render()
 void OptionsState::ResumeState()
 {
 	myIsActiveState = true;
+	PostMaster::GetInstance()->SendMessage(FadeMessage(1.f / 3.f));
 }
 
 void OptionsState::ReceiveMessage(const OnClickMessage& aMessage)

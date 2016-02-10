@@ -34,6 +34,7 @@
 #include <ScriptSystem.h>
 #include <CinematicMessage.h>
 #include <RunScriptMessage.h>
+#include <FadeMessage.h>
 
 InGameState::InGameState(int aLevelIndex, eDifficulty aDifficulty)
 	: myShouldReOpenConsole(false)
@@ -97,7 +98,7 @@ void InGameState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCur
 	PostMaster::GetInstance()->SendMessage(RunScriptMessage("Data/Script/Autorun.script"));
 
 	myIsActiveState = true;
-
+	PostMaster::GetInstance()->SendMessage(FadeMessage(1.f / 3.f));
 }
 
 void InGameState::EndState()
@@ -219,6 +220,7 @@ void InGameState::Render()
 void InGameState::ResumeState()
 {
 	myIsActiveState = true;
+	PostMaster::GetInstance()->SendMessage(FadeMessage(1.f / 3.f));
 }
 
 void InGameState::OnResize(int aWidth, int aHeight)
@@ -247,6 +249,7 @@ void InGameState::ReceiveMessage(const GameStateMessage& aMessage)
 		//Prism::MemoryTracker::GetInstance()->SetRunTime(false);
 		myLevel = myLevelFactory->LoadCurrentLevel();
 		//Prism::MemoryTracker::GetInstance()->SetRunTime(runtime);
+		
 		PostMaster::GetInstance()->SendMessage(RunScriptMessage("Data/Script/Autorun.script"));
 		break;
 
@@ -281,7 +284,6 @@ void InGameState::ReceiveMessage(const GameStateMessage& aMessage)
 		//Prism::MemoryTracker::GetInstance()->SetRunTime(runtime);
 		break;
 	}
-
 }
 
 void InGameState::ReceiveMessage(const OnClickMessage& aMessage)
