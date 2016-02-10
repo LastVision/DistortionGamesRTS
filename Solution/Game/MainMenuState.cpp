@@ -80,11 +80,13 @@ void MainMenuState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aC
 	myHasRunOnce = false;
 
 	GameSettingsSingleton::GetInstance();
+
+	PostMaster::GetInstance()->SendMessage(FadeMessage(1.f / 3.f));
 }
 
 void MainMenuState::EndState()
 {
-
+	
 }
 
 const eStateStatus MainMenuState::Update(const float& aDeltaTime)
@@ -152,6 +154,7 @@ void MainMenuState::ResumeState()
 {
 	PostMaster::GetInstance()->Subscribe(eMessageType::ON_CLICK, this);
 	Prism::Audio::AudioInterface::GetInstance()->PostEvent("Play_Menu", 0);
+	PostMaster::GetInstance()->SendMessage(FadeMessage(1.f / 3.f));
 }
 
 void MainMenuState::OnResize(int aWidth, int aHeight)

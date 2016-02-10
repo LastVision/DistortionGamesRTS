@@ -5,7 +5,7 @@
 #include "InputWrapper.h"
 #include "OnClickMessage.h"
 #include "InGameState.h"
-
+#include <FadeMessage.h>
 CreditMenuState::CreditMenuState()
 	: myGUIManager(nullptr)
 {
@@ -31,6 +31,8 @@ void CreditMenuState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* 
 
 	CU::Vector2<int> windowSize = Prism::Engine::GetInstance()->GetWindowSizeInt();
 	OnResize(windowSize.x, windowSize.y);
+
+	PostMaster::GetInstance()->SendMessage(FadeMessage(1.f / 3.f));
 }
 
 void CreditMenuState::EndState()
@@ -65,7 +67,7 @@ void CreditMenuState::Render()
 
 void CreditMenuState::ResumeState()
 {
-
+	PostMaster::GetInstance()->SendMessage(FadeMessage(1.f / 3.f));
 }
 
 void CreditMenuState::ReceiveMessage(const OnClickMessage& aMessage)

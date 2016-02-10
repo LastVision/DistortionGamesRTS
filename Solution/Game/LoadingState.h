@@ -6,6 +6,11 @@ namespace Prism
 	class SpriteProxy;
 }
 
+namespace GUI
+{
+	class GUIManager;
+}
+
 class LoadingState : public GameState
 {
 public:
@@ -21,10 +26,10 @@ public:
 	void OnResize(int aWidth, int aHeight) override;
 
 private:
-	Prism::SpriteProxy* myBackground;
+	GUI::GUIManager* myGUIManager;
+
 	Prism::SpriteProxy* myRotatingThing;
 	Prism::SpriteProxy* myRotatingThing2;
-	//Prism::Text* myText;
 	float myRotatingThingScale;
 
 	float myFinishedTextAlpha;
