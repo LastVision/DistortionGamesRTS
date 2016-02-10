@@ -4,6 +4,7 @@
 namespace Prism
 {
 	class SpriteProxy;
+	class SpriteAnimator;
 }
 
 class PlayerDirector;
@@ -16,6 +17,7 @@ namespace GUI
 		AbilityButton(XMLReader* aReader, tinyxml2::XMLElement* anXMLElement, const PlayerDirector* aPlayer);
 		~AbilityButton();
 
+		void Update(float aDelta) override;
 		void Render(const CU::Vector2<float>& aParentPosition) override;
 
 		void SetValue(const float& aFirstValue, const float& aSecondValue) override;
@@ -29,5 +31,8 @@ namespace GUI
 		Prism::SpriteProxy* myHasCooldownSprite;
 
 		float myPercentageMultiplier;
+
+		Prism::SpriteAnimator* myIsReadyAnimation;
+		bool myIsReady;
 	};
 }
