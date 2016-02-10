@@ -37,6 +37,7 @@ private:
 
 	float myAlpha;
 	bool myHasReachedTarget;
+	bool myHasJustLanded;
 
 	bool myActive;
 	bool myEffectActive;

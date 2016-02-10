@@ -30,6 +30,7 @@ TotemComponent::TotemComponent(Entity& aEntity, TotemComponentData& aData)
 	, myEffectActive(false)
 	, myDisapearing(false)
 	, myPlaced(false)
+	, myHasJustLanded(false)
 {
 	myOriginalPosition = myEntity.GetOrientation().GetPos();
 }
@@ -63,6 +64,7 @@ void TotemComponent::Update(float aDeltaTime)
 			Prism::Audio::AudioInterface::GetInstance()->PostEvent("Stop_Totem"
 				, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
 			myActive = false;
+			
 			//myEntity.SetPosition({ 1.f, 100.f, 128.f });
 			myDisapearing = true;
 			for (int i = 0; i < myUnits.Size(); ++i)
@@ -74,12 +76,14 @@ void TotemComponent::Update(float aDeltaTime)
 		{
 			if (myHasReachedTarget == true && myActive == true)
 			{
+				
 				for (int i = 0; i < myUnits.Size(); ++i)
 				{
 					myUnits[i]->GetComponent<HealthComponent>()->SetIsHealing(true);
 				}
 				if (myEffectActive == false)
 				{
+
 					PostMaster::GetInstance()->SendMessage(EmitterMessage("totem_healing", myTargetPosition, myEndTime, myRadius));
 					myEffectActive = true;
 				}
@@ -100,6 +104,13 @@ void TotemComponent::Update(float aDeltaTime)
 			myEntity.SetPosition(CU::Math::Lerp<CU::Vector3f>(myOriginalPosition, myTargetPosition, myAlpha));
 		}
 
+		if (myAlpha >= 1.0f && myHasReachedTarget == false && myHasJustLanded == false)
+		{
+			PostMaster::GetInstance()->SendMessage(EmitterMessage("totem_land", myTargetPosition));
+			myHasJustLanded = true;
+			Prism::Audio::AudioInterface::GetInstance()->PostEvent("Totem_HitGround"
+				, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+		}
 
 		if (myAlpha >= 1.2f && myHasReachedTarget == false)
 		{
@@ -111,8 +122,6 @@ void TotemComponent::Update(float aDeltaTime)
 			//	myActive = false;
 			//	myEntity.SetPosition(myOriginalPosition);
 			//}
-			Prism::Audio::AudioInterface::GetInstance()->PostEvent("Totem_HitGround"
-				, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
 			Prism::Audio::AudioInterface::GetInstance()->PostEvent("Play_Totem"
 				, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
 		}
@@ -186,5 +195,6 @@ void TotemComponent::SetTargetPosition(const CU::Vector3f& aTargetPosition)
 		myCurrentCooldown = myOriginalCooldown;
 		myDuration = 0.f;
 		myPlaced = true;
+		myHasJustLanded = false;
 	}
 }
