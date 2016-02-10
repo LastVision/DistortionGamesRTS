@@ -1044,10 +1044,17 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 
 		if (myFirstCameraPosition != aCamera.GetOrientation().GetPos())
 		{
-			CU::Vector3<float> difference = (aCamera.GetOrientation().GetPos() - myFirstCameraPosition) * 40.f;
-			CU::Vector2<float> screenPosition = { difference.x, difference.z };
-			myFirstMousePosition.x -= screenPosition.x;
-			myFirstMousePosition.y += screenPosition.y;
+			CU::Vector2<float> difference;
+			difference.x = (aCamera.GetOrientation().GetPos().x - myFirstCameraPosition.x) * 25.f;
+			difference.y = (aCamera.GetOrientation().GetPos().z - myFirstCameraPosition.z) * 25.f;
+			myFirstMousePosition.x -= difference.x;
+			myFirstMousePosition.y += difference.y;
+
+
+			//CU::Vector3<float> difference = (aCamera.GetOrientation().GetPos() - myFirstCameraPosition) * 40.f;
+			//CU::Vector2<float> screenPosition = { difference.x, difference.z };
+			//myFirstMousePosition.x -= screenPosition.x;
+			//myFirstMousePosition.y += screenPosition.y;
 
 			myFirstCameraPosition = aCamera.GetOrientation().GetPos();
 		}
