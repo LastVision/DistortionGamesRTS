@@ -364,10 +364,18 @@ void Director::ReceiveMessage(const KillUnitMessage& aMessage)
 			if (myHasUnlockedRanger == false && static_cast<eUnitType>(aMessage.myUnitType) == eUnitType::RANGER)
 			{
 				myHasUnlockedRanger = true;
+				if (myOwner == eOwnerType::PLAYER)
+				{
+					PostMaster::GetInstance()->SendMessage(NotificationMessage("You have unlocked ranger."));
+				}
 			}
 			else if (myHasUnlockedTank == false && static_cast<eUnitType>(aMessage.myUnitType) == eUnitType::TANK)
 			{
 				myHasUnlockedTank = true;
+				if (myOwner == eOwnerType::PLAYER)
+				{
+					PostMaster::GetInstance()->SendMessage(NotificationMessage("You have unlocked tank."));
+				}
 			}
 		}
 	}
