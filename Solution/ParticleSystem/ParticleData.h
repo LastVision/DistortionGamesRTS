@@ -34,7 +34,7 @@ struct GraphicalParticle
 	GraphicalParticle()
 		: myAlpha(0.0f)
 		, mySize(0.0f)
-		, myLifeTime(10.0f)
+		, myLifeTime(0.0f)
 		, myRotation(0.0f)
 	{
 	}
