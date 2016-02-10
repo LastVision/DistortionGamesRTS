@@ -50,6 +50,9 @@ namespace Prism
 		void SetShouldRender(bool aStatus);
 		bool GetShouldRender() const;
 
+		void SetRenderThroughCulling(bool aStatus);
+		bool GetRenderThroughCulling() const;
+
 		ModelProxy& GetModel();
 		const CU::Matrix44f& GetOrientation() const;
 	private:
@@ -76,6 +79,7 @@ namespace Prism
 		CU::Vector4<float> mySelectionColor;
 
 		bool myShouldRender;
+		bool myRenderThroughCulling;
 	};
 
 	inline float Instance::GetObjectCullingRadius() const

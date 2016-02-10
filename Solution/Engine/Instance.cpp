@@ -23,6 +23,7 @@ Prism::Instance::Instance(ModelProxy& aModel, const CU::Matrix44<float>& anOrien
 	, myAnimation(nullptr)
 	, myTotalTime(0.f)
 	, myOwnerType(eOwnerType::NOT_USED)
+	, myRenderThroughCulling(true)
 {
 }
 
@@ -215,6 +216,16 @@ void Prism::Instance::SetShouldRender(bool aStatus)
 bool Prism::Instance::GetShouldRender() const
 {
 	return myShouldRender;
+}
+
+void Prism::Instance::SetRenderThroughCulling(bool aStatus)
+{
+	myRenderThroughCulling = aStatus;
+}
+
+bool Prism::Instance::GetRenderThroughCulling() const
+{
+	return myRenderThroughCulling;
 }
 
 Prism::ModelProxy& Prism::Instance::GetModel()
