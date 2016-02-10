@@ -39,6 +39,7 @@ namespace Prism
 		void SetCamera(Camera* aCamera);
 		Camera* GetCamera();
 	private:
+		void Reset();
 
 		void CreateVertexBuffer();
 		int UpdateVertexBuffer();
