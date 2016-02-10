@@ -574,7 +574,13 @@ void ActorComponent::MuzzleFlash(float aDelta)
 	{
 		if (myMuzzleFrameTimer < 0)
 		{
-			++myCurrentMuzzleFlash;
+			int prev = myCurrentMuzzleFlash;
+			myCurrentMuzzleFlash = rand() % myMuzzleFlashes.Size();
+			if (myCurrentMuzzleFlash == prev)
+			{
+				++myCurrentMuzzleFlash;
+			}
+
 			myMuzzleFrameTimer = 1.f / 10.f;
 			if (myCurrentMuzzleFlash >= myMuzzleFlashes.Size())
 			{
