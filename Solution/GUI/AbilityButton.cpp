@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include <AudioInterface.h>
 #include "AbilityButton.h"
 #include <Engine.h>
 #include "../Game/PlayerDirector.h"
@@ -89,6 +90,7 @@ namespace GUI
 				if (myIsReadyAnimation != nullptr)
 				{
 					myIsReadyAnimation->RestartAnimation();
+					Prism::Audio::AudioInterface::GetInstance()->PostEvent("Totem_Ready", 0);
 				}
 				myIsReady = true;
 			}
