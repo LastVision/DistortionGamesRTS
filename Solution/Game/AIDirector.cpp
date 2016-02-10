@@ -163,6 +163,10 @@ void AIDirector::ReceiveMessage(const TimeMultiplierMessage& aMessage)
 	if (aMessage.myOwner == eOwnerType::ENEMY)
 	{
 		myTimeMultiplier = aMessage.myMultiplier;
+		if (myTimeMultiplier > 0.f)
+		{
+			myPlayerHasStarted = true;
+		}
 	}
 }
 

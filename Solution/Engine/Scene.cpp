@@ -122,9 +122,11 @@ void Prism::Scene::Render(bool aRenderNavMeshLines)
 
 	for (int i = 0; i < myInstances.Size(); ++i)
 	{
-		//if (myViewCamera->GetFrustum().Inside(myInstances[i]->GetPosition(), RENDER_CLIPPING_RADIUS) == true)
+		Instance* current = myInstances[i];
+		if (current->GetCastShadow() == true
+			&& (current->GetAlwaysRender() == true || (current->GetShouldRender() == true && current->GetRenderThroughCulling() == true)))
 		{
-			myInstances[i]->Render(*myCamera, *myInstancingHelper, true);
+			current->Render(*myCamera, *myInstancingHelper, true);
 		}
 	}
 
@@ -205,16 +207,14 @@ void Prism::Scene::Render(bool aRenderNavMeshLines, Texture* aFogOfWarTexture, S
 	int visibleInstances = 0;
 	for (int i = 0; i < myInstances.Size(); ++i)
 	{
-		//if (myCamera->GetFrustum().Inside(myInstances[i]->GetPosition(), RENDER_CLIPPING_RADIUS) == true)
+		Instance* current = myInstances[i];
+		if (current->GetAlwaysRender() == true || (current->GetShouldRender() == true && current->GetRenderThroughCulling() == true))
 		{
-			myInstances[i]->UpdateDirectionalLights(myDirectionalLightData);
-			myInstances[i]->UpdateSpotLights(mySpotLightData);
-			myInstances[i]->Render(*myCamera, *myInstancingHelper, false);
+			current->UpdateDirectionalLights(myDirectionalLightData);
+			current->UpdateSpotLights(mySpotLightData);
+			current->Render(*myCamera, *myInstancingHelper, false);
 
-			if (myInstances[i]->GetShouldRender())
-			{
-				++visibleInstances;
-			}
+			++visibleInstances;
 		}
 	}
 
@@ -236,7 +236,7 @@ void Prism::Scene::Render(bool aRenderNavMeshLines, Texture* aFogOfWarTexture, S
 
 	for (int i = 0; i < myInstances.Size(); ++i)
 	{
-		myInstances[i]->SetShouldRender(true);
+		myInstances[i]->SetRenderThroughCulling(true);
 	}
 }
 
@@ -315,7 +315,7 @@ void Prism::Scene::CalcShouldRender(const Prism::Camera& aCamera)
 		if (myInstances[i]->GetShouldRender() == true &&
 			aCamera.GetFrustum().Inside(myInstances[i]->GetPosition(), myRenderRadius) == false)
 		{
-			myInstances[i]->SetShouldRender(false);
+			myInstances[i]->SetRenderThroughCulling(false);
 		}
 	}
 }

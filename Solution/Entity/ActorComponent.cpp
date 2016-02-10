@@ -74,15 +74,15 @@ ActorComponent::ActorComponent(Entity& aEntity, ActorComponentData& aData, const
 
 	myMuzzleRadius = 5.f;
 	myMuzzleFlashes.Add(new Prism::Instance(*Prism::ModelLoader::GetInstance()->LoadModel("Data/Resource/Model/SM_muzzleflash.fbx"
-		, "Data/Resource/Shader/S_effect_pbl.fx"), myMuzzleOrientation, Prism::eOctreeType::DYNAMIC, myMuzzleRadius));
+		, "Data/Resource/Shader/S_effect_pbl.fx"), myMuzzleOrientation, Prism::eOctreeType::DYNAMIC, myMuzzleRadius, false, false));
 	myMuzzleFlashes.Add(new Prism::Instance(*Prism::ModelLoader::GetInstance()->LoadModel("Data/Resource/Model/SM_muzzleflash2.fbx"
-		, "Data/Resource/Shader/S_effect_pbl.fx"), myMuzzleOrientation, Prism::eOctreeType::DYNAMIC, myMuzzleRadius));
+		, "Data/Resource/Shader/S_effect_pbl.fx"), myMuzzleOrientation, Prism::eOctreeType::DYNAMIC, myMuzzleRadius, false, false));
 	myMuzzleFlashes.Add(new Prism::Instance(*Prism::ModelLoader::GetInstance()->LoadModel("Data/Resource/Model/SM_muzzleflash3.fbx"
-		, "Data/Resource/Shader/S_effect_pbl.fx"), myMuzzleOrientation, Prism::eOctreeType::DYNAMIC, myMuzzleRadius));
+		, "Data/Resource/Shader/S_effect_pbl.fx"), myMuzzleOrientation, Prism::eOctreeType::DYNAMIC, myMuzzleRadius, false, false));
 	myMuzzleFlashes.Add(new Prism::Instance(*Prism::ModelLoader::GetInstance()->LoadModel("Data/Resource/Model/SM_muzzleflash4.fbx"
-		, "Data/Resource/Shader/S_effect_pbl.fx"), myMuzzleOrientation, Prism::eOctreeType::DYNAMIC, myMuzzleRadius));
+		, "Data/Resource/Shader/S_effect_pbl.fx"), myMuzzleOrientation, Prism::eOctreeType::DYNAMIC, myMuzzleRadius, false, false));
 	myMuzzleFlashes.Add(new Prism::Instance(*Prism::ModelLoader::GetInstance()->LoadModel("Data/Resource/Model/SM_muzzleflash5.fbx"
-		, "Data/Resource/Shader/S_effect_pbl.fx"), myMuzzleOrientation, Prism::eOctreeType::DYNAMIC, myMuzzleRadius));
+		, "Data/Resource/Shader/S_effect_pbl.fx"), myMuzzleOrientation, Prism::eOctreeType::DYNAMIC, myMuzzleRadius, false, false));
 
 	for (int i = 0; i < myMuzzleFlashes.Size(); ++i)
 	{

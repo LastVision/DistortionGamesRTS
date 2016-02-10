@@ -20,7 +20,7 @@ GraphicsComponent::GraphicsComponent(Entity& aEntity, GraphicsComponentData& aCo
 	Prism::ModelProxy* model = Prism::ModelLoader::GetInstance()->LoadModel(aComponentData.myModelPath
 		, aComponentData.myEffectPath);
 
-	myInstance = new Prism::Instance(*model, myEntity.myOrientation, myEntity.GetOctreeType(), myCullingRadius);
+	myInstance = new Prism::Instance(*model, myEntity.myOrientation, myEntity.GetOctreeType(), myCullingRadius, aComponentData.myAlwaysRender);
 	myInstance->ActivateAlbedo(myEntity.GetOwner());
 }
 

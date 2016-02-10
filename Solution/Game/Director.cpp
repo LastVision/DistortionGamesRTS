@@ -148,14 +148,14 @@ bool Director::SpawnUnit(eUnitType aUnitType)
 {
 	if (aUnitType == eUnitType::RANGER && myHasUnlockedRanger == false) return false;
 	if (aUnitType == eUnitType::TANK && myHasUnlockedTank == false) return false;
-	if (myBuilding->GetComponent<BuildingComponent>()->IsQueueFull() == true)
+	if (myOwner == eOwnerType::PLAYER && myBuilding->GetComponent<BuildingComponent>()->IsQueueFull() == true)
 	{
 		PostMaster::GetInstance()->SendMessage(NotificationMessage("Queue is full."));
 		return false;
 	}
 
 	BuildingComponent* building = myBuilding->GetComponent<BuildingComponent>();
-	if (myUnitCount + building->GetTotalQueueSupplyCost() + building->GetUnitSupplyCost(aUnitType) > myUnitCap)
+	if (myOwner == eOwnerType::PLAYER && myUnitCount + building->GetTotalQueueSupplyCost() + building->GetUnitSupplyCost(aUnitType) > myUnitCap)
 	{
 		PostMaster::GetInstance()->SendMessage(NotificationMessage("Not enough supply."));
 		return false;
@@ -186,7 +186,7 @@ bool Director::UpgradeUnit(eUnitType aUnitType)
 	//	return false;
 	//}
 
-	if (building->CanUpgrade(aUnitType) == false)
+	if (myOwner == eOwnerType::PLAYER && building->CanUpgrade(aUnitType) == false)
 	{
 		PostMaster::GetInstance()->SendMessage(NotificationMessage("Upgrade on cooldown."));
 		return false;
@@ -198,7 +198,7 @@ bool Director::UpgradeUnit(eUnitType aUnitType)
 		building->UpgradeUnit(aUnitType);
 		return true;
 	}
-	else
+	else if (myOwner == eOwnerType::PLAYER)
 	{
 		PostMaster::GetInstance()->SendMessage(NotificationMessage("Not enough artifact."));
 	}

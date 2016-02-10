@@ -1068,10 +1068,16 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 	}
 
 	Entity* hoveredEnemy = PollingStation::GetInstance()->FindEntityAtPosition(firstTargetPos, eOwnerType::ENEMY | eOwnerType::NEUTRAL);
-	if (hoveredEnemy != nullptr && FogOfWarMap::GetInstance()->IsVisible(hoveredEnemy->GetPosition())
-		&& mySelectedAction == eSelectedAction::NONE)
+	if (hoveredEnemy != nullptr && mySelectedAction == eSelectedAction::NONE)
 	{
-		myCursor->SetCurrentCursor(eCursorType::ATTACK);
+		if (FogOfWarMap::GetInstance()->IsVisible(hoveredEnemy->GetPosition()) == true)
+		{
+			myCursor->SetCurrentCursor(eCursorType::ATTACK);
+		}
+		else
+		{
+			hoveredEnemy = nullptr;
+		}		
 	}
 
 	bool hasSelected = false;

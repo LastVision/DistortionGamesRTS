@@ -115,7 +115,7 @@ void Prism::Text::ConstructBuffers()
 		if (myText[i] == '\n')
 		{
 			drawX = 0;
-			drawY -= 48.f;
+			drawY -= 33.f;
 			++row;
 			continue;
 		}

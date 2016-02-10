@@ -32,6 +32,8 @@ namespace GUI
 		void SetCurrentCursor(eCursorType aType);
 		eCursorType GetCurrentCursor() const;
 
+		void SetShouldRender(bool aShouldRender);
+
 	private:
 		CU::Vector2<float> myPosition;
 		CU::Vector2<float> myPositionZeroToOne;
@@ -39,6 +41,8 @@ namespace GUI
 		CU::GrowingArray<Prism::SpriteProxy*> mySprites;
 
 		eCursorType myCurrentType;
+
+		bool myShouldRender;
 	};
 
 	inline void Cursor::SetCurrentCursor(eCursorType aType)
@@ -49,5 +53,10 @@ namespace GUI
 	inline eCursorType Cursor::GetCurrentCursor() const
 	{
 		return myCurrentType;
+	}
+
+	inline void Cursor::SetShouldRender(bool aShouldRender)
+	{
+		myShouldRender = aShouldRender;
 	}
 }
