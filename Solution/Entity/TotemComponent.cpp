@@ -104,9 +104,12 @@ void TotemComponent::Update(float aDeltaTime)
 			myEntity.SetPosition(CU::Math::Lerp<CU::Vector3f>(myOriginalPosition, myTargetPosition, myAlpha));
 		}
 
-		if (myAlpha >= 1.0f && myHasReachedTarget == false && myHasJustLanded == false)
+		if (myAlpha >= 0.9f && myHasReachedTarget == false && myHasJustLanded == false)
 		{
 			PostMaster::GetInstance()->SendMessage(EmitterMessage("totem_land", myTargetPosition));
+		}
+		if (myAlpha >= 1.0f && myHasReachedTarget == false && myHasJustLanded == false)
+		{
 			myHasJustLanded = true;
 			Prism::Audio::AudioInterface::GetInstance()->PostEvent("Totem_HitGround"
 				, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
