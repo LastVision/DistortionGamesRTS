@@ -23,7 +23,7 @@ void CreditMenuState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* 
 {
 	PostMaster::GetInstance()->Subscribe(eMessageType::ON_CLICK, this);
 	myIsActiveState = true;
-	myIsLetThrough = true;
+	myIsLetThrough = false;
 	myStateStatus = eStateStatus::eKeepState;
 	myStateStack = aStateStackProxy;
 	myCursor = aCursor;
@@ -46,11 +46,11 @@ void CreditMenuState::OnResize(int aWidth, int aHeight)
 const eStateStatus CreditMenuState::Update(const float& aDeltaTime)
 {
 	aDeltaTime;
-
-	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_ESCAPE) == true)
+	CU::InputWrapper* input = CU::InputWrapper::GetInstance();
+	if (input->KeyDown(DIK_ESCAPE) == true || input->KeyDown(DIK_SPACE) == true || input->KeyDown(DIK_RETURN) == true
+		|| input->MouseUp(0) == true || input->MouseUp(1) == true)
 	{
-		myIsActiveState = false;
-		return eStateStatus::ePopSubState;
+		PostMaster::GetInstance()->SendMessage(OnClickMessage(eOnClickEvent::GAME_QUIT));
 	}
 
 	myGUIManager->Update(aDeltaTime);
