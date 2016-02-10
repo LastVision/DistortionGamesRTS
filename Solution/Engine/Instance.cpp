@@ -11,7 +11,7 @@
 #include "InstancingHelper.h"
 
 Prism::Instance::Instance(ModelProxy& aModel, const CU::Matrix44<float>& anOrientation, eOctreeType anOctreeType
-		, const float& aObjectCullingRadius)
+		, const float& aObjectCullingRadius, bool aAlwaysRender)
 	: myProxy(aModel)
 	, myOctreeType(anOctreeType)
 	, myOrientation(anOrientation)
@@ -24,6 +24,7 @@ Prism::Instance::Instance(ModelProxy& aModel, const CU::Matrix44<float>& anOrien
 	, myTotalTime(0.f)
 	, myOwnerType(eOwnerType::NOT_USED)
 	, myRenderThroughCulling(true)
+	, myAlwaysRender(aAlwaysRender)
 {
 }
 
@@ -226,6 +227,11 @@ void Prism::Instance::SetRenderThroughCulling(bool aStatus)
 bool Prism::Instance::GetRenderThroughCulling() const
 {
 	return myRenderThroughCulling;
+}
+
+bool Prism::Instance::GetAlwaysRender() const
+{
+	return myAlwaysRender;
 }
 
 Prism::ModelProxy& Prism::Instance::GetModel()

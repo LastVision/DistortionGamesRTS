@@ -122,9 +122,10 @@ void Prism::Scene::Render(bool aRenderNavMeshLines)
 
 	for (int i = 0; i < myInstances.Size(); ++i)
 	{
-		if (myInstances[i]->GetShouldRender() == true && myInstances[i]->GetRenderThroughCulling() == true)
+		Instance* current = myInstances[i];
+		if (current->GetAlwaysRender() == true || (current->GetShouldRender() == true && current->GetRenderThroughCulling() == true))
 		{
-			myInstances[i]->Render(*myCamera, *myInstancingHelper, true);
+			current->Render(*myCamera, *myInstancingHelper, true);
 		}
 	}
 
@@ -205,11 +206,12 @@ void Prism::Scene::Render(bool aRenderNavMeshLines, Texture* aFogOfWarTexture, S
 	int visibleInstances = 0;
 	for (int i = 0; i < myInstances.Size(); ++i)
 	{
-		if (myInstances[i]->GetShouldRender() == true && myInstances[i]->GetRenderThroughCulling() == true)
+		Instance* current = myInstances[i];
+		if (current->GetAlwaysRender() == true || (current->GetShouldRender() == true && current->GetRenderThroughCulling() == true))
 		{
-			myInstances[i]->UpdateDirectionalLights(myDirectionalLightData);
-			myInstances[i]->UpdateSpotLights(mySpotLightData);
-			myInstances[i]->Render(*myCamera, *myInstancingHelper, false);
+			current->UpdateDirectionalLights(myDirectionalLightData);
+			current->UpdateSpotLights(mySpotLightData);
+			current->Render(*myCamera, *myInstancingHelper, false);
 
 			++visibleInstances;
 		}

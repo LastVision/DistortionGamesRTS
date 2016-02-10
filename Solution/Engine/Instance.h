@@ -20,7 +20,7 @@ namespace Prism
 	{
 	public:
 		Instance(ModelProxy& aModel, const CU::Matrix44<float>& anOrientation, eOctreeType anOctreeType
-			, const float& aObjectCullingRadius);
+			, const float& aObjectCullingRadius, bool aAlwaysRender = false);
 		~Instance();
 
 		void Update(float aDelta);
@@ -53,6 +53,8 @@ namespace Prism
 		void SetRenderThroughCulling(bool aStatus);
 		bool GetRenderThroughCulling() const;
 
+		bool GetAlwaysRender() const;
+
 		ModelProxy& GetModel();
 		const CU::Matrix44f& GetOrientation() const;
 	private:
@@ -80,6 +82,7 @@ namespace Prism
 
 		bool myShouldRender;
 		bool myRenderThroughCulling;
+		bool myAlwaysRender;
 	};
 
 	inline float Instance::GetObjectCullingRadius() const
