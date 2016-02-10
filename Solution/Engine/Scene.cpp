@@ -53,7 +53,7 @@ Prism::Scene::~Scene()
 	myOctree = nullptr;
 
 #else
-	myInstances.DeleteAll();
+	myInstances.RemoveAll();
 #endif
 
 	SAFE_DELETE(myInstancingHelper);

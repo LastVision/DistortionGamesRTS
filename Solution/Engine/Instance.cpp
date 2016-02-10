@@ -31,6 +31,7 @@ Prism::Instance::Instance(ModelProxy& aModel, const CU::Matrix44<float>& anOrien
 
 Prism::Instance::~Instance()
 {
+	int apa = 5;
 }
 
 void Prism::Instance::Update(float aDelta)
@@ -45,9 +46,9 @@ void Prism::Instance::Update(float aDelta)
 				{
 					myAnimation = myProxy.myModelAnimated->myAnimation;
 				}
-				MemoryTracker::GetInstance()->SetRunTime(false);
+				//MemoryTracker::GetInstance()->SetRunTime(false);
 				BuildHierarchy(myHierarchy, myProxy.myModelAnimated);
-				MemoryTracker::GetInstance()->SetRunTime(true);
+				//MemoryTracker::GetInstance()->SetRunTime(true);
 				myHierarchyIsBuilt = true;
 
 			}

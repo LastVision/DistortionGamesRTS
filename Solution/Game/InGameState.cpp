@@ -111,9 +111,9 @@ const eStateStatus InGameState::Update(const float& aDeltaTime)
 #ifndef _DEBUG
 	if (myIsFirstFrame == true)
 	{
-		Prism::MemoryTracker::GetInstance()->SetRunTime(false);
+		//Prism::MemoryTracker::GetInstance()->SetRunTime(false);
 		myStateStack->PushSubGameState(new LoadingState());
-		Prism::MemoryTracker::GetInstance()->SetRunTime(true);
+		//Prism::MemoryTracker::GetInstance()->SetRunTime(true);
 		myIsFirstFrame = false;
 		return eStateStatus::eKeepState;
 	}
@@ -124,12 +124,12 @@ const eStateStatus InGameState::Update(const float& aDeltaTime)
 //#ifndef _DEBUG
 	if (CU::InputWrapper::GetInstance()->KeyDown(DIK_ESCAPE))
 	{
-		bool oldRuntime = Prism::MemoryTracker::GetInstance()->GetRunTime();
-		Prism::MemoryTracker::GetInstance()->SetRunTime(false);
+		//bool oldRuntime = //Prism::MemoryTracker::GetInstance()->GetRunTime();
+		//Prism::MemoryTracker::GetInstance()->SetRunTime(false);
 
 		myStateStack->PushSubGameState(new InGameMenuState());
 
-		Prism::MemoryTracker::GetInstance()->SetRunTime(oldRuntime);
+		//Prism::MemoryTracker::GetInstance()->SetRunTime(oldRuntime);
 	}
 //#endif
 //#ifdef _DEBUG
@@ -144,22 +144,22 @@ const eStateStatus InGameState::Update(const float& aDeltaTime)
 	}
 	if (myIsComplete == true)
 	{
-		bool runtime = Prism::MemoryTracker::GetInstance()->GetRunTime();
-		Prism::MemoryTracker::GetInstance()->SetRunTime(false);
+		//bool runtime = //Prism::MemoryTracker::GetInstance()->GetRunTime();
+		//Prism::MemoryTracker::GetInstance()->SetRunTime(false);
 		myStateStack->PushSubGameState(new CreditMenuState());
-		Prism::MemoryTracker::GetInstance()->SetRunTime(runtime);
+		//Prism::MemoryTracker::GetInstance()->SetRunTime(runtime);
 		return eStateStatus::eKeepState;
 	}
 
 	if (CU::InputWrapper::GetInstance()->KeyUp(DIK_GRAVE) == true || myShouldReOpenConsole == true)
 	{
 #ifndef RELEASE_BUILD
-		bool runtime = Prism::MemoryTracker::GetInstance()->GetRunTime();
-		Prism::MemoryTracker::GetInstance()->SetRunTime(false);
+		bool runtime = //Prism::MemoryTracker::GetInstance()->GetRunTime();
+		//Prism::MemoryTracker::GetInstance()->SetRunTime(false);
 		myShouldReOpenConsole = false;
 		ConsoleState* newState = new ConsoleState(myShouldReOpenConsole);
 		myStateStack->PushSubGameState(newState);
-		Prism::MemoryTracker::GetInstance()->SetRunTime(runtime);
+		//Prism::MemoryTracker::GetInstance()->SetRunTime(runtime);
 #endif
 	}
 
@@ -235,10 +235,10 @@ void InGameState::ReceiveMessage(const GameStateMessage& aMessage)
 	switch (aMessage.myGameState)
 	{
 	case eGameState::RELOAD_LEVEL:
-		runtime = Prism::MemoryTracker::GetInstance()->GetRunTime();
-		Prism::MemoryTracker::GetInstance()->SetRunTime(false);
+		//runtime = //Prism::MemoryTracker::GetInstance()->GetRunTime();
+		//Prism::MemoryTracker::GetInstance()->SetRunTime(false);
 		myLevel = myLevelFactory->LoadCurrentLevel();
-		Prism::MemoryTracker::GetInstance()->SetRunTime(runtime);
+		//Prism::MemoryTracker::GetInstance()->SetRunTime(runtime);
 		PostMaster::GetInstance()->SendMessage(RunScriptMessage("Data/Script/Autorun.script"));
 		break;
 
@@ -260,17 +260,17 @@ void InGameState::ReceiveMessage(const GameStateMessage& aMessage)
 		}
 		else
 		{
-			runtime = Prism::MemoryTracker::GetInstance()->GetRunTime();
-			Prism::MemoryTracker::GetInstance()->SetRunTime(false);
+			//runtime = //Prism::MemoryTracker::GetInstance()->GetRunTime();
+			//Prism::MemoryTracker::GetInstance()->SetRunTime(false);
 			myLevel = myLevelFactory->LoadNextLevel(myDifficulty);
-			Prism::MemoryTracker::GetInstance()->SetRunTime(runtime);
+			//Prism::MemoryTracker::GetInstance()->SetRunTime(runtime);
 		}
 		break;
 	case eGameState::CLICKABLE_STATE:
-		runtime = Prism::MemoryTracker::GetInstance()->GetRunTime();
-		Prism::MemoryTracker::GetInstance()->SetRunTime(false);
+		//runtime = //Prism::MemoryTracker::GetInstance()->GetRunTime();
+		//Prism::MemoryTracker::GetInstance()->SetRunTime(false);
 		myStateStack->PushSubGameState(new ClickableState(aMessage.myTime, aMessage.myText));
-		Prism::MemoryTracker::GetInstance()->SetRunTime(runtime);
+		//Prism::MemoryTracker::GetInstance()->SetRunTime(runtime);
 		break;
 	}
 
@@ -361,22 +361,22 @@ void InGameState::RestartLevel()
 {
 	Prism::Audio::AudioInterface::GetInstance()->PostEvent("FadeForWinLoose", 0);
 	Prism::Audio::AudioInterface::GetInstance()->PostEvent("PlayLoose", 0);
-	bool runtime = Prism::MemoryTracker::GetInstance()->GetRunTime();
-	Prism::MemoryTracker::GetInstance()->SetRunTime(false);
+	//bool runtime = //Prism::MemoryTracker::GetInstance()->GetRunTime();
+	//Prism::MemoryTracker::GetInstance()->SetRunTime(false);
 	GameStateMessage* newEvent = new GameStateMessage(eGameState::RELOAD_LEVEL);
 	ShowMessage("Data/Resource/Texture/Menu/T_background_game_over.dds", { 1024, 1024 }, "Press [space] to restart.", newEvent);
-	Prism::MemoryTracker::GetInstance()->SetRunTime(runtime);
+	//Prism::MemoryTracker::GetInstance()->SetRunTime(runtime);
 }
 
 void InGameState::CompleteLevel()
 {
 	Prism::Audio::AudioInterface::GetInstance()->PostEvent("FadeForWinLoose", 0);
 	Prism::Audio::AudioInterface::GetInstance()->PostEvent("PlayWin", 0);
-	bool runtime = Prism::MemoryTracker::GetInstance()->GetRunTime();
-	Prism::MemoryTracker::GetInstance()->SetRunTime(false);
+	//bool runtime = //Prism::MemoryTracker::GetInstance()->GetRunTime();
+	//Prism::MemoryTracker::GetInstance()->SetRunTime(false);
 	GameStateMessage* newEvent = new GameStateMessage(eGameState::LOAD_NEXT_LEVEL);
 	ShowMessage("Data/Resource/Texture/Menu/T_background_completed_level.dds", { 1024, 1024 }, "Press [space] to continue.", newEvent);
-	Prism::MemoryTracker::GetInstance()->SetRunTime(runtime);
+	//Prism::MemoryTracker::GetInstance()->SetRunTime(runtime);
 }
 
 void InGameState::CompleteGame()
@@ -466,14 +466,14 @@ void InGameState::UpdateCamera(float aDeltaTime, const CU::Vector3<float>& aCame
 void InGameState::ShowMessage(const std::string& aBackgroundPath,
 	const CU::Vector2<float>& aSize, std::string aText, GameStateMessage* aMessage)
 {
-	bool runtime = Prism::MemoryTracker::GetInstance()->GetRunTime();
-	Prism::MemoryTracker::GetInstance()->SetRunTime(false);
+	bool runtime = //Prism::MemoryTracker::GetInstance()->GetRunTime();
+	//Prism::MemoryTracker::GetInstance()->SetRunTime(false);
 	myIsActiveState = false;
 	myMessageScreen = new MessageState(aBackgroundPath, aSize);
 	myMessageScreen->SetText(aText);
 	myMessageScreen->SetEvent(aMessage);
 	myStateStack->PushSubGameState(myMessageScreen);
-	Prism::MemoryTracker::GetInstance()->SetRunTime(runtime);
+	//Prism::MemoryTracker::GetInstance()->SetRunTime(runtime);
 }
 
 void InGameState::CapCameraToTerrain()

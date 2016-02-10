@@ -33,6 +33,7 @@ Prism::Text::Text(const Font& aFont)
 	myIndices.Init(1024);
 
 	SetText(" ");
+	ConstructBuffers();
 }
 
 
@@ -52,7 +53,7 @@ void Prism::Text::SetText(const std::string& aText)
 		myText = aText;
 	}
 
-	ConstructBuffers();
+	//ConstructBuffers();
 }
 
 void Prism::Text::Render()

@@ -95,7 +95,7 @@ namespace Prism
 
 	void Engine::Render()
 	{
-		DEBUG_PRINT(MemoryTracker::GetInstance()->GetRunTime());
+		//DEBUG_PRINT(//MemoryTracker::GetInstance()->GetRunTime());
 		DEBUG_PRINT(GetWindowSize());
 
 		if (myShouldRenderText == true)
@@ -167,8 +167,8 @@ namespace Prism
 
 	void Engine::OnResize(int aWidth, int aHeigth)
 	{
-		bool currentRuntime = MemoryTracker::GetInstance()->GetRunTime();
-		MemoryTracker::GetInstance()->SetRunTime(false);
+		//bool currentRuntime = //MemoryTracker::GetInstance()->GetRunTime();
+		//MemoryTracker::GetInstance()->SetRunTime(false);
 		myWindowSizeInt.x = aWidth;
 		myWindowSizeInt.y = aHeigth;
 		myWindowSize.x = static_cast<float>(myWindowSizeInt.x);
@@ -187,7 +187,7 @@ namespace Prism
 			myFadeData.mySprite->ResizeTexture(myDirectX->GetBackbufferTexture());
 			myFadeData.mySprite->SetSize(myWindowSize, { 0.f, 0.f });
 		}
-		MemoryTracker::GetInstance()->SetRunTime(currentRuntime);
+		//MemoryTracker::GetInstance()->SetRunTime(currentRuntime);
 	}
 
 	bool Engine::IsFullscreen() const
