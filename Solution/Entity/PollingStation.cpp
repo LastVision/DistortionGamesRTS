@@ -311,9 +311,9 @@ void PollingStation::AddArtifact(Entity* aArtifact)
 	myArtifacts.Add(aArtifact);
 }
 
-void PollingStation::DeleteArtifact(Entity* aArtifact)
+void PollingStation::RemoveArtifact(Entity* aArtifact)
 {
-	myArtifacts.DeleteCyclic(aArtifact);
+	myArtifacts.RemoveCyclic(aArtifact);
 }
 
 const CU::GrowingArray<Entity*>& PollingStation::GetArtifacts() const

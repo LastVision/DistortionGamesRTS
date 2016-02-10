@@ -81,7 +81,7 @@ const eStateStatus LoadingState::Update(const float& aDeltaTime)
 	}
 
 	float speed1 = -3.f;
-	float speed2 = 0.2f;
+	float speed2 = 0.0f;
 
 	myRotatingThing->Rotate(speed1 * aDeltaTime * (1.f / (myRotatingThingScale + 0.001f)));
 	myRotatingThing2->Rotate(speed2 * aDeltaTime * (1.f / (myRotatingThingScale + 0.001f)));

@@ -83,10 +83,10 @@ void InGameMenuState::ReceiveMessage(const OnClickMessage& aMessage)
 		case eOnClickEvent::OPTIONS_MENU:
 		{
 			myIsActiveState = false;
-			bool oldRuntime = Prism::MemoryTracker::GetInstance()->GetRunTime();
-			Prism::MemoryTracker::GetInstance()->SetRunTime(false);
+			//bool oldRuntime = //Prism::MemoryTracker::GetInstance()->GetRunTime();
+			//Prism::MemoryTracker::GetInstance()->SetRunTime(false);
 			myStateStack->PushSubGameState(new OptionsState());
-			Prism::MemoryTracker::GetInstance()->SetRunTime(oldRuntime);
+			//Prism::MemoryTracker::GetInstance()->SetRunTime(oldRuntime);
 			break;
 		}
 		case eOnClickEvent::GAME_QUIT:
@@ -96,10 +96,10 @@ void InGameMenuState::ReceiveMessage(const OnClickMessage& aMessage)
 		case eOnClickEvent::GAME_HELP:
 		{
 			myIsActiveState = false;
-			bool oldRuntime = Prism::MemoryTracker::GetInstance()->GetRunTime();
-			Prism::MemoryTracker::GetInstance()->SetRunTime(false);
+			//bool oldRuntime = //Prism::MemoryTracker::GetInstance()->GetRunTime();
+			//Prism::MemoryTracker::GetInstance()->SetRunTime(false);
 			myStateStack->PushSubGameState(new HelpState());
-			Prism::MemoryTracker::GetInstance()->SetRunTime(oldRuntime);
+			//Prism::MemoryTracker::GetInstance()->SetRunTime(oldRuntime);
 			break;
 		}
 		default:

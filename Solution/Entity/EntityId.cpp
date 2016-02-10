@@ -22,8 +22,8 @@ void EntityId::Destroy()
 
 int EntityId::GetId(Entity* anEntity)
 {
-	DL_ASSERT_EXP(Prism::MemoryTracker::GetInstance()->GetRunTime() == false
-		, "Don't call EntityId in runtime, too expensive.");
+	//DL_ASSERT_EXP(////Prism::MemoryTracker::GetInstance()->GetRunTime() == false
+	//	, "Don't call EntityId in runtime, too expensive.");
 	int index = myEntities.Find(anEntity);
 	if (index < 0)
 	{

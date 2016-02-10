@@ -93,14 +93,14 @@ const eStateStatus MainMenuState::Update(const float& aDeltaTime)
 	{
 #ifdef RELEASE_BUILD
 		PostMaster::GetInstance()->UnSubscribe(eMessageType::ON_CLICK, this);
-		bool runtime = Prism::MemoryTracker::GetInstance()->GetRunTime();
-		Prism::MemoryTracker::GetInstance()->SetRunTime(false);
+		//bool runtime = ////Prism::MemoryTracker::GetInstance()->GetRunTime();
+		////Prism::MemoryTracker::GetInstance()->SetRunTime(false);
 		myStateStack->PushSubGameState(new SplashState("Data/Resource/Texture/Menu/Splash/T_logo_other.dds", false));
-		Prism::MemoryTracker::GetInstance()->SetRunTime(runtime);
-		runtime = Prism::MemoryTracker::GetInstance()->GetRunTime();
-		Prism::MemoryTracker::GetInstance()->SetRunTime(false);
+		////Prism::MemoryTracker::GetInstance()->SetRunTime(runtime);
+		//runtime = ////Prism::MemoryTracker::GetInstance()->GetRunTime();
+		////Prism::MemoryTracker::GetInstance()->SetRunTime(false);
 		myStateStack->PushSubGameState(new SplashState("Data/Resource/Texture/Menu/Splash/T_logo_our.dds", true));
-		Prism::MemoryTracker::GetInstance()->SetRunTime(runtime);
+		////Prism::MemoryTracker::GetInstance()->SetRunTime(runtime);
 #endif
 		myHasRunOnce = true;
 	}
@@ -166,7 +166,7 @@ void MainMenuState::ReceiveMessage(const OnClickMessage& aMessage)
 		switch (aMessage.myEvent)
 		{
 		case eOnClickEvent::GAME_START:
-			Prism::MemoryTracker::GetInstance()->SetRunTime(false);
+			////Prism::MemoryTracker::GetInstance()->SetRunTime(false);
 			PostMaster::GetInstance()->UnSubscribe(eMessageType::ON_CLICK, this);
 #ifndef USE_DIFFICULTY
 			myStateStack->PushMainGameState(new InGameState(aMessage.myID, eDifficulty::NORMAL));
@@ -175,31 +175,31 @@ void MainMenuState::ReceiveMessage(const OnClickMessage& aMessage)
 #endif
 			break;
 		case eOnClickEvent::GAME_LEVEL_SELECT:
-			Prism::MemoryTracker::GetInstance()->SetRunTime(false);
+			////Prism::MemoryTracker::GetInstance()->SetRunTime(false);
 			PostMaster::GetInstance()->UnSubscribe(eMessageType::ON_CLICK, this);
 			myStateStack->PushMainGameState(new LevelSelectState());
 			break;
 		case eOnClickEvent::GAME_CREDIT:
-			Prism::MemoryTracker::GetInstance()->SetRunTime(false);
+			////Prism::MemoryTracker::GetInstance()->SetRunTime(false);
 			PostMaster::GetInstance()->UnSubscribe(eMessageType::ON_CLICK, this);
 			myStateStack->PushSubGameState(new CreditMenuState());
 			break;
 		case eOnClickEvent::GAME_HELP:
 		{
-			bool oldRuntime = Prism::MemoryTracker::GetInstance()->GetRunTime();
-			Prism::MemoryTracker::GetInstance()->SetRunTime(false);
+			//bool oldRuntime = ////Prism::MemoryTracker::GetInstance()->GetRunTime();
+			////Prism::MemoryTracker::GetInstance()->SetRunTime(false);
 			PostMaster::GetInstance()->UnSubscribe(eMessageType::ON_CLICK, this);
 			myStateStack->PushSubGameState(new HelpState());
-			Prism::MemoryTracker::GetInstance()->SetRunTime(oldRuntime);
+			////Prism::MemoryTracker::GetInstance()->SetRunTime(oldRuntime);
 			break;
 		}
 		case eOnClickEvent::OPTIONS_MENU:
 		{
-			bool oldRuntime = Prism::MemoryTracker::GetInstance()->GetRunTime();
-			Prism::MemoryTracker::GetInstance()->SetRunTime(false);
+			//bool oldRuntime = ////Prism::MemoryTracker::GetInstance()->GetRunTime();
+			////Prism::MemoryTracker::GetInstance()->SetRunTime(false);
 			PostMaster::GetInstance()->UnSubscribe(eMessageType::ON_CLICK, this);
 			myStateStack->PushSubGameState(new OptionsState());
-			Prism::MemoryTracker::GetInstance()->SetRunTime(oldRuntime);
+			////Prism::MemoryTracker::GetInstance()->SetRunTime(oldRuntime);
 			break;
 		}
 		case eOnClickEvent::GAME_QUIT:
