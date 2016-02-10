@@ -200,7 +200,7 @@ bool Director::UpgradeUnit(eUnitType aUnitType)
 	}
 	else if (myOwner == eOwnerType::PLAYER)
 	{
-		PostMaster::GetInstance()->SendMessage(NotificationMessage("Not enough artifact."));
+		PostMaster::GetInstance()->SendMessage(NotificationMessage("Not enough artifacts."));
 	}
 
 	return false;

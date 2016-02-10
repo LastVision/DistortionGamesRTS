@@ -46,6 +46,7 @@ InGameState::InGameState(int aLevelIndex, eDifficulty aDifficulty)
 	, myMessageScreen(nullptr)
 	, myIsComplete(false)
 	, myIsShuttingDown(false)
+	, myReturnedFromCredits(false)
 	, myCinematicIndex(0)
 {
 	myIsActiveState = false;
@@ -142,13 +143,20 @@ const eStateStatus InGameState::Update(const float& aDeltaTime)
 		SAFE_DELETE(myLevel);
 		return eStateStatus::ePopMainState;
 	}
-	if (myIsComplete == true)
+	if (myIsComplete == true && myReturnedFromCredits == false)
 	{
 		bool runtime = Prism::MemoryTracker::GetInstance()->GetRunTime();
 		Prism::MemoryTracker::GetInstance()->SetRunTime(false);
 		myStateStack->PushSubGameState(new CreditMenuState());
 		Prism::MemoryTracker::GetInstance()->SetRunTime(runtime);
+		myReturnedFromCredits = true;
 		return eStateStatus::eKeepState;
+	}
+	if (myReturnedFromCredits == true)
+	{
+		myIsActiveState = false;
+		SAFE_DELETE(myLevel);
+		return eStateStatus::ePopMainState;
 	}
 
 	if (CU::InputWrapper::GetInstance()->KeyUp(DIK_GRAVE) == true || myShouldReOpenConsole == true)
