@@ -83,7 +83,6 @@ void EnrageComponent::Update(float aDeltaTime)
 			actor->SetRechargeTime(myOriginalRechargeTime);
 
 		}
-		PostMaster::GetInstance()->SendMessage(EmitterMessage("enrage", myEntity.GetId()));
 	}
 }
 
@@ -119,6 +118,8 @@ void EnrageComponent::Activate()
 
 		Prism::Audio::AudioInterface::GetInstance()->PostEvent("Tank_Enrage"
 			, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+
+		PostMaster::GetInstance()->SendMessage(EmitterMessage("enrage", myEntity.GetId()));
 
 	}
 }
