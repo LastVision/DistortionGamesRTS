@@ -228,6 +228,7 @@ void Level::Render(Prism::Camera& aCamera)
 
 	myRenderer->BeginScene();
 	myScene->Render(myRenderNavMeshLines, myFogOfWarHelper->GetTexture(), myShadowLight);
+	Prism::DebugDrawer::GetInstance()->RenderLinesToScreen(aCamera);
 
 	if (globalUseParticles == true)
 	{
@@ -245,7 +246,6 @@ void Level::Render(Prism::Camera& aCamera)
 	}
 	myRenderer->FinalRender();
 
-	Prism::DebugDrawer::GetInstance()->RenderLinesToScreen(aCamera);
 
 	myPlayer->RenderHealthBars(aCamera);
 	myAI->RenderHealthBars(aCamera);

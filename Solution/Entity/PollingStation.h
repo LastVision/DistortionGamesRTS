@@ -31,7 +31,7 @@ public:
 	CU::Vector2<float> GetClosestNotOwnedVictoryPoint(eOwnerType aOwner, const CU::Vector2<float>& aPoint) const;
 
 	void AddArtifact(Entity* aArtifact);
-	void DeleteArtifact(Entity* aArtifact);
+	void RemoveArtifact(Entity* aArtifact);
 	const CU::GrowingArray<Entity*>& GetArtifacts() const;
 
 	const Entity* GetBase(eOwnerType anOwner) const;

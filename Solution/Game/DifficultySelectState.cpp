@@ -76,17 +76,17 @@ void DifficultySelectState::ReceiveMessage(const OnClickMessage& aMessage)
 		switch (aMessage.myEvent)
 		{
 		case eOnClickEvent::GAME_START_EASY:
-			Prism::MemoryTracker::GetInstance()->SetRunTime(false);
+			////Prism::MemoryTracker::GetInstance()->SetRunTime(false);
 			PostMaster::GetInstance()->UnSubscribe(eMessageType::ON_CLICK, this);
 			myStateStack->PushSubGameState(new InGameState(myLevelindex, eDifficulty::EASY));
 			break;
 		case eOnClickEvent::GAME_START_NORMAL:
-			Prism::MemoryTracker::GetInstance()->SetRunTime(false);
+			////Prism::MemoryTracker::GetInstance()->SetRunTime(false);
 			PostMaster::GetInstance()->UnSubscribe(eMessageType::ON_CLICK, this);
 			myStateStack->PushSubGameState(new InGameState(myLevelindex, eDifficulty::NORMAL));
 			break;
 		case eOnClickEvent::GAME_START_HARD:
-			Prism::MemoryTracker::GetInstance()->SetRunTime(false);
+			////Prism::MemoryTracker::GetInstance()->SetRunTime(false);
 			PostMaster::GetInstance()->UnSubscribe(eMessageType::ON_CLICK, this);
 			myStateStack->PushSubGameState(new InGameState(myLevelindex, eDifficulty::HARD));
 			break;

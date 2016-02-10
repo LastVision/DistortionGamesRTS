@@ -193,6 +193,7 @@ void ComponentLoader::LoadControllerComponent(XMLReader& aDocument, tinyxml2::XM
 void ComponentLoader::LoadGraphicsComponent(XMLReader& aDocument, tinyxml2::XMLElement* aSourceElement, GraphicsComponentData& aOutputData)
 {
 	aOutputData.myExistsInEntity = true;
+	aOutputData.myAlwaysRender = false;
 
 	for (tinyxml2::XMLElement* e = aDocument.FindFirstChild(aSourceElement); e != nullptr; e = aDocument.FindNextElement(e))
 	{
@@ -201,6 +202,10 @@ void ComponentLoader::LoadGraphicsComponent(XMLReader& aDocument, tinyxml2::XMLE
 		{
 			aDocument.ForceReadAttribute(e, "modelPath", aOutputData.myModelPath);
 			aDocument.ForceReadAttribute(e, "shaderPath", aOutputData.myEffectPath);
+		}
+		else if (elementName == CU::ToLower("AlwaysRender"))
+		{
+			aOutputData.myAlwaysRender = true;
 		}
 		else
 		{

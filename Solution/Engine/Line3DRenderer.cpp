@@ -26,7 +26,6 @@ namespace Prism
 
 	Line3DRenderer::~Line3DRenderer()
 	{
-		SAFE_DELETE(myEffect);
 		SAFE_DELETE(myVertexBuffer);
 		SAFE_DELETE(myVertexBufferDesc);
 		if (myInputLayout != nullptr)

@@ -139,11 +139,13 @@ eOwnerType TriggerComponent::ModifyOwnership(eOwnerType anOwner, float aModifyVa
 			{
 				PostMaster::GetInstance()->SendMessage(NotificationMessage("The enemy is taking over your resource point."));
 				PostMaster::GetInstance()->SendMessage(MinimapEventMessage(myEntity.GetPosition(), MinimapEventType::eRESOURCE_POINT));
+				Prism::Audio::AudioInterface::GetInstance()->PostEvent("TakingResourcePoint", 0);
 			}
 			else if (myType == eTriggerType::VICTORY)
 			{
 				PostMaster::GetInstance()->SendMessage(NotificationMessage("The enemy is taking over your victory point."));
 				PostMaster::GetInstance()->SendMessage(MinimapEventMessage(myEntity.GetPosition(), MinimapEventType::eVICTORY_POINT));
+				Prism::Audio::AudioInterface::GetInstance()->PostEvent("TakingVictoryPoint", 0);
 			}
 			else
 			{

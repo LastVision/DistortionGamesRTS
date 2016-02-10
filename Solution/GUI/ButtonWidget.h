@@ -42,6 +42,8 @@ namespace GUI
 
 	protected:
 		void Click();
+
+		std::string myHoverText;
 		
 		Prism::SpriteProxy* myImageNormal;
 		Prism::SpriteProxy* myImagePressed;

@@ -33,6 +33,7 @@ Entity::Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& a
 	, myPosition({aStartPosition.x, aStartPosition.z})
 	, myUnitType(aUnitType)
 	, myEmitterConnection(nullptr)
+	, myArtifactTotalTime((static_cast<float>(rand() % 100) * 0.01f))
 {
 	myId = EntityId::GetInstance()->GetId(this);
 	for (int i = 0; i < static_cast<int>(eComponentType::_COUNT); ++i)
@@ -41,6 +42,7 @@ Entity::Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& a
 	}
 
 	myOrientation.SetPos(aStartPosition);
+	myOriginalY = aStartPosition.y;
 	//aTerrain.CalcEntityHeight(myOrientation);
 
 	//if (aEntityData.myActorData.myExistsInEntity == true)
@@ -180,6 +182,10 @@ void Entity::Reset()
 
 void Entity::Update(float aDeltaTime)
 {
+	if (myType == eEntityType::ARTIFACT)
+	{
+		UpdateArtifact(aDeltaTime);
+	}
 	myPosition = { myOrientation.GetPos().x, myOrientation.GetPos().z };
 	for (int i = 0; i < static_cast<int>(eComponentType::_COUNT); ++i)
 	{
@@ -215,6 +221,21 @@ void Entity::Update(float aDeltaTime)
 		myCurrentDecayTime = 30.f;
 		myDecayFlag = true;
 	}
+}
+
+void Entity::UpdateArtifact(float aDeltaTime)
+{
+	myArtifactTotalTime += aDeltaTime;
+	float heightToAdd = sinf(myArtifactTotalTime * 4.f) * 0.3f;
+	CU::Vector3<float> pos(myOrientation.GetPos());
+	pos.y = myOriginalY;
+	pos.y += heightToAdd;
+	pos.y += 0.3f;
+
+	myOrientation.SetPos(CU::Vector3<float>());
+
+	myOrientation = myOrientation * CU::Matrix44<float>::CreateRotateAroundY(aDeltaTime);
+	myOrientation.SetPos(pos);
 }
 
 void Entity::AddComponent(Component* aComponent)

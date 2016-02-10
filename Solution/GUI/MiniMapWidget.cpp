@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+#include <AudioInterface.h>
 #include "../Game/GameDefines.h"
 #include <EventPositionMessage.h>
 #include "../Engine/Camera.h"
@@ -216,7 +217,7 @@ namespace GUI
 				return;
 			}
 		}
-
+		Prism::Audio::AudioInterface::GetInstance()->PostEvent("PLay_Ping", 0);
 		myEventSprites[myCurrentEventSprite].myEventPosition = aMessage.myPosition;
 		myEventSprites[myCurrentEventSprite].myEventTimer = 0.f;
 		myEventSprites[myCurrentEventSprite].myShouldRenderEvent = true;
@@ -243,7 +244,8 @@ namespace GUI
 			CU::Vector4<float> color = PLAYER_COLOR;
 			if (playerUnits[i]->IsSelected() == true)
 			{
-				color = { 1.f, 1.f, 1.f, 1.f };
+				color = PLAYER_COLOR;
+				color += CU::Vector4<float>(0.3f, 0.25f, 0.1f, 0.f);
 			}
 			CU::Vector2<float> position = (playerUnits[i]->GetPosition() / 255.f) * mySize;
 			myUnitSprite->Render(aParentPosition + myPosition + position, { 1.f, 1.f }, color);
