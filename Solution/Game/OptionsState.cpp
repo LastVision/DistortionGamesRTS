@@ -23,6 +23,7 @@ OptionsState::~OptionsState()
 	SAFE_DELETE(myMusicText);
 	SAFE_DELETE(myShadowText);
 	SAFE_DELETE(mySfxText);
+	SAFE_DELETE(myVoiceText);
 	myCursor = nullptr;
 	PostMaster::GetInstance()->UnSubscribe(eMessageType::ON_CLICK, this);
 }
@@ -41,6 +42,7 @@ void OptionsState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCu
 
 	myMusicText = new Prism::Text(*Prism::Engine::GetInstance()->GetFont(Prism::eFont::DIALOGUE));
 	mySfxText = new Prism::Text(*Prism::Engine::GetInstance()->GetFont(Prism::eFont::DIALOGUE));
+	myVoiceText = new Prism::Text(*Prism::Engine::GetInstance()->GetFont(Prism::eFont::DIALOGUE));
 	myShadowText = new Prism::Text(*Prism::Engine::GetInstance()->GetFont(Prism::eFont::DIALOGUE));
 	OnResize(windowSize.x, windowSize.y);
 
@@ -59,11 +61,13 @@ void OptionsState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCu
 
 	myMusicVolume = Prism::Audio::AudioInterface::GetInstance()->GetMusicVolume();
 	mySfxVolume = Prism::Audio::AudioInterface::GetInstance()->GetSFXVolume();
+	myVoiceVolume = Prism::Audio::AudioInterface::GetInstance()->GetVoiceVolume();
 
 	myMusicText->SetText("Music: " + std::to_string(myMusicVolume));
 	mySfxText->SetText("SFX: " + std::to_string(mySfxVolume));
 
 	PostMaster::GetInstance()->SendMessage(FadeMessage(1.f / 3.f));
+	myVoiceText->SetText("Voice: " + std::to_string(myVoiceVolume));
 }
 
 void OptionsState::EndState()
@@ -78,7 +82,8 @@ void OptionsState::OnResize(int aWidth, int aHeight)
 	GUI::WidgetContainer* widgetCont = reinterpret_cast<GUI::WidgetContainer*>(myGUIManager->GetWidgetContainer()->At(0));
 	CU::Vector2<float> firstRow = widgetCont->At(3)->GetPosition();
 	CU::Vector2<float> secondRow = widgetCont->At(1)->GetPosition();
-	CU::Vector2<float> fourthRow = widgetCont->At(5)->GetPosition();
+	CU::Vector2<float> thirdRow = widgetCont->At(5)->GetPosition();
+	CU::Vector2<float> fourthRow = widgetCont->At(7)->GetPosition();
 	float moveAmount = 320.f;
 	float ratio = static_cast<float>(aWidth) / static_cast<float>(aHeight);
 
@@ -97,6 +102,7 @@ void OptionsState::OnResize(int aWidth, int aHeight)
 	}
 	myMusicText->SetPosition({ firstRow.x - moveAmount, firstRow.y - (widgetCont->At(1)->GetSize().y * 0.25f) });
 	mySfxText->SetPosition({ secondRow.x - moveAmount, secondRow.y - (widgetCont->At(3)->GetSize().y * 0.25f) });
+	myVoiceText->SetPosition({ thirdRow.x - moveAmount, thirdRow.y - (widgetCont->At(5)->GetSize().y * 0.25f) });
 	myShadowText->SetPosition({ fourthRow.x - moveAmount, fourthRow.y });
 }
 
@@ -124,6 +130,13 @@ const eStateStatus OptionsState::Update(const float& aDeltaTime)
 		mySfxText->SetText("SFX: " + std::to_string(mySfxVolume));
 	}
 
+	int currentVoiceVolume = Prism::Audio::AudioInterface::GetInstance()->GetVoiceVolume();
+	if (currentVoiceVolume != myVoiceVolume)
+	{
+		myVoiceVolume = currentVoiceVolume;
+		myVoiceText->SetText("Voice: " + std::to_string(myVoiceVolume));
+	}
+
 	myGUIManager->Update(aDeltaTime);
 
 	return myStateStatus;
@@ -134,6 +147,7 @@ void OptionsState::Render()
 	myGUIManager->Render();
 	myMusicText->Render();
 	mySfxText->Render();
+	myVoiceText->Render();
 	myShadowText->Render();
 }
 
@@ -160,6 +174,14 @@ void OptionsState::ReceiveMessage(const OnClickMessage& aMessage)
 			break;
 		case eOnClickEvent::LOWERMUSIC:
 			Prism::Audio::AudioInterface::GetInstance()->PostEvent("LowerMusic", 0);
+			break;
+		case eOnClickEvent::INCREASEVOICE:
+			Prism::Audio::AudioInterface::GetInstance()->PostEvent("IncreaseVoice", 0);
+			Prism::Audio::AudioInterface::GetInstance()->PostEvent("Not_Enough_Fuel", 0);
+			break;
+		case eOnClickEvent::LOWERVOICE:
+			Prism::Audio::AudioInterface::GetInstance()->PostEvent("LowerVoice", 0);
+			Prism::Audio::AudioInterface::GetInstance()->PostEvent("Not_Enough_Fuel", 0);
 			break;
 		case eOnClickEvent::TOGGLE_SHADOWS:
 		{

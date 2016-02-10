@@ -32,8 +32,10 @@ private:
 	GUI::GUIManager* myGUIManager;
 	Prism::Text* myMusicText;
 	Prism::Text* mySfxText;
+	Prism::Text* myVoiceText;
 	Prism::Text* myShadowText;
 
 	int myMusicVolume;
 	int mySfxVolume;
+	int myVoiceVolume;
 };
