@@ -123,7 +123,8 @@ void Prism::Scene::Render(bool aRenderNavMeshLines)
 	for (int i = 0; i < myInstances.Size(); ++i)
 	{
 		Instance* current = myInstances[i];
-		if (current->GetAlwaysRender() == true || (current->GetShouldRender() == true && current->GetRenderThroughCulling() == true))
+		if (current->GetCastShadow() == true
+			&& (current->GetAlwaysRender() == true || (current->GetShouldRender() == true && current->GetRenderThroughCulling() == true)))
 		{
 			current->Render(*myCamera, *myInstancingHelper, true);
 		}
