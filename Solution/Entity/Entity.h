@@ -97,6 +97,8 @@ public:
 
 	void AddEmitter(Prism::ParticleEmitterInstance* anEmitterConnection);
 
+	Prism::ParticleEmitterInstance* GetEmitter();
+
 private:
 	void UpdateArtifact(float aDeltaTime);
 	void operator=(Entity&) = delete;

@@ -2,7 +2,7 @@
 #include "Subscriber.h"
 #include <GrowingArray.h>
 #include <bitset>
-#define PREALLOCATED_EMITTERGROUP 16
+#define PREALLOCATED_EMITTERGROUP 24
 
 class Entity;
 class ParticleEmitterComponent;

@@ -7,6 +7,7 @@
 #include "Console.h"
 #include "Director.h"
 #include <Entity.h>
+#include <EmitterMessage.h>
 #include "FogOfWarMap.h"
 #include <HealthComponent.h>
 #include <InWorldTextMessage.h>
@@ -321,6 +322,12 @@ void Director::ReceiveMessage(const UpgradeUnitMessage& aMessage)
 					actor->SetAttackDamage(actor->GetAttackDamage() + upgrade.myAttackModifier);
 					actor->SetRechargeTime(actor->GetAttackSpeed() + upgrade.myAttackSpeedModifier);
 				}
+
+				if (myOwner == eOwnerType::PLAYER)
+				{
+					PostMaster::GetInstance()->SendMessage(EmitterMessage("on_unit_upgrade",myUnits[i]->GetOrientation().GetPos()) );
+				}
+
 			}
 		}
 

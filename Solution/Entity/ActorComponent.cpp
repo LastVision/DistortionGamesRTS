@@ -182,6 +182,8 @@ void ActorComponent::Update(float aDelta)
 				PostMaster::GetInstance()->SendMessage(EmitterMessage("artifact_pickup", myEntity.GetOrientation().GetPos()));
 				//PostMaster::GetInstance()->SendMessage(EmitterMessage("artifact_glow", true, 1.f));
 				artifacts[i]->RemoveFromScene();
+				PostMaster::GetInstance()->SendMessage(EmitterMessage(artifacts[i]->GetEmitter(), true));
+
 				PollingStation::GetInstance()->RemoveArtifact(artifacts[i]);
 			}
 		}
