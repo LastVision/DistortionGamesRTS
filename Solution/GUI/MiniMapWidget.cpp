@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+#include <AudioInterface.h>
 #include "../Game/GameDefines.h"
 #include <EventPositionMessage.h>
 #include "../Engine/Camera.h"
@@ -216,7 +217,7 @@ namespace GUI
 				return;
 			}
 		}
-
+		Prism::Audio::AudioInterface::GetInstance()->PostEvent("PLay_Ping", 0);
 		myEventSprites[myCurrentEventSprite].myEventPosition = aMessage.myPosition;
 		myEventSprites[myCurrentEventSprite].myEventTimer = 0.f;
 		myEventSprites[myCurrentEventSprite].myShouldRenderEvent = true;

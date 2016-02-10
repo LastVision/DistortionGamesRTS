@@ -98,6 +98,7 @@ public:
 	void AddEmitter(Prism::ParticleEmitterInstance* anEmitterConnection);
 
 private:
+	void UpdateArtifact(float aDeltaTime);
 	void operator=(Entity&) = delete;
 	CU::StaticArray<Component*, static_cast<int>(eComponentType::_COUNT)> myComponents;
 
@@ -129,6 +130,9 @@ private:
 	bool myIsSelectable;
 
 	float myCurrentDecayTime;
+
+	float myArtifactTotalTime;
+	float myOriginalY;
 };
 
 template <typename T>

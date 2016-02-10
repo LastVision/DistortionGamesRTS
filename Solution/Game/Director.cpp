@@ -148,14 +148,14 @@ bool Director::SpawnUnit(eUnitType aUnitType)
 {
 	if (aUnitType == eUnitType::RANGER && myHasUnlockedRanger == false) return false;
 	if (aUnitType == eUnitType::TANK && myHasUnlockedTank == false) return false;
-	if (myBuilding->GetComponent<BuildingComponent>()->IsQueueFull() == true)
+	if (myOwner == eOwnerType::PLAYER && myBuilding->GetComponent<BuildingComponent>()->IsQueueFull() == true)
 	{
 		PostMaster::GetInstance()->SendMessage(NotificationMessage("Queue is full."));
 		return false;
 	}
 
 	BuildingComponent* building = myBuilding->GetComponent<BuildingComponent>();
-	if (myUnitCount + building->GetTotalQueueSupplyCost() + building->GetUnitSupplyCost(aUnitType) > myUnitCap)
+	if (myOwner == eOwnerType::PLAYER && myUnitCount + building->GetTotalQueueSupplyCost() + building->GetUnitSupplyCost(aUnitType) > myUnitCap)
 	{
 		PostMaster::GetInstance()->SendMessage(NotificationMessage("Not enough supply."));
 		return false;
@@ -186,7 +186,7 @@ bool Director::UpgradeUnit(eUnitType aUnitType)
 	//	return false;
 	//}
 
-	if (building->CanUpgrade(aUnitType) == false)
+	if (myOwner == eOwnerType::PLAYER && building->CanUpgrade(aUnitType) == false)
 	{
 		PostMaster::GetInstance()->SendMessage(NotificationMessage("Upgrade on cooldown."));
 		return false;
@@ -198,7 +198,7 @@ bool Director::UpgradeUnit(eUnitType aUnitType)
 		building->UpgradeUnit(aUnitType);
 		return true;
 	}
-	else
+	else if (myOwner == eOwnerType::PLAYER)
 	{
 		PostMaster::GetInstance()->SendMessage(NotificationMessage("Not enough artifact."));
 	}
@@ -325,7 +325,7 @@ void Director::ReceiveMessage(const UpgradeUnitMessage& aMessage)
 		if (myOwner == eOwnerType::PLAYER)
 		{
 			std::string message = "";
-
+			std::string soundEvent;
 			switch (aMessage.myUnit)
 			{
 			case eUnitType::GRUNT:
@@ -338,9 +338,10 @@ void Director::ReceiveMessage(const UpgradeUnitMessage& aMessage)
 				message = "Tank";
 				break;
 			}
-	
+			soundEvent = message + "_Upgrade";
 			message.append(" upgraded to level " + std::to_string(aMessage.myUpgradeLevel + 1) + ".");
 			PostMaster::GetInstance()->SendMessage(NotificationMessage(message));
+			Prism::Audio::AudioInterface::GetInstance()->PostEvent(soundEvent.c_str(), 0);
 		}
 	}
 }
