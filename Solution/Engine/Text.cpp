@@ -4,6 +4,8 @@
 #include "Text.h"
 #include "Texture.h"
 
+#include "Engine.h"
+
 Prism::Text::Text(const Font& aFont)
 	: myFont(aFont)
 	, myColor(1.f, 1.f, 1.f, 1.f)
@@ -42,6 +44,13 @@ void Prism::Text::SetText(const std::string& aText)
 	if (myText == aText)
 	{
 		return;
+	}
+
+	float aspect = Engine::GetInstance()->GetWindowSize().x / Engine::GetInstance()->GetWindowSize().y;
+
+	if (aspect < 1.5f)
+	{
+		myScale = CU::Vector2<float>(0.5f, 0.5f);
 	}
 
 	if (aText == "")

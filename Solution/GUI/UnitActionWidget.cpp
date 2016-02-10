@@ -129,8 +129,13 @@ namespace GUI
 		}
 	}
 
-	void UnitActionWidget::Update(float)
+	void UnitActionWidget::Update(float aDelta)
 	{
+		myGruntActionButtons->Update(aDelta);
+		myRangerActionButtons->Update(aDelta);
+		myTankActionButtons->Update(aDelta);
+		myBuildingActionButtons->Update(aDelta);
+
 		myFirstSelectedGrunt = nullptr;
 		myFirstSelectedRanger = nullptr;
 		myFirstSelectedTank = nullptr;
