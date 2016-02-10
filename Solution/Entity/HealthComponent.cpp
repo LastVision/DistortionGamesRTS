@@ -91,13 +91,19 @@ void HealthComponent::Update(float aDelta)
 bool HealthComponent::TakeDamageAndCheckSurvive(float aDamage)
 {
 	DL_ASSERT_EXP(aDamage >= 0, "Cant take negative damage, use Heal for healing if that was your intention");
-	PostMaster::GetInstance()->SendMessage(EmitterMessage("OnHit", myEntity.GetId()));
 
-	if (FogOfWarMap::GetInstance()->IsVisible(myEntity.GetPosition()) && myEntity.GetOwner() == eOwnerType::PLAYER)
+
+
+	if (FogOfWarMap::GetInstance()->IsVisible(myEntity.GetPosition())) 
 	{
-		PostMaster::GetInstance()->SendMessage(MinimapEventMessage(myEntity.GetPosition(), MinimapEventType::eUNIT_ATTACKED));
+		if (myEntity.GetOwner() == eOwnerType::PLAYER)
+		{
+			PostMaster::GetInstance()->SendMessage(MinimapEventMessage(myEntity.GetPosition(), MinimapEventType::eUNIT_ATTACKED));
+		}
+		CU::Vector3<float> pos = myEntity.GetOrientation().GetPos();
+		pos.y += 2;
+		PostMaster::GetInstance()->SendMessage(EmitterMessage("OnHit", pos));
 	}
-
 	float damage = aDamage - myArmor;
 	if (damage <= 0.f)
 	{

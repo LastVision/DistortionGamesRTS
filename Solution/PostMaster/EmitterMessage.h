@@ -23,44 +23,46 @@ struct EmitterMessage : public Message
 	EmitterMessage(const std::string& aParticleType, const CU::Vector3f& aPosition, float anEmitterLifeTime, float aRadius);
 
 	Prism::ParticleEmitterInstance* myEmitter;
-	const std::string myParticleTypeString;
-	const int myEntityID;
-	const CU::Vector3f myPosition;
-	const float myEmitterLifeTime;
 	Prism::Camera* myCamera;
-	CU::Vector3f mySize;
-	float myRadius;
-	bool myShouldAlwaysShow;
-	bool myShouldKillEmitter;
-	bool myIsArtifact;
+	const std::string myParticleTypeString;
+	const CU::Vector3f myPosition;
+	const CU::Vector3f mySize;
+	const int myEntityID;
+	const bool myShouldAlwaysShow;
+	const bool myShouldKillEmitter;
+	const bool myIsArtifact;
+	const float myEmitterLifeTime;
+	const float myRadius;
 };
 
 inline EmitterMessage::EmitterMessage(const std::string& aParticleType, int aEntityID)
 	: Message(eMessageType::PARTICLE)
-	, myParticleTypeString(aParticleType)
-	, myEntityID(aEntityID)
+	, myEmitter(nullptr)
 	, myCamera(nullptr)
-	, myEmitterLifeTime(0.f)
+	, myParticleTypeString(aParticleType)
 	, mySize({ 0.f, 0.f, 0.f })
-	, myRadius(0.f)
+	, myEntityID(aEntityID)
 	, myShouldAlwaysShow(false)
 	, myShouldKillEmitter(false)
-	, myEmitter(nullptr)
+	, myIsArtifact(false)
+	, myEmitterLifeTime(0.f)
+	, myRadius(0.f)
 {
 }
 
 inline EmitterMessage::EmitterMessage(const std::string& aParticleType, const CU::Vector3f& aPosition)
 	: Message(eMessageType::PARTICLE)
+	, myEmitter(nullptr)
+	, myCamera(nullptr)
 	, myParticleTypeString(aParticleType)
+	, mySize({ 0.f, 0.f, 0.f })
 	, myPosition(aPosition)
 	, myEntityID(-1)
-	, myCamera(nullptr)
 	, myEmitterLifeTime(0.f)
-	, mySize({ 0.f, 0.f, 0.f })
-	, myRadius(0.f)
 	, myShouldAlwaysShow(false)
 	, myShouldKillEmitter(false)
-	, myEmitter(nullptr)
+	, myIsArtifact(false)
+	, myRadius(0.f)
 {
 }
 

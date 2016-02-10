@@ -34,10 +34,7 @@ namespace Prism
 		myGraphicalParticles.Init(particleCount);
 		myLogicalParticles.Init(particleCount);
 
-		myEmissionTime = myParticleEmitterData->myEmissionRate;
-
-		myDiffColor = (myParticleEmitterData->myData.myEndColor - myParticleEmitterData->myData.myStartColor)
-			/ myParticleEmitterData->myParticlesLifeTime;
+		
 
 		for (int i = 0; i < particleCount; ++i)
 		{
@@ -46,6 +43,70 @@ namespace Prism
 			LogicalParticle tempLogic;
 			myLogicalParticles.Add(tempLogic);
 		}
+
+		Reset();
+
+		CreateVertexBuffer();
+	}
+
+	ParticleEmitterInstance::~ParticleEmitterInstance()
+	{
+		if (myVertexWrapper != nullptr && myVertexWrapper->myVertexBuffer != nullptr)
+		{
+			myVertexWrapper->myVertexBuffer->Release();
+		}
+
+		SAFE_DELETE(myVertexWrapper);
+	}
+
+	void ParticleEmitterInstance::ReleaseData()
+	{
+		myParticleEmitterData = nullptr;
+	}
+
+	void ParticleEmitterInstance::Render()
+	{
+		int toGraphicsCard = UpdateVertexBuffer();
+		myParticleEmitterData->myEffect->SetTexture(TextureContainer::GetInstance()->GetTexture(myParticleEmitterData->myTextureName));
+		//myParticleEmitterData->myEffect->SetWorldMatrix(myOrientation);
+
+		ID3D11DeviceContext* context = Engine::GetInstance()->GetContex();
+		context->IASetVertexBuffers(
+			myVertexWrapper->myStartSlot
+			, myVertexWrapper->myNumberOfBuffers
+			, &myVertexWrapper->myVertexBuffer
+			, &myVertexWrapper->myStride
+			, &myVertexWrapper->myByteOffset);
+
+		for (UINT i = 0; i < myParticleEmitterData->myTechniqueDesc->Passes; ++i)
+		{
+			myParticleEmitterData->myEffect->GetTechnique(false)->GetPassByIndex(i)->Apply(0, context);
+			context->Draw(myGraphicalParticles.Size(), 0);
+		}
+
+	}
+
+	void ParticleEmitterInstance::Update(float aDeltaTime, const CU::Matrix44f& aWorldMatrix)
+	{
+		UpdateEmitter(aDeltaTime, aWorldMatrix);
+	}
+
+
+	void ParticleEmitterInstance::Reset()
+	{
+
+		for (int i = 0; i < myGraphicalParticles.GetCapacity(); ++i)
+		{
+			myGraphicalParticles[i] = GraphicalParticle();
+			myLogicalParticles[i] = LogicalParticle();
+		}
+
+		
+		myLiveParticleCount = 0;
+
+		myEmissionTime = myParticleEmitterData->myEmissionRate;
+		myDiffColor = (myParticleEmitterData->myData.myEndColor - myParticleEmitterData->myData.myStartColor)
+			/ myParticleEmitterData->myParticlesLifeTime;
 
 		if (myParticleEmitterData->myUseAlphaDelta == true)
 		{
@@ -93,50 +154,6 @@ namespace Prism
 		}
 
 		myEmitterLife = myParticleEmitterData->myEmitterLifeTime;
-
-		CreateVertexBuffer();
-	}
-
-	ParticleEmitterInstance::~ParticleEmitterInstance()
-	{
-		if (myVertexWrapper != nullptr && myVertexWrapper->myVertexBuffer != nullptr)
-		{
-			myVertexWrapper->myVertexBuffer->Release();
-		}
-
-		SAFE_DELETE(myVertexWrapper);
-	}
-
-	void ParticleEmitterInstance::ReleaseData()
-	{
-		myParticleEmitterData = nullptr;
-	}
-
-	void ParticleEmitterInstance::Render()
-	{
-		int toGraphicsCard = UpdateVertexBuffer();
-		myParticleEmitterData->myEffect->SetTexture(TextureContainer::GetInstance()->GetTexture(myParticleEmitterData->myTextureName));
-		//myParticleEmitterData->myEffect->SetWorldMatrix(myOrientation);
-
-		ID3D11DeviceContext* context = Engine::GetInstance()->GetContex();
-		context->IASetVertexBuffers(
-			myVertexWrapper->myStartSlot
-			, myVertexWrapper->myNumberOfBuffers
-			, &myVertexWrapper->myVertexBuffer
-			, &myVertexWrapper->myStride
-			, &myVertexWrapper->myByteOffset);
-
-		for (UINT i = 0; i < myParticleEmitterData->myTechniqueDesc->Passes; ++i)
-		{
-			myParticleEmitterData->myEffect->GetTechnique(false)->GetPassByIndex(i)->Apply(0, context);
-			context->Draw(myGraphicalParticles.Size(), 0);
-		}
-
-	}
-
-	void ParticleEmitterInstance::Update(float aDeltaTime, const CU::Matrix44f& aWorldMatrix)
-	{
-		UpdateEmitter(aDeltaTime, aWorldMatrix);
 	}
 
 	void ParticleEmitterInstance::CreateVertexBuffer()
@@ -421,8 +438,8 @@ namespace Prism
 
 	void ParticleEmitterInstance::Activate()
 	{
+		Reset();
 		myStates[ACTIVE] = TRUE;
-		myEmitterLife = myParticleEmitterData->myEmitterLifeTime;
 	}
 
 	bool ParticleEmitterInstance::IsActive()
