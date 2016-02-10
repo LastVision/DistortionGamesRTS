@@ -93,11 +93,11 @@ const eStateStatus MainMenuState::Update(const float& aDeltaTime)
 	{
 #ifdef RELEASE_BUILD
 		PostMaster::GetInstance()->UnSubscribe(eMessageType::ON_CLICK, this);
-		bool runtime = ////Prism::MemoryTracker::GetInstance()->GetRunTime();
+		//bool runtime = ////Prism::MemoryTracker::GetInstance()->GetRunTime();
 		////Prism::MemoryTracker::GetInstance()->SetRunTime(false);
 		myStateStack->PushSubGameState(new SplashState("Data/Resource/Texture/Menu/Splash/T_logo_other.dds", false));
 		////Prism::MemoryTracker::GetInstance()->SetRunTime(runtime);
-		runtime = ////Prism::MemoryTracker::GetInstance()->GetRunTime();
+		//runtime = ////Prism::MemoryTracker::GetInstance()->GetRunTime();
 		////Prism::MemoryTracker::GetInstance()->SetRunTime(false);
 		myStateStack->PushSubGameState(new SplashState("Data/Resource/Texture/Menu/Splash/T_logo_our.dds", true));
 		////Prism::MemoryTracker::GetInstance()->SetRunTime(runtime);
