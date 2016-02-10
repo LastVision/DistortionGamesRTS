@@ -88,8 +88,8 @@ void Prism::Texture::InitAsDepthBuffer()
 	int width = Prism::Engine::GetInstance()->GetWindowSizeInt().x;
 	int height = Prism::Engine::GetInstance()->GetWindowSizeInt().y;
 
-	width = 1024;
-	height = 1024;
+	width = 1024 * 4;
+	height = 1024 * 4;
 	myFileName = "Initied as DSV";
 	myShaderView = nullptr;
 	myRenderTargetView = nullptr;
