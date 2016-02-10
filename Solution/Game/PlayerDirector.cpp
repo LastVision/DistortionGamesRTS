@@ -1014,6 +1014,40 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 		myRenderDragSelection = false;
 	}
 
+
+	if (myRightClicked == true)
+	{
+		myFirstMousePosition = CU::InputWrapper::GetInstance()->GetMousePosition();
+		myFirstMousePositionInWorld = CalcCursorWorldPosition(myFirstMousePosition, aCamera);
+		myFirstCameraPosition = aCamera.GetOrientation().GetPos();
+#ifdef CLICK_EXPLOSION
+		CU::Vector3<float> pos = myFirstMousePositionInWorld;
+		pos.y = 10.f;
+		std::string effect = "OnHit";
+
+		PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
+		pos.x += 5.f;
+	/*	PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
+		pos.x += 5.f;
+		pos.z += 5.f;
+		PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
+		pos.x += 5.f;
+		pos.z -= 5.f;
+		PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
+		pos.x -= 5.f;
+		pos.z -= 5.f;
+		PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
+		pos.x -= 5.f;
+		pos.z += 5.f;
+		PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
+		pos.x -= 5.f;
+		PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
+		pos.z += 5.f;
+		PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
+		pos.z -= 5.f;*/
+#endif
+	}
+
 	if (myLeftMouseDown == true && mySelectedAction == eSelectedAction::PLACE_TOTEM)
 	{
 		myCursor->SetCurrentCursor(eCursorType::NORMAL);
@@ -1026,7 +1060,53 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 		myFirstMousePositionInWorld = CalcCursorWorldPosition(myFirstMousePosition, aCamera);
 		myFirstCameraPosition = aCamera.GetOrientation().GetPos();
 #ifdef CLICK_EXPLOSION
-		PostMaster::GetInstance()->SendMessage(EmitterMessage("grenade", myFirstMousePositionInWorld));
+		CU::Vector3<float> pos = myFirstMousePositionInWorld;
+		pos.y = 10.f;
+
+		std::string effect = "grenade";
+
+		PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
+		pos.x += 5.f;
+	/*	PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
+		pos.x += 5.f;
+		pos.z += 5.f;
+		PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
+		pos.x += 5.f;
+		pos.z -= 5.f;
+		PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
+		pos.x -= 5.f;
+		pos.z -= 5.f;
+		PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
+		pos.x -= 5.f;
+		pos.z += 5.f;
+		PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
+		pos.x -= 5.f;
+		PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
+		pos.z += 5.f;
+		PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
+		pos.z -= 5.f;
+
+		
+		PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
+		pos.x += 7.5f;
+		PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
+		pos.x += 7.5f;
+		pos.z += 7.5f;
+		PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
+		pos.x += 7.5f;
+		pos.z -= 7.5f;
+		PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
+		pos.x -= 7.5f;
+		pos.z -= 7.5f;
+		PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
+		pos.x -= 7.5f;
+		pos.z += 7.5f;
+		PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
+		pos.x -= 7.5f;
+		PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
+		pos.z += 7.5f;
+		PostMaster::GetInstance()->SendMessage(EmitterMessage(effect, pos));
+		pos.z -= 7.5f;*/
 #endif
 		if (myMouseIsOverGUI == true)
 		{
@@ -1044,10 +1124,17 @@ void PlayerDirector::UpdateMouseInteraction(const Prism::Camera& aCamera)
 
 		if (myFirstCameraPosition != aCamera.GetOrientation().GetPos())
 		{
-			CU::Vector3<float> difference = (aCamera.GetOrientation().GetPos() - myFirstCameraPosition) * 40.f;
-			CU::Vector2<float> screenPosition = { difference.x, difference.z };
-			myFirstMousePosition.x -= screenPosition.x;
-			myFirstMousePosition.y += screenPosition.y;
+			CU::Vector2<float> difference;
+			difference.x = (aCamera.GetOrientation().GetPos().x - myFirstCameraPosition.x) * 25.f;
+			difference.y = (aCamera.GetOrientation().GetPos().z - myFirstCameraPosition.z) * 25.f;
+			myFirstMousePosition.x -= difference.x;
+			myFirstMousePosition.y += difference.y;
+
+
+			//CU::Vector3<float> difference = (aCamera.GetOrientation().GetPos() - myFirstCameraPosition) * 40.f;
+			//CU::Vector2<float> screenPosition = { difference.x, difference.z };
+			//myFirstMousePosition.x -= screenPosition.x;
+			//myFirstMousePosition.y += screenPosition.y;
 
 			myFirstCameraPosition = aCamera.GetOrientation().GetPos();
 		}

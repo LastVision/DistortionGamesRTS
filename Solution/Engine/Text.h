@@ -41,7 +41,7 @@ inline void Prism::Text::SetPosition(const CU::Vector2<float>& aPosition)
 
 inline void Prism::Text::SetScale(const CU::Vector2<float>&)
 {
-	myScale = { 1.f, 1.f }; // scaling not allowed
+	myScale = myScale; // scaling not allowed
 }
 
 inline void Prism::Text::SetColor(const CU::Vector4<float>& aColor)

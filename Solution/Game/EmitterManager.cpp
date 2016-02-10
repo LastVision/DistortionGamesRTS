@@ -74,7 +74,7 @@ void EmitterManager::UpdateEmitters(float aDeltaTime, CU::Matrix44f aWorldMatrix
 				if (instance->GetCamera() != nullptr)
 				{
 					CU::Vector3<float> pos = instance->GetCamera()->GetOrientation().GetPos();
-					instance->SetPosition({ pos.x, pos.y -50.f, pos.z+65.f});
+					instance->SetPosition({ pos.x, pos.y - 50.f, pos.z + 65.f });
 
 				}
 				instance->Update(aDeltaTime, aWorldMatrix);
@@ -85,7 +85,6 @@ void EmitterManager::UpdateEmitters(float aDeltaTime, CU::Matrix44f aWorldMatrix
 
 void EmitterManager::RenderEmitters()
 {
-	int finished = 0;
 	Prism::ParticleDataContainer::GetInstance()->SetGPUData(myCamera);
 	for (int i = 0; i < myEmitterList.Size(); ++i)
 	{
@@ -95,6 +94,7 @@ void EmitterManager::RenderEmitters()
 		}
 		for (int k = 0; k < PREALLOCATED_EMITTERGROUP; k++)
 		{
+		int finished = 0;
 			if (myEmitterList[i]->myFinishedGroups[k] == FINISHED)
 			{
 				continue;
@@ -106,17 +106,7 @@ void EmitterManager::RenderEmitters()
 				if (instance->IsActive() == false)
 				{
 					finished++;
-
-					if (finished >= myEmitterList[i]->myEmitters[k].Size())
-					{
-						myEmitterList[i]->myFinishedCount++;
-						myEmitterList[i]->myFinishedGroups[k] = FINISHED;
-						if (myEmitterList[i]->myFinishedCount >= PREALLOCATED_EMITTERGROUP)
-						{
-							myEmitterList[i]->myGroupIsActive = false;
-						}
-					}
-					continue;
+					
 				}
 				else
 				{
@@ -124,6 +114,17 @@ void EmitterManager::RenderEmitters()
 					{
 						instance->Render();
 					}
+				}
+			}
+
+			if (finished >= myEmitterList[i]->myEmitters[k].Size())
+			{
+				myEmitterList[i]->myFinishedCount--;
+				myEmitterList[i]->myFinishedGroups[k] = FINISHED;
+				//if (myEmitterList[i]->myFinishedCount >= PREALLOCATED_EMITTERGROUP)
+				if (myEmitterList[i]->myFinishedCount <= 0)
+				{
+					myEmitterList[i]->myGroupIsActive = false;
 				}
 			}
 		}
@@ -142,16 +143,14 @@ void EmitterManager::ReceiveMessage(const EmitterMessage& aMessage)
 		}
 	}
 
-
-	if (FogOfWarMap::GetInstance()->IsVisible({ position.x, position.z }) == true || aMessage.myShouldAlwaysShow == true || aMessage.myIsArtifact)
+	if (aMessage.myEntityID != -1)
 	{
-		if (aMessage.myEntityID != -1)
-		{
-			position = EntityId::GetInstance()->GetEntity(aMessage.myEntityID)->GetOrientation().GetPos();
-			position.y += 2;
-		}
+		position = EntityId::GetInstance()->GetEntity(aMessage.myEntityID)->GetOrientation().GetPos();
+		position.y += 2;
+	}
 
-
+	if (FogOfWarMap::GetInstance()->IsVisible({ position.x, position.z }) == true || aMessage.myShouldAlwaysShow == true || aMessage.myIsArtifact == true)
+	{
 		std::string particleType = CU::ToLower(aMessage.myParticleTypeString);
 		if (particleType == "")
 		{
@@ -162,15 +161,23 @@ void EmitterManager::ReceiveMessage(const EmitterMessage& aMessage)
 		if (myEmitters[particleType]->myCurrentIndex > (PREALLOCATED_EMITTERGROUP - 1))
 		{
 			myEmitters[particleType]->myCurrentIndex = 0;
+
+			short index = myEmitters[particleType]->myCurrentIndex;
+		//	DL_ASSERT_EXP(myEmitters[particleType]->myEmitters[index][0]->IsActive() == false, "Particle popped");
 		}
 
 		short index = myEmitters[particleType]->myCurrentIndex;
+
+		/*if (myEmitters[particleType]->myEmitters[index][0]->IsActive() == true)
+		{
+			return;
+		}*/
 
 		for (int i = 0; i < myEmitters[particleType]->myEmitters[index].Size(); ++i)
 		{
 			Prism::ParticleEmitterInstance* instance = myEmitters[particleType]->myEmitters[index][i];
 
-			if (aMessage.myEntityID != -1)
+			if (aMessage.myEntityID != -1 && aMessage.myIsArtifact)
 			{
 				instance->SetEntity(EntityId::GetInstance()->GetEntity(aMessage.myEntityID));
 				instance->GetEntity()->AddEmitter(instance);
@@ -205,14 +212,11 @@ void EmitterManager::ReceiveMessage(const EmitterMessage& aMessage)
 				instance->SetEmitterLifeTime(aMessage.myEmitterLifeTime);
 			}
 
-			if (aMessage.myCamera != nullptr)
-			{
-				instance->SetCamera(aMessage.myCamera);
-			}
+
 
 		}
 		myEmitters[particleType]->myFinishedGroups[index] = UNFINISHED;
-		myEmitters[particleType]->myFinishedCount--;
+		myEmitters[particleType]->myFinishedCount++;
 		myEmitters[particleType]->myGroupIsActive = true;
 		myEmitters[particleType]->myCurrentIndex++;
 	}
@@ -280,7 +284,7 @@ void EmitterManager::ReadList(const std::string& aPath, const std::string& anID,
 EmitterData::EmitterData(const std::string& aType)
 	: myType(aType)
 	, myCurrentIndex(0)
-	, myFinishedCount(PREALLOCATED_EMITTERGROUP)
+	, myFinishedCount(0)
 	, myGroupIsActive(false)
 {
 	for (int i = 0; i < PREALLOCATED_EMITTERGROUP; ++i)

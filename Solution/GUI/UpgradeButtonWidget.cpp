@@ -44,6 +44,14 @@ namespace GUI
 		}
 	}
 
+	void UpgradeButtonWidget::Update(float aDelta)
+	{
+		for (int i = 0; i < 3; i++)
+		{
+			myUpgrades[i]->Update(aDelta);
+		}
+	}
+
 	void UpgradeButtonWidget::Render(const CU::Vector2<float>& aParentPosition)
 	{
 		if (*myUpgradeLevel < AMOUNT_OF_UPGRADES)

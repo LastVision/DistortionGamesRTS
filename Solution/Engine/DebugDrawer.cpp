@@ -7,8 +7,8 @@
 #ifdef RELEASE_BUILD
 	#define WHITE_DEBUG CU::Vector4<float>(176.f/255.f, 176.f/255.f, 175.f/255.f, 1.f)
 	#define BLACK_DEBUG CU::Vector4<float>(0.f, 0.f, 0.f, 1.f)
-	#define RED_DEBUG CU::Vector4<float>(176.f/255.f, 112.f/255.f, 112.f/255.f, 1.f)
-	#define GREEN_DEBUG CU::Vector4<float>(115.f / 255.f, 176.f/255.f, 112.f/255.f, 1.f)
+	#define RED_DEBUG CU::Vector4<float>(176.f/255.f, 0.f/255.f, 0.f/255.f, 1.f)
+	#define GREEN_DEBUG CU::Vector4<float>(0.f / 255.f, 176.f/255.f, 0.f/255.f, 1.f)
 	#define BLUE_DEBUG CU::Vector4<float>(0.f, 0.f, 1.f, 1.f)
 	#define PINK_DEBUG CU::Vector4<float>(176.f/255.f, 112.f/255.f, 176.f/255.f, 1.f)
 	#define YELLOW_DEBUG CU::Vector4<float>(1.f, 1.f, 0.f, 1.f)

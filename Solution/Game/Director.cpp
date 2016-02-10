@@ -158,6 +158,7 @@ bool Director::SpawnUnit(eUnitType aUnitType)
 	if (myOwner == eOwnerType::PLAYER && myUnitCount + building->GetTotalQueueSupplyCost() + building->GetUnitSupplyCost(aUnitType) > myUnitCap)
 	{
 		PostMaster::GetInstance()->SendMessage(NotificationMessage("Not enough supply."));
+		Prism::Audio::AudioInterface::GetInstance()->PostEvent("Not_Enough_Supply", 0);
 		return false;
 	}
 
@@ -201,6 +202,7 @@ bool Director::UpgradeUnit(eUnitType aUnitType)
 	else if (myOwner == eOwnerType::PLAYER)
 	{
 		PostMaster::GetInstance()->SendMessage(NotificationMessage("Not enough artifacts."));
+		Prism::Audio::AudioInterface::GetInstance()->PostEvent("Not_Enough_Artifacts", 0);
 	}
 
 	return false;
