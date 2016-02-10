@@ -42,7 +42,7 @@ void LoadingState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCu
 	myIsLetThrough = false;
 	myStateStack = aStateStackProxy;
 
-	myGUIManager = new GUI::GUIManager(myCursor, "Data/Resource/GUI/GUI_level_select.xml", nullptr, nullptr, nullptr, -1);
+	myGUIManager = new GUI::GUIManager(myCursor, "Data/Resource/GUI/GUI_loading_screen.xml", nullptr, nullptr, nullptr, -1);
 	OnResize(Prism::Engine::GetInstance()->GetWindowSizeInt().x, Prism::Engine::GetInstance()->GetWindowSizeInt().y);
 	Prism::Audio::AudioInterface::GetInstance()->PostEvent("Stop_Menu", 0);
 	Prism::Audio::AudioInterface::GetInstance()->PostEvent("Play_Loading", 0);

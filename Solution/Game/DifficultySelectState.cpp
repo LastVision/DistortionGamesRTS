@@ -35,7 +35,7 @@ void DifficultySelectState::InitState(StateStackProxy* aStateStackProxy, GUI::Cu
 	myStateStack = aStateStackProxy;
 	myCursor = aCursor;
 	myGUIManager = new GUI::GUIManager(myCursor, "Data/Resource/GUI/GUI_difficulty_select.xml", nullptr, nullptr, nullptr, -1);
-	myFadingGUIManager = new GUI::GUIManager(myCursor, "Data/Resource/GUI/GUI_level_select.xml", nullptr, nullptr, nullptr, -1);
+	myFadingGUIManager = new GUI::GUIManager(myCursor, "Data/Resource/GUI/GUI_loading_screen.xml", nullptr, nullptr, nullptr, -1);
 
 	CU::Vector2<int> windowSize = Prism::Engine::GetInstance()->GetWindowSizeInt();
 	OnResize(windowSize.x, windowSize.y);
