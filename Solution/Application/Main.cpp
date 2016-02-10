@@ -10,7 +10,7 @@
 #include <InputWrapper.h>
 //#include <vld.h>
 
-
+bool engineIsRunning = true;
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 bool ReadSetup(Prism::SetupInfo& aSetup, const std::string& aFilePath);
 void OnResize();
@@ -124,7 +124,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPTSTR, int aNumberCommands)
 			Prism::Engine::GetInstance()->Render();
 		}
 	}
-
+	engineIsRunning = false;
 	globalGame->Destroy();
 	delete globalGame;
 	globalGame = nullptr;
@@ -234,18 +234,21 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 void OnResize()
 {
-	Prism::ModelLoader::GetInstance()->Pause();
-	Prism::Engine::GetInstance()->OnResize(globalClientWidth, globalClientHeight);
-
-	if (globalGame != nullptr)
+	if (engineIsRunning == true)
 	{
-		if (globalIsActive == true)
+		Prism::ModelLoader::GetInstance()->Pause();
+		Prism::Engine::GetInstance()->OnResize(globalClientWidth, globalClientHeight);
+
+		if (globalGame != nullptr)
 		{
-			globalGame->UnPause();
+			if (globalIsActive == true)
+			{
+				globalGame->UnPause();
+			}
+			globalGame->OnResize(globalClientWidth, globalClientHeight);
 		}
-		globalGame->OnResize(globalClientWidth, globalClientHeight);
+		Prism::ModelLoader::GetInstance()->UnPause();
 	}
-	Prism::ModelLoader::GetInstance()->UnPause();
 }
 
 bool ReadSetup(Prism::SetupInfo& aSetup, const std::string& aFilePath)
