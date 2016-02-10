@@ -301,6 +301,14 @@ namespace GUI
 		{
 			myClickEvent = new OnClickMessage(eOnClickEvent::LOWERMUSIC);
 		}
+		else if (clickEvent == "IncreaseVoice")
+		{
+			myClickEvent = new OnClickMessage(eOnClickEvent::INCREASEVOICE);
+		}
+		else if (clickEvent == "LowerVoice")
+		{
+			myClickEvent = new OnClickMessage(eOnClickEvent::LOWERVOICE);
+		}
 		else if (clickEvent == "options_menu")
 		{
 			myClickEvent = new OnClickMessage(eOnClickEvent::OPTIONS_MENU);

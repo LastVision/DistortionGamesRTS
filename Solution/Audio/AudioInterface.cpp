@@ -16,7 +16,7 @@ namespace Prism
 			:myWwiseManager(nullptr)
 			, mySFXVolume(80)
 			, myMusicVolume(70)
-			, myVoiceVolume(90)
+			, myVoiceVolume(80)
 		{	
 		}
 

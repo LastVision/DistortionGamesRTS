@@ -37,6 +37,9 @@ private:
 	CU::Vector2<float> myMessagePosition;
 	GameStateMessage* myEvent;
 
+	float myTotalTime;
+	float myFinishedTextAlpha;
+	bool myFinishedTextFadeIn;
 };
 
 inline void MessageState::SetText(const std::string& aText)

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include <AudioInterface.h>
+#include <Cursor.h>
 #include <InputWrapper.h>
 #include "LoadingState.h"
 #include <Sprite.h>
@@ -38,7 +39,7 @@ LoadingState::~LoadingState()
 
 void LoadingState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCursor)
 {
-	aCursor;
+	myCursor = aCursor;
 	myIsLetThrough = false;
 	myStateStack = aStateStackProxy;
 
@@ -53,6 +54,7 @@ void LoadingState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCu
 void LoadingState::EndState()
 {
 	PostMaster::GetInstance()->SendMessage(FadeMessage(1.f / 30.f));
+	myCursor->SetShouldRender(true);
 }
 
 const eStateStatus LoadingState::Update(const float& aDeltaTime)
@@ -145,12 +147,12 @@ void LoadingState::Render()
 
 	if (Prism::ModelLoader::GetInstance()->IsLoading() == false)
 	{
-		Prism::Engine::GetInstance()->PrintText("Press Enter to begin."
+		Prism::Engine::GetInstance()->PrintText("Press [space] to begin."
 			, { windowSize.x * 0.5f - 150.f, windowSize.y  * 0.5f - 350.f }, Prism::eTextType::RELEASE_TEXT
 			, 1.f, { 1.f, 1.f, 1.f, myFinishedTextAlpha });
 	}
 
-	CU::Vector2<float> position = { windowSize.x * 0.5f + 650.f, windowSize.y *0.5f - 350.f };
+	CU::Vector2<float> position = { windowSize.x * 0.5f + 400.f, windowSize.y *0.5f - 350.f };
 	CU::Vector2<float> scale = { myRotatingThingScale * 0.5f, myRotatingThingScale * 0.5f };
 
 	myRotatingThing->Render(position, scale);

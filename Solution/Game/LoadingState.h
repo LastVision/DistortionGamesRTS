@@ -8,6 +8,7 @@ namespace Prism
 
 namespace GUI
 {
+	class Cursor;
 	class GUIManager;
 }
 
@@ -27,6 +28,7 @@ public:
 
 private:
 	GUI::GUIManager* myGUIManager;
+	GUI::Cursor* myCursor;
 
 	Prism::SpriteProxy* myRotatingThing;
 	Prism::SpriteProxy* myRotatingThing2;
