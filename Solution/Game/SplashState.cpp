@@ -5,6 +5,7 @@
 #include <Sprite.h>
 #include <SpriteProxy.h>
 #include <Camera.h>
+#include <Cursor.h>
 #include <InputWrapper.h>
 #include "StateStackProxy.h"
 #include <TimerManager.h>
@@ -42,12 +43,13 @@ SplashState::~SplashState()
 {
 }
 
-void SplashState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor*)
+void SplashState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCursor)
 {
 	myIsLetThrough = false;
 	myStateStack = aStateStackProxy;
 	CU::Matrix44<float> orientation;
 	myCamera = new Prism::Camera(orientation);
+	myCursor = aCursor;
 
 	OnResize(Prism::Engine::GetInstance()->GetWindowSizeInt().x, Prism::Engine::GetInstance()->GetWindowSizeInt().y);
 
@@ -70,6 +72,8 @@ void SplashState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor*)
 	myCurrentTime = 0;
 	myFadeOut = false;
 	myDisplay = false;
+
+	myCursor->SetShouldRender(false);
 }
 
 void SplashState::EndState()
@@ -83,6 +87,8 @@ void SplashState::EndState()
 	SAFE_DELETE(myLogo);
 	SAFE_DELETE(myBackground);
 	SAFE_DELETE(myCamera);
+
+	myCursor->SetShouldRender(true);
 }
 
 const eStateStatus SplashState::Update(const float&)
@@ -146,7 +152,7 @@ void SplashState::Render()
 
 void SplashState::ResumeState()
 {
-	
+	myCursor->SetShouldRender(false);
 }
 
 void SplashState::OnResize(int aWidth, int aHeight)

@@ -8,6 +8,7 @@ namespace GUI
 	Cursor::Cursor(const CU::Vector2<int>& aWindowSize)
 		: myCurrentType(eCursorType::NORMAL)
 		, mySprites(8)
+		, myShouldRender(true)
 	{
 		myWindowSize.x = float(aWindowSize.x);
 		myWindowSize.y = float(aWindowSize.y);
@@ -59,7 +60,10 @@ namespace GUI
 
 	void Cursor::Render()
 	{
-		mySprites[static_cast<int>(myCurrentType)]->Render(myPosition);
+		if (myShouldRender == true)
+		{
+			mySprites[static_cast<int>(myCurrentType)]->Render(myPosition);
+		}
 	}
 
 	const CU::Vector2<float>& Cursor::GetMousePosition() const

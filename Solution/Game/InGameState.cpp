@@ -46,6 +46,7 @@ InGameState::InGameState(int aLevelIndex, eDifficulty aDifficulty)
 	, myMessageScreen(nullptr)
 	, myIsComplete(false)
 	, myIsShuttingDown(false)
+	, myReturnedFromCredits(false)
 	, myCinematicIndex(0)
 {
 	myIsActiveState = false;
@@ -142,19 +143,26 @@ const eStateStatus InGameState::Update(const float& aDeltaTime)
 		SAFE_DELETE(myLevel);
 		return eStateStatus::ePopMainState;
 	}
-	if (myIsComplete == true)
+	if (myIsComplete == true && myReturnedFromCredits == false)
 	{
 		//bool runtime = //Prism::MemoryTracker::GetInstance()->GetRunTime();
 		//Prism::MemoryTracker::GetInstance()->SetRunTime(false);
 		myStateStack->PushSubGameState(new CreditMenuState());
 		//Prism::MemoryTracker::GetInstance()->SetRunTime(runtime);
+		myReturnedFromCredits = true;
 		return eStateStatus::eKeepState;
+	}
+	if (myReturnedFromCredits == true)
+	{
+		myIsActiveState = false;
+		SAFE_DELETE(myLevel);
+		return eStateStatus::ePopMainState;
 	}
 
 	if (CU::InputWrapper::GetInstance()->KeyUp(DIK_GRAVE) == true || myShouldReOpenConsole == true)
 	{
 #ifndef RELEASE_BUILD
-		bool runtime = //Prism::MemoryTracker::GetInstance()->GetRunTime();
+		//bool runtime = //Prism::MemoryTracker::GetInstance()->GetRunTime();
 		//Prism::MemoryTracker::GetInstance()->SetRunTime(false);
 		myShouldReOpenConsole = false;
 		ConsoleState* newState = new ConsoleState(myShouldReOpenConsole);
@@ -230,7 +238,7 @@ void InGameState::OnResize(int aWidth, int aHeight)
 
 void InGameState::ReceiveMessage(const GameStateMessage& aMessage)
 {
-	bool runtime;
+	//bool runtime;
 
 	switch (aMessage.myGameState)
 	{
@@ -466,7 +474,7 @@ void InGameState::UpdateCamera(float aDeltaTime, const CU::Vector3<float>& aCame
 void InGameState::ShowMessage(const std::string& aBackgroundPath,
 	const CU::Vector2<float>& aSize, std::string aText, GameStateMessage* aMessage)
 {
-	bool runtime = //Prism::MemoryTracker::GetInstance()->GetRunTime();
+	//bool runtime = //Prism::MemoryTracker::GetInstance()->GetRunTime();
 	//Prism::MemoryTracker::GetInstance()->SetRunTime(false);
 	myIsActiveState = false;
 	myMessageScreen = new MessageState(aBackgroundPath, aSize);

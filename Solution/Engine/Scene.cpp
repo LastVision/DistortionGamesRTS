@@ -59,7 +59,7 @@ Prism::Scene::~Scene()
 	SAFE_DELETE(myInstancingHelper);
 }
 
-void Prism::Scene::Render(bool aRenderNavMeshLines)
+void Prism::Scene::Render(bool)
 {
 	for (int i = 0; i < myDirectionalLights.Size(); ++i)
 	{

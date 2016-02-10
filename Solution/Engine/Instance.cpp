@@ -31,7 +31,6 @@ Prism::Instance::Instance(ModelProxy& aModel, const CU::Matrix44<float>& anOrien
 
 Prism::Instance::~Instance()
 {
-	int apa = 5;
 }
 
 void Prism::Instance::Update(float aDelta)

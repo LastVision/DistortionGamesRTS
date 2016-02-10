@@ -283,7 +283,7 @@ void ConsoleHistoryManager::AddHistory(const std::string& aCommand, eHistoryType
 	}
 	History* tempHistory;
 	
-	bool prevRuntime = ////Prism::MemoryTracker::GetInstance()->GetRunTime();
+	//bool prevRuntime = ////Prism::MemoryTracker::GetInstance()->GetRunTime();
 	////Prism::MemoryTracker::GetInstance()->SetRunTime(false);
 	tempHistory = new History();
 	tempHistory->myRenderText = new Prism::Text(*Prism::Engine::GetInstance()->GetFont(Prism::eFont::CONSOLE));

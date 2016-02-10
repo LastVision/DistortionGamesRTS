@@ -200,7 +200,7 @@ bool Director::UpgradeUnit(eUnitType aUnitType)
 	}
 	else if (myOwner == eOwnerType::PLAYER)
 	{
-		PostMaster::GetInstance()->SendMessage(NotificationMessage("Not enough artifact."));
+		PostMaster::GetInstance()->SendMessage(NotificationMessage("Not enough artifacts."));
 	}
 
 	return false;
@@ -325,7 +325,7 @@ void Director::ReceiveMessage(const UpgradeUnitMessage& aMessage)
 		if (myOwner == eOwnerType::PLAYER)
 		{
 			std::string message = "";
-
+			std::string soundEvent;
 			switch (aMessage.myUnit)
 			{
 			case eUnitType::GRUNT:
@@ -338,9 +338,10 @@ void Director::ReceiveMessage(const UpgradeUnitMessage& aMessage)
 				message = "Tank";
 				break;
 			}
-	
+			soundEvent = message + "_Upgrade";
 			message.append(" upgraded to level " + std::to_string(aMessage.myUpgradeLevel + 1) + ".");
 			PostMaster::GetInstance()->SendMessage(NotificationMessage(message));
+			Prism::Audio::AudioInterface::GetInstance()->PostEvent(soundEvent.c_str(), 0);
 		}
 	}
 }
