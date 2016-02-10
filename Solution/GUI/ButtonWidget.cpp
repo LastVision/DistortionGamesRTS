@@ -15,6 +15,7 @@ namespace GUI
 		, myImageHover(nullptr)
 		, myImageCurrent(nullptr)
 		, myClickEvent(nullptr)
+		, myHoverText("")
 	{
 		std::string spritePathNormal = "";
 		std::string spritePathHover = "";
@@ -28,6 +29,12 @@ namespace GUI
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "spritenormal"), "path", spritePathNormal);
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "spritehover"), "path", spritePathHover);
 		aReader->ForceReadAttribute(aReader->ForceFindFirstChild(anXMLElement, "spritepressed"), "path", spritePathPressed);
+
+		tinyxml2::XMLElement* hoverElement = aReader->FindFirstChild(anXMLElement, "hover");
+		if (hoverElement != nullptr)
+		{
+			aReader->ForceReadAttribute(hoverElement, "text", myHoverText);
+		}
 
 		ReadTooltip(aReader, anXMLElement, aPlayer);
 		ReadEvent(aReader, anXMLElement);
@@ -52,14 +59,13 @@ namespace GUI
 	{
 		myImageCurrent->Render(myPosition + aParentPosition);
 
-		//if (myImageCurrent == myImageHover && myHoverText != "")
-		//{
-		//	CU::Vector2<float> hoverPosition = { myPosition.x - mySize.x / 2.f
-		//		, myPosition.y + mySize.y / 2.f };
-		//	hoverPosition += aParentPosition;
-		//
-		//	Prism::Engine::GetInstance()->PrintText(myHoverText, hoverPosition, Prism::eTextType::RELEASE_TEXT);
-		//}
+		if (myImageCurrent == myImageHover && myHoverText != "")
+		{
+			CU::Vector2<float> hoverPosition = { myPosition.x + mySize.x / 2.f, myPosition.y };
+			hoverPosition += aParentPosition;
+		
+			Prism::Engine::GetInstance()->PrintText(myHoverText, hoverPosition, Prism::eTextType::RELEASE_TEXT);
+		}
 	}
 
 	void ButtonWidget::OnMousePressed(const CU::Vector2<float>&)
