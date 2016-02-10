@@ -147,7 +147,7 @@ void LoadingState::Render()
 
 	if (Prism::ModelLoader::GetInstance()->IsLoading() == false)
 	{
-		Prism::Engine::GetInstance()->PrintText("Press Enter to begin."
+		Prism::Engine::GetInstance()->PrintText("Press [space] to begin."
 			, { windowSize.x * 0.5f - 150.f, windowSize.y  * 0.5f - 350.f }, Prism::eTextType::RELEASE_TEXT
 			, 1.f, { 1.f, 1.f, 1.f, myFinishedTextAlpha });
 	}
