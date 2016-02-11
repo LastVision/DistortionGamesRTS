@@ -51,9 +51,6 @@ MainMenuState::MainMenuState()
 	myLogoEndPosition.y = myWindowSize.y - (myLogo->GetSize().y * 0.5f);
 
 	myGUIPosition = myGUIStartPosition;
-
-
-
 }
 
 MainMenuState::~MainMenuState()
@@ -80,11 +77,13 @@ void MainMenuState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aC
 	myHasRunOnce = false;
 
 	GameSettingsSingleton::GetInstance();
+
+	PostMaster::GetInstance()->SendMessage(FadeMessage(1.f / 3.f));
 }
 
 void MainMenuState::EndState()
 {
-
+	
 }
 
 const eStateStatus MainMenuState::Update(const float& aDeltaTime)
@@ -118,6 +117,7 @@ const eStateStatus MainMenuState::Update(const float& aDeltaTime)
 		}
 		else
 		{
+			myLogoPosition.y = myLogoEndPosition.y + 25.f;
 			myMenuAlpha += aDeltaTime;
 			if (myLogoDone == false)
 			{
@@ -145,13 +145,14 @@ void MainMenuState::Render()
 {
 	myGUIManager->Render();
 	myLogo->Render(myLogoPosition);
-	myLogoDust->Render(myLogoEndPosition, CU::Vector2<float>(0.95f + myDustAlpha * 0.05f, 0.95f + myDustAlpha * 0.05f), CU::Vector4<float>(1.f, 1.f, 1.f, myDustAlpha));
+	myLogoDust->Render({ myLogoEndPosition.x, myLogoEndPosition.y + 25.f }, CU::Vector2<float>(0.95f + myDustAlpha * 0.05f, 0.95f + myDustAlpha * 0.05f), CU::Vector4<float>(1.f, 1.f, 1.f, myDustAlpha));
 }
 
 void MainMenuState::ResumeState()
 {
 	PostMaster::GetInstance()->Subscribe(eMessageType::ON_CLICK, this);
 	Prism::Audio::AudioInterface::GetInstance()->PostEvent("Play_Menu", 0);
+	PostMaster::GetInstance()->SendMessage(FadeMessage(1.f / 3.f));
 }
 
 void MainMenuState::OnResize(int aWidth, int aHeight)

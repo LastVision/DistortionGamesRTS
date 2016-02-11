@@ -7,6 +7,7 @@
 #include <ColoursForBG.h>
 #include "ConsoleState.h"
 #include "CreditMenuState.h"
+#include <Cursor.h>
 #include <EffectContainer.h>
 #include <Engine.h>
 #include <Entity.h>
@@ -34,6 +35,7 @@
 #include <ScriptSystem.h>
 #include <CinematicMessage.h>
 #include <RunScriptMessage.h>
+#include <FadeMessage.h>
 
 InGameState::InGameState(int aLevelIndex, eDifficulty aDifficulty)
 	: myShouldReOpenConsole(false)
@@ -85,7 +87,6 @@ void InGameState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCur
 	myLevel = myLevelFactory->LoadLevel(myStartLevelIndex, false, myDifficulty);
 
 
-
 	CU::Vector2<int> windowSize = Prism::Engine::GetInstance()->GetWindowSizeInt();
 
 	//OnResize(windowSize.x, windowSize.y);
@@ -97,7 +98,7 @@ void InGameState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCur
 	PostMaster::GetInstance()->SendMessage(RunScriptMessage("Data/Script/Autorun.script"));
 
 	myIsActiveState = true;
-
+	PostMaster::GetInstance()->SendMessage(FadeMessage(1.f / 3.f));
 }
 
 void InGameState::EndState()
@@ -219,6 +220,7 @@ void InGameState::Render()
 void InGameState::ResumeState()
 {
 	myIsActiveState = true;
+	PostMaster::GetInstance()->SendMessage(FadeMessage(1.f / 3.f));
 }
 
 void InGameState::OnResize(int aWidth, int aHeight)
@@ -247,6 +249,7 @@ void InGameState::ReceiveMessage(const GameStateMessage& aMessage)
 		//Prism::MemoryTracker::GetInstance()->SetRunTime(false);
 		myLevel = myLevelFactory->LoadCurrentLevel();
 		//Prism::MemoryTracker::GetInstance()->SetRunTime(runtime);
+		
 		PostMaster::GetInstance()->SendMessage(RunScriptMessage("Data/Script/Autorun.script"));
 		break;
 
@@ -281,7 +284,6 @@ void InGameState::ReceiveMessage(const GameStateMessage& aMessage)
 		//Prism::MemoryTracker::GetInstance()->SetRunTime(runtime);
 		break;
 	}
-
 }
 
 void InGameState::ReceiveMessage(const OnClickMessage& aMessage)
@@ -369,6 +371,7 @@ void InGameState::RestartLevel()
 {
 	Prism::Audio::AudioInterface::GetInstance()->PostEvent("FadeForWinLoose", 0);
 	Prism::Audio::AudioInterface::GetInstance()->PostEvent("PlayLoose", 0);
+	Prism::Audio::AudioInterface::GetInstance()->PostEvent("Stop_Totem", 0);
 	//bool runtime = //Prism::MemoryTracker::GetInstance()->GetRunTime();
 	//Prism::MemoryTracker::GetInstance()->SetRunTime(false);
 	GameStateMessage* newEvent = new GameStateMessage(eGameState::RELOAD_LEVEL);
@@ -380,6 +383,7 @@ void InGameState::CompleteLevel()
 {
 	Prism::Audio::AudioInterface::GetInstance()->PostEvent("FadeForWinLoose", 0);
 	Prism::Audio::AudioInterface::GetInstance()->PostEvent("PlayWin", 0);
+	Prism::Audio::AudioInterface::GetInstance()->PostEvent("Stop_Totem", 0);
 	//bool runtime = //Prism::MemoryTracker::GetInstance()->GetRunTime();
 	//Prism::MemoryTracker::GetInstance()->SetRunTime(false);
 	GameStateMessage* newEvent = new GameStateMessage(eGameState::LOAD_NEXT_LEVEL);
@@ -391,6 +395,7 @@ void InGameState::CompleteGame()
 {
 	Prism::Audio::AudioInterface::GetInstance()->PostEvent("FadeForWinLoose", 0);
 	Prism::Audio::AudioInterface::GetInstance()->PostEvent("PlayWin", 0);
+	Prism::Audio::AudioInterface::GetInstance()->PostEvent("Stop_Totem", 0);
 	//Fadea ut levelmusiken
 	//Spela win 
 	ShowMessage("Data/Resource/Texture/Menu/T_background_completed_game.dds", { 1024, 1024 }, "Press [space] to continue.");

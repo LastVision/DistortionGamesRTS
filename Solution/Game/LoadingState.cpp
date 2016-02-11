@@ -1,30 +1,28 @@
 #include "stdafx.h"
 #include <AudioInterface.h>
+#include <Cursor.h>
 #include <InputWrapper.h>
 #include "LoadingState.h"
 #include <Sprite.h>
 #include <SpriteProxy.h>
 #include <Text.h>
+#include <GUIManager.h>
 
+
+#include <FadeMessage.h>
+#include <PostMaster.h>
 
 LoadingState::LoadingState()
-	: myRotatingThingScale(1.f)
+	: myRotatingThingScale(0.f)
+	, myGUIManager(nullptr)
 {
 	CU::Vector2<float> windowSize = CU::Vector2<float>(float(Prism::Engine::GetInstance()->GetWindowSize().x)
 		, float(Prism::Engine::GetInstance()->GetWindowSize().y));
 
-	myBackground = Prism::ModelLoader::GetInstance()->LoadSprite("Data/Resource/Texture/Menu/T_loadingscreen_background.dds"
-		, { windowSize.y * 2.f, windowSize.y }, windowSize * 0.5f);
 	myRotatingThing = Prism::ModelLoader::GetInstance()->LoadSprite("Data/Resource/Texture/Menu/T_loadingscreen_rotating_thing.dds"
 		, { 256.f, 256.f }, { 128.f, 128.f });
 	myRotatingThing2 = Prism::ModelLoader::GetInstance()->LoadSprite("Data/Resource/Texture/Menu/T_loadingscreen_rotating_thing_2.dds"
 		, { 256.f, 256.f }, { 128.f, 128.f });
-
-	Prism::ModelLoader::GetInstance()->Pause();
-	//myText = new Prism::Text(*Prism::Engine::GetInstance()->GetFont(Prism::eFont::DIALOGUE));
-	//myText->SetText("Press Enter to start.");
-	//myText->SetPosition(windowSize * 0.5f);
-	Prism::ModelLoader::GetInstance()->UnPause();
 
 	myFinishedTextAlpha = 0.f;
 	myFinishedTextFadeIn = false;
@@ -34,26 +32,29 @@ LoadingState::LoadingState()
 
 LoadingState::~LoadingState()
 {
-	SAFE_DELETE(myBackground);
 	SAFE_DELETE(myRotatingThing);
 	SAFE_DELETE(myRotatingThing2);
-	//SAFE_DELETE(myText);
+	SAFE_DELETE(myGUIManager);
 }
 
 void LoadingState::InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCursor)
 {
-	aCursor;
+	myCursor = aCursor;
 	myIsLetThrough = false;
 	myStateStack = aStateStackProxy;
 
+	myGUIManager = new GUI::GUIManager(myCursor, "Data/Resource/GUI/GUI_loading_screen.xml", nullptr, nullptr, nullptr, -1);
 	OnResize(Prism::Engine::GetInstance()->GetWindowSizeInt().x, Prism::Engine::GetInstance()->GetWindowSizeInt().y);
 	Prism::Audio::AudioInterface::GetInstance()->PostEvent("Stop_Menu", 0);
 	Prism::Audio::AudioInterface::GetInstance()->PostEvent("Play_Loading", 0);
+
+	PostMaster::GetInstance()->SendMessage(FadeMessage(1.f / 3.f));
 }
 
 void LoadingState::EndState()
 {
-
+	PostMaster::GetInstance()->SendMessage(FadeMessage(1.f / 30.f));
+	myCursor->SetShouldRender(true);
 }
 
 const eStateStatus LoadingState::Update(const float& aDeltaTime)
@@ -136,20 +137,22 @@ const eStateStatus LoadingState::Update(const float& aDeltaTime)
 
 void LoadingState::Render()
 {
+	myGUIManager->Render();
+
 	CU::Vector2<float> windowSize = CU::Vector2<float>(float(Prism::Engine::GetInstance()->GetWindowSize().x),
 		float(Prism::Engine::GetInstance()->GetWindowSize().y));
-	myBackground->Render(windowSize * 0.5f);
+	//myBackground->Render(windowSize * 0.5f);
 
 	//myText->Render();
 
 	if (Prism::ModelLoader::GetInstance()->IsLoading() == false)
 	{
-		Prism::Engine::GetInstance()->PrintText("Press Enter to begin."
+		Prism::Engine::GetInstance()->PrintText("Press [space] to begin."
 			, { windowSize.x * 0.5f - 150.f, windowSize.y  * 0.5f - 350.f }, Prism::eTextType::RELEASE_TEXT
 			, 1.f, { 1.f, 1.f, 1.f, myFinishedTextAlpha });
 	}
 
-	CU::Vector2<float> position = { windowSize.x * 0.5f + 650.f, windowSize.y *0.5f - 350.f };
+	CU::Vector2<float> position = { windowSize.x * 0.5f + 400.f, windowSize.y *0.5f - 350.f };
 	CU::Vector2<float> scale = { myRotatingThingScale * 0.5f, myRotatingThingScale * 0.5f };
 
 	myRotatingThing->Render(position, scale);
@@ -158,7 +161,7 @@ void LoadingState::Render()
 
 void LoadingState::ResumeState()
 {
-
+	PostMaster::GetInstance()->SendMessage(FadeMessage(1.f / 3.f));
 }
 
 void LoadingState::OnResize(int aWidth, int aHeight)
@@ -168,9 +171,6 @@ void LoadingState::OnResize(int aWidth, int aHeight)
 	CU::Vector2<float> windowSize = CU::Vector2<float>(float(Prism::Engine::GetInstance()->GetWindowSize().x)
 		, float(Prism::Engine::GetInstance()->GetWindowSize().y));
 
-	if (myBackground != nullptr)
-	{
-		myBackground->SetSize(windowSize, windowSize / 2.f);
-	}
+	myGUIManager->OnResize(aWidth, aHeight);
 }
 

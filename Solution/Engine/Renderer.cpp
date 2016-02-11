@@ -49,8 +49,8 @@ namespace Prism
 		mySceneIndex = 0;
 
 		myShadowViewport = new D3D11_VIEWPORT[D3D11_VIEWPORT_AND_SCISSORRECT_MAX_INDEX];
-		myShadowViewport->Height = 1024;
-		myShadowViewport->Width = 1024;
+		myShadowViewport->Height = 1024 * 2;
+		myShadowViewport->Width = 1024 * 2;
 		myShadowViewport->TopLeftX = 0;
 		myShadowViewport->TopLeftY = 0;
 		myShadowViewport->MinDepth = 0;

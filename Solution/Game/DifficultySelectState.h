@@ -11,6 +11,7 @@ namespace Prism
 {
 	class Camera;
 	class Sprite;
+	class SpriteProxy;
 }
 
 namespace GUI
@@ -38,6 +39,16 @@ public:
 
 private:
 	GUI::GUIManager* myGUIManager;
-	int myLevelindex;
+	GUI::GUIManager* myFadingGUIManager;
+	int myLevelIndex;
+	eDifficulty myDifficulty;
+	float myFadeTimer;
+	bool myIsFading;
+	bool myHasRenderedFadingGUI;
+
+	CU::Vector2<float> myLogoEndPosition;
+	CU::Vector2<float> myWindowSize;
+	Prism::SpriteProxy* myLogo;
+	Prism::SpriteProxy* myLogoDust;
 };
 

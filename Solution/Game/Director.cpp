@@ -7,6 +7,7 @@
 #include "Console.h"
 #include "Director.h"
 #include <Entity.h>
+#include <EmitterMessage.h>
 #include "FogOfWarMap.h"
 #include <HealthComponent.h>
 #include <InWorldTextMessage.h>
@@ -321,6 +322,15 @@ void Director::ReceiveMessage(const UpgradeUnitMessage& aMessage)
 					actor->SetAttackDamage(actor->GetAttackDamage() + upgrade.myAttackModifier);
 					actor->SetRechargeTime(actor->GetAttackSpeed() + upgrade.myAttackSpeedModifier);
 				}
+
+				if (myOwner == eOwnerType::PLAYER)
+				{
+					if (myUnits[i]->GetAlive() == true)
+					{
+						PostMaster::GetInstance()->SendMessage(EmitterMessage("on_unit_upgrade", myUnits[i]->GetOrientation().GetPos()));
+					}
+				}
+
 			}
 		}
 
@@ -357,10 +367,18 @@ void Director::ReceiveMessage(const KillUnitMessage& aMessage)
 			if (myHasUnlockedRanger == false && static_cast<eUnitType>(aMessage.myUnitType) == eUnitType::RANGER)
 			{
 				myHasUnlockedRanger = true;
+				if (myOwner == eOwnerType::PLAYER)
+				{
+					PostMaster::GetInstance()->SendMessage(NotificationMessage("You have unlocked ranger."));
+				}
 			}
 			else if (myHasUnlockedTank == false && static_cast<eUnitType>(aMessage.myUnitType) == eUnitType::TANK)
 			{
 				myHasUnlockedTank = true;
+				if (myOwner == eOwnerType::PLAYER)
+				{
+					PostMaster::GetInstance()->SendMessage(NotificationMessage("You have unlocked tank."));
+				}
 			}
 		}
 	}

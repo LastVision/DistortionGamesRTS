@@ -149,7 +149,6 @@ Entity::Entity(eOwnerType aOwner, Prism::eOctreeType anOctreeType, EntityData& a
 
 Entity::~Entity()
 {
-	PostMaster::GetInstance()->SendMessage(EmitterMessage(myEmitterConnection, true));
 
 	if (myIsInScene == true)
 	{
@@ -406,6 +405,11 @@ CU::GrowingArray<CU::Vector2<float>> Entity::GetCutMesh() const
 void Entity::AddEmitter(Prism::ParticleEmitterInstance* anEmitterConnection)
 {
 	myEmitterConnection = anEmitterConnection;
+}
+
+Prism::ParticleEmitterInstance* Entity::GetEmitter()
+{
+	return myEmitterConnection;
 }
 
 void Entity::SetPosition(const CU::Vector3f& aPosition)

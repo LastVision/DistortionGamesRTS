@@ -179,9 +179,10 @@ void ActorComponent::Update(float aDelta)
 				}
 
 				PostMaster::GetInstance()->SendMessage(ArtifactMessage(myEntity.GetOwner(), 1));
-				PostMaster::GetInstance()->SendMessage(EmitterMessage("artifact_pickup", myEntity.GetOrientation().GetPos()));
 				//PostMaster::GetInstance()->SendMessage(EmitterMessage("artifact_glow", true, 1.f));
 				artifacts[i]->RemoveFromScene();
+				PostMaster::GetInstance()->SendMessage(EmitterMessage(artifacts[i]->GetEmitter(), true));
+
 				PollingStation::GetInstance()->RemoveArtifact(artifacts[i]);
 			}
 		}
@@ -573,7 +574,13 @@ void ActorComponent::MuzzleFlash(float aDelta)
 	{
 		if (myMuzzleFrameTimer < 0)
 		{
-			++myCurrentMuzzleFlash;
+			int prev = myCurrentMuzzleFlash;
+			myCurrentMuzzleFlash = rand() % myMuzzleFlashes.Size();
+			if (myCurrentMuzzleFlash == prev)
+			{
+				++myCurrentMuzzleFlash;
+			}
+
 			myMuzzleFrameTimer = 1.f / 10.f;
 			if (myCurrentMuzzleFlash >= myMuzzleFlashes.Size())
 			{

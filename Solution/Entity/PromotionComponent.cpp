@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+#include <AudioInterface.h>
 #include <Camera.h>
 #include <Engine.h>
 #include <ModelLoader.h>
@@ -8,6 +9,7 @@
 #include <SpriteProxy.h>
 #include <PostMaster.h>
 #include <EmitterMessage.h>
+#include "SoundComponent.h"
 
 PromotionComponent::PromotionComponent(Entity& aEntity, PromotionComponentData& aData)
 	: Component(aEntity)
@@ -68,5 +70,13 @@ void PromotionComponent::Promote()
 	{
 		PostMaster::GetInstance()->SendMessage(EmitterMessage("promotion", myEntity.GetId()));
 		myIsPromoted = true;
+		if (myEntity.GetOwner() == eOwnerType::PLAYER)
+		{
+			if (myEntity.GetComponent<SoundComponent>() != nullptr)
+			{
+				Prism::Audio::AudioInterface::GetInstance()->PostEvent("Promotion"
+					, myEntity.GetComponent<SoundComponent>()->GetAudioSFXID());
+			}
+		}
 	}
 }

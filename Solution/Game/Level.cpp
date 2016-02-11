@@ -29,7 +29,7 @@
 #include <ToggleRenderLinesMessage.h>
 #include "Tutorial.h"
 #include <TriggerComponent.h>
-
+#include <FadeMessage.h>
 Level::Level(const Prism::Camera& aCamera, Prism::Terrain* aTerrain, GUI::Cursor* aCursor, eDifficulty aDifficulty)
 	: myEntities(64)
 	, myRenderNavMeshLines(false)
@@ -69,7 +69,6 @@ Level::Level(const Prism::Camera& aCamera, Prism::Terrain* aTerrain, GUI::Cursor
 	FogOfWarMap::GetInstance()->SetFogOfWarHelperTexture(myFogOfWarHelper->GetTexture());
 
 	Prism::Audio::AudioInterface::GetInstance()->PostEvent("Play_Ambience", 0);
-
 }
 
 Level::~Level()
