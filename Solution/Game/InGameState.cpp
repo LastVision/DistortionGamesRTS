@@ -148,7 +148,7 @@ const eStateStatus InGameState::Update(const float& aDeltaTime)
 	{
 		//bool runtime = //Prism::MemoryTracker::GetInstance()->GetRunTime();
 		//Prism::MemoryTracker::GetInstance()->SetRunTime(false);
-		myStateStack->PushSubGameState(new CreditMenuState());
+		myStateStack->PushSubGameState(new CreditMenuState(4.f));
 		//Prism::MemoryTracker::GetInstance()->SetRunTime(runtime);
 		myReturnedFromCredits = true;
 		return eStateStatus::eKeepState;

@@ -12,7 +12,7 @@ namespace GUI
 class CreditMenuState : public GameState, public Subscriber
 {
 public:
-	CreditMenuState();
+	CreditMenuState(float aShowTimer = 1.f);
 	~CreditMenuState();
 	void InitState(StateStackProxy* aStateStackProxy, GUI::Cursor* aCursor) override;
 	void EndState() override;
@@ -25,6 +25,7 @@ public:
 	void ReceiveMessage(const OnClickMessage& aMessage);
 private:
 	GUI::GUIManager* myGUIManager;
+	float myShowTimer;
 
 };
 

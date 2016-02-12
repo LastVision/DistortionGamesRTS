@@ -6,8 +6,9 @@
 #include "OnClickMessage.h"
 #include "InGameState.h"
 #include <FadeMessage.h>
-CreditMenuState::CreditMenuState()
+CreditMenuState::CreditMenuState(float aShowTimer)
 	: myGUIManager(nullptr)
+	, myShowTimer(aShowTimer)
 {
 }
 
@@ -47,7 +48,11 @@ void CreditMenuState::OnResize(int aWidth, int aHeight)
 
 const eStateStatus CreditMenuState::Update(const float& aDeltaTime)
 {
-	aDeltaTime;
+	myShowTimer -= aDeltaTime;
+	if (myShowTimer > 0)
+	{
+		return myStateStatus;
+	}
 	CU::InputWrapper* input = CU::InputWrapper::GetInstance();
 	if (input->KeyDown(DIK_ESCAPE) == true || input->KeyDown(DIK_SPACE) == true || input->KeyDown(DIK_RETURN) == true
 		|| input->MouseUp(0) == true || input->MouseUp(1) == true)
