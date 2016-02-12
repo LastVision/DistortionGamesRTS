@@ -74,7 +74,7 @@ namespace Launcher
             myResolutionList.Items.Add("1600 x 900");
             myResolutionList.Items.Add("1920 x 1080");
             myResolutionList.Items.Add("Automatic");
-            myResolutionList.SelectedIndex = 1;
+            myResolutionList.SelectedIndex = 3;
 
             //aaDropdown.Items.Add("MSAA x1");
             //aaDropdown.Items.Add("MSAA x2");
