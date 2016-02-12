@@ -325,7 +325,10 @@ void Director::ReceiveMessage(const UpgradeUnitMessage& aMessage)
 
 				if (myOwner == eOwnerType::PLAYER)
 				{
-					PostMaster::GetInstance()->SendMessage(EmitterMessage("on_unit_upgrade",myUnits[i]->GetOrientation().GetPos()) );
+					if (myUnits[i]->GetAlive() == true)
+					{
+						PostMaster::GetInstance()->SendMessage(EmitterMessage("on_unit_upgrade", myUnits[i]->GetOrientation().GetPos()));
+					}
 				}
 
 			}
