@@ -152,7 +152,7 @@ void LoadingState::Render()
 			, 1.f, { 1.f, 1.f, 1.f, myFinishedTextAlpha });
 	}
 
-	CU::Vector2<float> position = { windowSize.x * 0.5f + 400.f, windowSize.y *0.5f - 350.f };
+	CU::Vector2<float> position = { windowSize.x * 0.5f + 650.f, windowSize.y *0.5f - 350.f };
 	CU::Vector2<float> scale = { myRotatingThingScale * 0.5f, myRotatingThingScale * 0.5f };
 
 	myRotatingThing->Render(position, scale);
